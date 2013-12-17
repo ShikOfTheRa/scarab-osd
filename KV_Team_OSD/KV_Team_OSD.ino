@@ -128,7 +128,7 @@ void setMspRequests() {
     if(MwVersion == 0)
       modeMSPRequests |= REQ_MSP_IDENT;
 
-    if(!armed || Settings[S_THROTTLEPOSITION] || fieldIsVisible(pMeterSumPosition) || !fieldIsVisible(amperagePosition) )
+    if(!armed || Settings[S_THROTTLEPOSITION] || fieldIsVisible(pMeterSumPosition) || fieldIsVisible(amperagePosition) )
       modeMSPRequests |= REQ_MSP_RC;
 
     if(mode_armed == 0) {
