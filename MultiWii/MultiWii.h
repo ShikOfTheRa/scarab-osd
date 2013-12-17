@@ -133,7 +133,10 @@ extern int16_t lookupThrottleRC[11];
   extern uint16_t GPS_ground_course;                       //                   - unit: degree*10
   extern uint8_t  GPS_Present;                             // Checksum from Gps serial
   extern uint8_t  GPS_Enable;
-
+  extern uint32_t GPS_time;                                //UTC time of coord calc - haydentz
+  extern int16_t  GPS_tz;
+  extern int8_t   GPS_dst;
+  
   #define LAT  0
   #define LON  1
 

@@ -311,6 +311,9 @@ conf_t conf;
   uint16_t GPS_ground_course = 0;                       //                   - unit: degree*10
   uint8_t  GPS_Present = 0;                             // Checksum from Gps serial
   uint8_t  GPS_Enable  = 0;
+  uint32_t GPS_time;                                    //local time of coord calc - haydent
+  int16_t  GPS_tz  =  TIME_ZONE * 10;                  //time zone * 10 to preserve decimal
+  int8_t   GPS_dst  =  DST_MINUTES;                    //adjustment for daylight saving
 
   // The desired bank towards North (Positive) or South (Negative) : latitude
   // The desired bank towards East (Positive) or West (Negative)   : longitude
