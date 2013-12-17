@@ -367,6 +367,7 @@ else
           displayAngleToHome();
           displayGPS_speed();
           displayGPSPosition();
+          displayGPS_time();
         }
          displayDebug();
       }
