@@ -463,9 +463,9 @@ void displaypMeterSum(void)
 
   int xx= 0;
   if (Settings[S_AMPERAGE_VIRTUAL])
-    int xx= amperagesum;
+    xx= amperagesum;
   else
-    int xx= pMeterSum / EST_PMSum;
+    xx= pMeterSum / EST_PMSum;
 
   itoa(xx,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(pMeterSumPosition));
