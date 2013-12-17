@@ -56,7 +56,7 @@ char *FormatGPSCoord(int32_t val, char *str, uint8_t p, char pos, char neg) {
 // Take time in Seconds and format it as 'MM:SS'
 // Alternately Take time in Minutes and format it as 'HH:MM'
 // If hhmmss is 1, display as HH:MM:SS
-char *formatTime(uint16_t val, char *str, uint8_t hhmmss) {
+char *formatTime(uint32_t val, char *str, uint8_t hhmmss) {
   int8_t bytes = 5;
   if(hhmmss)
     bytes = 8;
@@ -536,6 +536,18 @@ void displayIntro(void)
     MAX7456_WriteString_P(message1, KVTeamVersionPosition+30);
 
     
+ //haydent - Time Zone & DST Setting//
+  MAX7456_WriteString_P(message10, KVTeamVersionPosition+30+LINE);
+  
+  if(abs(GPS_tz) >= 100)ItoaPadded(GPS_tz, screenBuffer, 5, 4);
+  else ItoaPadded(GPS_tz, screenBuffer, 4, 3);
+  if(GPS_tz >= 0)screenBuffer[0] = '+'; 
+   
+  MAX7456_WriteString(screenBuffer, KVTeamVersionPosition+37+LINE); 
+
+  MAX7456_WriteString_P(message11, KVTeamVersionPosition+43+LINE);
+  MAX7456_WriteString(itoa(GPS_dst,screenBuffer,10), KVTeamVersionPosition+47+LINE);
+  //haydent - Time Zone & DST Setting//
 
   MAX7456_WriteString_P(MultiWiiLogoL1Add, KVTeamVersionPosition+120);
   MAX7456_WriteString_P(MultiWiiLogoL2Add, KVTeamVersionPosition+120+LINE);
@@ -645,6 +657,23 @@ void displayGPS_speed(void)
   itoa(xx,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(speedPosition));
 }
+
+void displayGPS_time(void)       //local time of coord calc - haydent
+{
+  if(!GPS_fix) return;
+ 
+  uint16_t milli = GPS_time % 1000;//get milli for later
+  uint32_t seconds = (GPS_time / 1000) % 86400;//remove millisonds and whole days
+  
+  formatTime(seconds, screenBuffer, 1);
+  if(screenBuffer[0] == ' ')screenBuffer[0] = '0';//put leading zero if empty space
+  screenBuffer[8] = '.';//add milli indicator
+  screenBuffer[9] = '0' + (milli / 100);//only show first digit of milli due to limit of gps rate
+  screenBuffer[10] = 0;//equivalent of new line or end of buffer
+   
+  MAX7456_WriteString(screenBuffer,getPosition(GPS_timePosition));
+
+}     //local time of coord calc - haydent
 
 void displayAltitude(void)
 {

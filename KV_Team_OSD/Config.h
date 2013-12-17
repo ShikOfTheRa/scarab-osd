@@ -78,7 +78,7 @@
 #define  OSDOFF28 DISPLAY_MIN_OFF // CallSign Position
 #define  OSDOFF29 DISPLAY_ALWAYS // Debug Position
 //#define  OSDOFF30 DISPLAY_MIN_OFF // Gimbal Position
-
+#define  OSDOFF31 DISPLAY_MIN_OFF // GPS_time Position
 
 /*----------------------------------------------       End of configurable parameters      ----------------------------------------------------*/
 
