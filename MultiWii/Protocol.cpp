@@ -458,10 +458,13 @@ void evaluateCommand() {
      serialize16(GPS_ground_course);        // added since r1172
      break;
    case MSP_COMP_GPS:
-     headSerialReply(5);
+     headSerialReply(12);
      serialize16(GPS_distanceToHome);
      serialize16(GPS_directionToHome);
      serialize8(GPS_update & 1);
+     serialize32(GPS_time);       //local time of coord calc - haydent -- where should it go ?
+     serialize16(GPS_tz);     //local time of coord calc - haydent -- where should it go ?
+     serialize8(GPS_dst);    //local time of coord calc - haydent -- where should it go ?
      break;
    #endif
    case MSP_ATTITUDE:

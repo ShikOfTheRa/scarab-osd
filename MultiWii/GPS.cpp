@@ -16,6 +16,7 @@ bool GPS_newFrame(char c);
 #if defined(UBLOX)
   bool GPS_UBLOX_newFrame(uint8_t data);
   bool UBLOX_parse_gps(void);
+  uint32_t UBLOX_mstow_to_local(uint32_t msToW);
 #endif
 #if defined(MTK_BINARY16) || defined(MTK_BINARY19)
   bool GPS_MTK_newFrame(uint8_t data);
@@ -1253,6 +1254,7 @@ bool GPS_newFrame(char c) {
         GPS_coord[LON] = _buffer.posllh.longitude;
         GPS_coord[LAT] = _buffer.posllh.latitude;
         GPS_altitude   = _buffer.posllh.altitude_msl / 1000;      //alt in m
+        GPS_time       = UBLOX_mstow_to_local(_buffer.posllh.time);     //UTC to Local time of coord calc - haydent
       }
       f.GPS_FIX = _fix_ok;
       return true;        // POSLLH message received, allow blink GUI icon and LED
@@ -1270,6 +1272,19 @@ bool GPS_newFrame(char c) {
       break;
     }
     return false;
+  }
+  uint32_t UBLOX_mstow_to_local(uint32_t msToW){//convert milliseconds of week time to local time // haydent
+    
+    uint32_t ms_in_week = 604800000; //milliseconds in week
+    uint32_t ms_in_min = 60000; // millisecond in min
+    
+    uint32_t tz_mins =  TIME_ZONE * 60;//TIME_ZONE * mins_in_hour; //Time Zone offset in minutes from UTC
+    uint32_t dst_mins = DST_MINUTES; //Day Light Saving adjustment in minutes
+
+    uint32_t local = msToW + ((tz_mins + dst_mins) * ms_in_min);//make correction for time zone and dst
+    local = local % ms_in_week;//prob not necessary but keeps day of week accurate <= 7
+        
+    return local;
   }
 #endif //UBLOX
 

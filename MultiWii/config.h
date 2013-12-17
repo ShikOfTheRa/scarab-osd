@@ -695,6 +695,9 @@
     #define NAV_SLEW_RATE              30        // Adds a rate control to nav output, will smoothen out nav angle spikes
 
 
+    #define TIME_ZONE                  +10   // Time Zone in Hours (eg +9.5 or -7)
+    #define DST_MINUTES                +60    // Adjustment for Day Light Savings in Minutes
+
   /**************************************************************************************/
   /***********************        LCD/OLED - display settings       *********************/
   /**************************************************************************************/
