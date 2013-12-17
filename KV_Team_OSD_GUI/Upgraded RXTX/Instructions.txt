@@ -1,0 +1,42 @@
+
+
+Please follow these directions in order to upgrade your RXTX Version.
+
+
+
+goto http://rxtx.qbang.org/wiki/index.php/Download 
+
+   and download rxtx-2.1-7-bins-r2.zip from "Binary" column.
+
+
+
+locate and extract the zip file to a temp location.
+
+in the newly created location, locate the RXTXcomm.jar file
+   and copy RXTXcomm.jar to (your processing folder) \java\lib\ext
+
+
+In the temp folder where you unzipped the files locate the rxtxSerial.dll
+  and copy rxtxSerial.dll to (your processing folder) \java\bin
+
+
+Now restart Processing, when you run the KV_Team
+
+
+you will get a WARNING message in the system console, this is expected, the latest RXTX Library contains both versions and has not been updated yet.
+
+
+the message will be 
+
+WARNING:  RXTX Version mismatch
+	Jar version = RXTX-2.2pre1
+	native lib Version = RXTX-2.2pre2
+
+
+run the KV_Team_OSD_Gui and enjoy.
+
+
+
+******* IMPORTANT*********************
+
+we have seen that the older version of RXTX is used when exporting, be sure to copy the never version RXTX into any exported applications
