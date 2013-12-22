@@ -13,10 +13,10 @@ const uint8_t rssiSample=30;
 //const uint8_t lowrssiAlarm=RSSI_ALARM;     // This will make blink the Rssi if lower then this value
 
 //General use variables
-int tenthSec=0;
-int halfSec=0;
-int Blink2hz=0;                             // This is turing on and off at 2hz
-int Blink10hz=0;                            // This is turing on and off at 10hz
+uint8_t tenthSec=0;
+uint8_t halfSec=0;
+uint8_t Blink2hz=0;                             // This is turing on and off at 2hz
+uint8_t Blink10hz=0;                            // This is turing on and off at 10hz
 int lastCallSign=0;                          //callsign_timer
 uint8_t rssiTimer=0;
 uint8_t accCalibrationTimer=0;

@@ -60,8 +60,8 @@ uint32_t queuedMSPRequests;
 // May be moved in GlobalVariables.h
 unsigned long previous_millis_low=0;
 unsigned long previous_millis_high =0;
-int hi_speed_cycle = 50;
-int lo_speed_cycle = 100;
+uint8_t hi_speed_cycle = 50;
+uint8_t lo_speed_cycle = 100;
 //----------------
 
 
@@ -471,14 +471,14 @@ void calculateRssi(void)
 
 void writeEEPROM(void)
 {
-  for(int en=0;en<EEPROM_SETTINGS;en++){
+  for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
     if (EEPROM.read(en) != Settings[en]) EEPROM.write(en,Settings[en]);
   } 
 }
 
 void readEEPROM(void)
 {
-  for(int en=0;en<EEPROM_SETTINGS;en++){
+  for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
      Settings[en] = EEPROM.read(en);
   }
 }

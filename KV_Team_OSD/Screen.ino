@@ -212,7 +212,7 @@ void displayCallsign(void)
 {
   uint16_t position = getPosition(callSignPosition);
   if(Settings[S_DISPLAY_CS]){
-      for(int X=0; X<10; X++) {
+      for(uint8_t X=0; X<10; X++) {
           screenBuffer[X] = char(Settings[S_CS0 + X]);
      }   
        screenBuffer[10] = 0;
@@ -231,7 +231,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
   if(rollAngle>400) rollAngle=400;
   if(rollAngle<-400) rollAngle=-400;
 
-  for(int X=0; X<=8; X++) {
+  for(uint8_t X=0; X<=8; X++) {
     int Y = (rollAngle * (4-X)) / 64;
     Y -= pitchAngle / 8;
     Y += 41;
@@ -278,16 +278,10 @@ void displayHorizon(int rollAngle, int pitchAngle)
     // Draw AH sides
     screen[position+2*LINE+1] =   SYM_AH_LEFT;
     screen[position+2*LINE+13] =  SYM_AH_RIGHT;
-    screen[position+0*LINE] =     SYM_AH_DECORATION_LEFT;
-    screen[position+1*LINE] =     SYM_AH_DECORATION_LEFT;
-    screen[position+2*LINE] =     SYM_AH_DECORATION_LEFT;
-    screen[position+3*LINE] =     SYM_AH_DECORATION_LEFT;
-    screen[position+4*LINE] =     SYM_AH_DECORATION_LEFT;
-    screen[position+0*LINE+14] =  SYM_AH_DECORATION_RIGHT;
-    screen[position+1*LINE+14] =  SYM_AH_DECORATION_RIGHT;
-    screen[position+2*LINE+14] =  SYM_AH_DECORATION_RIGHT;
-    screen[position+3*LINE+14] =  SYM_AH_DECORATION_RIGHT;
-    screen[position+4*LINE+14] = SYM_AH_DECORATION_RIGHT;
+  for(int X=0; X<=4; X++) {
+    screen[position+X*LINE] =     SYM_AH_DECORATION_LEFT;
+    screen[position+X*LINE+14] =  SYM_AH_DECORATION_RIGHT;
+  }
   }
 }
 
@@ -420,8 +414,8 @@ void displayDebug(void)
     if(!(MwSensorActive&mode_llights))
   #endif
     return;
-  for(int X=0; X<4; X++) {
-debug[0]=MwAltitude;
+  for(uint8_t X=0; X<4; X++) {
+//debug[0]=MwAltitude;
 //debug[1]=X;
 //debug[2]=X;
 //debug[3]=X;
@@ -550,7 +544,7 @@ void displayIntro(void)
   
   MAX7456_WriteString_P(message9, KVTeamVersionPosition+120+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE);
    if(Settings[S_DISPLAY_CS]){
-      for(int X=0; X<10; X++) {
+      for(uint8_t X=0; X<10; X++) {
           screenBuffer[X] = char(Settings[S_CS0 + X]);
       }
    if (Blink2hz)
@@ -672,10 +666,10 @@ void displayClimbRate(void)
     return;
 
     uint16_t position = getPosition(horizonPosition);
-    screen[position+1*LINE+15] =  0x7F;
-    screen[position+2*LINE+15] =  0x7F;
-    screen[position+3*LINE+15] =  0x7F;
-
+    for(int X=0; X<=3; X++) {
+      screen[position+X*LINE+15] =  0x7F;
+    }
+      
     if     (MwVario > 120)  screen[position+1*LINE+15] =  0x8F;
     else if(MwVario > 105)  screen[position+1*LINE+15] =  0x8E;
     else if(MwVario > 90)  screen[position+1*LINE+15] =  0x8D;

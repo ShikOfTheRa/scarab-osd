@@ -53,7 +53,7 @@ void serialMSPCheck()
     }
 
     if (cmd == OSD_WRITE_CMD) {
-      for(int en=0;en<EEPROM_SETTINGS; en++){
+      for(uint8_t en=0;en<EEPROM_SETTINGS; en++){
 	uint8_t inSetting = read8();
 	if (inSetting != Settings[en])
 	  EEPROM.write(en,inSetting);
