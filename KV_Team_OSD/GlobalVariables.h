@@ -40,6 +40,7 @@ uint8_t retransmitQueue;
 // Mode bits
 uint32_t mode_armed;
 uint32_t mode_stable;
+uint32_t mode_horizon;
 uint32_t mode_baro;
 uint32_t mode_mag;
 uint32_t mode_gpshome;
