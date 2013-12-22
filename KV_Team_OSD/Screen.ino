@@ -654,7 +654,7 @@ void displayGPS_speed(void)
 
 void displayGPS_time(void)       //local time of coord calc - haydent
 {
-  if(!GPS_fix) return;
+  if(!GPS_fix||!Settings[S_UNITSYSTEM]) return;
  
   uint16_t milli = GPS_time % 1000;//get milli for later
   uint32_t seconds = (GPS_time / 1000) % 86400;//remove millisonds and whole days

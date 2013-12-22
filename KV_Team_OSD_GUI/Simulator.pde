@@ -58,20 +58,20 @@ void SimSetup(){
  
 
   SG = ScontrolP5.addGroup("SG")
-    .setPosition(305,YSim + 33)
+    .setPosition(305,YSim + 38)
     .setWidth(733)
     .setBarHeight(13)
     .activateEvent(true)
     .disableCollapse()
     .setBackgroundColor(color(0,255))
-    .setBackgroundHeight(187)
+    .setBackgroundHeight(192)
    .setLabel("Simulator")
    .setMoveable(true);
     ;
                 
  
   SGModes = ScontrolP5.addGroup("SGModes")
-                .setPosition(629,20)
+                .setPosition(629,25)
                 .setWidth(100)
                 .setBarHeight(15)
                 .activateEvent(true)
@@ -85,7 +85,7 @@ void SimSetup(){
                ; 
                
   SGAtitude = ScontrolP5.addGroup("SGAtitude")
-                .setPosition(525,20)
+                .setPosition(525,25)
                 .setWidth(100)
                 .setBarHeight(15)
                 .activateEvent(true)
@@ -98,7 +98,7 @@ void SimSetup(){
                ;
                
  SGRadio = ScontrolP5.addGroup("SGRadio")
-                .setPosition(391,20)
+                .setPosition(391,25)
                 .setWidth(130)
                 .setBarHeight(15)
                 .activateEvent(true)
@@ -111,7 +111,7 @@ void SimSetup(){
                ; 
 
 SGSensors1 = ScontrolP5.addGroup("SGSensors1")
-                .setPosition(5,20)
+                .setPosition(5,25)
                 .setWidth(175)
                 .setBarHeight(15)
                 .activateEvent(true)
@@ -123,7 +123,7 @@ SGSensors1 = ScontrolP5.addGroup("SGSensors1")
                 //.close() 
                ;                                  
 SGGPS = ScontrolP5.addGroup("SGGPS")
-                .setPosition(186,20)
+                .setPosition(186,25)
                 .setWidth(200)
                 .setBarHeight(15)
                 .activateEvent(true)
