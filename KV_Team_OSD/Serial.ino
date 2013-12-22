@@ -254,6 +254,7 @@ if (Settings[S_USE_BOXNAMES]){
 
     mode_armed = 0;
     mode_stable = 0;
+    mode_horizon = 0;
     mode_baro = 0;
     mode_mag = 0;
     mode_gpshome = 0;
@@ -269,6 +270,8 @@ if (Settings[S_USE_BOXNAMES]){
         mode_armed |= bit;
         break;
       case 1:
+        mode_horizon |= bit;
+        break;
       case 2:
         mode_stable |= bit;
         break;

@@ -149,6 +149,11 @@ void displayMode(void)
       screenBuffer[0]=SYM_STABLE;
       screenBuffer[1]=SYM_STABLE1;
     }
+    else if(MwSensorActive&mode_horizon){
+      screenBuffer[2]=0;
+      screenBuffer[0]=SYM_HORIZON;
+      screenBuffer[1]=SYM_HORIZON1;
+    }
    else{
       screenBuffer[2]=0;
       screenBuffer[0]=SYM_ACRO;
@@ -163,7 +168,7 @@ void displayMode(void)
     }
     
     xx = 0;
-  if(MwSensorActive&mode_stable){
+  if(MwSensorActive&(mode_stable||mode_horizon)){
     screenBuffer[xx] = SYM_ACC;
     xx++;
     }
