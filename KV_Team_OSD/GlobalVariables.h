@@ -216,6 +216,9 @@ int16_t I2CError=0;
 uint16_t cycleTime=0;
 uint16_t pMeterSum=0;
 uint16_t MwRssi=0;
+int32_t GPS_time = 0;        //local time of coord calc - haydent
+int16_t GPS_tz = 0;
+int8_t GPS_dst = 0;
 
 // For decoration
 uint8_t SYM_AH_DECORATION_LEFT = 0x10;
@@ -333,6 +336,8 @@ const char message6[] PROGMEM = "MENU:THRT MIDDLE";
 const char message7[] PROGMEM = "YAW RIGHT";
 const char message8[] PROGMEM = "PITCH FULL";
 const char message9[] PROGMEM = "UNIQUE ID:";         // Call Sign on the beggining of the transmission   
+const char message10[] PROGMEM = "TZ UTC:"; //haydent - Time Zone & DST Setting
+const char message11[] PROGMEM = "DST:"; //haydent - Time Zone & DST Setting
 
 // For Config menu common
 const char configMsgON[] PROGMEM = "ON";
@@ -477,7 +482,8 @@ enum Positions {
   horizonPosition,
   callSignPosition,
   debugPosition,
-  gimbalPosition
+  gimbalPosition,
+  GPS_timePosition
 };
 
 #define REQ_MSP_IDENT     (1 <<  0)
