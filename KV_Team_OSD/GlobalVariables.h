@@ -392,15 +392,6 @@ const char configMsg54[] PROGMEM = "ACC Z";
 const char configMsg55[] PROGMEM = "MAG CALIBRATION";
 const char configMsg56[] PROGMEM = "HEADING";
 const char configMsg57[] PROGMEM = "MW EEPROM WRITE";
-//-----------------------------------------------------------Page6
-const char configMsg60[] PROGMEM = "6/8 GPS";
-const char configMsg61[] PROGMEM = "DISPLAY GPS";
-const char configMsg62[] PROGMEM = "GPS COORDIN";
-const char configMsg63[] PROGMEM = "COORD ON TOP";
-const char configMsg64[] PROGMEM = "GPS ALTITUDE";
-const char configMsg65[] PROGMEM = "ANGLE TO HOME";
-const char configMsg66[] PROGMEM = "DISPLAY HEADING";
-const char configMsg67[] PROGMEM = "DISPLAY MODE";
 //-----------------------------------------------------------Page7
 const char configMsg70[] PROGMEM = "7/8 ADV SETUP";
 const char configMsg71[] PROGMEM = "CALLSIGN";

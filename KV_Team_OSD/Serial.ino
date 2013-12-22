@@ -426,16 +426,6 @@ void handleRawRC() {
 	  if(ROW==7) eepromWriteTimer=0;
 	}
 
-	if(configPage == 6 && COL == 3) {
-  	  if(ROW==1) Settings[S_DISPLAYGPS]=!Settings[S_DISPLAYGPS];
-  	  if(ROW==2) Settings[S_COORDINATES]=!Settings[S_COORDINATES];
-  	  if(ROW==3) Settings[S_GPSCOORDTOP]=!Settings[S_GPSCOORDTOP];  // Coord on top
-	  if(ROW==4) Settings[S_GPSALTITUDE]=!Settings[S_GPSALTITUDE];  // GPS Altitude
-	  if(ROW==5) Settings[S_ANGLETOHOME]=!Settings[S_ANGLETOHOME];  // Angle to Home
-	  if(ROW==6) Settings[S_SHOWHEADING]=!Settings[S_SHOWHEADING];
-	  if(ROW==7) Settings[S_MODEICON]=!Settings[S_MODEICON];        // Mode Icons
-	}
-
 	if(configPage == 7 && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAY_CS]=!Settings[S_DISPLAY_CS];
 	  if(ROW==2) Settings[S_THROTTLEPOSITION]=!Settings[S_THROTTLEPOSITION];
