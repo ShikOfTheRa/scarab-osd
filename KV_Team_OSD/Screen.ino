@@ -1040,67 +1040,6 @@ void displayConfigScreen(void)
       MAX7456_WriteString("-",MAGD);
   }
 
-  if(configPage==6)
-  {
-    MAX7456_WriteString_P(configMsg60, 39);
-
-    MAX7456_WriteString_P(configMsg61, ROLLT);
-    if(Settings[S_DISPLAYGPS]){
-      MAX7456_WriteString_P(configMsgON, ROLLD);
-    }
-    else{
-      MAX7456_WriteString_P(configMsgOFF, ROLLD);
-    }
-
-    MAX7456_WriteString_P(configMsg62, PITCHT);
-    if(Settings[S_COORDINATES]){
-      MAX7456_WriteString_P(configMsgON, PITCHD);
-    }
-    else{
-      MAX7456_WriteString_P(configMsgOFF, PITCHD);
-    }
-
-    MAX7456_WriteString_P(configMsg63, YAWT);
-    if(Settings[S_GPSCOORDTOP]){
-      MAX7456_WriteString_P(configMsgON, YAWD);
-    }
-    else{
-      MAX7456_WriteString_P(configMsgOFF, YAWD);
-    }
-
-        MAX7456_WriteString_P(configMsg64, ALTT);
-    if(Settings[S_GPSALTITUDE]){
-      MAX7456_WriteString_P(configMsgON, ALTD);
-    }
-    else{
-      MAX7456_WriteString_P(configMsgOFF, ALTD);
-    }
-
-    MAX7456_WriteString_P(configMsg65, VELT);
-    if(Settings[S_ANGLETOHOME]){
-      MAX7456_WriteString_P(configMsgON, VELD);
-    }
-    else{
-      MAX7456_WriteString_P(configMsgOFF, VELD);
-    }
-    
-    MAX7456_WriteString_P(configMsg66, LEVT);
-    if(Settings[S_SHOWHEADING]){
-      MAX7456_WriteString_P(configMsgON, LEVD);
-    }
-    else{
-      MAX7456_WriteString_P(configMsgOFF, LEVD);
-    }
-    
-    MAX7456_WriteString_P(configMsg67, MAGT);
-    if(Settings[S_MODEICON]){
-      MAX7456_WriteString_P(configMsgON, MAGD);
-    }
-    else{
-      MAX7456_WriteString_P(configMsgOFF, MAGD);
-    }    
- }
-
   if(configPage==7)
   {
     MAX7456_WriteString_P(configMsg70, 39);
