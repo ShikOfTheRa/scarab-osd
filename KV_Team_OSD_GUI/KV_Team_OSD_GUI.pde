@@ -183,7 +183,7 @@ int ConfigEEPROM = -1;
 int ConfigVALUE = -1;
 
 int windowsX    = 1041;       int windowsY    =578;        //995; //573;
-int xGraph      = 10;         int yGraph      = 325;
+int xGraph      = 10;         int yGraph      = 35;
 int xObj        = 520;        int yObj        = 293; //900,450
 int xCompass    = 920;        int yCompass    = 341; //760,336
 int xLevelObj   = 920;        int yLevelObj   = 80; //760,80
@@ -291,6 +291,7 @@ String[] ConfigNames = {
   "Display Flight Mode Icons",
   
   "Display CallSign",
+  "Display GPS time",
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -354,6 +355,7 @@ String[] ConfigHelp = {
   "Display Flight Mode Icons",
   
   "Display CallSign",
+  "Display GPS time",
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -425,6 +427,7 @@ int[] ConfigRanges = {
 1,     // S_MODEICON               36
 
 1,     // call sign                37
+1,     // GPStime                  37a
 255,
 255,
  255,
@@ -674,6 +677,7 @@ CreateItem(GetSetting("S_ENABLEADC"),  5,7*17, G_Other);
 CreateItem(GetSetting("S_VREFERENCE"),  5,8*17, G_Other);
 CreateItem(GetSetting("S_USE_BOXNAMES"),  5,9*17, G_Other);
 CreateItem(GetSetting("S_MODEICON"),  5,10*17, G_Other);
+CreateItem(GetSetting("S_GPSTIME"),  5,11*17, G_Other);
 
 
 //  Call Sign ---------------------------------------------------------------------------

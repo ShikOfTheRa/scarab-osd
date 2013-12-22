@@ -40,6 +40,7 @@ enum Settings {
   S_USE_BOXNAMES,
   S_MODEICON,
   S_DISPLAY_CS,
+  S_GPSTIME,
   S_CS0,
   S_CS1,
   S_CS2,
