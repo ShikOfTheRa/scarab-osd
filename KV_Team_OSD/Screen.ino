@@ -207,10 +207,14 @@ void displayMode(void)
 
 void displayArmed(void)
 {
-  if(!armed)
+  if(!armed){
     MAX7456_WriteString_P(disarmed_text, getPosition(motorArmedPosition));
-  else if(Blink10hz && flyTime < 8)
+    armedtimer=50;
+  }
+  else if(Blink10hz&&armedtimer){
+    armedtimer--;
     MAX7456_WriteString_P(armed_text, getPosition(motorArmedPosition));
+  }
 }
 
 void displayCallsign(void)
@@ -420,7 +424,7 @@ void displayDebug(void)
   #endif
     return;
   for(uint8_t X=0; X<4; X++) {
-//debug[0]=MwAltitude;
+debug[0]=Settings[S_GPSTIME];
 //debug[1]=X;
 //debug[2]=X;
 //debug[3]=X;
@@ -659,7 +663,7 @@ void displayGPS_speed(void)
 
 void displayGPS_time(void)       //local time of coord calc - haydent
 {
-  if(!GPS_fix||!Settings[S_UNITSYSTEM]) return;
+  if(!GPS_fix||!Settings[S_GPSTIME]) return;
  
   uint16_t milli = GPS_time % 1000;//get milli for later
   uint32_t seconds = (GPS_time / 1000) % 86400;//remove millisonds and whole days
@@ -700,7 +704,7 @@ void displayClimbRate(void)
     return;
 
     uint16_t position = getPosition(horizonPosition);
-    for(int X=0; X<=3; X++) {
+    for(int X=1; X<=3; X++) {
       screen[position+X*LINE+15] =  0x7F;
     }
       
