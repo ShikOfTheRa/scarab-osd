@@ -168,7 +168,7 @@ void displayMode(void)
     }
     
     xx = 0;
-  if(MwSensorActive&(mode_stable||mode_horizon)){
+  if(MwSensorActive&mode_stable||MwSensorActive&mode_horizon){
     screenBuffer[xx] = SYM_ACC;
     xx++;
     }
@@ -178,6 +178,10 @@ void displayMode(void)
   }
   if (MwSensorActive&mode_baro){
     screenBuffer[xx] = SYM_BAR;
+    xx++;
+  }
+  if (MwSensorActive&mode_gpshome||MwSensorActive&mode_gpshold){
+    screenBuffer[xx] = SYM_GPS;
     xx++;
   }
   screenBuffer[xx] = 0;
