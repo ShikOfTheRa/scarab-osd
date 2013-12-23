@@ -1,0 +1,123 @@
+--- config.h	Fri Nov 08 01:00:00 2013
++++ config.h	Wed Dec 18 07:57:31 2013
+@@ -695,6 +695,9 @@
+     #define NAV_SLEW_RATE              30        // Adds a rate control to nav output, will smoothen out nav angle spikes
+ 
+ 
++    #define TIME_ZONE                  +10   // Time Zone in Hours (eg +9.5 or -7)
++    #define DST_MINUTES                +60    // Adjustment for Day Light Savings in Minutes
++
+   /**************************************************************************************/
+   /***********************        LCD/OLED - display settings       *********************/
+   /**************************************************************************************/
+@@ -1090,4 +1093,4 @@
+ /*************************************************************************************************/
+ 
+ #endif /* CONFIG_H_ */
+-
++
+--- GPS.cpp	Mon Oct 21 23:22:00 2013
++++ GPS.cpp	Wed Dec 18 07:58:08 2013
+@@ -16,6 +16,7 @@
+ #if defined(UBLOX)
+   bool GPS_UBLOX_newFrame(uint8_t data);
+   bool UBLOX_parse_gps(void);
++  uint32_t UBLOX_mstow_to_local(uint32_t msToW);
+ #endif
+ #if defined(MTK_BINARY16) || defined(MTK_BINARY19)
+   bool GPS_MTK_newFrame(uint8_t data);
+@@ -1253,6 +1254,7 @@
+         GPS_coord[LON] = _buffer.posllh.longitude;
+         GPS_coord[LAT] = _buffer.posllh.latitude;
+         GPS_altitude   = _buffer.posllh.altitude_msl / 1000;      //alt in m
++        GPS_time       = UBLOX_mstow_to_local(_buffer.posllh.time);     //UTC to Local time of coord calc - haydent
+       }
+       f.GPS_FIX = _fix_ok;
+       return true;        // POSLLH message received, allow blink GUI icon and LED
+@@ -1271,6 +1273,19 @@
+     }
+     return false;
+   }
++  uint32_t UBLOX_mstow_to_local(uint32_t msToW){//convert milliseconds of week time to local time // haydent
++    
++    uint32_t ms_in_week = 604800000; //milliseconds in week
++    uint32_t ms_in_min = 60000; // millisecond in min
++    
++    uint32_t tz_mins =  TIME_ZONE * 60;//TIME_ZONE * mins_in_hour; //Time Zone offset in minutes from UTC
++    uint32_t dst_mins = DST_MINUTES; //Day Light Saving adjustment in minutes
++
++    uint32_t local = msToW + ((tz_mins + dst_mins) * ms_in_min);//make correction for time zone and dst
++    local = local % ms_in_week;//prob not necessary but keeps day of week accurate <= 7
++        
++    return local;
++  }
+ #endif //UBLOX
+ 
+ #if defined(MTK_BINARY16) || defined(MTK_BINARY19)
+@@ -1432,4 +1447,4 @@
+ #endif //SERIAL GPS
+ #endif //ONBOARD GPS CALC
+ 
+-#endif // GPS
++#endif // GPS
+--- MultiWii.cpp	Fri Nov 08 00:56:18 2013
++++ MultiWii.cpp	Wed Dec 18 07:58:46 2013
+@@ -311,6 +311,9 @@
+   uint16_t GPS_ground_course = 0;                       //                   - unit: degree*10
+   uint8_t  GPS_Present = 0;                             // Checksum from Gps serial
+   uint8_t  GPS_Enable  = 0;
++  uint32_t GPS_time;                                    //local time of coord calc - haydent
++  int16_t  GPS_tz  =  TIME_ZONE * 10;                  //time zone * 10 to preserve decimal
++  int8_t   GPS_dst  =  DST_MINUTES;                    //adjustment for daylight saving
+ 
+   // The desired bank towards North (Positive) or South (Negative) : latitude
+   // The desired bank towards East (Positive) or West (Negative)   : longitude
+@@ -1342,4 +1345,4 @@
+   // do not update servos during unarmed calibration of sensors which are sensitive to vibration
+   if ( (f.ARMED) || ((!calibratingG) && (!calibratingA)) ) writeServos();
+   writeMotors();
+-}
++}
+--- MultiWii.h	Fri Nov 08 00:51:54 2013
++++ MultiWii.h	Wed Dec 18 07:58:54 2013
+@@ -133,7 +133,10 @@
+   extern uint16_t GPS_ground_course;                       //                   - unit: degree*10
+   extern uint8_t  GPS_Present;                             // Checksum from Gps serial
+   extern uint8_t  GPS_Enable;
+-
++  extern uint32_t GPS_time;                                //UTC time of coord calc - haydentz
++  extern int16_t  GPS_tz;
++  extern int8_t   GPS_dst;
++  
+   #define LAT  0
+   #define LON  1
+ 
+@@ -199,4 +202,4 @@
+ 
+ void annexCode();
+ 
+-#endif /* MULTIWII_H_ */
++#endif /* MULTIWII_H_ */
+--- Protocol.cpp	Fri Nov 08 00:56:18 2013
++++ Protocol.cpp	Wed Dec 18 07:59:12 2013
+@@ -458,10 +458,13 @@
+      serialize16(GPS_ground_course);        // added since r1172
+      break;
+    case MSP_COMP_GPS:
+-     headSerialReply(5);
++     headSerialReply(12);
+      serialize16(GPS_distanceToHome);
+      serialize16(GPS_directionToHome);
+      serialize8(GPS_update & 1);
++     serialize32(GPS_time);       //local time of coord calc - haydent -- where should it go ?
++     serialize16(GPS_tz);     //local time of coord calc - haydent -- where should it go ?
++     serialize8(GPS_dst);    //local time of coord calc - haydent -- where should it go ?
+      break;
+    #endif
+    case MSP_ATTITUDE:
+@@ -684,4 +687,4 @@
+ }
+ #else
+ void debugmsg_append_str(const char *str) {};
+-#endif
++#endif
