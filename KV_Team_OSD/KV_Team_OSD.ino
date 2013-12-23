@@ -299,7 +299,7 @@ else
       blankserialRequest(MSPcmdsend);      
 
     MAX7456_DrawScreen();
-    if( allSec < 8 ){
+    if( allSec < 5 ){
       displayIntro();
       lastCallSign = onTime;
     }  
@@ -309,6 +309,7 @@ else
         previousarmedstatus=1;
       }
       if(previousarmedstatus && !armed){
+        armedtimer=50;
         configPage=8;
         ROW=10;
         COL=1;

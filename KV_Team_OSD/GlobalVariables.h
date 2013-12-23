@@ -25,6 +25,7 @@ uint8_t eepromWriteTimer=0;
 uint16_t debug[4];
 
 unsigned int allSec=0;
+uint8_t armedtimer=255;
 
 // Config status and cursor location
 uint8_t ROW=10;

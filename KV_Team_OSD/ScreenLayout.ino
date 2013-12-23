@@ -32,7 +32,7 @@ const uint16_t screenPosition[] PROGMEM = {
   POS(LINE12+22, 2, OSDOFF13), // CurrentThrottlePosition
   POS(LINE13+22, 2, OSDOFF14), // flyTimePosition
   POS(LINE13+22, 2, OSDOFF15), // onTimePosition
-  POS(LINE12+11, 2, OSDOFF16), // motorArmedPosition
+  POS(LINE11+11, 2, OSDOFF16), // motorArmedPosition
   POS(LINE10+2,  2, OSDOFF17),  // MwGPSLatPosition
   POS(LINE10+15, 2, OSDOFF18),  // MwGPSLonPosition
   POS(LINE01+2,  0, OSDOFF19),  // MwGPSLatPositionTop      // On top of screen // Shiki Mod for nicer position
@@ -47,7 +47,7 @@ const uint16_t screenPosition[] PROGMEM = {
   POS(LINE12+10, 2, OSDOFF28), // CallSign Position
   POS(LINE08+10, 2, OSDOFF29), // Debug Position
   POS(LINE05+2,  0, OSDOFF08), // Gimbal Position
-  POS(LINE11+10, 0, OSDOFF31), // GPS_time Position
+  POS(LINE12+10, 0, OSDOFF31), // GPS_time Position
 };
 
 uint16_t getPosition(uint8_t pos) {
