@@ -270,10 +270,10 @@ if (Settings[S_USE_BOXNAMES]){
         mode_armed |= bit;
         break;
       case 1:
-        mode_horizon |= bit;
+        mode_stable |= bit;
         break;
       case 2:
-        mode_stable |= bit;
+        mode_horizon |= bit;
         break;
       case 3:
         mode_baro |= bit;
