@@ -12,6 +12,7 @@ int mode_mag = 0;
 int mode_gpshome = 0;
 int mode_gpshold = 0;
 int mode_llights = 0;
+int mode_camstab = 0;
 int mode_osd_switch = 0;
 
 int SendSim = 0;
@@ -653,6 +654,7 @@ void GetModes(){
   mode_gpshome = 0;
   mode_gpshold = 0;
   mode_llights = 0;
+  mode_camstab = 0;
   mode_osd_switch = 0;
   for (int c = 0; c < boxnames.length; c++) {
     if (boxnames[c] == "ARM;") mode_armed |= bit;
@@ -661,6 +663,7 @@ void GetModes(){
     if (boxnames[c] == "MAG;") mode_mag |= bit;
     if (boxnames[c] == "BARO;") mode_baro |= bit;
     if (boxnames[c] == "LLIGHTS;") mode_llights |= bit;
+    if (boxnames[c] == "CAMSTAB;") mode_camstab |= bit;
     if (boxnames[c] == "GPS HOME;") mode_gpshome |= bit;
     if (boxnames[c] == "GPS HOLD;") mode_gpshold |= bit;
     
