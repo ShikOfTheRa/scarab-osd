@@ -297,7 +297,7 @@ String[] ConfigNames = {
   "Display GPS time",
   "Time Zone +/-",
   "Time Zone offset",
-  "Daylight saving",
+  "DST Minutes",
   "Debug",
   "S_CS0",
   "S_CS1",
@@ -365,7 +365,7 @@ String[] ConfigHelp = {
   "Display GPS time",
   "Time Zone +/-",
   "Time Zone offset",
-  "Daylight saving",
+  "DST Minutes",
   "Debug",
   "S_CS0",
   "S_CS1",
@@ -440,7 +440,7 @@ int[] ConfigRanges = {
 1,     // call sign                37
 1,     // GPStime                  37a
 1,     // GPSTZ +/-                37b
-12,    // GPSTZ                    37c
+13,    // GPSTZ                    37c
 60,    // GPSDS                    37d
 1,     // Debug                    37e
 255,
@@ -701,9 +701,11 @@ CreateItem(GetSetting("S_MODEICON"),  5,10*17, G_Other);
 //  TIME  ----------------------------------------------------------------------------
 CreateItem(GetSetting("S_GPSTIME"),  5,0*17, G_TIME);
 CreateItem(GetSetting("S_GPSTZ"),  5,1*17, G_TIME);
+  confItem[GetSetting("S_GPSTZ")].setMultiplier(0.5);//30min increments, kathmandu would require 15min, it can use DST 
+  confItem[GetSetting("S_GPSTZ")].setDecimalPrecision(1);
 CreateItem(GetSetting("S_GPSTZAHEAD"),  5,2*17, G_TIME);
 CreateItem(GetSetting("S_GPSDS"),  5,3*17, G_TIME);
-
+   confItem[GetSetting("S_GPSDS")].setMultiplier(15);
 
 //  Call Sign ---------------------------------------------------------------------------
 CreateItem(GetSetting("S_DISPLAY_CS"),  5,0, G_CallSign);
