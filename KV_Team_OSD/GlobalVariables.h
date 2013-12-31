@@ -97,6 +97,7 @@ enum Setting_ {
   S_GPSTZAHEAD,
   S_GPSTZ,
   S_GPSDS,
+  S_DEBUG,
   S_CS0,
   S_CS1,
   S_CS2,
@@ -171,6 +172,7 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 0,   // GPSTZ +/-                   37b
 0,   // GPSTZ                        37c
 0,   // GPSDS                       37d
+0,   // DEBUG                       37e
 0,   // S_CS0,
 0,   // S_CS1,
 0,   // S_CS2,

@@ -200,6 +200,7 @@ if (Settings[S_USE_BOXNAMES]){
     mode_gpshome = 0;
     mode_gpshold = 0;
     mode_llights = 0;
+    mode_camstab = 0;
     mode_osd_switch = 0;
 
     while(remaining > 0) {
@@ -223,6 +224,8 @@ if (Settings[S_USE_BOXNAMES]){
           mode_baro |= bit;
         if(firstc == 'L' && lastc == 'S') // "LLIGHTS;"
           mode_llights |= bit;
+        if(firstc == 'C' && lastc == 'B') // "CAMSTAB;"
+          mode_camstab |= bit;
         if(firstc == 'G') {
           if(lastc == 'E') // "GPS HOME;"
             mode_gpshome |= bit;

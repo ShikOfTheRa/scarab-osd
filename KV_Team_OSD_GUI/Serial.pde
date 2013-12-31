@@ -39,7 +39,7 @@ String boxnames[] = { // names for dynamic generation of config GUI
     "HORIZON;",
     "BARO;",
     "MAG;",
-    "LLIGHTS;",
+    "CAMSTAB;",
     "GPS HOME;",
     "GPS HOLD;",
     "OSD SW;"

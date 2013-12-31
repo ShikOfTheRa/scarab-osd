@@ -207,6 +207,7 @@ int XVolts      = 120;       int YVolts    = 172;
 int XAmps       = 120;       int YAmps    = 281;
 int XVVolts    = 120;        int YVVolts  = 373;
 int XTemp      = 120;        int YTemp    = 449;
+int XDebug      = 5;       int YDebug    = 390;
 int XCS      = 120;          int YCS    = 506;
 int XGPS       = 305;        int YGPS    = 5;
 int XTIME       = 510;        int YTIME    = 5;
@@ -297,6 +298,7 @@ String[] ConfigNames = {
   "Time Zone +/-",
   "Time Zone offset",
   "Daylight saving",
+  "Debug",
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -364,6 +366,7 @@ String[] ConfigHelp = {
   "Time Zone +/-",
   "Time Zone offset",
   "Daylight saving",
+  "Debug",
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -439,6 +442,7 @@ int[] ConfigRanges = {
 1,     // GPSTZ +/-                37b
 12,    // GPSTZ                    37c
 60,    // GPSDS                    37d
+1,     // Debug                    37e
 255,
 255,
  255,
@@ -522,6 +526,7 @@ Group MGUploadF,
   G_Amperage,
   G_VVoltage,
   G_Temperature,
+  G_Debug,
   G_Board,
   G_GPS,
   G_Other,
@@ -658,6 +663,9 @@ CreateItem(GetSetting("S_VIDVOLTAGE_VBAT"),  5,2*17, G_VVoltage);
 //  Temperature  --------------------------------------------------------------------
 CreateItem(GetSetting("S_DISPLAYTEMPERATURE"),  5,0, G_Temperature);
 CreateItem(GetSetting("S_TEMPERATUREMAX"),  5,1*17, G_Temperature);
+
+//  Debug  --------------------------------------------------------------------
+CreateItem(GetSetting("S_DEBUG"),  5,0, G_Debug);
 
 //  Board ---------------------------------------------------------------------------
 CreateItem(GetSetting("S_BOARDTYPE"),  5,0, G_Board);

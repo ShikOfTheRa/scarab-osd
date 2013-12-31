@@ -424,7 +424,7 @@ void displayTime(void)
 void displayDebug(void)
 {
   #if defined DEBUG
-    if(!(MwSensorActive&mode_llights))
+    if(!Settings[S_DEBUG])
   #endif
     return;
   for(uint8_t X=0; X<4; X++) {
