@@ -546,14 +546,14 @@ void displayIntro(void)
  //haydent - Time Zone & DST Setting//
   MAX7456_WriteString_P(message10, KVTeamVersionPosition+30+LINE);
   
-  if(abs(GPS_tz) >= 100)ItoaPadded(GPS_tz, screenBuffer, 5, 4);
-  else ItoaPadded(GPS_tz, screenBuffer, 4, 3);
-  if(GPS_tz >= 0)screenBuffer[0] = '+'; 
+  if(abs(TIME_ZONE) >= 100)ItoaPadded(TIME_ZONE, screenBuffer, 5, 4);
+  else ItoaPadded(TIME_ZONE, screenBuffer, 3, 2);
+  if(TIME_ZONE >= 0)screenBuffer[0] = '+'; 
    
   MAX7456_WriteString(screenBuffer, KVTeamVersionPosition+37+LINE); 
 
   MAX7456_WriteString_P(message11, KVTeamVersionPosition+43+LINE);
-  MAX7456_WriteString(itoa(GPS_dst,screenBuffer,10), KVTeamVersionPosition+47+LINE);
+  MAX7456_WriteString(itoa(DST_MINUTES, screenBuffer,10), KVTeamVersionPosition+47+LINE);
   //haydent - Time Zone & DST Setting//
 
   MAX7456_WriteString_P(MultiWiiLogoL1Add, KVTeamVersionPosition+120);
@@ -668,9 +668,15 @@ void displayGPS_speed(void)
 void displayGPS_time(void)       //local time of coord calc - haydent
 {
   if(!GPS_fix||!Settings[S_GPSTIME]) return;
- 
-  uint16_t milli = GPS_time % 1000;//get milli for later
-  uint32_t seconds = (GPS_time / 1000) % 86400;//remove millisonds and whole days
+
+//convert to local    
+  uint32_t local = GPS_time + (((TIME_ZONE * 60) + DST_MINUTES) * 60000);//make correction for time zone and dst
+  local = local % 604800000;//prob not necessary but keeps day of week accurate <= 7
+//convert to local
+
+//format and display
+  uint16_t milli = local % 1000;//get milli for later
+  uint32_t seconds = (local / 1000) % 86400;//remove millisonds and whole days
   
   formatTime(seconds, screenBuffer, 1);
   if(screenBuffer[0] == ' ')screenBuffer[0] = '0';//put leading zero if empty space
@@ -679,6 +685,7 @@ void displayGPS_time(void)       //local time of coord calc - haydent
   screenBuffer[10] = 0;//equivalent of new line or end of buffer
    
   MAX7456_WriteString(screenBuffer,getPosition(GPS_timePosition));
+//format and display
 
 }     //local time of coord calc - haydent
 

@@ -133,8 +133,6 @@ void serialMSPCheck()
     GPS_directionToHome=read16();
     read8(); //missing
     GPS_time = read32();        //local time of coord calc - haydent
-    GPS_tz = read16();
-    GPS_dst = read8();
   }
 
   if (cmdMSP==MSP_ATTITUDE)

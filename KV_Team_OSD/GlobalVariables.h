@@ -221,8 +221,6 @@ uint16_t cycleTime=0;
 uint16_t pMeterSum=0;
 uint16_t MwRssi=0;
 int32_t GPS_time = 0;        //local time of coord calc - haydent
-int16_t GPS_tz = 0;
-int8_t GPS_dst = 0;
 
 // For decoration
 uint8_t SYM_AH_DECORATION_LEFT = 0x10;
