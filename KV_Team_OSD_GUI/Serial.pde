@@ -175,7 +175,8 @@ void SetConfigItem(int index, int value) {
   if(index >= CONFIGITEMS)
     return;
 
-  confItem[index].setValue(value);
+  if(index == GetSetting("S_GPSTZ"))confItem[index].setValue(float(value)/10);//preserve decimal, maybe can go elsewhere - haydent
+  else confItem[index].setValue(value);
   if (index == CONFIGITEMS-1)
     buttonWRITE.setColorBackground(green_);
     
@@ -258,7 +259,8 @@ public void WRITE(){
     headSerialReply(MSP_OSD, CONFIGITEMS+1);
     serialize8(OSD_WRITE_CMD);
     for(int i = 0; i < CONFIGITEMS; i++){
-      serialize8(int(confItem[i].value()));
+     if(i == GetSetting("S_GPSTZ")) serialize8(int(confItem[i].value()*10));//preserve decimal, maybe can go elsewhere - haydent
+     else serialize8(int(confItem[i].value()));
     }
     tailSerialReply();
   }

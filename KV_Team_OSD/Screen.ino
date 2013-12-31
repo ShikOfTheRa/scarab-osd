@@ -546,9 +546,11 @@ void displayIntro(void)
  //haydent - Time Zone & DST Setting//
   MAX7456_WriteString_P(message10, KVTeamVersionPosition+30+LINE);
   
+
   if(abs(Settings[S_GPSTZ]) >= 100)ItoaPadded(Settings[S_GPSTZ], screenBuffer, 5, 4);
-  else ItoaPadded(Settings[S_GPSTZ], screenBuffer, 3, 2);
-  if(Settings[S_GPSTZAHEAD])screenBuffer[0] = '+'; 
+  else ItoaPadded(Settings[S_GPSTZ], screenBuffer, 4, 3);
+  if(Settings[S_GPSTZAHEAD] || Settings[S_GPSTZ] == 0)screenBuffer[0] = '+';
+  else screenBuffer[0] = '-';
    
   MAX7456_WriteString(screenBuffer, KVTeamVersionPosition+37+LINE); 
 
@@ -669,8 +671,9 @@ void displayGPS_time(void)       //local time of coord calc - haydent
 {
   if(!GPS_fix||!Settings[S_GPSTIME]) return;
 
-//convert to local    
-  uint32_t local = GPS_time + (((Settings[S_GPSTZ] * 60) + Settings[S_GPSDS]) * 60000);//make correction for time zone and dst
+//convert to local   
+  int TZ_SIGN = (Settings[S_GPSTZAHEAD] ? 1 :-1);
+  uint32_t local = GPS_time + (((Settings[S_GPSTZ] * 60 * TZ_SIGN / 10) + Settings[S_GPSDS]) * 60000);//make correction for time zone and dst
   local = local % 604800000;//prob not necessary but keeps day of week accurate <= 7
 //convert to local
 
