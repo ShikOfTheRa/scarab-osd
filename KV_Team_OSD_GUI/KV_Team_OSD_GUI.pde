@@ -129,12 +129,13 @@ int[] amperagePosition =     {
 int[] pMeterSumPosition =       {
   LINE15+30,LINE15+30+60};
   
-int DisplayWindowX = 598; //500;
-int DisplayWindowY = 40; //5;
-int WindowAdjX = -84; //15
-int WindowAdjY = -31;
+int DisplayWindowX = 681; //500;
+int DisplayWindowY = 5; //5;
+int WindowAdjX = -0; //15
+int WindowAdjY = -0;
 int WindowShrinkX = 8;
 int WindowShrinkY = 48;
+//image(OSDBackground,DisplayWindowX+WindowAdjX, DisplayWindowY+WindowAdjY, 469-WindowShrinkX, 300-WindowShrinkY); //529-WindowShrinkX, 360-WindowShrinkY);
 
 int currentCol = 0;
 int currentRow = 0;  
@@ -197,7 +198,7 @@ int XSim        = DisplayWindowX+WindowAdjX;        int YSim        = 305-Window
 
 //DisplayWindowX+WindowAdjX, DisplayWindowY+WindowAdjY, 360-WindowShrinkX, 288-WindowShrinkY);
 // Box locations -------------------------------------------------------------------------
-int Col1Width = 180;        int Col2Width = 200;
+int Col1Width = 180;        int Col2Width = 200;    int Col3Width = 165;
 
 int XEEPROM    = 120;        int YEEPROM    = 5;  //hidden do not remove
 int XBoard     = 120;        int YBoard   = 5;
@@ -208,8 +209,9 @@ int XVVolts    = 120;        int YVVolts  = 373;
 int XTemp      = 120;        int YTemp    = 449;
 int XCS      = 120;          int YCS    = 506;
 int XGPS       = 305;        int YGPS    = 5;
+int XTIME       = 510;        int YTIME    = 5;
 
-int XOther     = 305;        int YOther   = 156; //48;
+int XOther     = 305;        int YOther   = 150; //48;
 int XPortStat  = 5;            int YPortStat = 350;
 int XControlBox     = 5;        int YControlBox   = 450;  //389
 int XRCSim    =   XSim;      int YRCSim = 30;
@@ -292,6 +294,9 @@ String[] ConfigNames = {
   
   "Display CallSign",
   "Display GPS time",
+  "Time Zone +/-",
+  "Time Zone offset",
+  "Daylight saving",
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -356,6 +361,9 @@ String[] ConfigHelp = {
   
   "Display CallSign",
   "Display GPS time",
+  "Time Zone +/-",
+  "Time Zone offset",
+  "Daylight saving",
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -428,6 +436,9 @@ int[] ConfigRanges = {
 
 1,     // call sign                37
 1,     // GPStime                  37a
+1,     // GPSTZ +/-                37b
+12,    // GPSTZ                    37c
+60,    // GPSDS                    37d
 255,
 255,
  255,
@@ -515,7 +526,8 @@ Group MGUploadF,
   G_GPS,
   G_Other,
   G_CallSign,
-  G_PortStatus
+  G_PortStatus,
+  G_TIME
   
   ;
 
@@ -536,7 +548,7 @@ void setup() {
 //Map<Settings, String> table = new EnumMap<Settings>(Settings.class);
 OnTimer = millis();
   frameRate(30); 
-OSDBackground = loadImage("Background3.jpg");
+OSDBackground = loadImage("Background4.jpg");
 //RadioPot = loadImage("kvImage.jpg");
 //PGraphics icon = createGraphics(16, 16, P3D);
 //icon.beginDraw();
@@ -677,7 +689,12 @@ CreateItem(GetSetting("S_ENABLEADC"),  5,7*17, G_Other);
 CreateItem(GetSetting("S_VREFERENCE"),  5,8*17, G_Other);
 CreateItem(GetSetting("S_USE_BOXNAMES"),  5,9*17, G_Other);
 CreateItem(GetSetting("S_MODEICON"),  5,10*17, G_Other);
-CreateItem(GetSetting("S_GPSTIME"),  5,11*17, G_Other);
+
+//  TIME  ----------------------------------------------------------------------------
+CreateItem(GetSetting("S_GPSTIME"),  5,0*17, G_TIME);
+CreateItem(GetSetting("S_GPSTZ"),  5,1*17, G_TIME);
+CreateItem(GetSetting("S_GPSTZAHEAD"),  5,2*17, G_TIME);
+CreateItem(GetSetting("S_GPSDS"),  5,3*17, G_TIME);
 
 
 //  Call Sign ---------------------------------------------------------------------------
@@ -958,10 +975,10 @@ void draw() {
   strokeWeight(3);stroke(0);
   rectMode(CORNERS);
   if (int(ShowSimBackground.arrayValue()[0]) < 1){
-    image(OSDBackground,DisplayWindowX+WindowAdjX, DisplayWindowY+WindowAdjY, 529-WindowShrinkX, 360-WindowShrinkY); //529-WindowShrinkX, 360-WindowShrinkY);
+    image(OSDBackground,DisplayWindowX+WindowAdjX, DisplayWindowY+WindowAdjY, 364-WindowShrinkX, 300-WindowShrinkY); //529-WindowShrinkX, 360-WindowShrinkY);
   }
   else{
-    fill(80, 80,80); strokeWeight(3);stroke(1); rectMode(CORNER); rect(DisplayWindowX+WindowAdjX, DisplayWindowY+WindowAdjY, 529-WindowShrinkX, 360-WindowShrinkY);  //335-WindowShrinkX, 288-WindowShrinkY);
+    fill(80, 80,80); strokeWeight(3);stroke(1); rectMode(CORNER); rect(DisplayWindowX+WindowAdjX, DisplayWindowY+WindowAdjY, 364-WindowShrinkX, 300-WindowShrinkY);  //335-WindowShrinkX, 288-WindowShrinkY);
   }
 
 

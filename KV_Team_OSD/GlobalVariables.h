@@ -94,6 +94,9 @@ enum Setting_ {
   S_MODEICON,
   S_DISPLAY_CS,
   S_GPSTIME,
+  S_GPSTZAHEAD,
+  S_GPSTZ,
+  S_GPSDS,
   S_CS0,
   S_CS1,
   S_CS2,
@@ -164,7 +167,10 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 1,   // S_MODEICON                  36
 
 0,   // S_DISPLAY_CS,               37
-0,   // S_GPSTIME,                  37a
+0,   // GPStime                     37a
+0,   // GPSTZ +/-                   37b
+0,   // GPSTZ                        37c
+0,   // GPSDS                       37d
 0,   // S_CS0,
 0,   // S_CS1,
 0,   // S_CS2,
