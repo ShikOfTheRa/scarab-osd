@@ -36,11 +36,6 @@
 
 #define BOX_OSD_SWITCH              // Comment to use LLIGHT switch instead. ( OSD switch will be default and only option after MW 2.2 release. It is used to hide your AH, side bars, and coordinates).
 
-/**********************************   Clock Time Zone Settings **********************/
-//to be moved to GUI
-#define TIME_ZONE                  +10   // Time Zone in Hours (eg +9.5 or -7)
-#define DST_MINUTES                +60    // Adjustment for Day Light Savings in Minutes
-
 /********************       For Sensors presence      *********************/
 
 #define ACCELEROMETER  1//0b00000001
