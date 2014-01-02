@@ -203,19 +203,20 @@ int Col1Width = 180;        int Col2Width = 200;    int Col3Width = 165;
 int XEEPROM    = 120;        int YEEPROM    = 5;  //hidden do not remove
 int XBoard     = 120;        int YBoard   = 5;
 int XRSSI      = 120;        int YRSSI    = 46;
-int XVolts      = 120;       int YVolts    = 172;
-int XAmps       = 120;       int YAmps    = 281;
+int XVolts     = 120;        int YVolts    = 172;
+int XAmps      = 120;        int YAmps    = 281;
 int XVVolts    = 120;        int YVVolts  = 373;
 int XTemp      = 120;        int YTemp    = 449;
-int XDebug      = 5;       int YDebug    = 390;
-int XCS      = 120;          int YCS    = 506;
+int XCS        = 120;        int YCS    = 506;
 int XGPS       = 305;        int YGPS    = 5;
-int XTIME       = 510;        int YTIME    = 5;
+int XTIME      = 510;        int YTIME    = 5;
 
 int XOther     = 305;        int YOther   = 150; //48;
-int XPortStat  = 5;            int YPortStat = 350;
-int XControlBox     = 5;        int YControlBox   = 450;  //389
-int XRCSim    =   XSim;      int YRCSim = 30;
+int XPortStat  = 5;          int YPortStat = 415;
+int XDebug     = 5;          int YDebug    = 240;
+int XFONTTOOLS = 5;          int YFONTTOOLS    = 296;
+int XControlBox= 5;          int YControlBox   = 450;  //389
+int XRCSim     = XSim;       int YRCSim = 30;
 
 
 String FontFileName = "data/MW_OSD_Team.mcm";

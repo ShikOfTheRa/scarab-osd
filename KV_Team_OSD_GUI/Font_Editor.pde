@@ -160,7 +160,7 @@ String[] CharRows = {"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E"
   buttonFClose.setGroup(FG);
  
   MGUploadF = controlP5.addGroup("MGUploadF")
-                .setPosition(5,200)
+                .setPosition(XFONTTOOLS,YFONTTOOLS)
                 .setWidth(110)
                 .setBarHeight(15)
                 .activateEvent(true)
