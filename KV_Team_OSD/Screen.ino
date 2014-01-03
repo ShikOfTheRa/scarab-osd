@@ -32,8 +32,9 @@ char *FormatGPSCoord(int32_t val, char *str, uint8_t p, char pos, char neg) {
     val = -val;
   }
 
-  uint8_t bytes = p+8;
-
+  uint8_t bytes = p+6;
+  val = val / 100;
+ 
   str[bytes] = 0;
   str[--bytes] = pos;
   for(;;) {
@@ -43,9 +44,8 @@ char *FormatGPSCoord(int32_t val, char *str, uint8_t p, char pos, char neg) {
     }
     str[--bytes] = '0' + (val % 10);
     val = val / 10;
-//if(bytes < 3 && val == 0)
-     if(bytes == 0 || (bytes < 3 && val == 0))
-       break;   }
+    if(bytes == 0 || (bytes < 3 && val == 0))
+      break;   }
 
    while(bytes != 0)
      str[--bytes] = ' ';
@@ -669,7 +669,8 @@ void displayGPS_speed(void)
 
 void displayGPS_time(void)       //local time of coord calc - haydent
 {
-  if(!GPS_fix||!Settings[S_GPSTIME]) return;
+  if(!GPS_fix||!Settings[S_GPSTIME]||!fieldIsVisible(GPS_timePosition)) return;
+
 
 //convert to local   
   int TZ_SIGN = (Settings[S_GPSTZAHEAD] ? 1 :-1);

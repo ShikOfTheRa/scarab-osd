@@ -10,33 +10,39 @@
 
 #define POS(pos, pal_off, disp)  (((pos)&POS_MASK)|((pal_off)<<PAL_SHFT)|(disp))
 
+#if defined SHIFTDOWN
+#define TOPSHIFT        LINE
+#else
+#define TOPSHIFT        0
+#endif
+
 const uint16_t screenPosition[] PROGMEM = {
-  POS(LINE02+2,  0, OSDOFF01 ), // GPS_numSatPosition
-  POS(LINE01+13,  0, OSDOFF02), // GPS_numSatPositionTop      // On top of screen
-  POS(LINE02+22, 0, OSDOFF03), // GPS_directionToHomePosition
+  POS(LINE02+2+TOPSHIFT,  0, OSDOFF01 ), // GPS_numSatPosition
+  POS(LINE01+13+TOPSHIFT,  0, OSDOFF02), // GPS_numSatPositionTop      // On top of screen
+  POS(LINE02+22+TOPSHIFT, 0, OSDOFF03), // GPS_directionToHomePosition
   POS(LINE13+20, 2, OSDOFF03), // GPS_directionToHomePositionBottom
-  POS(LINE02+24, 0, OSDOFF04), // GPS_distanceToHomePosition
+  POS(LINE02+24+TOPSHIFT, 0, OSDOFF04), // GPS_distanceToHomePosition
 //  POS(LINE03+24, 0, OSDOFF05), // speedPosition
   POS(LINE07+3, 1, OSDOFF05), // speedPosition
 //  POS(LINE04+12, 0, OSDOFF06), // GPS_angleToHomePosition
-  POS(LINE05+24, 0, OSDOFF06), // GPS_angleToHomePosition
-  POS(LINE03+24, 0, OSDOFF07), // MwGPSAltPosition
+  POS(LINE05+24+TOPSHIFT, 0, OSDOFF06), // GPS_angleToHomePosition
+  POS(LINE03+24+TOPSHIFT, 0, OSDOFF07), // MwGPSAltPosition
   POS(LINE03+2,  0, OSDOFF08), // sensorPosition
 //  POS(LINE02+19, 0, OSDOFF09), // MwHeadingPosition
-  POS(LINE04+24, 0, OSDOFF09), // MwHeadingPosition
-  POS(LINE02+9, 0, OSDOFF10), // MwHeadingGraphPosition
+  POS(LINE04+24+TOPSHIFT, 0, OSDOFF09), // MwHeadingPosition
+  POS(LINE02+9+TOPSHIFT, 0, OSDOFF10), // MwHeadingGraphPosition
 //  POS(LINE07+2,  1, OSDOFF11), // MwAltitudePosition
   POS(LINE07+23,  1, OSDOFF11), // MwAltitudePosition
 //  POS(LINE07+24, 1, OSDOFF12), // MwClimbRatePosition
-  POS(LINE03+23, 0, OSDOFF12), // MwClimbRatePosition
+  POS(LINE03+23+TOPSHIFT, 0, OSDOFF12), // MwClimbRatePosition
   POS(LINE12+22, 2, OSDOFF13), // CurrentThrottlePosition
   POS(LINE13+22, 2, OSDOFF14), // flyTimePosition
   POS(LINE13+22, 2, OSDOFF15), // onTimePosition
   POS(LINE11+11, 2, OSDOFF16), // motorArmedPosition
   POS(LINE10+2,  2, OSDOFF17),  // MwGPSLatPosition
   POS(LINE10+15, 2, OSDOFF18),  // MwGPSLonPosition
-  POS(LINE01+2,  0, OSDOFF19),  // MwGPSLatPositionTop      // On top of screen // Shiki Mod for nicer position
-  POS(LINE01+15, 0, OSDOFF20),  // MwGPSLonPositionTop      // On top of screen  // Shiki Mod for nicer position
+  POS(LINE01+2+TOPSHIFT,  0, OSDOFF19),  // MwGPSLatPositionTop      // On top of screen // Shiki Mod for nicer position
+  POS(LINE01+15+TOPSHIFT, 0, OSDOFF20),  // MwGPSLonPositionTop      // On top of screen  // Shiki Mod for nicer position
   POS(LINE12+2,  2, OSDOFF21), // rssiPosition
   POS(LINE09+2,  2, OSDOFF22), // temperaturePosition
   POS(LINE13+3,  2, OSDOFF23), // voltagePosition

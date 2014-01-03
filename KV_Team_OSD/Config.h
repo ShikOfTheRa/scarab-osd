@@ -1,4 +1,3 @@
-# define DEBUG // display debug when llights enabled
 
 /*--------------------------------------------------       configurable parameters      ----------------------------------------------------*/
  
@@ -31,6 +30,7 @@
 /**********************************         Display Settings         ************************/
 
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
+//#define SHIFTDOWN                   // Select if your monitor cannot display top line fully. It shifts some lines down
 
 /**********************************   MSP Options and compatibility **********************/
 
@@ -80,7 +80,12 @@
 //#define  OSDOFF30 DISPLAY_MIN_OFF // Gimbal Position
 #define  OSDOFF31 DISPLAY_MIN_OFF // GPS_time Position
 
+//# define DEBUG // For developers - remove if memory required
+
 /*----------------------------------------------       End of configurable parameters      ----------------------------------------------------*/
+
+
+
 
 #define LINE      30
 #define LINE01    0
