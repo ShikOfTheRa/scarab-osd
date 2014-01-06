@@ -944,7 +944,7 @@ void displayConfigScreen(void)
   if(configPage==3)
   {
     MAX7456_WriteString_P(configMsg30, 35);
-    
+//R1:    
     MAX7456_WriteString_P(configMsg31, ROLLT);
     if(Settings[S_DISPLAYVOLTAGE]){
       MAX7456_WriteString_P(configMsgON, ROLLD);
@@ -952,30 +952,29 @@ void displayConfigScreen(void)
     else {
       MAX7456_WriteString_P(configMsgOFF, ROLLD);
     }
-    
+//R2:     
     MAX7456_WriteString_P(configMsg32, PITCHT);
-    MAX7456_WriteString(itoa(Settings[S_VOLTAGEMIN],screenBuffer,10),PITCHD);
-    
+    MAX7456_WriteString(itoa(Settings[S_DIVIDERRATIO],screenBuffer,10),PITCHD);
+//R3:
     MAX7456_WriteString_P(configMsg33, YAWT);
-    if(Settings[S_VIDVOLTAGE]){
-      MAX7456_WriteString_P(configMsgON, YAWD);
-    }
-    else{
-      MAX7456_WriteString_P(configMsgOFF, YAWD);
-    }
-
+    MAX7456_WriteString(itoa(Settings[S_VOLTAGEMIN],screenBuffer,10),YAWD);
+//R4:     
     MAX7456_WriteString_P(configMsg34, ALTT);
-    if(Settings[S_DISPLAYTEMPERATURE] ){
+    if(Settings[S_VIDVOLTAGE]){
       MAX7456_WriteString_P(configMsgON, ALTD);
     }
-    else {
+    else{
       MAX7456_WriteString_P(configMsgOFF, ALTD);
     }
-    
+//R5:
     MAX7456_WriteString_P(configMsg35, VELT);
-    MAX7456_WriteString(itoa(Settings[S_TEMPERATUREMAX],screenBuffer,10),VELD);
-    
-
+    if(Settings[S_AMPERAGE]){
+      MAX7456_WriteString_P(configMsgON, VELD);
+    }
+    else{
+      MAX7456_WriteString_P(configMsgOFF, VELD);
+    }
+//R6:
     MAX7456_WriteString_P(configMsg36, LEVT);
     if(Settings[S_AMPER_HOUR]){
       MAX7456_WriteString_P(configMsgON, LEVD);
@@ -983,24 +982,20 @@ void displayConfigScreen(void)
     else{
       MAX7456_WriteString_P(configMsgOFF, LEVD);
     }
-
+//R7:
     MAX7456_WriteString_P(configMsg37, MAGT);
-    if(Settings[S_AMPERAGE]){
+    if(Settings[S_AMPERAGE_VIRTUAL]){
       MAX7456_WriteString_P(configMsgON, MAGD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, MAGD);
     }
-
-    MAX7456_WriteString_P(configMsg38, MAGT+30);
-    if(Settings[S_AMPERAGE_VIRTUAL]){
-      MAX7456_WriteString_P(configMsgON, MAGD+30);
-    }
-    else{
-      MAX7456_WriteString_P(configMsgOFF, MAGD+30);
-    }
-    MAX7456_WriteString_P(configMsg39, MAGT+60);
-    MAX7456_WriteString(itoa(Settings[S_AMPDIVIDERRATIO],screenBuffer,10),MAGD+60);
+//R8:
+    MAX7456_WriteString_P(configMsg38, MAGT+LINE);   
+    MAX7456_WriteString(itoa(Settings[S_AMPDIVIDERRATIO],screenBuffer,10),MAGD+LINE);
+//R9:
+    MAX7456_WriteString_P(configMsg39, MAGT+LINE+LINE);   
+    MAX7456_WriteString(itoa(Settings[S_BATCELLS],screenBuffer,10),MAGD+LINE+LINE);
   }
 
   if(configPage==4)
