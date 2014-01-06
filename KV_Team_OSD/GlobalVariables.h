@@ -338,7 +338,7 @@ const char armed_text[] PROGMEM = " ARMED";
 
 
 // For Intro
-const char message0[] PROGMEM = "SCARAB OSD - KV R370-1";
+const char message0[] PROGMEM = "SCARAB OSD - RUSH/KV-2";
 const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
 const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
 const char message5[] PROGMEM = "MW VERSION:";
@@ -376,16 +376,16 @@ const char configMsg25[] PROGMEM = "THROTTLE PID ATT";
 const char configMsg26[] PROGMEM = "MWCYCLE TIME";
 const char configMsg27[] PROGMEM = "MWI2C ERRORS";
 //-----------------------------------------------------------Page3
-const char configMsg30[] PROGMEM = "3/8 SUPPLY & ALARM";
-const char configMsg31[] PROGMEM = "DISPLAY VOLTAGE";
-const char configMsg32[] PROGMEM = "VOLTAGE ALARM";
-const char configMsg33[] PROGMEM = "DISPLAY VID BATT";
-const char configMsg34[] PROGMEM = "DISPLAY TEMPERATURE";
-const char configMsg35[] PROGMEM = "SET TEMP ALARM";
-const char configMsg36[] PROGMEM = "CONSUMED MAH";
-const char configMsg37[] PROGMEM = "CURRENT A";
-const char configMsg38[] PROGMEM = "USE VIRTUAL AMPS";
-const char configMsg39[] PROGMEM = "SET VIRTUAL AMPS";
+const char configMsg30[] PROGMEM = "3/8 POWER";
+const char configMsg31[] PROGMEM = "DISPLAY MAIN VOLTS";
+const char configMsg32[] PROGMEM = "ADJUST VOLTS";
+const char configMsg33[] PROGMEM = "MAIN VOLTS ALARM";
+const char configMsg34[] PROGMEM = "DISPLAY VID VOLTS";
+const char configMsg35[] PROGMEM = "DISPLAY AMPS";
+const char configMsg36[] PROGMEM = "DISPLAY MAH";
+const char configMsg37[] PROGMEM = "USE VIRTUAL AMPS";
+const char configMsg38[] PROGMEM = "ADJUST AMPS";
+const char configMsg39[] PROGMEM = "CELLS";
 //-----------------------------------------------------------Page4
 const char configMsg40[] PROGMEM = "4/8 RSSI";
 const char configMsg41[] PROGMEM = "ACTUAL RSSIADC";

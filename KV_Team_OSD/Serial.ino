@@ -408,14 +408,14 @@ void handleRawRC() {
 
 	if(configPage == 3 && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAYVOLTAGE]=!Settings[S_DISPLAYVOLTAGE];
-	  if(ROW==2) Settings[S_VOLTAGEMIN]--;
-	  if(ROW==3) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
-	  if(ROW==4) Settings[S_DISPLAYTEMPERATURE]=!Settings[S_DISPLAYTEMPERATURE];
-	  if(ROW==5) Settings[S_TEMPERATUREMAX]--;
+	  if(ROW==2) Settings[S_DIVIDERRATIO]--;
+	  if(ROW==3) Settings[S_VOLTAGEMIN]--;
+	  if(ROW==4) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
+	  if(ROW==5) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
 	  if(ROW==6) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
-	  if(ROW==7) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
-	  if(ROW==8) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
-	  if(ROW==9) Settings[S_AMPDIVIDERRATIO]--;
+	  if(ROW==7) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
+	  if(ROW==8) Settings[S_AMPDIVIDERRATIO]--;
+	  if(ROW==9) Settings[S_BATCELLS]--;
 	}
 
 	if(configPage == 4 && COL == 3) {
@@ -476,13 +476,14 @@ void handleRawRC() {
 
 	if(configPage == 3 && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAYVOLTAGE]=!Settings[S_DISPLAYVOLTAGE];
-	  if(ROW==2) Settings[S_VOLTAGEMIN]++;
-	  if(ROW==3) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
-	  if(ROW==4) Settings[S_DISPLAYTEMPERATURE]=!Settings[S_DISPLAYTEMPERATURE];
-	  if(ROW==5) Settings[S_TEMPERATUREMAX]++;
+	  if(ROW==2) Settings[S_DIVIDERRATIO]++;
+	  if(ROW==3) Settings[S_VOLTAGEMIN]++;
+	  if(ROW==4) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
+	  if(ROW==5) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
 	  if(ROW==6) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
-	  if(ROW==8) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
-	  if(ROW==9) Settings[S_AMPDIVIDERRATIO]++;
+	  if(ROW==7) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
+	  if(ROW==8) Settings[S_AMPDIVIDERRATIO]++;
+	  if(ROW==9) Settings[S_BATCELLS]++;
 	}
 
 	if(configPage == 4 && COL == 3) {
