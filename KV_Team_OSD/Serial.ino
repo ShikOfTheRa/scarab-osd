@@ -404,6 +404,7 @@ void handleRawRC() {
 	  if(ROW==3) rollPitchRate--;
 	  if(ROW==4) yawRate--;
 	  if(ROW==5) dynThrPID--;
+	  if(ROW==6) eepromWriteTimer=EEPROM_WRITE_DELAY;
 	}
 
 	if(configPage == 3 && COL == 3) {
@@ -411,34 +412,35 @@ void handleRawRC() {
 	  if(ROW==2) Settings[S_DIVIDERRATIO]--;
 	  if(ROW==3) Settings[S_VOLTAGEMIN]--;
 	  if(ROW==4) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
-	  if(ROW==5) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
-	  if(ROW==6) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
-	  if(ROW==7) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
-	  if(ROW==8) Settings[S_AMPDIVIDERRATIO]--;
-	  if(ROW==9) Settings[S_BATCELLS]--;
+	  if(ROW==5) Settings[S_BATCELLS]--;
 	}
 
 	if(configPage == 4 && COL == 3) {
+	  if(ROW==1) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
 	  if(ROW==3) rssiTimer=15;
 	  if(ROW==4) Settings[S_RSSIMAX]=rssiADC;  // set MAX RSSI signal received (tx ON and rx near to tx)
-	  if(ROW==5) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
 	}
 
 	if(configPage == 5 && COL == 3) {
-	  if(ROW==1) accCalibrationTimer=0;
-	  if(ROW==5) magCalibrationTimer=0;
-	  if(ROW==7) eepromWriteTimer=0;
+	  if(ROW==1) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
+	  if(ROW==2) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
+	  if(ROW==3) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
+	  if(ROW==4) Settings[S_AMPDIVIDERRATIO]--;
 	}
 
 	if(configPage == 7 && COL == 3) {
-	  if(ROW==1) Settings[S_DISPLAY_CS]=!Settings[S_DISPLAY_CS];
-	  if(ROW==2) Settings[S_THROTTLEPOSITION]=!Settings[S_THROTTLEPOSITION];
-	  if(ROW==3) Settings[S_WITHDECORATION]=!Settings[S_WITHDECORATION];
-	  if(ROW==4) Settings[S_UNITSYSTEM]=!Settings[S_UNITSYSTEM];
-	  if(ROW==5) {
+	  if(ROW==1) Settings[S_UNITSYSTEM]=!Settings[S_UNITSYSTEM];
+	  if(ROW==2) {
 	    Settings[S_VIDEOSIGNALTYPE]=!Settings[S_VIDEOSIGNALTYPE];
 	    MAX7456Setup();
 	    }
+	  if(ROW==3) Settings[S_VREFERENCE]=!Settings[S_VREFERENCE];
+	}
+
+	if(configPage == 9 && COL == 3) {
+	  if(ROW==1) accCalibrationTimer=0;
+	  if(ROW==5) magCalibrationTimer=0;
+	  if(ROW==7) eepromWriteTimer=0;
 	}
 
 	if((ROW==10)&&(COL==3)) configPage--;
@@ -472,6 +474,7 @@ void handleRawRC() {
 	  if(ROW==3) rollPitchRate++;
 	  if(ROW==4) yawRate++;
 	  if(ROW==5) dynThrPID++;
+	  if(ROW==6) eepromWriteTimer=EEPROM_WRITE_DELAY;
 	}
 
 	if(configPage == 3 && COL == 3) {
@@ -479,17 +482,13 @@ void handleRawRC() {
 	  if(ROW==2) Settings[S_DIVIDERRATIO]++;
 	  if(ROW==3) Settings[S_VOLTAGEMIN]++;
 	  if(ROW==4) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
-	  if(ROW==5) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
-	  if(ROW==6) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
-	  if(ROW==7) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
-	  if(ROW==8) Settings[S_AMPDIVIDERRATIO]++;
-	  if(ROW==9) Settings[S_BATCELLS]++;
+	  if(ROW==5) Settings[S_BATCELLS]++;
 	}
 
 	if(configPage == 4 && COL == 3) {
+	  if(ROW==1) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
 	  if(ROW==3) rssiTimer=15;
 	  if(ROW==4) Settings[S_RSSIMAX]=rssiADC;  // set MAX RSSI signal received (tx ON and rx near to tx)
-	  if(ROW==5) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
 	}
 
 	if(configPage == 5 && COL == 3) {
@@ -509,15 +508,12 @@ void handleRawRC() {
 	}
 
 	if(configPage == 7 && COL == 3) {
-	  if(ROW==1) Settings[S_DISPLAY_CS]=!Settings[S_DISPLAY_CS];
-	  if(ROW==2) Settings[S_THROTTLEPOSITION]=!Settings[S_THROTTLEPOSITION];
-	  if(ROW==3) Settings[S_WITHDECORATION]=!Settings[S_WITHDECORATION];
-	  if(ROW==4) Settings[S_UNITSYSTEM]=!Settings[S_UNITSYSTEM];
-	  if(ROW==5) {
+	  if(ROW==1) Settings[S_UNITSYSTEM]=!Settings[S_UNITSYSTEM];
+	  if(ROW==2) {
 	    Settings[S_VIDEOSIGNALTYPE]=!Settings[S_VIDEOSIGNALTYPE];
 	    MAX7456Setup();
 	    }
-	  if(ROW==6) Settings[S_VREFERENCE]=!Settings[S_VREFERENCE];
+	  if(ROW==3) Settings[S_VREFERENCE]=!Settings[S_VREFERENCE];
 	}
 
 	if((ROW==10)&&(COL==3)) configPage++;
