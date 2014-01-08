@@ -98,6 +98,8 @@ enum Setting_ {
   S_GPSTZ,
   S_GPSDS,
   S_DEBUG,
+  S_SCROLLING,
+  S_GIMBAL,
   S_CS0,
   S_CS1,
   S_CS2,
@@ -170,9 +172,11 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 0,   // S_DISPLAY_CS,               37
 0,   // GPStime                     37a
 0,   // GPSTZ +/-                   37b
-0,   // GPSTZ                        37c
+0,   // GPSTZ                       37c
 0,   // GPSDS                       37d
 0,   // DEBUG                       37e
+1,   // SCROLOLING LADDERS          37f
+1,   // SHOW GIMBAL ICON            37g
 0,   // S_CS0,
 0,   // S_CS1,
 0,   // S_CS2,
@@ -381,12 +385,16 @@ const char configMsg32[] PROGMEM = "ADJUST VOLTS";
 const char configMsg33[] PROGMEM = "MAIN VOLTS ALARM";
 const char configMsg34[] PROGMEM = "DISPLAY VID VOLTS";
 const char configMsg35[] PROGMEM = "CELLS";
+const char configMsg36[] PROGMEM = "USE MWII";
 //-----------------------------------------------------------Page4
 const char configMsg40[] PROGMEM = "RSSI";
 const char configMsg41[] PROGMEM = "DISPLAY RSSI";
 const char configMsg42[] PROGMEM = "ACTUAL RSSI";
 const char configMsg43[] PROGMEM = "SET RSSI MIN";
 const char configMsg44[] PROGMEM = "SET RSSI MAX";
+const char configMsg45[] PROGMEM = "USE MWII";
+const char configMsg46[] PROGMEM = "USE PWM";
+
 //-----------------------------------------------------------Page5
 const char configMsg50[] PROGMEM = "CURRENT";
 const char configMsg51[] PROGMEM = "DISPLAY AMPS";
@@ -395,13 +403,14 @@ const char configMsg53[] PROGMEM = "USE VIRTUAL AMPS";
 const char configMsg54[] PROGMEM = "ADJUST AMPS";
 //-----------------------------------------------------------Page6
 const char configMsg60[] PROGMEM = "DISPLAY";
-const char configMsg61[] PROGMEM = "XONXOFF";
-const char configMsg62[] PROGMEM = "CALLSIGN";
-const char configMsg63[] PROGMEM = "THROTTLE";
-const char configMsg64[] PROGMEM = "AH SIDE BAR";
-const char configMsg65[] PROGMEM = "UNIT SYSTEM";
-const char configMsg66[] PROGMEM = "VIDEO SYSTEM";
-const char configMsg67[] PROGMEM = "REF VOLTAGE";
+const char configMsg61[] PROGMEM = "HORIZON";
+const char configMsg62[] PROGMEM = "SIDE BARS";
+const char configMsg63[] PROGMEM = "SCROLLING BARS";
+const char configMsg64[] PROGMEM = "THROTTLE";
+const char configMsg65[] PROGMEM = "GPS COORDS";
+const char configMsg66[] PROGMEM = "SENSORS";
+const char configMsg67[] PROGMEM = "GIMBAL";
+const char configMsg68[] PROGMEM = "GPS TIME";
 //-----------------------------------------------------------Page7
 const char configMsg70[] PROGMEM = "ADVANCED";
 const char configMsg71[] PROGMEM = "UNITS";
@@ -413,6 +422,8 @@ const char configMsg721[] PROGMEM = "PAL";
 const char configMsg73[] PROGMEM = "VOLT REF";
 const char configMsg730[] PROGMEM = "5V";
 const char configMsg731[] PROGMEM = "1.1V";
+const char configMsg74[] PROGMEM = "DEBUG";
+//const char configMsg75[] PROGMEM = "TOP SHIFT";
 //-----------------------------------------------------------Page8
 const char configMsg80[] PROGMEM = "STATISTICS";
 const char configMsg81[] PROGMEM = "TRIP";

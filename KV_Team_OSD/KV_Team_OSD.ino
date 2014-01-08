@@ -203,34 +203,7 @@ else
       
     if(Settings[S_DISPLAYRSSI])
       calculateRssi();
-
-      // Scrolling decoration
-      if (GPS_speed > old_GPS_speed+10){
-      old_GPS_speed = GPS_speed;
-        SYM_AH_DECORATION_LEFT--;
-        if (SYM_AH_DECORATION_LEFT<0x10)
-          SYM_AH_DECORATION_LEFT=0x15;
-      }
-      else if (GPS_speed +10 < old_GPS_speed){
-      old_GPS_speed = GPS_speed;
-        SYM_AH_DECORATION_LEFT++;
-        if (SYM_AH_DECORATION_LEFT>0x15)
-          SYM_AH_DECORATION_LEFT=0x10;
-      }
- 
-      if (MwAltitude > old_MwAltitude+10){
-       old_MwAltitude = MwAltitude;
-      SYM_AH_DECORATION_RIGHT--;
-        if (SYM_AH_DECORATION_RIGHT<0x10)
-          SYM_AH_DECORATION_RIGHT=0x15;
-      }
-      else if (MwAltitude < old_MwAltitude-10){
-        old_MwAltitude = MwAltitude;
-      SYM_AH_DECORATION_RIGHT++;
-        if (SYM_AH_DECORATION_RIGHT>0x15)
-          SYM_AH_DECORATION_RIGHT=0x10;
-      }  
-
+    scrollingLadders();
   }  // End of slow Timed Service Routine (100ms loop)
 
   if((currentMillis - previous_millis_high) >= hi_speed_cycle)  // 20 Hz (Executed every 50ms)
