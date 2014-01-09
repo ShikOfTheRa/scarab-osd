@@ -45,6 +45,8 @@ enum Settings {
   S_GPSTZ,
   S_GPSDS,
   S_DEBUG,
+  S_SCROLLING,
+  S_CAMSTAB,
   S_CS0,
   S_CS1,
   S_CS2,

@@ -1,4 +1,7 @@
 
+// Modifications based on work by guys below + many others...
+// All credits to the incredible contributions to all below + many others...
+
 //   KV Team OSD GUI
 //   http://code.google.com/p/rush-osd-development/
 //   July  2013  V_r370
@@ -49,7 +52,7 @@ import java.text.DecimalFormat;
 
 
 
-String KV_OSD_GUI_Version = "r370";
+String KV_OSD_GUI_Version = "R1";
 
 
 PImage img_Clear,OSDBackground,RadioPot;
@@ -208,10 +211,13 @@ int XAmps      = 120;        int YAmps    = 281;
 int XVVolts    = 120;        int YVVolts  = 373;
 int XTemp      = 120;        int YTemp    = 449;
 int XCS        = 120;        int YCS    = 506;
-int XGPS       = 305;        int YGPS    = 5;
-int XTIME      = 510;        int YTIME    = 5;
+int XGPS       = 510;        int YGPS    = 5;
+//int XGPS       = 305;        int YGPS    = 5;
+int XTIME      = 510;        int YTIME    = 150;
+//int XTIME      = 510;        int YTIME    = 5;
 
-int XOther     = 305;        int YOther   = 150; //48;
+int XOther     = 305;        int YOther   = 5; //48;
+//int XOther     = 305;        int YOther   = 150; //48;
 int XPortStat  = 5;          int YPortStat = 415;
 int XDebug     = 5;          int YDebug    = 240;
 int XFONTTOOLS = 5;          int YFONTTOOLS    = 296;
@@ -300,6 +306,8 @@ String[] ConfigNames = {
   "Time Zone offset",
   "DST Minutes",
   "Debug",
+  "Scrolling Bars",
+  "Display Gimbal",
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -368,6 +376,8 @@ String[] ConfigHelp = {
   "Time Zone offset",
   "DST Minutes",
   "Debug",
+  "Scrolling Bars",
+  "Display Gimbal",
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -444,6 +454,8 @@ int[] ConfigRanges = {
 13,    // GPSTZ                    37c
 60,    // GPSDS                    37d
 1,     // Debug                    37e
+1,     // S_SCROLLING              37f
+1,     // S_CAMSTAB                37g
 255,
 255,
  255,
@@ -554,7 +566,7 @@ void setup() {
 //Map<Settings, String> table = new EnumMap<Settings>(Settings.class);
 OnTimer = millis();
   frameRate(30); 
-OSDBackground = loadImage("Background4.jpg");
+OSDBackground = loadImage("Background.jpg");
 //RadioPot = loadImage("kvImage.jpg");
 //PGraphics icon = createGraphics(16, 16, P3D);
 //icon.beginDraw();
@@ -698,6 +710,8 @@ CreateItem(GetSetting("S_ENABLEADC"),  5,7*17, G_Other);
 CreateItem(GetSetting("S_VREFERENCE"),  5,8*17, G_Other);
 CreateItem(GetSetting("S_USE_BOXNAMES"),  5,9*17, G_Other);
 CreateItem(GetSetting("S_MODEICON"),  5,10*17, G_Other);
+CreateItem(GetSetting("S_SCROLLING"),  5,11*17, G_Other);
+CreateItem(GetSetting("S_CAMSTAB"),  5,12*17, G_Other);
 
 //  TIME  ----------------------------------------------------------------------------
 CreateItem(GetSetting("S_GPSTIME"),  5,0*17, G_TIME);
@@ -979,14 +993,14 @@ void draw() {
   textFont(font12);
   // version
   fill(255, 255, 255);
-  text("KV Team OSD",10,19);
-  text("  GUI    V",10,35);
+  text("SCARAB KVR",10,19);
+  text("GUI V: ",10,35);
   text(KV_OSD_GUI_Version, 74, 35);
   fill(0, 0, 0);
   strokeWeight(3);stroke(0);
   rectMode(CORNERS);
   if (int(ShowSimBackground.arrayValue()[0]) < 1){
-    image(OSDBackground,DisplayWindowX+WindowAdjX, DisplayWindowY+WindowAdjY, 364-WindowShrinkX, 300-WindowShrinkY); //529-WindowShrinkX, 360-WindowShrinkY);
+    image(OSDBackground,DisplayWindowX+WindowAdjX+10, DisplayWindowY+WindowAdjY, 354-WindowShrinkX, 300-WindowShrinkY); //529-WindowShrinkX, 360-WindowShrinkY);
   }
   else{
     fill(80, 80,80); strokeWeight(3);stroke(1); rectMode(CORNER); rect(DisplayWindowX+WindowAdjX, DisplayWindowY+WindowAdjY, 364-WindowShrinkX, 300-WindowShrinkY);  //335-WindowShrinkX, 288-WindowShrinkY);
