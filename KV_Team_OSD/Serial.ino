@@ -413,11 +413,11 @@ void handleRawRC() {
 	  if(ROW==3) Settings[S_VOLTAGEMIN]--;
 	  if(ROW==4) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
 	  if(ROW==5) Settings[S_BATCELLS]--;
-	  if(ROW==6) Settings[S_MAINVOLTAGE_VBAT]=!Settings[S_DISPLAYVOLTAGE];
+	  if(ROW==6) Settings[S_MAINVOLTAGE_VBAT]=!Settings[S_MAINVOLTAGE_VBAT];
 	}
 
 	if(configPage == 4 && COL == 3) {
-	  if(ROW==1) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
+	  if(ROW==2) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
 	  if(ROW==3) rssiTimer=15;
 	  if(ROW==4) Settings[S_RSSIMAX]=rssiADC;  // set MAX RSSI signal received (tx ON and rx near to tx)
 	  if(ROW==5) Settings[S_MWRSSI]=!Settings[S_MWRSSI];
@@ -498,11 +498,11 @@ void handleRawRC() {
 	  if(ROW==3) Settings[S_VOLTAGEMIN]++;
 	  if(ROW==4) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
 	  if(ROW==5) Settings[S_BATCELLS]++;
-	  if(ROW==6) Settings[S_MAINVOLTAGE_VBAT]=!Settings[S_DISPLAYVOLTAGE];
+	  if(ROW==6) Settings[S_MAINVOLTAGE_VBAT]=!Settings[S_MAINVOLTAGE_VBAT];
 	}
 
 	if(configPage == 4 && COL == 3) {
-	  if(ROW==1) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
+	  if(ROW==2) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
 	  if(ROW==3) rssiTimer=15;
 	  if(ROW==4) Settings[S_RSSIMAX]=rssiADC;  // set MAX RSSI signal received (tx ON and rx near to tx)
 	  if(ROW==5) Settings[S_MWRSSI]=!Settings[S_MWRSSI];
@@ -510,19 +510,21 @@ void handleRawRC() {
 	}
 
 	if(configPage == 5 && COL == 3) {
-	  if(ROW==1) accCalibrationTimer=CALIBRATION_DELAY;
-	  if(ROW==5) magCalibrationTimer=CALIBRATION_DELAY;
-	  if(ROW==7) eepromWriteTimer=EEPROM_WRITE_DELAY;
+	  if(ROW==1) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
+	  if(ROW==2) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
+	  if(ROW==3) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
+	  if(ROW==4) Settings[S_AMPDIVIDERRATIO]++;
 	}
 
 	if(configPage == 6 && COL == 3) {
-  	  if(ROW==1) Settings[S_DISPLAYGPS]=!Settings[S_DISPLAYGPS];
-  	  if(ROW==2) Settings[S_COORDINATES]=!Settings[S_COORDINATES];
-  	  if(ROW==3) Settings[S_GPSCOORDTOP]=!Settings[S_GPSCOORDTOP];  // Coord on top
-	  if(ROW==4) Settings[S_GPSALTITUDE]=!Settings[S_GPSALTITUDE];  // GPS Altitude
-	  if(ROW==5) Settings[S_ANGLETOHOME]=!Settings[S_ANGLETOHOME];  // Angle to Home
-	  if(ROW==6) Settings[S_SHOWHEADING]=!Settings[S_SHOWHEADING];
-	  if(ROW==7) Settings[S_MODEICON]=!Settings[S_MODEICON];        // Mode Icons
+	  if(ROW==1) Settings[S_WITHDECORATION]=!Settings[S_WITHDECORATION];
+	  if(ROW==2) Settings[S_DISPLAY_HORIZON_BR]=!Settings[S_DISPLAY_HORIZON_BR];
+	  if(ROW==3) Settings[S_SCROLLING]=!Settings[S_SCROLLING];
+	  if(ROW==4) Settings[S_THROTTLEPOSITION]=!Settings[S_THROTTLEPOSITION];
+	  if(ROW==5) Settings[S_COORDINATES]=!Settings[S_DISPLAYGPS];
+	  if(ROW==6) Settings[S_MODEICON]=!Settings[S_MODEICON];
+	  if(ROW==7) Settings[S_GIMBAL]=!Settings[S_GIMBAL];
+	  if(ROW==8) Settings[S_GPSTIME]=!Settings[S_GPSTIME];
 	}
 
 	if(configPage == 7 && COL == 3) {

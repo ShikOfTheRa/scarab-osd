@@ -875,7 +875,8 @@ void displayCursor(void)
       }
     if(configPage==4){
       COL=3;
-      if (ROW==2) ROW=3;
+      if (ROW==1) ROW=2;
+      if (ROW==7) ROW=10;
       if (ROW==9) ROW=6;
       cursorpos=(ROW+2)*30+10+6+6;
       }
@@ -884,20 +885,21 @@ void displayCursor(void)
       {  
       COL=3;
       if (ROW==9) ROW=4;
+      if (ROW==5) ROW=10;
       cursorpos=(ROW+2)*30+10+6+6;
       }
 
     if(configPage==6)
       {  
       COL=3;
-      if (ROW==9) ROW=8;
       cursorpos=(ROW+2)*30+10+6+6;
       }
 
     if(configPage==7)
       {  
       COL=3;
-      if (ROW==6) ROW=4;
+      if (ROW==9) ROW=4;
+      if (ROW==5) ROW=10;
        cursorpos=(ROW+2)*30+10+6+6;
       }
 
@@ -1023,16 +1025,16 @@ void displayConfigScreen(void)
     MAX7456_WriteString_P(configMsg40, 35);
 
 //R1:
-    MAX7456_WriteString_P(configMsg41, ROLLT);
+    MAX7456_WriteString_P(configMsg41, PITCHT);
+    MAX7456_WriteString(itoa(rssi,screenBuffer,10),PITCHD);
+//R2:
+    MAX7456_WriteString_P(configMsg42, ROLLT);
     if(Settings[S_DISPLAYRSSI]){
       MAX7456_WriteString_P(configMsgON, ROLLD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, ROLLD);
     }
-//R2:
-    MAX7456_WriteString_P(configMsg42, PITCHT);
-    MAX7456_WriteString(itoa(rssi,screenBuffer,10),PITCHD);
 //R3:
     MAX7456_WriteString_P(configMsg43, YAWT);
     if(rssiTimer>0) MAX7456_WriteString(itoa(rssiTimer,screenBuffer,10),YAWD-5);
