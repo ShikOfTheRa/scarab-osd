@@ -518,7 +518,7 @@ void displayHeading(void)
 void displayHeadingGraph(void)
 {
  //Shiki Mod
- if(!fieldIsVisible(MwHeadingGraphPosition))
+ if(!fieldIsVisible(MwHeadingGraphPosition)||!Settings[S_COMPASS])
     return;
  //
   int xx;
@@ -1160,8 +1160,7 @@ void displayConfigScreen(void)
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, MAGD+LINE);
-    }
-    
+    }   
   }
   
   if(configPage==7)
