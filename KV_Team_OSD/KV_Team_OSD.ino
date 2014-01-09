@@ -158,7 +158,12 @@ void loop()
       uint16_t voltageRaw = 0;
       for (uint16_t i=0;i<8;i++)
         voltageRaw += voltageRawArray[i];
+    if (!Settings[S_VREFERENCE]){
       voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (1.1/102.3/4/8);  
+    }
+    else {
+      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (1.1/102.3/8);     
+    }
     }
     if (!Settings[S_VIDVOLTAGE_VBAT]) {
       vidvoltage = float(analogRead(vidvoltagePin)) * Settings[S_VIDDIVIDERRATIO] * (1.1/102.3/4);

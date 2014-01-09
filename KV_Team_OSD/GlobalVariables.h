@@ -100,6 +100,9 @@ enum Setting_ {
   S_DEBUG,
   S_SCROLLING,
   S_GIMBAL,
+  S_VARIO,
+  S_BAROALT,
+  S_COMPASS,
   S_CS0,
   S_CS1,
   S_CS2,
@@ -177,6 +180,9 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 0,   // DEBUG                       37e
 1,   // SCROLOLING LADDERS          37f
 1,   // SHOW GIMBAL ICON            37g
+1,   // SHOW VARIO                  37h
+1,   // SHOW BAROALT                38h
+1,   // SHOW COMPASS                39h
 0,   // S_CS0,
 0,   // S_CS1,
 0,   // S_CS2,
