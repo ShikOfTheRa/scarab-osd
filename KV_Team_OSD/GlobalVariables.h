@@ -348,7 +348,7 @@ const char armed_text[] PROGMEM = " ARMED";
 
 
 // For Intro
-const char message0[] PROGMEM = "SCARAB OSD - RUSH/KV-2";
+const char message0[] PROGMEM = "SCARAB OSD - KVR R1";
 const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
 const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
 const char message5[] PROGMEM = "MW VERSION:";
@@ -394,8 +394,8 @@ const char configMsg35[] PROGMEM = "CELLS";
 const char configMsg36[] PROGMEM = "USE MWII";
 //-----------------------------------------------------------Page4
 const char configMsg40[] PROGMEM = "RSSI";
-const char configMsg41[] PROGMEM = "DISPLAY RSSI";
-const char configMsg42[] PROGMEM = "ACTUAL RSSI";
+const char configMsg41[] PROGMEM = "ACTUAL RSSI";
+const char configMsg42[] PROGMEM = "DISPLAY RSSI";
 const char configMsg43[] PROGMEM = "SET RSSI MIN";
 const char configMsg44[] PROGMEM = "SET RSSI MAX";
 const char configMsg45[] PROGMEM = "USE MWII";
