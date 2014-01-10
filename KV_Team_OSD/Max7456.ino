@@ -159,6 +159,7 @@ void MAX7456Setup(void)
   //sample on leading edge of clk,system clock/4 rate (4 meg)
 
   SPCR = (1<<SPE)|(1<<MSTR);
+  SPSR=(1<<SPI2X);
   uint8_t spi_junk;
   spi_junk=SPSR;
   spi_junk=SPDR;
@@ -189,6 +190,10 @@ void MAX7456Setup(void)
   }
   digitalWrite(MAX7456SELECT,HIGH);
   delay(100);
+  
+  EIMSK |= (1 << INT0);  // enable interuppt
+  EICRA |= (1 << ISC01); // interrupt at the falling edge
+  sei();
 }
 
 // Copy string from ram into screen buffer
@@ -212,18 +217,44 @@ void MAX7456_WriteString_P(const char *string, int Adresse)
   }
 }
 
+
+volatile unsigned char vsync_wait = 0;
+
+ISR(INT0_vect) {
+  vsync_wait = 0;
+}
+
 void MAX7456_DrawScreen()
 {
+  vsync_wait = 1;
+  while (vsync_wait)
+  ;
+  
   int xx;
-
   digitalWrite(MAX7456SELECT,LOW);
+  
+  spi_transfer(DMM_reg);  
+  spi_transfer(1); 
+
+  spi_transfer(DMAH_reg);  
+  spi_transfer(0); 
+
+  spi_transfer(DMAL_reg);  
+  spi_transfer(0); 
+
+
   for(xx=0;xx<MAX_screen_size;++xx)
   {
-    MAX7456_Send(MAX7456ADD_DMAH, xx>>8);
-    MAX7456_Send(MAX7456ADD_DMAL, xx);
     MAX7456_Send(MAX7456ADD_DMDI, screen[xx]);
     screen[xx] = ' ';
   }
+
+  spi_transfer(DMDI_reg); 
+  spi_transfer(END_string); 
+
+  spi_transfer(DMM_reg);  
+  spi_transfer(B00000000);
+  
   digitalWrite(MAX7456SELECT,HIGH);
 }
 
