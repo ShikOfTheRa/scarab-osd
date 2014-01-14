@@ -53,7 +53,7 @@ const uint16_t screenPosition[] PROGMEM = {
   POS(LINE12+10, 2, OSDOFF28), // CallSign Position
   POS(LINE08+10, 2, OSDOFF29), // Debug Position
   POS(LINE05+2,  0, OSDOFF08), // Gimbal Position
-  POS(LINE12+11, 2, OSDOFF31), // GPS_time Position
+  POS(LINE12+10, 2, OSDOFF31), // GPS_time Position
 };
 
 uint16_t getPosition(uint8_t pos) {

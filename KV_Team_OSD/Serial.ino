@@ -404,16 +404,52 @@ void handleRawRC() {
 	  if(ROW==3) rollPitchRate--;
 	  if(ROW==4) yawRate--;
 	  if(ROW==5) dynThrPID--;
+	  if(ROW==6) eepromWriteTimer=EEPROM_WRITE_DELAY;
 	}
 
 	if(configPage == 3 && COL == 3) {
+	  if(ROW==1) Settings[S_DISPLAYVOLTAGE]=!Settings[S_DISPLAYVOLTAGE];
 	  if(ROW==2) Settings[S_DIVIDERRATIO]--;
 	  if(ROW==3) Settings[S_VOLTAGEMIN]--;
+	  if(ROW==4) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
 	  if(ROW==5) Settings[S_BATCELLS]--;
+	  if(ROW==6) Settings[S_MAINVOLTAGE_VBAT]=!Settings[S_MAINVOLTAGE_VBAT];
+	}
+
+	if(configPage == 4 && COL == 3) {
+	  if(ROW==2) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
+	  if(ROW==3) rssiTimer=15;
+	  if(ROW==4) Settings[S_RSSIMAX]=rssiADC;  // set MAX RSSI signal received (tx ON and rx near to tx)
+	  if(ROW==5) Settings[S_MWRSSI]=!Settings[S_MWRSSI];
+	  if(ROW==6) Settings[S_PWMRSSI]=!Settings[S_PWMRSSI];
 	}
 
 	if(configPage == 5 && COL == 3) {
+	  if(ROW==1) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
+	  if(ROW==2) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
+	  if(ROW==3) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
 	  if(ROW==4) Settings[S_AMPDIVIDERRATIO]--;
+	}
+
+	if(configPage == 6 && COL == 3) {
+	  if(ROW==1) Settings[S_WITHDECORATION]=!Settings[S_WITHDECORATION];
+	  if(ROW==2) Settings[S_DISPLAY_HORIZON_BR]=!Settings[S_DISPLAY_HORIZON_BR];
+	  if(ROW==3) Settings[S_SCROLLING]=!Settings[S_SCROLLING];
+	  if(ROW==4) Settings[S_THROTTLEPOSITION]=!Settings[S_THROTTLEPOSITION];
+	  if(ROW==5) Settings[S_COORDINATES]=!Settings[S_DISPLAYGPS];
+	  if(ROW==6) Settings[S_MODEICON]=!Settings[S_MODEICON];
+	  if(ROW==7) Settings[S_GIMBAL]=!Settings[S_GIMBAL];
+	  if(ROW==8) Settings[S_GPSTIME]=!Settings[S_GPSTIME];
+	}
+
+	if(configPage == 7 && COL == 3) {
+	  if(ROW==1) Settings[S_UNITSYSTEM]=!Settings[S_UNITSYSTEM];
+	  if(ROW==2) {
+	    Settings[S_VIDEOSIGNALTYPE]=!Settings[S_VIDEOSIGNALTYPE];
+	    MAX7456Setup();
+	    }
+	  if(ROW==3) Settings[S_VREFERENCE]=!Settings[S_VREFERENCE];
+	  if(ROW==4) Settings[S_DEBUG]=!Settings[S_DEBUG];
 	}
 
 	if(configPage == 9 && COL == 3) {
@@ -453,38 +489,15 @@ void handleRawRC() {
 	  if(ROW==3) rollPitchRate++;
 	  if(ROW==4) yawRate++;
 	  if(ROW==5) dynThrPID++;
-	}
-
-	if(configPage == 3 && COL == 3) {
-	  if(ROW==2) Settings[S_DIVIDERRATIO]++;
-	  if(ROW==3) Settings[S_VOLTAGEMIN]++;
-	  if(ROW==5) Settings[S_BATCELLS]++;
-	}
-
-	if(configPage == 5 && COL == 3) {
-	  if(ROW==4) Settings[S_AMPDIVIDERRATIO]++;
-	}
-
-	if((ROW==10)&&(COL==3)) configPage++;
-	if(configPage>MAXPAGE) configPage = MINPAGE;
-        serialMenuCommon();  
-    }
-      
-    }
-
-    if(waitStick == 1)
-      stickTime = millis();
-  }
-}
-void serialMenuCommon()
-{
-  	if(configPage == 2 && COL == 3) {
 	  if(ROW==6) eepromWriteTimer=EEPROM_WRITE_DELAY;
 	}
 
 	if(configPage == 3 && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAYVOLTAGE]=!Settings[S_DISPLAYVOLTAGE];
+	  if(ROW==2) Settings[S_DIVIDERRATIO]++;
+	  if(ROW==3) Settings[S_VOLTAGEMIN]++;
 	  if(ROW==4) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
+	  if(ROW==5) Settings[S_BATCELLS]++;
 	  if(ROW==6) Settings[S_MAINVOLTAGE_VBAT]=!Settings[S_MAINVOLTAGE_VBAT];
 	}
 
@@ -500,14 +513,15 @@ void serialMenuCommon()
 	  if(ROW==1) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
 	  if(ROW==2) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
 	  if(ROW==3) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
+	  if(ROW==4) Settings[S_AMPDIVIDERRATIO]++;
 	}
 
 	if(configPage == 6 && COL == 3) {
-	  if(ROW==1) Settings[S_DISPLAY_HORIZON_BR]=!Settings[S_DISPLAY_HORIZON_BR];
-	  if(ROW==2) Settings[S_WITHDECORATION]=!Settings[S_WITHDECORATION];
+	  if(ROW==1) Settings[S_WITHDECORATION]=!Settings[S_WITHDECORATION];
+	  if(ROW==2) Settings[S_DISPLAY_HORIZON_BR]=!Settings[S_DISPLAY_HORIZON_BR];
 	  if(ROW==3) Settings[S_SCROLLING]=!Settings[S_SCROLLING];
 	  if(ROW==4) Settings[S_THROTTLEPOSITION]=!Settings[S_THROTTLEPOSITION];
-	  if(ROW==5) Settings[S_COORDINATES]=!Settings[S_COORDINATES];
+	  if(ROW==5) Settings[S_COORDINATES]=!Settings[S_DISPLAYGPS];
 	  if(ROW==6) Settings[S_MODEICON]=!Settings[S_MODEICON];
 	  if(ROW==7) Settings[S_GIMBAL]=!Settings[S_GIMBAL];
 	  if(ROW==8) Settings[S_GPSTIME]=!Settings[S_GPSTIME];
@@ -520,11 +534,18 @@ void serialMenuCommon()
 	    MAX7456Setup();
 	    }
 	  if(ROW==3) Settings[S_VREFERENCE]=!Settings[S_VREFERENCE];
-	  if(ROW==4) Settings[S_DEBUG]=!Settings[S_DEBUG];
 	}
 
-  	if((ROW==10)&&(COL==1)) configExit();
+	if((ROW==10)&&(COL==3)) configPage++;
+	if(configPage>MAXPAGE) configPage = MINPAGE;
+	if((ROW==10)&&(COL==1)) configExit();
 	if((ROW==10)&&(COL==2)) saveExit();
+      }
+    }
+
+    if(waitStick == 1)
+      stickTime = millis();
+  }
 }
 
 void serialMSPreceive()
