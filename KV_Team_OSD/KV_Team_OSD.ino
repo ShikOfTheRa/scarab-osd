@@ -162,7 +162,7 @@ void loop()
       voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (1.1/102.3/4/8);  
     }
     else {
-      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (1.1/102.3/8);     
+      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (1.1/102.3/2/8);     
     }
     }
     if (!Settings[S_VIDVOLTAGE_VBAT]) {
