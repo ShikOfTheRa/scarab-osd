@@ -80,7 +80,7 @@
 //#define  OSDOFF30 DISPLAY_MIN_OFF // Gimbal Position
 #define  OSDOFF31 DISPLAY_MIN_OFF // GPS_time Position
 
-#define DEBUG // For developers - remove if memory required
+//#define DEBUG // For developers - remove if memory required
 
 /*----------------------------------------------       End of configurable parameters      ----------------------------------------------------*/
 
