@@ -544,6 +544,7 @@ void displayIntro(void)
  //haydent - Time Zone & DST Setting//
   MAX7456_WriteString_P(message10, KVTeamVersionPosition+30+LINE);
   
+/* removed temp because lack of memeory
 
   if(abs(Settings[S_GPSTZ]) >= 100)ItoaPadded(Settings[S_GPSTZ], screenBuffer, 5, 4);
   else ItoaPadded(Settings[S_GPSTZ], screenBuffer, 4, 3);
@@ -551,6 +552,7 @@ void displayIntro(void)
   else screenBuffer[0] = '-';
    
   MAX7456_WriteString(screenBuffer, KVTeamVersionPosition+37+LINE); 
+*/
 
   MAX7456_WriteString_P(message11, KVTeamVersionPosition+43+LINE);
   MAX7456_WriteString(itoa(Settings[S_GPSDS], screenBuffer,10), KVTeamVersionPosition+47+LINE);
@@ -608,8 +610,7 @@ void displayGPSPosition(void)
   }
   
   if(Settings[S_GPSALTITUDE]){
-   // Shiki Mod
-   if(!fieldIsVisible(MwGPSAltPosition))
+    if(!fieldIsVisible(MwGPSAltPosition))
     return;
    //
       screenBuffer[0] = MwGPSAltPositionAdd[Settings[S_UNITSYSTEM]];
@@ -626,6 +627,8 @@ void displayGPSPosition(void)
 void displayNumberOfSat(void)
 {
   // Shiki mod
+  if(!GPS_fix)
+    return;
   if(!fieldIsVisible(GPS_numSatPosition))
     return;
   //
@@ -682,10 +685,13 @@ void displayGPS_time(void)       //local time of coord calc - haydent
   
   formatTime(seconds, screenBuffer, 1);
   if(screenBuffer[0] == ' ')screenBuffer[0] = '0';//put leading zero if empty space
+//shiki no dec
+  screenBuffer[8] = 0;//equivalent of new line or end of buffer
+/*
   screenBuffer[8] = '.';//add milli indicator
   screenBuffer[9] = '0' + (milli / 100);//only show first digit of milli due to limit of gps rate
   screenBuffer[10] = 0;//equivalent of new line or end of buffer
-   
+*/   
   MAX7456_WriteString(screenBuffer,getPosition(GPS_timePosition));
 //format and display
 
@@ -704,6 +710,8 @@ void displayAltitude(void)
   //Shiki Mod
   if(!fieldIsVisible(MwAltitudePosition))
     return;
+  if(!Settings[S_BAROALT])
+    return;
   //
   screenBuffer[0]=MwAltitudeAdd[Settings[S_UNITSYSTEM]];
   itoa(altitude,screenBuffer+1,10);
@@ -714,6 +722,8 @@ void displayClimbRate(void)
 {
   //Shiki Mod
   if(!fieldIsVisible(MwClimbRatePosition))
+    return;
+  if(!Settings[S_VARIO])
     return;
 
     uint16_t position = getPosition(horizonPosition);
@@ -1025,15 +1035,15 @@ void displayConfigScreen(void)
     MAX7456_WriteString_P(configMsg40, 35);
 
 //R1:
-    MAX7456_WriteString_P(configMsg41, PITCHT);
-    MAX7456_WriteString(itoa(rssi,screenBuffer,10),PITCHD);
+    MAX7456_WriteString_P(configMsg41, ROLLT);
+    MAX7456_WriteString(itoa(rssi,screenBuffer,10),ROLLD);
 //R2:
-    MAX7456_WriteString_P(configMsg42, ROLLT);
+    MAX7456_WriteString_P(configMsg42, PITCHT);
     if(Settings[S_DISPLAYRSSI]){
-      MAX7456_WriteString_P(configMsgON, ROLLD);
+      MAX7456_WriteString_P(configMsgON, PITCHD);
     }
     else{
-      MAX7456_WriteString_P(configMsgOFF, ROLLD);
+      MAX7456_WriteString_P(configMsgOFF, PITCHD);
     }
 //R3:
     MAX7456_WriteString_P(configMsg43, YAWT);
@@ -1065,20 +1075,20 @@ void displayConfigScreen(void)
   {
     MAX7456_WriteString_P(configMsg50, 35);
 //R1:
-    MAX7456_WriteString_P(configMsg51, PITCHT);
+    MAX7456_WriteString_P(configMsg51, ROLLT);
     if(Settings[S_AMPERAGE]){
-      MAX7456_WriteString_P(configMsgON, PITCHD);
-    }
-    else{
-      MAX7456_WriteString_P(configMsgOFF, PITCHD);
-    }
-//R2:
-    MAX7456_WriteString_P(configMsg52, ROLLT);
-    if(Settings[S_AMPER_HOUR]){
       MAX7456_WriteString_P(configMsgON, ROLLD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, ROLLD);
+    }
+//R2:
+    MAX7456_WriteString_P(configMsg52, PITCHT);
+    if(Settings[S_AMPER_HOUR]){
+      MAX7456_WriteString_P(configMsgON, PITCHD);
+    }
+    else{
+      MAX7456_WriteString_P(configMsgOFF, PITCHD);
     }
 //R3:
     MAX7456_WriteString_P(configMsg53, YAWT);
@@ -1098,20 +1108,20 @@ void displayConfigScreen(void)
     MAX7456_WriteString_P(configMsg60, 35);
     
 //R1:     
-    MAX7456_WriteString_P(configMsg61, PITCHT);
+    MAX7456_WriteString_P(configMsg61, ROLLT);
     if(Settings[S_DISPLAY_HORIZON_BR]){
-      MAX7456_WriteString_P(configMsgON, PITCHD);
-    }
-    else{
-      MAX7456_WriteString_P(configMsgOFF, PITCHD);
-    }
-//R2:     
-    MAX7456_WriteString_P(configMsg62, ROLLT);
-    if(Settings[S_WITHDECORATION]){
       MAX7456_WriteString_P(configMsgON, ROLLD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, ROLLD);
+    }
+//R2:     
+    MAX7456_WriteString_P(configMsg62, PITCHT);
+    if(Settings[S_WITHDECORATION]){
+      MAX7456_WriteString_P(configMsgON, PITCHD);
+    }
+    else{
+      MAX7456_WriteString_P(configMsgOFF, PITCHD);
     }
 //R3:
     MAX7456_WriteString_P(configMsg63, YAWT);
@@ -1169,20 +1179,20 @@ void displayConfigScreen(void)
   {
     MAX7456_WriteString_P(configMsg70, 35);
 //R1:
-    MAX7456_WriteString_P(configMsg71, PITCHT);
+    MAX7456_WriteString_P(configMsg71, ROLLT);
     if(!Settings[S_UNITSYSTEM]){
-      MAX7456_WriteString_P(configMsg710, PITCHD);
+      MAX7456_WriteString_P(configMsg710, ROLLD);
     }
     else {
-      MAX7456_WriteString_P(configMsg711, PITCHD);
+      MAX7456_WriteString_P(configMsg711, ROLLD);
       }
 //R2:
-    MAX7456_WriteString_P(configMsg72, ROLLT);
+    MAX7456_WriteString_P(configMsg72, PITCHT);
     if(!Settings[S_VIDEOSIGNALTYPE]){
-      MAX7456_WriteString_P(configMsg720, ROLLD);
+      MAX7456_WriteString_P(configMsg720, PITCHD);
     }
     else {
-      MAX7456_WriteString_P(configMsg721, ROLLD);
+      MAX7456_WriteString_P(configMsg721, PITCHD);
       }
 //R3:
     MAX7456_WriteString_P(configMsg73, YAWT);
