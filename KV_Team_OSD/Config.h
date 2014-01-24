@@ -1,6 +1,10 @@
 
 /*--------------------------------------------------       configurable parameters      ----------------------------------------------------*/
  
+
+/********************       USE HARDWARE SYNC      *********************/
+
+#define USE_VSYNC // Remove "sparklies" on boards that support VSYNC 
  
 /********************       PWM RSSI      *********************/
 
@@ -16,8 +20,7 @@
 #define EEPROM_WRITE_DELAY 5
 
 /***************************************         Amperage        ********************************************/
-
-#define AMPERAGE_VIRTUAL_IDLE 4    // Set AMPERAGE_VIRTUAL_IDLE value for motors off current draw * 10. 4 = 0.4A (typical FPV equipment current draw) 
+#define AMPERAGE_VIRTUAL_IDLE 4     // Set AMPERAGE_VIRTUAL_IDLE value for motors off current draw * 10. 4 = 0.4A (typical FPV equipment current draw) 
 
 #define EST_PMSum 1                 /****  NOTE  **** If you use hardware CURRENT sensor on OSD use (#define EST_PMSum 1) BEFORE ANY ADJUSTMENT OR CALIBRATION
                                                         this value is empirical and is for fine tunning your consumption using the same instructions as for POWERMETER adjustment
@@ -80,12 +83,9 @@
 //#define  OSDOFF30 DISPLAY_MIN_OFF // Gimbal Position
 #define  OSDOFF31 DISPLAY_MIN_OFF // GPS_time Position
 
-#define DEBUG // For developers - remove if memory required
-
 /*----------------------------------------------       End of configurable parameters      ----------------------------------------------------*/
 
-
-
+#define DEBUG // For developers - remove if memory required
 
 #define LINE      30
 #define LINE01    0

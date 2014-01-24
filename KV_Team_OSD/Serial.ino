@@ -80,6 +80,10 @@ void serialMSPCheck()
 	//fontCharacterReceived(c);
       }
     }
+    if(cmd == OSD_DEFAULT) {
+    EEPROM.write(0,0);
+    resetFunc();
+    }
     if(cmd == OSD_RESET) {
     resetFunc();
     }
@@ -424,8 +428,7 @@ void handleRawRC() {
 
 	if((ROW==10)&&(COL==3)) configPage--;
 	if(configPage<MINPAGE) configPage = MAXPAGE;
-	if((ROW==10)&&(COL==1)) configExit();
-	if((ROW==10)&&(COL==2)) saveExit();
+        serialMenuCommon();  
       }
       else if(!previousarmedstatus&&configMode&&(MwRcData[YAWSTICK]>MAXSTICK)) // INCREASE
       {
@@ -525,6 +528,7 @@ void serialMenuCommon()
 
   	if((ROW==10)&&(COL==1)) configExit();
 	if((ROW==10)&&(COL==2)) saveExit();
+
 }
 
 void serialMSPreceive()

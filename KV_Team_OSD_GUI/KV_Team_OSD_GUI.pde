@@ -311,6 +311,7 @@ String[] ConfigNames = {
   "Display Vario",
   "Display BARO ALT",
   "Display Compass",
+  "Display Horizon Elevation",
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -384,6 +385,7 @@ String[] ConfigHelp = {
   "Display Vario",
   "Display BARO ALT",
   "Display Compass",
+  "Display Horizon Elevation",
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -465,6 +467,7 @@ int[] ConfigRanges = {
 1,     // S_VARO                   37h
 1,     // SHOW BAROALT             38h
 1,     // SHOW COMPASS             39h
+1,     // SHOW HORIZON ELEVATION   40h
 255,
 255,
  255,
@@ -724,6 +727,7 @@ CreateItem(GetSetting("S_GIMBAL"),  5,12*17, G_Other);
 CreateItem(GetSetting("S_VARIO"),  5,13*17, G_Other);
 CreateItem(GetSetting("S_BAROALT"),  5,14*17, G_Other);
 CreateItem(GetSetting("S_COMPASS"),  5,15*17, G_Other);
+CreateItem(GetSetting("S_HORIZON_ELEVATION"),  5,16*17, G_Other);
 
 //  TIME  ----------------------------------------------------------------------------
 CreateItem(GetSetting("S_GPSTIME"),  5,0*17, G_TIME);

@@ -2,9 +2,6 @@
 #define DATAIN  12              // MISO
 #define SPICLOCK  13            // sck
 
-
-
-
 #define VSYNC 2                 // INT0
 
 //MAX7456 opcodes
@@ -159,7 +156,6 @@ void MAX7456Setup(void)
   //sample on leading edge of clk,system clock/4 rate (4 meg)
 
   SPCR = (1<<SPE)|(1<<MSTR);
-  SPSR=(1<<SPI2X);
   uint8_t spi_junk;
   spi_junk=SPSR;
   spi_junk=SPDR;
@@ -190,10 +186,11 @@ void MAX7456Setup(void)
   }
   digitalWrite(MAX7456SELECT,HIGH);
   delay(100);
-  
+# ifdef USE_VSYNC
   EIMSK |= (1 << INT0);  // enable interuppt
   EICRA |= (1 << ISC01); // interrupt at the falling edge
   sei();
+#endif
 }
 
 // Copy string from ram into screen buffer
@@ -217,44 +214,48 @@ void MAX7456_WriteString_P(const char *string, int Adresse)
   }
 }
 
-
+#ifdef USE_VSYNC
 volatile unsigned char vsync_wait = 0;
-
-ISR(INT0_vect) {
+  ISR(INT0_vect) {
   vsync_wait = 0;
 }
-
+#endif
 void MAX7456_DrawScreen()
 {
+#ifdef USE_VSYNC
   vsync_wait = 1;
   while (vsync_wait)
   ;
-  
-  int xx;
+#endif
+int xx;
+#ifdef USE_VSYNC
   digitalWrite(MAX7456SELECT,LOW);
-  
-  spi_transfer(DMM_reg);  
-  spi_transfer(1); 
+  spi_transfer(DMM_reg);
+  spi_transfer(1);
+  spi_transfer(DMAH_reg);
+  spi_transfer(0);
+  spi_transfer(DMAL_reg);
+  spi_transfer(0);
+#else
+digitalWrite(MAX7456SELECT,LOW);
+#endif
 
-  spi_transfer(DMAH_reg);  
-  spi_transfer(0); 
-
-  spi_transfer(DMAL_reg);  
-  spi_transfer(0); 
-
-
+  digitalWrite(MAX7456SELECT,LOW);
   for(xx=0;xx<MAX_screen_size;++xx)
   {
+#ifndef USE_VSYNC
+    MAX7456_Send(MAX7456ADD_DMAH, xx>>8);
+    MAX7456_Send(MAX7456ADD_DMAL, xx);
+#endif
     MAX7456_Send(MAX7456ADD_DMDI, screen[xx]);
     screen[xx] = ' ';
   }
-
-  spi_transfer(DMDI_reg); 
-  spi_transfer(END_string); 
-
-  spi_transfer(DMM_reg);  
+#ifdef USE_VSYNC
+  spi_transfer(DMDI_reg);
+  spi_transfer(END_string);
+  spi_transfer(DMM_reg);
   spi_transfer(B00000000);
-  
+#endif
   digitalWrite(MAX7456SELECT,HIGH);
 }
 
