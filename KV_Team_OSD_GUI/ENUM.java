@@ -50,6 +50,7 @@ enum Settings {
   S_VARIO,
   S_BAROALT,
   S_COMPASS,
+  S_HORIZON_ELEVATION,
   S_CS0,
   S_CS1,
   S_CS2,

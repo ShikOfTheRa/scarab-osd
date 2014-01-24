@@ -93,7 +93,7 @@
 //#define SYM_AH_STEP_0 0X17
 
 // AH Bars
-#define SYM_AH_BAR9_0 0x80
+#define SYM_AH_BAR9_0 0x81
 #define SYM_AH_BAR9_9 0x89
 
 

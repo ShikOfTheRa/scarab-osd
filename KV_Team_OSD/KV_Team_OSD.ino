@@ -1,43 +1,23 @@
 /*
-KV Team OSD
-http://code.google.com/p/rush-osd-development/
-July  2013  r370
+MultiWii NG OSD aka Scarab OSD because we fly Scarabs...
+Jan 2014 - R1
+
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  any later version. see http://www.gnu.org/licenses/
+
+This work is based on the following earlier work :-
+ Rushduino   http://code.google.com/p/rushduino-osd/
+ KVTeam      https://code.google.com/p/rush-osd-development/
+ Minim OSD   https://code.google.com/p/arducam-osd/wiki/minimosd
+
+ Its base is taken from KVT R370
+
+ All credit and full acknowledgement to the incredible work and hours from the many developers, contributors and testers that have helped along the way.
+ Jean Gabriel Maurice. He started the revoultion. He was the first....
+ We only make a few changes! 
 */
-
-// This Team work is based on the earlier work developed by Jean Gabriel Maurice known as Rushduino. http://code.google.com/p/rushduino-osd/
-// Rushduino OSD <Multiwii forum>  http://www.multiwii.com/forum/viewtopic.php?f=8&t=922
-// Minim OSD <Multiwii forum>  http://www.multiwii.com/forum/viewtopic.php?f=8&t=2918
-// Thanks to all developers that coded this software before us, and all users that also help us to improve.
-// This team wish you great flights.
-
-
-// This software communicates using MSP via the serial protocol. Therefore Multiwii develop-dependent.
-              // Changes the values of pid and rc-tuning, writes in eeprom of Multiwii FC.
-              // In config mode, can do acc and mag calibration.
-              // In addition, it works by collecting information analogue inputs. Such as voltage, amperage, rssi and temperature.
-              // At the end of the flight may be useful to look at the statistics.
-
-
-
-              /***********************************************************************************************************************************************/
-              /*                                                            KV_OSD_Team                                                                      */
-              /*                                                                                                                                             */
-              /*                                                                                                                                             */
-              /*                                             This software is the result of a team work                                                      */
-              /*                                                                                                                                             */
-              /*                                     KATAVENTOS               ITAIN                    CARLONB                                               */
-              /*                         POWER67                  LIAM2317             NEVERLANDED                                                           */
-              /*                                                                                                                                             */
-              /*                                                                                                                                             */
-              /*                                                                                                                                             */
-              /*                                                                                                                                             */
-              /***********************************************************************************************************************************************/
-
-
             
 
 
@@ -148,48 +128,10 @@ void setMspRequests() {
 
 void loop()
 {
-  // Process AI   
-  if (Settings[S_ENABLEADC]){
-    temperature=(analogRead(temperaturePin)-102)/2.048; 
-    if (!Settings[S_MAINVOLTAGE_VBAT]){
-      static uint16_t ind = 0;
-      static uint32_t voltageRawArray[8];
-      voltageRawArray[(ind++)%8] = analogRead(voltagePin);                  
-      uint16_t voltageRaw = 0;
-      for (uint16_t i=0;i<8;i++)
-        voltageRaw += voltageRawArray[i];
-    if (!Settings[S_VREFERENCE]){
-      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (1.1/102.3/4/8);  
-    }
-    else {
-      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (1.1/102.3/2/8);     
-    }
-    }
-    if (!Settings[S_VIDVOLTAGE_VBAT]) {
-      vidvoltage = float(analogRead(vidvoltagePin)) * Settings[S_VIDDIVIDERRATIO] * (1.1/102.3/4);
-    }
-    if (!Settings[S_MWRSSI]) {
-      rssiADC = (analogRead(rssiPin)*1.1*100)/1023;  // RSSI Readings, result in mV/10 (example 1.1V=1100mV=110 mV/10)
-    }
-    amperage = (AMPRERAGE_OFFSET - (analogRead(amperagePin)*AMPERAGE_CAL))/10.23;
-  }
-  if (Settings[S_MWRSSI]) {
-      rssiADC = MwRssi;
-  } 
-   if (Settings[S_PWMRSSI]){
-   rssiADC = pulseIn(PwmRssiPin, HIGH);     
-  }
  
-  //Shiki mod - virtual current sensor
-if (Settings[S_AMPERAGE_VIRTUAL]){
-  uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],1000,2000);
-  Vthrottle = constrain((Vthrottle-1000)/10,10,100);
-    amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings[S_AMPDIVIDERRATIO]*0.01;
-if(armed)
-  amperage += AMPERAGE_VIRTUAL_IDLE;
-else 
-  amperage = AMPERAGE_VIRTUAL_IDLE;
-}
+  if (Settings[S_ENABLEADC])                   ProcessAnalogue();       // using analogue sensors
+  if (Settings[S_MWRSSI]||Settings[S_PWMRSSI]) ProcessRSSI();           // using multiwii sensors for RSSI
+  if (Settings[S_AMPERAGE_VIRTUAL])            ProcessVirtualSensors(); // using virtual sensors
 
   // Blink Basic Sanity Test Led at 1hz
   if(tenthSec>10)
@@ -430,9 +372,9 @@ void calculateRssi(void)
   float aa=0;
  
  if (Settings[S_PWMRSSI]){
-     //Digital read Pin
-   aa = pulseIn(PwmRssiPin, HIGH);
-   aa = ((aa-Settings[S_RSSIMIN]) *101)/((Settings[S_RSSIMAX]*4)-Settings[S_RSSIMIN]) ;
+//     //Digital read Pin
+//   aa = pulseIn(PwmRssiPin, HIGH, 15000);
+//   aa = ((aa-Settings[S_RSSIMIN]) *101)/((Settings[S_RSSIMAX]*4)-Settings[S_RSSIMIN]) ;
  }
   else { 
       if (Settings[S_MWRSSI]) {
@@ -542,4 +484,58 @@ int16_t getNextCharToRequest() {
   return temp2;
 }
 
+void ProcessAnalogue(void) {
+
+  if (Settings[S_DISPLAYTEMPERATURE]){
+    temperature=(analogRead(temperaturePin)-102)/2.048; 
+  }
+
+  if (!Settings[S_MAINVOLTAGE_VBAT]){ // not MWII
+    static uint16_t ind = 0;
+    static uint32_t voltageRawArray[8];
+    voltageRawArray[(ind++)%8] = analogRead(voltagePin);                  
+    uint16_t voltageRaw = 0;
+    for (uint16_t i=0;i<8;i++)
+      voltageRaw += voltageRawArray[i];
+    if (!Settings[S_VREFERENCE]){
+      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (0.0001);  
+    }
+    else {
+      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (0.0005);     
+    }
+    }
+
+  if (!Settings[S_VIDVOLTAGE_VBAT]) {
+    if (!Settings[S_VREFERENCE]){
+      vidvoltage = float(analogRead(vidvoltagePin)) * Settings[S_VIDDIVIDERRATIO] * (1.1/102.3/4);
+    }
+    else {
+      vidvoltage = float(analogRead(vidvoltagePin)) * Settings[S_VIDDIVIDERRATIO] * (1.1/102.3);
+    }
+  }
+
+  if (!(Settings[S_MWRSSI]||Settings[S_PWMRSSI])) {
+      rssiADC = (analogRead(rssiPin)*1.1*100)/1023;  // RSSI Readings, result in mV/10 (example 1.1V=1100mV=110 mV/10)
+    }
+
+  if (!Settings[S_AMPERAGE_VIRTUAL]) {
+    amperage = (AMPRERAGE_OFFSET - (analogRead(amperagePin)*AMPERAGE_CAL))/10.23;
+  }  
+
+}
+
+void ProcessVirtualSensors(void){
+  uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],1000,2000);
+  Vthrottle = constrain((Vthrottle-1000)/10,10,100);
+    amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings[S_AMPDIVIDERRATIO]*0.01;
+if(armed)
+  amperage += AMPERAGE_VIRTUAL_IDLE;
+else 
+  amperage = AMPERAGE_VIRTUAL_IDLE;
+}
+
+void ProcessRSSI(void){
+  if (Settings[S_MWRSSI])           rssiADC = MwRssi;                          // using multiwii sensors for RSSI
+//  if (Settings[S_PWMRSSI])          rssiADC = pulseIn(PwmRssiPin, HIGH,15000); // using PWM RSSI     
+}
 

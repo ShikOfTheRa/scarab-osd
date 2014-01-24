@@ -180,13 +180,8 @@ void displayMode(void)
     screenBuffer[xx] = SYM_BAR;
     xx++;
   }
-  if (MwSensorActive&mode_gpshome||MwSensorActive&mode_gpshold){
-    screenBuffer[xx] = SYM_GPS;
-    xx++;
-  }
   screenBuffer[xx] = 0;
   MAX7456_WriteString(screenBuffer,getPosition(GPS_numSatPosition)+4);
-
 
 /*  
  alternative bundicator
@@ -255,32 +250,22 @@ void displayHorizon(int rollAngle, int pitchAngle)
         screen[pos-LINE] = SYM_AH_BAR9_9;
     }
   }
-/*
-// for extra bars
+
+if (Settings[S_HORIZON_ELEVATION]){                   
   for(int X=3; X<=5; X++) {
     int Y = (rollAngle * (4-X)) / 64;
     Y -= pitchAngle / 8;
     Y += 41;
     if(Y >= 0 && Y <= 81) {
       uint16_t pos = position + LINE*(Y/9) + 3 - 2*LINE + X;
-      screen[pos-LINE] = SYM_AH_BAR9_0+(Y%9);
-      if(Y>=9 && (Y%9) == 0)
-        screen[pos-2*LINE] = SYM_AH_BAR9_9;
-    }
-  }
-  for(int X=3; X<=5; X++) {
-    int Y = (rollAngle * (4-X)) / 64;
-    Y -= pitchAngle / 8;
-    Y += 41;
-    if(Y >= 0 && Y <= 81) {
-      uint16_t pos = position + LINE*(Y/9) + 3 - 2*LINE + X;
+      screen[pos-1*LINE] = SYM_AH_BAR9_0+(Y%9);
       screen[pos+1*LINE] = SYM_AH_BAR9_0+(Y%9);
       if(Y>=9 && (Y%9) == 0)
+        screen[pos-2*LINE] = SYM_AH_BAR9_9;
         screen[pos] = SYM_AH_BAR9_9;
     }
-
   }
-*/
+}
   if(Settings[S_DISPLAY_HORIZON_BR]){
     //Draw center screen
     screen[position+2*LINE+7-1] = SYM_AH_CENTER_LINE;
@@ -994,6 +979,8 @@ void displayConfigScreen(void)
 
   if(configPage==3)
   {
+    if (Settings[S_ENABLEADC])ProcessAnalogue();
+
     MAX7456_WriteString_P(configMsg30, 35);
 //R1:    
     MAX7456_WriteString_P(configMsg31, ROLLT);
@@ -1005,7 +992,7 @@ void displayConfigScreen(void)
     }
 //R2:     
     MAX7456_WriteString_P(configMsg32, PITCHT);
-    MAX7456_WriteString(itoa(Settings[S_DIVIDERRATIO],screenBuffer,10),PITCHD);
+    MAX7456_WriteString(itoa(voltage,screenBuffer,10),PITCHD);
 //R3:
     MAX7456_WriteString_P(configMsg33, YAWT);
     MAX7456_WriteString(itoa(Settings[S_VOLTAGEMIN],screenBuffer,10),YAWD);

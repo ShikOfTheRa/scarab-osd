@@ -101,8 +101,9 @@ enum Setting_ {
   S_SCROLLING,
   S_GIMBAL,
   S_VARIO,
-  S_BAROALT,
+  S_BAROALT, //50
   S_COMPASS,
+  S_HORIZON_ELEVATION,
   S_CS0,
   S_CS1,
   S_CS2,
@@ -123,35 +124,27 @@ uint8_t Settings[EEPROM_SETTINGS];
 // For Settings Defaults
 uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 1,   // used for check              0
-
 0,   // S_RSSIMIN                   1
 150, // S_RSSIMAX                   2
-60,  //S_RSSI_ALARM                 3
+60,  // S_RSSI_ALARM                3
 0,   // S_DISPLAYRSSI               4
 0,   // S_MWRSSI                    5
 0,   // S_PWMRSSI                   6
-
 1,   // S_DISPLAYVOLTAGE            7
 138, // S_VOLTAGEMIN                8
 4,   // S_BATCELLS                  9
-61 , // S_DIVIDERRATIO              10
+200, // S_DIVIDERRATIO              10
 0,   // S_MAINVOLTAGE_VBAT          11
-
 0,   // S_AMPERAGE                  12
 0,   // S_AMPER_HOUR                13
 0,   // S_AMPERAGE_VIRTUAL,
 150, // S_AMPDIVIDERRATIO,
-
-
 0,   // S_VIDVOLTAGE                14
-61 , // S_VIDDIVIDERRATIO           15
+200, // S_VIDDIVIDERRATIO           15
 0,   // S_VIDVOLTAGE_VBAT           16 
-
 0,   // S_DISPLAYTEMPERATURE        17
 255, // S_TEMPERATUREMAX            18
-
 1,   // S_BOARDTYPE                 19
-
 1,   // S_DISPLAYGPS                20
 0,   // S_COORDINATES               21
 1,   // S_GPSCOORDTOP               22
@@ -159,7 +152,6 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 0,   // S_ANGLETOHOME               24 
 0,   // S_SHOWHEADING               25
 1,   // S_HEADING360                26
-
 0,   // S_UNITSYSTEM                27
 0,   // S_VIDEOSIGNALTYPE           28
 0,   // S_THROTTLEPOSITION          29
@@ -171,7 +163,6 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 0,   // S_VREFERENCE,
 0,   // S_USE_BOXNAMES              35
 1,   // S_MODEICON                  36
-
 0,   // S_DISPLAY_CS,               37
 0,   // GPStime                     37a
 0,   // GPSTZ +/-                   37b
@@ -181,8 +172,9 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 1,   // SCROLOLING LADDERS          37f
 1,   // SHOW GIMBAL ICON            37g
 1,   // SHOW VARIO                  37h
-1,   // SHOW BAROALT                38h
+1,   // SHOW BAROALT                38h 50
 1,   // SHOW COMPASS                39h
+0,   // S_HORIZON_ELEVATION         40h
 0,   // S_CS0,
 0,   // S_CS1,
 0,   // S_CS2,
@@ -193,10 +185,6 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 0,   // S_CS7,
 0,   // S_CS8,
 0,   // S_CS9,
-
-
-
-
 };
 
 static uint8_t P8[PIDITEMS], I8[PIDITEMS], D8[PIDITEMS];
@@ -341,6 +329,7 @@ uint16_t flyingTime=0;
 #define OSD_GET_FONT             3
 #define OSD_SERIAL_SPEED         4
 #define OSD_RESET                5
+#define OSD_DEFAULT              6
 // End private MSP for use with the GUI
 
 const char disarmed_text[] PROGMEM = "DISARMED";
@@ -348,7 +337,7 @@ const char armed_text[] PROGMEM = " ARMED";
 
 
 // For Intro
-const char message0[] PROGMEM = "SCARAB OSD - KVR R1";
+const char message0[] PROGMEM = "MULTIWII NG OSD - R1";
 const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
 const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
 const char message5[] PROGMEM = "MW VERSION:";
