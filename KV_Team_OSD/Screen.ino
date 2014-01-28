@@ -166,7 +166,7 @@ void displayMode(void)
     MAX7456_WriteString(screenBuffer,getPosition(gimbalPosition));
     }
 
-  if(Settings[S_MODEICON]){
+  if(Settings[S_MODESENSOR]){
     xx = 0;
   if(MwSensorActive&mode_stable||MwSensorActive&mode_horizon){
     screenBuffer[xx] = SYM_ACC;
@@ -283,6 +283,30 @@ if (Settings[S_HORIZON_ELEVATION]){
   }
 }
 
+void displaySidebartop(void){
+#ifndef DEBUG
+
+if (millis()<(sidebarsMillis + 1000)) {
+  if (sidebarsdir == 2){
+screen[getPosition(horizonPosition)-LINE] = SYM_AH_DECORATION_UP;
+  }
+  else{
+screen[getPosition(horizonPosition)+5*LINE] = SYM_AH_DECORATION_DOWN;
+  }
+}
+if (millis()<(sidebaraMillis + 1000)) {
+  if (sidebaradir == 2){
+screen[getPosition(horizonPosition)+14-LINE] = SYM_AH_DECORATION_UP;
+  }
+  else{
+screen[getPosition(horizonPosition)+5*LINE+14] = SYM_AH_DECORATION_DOWN;
+  }
+}
+#endif
+}
+
+
+
 void displayVoltage(void)
 {
   if (Settings[S_VIDVOLTAGE_VBAT]){
@@ -383,6 +407,9 @@ void displayCurrentThrottle(void)
 
 void displayTime(void)
 { 
+    if(!Settings[S_TIMER])
+    return;
+
   if(flyTime < 3600) {
     screenBuffer[0] = SYM_FLY_M;
     formatTime(flyTime, screenBuffer+1, 0);
@@ -803,41 +830,56 @@ void displayDirectionToHome(void)
 
 void scrollingLadders(void)
 {
+
+
   if (Settings[S_SCROLLING]){
   // Scrolling decoration
-      if (GPS_speed > old_GPS_speed+10){
-      old_GPS_speed = GPS_speed;
+
+
+
+      if (GPS_speed > old_GPS_speed+15){
+        sidebarsMillis = millis();
+        sidebarsdir = 2;
+        old_GPS_speed = GPS_speed;
         SYM_AH_DECORATION_LEFT--;
         if (SYM_AH_DECORATION_LEFT<0x10)
           SYM_AH_DECORATION_LEFT=0x15;
       }
 
-      else if (GPS_speed +10 < old_GPS_speed){
-      old_GPS_speed = GPS_speed;
+      else if (GPS_speed+15 < old_GPS_speed){
+        sidebarsMillis = millis();
+        sidebarsdir = 1;
+       old_GPS_speed = GPS_speed;
         SYM_AH_DECORATION_LEFT++;
         if (SYM_AH_DECORATION_LEFT>0x15)
           SYM_AH_DECORATION_LEFT=0x10;
       }
  
-      if (MwAltitude > old_MwAltitude+10){
-       old_MwAltitude = MwAltitude;
-      SYM_AH_DECORATION_RIGHT--;
+      if (MwAltitude > old_MwAltitude+20){
+        sidebaraMillis = millis();
+        sidebaradir = 2;
+        old_MwAltitude = MwAltitude;
+        SYM_AH_DECORATION_RIGHT--;
         if (SYM_AH_DECORATION_RIGHT<0x10)
           SYM_AH_DECORATION_RIGHT=0x15;
       }
 
-      else if (MwAltitude < old_MwAltitude-10){
+      else if (MwAltitude+20 < old_MwAltitude){
+        sidebaraMillis = millis();
+        sidebaradir = 1;
         old_MwAltitude = MwAltitude;
-      SYM_AH_DECORATION_RIGHT++;
+        SYM_AH_DECORATION_RIGHT++;
         if (SYM_AH_DECORATION_RIGHT>0x15)
           SYM_AH_DECORATION_RIGHT=0x10;
       }
   }
   else{
      SYM_AH_DECORATION_LEFT=0x13;
-    SYM_AH_DECORATION_RIGHT=0x13;
+     SYM_AH_DECORATION_RIGHT=0x13;
   }  
+
 }
+
 void displayCursor(void)
 {
   int cursorpos;
@@ -1136,7 +1178,7 @@ void displayConfigScreen(void)
     }
 //R5:     
     MAX7456_WriteString_P(configMsg66, LEVT);
-    if(Settings[S_MODEICON]){
+    if(Settings[S_MODESENSOR]){
       MAX7456_WriteString_P(configMsgON, LEVD);
     }
     else{

@@ -104,6 +104,9 @@ enum Setting_ {
   S_BAROALT, //50
   S_COMPASS,
   S_HORIZON_ELEVATION,
+  S_TIMER,
+  S_MODESENSOR,
+  S_SIDEBARTOPS,
   S_CS0,
   S_CS1,
   S_CS2,
@@ -175,6 +178,9 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 1,   // SHOW BAROALT                38h 50
 1,   // SHOW COMPASS                39h
 0,   // S_HORIZON_ELEVATION         40h
+1,   // S_TIMER                     41h
+1,   // S_MODESENSOR                42h
+0,   // S_SIDEBARTOPS               43h
 0,   // S_CS0,
 0,   // S_CS1,
 0,   // S_CS2,
@@ -218,8 +224,8 @@ uint8_t GPS_fix=0;
 int32_t GPS_latitude;
 int32_t GPS_longitude;
 int16_t GPS_altitude;
-uint16_t GPS_speed=0;
-uint16_t old_GPS_speed=0;
+uint16_t GPS_speed;
+uint16_t old_GPS_speed;
 int16_t GPS_directionToHome=0;
 uint8_t GPS_numSat=0;
 int16_t I2CError=0;
@@ -231,6 +237,14 @@ int32_t GPS_time = 0;        //local time of coord calc - haydent
 // For decoration
 uint8_t SYM_AH_DECORATION_LEFT = 0x10;
 uint8_t SYM_AH_DECORATION_RIGHT = 0x10;
+uint8_t sym_sidebartopspeed = SYM_BLANK;
+uint8_t sym_sidebarbottomspeed = SYM_BLANK;
+uint8_t sym_sidebartopalt = SYM_BLANK;
+uint8_t sym_sidebarbottomalt = SYM_BLANK;
+uint8_t sidebarsdir; // speed
+uint8_t sidebaradir; // alt
+unsigned long sidebarsMillis = 0;
+unsigned long sidebaraMillis = 0;
 
 //For Current Throttle
 int LowT = 1100;
