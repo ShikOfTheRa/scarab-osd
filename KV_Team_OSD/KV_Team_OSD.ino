@@ -248,6 +248,7 @@ void loop()
         if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(Blink2hz))) displayRSSI();
 
         displayTime();
+        if (Settings[S_SIDEBARTOPS]) displaySidebartop();
         displayMode();
         
         if(Settings[S_DISPLAYTEMPERATURE]&&((temperature<Settings[S_TEMPERATUREMAX])||(Blink2hz))) displayTemperature();

@@ -85,7 +85,7 @@
 
 /*----------------------------------------------       End of configurable parameters      ----------------------------------------------------*/
 
-#define DEBUG // For developers - remove if memory required
+//#define DEBUG // For developers - remove if memory required
 
 #define LINE      30
 #define LINE01    0
