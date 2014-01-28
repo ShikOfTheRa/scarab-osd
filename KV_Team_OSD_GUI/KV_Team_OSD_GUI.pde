@@ -85,28 +85,43 @@ int TestLine = 300;
 int[] GPS_numSatPosition = {
  LINE02+2,LINE02+2};
 int[] GPS_directionToHomePosition=    {
-  LINE03+13 ,LINE03+13};
-
+  LINE02+21 ,LINE02+21};
+int[] MwGPSLatPosition =              {
+  LINE01+2,LINE01+2};
+int[] MwGPSLonPosition =              {
+  LINE01+13+2,LINE01+13+2};
 int[] GPS_distanceToHomePosition=  {
-  LINE02+22  ,LINE02+24 };
-int[] speedPosition = {     
-  LINE03+22 ,LINE03+24};  // [0] En Km/h   [1] En Mph
+  LINE02+23  ,LINE02+23 };
 int[] GPS_angleToHomePosition=  {
-  LINE04+14 ,LINE04+14};
+  LINE05+23 ,LINE05+23};
 int[] MwGPSAltPosition =        {
-  LINE04+22,LINE04+24};
+  LINE03+23  ,LINE03+23};
 int[] sensorPosition=           {
-  LINE03+2 ,LINE03+2};
+  LINE02+6 ,LINE02+6};
 int[] MwHeadingPosition =       {
-  LINE02+19 ,LINE02+19};
+  LINE04+23 ,LINE04+23};
 int[] MwHeadingGraphPosition =  {
   LINE02+10 ,LINE02+10};
+int[] statusPosition = {
+ LINE04+2,LINE04+2};
+int[] gimbalPosition = {
+ LINE05+2,LINE05+2};
 
 // MIDDLE OF THE SCREEN
+int[] GPS_speedPosition = {     
+  LINE07+3,LINE07+3 };  // [0] En Km/h   [1] En Mph
+int[] temperaturePosition= {
+  LINE09+2   ,LINE09+2+30};
 int[] MwAltitudePosition=  {
-  LINE07+2,LINE07+2 };
+  LINE07+22,LINE07+22 };
 int[] MwClimbRatePosition=  {
   LINE07+27 ,LINE07+28 };
+
+int[] MwGPSMidLatPosition =              {
+  LINE10+2,LINE10+2+60};
+int[] MwGPSMidLonPosition =              {
+  LINE10+13+2,LINE10+13+2+60};
+
 int[] CurrentThrottlePosition = {
   LINE12+23,LINE12+24+60};
 int[] flyTimePosition=                {
@@ -114,15 +129,11 @@ int[] flyTimePosition=                {
 //int[] onTimePosition=                 {
  // LINE13+23,LINE13+24+60};
 int[] motorArmedPosition=            {
-  LINE12+11,LINE11+11+60};
-int[] MwGPSLatPosition =              {
-  LINE10+2,LINE10+2+60};
-int[] MwGPSLonPosition =              {
-  LINE10+13+2,LINE10+2+13+60};
+  LINE11+11,LINE10+11+60};
 int[]  rssiPosition = {
   LINE12+2 ,LINE12+2+60};
-int[] temperaturePosition= {
-  LINE11+2   ,LINE11+2};
+int[] UTCPosition =     {
+  LINE12+11,LINE11+11+60};
 int[] voltagePosition =                {
   LINE13+2  ,LINE13+2+60 };
 int[] vidvoltagePosition =   {
@@ -131,6 +142,9 @@ int[] amperagePosition =     {
   LINE13+17,LINE13+19+60};
 int[] pMeterSumPosition =       {
   LINE15+30,LINE15+30+60};
+int[] debugPosition =       {
+  LINE08+10,LINE07+10+60};
+ 
   
 int DisplayWindowX = 681; //500;
 int DisplayWindowY = 5; //5;
@@ -292,13 +306,13 @@ String[] ConfigNames = {
   "Video Signal",
   "Display Throttle Position",
   "Display Horizon Bar",
-  "Display Horizon Side Bars",
+  "Display Side Bars",
   "Display Battery Evo",
   "Reset Stats After Arm",
   "Enable OSD Read ADC",
   "Enable ADC 5v ref",
   "Use BoxNames",
-  "Display Flight Mode Icons",
+  "Display Flight Mode",
   
   "Display CallSign",
   "Display GPS time",
@@ -312,6 +326,9 @@ String[] ConfigNames = {
   "Display BARO ALT",
   "Display Compass",
   "Display Horizon Elevation",
+  "Display Timer",
+  "Display Flight Sensors",  
+  "Display Side Bar arrows",  
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -366,13 +383,13 @@ String[] ConfigHelp = {
   "Screen Type NTSC / PAL:",
   "Display Throttle Position",
   "Display Horizon Bar",
-  "Display Horizon Side Bars",
+  "Display Side Bars",
   "Display Battery Evo",
   "Reset Stats After Arm",
   "Enable OSD Read ADC",
   "Enable ADC 5v ref",
   "Use BoxNames",
-  "Display Flight Mode Icons",
+  "Display Flight Mode",
   
   "Display CallSign",
   "Display GPS time",
@@ -386,6 +403,9 @@ String[] ConfigHelp = {
   "Display BARO ALT",
   "Display Compass",
   "Display Horizon Elevation",
+  "Display Timer",
+  "Display Flight Sensors",
+  "Display Side Bar arrows",  
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -468,6 +488,9 @@ int[] ConfigRanges = {
 1,     // SHOW BAROALT             38h
 1,     // SHOW COMPASS             39h
 1,     // SHOW HORIZON ELEVATION   40h
+1,     // S_TIMER                  41h
+1,     // S_MODESENSOR             42h
+1,     //S_SIDEBARTOPS             43h
 255,
 255,
  255,
@@ -728,6 +751,9 @@ CreateItem(GetSetting("S_VARIO"),  5,13*17, G_Other);
 CreateItem(GetSetting("S_BAROALT"),  5,14*17, G_Other);
 CreateItem(GetSetting("S_COMPASS"),  5,15*17, G_Other);
 CreateItem(GetSetting("S_HORIZON_ELEVATION"),  5,16*17, G_Other);
+CreateItem(GetSetting("S_TIMER"),  5,17*17, G_Other);
+CreateItem(GetSetting("S_MODESENSOR"),  5,18*17, G_Other);
+CreateItem(GetSetting("S_SIDEBARTOPS"),  5,19*17, G_Other);
 
 //  TIME  ----------------------------------------------------------------------------
 CreateItem(GetSetting("S_GPSTIME"),  5,0*17, G_TIME);
@@ -1009,7 +1035,7 @@ void draw() {
   textFont(font12);
   // version
   fill(255, 255, 255);
-  text("SCARAB KVR",10,19);
+  text("MWII OSD NG",10,19);
   text("GUI V: ",10,35);
   text(KV_OSD_GUI_Version, 74, 35);
   fill(0, 0, 0);
@@ -1023,24 +1049,42 @@ void draw() {
   }
 
 
- 
+//################################################################################################################################################################################ 
+// Display
+//################################################################################################################################################################################ 
 
-  displayHorizon(int(MW_Pitch_Roll.arrayValue()[0])*10,int(MW_Pitch_Roll.arrayValue()[1])*10*-1);
+  if(confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() > 0) displayHorizon(int(MW_Pitch_Roll.arrayValue()[0])*10,int(MW_Pitch_Roll.arrayValue()[1])*10*-1);
   SimulateTimer();
-  ShowCurrentThrottlePosition();
-  if (int(confItem[GetSetting("S_DISPLAYRSSI")].value()) > 0)
-    ShowRSSI(); 
-  if (int(confItem[GetSetting("S_DISPLAYVOLTAGE")].value()) > 0) {
-     ShowVolts(sVBat);
-  }
-    
- 
   CalcAlt_Vario(); 
+
+  ShowCurrentThrottlePosition();
+  if (int(confItem[GetSetting("S_DISPLAYRSSI")].value()) > 0)    ShowRSSI(); 
+  if (int(confItem[GetSetting("S_DISPLAYVOLTAGE")].value()) > 0) ShowVolts(sVBat);
+
+  ShowVideoVolts(sVBat);    
+ 
   displaySensors();
   displayMode();
+  ShowAmps();
+  ShowAltitude();
+  ShownAngletohome();
   ShowAmperage();
+  ShowVario();
+  ShowTemp();
+  ShowUTC();
   displayHeadingGraph();
   displayHeading();
+  ShowDebug();
+  ShowSideBArArrows();
+
+  if(confItem[GetSetting("S_DISPLAYGPS")].value() > 0) {
+  ShowGPSAltitude();
+  ShowDistance();
+  ShowLatLon();
+  ShowSats();   
+  ShowSpeed();
+  ShowDirection();
+ }
  
   MatchConfigs();
   MakePorts();
@@ -1203,10 +1247,9 @@ void makeText(String inString, int inStartAddress ){
 
 void displaySensors()
 {
-   mapchar(0xa0,sensorPosition[0]);
-   mapchar(0xa2,sensorPosition[0]+1);
-   mapchar(0xa1,sensorPosition[0]+2);
-   mapchar(0xa3,sensorPosition[0]+3);
+//   mapchar(0xa0,sensorPosition[0]);
+//   mapchar(0xa2,sensorPosition[0]+1);
+//   mapchar(0xa1,sensorPosition[0]+2);
    /* 
   if(MwSensorPresent&ACCELEROMETER) mapchar("0xa0",sensorPosition[0]);
   else ;

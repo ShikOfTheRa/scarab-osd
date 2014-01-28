@@ -42,8 +42,7 @@ String boxnames[] = { // names for dynamic generation of config GUI
     "CAMSTAB;",
     "GPS HOME;",
     "GPS HOLD;",
-    "OSD SW;"
-    
+    "OSD SW;"    
   };
 String strBoxNames = join(boxnames,""); 
 //int modebits = 0;
@@ -369,10 +368,15 @@ void SendCommand(int cmd){
         serialize16(1|1<<1|1<<2|1<<3|0<<4);
         int modebits = 0;
         int BitCounter = 1;
-        for (int i=0; i<boxnames.length; i++) {
-          if(toggleModeItems[i].getValue() > 0) modebits |= BitCounter;
-          BitCounter += BitCounter;
-        }
+        if(toggleModeItems[0].getValue()> 0) modebits |=1<<0;
+        if(toggleModeItems[1].getValue()> 0) modebits |=1<<1;
+        if(toggleModeItems[2].getValue()> 0) modebits |=1<<2;
+        if(toggleModeItems[3].getValue()> 0) modebits |=1<<3;
+        if(toggleModeItems[4].getValue()> 0) modebits |=1<<5;
+        if(toggleModeItems[5].getValue()> 0) modebits |=1<<8;
+        if(toggleModeItems[6].getValue()> 0) modebits |=1<<10;
+        if(toggleModeItems[7].getValue()> 0) modebits |=1<<11;
+        if(toggleModeItems[8].getValue()> 0) modebits |=1<<19;
         serialize32(modebits);
         serialize8(0);   // current setting
         tailSerialReply();
@@ -413,17 +417,15 @@ void SendCommand(int cmd){
       break;
       
       case MSP_BOXIDS:
-        headSerialReply(MSP_BOXIDS,19);
-        for(int i=0;i<4;i++) 
-        {serialize8(i);
-        serialize8(5);
-        serialize8(10);
-        serialize8(11);
-        serialize8(16);
-        serialize8(19);
+        PortIsWriting = true;
+        headSerialReply(MSP_BOXIDS,21);
+        for (int i=0; i<21; i++) {
+        serialize8(i);
+        }
         tailSerialReply();
         PortIsWriting = false;
-     }
+    break;
+
      
       case MSP_ATTITUDE:
         PortIsWriting = true;
