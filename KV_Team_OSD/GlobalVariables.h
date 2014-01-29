@@ -432,7 +432,8 @@ const char configMsg73[] PROGMEM = "VOLT REF";
 const char configMsg730[] PROGMEM = "5V";
 const char configMsg731[] PROGMEM = "1.1V";
 const char configMsg74[] PROGMEM = "DEBUG";
-//const char configMsg75[] PROGMEM = "TOP SHIFT";
+const char configMsg75[] PROGMEM = "MAG CAL";
+//const char configMsg76[] PROGMEM = "TOP SHIFT";
 //-----------------------------------------------------------Page8
 const char configMsg80[] PROGMEM = "STATISTICS";
 const char configMsg81[] PROGMEM = "TRIP";

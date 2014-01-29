@@ -342,7 +342,7 @@ else
     }
 
 //    if(accCalibrationTimer>0) accCalibrationTimer--;
-//    if(magCalibrationTimer>0) magCalibrationTimer--;
+    if(magCalibrationTimer>0) magCalibrationTimer--;
     if(eepromWriteTimer>0) eepromWriteTimer--;
 
     if((rssiTimer==1)&&(configMode)) {

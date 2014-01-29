@@ -524,6 +524,7 @@ void serialMenuCommon()
 	    }
 	  if(ROW==3) Settings[S_VREFERENCE]=!Settings[S_VREFERENCE];
 	  if(ROW==4) Settings[S_DEBUG]=!Settings[S_DEBUG];
+	  if(ROW==5) magCalibrationTimer=CALIBRATION_DELAY;
 	}
 
   	if((ROW==10)&&(COL==1)) configExit();
