@@ -4,7 +4,7 @@
 
 /********************       USE HARDWARE SYNC      *********************/
 
-#define USE_VSYNC // Remove "sparklies" on boards that support VSYNC 
+//#define USE_VSYNC // Remove "sparklies" on boards that support VSYNC 
  
 /********************       PWM RSSI      *********************/
 

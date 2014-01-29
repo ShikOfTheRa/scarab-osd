@@ -935,8 +935,8 @@ void displayCursor(void)
     if(configPage==7)
       {  
       COL=3;
-      if (ROW==9) ROW=4;
-      if (ROW==5) ROW=10;
+      if (ROW==9) ROW=5;
+      if (ROW==6) ROW=10;
        cursorpos=(ROW+2)*30+10+6+6;
       }
 
@@ -1239,6 +1239,12 @@ void displayConfigScreen(void)
     else {
       MAX7456_WriteString_P(configMsgOFF, ALTD);
       }
+//R5:
+    MAX7456_WriteString_P(configMsg75, VELT);
+    if(magCalibrationTimer>0)
+      MAX7456_WriteString(itoa(magCalibrationTimer,screenBuffer,10),VELD);
+    else
+      MAX7456_WriteString("-",VELD);
    }
 
   if(configPage==8)
