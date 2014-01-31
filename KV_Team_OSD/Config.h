@@ -156,7 +156,7 @@
 
 #define SAVEP 93+(30*9)
 
-//#define DEBUG // For developers - remove if memory required
+#define DEBUG // For developers - remove if memory required
 //#define DEV   // For developers - remove if even more memory required
 
 
