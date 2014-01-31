@@ -386,7 +386,7 @@ const char configMsg22[] PROGMEM = "EXPONENTIAL";
 const char configMsg23[] PROGMEM = "ROLL PITCH RATE";
 const char configMsg24[] PROGMEM = "YAW RATE";
 const char configMsg25[] PROGMEM = "THROTTLE PID ATT";
-const char configMsg26[] PROGMEM = "MW EEPROM WRITE";
+const char configMsg26[] PROGMEM = "SAVE TO MULTIWII";
 //-----------------------------------------------------------Page3
 const char configMsg30[] PROGMEM = "VOLTAGE";
 const char configMsg31[] PROGMEM = "DISPLAY MAIN VOLTS";

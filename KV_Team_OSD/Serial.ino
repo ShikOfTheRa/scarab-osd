@@ -33,9 +33,7 @@ void serialMSPCheck()
     uint8_t cmd = read8();
     if(cmd == OSD_READ_CMD) {
       uint8_t txCheckSum, txSize;
-      Serial.write('$');
-      Serial.write('M');
-      Serial.write('<');
+      headSerialRequest();
       txCheckSum=0;
       txSize = EEPROM_SETTINGS + 1;
       Serial.write(txSize);
@@ -190,7 +188,7 @@ void serialMSPCheck()
     modeMSPRequests &=~ REQ_MSP_PID;
   }
 
-if (Settings[S_USE_BOXNAMES]){ 
+#ifdef BOXNAMES
   if(cmdMSP==MSP_BOXNAMES) {
     uint32_t bit = 1;
     uint8_t remaining = dataSize;
@@ -252,7 +250,7 @@ if (Settings[S_USE_BOXNAMES]){
     #endif
     modeMSPRequests &=~ REQ_MSP_BOX;
   }
-}else{ // use MSP_BOXIDS
+#else  
   if(cmdMSP==MSP_BOXIDS) {
     uint32_t bit = 1;
     uint8_t remaining = dataSize;
@@ -312,9 +310,8 @@ if (Settings[S_USE_BOXNAMES]){
 #endif
     modeMSPRequests &=~ REQ_MSP_BOX;
   }
+#endif
 }
-}
-
 // End of decoded received commands from MultiWii
 // --------------------------------------------------------------------------------------
 
@@ -481,6 +478,11 @@ void handleRawRC() {
 }
 void serialMenuCommon()
 {
+
+  	if(configPage == 1 && COL == 3) {
+	  if(ROW==8) eepromWriteTimer=EEPROM_WRITE_DELAY;
+	}
+
   	if(configPage == 2 && COL == 3) {
 	  if(ROW==6) eepromWriteTimer=EEPROM_WRITE_DELAY;
 	}
@@ -623,9 +625,7 @@ void saveExit()
   uint8_t txSize;
 
   if (configPage==1){
-    Serial.write('$');
-    Serial.write('M');
-    Serial.write('<');
+    headSerialRequest();
     txCheckSum=0;
     txSize=30;
     Serial.write(txSize);
@@ -644,9 +644,7 @@ void saveExit()
   }
 
   if (configPage==2){
-    Serial.write('$');
-    Serial.write('M');
-    Serial.write('<');
+  headSerialRequest();
     txCheckSum=0;
     txSize=7;
     Serial.write(txSize);
@@ -683,9 +681,7 @@ void blankserialRequest(uint8_t requestMSP)
     fontSerialRequest();
     return;
   }
-  Serial.write('$');
-  Serial.write('M');
-  Serial.write('<');
+  headSerialRequest();
   Serial.write((uint8_t)0x00);
   Serial.write(requestMSP);
   Serial.write(requestMSP);
@@ -695,9 +691,7 @@ void fontSerialRequest() {
   int16_t cindex = getNextCharToRequest();
   uint8_t txCheckSum;
   uint8_t txSize;
-  Serial.write('$');
-  Serial.write('M');
-  Serial.write('<');
+  headSerialRequest();
   txCheckSum=0;
   txSize=3;
   Serial.write(txSize);
@@ -711,4 +705,11 @@ void fontSerialRequest() {
   Serial.write(cindex>>8);
   txCheckSum ^= cindex>>8;
   Serial.write(txCheckSum);
+}
+
+void headSerialRequest (void) {
+  Serial.write('$');
+  Serial.write('M');
+  Serial.write('<');
+  
 }

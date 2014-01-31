@@ -227,11 +227,58 @@ void displayCallsign(void)
        MAX7456_WriteString(screenBuffer, getPosition(callSignPosition)); 
   }
 }
+
+//************************************************************************************************************************************************************************************
 void displayHorizon(int rollAngle, int pitchAngle)
 {
   if(!fieldIsVisible(horizonPosition))
     return;
 
+  if (Settings[S_SCROLLING]|Settings[S_SIDEBARTOPS]){
+      if(!armed) GPS_speed=0;
+  // Scrolling decoration
+      if (GPS_speed > old_GPS_speed+15){
+        sidebarsMillis = millis();
+        sidebarsdir = 2;
+        old_GPS_speed = GPS_speed;
+        SYM_AH_DECORATION_LEFT--;
+        if (SYM_AH_DECORATION_LEFT<0x10)
+          SYM_AH_DECORATION_LEFT=0x15;
+      }
+
+      else if (GPS_speed+15 < old_GPS_speed){
+        sidebarsMillis = millis();
+        sidebarsdir = 1;
+       old_GPS_speed = GPS_speed;
+        SYM_AH_DECORATION_LEFT++;
+        if (SYM_AH_DECORATION_LEFT>0x15)
+          SYM_AH_DECORATION_LEFT=0x10;
+      }
+ 
+      if (MwAltitude > old_MwAltitude+20){
+        sidebaraMillis = millis();
+        sidebaradir = 2;
+        old_MwAltitude = MwAltitude;
+        SYM_AH_DECORATION_RIGHT--;
+        if (SYM_AH_DECORATION_RIGHT<0x10)
+          SYM_AH_DECORATION_RIGHT=0x15;
+      }
+
+      else if (MwAltitude+20 < old_MwAltitude){
+        sidebaraMillis = millis();
+        sidebaradir = 1;
+        old_MwAltitude = MwAltitude;
+        SYM_AH_DECORATION_RIGHT++;
+        if (SYM_AH_DECORATION_RIGHT>0x15)
+          SYM_AH_DECORATION_RIGHT=0x10;
+      }
+  }
+
+  if (!Settings[S_SCROLLING]){
+     SYM_AH_DECORATION_LEFT=0x13;
+     SYM_AH_DECORATION_RIGHT=0x13;
+  } 
+  
   uint16_t position = getPosition(horizonPosition);
 
   if(pitchAngle>200) pitchAngle=200;
@@ -252,7 +299,8 @@ void displayHorizon(int rollAngle, int pitchAngle)
   }
 
 if (Settings[S_HORIZON_ELEVATION]){                   
-  for(int X=3; X<=5; X++) {
+
+    for(int X=3; X<=5; X++) {
     int Y = (rollAngle * (4-X)) / 64;
     Y -= pitchAngle / 8;
     Y += 41;
@@ -265,9 +313,12 @@ if (Settings[S_HORIZON_ELEVATION]){
         screen[pos] = SYM_AH_BAR9_9;
     }
   }
+ 
 }
   if(Settings[S_DISPLAY_HORIZON_BR]){
-    //Draw center screen
+
+#ifndef DEV
+//Draw center screen
     screen[position+2*LINE+7-1] = SYM_AH_CENTER_LINE;
     screen[position+2*LINE+7+1] = SYM_AH_CENTER_LINE_RIGHT;
     screen[position+2*LINE+7] =   SYM_AH_CENTER;
@@ -280,31 +331,29 @@ if (Settings[S_HORIZON_ELEVATION]){
     screen[position+X*LINE] =     SYM_AH_DECORATION_LEFT;
     screen[position+X*LINE+14] =  SYM_AH_DECORATION_RIGHT;
   }
-  }
-}
 
-void displaySidebartop(void){
-#ifndef DEBUG
 
-if (millis()<(sidebarsMillis + 1000)) {
-  if (sidebarsdir == 2){
-screen[getPosition(horizonPosition)-LINE] = SYM_AH_DECORATION_UP;
-  }
-  else{
-screen[getPosition(horizonPosition)+5*LINE] = SYM_AH_DECORATION_DOWN;
-  }
-}
-if (millis()<(sidebaraMillis + 1000)) {
-  if (sidebaradir == 2){
-screen[getPosition(horizonPosition)+14-LINE] = SYM_AH_DECORATION_UP;
-  }
-  else{
-screen[getPosition(horizonPosition)+5*LINE+14] = SYM_AH_DECORATION_DOWN;
-  }
-}
+    if (Settings[S_SIDEBARTOPS]) {
+      if (millis()<(sidebarsMillis + 1000)) {
+        if (sidebarsdir == 2){
+          screen[getPosition(horizonPosition)-LINE] = SYM_AH_DECORATION_UP;
+        }
+        else{
+          screen[getPosition(horizonPosition)+5*LINE] = SYM_AH_DECORATION_DOWN;
+        }
+      }
+      if (millis()<(sidebaraMillis + 1000)) { 
+        if (sidebaradir == 2){
+          screen[getPosition(horizonPosition)+14-LINE] = SYM_AH_DECORATION_UP;
+        }
+        else{
+          screen[getPosition(horizonPosition)+5*LINE+14] = SYM_AH_DECORATION_DOWN;
+        }
+      }
+    }
 #endif
+  }
 }
-
 
 
 void displayVoltage(void)
@@ -375,27 +424,6 @@ void displayCurrentThrottle(void)
   }
   else
   {
- /*
- 
-     uint16_t position = getPosition(CurrentThrottlePosition)-2*LINE+5;
-    screen[position+1*LINE] =  0x7F;
-    screen[position+2*LINE] =  0x7F;
-
-    int CurThrottle = map(MwRcData[THROTTLESTICK],LowT,HighT,0,100);
-
-    if     (CurThrottle > 88)  screen[position+1*LINE] =  0x8F; 
-    else if(CurThrottle > 80)  screen[position+1*LINE] =  0x8E;
-    else if(CurThrottle > 72)  screen[position+1*LINE] =  0x8D;
-    else if(CurThrottle > 66)  screen[position+1*LINE] =  0x8C;
-    else if(CurThrottle > 58)  screen[position+1*LINE] =  0x8B;
-    else if(CurThrottle > 50)  screen[position+1*LINE] =  0x8A;
-    else if(CurThrottle > 42)  screen[position+2*LINE] =  0x8F;
-    else if(CurThrottle > 34)  screen[position+2*LINE] =  0x8E;
-    else if(CurThrottle > 26)  screen[position+2*LINE] =  0x8D;
-    else if(CurThrottle > 18)  screen[position+2*LINE] =  0x8C;
-    else if(CurThrottle > 10)  screen[position+2*LINE] =  0x8B;
-    else                       screen[position+2*LINE] =  0x8A;
-*/
 
     int CurThrottle = map(MwRcData[THROTTLESTICK],LowT,HighT,0,100);
     ItoaPadded(CurThrottle,screenBuffer,3,0);
@@ -438,11 +466,8 @@ void displayDebug(void)
   #if defined DEBUG
     if(!Settings[S_DEBUG])
     return;
+//    debug[0]=X;
   for(uint8_t X=0; X<4; X++) {
-    debug[0]=X;
-//debug[1]=X;
-//debug[2]=X;
-//debug[3]=X;
     ItoaPadded(debug[X], screenBuffer+2,7,0);     
     screenBuffer[0] = 0x30+X;
     screenBuffer[1] = 0X3A;
@@ -732,7 +757,7 @@ void displayAltitude(void)
 
 void displayClimbRate(void)
 {
-  //Shiki Mod
+#ifndef DEV
   if(!fieldIsVisible(MwClimbRatePosition))
     return;
   if(!Settings[S_VARIO])
@@ -762,6 +787,7 @@ void displayClimbRate(void)
     else if(MwVario < -15)  screen[position+2*LINE+15] =  0x8C;
     else                    screen[position+2*LINE+15] =  0x8D;
 
+#endif
 }
 
 void displayDistanceToHome(void)
@@ -828,57 +854,7 @@ void displayDirectionToHome(void)
   MAX7456_WriteString(screenBuffer,position);
 }
 
-void scrollingLadders(void)
-{
 
-
-  if (Settings[S_SCROLLING]){
-  // Scrolling decoration
-
-
-
-      if (GPS_speed > old_GPS_speed+15){
-        sidebarsMillis = millis();
-        sidebarsdir = 2;
-        old_GPS_speed = GPS_speed;
-        SYM_AH_DECORATION_LEFT--;
-        if (SYM_AH_DECORATION_LEFT<0x10)
-          SYM_AH_DECORATION_LEFT=0x15;
-      }
-
-      else if (GPS_speed+15 < old_GPS_speed){
-        sidebarsMillis = millis();
-        sidebarsdir = 1;
-       old_GPS_speed = GPS_speed;
-        SYM_AH_DECORATION_LEFT++;
-        if (SYM_AH_DECORATION_LEFT>0x15)
-          SYM_AH_DECORATION_LEFT=0x10;
-      }
- 
-      if (MwAltitude > old_MwAltitude+20){
-        sidebaraMillis = millis();
-        sidebaradir = 2;
-        old_MwAltitude = MwAltitude;
-        SYM_AH_DECORATION_RIGHT--;
-        if (SYM_AH_DECORATION_RIGHT<0x10)
-          SYM_AH_DECORATION_RIGHT=0x15;
-      }
-
-      else if (MwAltitude+20 < old_MwAltitude){
-        sidebaraMillis = millis();
-        sidebaradir = 1;
-        old_MwAltitude = MwAltitude;
-        SYM_AH_DECORATION_RIGHT++;
-        if (SYM_AH_DECORATION_RIGHT>0x15)
-          SYM_AH_DECORATION_RIGHT=0x10;
-      }
-  }
-  else{
-     SYM_AH_DECORATION_LEFT=0x13;
-     SYM_AH_DECORATION_RIGHT=0x13;
-  }  
-
-}
 
 void displayCursor(void)
 {
@@ -891,12 +867,12 @@ void displayCursor(void)
   }
   if(ROW<10){
     if(configPage==1){
-      if (ROW==9) ROW=7;
-      if (ROW==8) ROW=10;
       if(COL==1) cursorpos=(ROW+2)*30+10;
       if(COL==2) cursorpos=(ROW+2)*30+10+6;
       if(COL==3) cursorpos=(ROW+2)*30+10+6+6;
-      }
+      if(ROW==7) {cursorpos=(ROW+2)*30+10;COL=1;}
+      if(ROW==8) {cursorpos=(ROW+2)*30+10+6+6;COL=3;}
+       }
     if(configPage==2){
       COL=3;
       if (ROW==7) ROW=10;
@@ -992,6 +968,12 @@ void displayConfigScreen(void)
 
     MAX7456_WriteString_P(configMsg17, MAGT);
     MAX7456_WriteString(itoa(P8[8],screenBuffer,10),MAGP);
+
+    MAX7456_WriteString_P(configMsg26, MAGT+LINE);
+    if(eepromWriteTimer>0)
+      MAX7456_WriteString(itoa(eepromWriteTimer,screenBuffer,10),MAGD+LINE);
+    else
+      MAX7456_WriteString("-",MAGD+LINE);
 
     MAX7456_WriteString("P",71);
     MAX7456_WriteString("I",77);
@@ -1275,4 +1257,50 @@ void displayConfigScreen(void)
     }
     
   displayCursor();
+}
+
+void dev(void) {
+
+#ifdef DEV
+  int8_t xdir;
+  int8_t ydir;
+  int8_t range;
+  int8_t targetpos;
+  uint16_t maxdir;
+  uint8_t tmp = map(GPS_directionToHome, 0, 360, 0, 3);
+  switch (tmp) {
+    case 0:
+      xdir=-1;
+      ydir=+1;
+      break;
+    case 1:    
+      xdir=+1;
+      ydir=+1;
+      break;
+    case 2:    
+      xdir=-1;
+      ydir=+1;
+      break;
+    case 3: 
+      xdir=-1;
+      ydir=-1;
+      break;   
+    }  
+  float rad  = GPS_directionToHome * PI / 180;    // convert to radians  
+  int x = GPS_distanceToHome * sin(rad);
+  int y = GPS_distanceToHome * cos(rad);
+  if (y>x) maxdir=y; else maxdir=x;
+
+  xdir = map(x, range*xdir, range, -4, 4);
+  ydir = map(y, range*ydir, range, -4, 4);
+
+  debug[0]=x;
+  debug[1]=y;
+  
+  targetpos= 7*LINE + 14 + xdir + LINE*ydir; 
+  screenBuffer[0] = SYM_CHECK;
+  screenBuffer[1] = 0;
+  MAX7456_WriteString(screenBuffer,targetpos);
+
+#endif
 }

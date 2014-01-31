@@ -10,6 +10,9 @@
 
 #define PwmRssiPin 12              // Miso Pin
 
+/********************       MW 2.0 / 2.1 support      *********************/
+//#define BOXNAMES                 // required to support multiwii 2.1 / 2.0 
+
 /**********************       Serial speed      ************************/
 
 //#define SERIAL_SPEED 115200
@@ -85,7 +88,6 @@
 
 /*----------------------------------------------       End of configurable parameters      ----------------------------------------------------*/
 
-//#define DEBUG // For developers - remove if memory required
 
 #define LINE      30
 #define LINE01    0
@@ -154,5 +156,7 @@
 
 #define SAVEP 93+(30*9)
 
+//#define DEBUG // For developers - remove if memory required
+//#define DEV   // For developers - remove if even more memory required
 
 

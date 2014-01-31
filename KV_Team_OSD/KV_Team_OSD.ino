@@ -7,7 +7,7 @@ Jan 2014 - R1
  the Free Software Foundation, either version 3 of the License, or
  any later version. see http://www.gnu.org/licenses/
 
-This work is based on the following earlier work :-
+This work is based on the following open source work :-
  Rushduino   http://code.google.com/p/rushduino-osd/
  KVTeam      https://code.google.com/p/rush-osd-development/
  Minim OSD   https://code.google.com/p/arducam-osd/wiki/minimosd
@@ -15,7 +15,7 @@ This work is based on the following earlier work :-
  Its base is taken from KVT R370
 
  All credit and full acknowledgement to the incredible work and hours from the many developers, contributors and testers that have helped along the way.
- Jean Gabriel Maurice. He started the revoultion. He was the first....
+ Jean Gabriel Maurice. He started the revolution. He was the first....
  We only make a few changes! 
 */
             
@@ -150,7 +150,7 @@ void loop()
       
     if(Settings[S_DISPLAYRSSI])
       calculateRssi();
-    scrollingLadders();
+
   }  // End of slow Timed Service Routine (100ms loop)
 
   if((currentMillis - previous_millis_high) >= hi_speed_cycle)  // 20 Hz (Executed every 50ms)
@@ -248,8 +248,6 @@ void loop()
         if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(Blink2hz))) displayRSSI();
 
         displayTime();
-        if (Settings[S_SIDEBARTOPS]) displaySidebartop();
-        displayMode();
         
         if(Settings[S_DISPLAYTEMPERATURE]&&((temperature<Settings[S_TEMPERATUREMAX])||(Blink2hz))) displayTemperature();
 
@@ -271,6 +269,7 @@ void loop()
         if(MwSensorPresent&ACCELEROMETER)
            displayHorizon(MwAngle[0],MwAngle[1]);
 
+
         if(MwSensorPresent&MAGNETOMETER) {
           displayHeadingGraph();
           displayHeading();
@@ -291,6 +290,8 @@ void loop()
           displayGPSPosition();
           displayGPS_time();
         }
+         displayMode();
+         dev();
          displayDebug();
       }
     }
