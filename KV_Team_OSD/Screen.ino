@@ -234,6 +234,8 @@ void displayHorizon(int rollAngle, int pitchAngle)
   if(!fieldIsVisible(horizonPosition))
     return;
 
+#ifndef DEV
+
   if (Settings[S_SCROLLING]|Settings[S_SIDEBARTOPS]){
       if(!armed) GPS_speed=0;
   // Scrolling decoration
@@ -317,7 +319,6 @@ if (Settings[S_HORIZON_ELEVATION]){
 }
   if(Settings[S_DISPLAY_HORIZON_BR]){
 
-#ifndef DEV
 //Draw center screen
     screen[position+2*LINE+7-1] = SYM_AH_CENTER_LINE;
     screen[position+2*LINE+7+1] = SYM_AH_CENTER_LINE_RIGHT;
@@ -351,8 +352,9 @@ if (Settings[S_HORIZON_ELEVATION]){
         }
       }
     }
-#endif
+
   }
+#endif
 }
 
 
@@ -1254,41 +1256,59 @@ void dev(void) {
 #ifdef DEV
   int8_t xdir;
   int8_t ydir;
-  int8_t range;
-  int8_t targetpos;
+  int16_t targetx;
+  int16_t targety;
+  int16_t range=200;
+  int8_t angle;
+  int16_t targetpos;
+  int16_t centerpos;
   uint16_t maxdir;
-  uint8_t tmp = map(GPS_directionToHome, 0, 360, 0, 3);
+  uint8_t tmp = GPS_directionToHome/90;
   switch (tmp) {
     case 0:
-      xdir=-1;
-      ydir=+1;
+      xdir=+1;
+      ydir=-1;
+      angle=GPS_directionToHome;
       break;
     case 1:    
       xdir=+1;
       ydir=+1;
+      angle=180-GPS_directionToHome;
       break;
     case 2:    
       xdir=-1;
       ydir=+1;
+      angle=GPS_directionToHome-180;
       break;
     case 3: 
       xdir=-1;
       ydir=-1;
+      angle=360-GPS_directionToHome;
       break;   
     }  
-  float rad  = GPS_directionToHome * PI / 180;    // convert to radians  
-  int x = GPS_distanceToHome * sin(rad);
-  int y = GPS_distanceToHome * cos(rad);
-  if (y>x) maxdir=y; else maxdir=x;
+  float rad  = angle * PI / 180;    // convert to radians  
+  uint16_t x = GPS_distanceToHome * sin(rad);
+  uint16_t y = GPS_distanceToHome * cos(rad);
+ // if (y > x) maxdir=y;
+ // else maxdir=x;
 
-  xdir = map(x, range*xdir, range, -4, 4);
-  ydir = map(y, range*ydir, range, -4, 4);
+  targetx = xdir*map(x, 0, range, 0, 7);
+  targety = ydir*map(y, 0, range, 0, 7);
 
   debug[0]=x;
   debug[1]=y;
+  debug[2]=targetx;
+  debug[3]=targety;
   
-  targetpos= 7*LINE + 14 + xdir + LINE*ydir; 
-  screenBuffer[0] = SYM_CHECK;
+  centerpos=getPosition(horizonPosition)+67;
+  targetpos= centerpos + targetx + (LINE*targety); 
+
+
+  screenBuffer[0] = SYM_AIRCRAFT;
+  screenBuffer[1] = 0;
+  MAX7456_WriteString(screenBuffer,centerpos);
+
+  screenBuffer[0] = SYM_HOME;
   screenBuffer[1] = 0;
   MAX7456_WriteString(screenBuffer,targetpos);
 

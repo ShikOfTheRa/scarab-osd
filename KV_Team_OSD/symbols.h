@@ -42,6 +42,10 @@
 #define SYM_HEADING_DIVIDED_LINE 0X1C
 #define SYM_HEADING_LINE 0X1D
 
+// Map mode
+#define SYM_HOME     0x04
+#define SYM_AIRCRAFT 0X05
+
 // GPS Coordinates and Altitude
 #define SYM_LAT 0xCA
 #define SYM_LON 0XCB
