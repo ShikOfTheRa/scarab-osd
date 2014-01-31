@@ -418,9 +418,7 @@ void handleRawRC() {
 	}
 
 	if(configPage == 9 && COL == 3) {
-	  if(ROW==1) accCalibrationTimer=0;
 	  if(ROW==5) magCalibrationTimer=0;
-	  if(ROW==7) eepromWriteTimer=0;
 	}
 
 	if((ROW==10)&&(COL==3)) configPage--;
@@ -437,7 +435,6 @@ void handleRawRC() {
 	    if(COL==2) I8[ROW-1]++;
 	    if(COL==3) D8[ROW-1]++;
 	  }
-
 	  if(ROW == 6) {
 	    if(COL==1) P8[7]++;
 	    if(COL==2) I8[7]++;
@@ -478,15 +475,6 @@ void handleRawRC() {
 }
 void serialMenuCommon()
 {
-
-  	if(configPage == 1 && COL == 3) {
-	  if(ROW==8) eepromWriteTimer=EEPROM_WRITE_DELAY;
-	}
-
-  	if(configPage == 2 && COL == 3) {
-	  if(ROW==6) eepromWriteTimer=EEPROM_WRITE_DELAY;
-	}
-
 	if(configPage == 3 && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAYVOLTAGE]=!Settings[S_DISPLAYVOLTAGE];
 	  if(ROW==4) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
@@ -530,7 +518,7 @@ void serialMenuCommon()
 	}
 
   	if((ROW==10)&&(COL==1)) configExit();
-	if((ROW==10)&&(COL==2)) saveExit();
+	if((ROW==10)&&(COL==2)) configSave();
 
 }
 
@@ -619,12 +607,11 @@ void configExit()
   setMspRequests();
 }
 
-void saveExit()
+void configSave()
 {
   uint8_t txCheckSum;
   uint8_t txSize;
 
-  if (configPage==1){
     headSerialRequest();
     txCheckSum=0;
     txSize=30;
@@ -641,9 +628,7 @@ void saveExit()
       txCheckSum ^= D8[i];
     }
     Serial.write(txCheckSum);
-  }
 
-  if (configPage==2){
   headSerialRequest();
     txCheckSum=0;
     txSize=7;
@@ -666,12 +651,8 @@ void saveExit()
     Serial.write(thrExpo8);
     txCheckSum ^= thrExpo8;
     Serial.write(txCheckSum);
-  }
 
-//  if (configPage==3 || configPage==4){
-  if (configPage==3 || configPage==4 || configPage==6 || configPage==7){
     writeEEPROM();
-  }
   configExit();
 }
 

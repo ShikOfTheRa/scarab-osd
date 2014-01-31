@@ -21,7 +21,6 @@ int lastCallSign=0;                          //callsign_timer
 uint8_t rssiTimer=0;
 uint8_t accCalibrationTimer=0;
 uint8_t magCalibrationTimer=0;
-uint8_t eepromWriteTimer=0;
 uint16_t debug[4];
 
 unsigned int allSec=0;
@@ -366,7 +365,7 @@ const char message11[] PROGMEM = "DST:"; //haydent - Time Zone & DST Setting
 const char configMsgON[] PROGMEM = "ON";
 const char configMsgOFF[] PROGMEM = "OFF";
 const char configMsgEXT[] PROGMEM = "EXIT";
-const char configMsgSAVE[] PROGMEM = "SAVE-EXIT";
+const char configMsgSAVE[] PROGMEM = "SAVE+EXIT";
 const char configMsgPGS[] PROGMEM = "<PAGE>";
 
 // For Config pages

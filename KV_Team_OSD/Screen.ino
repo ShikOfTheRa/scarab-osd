@@ -867,16 +867,17 @@ void displayCursor(void)
   }
   if(ROW<10){
     if(configPage==1){
+      if (ROW==8) ROW=10;
+      if (ROW==9) ROW=7;
       if(COL==1) cursorpos=(ROW+2)*30+10;
       if(COL==2) cursorpos=(ROW+2)*30+10+6;
       if(COL==3) cursorpos=(ROW+2)*30+10+6+6;
       if(ROW==7) {cursorpos=(ROW+2)*30+10;COL=1;}
-      if(ROW==8) {cursorpos=(ROW+2)*30+10+6+6;COL=3;}
        }
     if(configPage==2){
       COL=3;
-      if (ROW==7) ROW=10;
-      if (ROW==9) ROW=6;
+      if (ROW==6) ROW=10;
+      if (ROW==9) ROW=5;
       cursorpos=(ROW+2)*30+10+6+6;
       }
     if(configPage==3){
@@ -969,13 +970,7 @@ void displayConfigScreen(void)
     MAX7456_WriteString_P(configMsg17, MAGT);
     MAX7456_WriteString(itoa(P8[8],screenBuffer,10),MAGP);
 
-    MAX7456_WriteString_P(configMsg26, MAGT+LINE);
-    if(eepromWriteTimer>0)
-      MAX7456_WriteString(itoa(eepromWriteTimer,screenBuffer,10),MAGD+LINE);
-    else
-      MAX7456_WriteString("-",MAGD+LINE);
-
-    MAX7456_WriteString("P",71);
+     MAX7456_WriteString("P",71);
     MAX7456_WriteString("I",77);
     MAX7456_WriteString("D",83);
   }
@@ -993,11 +988,6 @@ void displayConfigScreen(void)
     MAX7456_WriteString(itoa(yawRate,screenBuffer,10),ALTD);
     MAX7456_WriteString_P(configMsg25, VELT);
     MAX7456_WriteString(itoa(dynThrPID,screenBuffer,10),VELD);
-    MAX7456_WriteString_P(configMsg26, LEVT);
-    if(eepromWriteTimer>0)
-      MAX7456_WriteString(itoa(eepromWriteTimer,screenBuffer,10),LEVD);
-    else
-      MAX7456_WriteString("-",LEVD);
 
   }
 
