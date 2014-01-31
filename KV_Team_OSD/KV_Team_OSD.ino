@@ -337,14 +337,8 @@ else
       magCalibrationTimer=0;
     }
 
-    if((eepromWriteTimer==1)&&(configMode)) {
-      blankserialRequest(MSP_EEPROM_WRITE);
-      eepromWriteTimer=0;
-    }
-
 //    if(accCalibrationTimer>0) accCalibrationTimer--;
     if(magCalibrationTimer>0) magCalibrationTimer--;
-    if(eepromWriteTimer>0) eepromWriteTimer--;
 
     if((rssiTimer==1)&&(configMode)) {
       Settings[S_RSSIMIN]=rssiADC;  // set MIN RSSI signal received (tx off?)
