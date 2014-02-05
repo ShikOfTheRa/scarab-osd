@@ -482,11 +482,10 @@ void serialMenuCommon()
 	}
 
 	if(configPage == 4 && COL == 3) {
-	  if(ROW==2) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
-	  if(ROW==3) rssiTimer=15;
-	  if(ROW==4) Settings[S_RSSIMAX]=rssiADC;  // set MAX RSSI signal received (tx ON and rx near to tx)
-	  if(ROW==5) Settings[S_MWRSSI]=!Settings[S_MWRSSI];
-	  if(ROW==6) Settings[S_PWMRSSI]=!Settings[S_PWMRSSI];
+	  if(ROW==1) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
+	  if(ROW==2) rssiTimer=15; // 15 secs to turn off tx anwait to read min RSSI
+	  if(ROW==3) Settings[S_MWRSSI]=!Settings[S_MWRSSI];
+	  if(ROW==4) Settings[S_PWMRSSI]=!Settings[S_PWMRSSI];
 	}
 
 	if(configPage == 5 && COL == 3) {
@@ -503,7 +502,7 @@ void serialMenuCommon()
 	  if(ROW==5) Settings[S_COORDINATES]=!Settings[S_COORDINATES];
 	  if(ROW==6) Settings[S_MODEICON]=!Settings[S_MODEICON];
 	  if(ROW==7) Settings[S_GIMBAL]=!Settings[S_GIMBAL];
-	  if(ROW==8) Settings[S_GPSTIME]=!Settings[S_GPSTIME];
+	  if(ROW==8) Settings[S_ENABLEADC]=!Settings[S_ENABLEADC];
 	}
 
 	if(configPage == 7 && COL == 3) {
@@ -612,47 +611,48 @@ void configSave()
   uint8_t txCheckSum;
   uint8_t txSize;
 
-    headSerialRequest();
-    txCheckSum=0;
-    txSize=30;
-    Serial.write(txSize);
-    txCheckSum ^= txSize;
-    Serial.write(MSP_SET_PID);
-    txCheckSum ^= MSP_SET_PID;
-    for(uint8_t i=0; i<PIDITEMS; i++) {
-      Serial.write(P8[i]);
-      txCheckSum ^= P8[i];
-      Serial.write(I8[i]);
-      txCheckSum ^= I8[i];
-      Serial.write(D8[i]);
-      txCheckSum ^= D8[i];
-    }
-    Serial.write(txCheckSum);
+  headSerialRequest();
+  txCheckSum=0;
+  txSize=30;
+  Serial.write(txSize);
+  txCheckSum ^= txSize;
+  Serial.write(MSP_SET_PID);
+  txCheckSum ^= MSP_SET_PID;
+  for(uint8_t i=0; i<PIDITEMS; i++) {
+    Serial.write(P8[i]);
+    txCheckSum ^= P8[i];
+    Serial.write(I8[i]);
+    txCheckSum ^= I8[i];
+    Serial.write(D8[i]);
+    txCheckSum ^= D8[i];
+  }
+  Serial.write(txCheckSum);
 
   headSerialRequest();
-    txCheckSum=0;
-    txSize=7;
-    Serial.write(txSize);
-    txCheckSum ^= txSize;
-    Serial.write(MSP_SET_RC_TUNING);
-    txCheckSum ^= MSP_SET_RC_TUNING;
-    Serial.write(rcRate8);
-    txCheckSum ^= rcRate8;
-    Serial.write(rcExpo8);
-    txCheckSum ^= rcExpo8;
-    Serial.write(rollPitchRate);
-    txCheckSum ^= rollPitchRate;
-    Serial.write(yawRate);
-    txCheckSum ^= yawRate;
-    Serial.write(dynThrPID);
-    txCheckSum ^= dynThrPID;
-    Serial.write(thrMid8);
-    txCheckSum ^= thrMid8;
-    Serial.write(thrExpo8);
-    txCheckSum ^= thrExpo8;
-    Serial.write(txCheckSum);
+  txCheckSum=0;
+  txSize=7;
+  Serial.write(txSize);
+  txCheckSum ^= txSize;
+  Serial.write(MSP_SET_RC_TUNING);
+  txCheckSum ^= MSP_SET_RC_TUNING;
+  Serial.write(rcRate8);
+  txCheckSum ^= rcRate8;
+  Serial.write(rcExpo8);
+  txCheckSum ^= rcExpo8;
+  Serial.write(rollPitchRate);
+  txCheckSum ^= rollPitchRate;
+  Serial.write(yawRate);
+  txCheckSum ^= yawRate;
+  Serial.write(dynThrPID);
+  txCheckSum ^= dynThrPID;
+  Serial.write(thrMid8);
+  txCheckSum ^= thrMid8;
+  Serial.write(thrExpo8);
+  txCheckSum ^= thrExpo8;
+  Serial.write(txCheckSum);
 
-    writeEEPROM();
+  writeEEPROM();
+  blankserialRequest(MSP_EEPROM_WRITE);
   configExit();
 }
 

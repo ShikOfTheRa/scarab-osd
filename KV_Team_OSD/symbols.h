@@ -45,6 +45,11 @@
 // Map mode
 #define SYM_HOME     0x04
 #define SYM_AIRCRAFT 0X05
+#define SYM_RANGE_50   0x21
+#define SYM_RANGE_250  0x22
+#define SYM_RANGE_750  0x23
+#define SYM_RANGE_2500 0x24
+#define SYM_RANGE_MAX  0x26
 
 // GPS Coordinates and Altitude
 #define SYM_LAT 0xCA

@@ -55,11 +55,12 @@ void setup()
 //---
   Serial.flush();
   
-  //PWM RSSI
-  pinMode(PwmRssiPin, INPUT);
+  //RSSI
+  pinMode(PWMRSSIPIN, INPUT);
+  pinMode(RSSIPIN, INPUT);
   
   //Led output
-  pinMode(7,OUTPUT);
+  pinMode(LEDPIN,OUTPUT);
  
   checkEEPROM();
   readEEPROM();
@@ -129,15 +130,15 @@ void setMspRequests() {
 void loop()
 {
  
-  if (Settings[S_ENABLEADC])                   ProcessAnalogue();       // using analogue sensors
-  if (Settings[S_MWRSSI]||Settings[S_PWMRSSI]) ProcessRSSI();           // using multiwii sensors for RSSI
+  ProcessAnalogue();       // using analogue sensors
+  if (Settings[S_DISPLAYRSSI])                 ProcessRSSI();           
   if (Settings[S_AMPERAGE_VIRTUAL])            ProcessVirtualSensors(); // using virtual sensors
 
   // Blink Basic Sanity Test Led at 1hz
   if(tenthSec>10)
-    digitalWrite(7,HIGH);
+    digitalWrite(LEDPIN,HIGH);
   else
-    digitalWrite(7,LOW);
+    digitalWrite(LEDPIN,LOW);
 
   //---------------  Start Timed Service Routines  ---------------------------------------
   unsigned long currentMillis = millis();
@@ -147,11 +148,7 @@ void loop()
     previous_millis_low = currentMillis;    
     if(!fontMode)
       blankserialRequest(MSP_ATTITUDE);
-      
-    if(Settings[S_DISPLAYRSSI])
-      calculateRssi();
-
-  }  // End of slow Timed Service Routine (100ms loop)
+   }  // End of slow Timed Service Routine (100ms loop)
 
   if((currentMillis - previous_millis_high) >= hi_speed_cycle)  // 20 Hz (Executed every 50ms)
   {
@@ -229,7 +226,8 @@ void loop()
         previousarmedstatus=1;
       }
       if(previousarmedstatus && !armed){
-        armedtimer=50;
+        armedangle = MwHeading;
+        armedtimer=30;
         configPage=8;
         ROW=10;
         COL=1;
@@ -267,7 +265,7 @@ void loop()
        }
 
         if(MwSensorPresent&ACCELEROMETER)
-           displayHorizon(MwAngle[0],MwAngle[1]);
+           if(!Settings[S_ENABLEADC]) displayHorizon(MwAngle[0],MwAngle[1]);
 
 
         if(MwSensorPresent&MAGNETOMETER) {
@@ -289,9 +287,9 @@ void loop()
           displayGPS_speed();
           displayGPSPosition();
           displayGPS_time();
+          if(Settings[S_ENABLEADC]) mapmode();
         }
-         displayMode();
-         dev();
+         displayMode();       
          displayDebug();
       }
     }
@@ -340,10 +338,6 @@ else
 //    if(accCalibrationTimer>0) accCalibrationTimer--;
     if(magCalibrationTimer>0) magCalibrationTimer--;
 
-    if((rssiTimer==1)&&(configMode)) {
-      Settings[S_RSSIMIN]=rssiADC;  // set MIN RSSI signal received (tx off?)
-      rssiTimer=0;
-    }
     if(rssiTimer>0) rssiTimer--;
   }
 
@@ -360,30 +354,6 @@ void calculateTrip(void)
       trip += GPS_speed *0.0016404;     //  50/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
     else
       trip += GPS_speed *0.0005;        //  50/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)      
-  }
-}
-
-void calculateRssi(void)
-{
-  float aa=0;
- 
- if (Settings[S_PWMRSSI]){
-//     //Digital read Pin
-//   aa = pulseIn(PwmRssiPin, HIGH, 15000);
-//   aa = ((aa-Settings[S_RSSIMIN]) *101)/((Settings[S_RSSIMAX]*4)-Settings[S_RSSIMIN]) ;
- }
-  else { 
-      if (Settings[S_MWRSSI]) {
-        aa =  MwRssi;
-      }
-      else {
-        aa=rssiADC;  // actual RSSI analogic signal received
-      }
-  aa = ((aa-Settings[S_RSSIMIN]) *101)/(Settings[S_RSSIMAX]-Settings[S_RSSIMIN]) ;  // Percentage of signal strength
-  rssi_Int += ( ( (signed int)((aa*rssiSample) - rssi_Int )) / rssiSample );  // Smoothing the readings
-  rssi = rssi_Int / rssiSample ;
-  if(rssi<0) rssi=0;
-  if(rssi>100) rssi=100;
   }
 }
 
@@ -510,14 +480,9 @@ void ProcessAnalogue(void) {
     }
   }
 
-  if (!(Settings[S_MWRSSI]||Settings[S_PWMRSSI])) {
-      rssiADC = (analogRead(rssiPin)*1.1*100)/1023;  // RSSI Readings, result in mV/10 (example 1.1V=1100mV=110 mV/10)
-    }
-
   if (!Settings[S_AMPERAGE_VIRTUAL]) {
     amperage = (AMPRERAGE_OFFSET - (analogRead(amperagePin)*AMPERAGE_CAL))/10.23;
   }  
-
 }
 
 void ProcessVirtualSensors(void){
@@ -531,7 +496,33 @@ else
 }
 
 void ProcessRSSI(void){
-  if (Settings[S_MWRSSI])           rssiADC = MwRssi;                          // using multiwii sensors for RSSI
-//  if (Settings[S_PWMRSSI])          rssiADC = pulseIn(PwmRssiPin, HIGH,15000); // using PWM RSSI     
+  static uint8_t rssiloop;
+  if (Settings[S_PWMRSSI]){
+    rssi = pulseIn(PWMRSSIPIN, HIGH,30000)>>3;
+  }
+  else if(Settings[S_MWRSSI]) {
+    rssi = MwRssi;
+  }
+  else { 
+    rssi = analogRead(RSSIPIN);
+    rssi=(rssi+oldrssi)>>1;
+    if (rssi > oldrssi) oldrssi++;
+    else if (rssi < oldrssi) oldrssi--;
+    rssi = oldrssi>>2;                 // move to 8 bit  
+  }
+
+  if((rssiTimer==15)&&(configMode)) {
+    Settings[S_RSSIMAX]=rssi; // tx on
+  }
+  if((rssiTimer==1)&&(configMode)) {
+    Settings[S_RSSIMIN]=rssi; // tx off
+    rssiTimer=0;
+  }
+  rssi = map(rssi, Settings[S_RSSIMIN], Settings[S_RSSIMAX], 0, 100);
+  if (rssi < 0) rssi=0;
+  else if (rssi > 100) rssi=100;
+
 }
+
+
 

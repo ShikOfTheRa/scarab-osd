@@ -1,14 +1,18 @@
 
 /*--------------------------------------------------       configurable parameters      ----------------------------------------------------*/
  
+#define MAPMODE 1  // 1 for MAP - home is center, map shows location of aircraft relative to home and take off direction 
 
 /********************       USE HARDWARE SYNC      *********************/
 
 //#define USE_VSYNC // Remove "sparklies" on boards that support VSYNC 
  
-/********************       PWM RSSI      *********************/
+/********************       RSSI      *********************/
+#define PWMRSSIPIN A3              
+#define RSSIPIN    A3              
 
-#define PwmRssiPin 12              // Miso Pin
+/********************       LED      *********************/
+#define LEDPIN     7
 
 /********************       MW 2.0 / 2.1 support      *********************/
 //#define BOXNAMES                 // required to support multiwii 2.1 / 2.0 
@@ -156,7 +160,10 @@
 
 #define SAVEP 93+(30*9)
 
-#define DEBUG // For developers - remove if memory required
-//#define DEV   // For developers - remove if even more memory required
+//#define DEBUG   // For developers - remove if memory required
+//#define DEV     // For developers - current DEV section remove if memory required
+#define HORIZON // For developpers - remove horizon if required
 
-
+#ifdef MAPMODE 
+  #undef HORIZON
+#endif
