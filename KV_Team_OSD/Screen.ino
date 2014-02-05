@@ -234,9 +234,9 @@ void displayHorizon(int rollAngle, int pitchAngle)
   if(!fieldIsVisible(horizonPosition))
     return;
 
-#ifndef DEV
+#ifdef HORIZON
 
-  if (Settings[S_SCROLLING]|Settings[S_SIDEBARTOPS]){
+  if (Settings[S_SCROLLING]||Settings[S_SIDEBARTOPS]){
       if(!armed) GPS_speed=0;
   // Scrolling decoration
       if (GPS_speed > old_GPS_speed+15){
@@ -275,6 +275,8 @@ void displayHorizon(int rollAngle, int pitchAngle)
           SYM_AH_DECORATION_RIGHT=0x10;
       }
   }
+
+#endif
 
   if (!Settings[S_SCROLLING]){
      SYM_AH_DECORATION_LEFT=0x13;
@@ -354,7 +356,7 @@ if (Settings[S_HORIZON_ELEVATION]){
     }
 
   }
-#endif
+
 }
 
 
@@ -465,8 +467,8 @@ void displayTime(void)
 
 void displayDebug(void)
 {
-  #if defined DEBUG
-    if(!Settings[S_DEBUG])
+#if defined DEBUG
+  if(!Settings[S_DEBUG])
     return;
 //    debug[0]=X;
   for(uint8_t X=0; X<4; X++) {
@@ -475,7 +477,7 @@ void displayDebug(void)
     screenBuffer[1] = 0X3A;
     MAX7456_WriteString(screenBuffer,getPosition(debugPosition)+(X*LINE));
   }  
-  #endif
+#endif
 }
 
 void displayAmperage(void)
@@ -497,7 +499,7 @@ void displaypMeterSum(void)
   if(!fieldIsVisible(pMeterSumPosition))
     return;
   //
-  if (Settings[S_ENABLEADC]){
+  if (!Settings[S_AMPERAGE_VIRTUAL]){
     pMeterSum = amperagesum;
   }
 
@@ -759,7 +761,7 @@ void displayAltitude(void)
 
 void displayClimbRate(void)
 {
-#ifndef DEV
+
   if(!fieldIsVisible(MwClimbRatePosition))
     return;
   if(!Settings[S_VARIO])
@@ -789,7 +791,6 @@ void displayClimbRate(void)
     else if(MwVario < -15)  screen[position+2*LINE+15] =  0x8C;
     else                    screen[position+2*LINE+15] =  0x8D;
 
-#endif
 }
 
 void displayDistanceToHome(void)
@@ -891,9 +892,8 @@ void displayCursor(void)
       }
     if(configPage==4){
       COL=3;
-      if (ROW==1) ROW=2;
-      if (ROW==7) ROW=10;
-      if (ROW==9) ROW=6;
+      if (ROW==5) ROW=10;
+      if (ROW==9) ROW=4;
       cursorpos=(ROW+2)*30+10+6+6;
       }
       
@@ -995,7 +995,7 @@ void displayConfigScreen(void)
 
   if(configPage==3)
   {
-    if (Settings[S_ENABLEADC])ProcessAnalogue();
+    ProcessAnalogue();
 
     MAX7456_WriteString_P(configMsg30, 35);
 //R1:    
@@ -1036,40 +1036,39 @@ void displayConfigScreen(void)
   if(configPage==4)
   {
     MAX7456_WriteString_P(configMsg40, 35);
+    MAX7456_WriteString(itoa(rssi,screenBuffer,10),ROLLD-LINE);
 
 //R1:
-    MAX7456_WriteString_P(configMsg41, ROLLT);
-    MAX7456_WriteString(itoa(rssi,screenBuffer,10),ROLLD);
-//R2:
-    MAX7456_WriteString_P(configMsg42, PITCHT);
+    MAX7456_WriteString_P(configMsg42, ROLLT);
     if(Settings[S_DISPLAYRSSI]){
-      MAX7456_WriteString_P(configMsgON, PITCHD);
+      MAX7456_WriteString_P(configMsgON, ROLLD);
     }
     else{
-      MAX7456_WriteString_P(configMsgOFF, PITCHD);
+      MAX7456_WriteString_P(configMsgOFF, ROLLD);
+    }
+//R2:
+    MAX7456_WriteString_P(configMsg43, PITCHT);
+    if(rssiTimer>0) {
+      MAX7456_WriteString(itoa(rssiTimer,screenBuffer,10),PITCHD);
+    }
+    else {
+    MAX7456_WriteString_P(configMsgOFF, PITCHD);
     }
 //R3:
-    MAX7456_WriteString_P(configMsg43, YAWT);
-    if(rssiTimer>0) MAX7456_WriteString(itoa(rssiTimer,screenBuffer,10),YAWD-5);
-    MAX7456_WriteString(itoa(Settings[S_RSSIMIN],screenBuffer,10),YAWD);
-//R4:
-    MAX7456_WriteString_P(configMsg44, ALTT);
-    MAX7456_WriteString(itoa(Settings[S_RSSIMAX],screenBuffer,10),ALTD);
-//R5:
-    MAX7456_WriteString_P(configMsg45, VELT);
+    MAX7456_WriteString_P(configMsg45, YAWT);
     if(Settings[S_MWRSSI]){
-      MAX7456_WriteString_P(configMsgON, VELD);
+      MAX7456_WriteString_P(configMsgON, YAWD);
     }
     else{
-      MAX7456_WriteString_P(configMsgOFF, VELD);
+      MAX7456_WriteString_P(configMsgOFF, YAWD);
   }
-//R6:
-    MAX7456_WriteString_P(configMsg46, LEVT);
+//R4:
+    MAX7456_WriteString_P(configMsg46, ALTT);
     if(Settings[S_PWMRSSI]){
-      MAX7456_WriteString_P(configMsgON, LEVD);
+      MAX7456_WriteString_P(configMsgON, ALTD);
     }
     else{
-      MAX7456_WriteString_P(configMsgOFF, LEVD);
+      MAX7456_WriteString_P(configMsgOFF, ALTD);
   }
 
   }
@@ -1168,9 +1167,9 @@ void displayConfigScreen(void)
       MAX7456_WriteString_P(configMsgOFF, MAGD);
     }
 //R7:     
-    MAX7456_WriteString_P(configMsg68, MAGT+LINE);
-    MAX7456_WriteString(itoa(Settings[S_GPSTIME],screenBuffer,10),MAGD+LINE);
-    if(Settings[S_GPSTIME]){
+    MAX7456_WriteString_P(configMsg69, MAGT+LINE);
+    MAX7456_WriteString(itoa(Settings[S_ENABLEADC],screenBuffer,10),MAGD+LINE);
+    if(Settings[S_ENABLEADC]){
       MAX7456_WriteString_P(configMsgON, MAGD+LINE);
     }
     else{
@@ -1251,9 +1250,9 @@ void displayConfigScreen(void)
   displayCursor();
 }
 
-void dev(void) {
+void mapmode(void) {
 
-#ifdef DEV
+#ifdef MAPMODE
   int8_t xdir;
   int8_t ydir;
   int16_t targetx;
@@ -1262,7 +1261,11 @@ void dev(void) {
   int8_t angle;
   int16_t targetpos;
   int16_t centerpos;
-  uint16_t maxdir;
+  uint16_t maxdistance;
+  uint8_t mapsymbolcenter;
+  uint8_t mapsymboltarget;
+  uint8_t mapsymbolrange;
+  
   uint8_t tmp = GPS_directionToHome/90;
   switch (tmp) {
     case 0:
@@ -1286,31 +1289,63 @@ void dev(void) {
       angle=360-GPS_directionToHome;
       break;   
     }  
+  if (MAPMODE==1) angle=(angle+180 + MwHeading + 360)%360;
+
   float rad  = angle * PI / 180;    // convert to radians  
   uint16_t x = GPS_distanceToHome * sin(rad);
   uint16_t y = GPS_distanceToHome * cos(rad);
- // if (y > x) maxdir=y;
- // else maxdir=x;
 
-  targetx = xdir*map(x, 0, range, 0, 7);
-  targety = ydir*map(y, 0, range, 0, 7);
+  if (y > x) maxdistance=y;
+  else maxdistance=x;
+  if (maxdistance < 50) {
+    range = 50;
+    mapsymbolrange=SYM_RANGE_50;
+  }
+  else if (maxdistance < 250) {
+    range = 250;
+    mapsymbolrange=SYM_RANGE_250;
+  }
+  else if (maxdistance < 750) {
+    range = 750;
+    mapsymbolrange=SYM_RANGE_750;
+  }  
+  else if (maxdistance < 2500) {
+    range = 2500;
+    mapsymbolrange=SYM_RANGE_2500;
+  }
+  else {
+    range = maxdistance;
+    mapsymbolrange=SYM_RANGE_MAX;
+  }
 
-  debug[0]=x;
-  debug[1]=y;
-  debug[2]=targetx;
-  debug[3]=targety;
+  targetx = xdir*map(x, 0, range, 0, 5);
+  targety = ydir*map(y, 0, range, 0, 5);
   
   centerpos=getPosition(horizonPosition)+67;
   targetpos= centerpos + targetx + (LINE*targety); 
 
 
-  screenBuffer[0] = SYM_AIRCRAFT;
+  if (MAPMODE==1) {
+    mapsymbolcenter = SYM_HOME;
+    mapsymboltarget = SYM_AIRCRAFT;
+  }
+  else {
+    mapsymbolcenter = SYM_AIRCRAFT;
+    mapsymboltarget = SYM_HOME;
+  }
+  
+  screenBuffer[0] = mapsymbolcenter;
   screenBuffer[1] = 0;
   MAX7456_WriteString(screenBuffer,centerpos);
-
-  screenBuffer[0] = SYM_HOME;
+  screenBuffer[0] = mapsymboltarget;
   screenBuffer[1] = 0;
   MAX7456_WriteString(screenBuffer,targetpos);
 
+  if (MAPMODE==1) {
+  }
+  screenBuffer[0] = mapsymbolrange;
+  screenBuffer[1] = 0;
+  MAX7456_WriteString(screenBuffer,getPosition(GPS_directionToHomePosition)+LINE);
+ 
 #endif
 }

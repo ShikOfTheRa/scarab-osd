@@ -7,9 +7,8 @@
 const uint16_t voltagePin=0;
 const uint16_t vidvoltagePin=2;
 const uint16_t amperagePin=1;
-const uint16_t rssiPin=3;
 const uint16_t temperaturePin=6;            // Temperature pin 6 for original Rushduino Board V1.2
-const uint8_t rssiSample=30;
+//const uint8_t rssiSample=30;
 //const uint8_t lowrssiAlarm=RSSI_ALARM;     // This will make blink the Rssi if lower then this value
 
 //General use variables
@@ -161,7 +160,7 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 1,   // S_WITHDECORATION            31
 0,   // S_SHOWBATLEVELEVOLUTION     32
 0,   // S_RESETSTATISTICS           33
-1,   // S_ENABLEADC                 34
+0,   // S_ENABLEADC                 34
 0,   // S_VREFERENCE,
 0,   // S_USE_BOXNAMES              35
 1,   // S_MODEICON                  36
@@ -218,6 +217,7 @@ uint8_t MwVBat=0;
 int16_t MwVario=0;
 uint8_t armed=0;
 uint8_t previousarmedstatus=0;  // for statistics after disarming
+uint8_t armedangle=0;           // for capturing direction at arming
 int16_t GPS_distanceToHome=0;
 uint8_t GPS_fix=0;
 int32_t GPS_latitude;
@@ -264,8 +264,9 @@ float amperagesum = 0;
 
 // Rssi
 int rssi =0;
-int rssiADC=0;
-int rssi_Int=0;
+int oldrssi;
+//int rssiADC=0;
+//int rssi_Int=0;
 
 
 // For Voltage
@@ -396,10 +397,10 @@ const char configMsg35[] PROGMEM = "CELLS";
 const char configMsg36[] PROGMEM = "USE MWII";
 //-----------------------------------------------------------Page4
 const char configMsg40[] PROGMEM = "RSSI";
-const char configMsg41[] PROGMEM = "ACTUAL RSSI";
+//const char configMsg41[] PROGMEM = "ACTUAL RSSI";
 const char configMsg42[] PROGMEM = "DISPLAY RSSI";
-const char configMsg43[] PROGMEM = "SET RSSI MIN";
-const char configMsg44[] PROGMEM = "SET RSSI MAX";
+const char configMsg43[] PROGMEM = "SET RSSI";
+//const char configMsg44[] PROGMEM = "SET RSSI MAX";
 const char configMsg45[] PROGMEM = "USE MWII";
 const char configMsg46[] PROGMEM = "USE PWM";
 
@@ -419,6 +420,7 @@ const char configMsg65[] PROGMEM = "GPS COORDS";
 const char configMsg66[] PROGMEM = "SENSORS";
 const char configMsg67[] PROGMEM = "GIMBAL";
 const char configMsg68[] PROGMEM = "GPS TIME";
+const char configMsg69[] PROGMEM = "MAP MODE";
 //-----------------------------------------------------------Page7
 const char configMsg70[] PROGMEM = "ADVANCED";
 const char configMsg71[] PROGMEM = "UNITS";
