@@ -271,8 +271,7 @@ void MAX7456Configure() {
     MAX7456SELECT = 10;      // ss 
     MAX7456RESET  = 9;       // RESET
   }
-
-  if(Settings[S_BOARDTYPE] == 1) {	// MinimOSD
+  else if(Settings[S_BOARDTYPE] == 1) {	// MinimOSD
     MAX7456SELECT = 6;       // ss
     MAX7456RESET = 10;       // RESET
   }

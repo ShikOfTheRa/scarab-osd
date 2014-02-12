@@ -95,9 +95,6 @@ void displayTemperature(void)        // WILL WORK ONLY WITH V1.2
   else
     xxx = temperature;
 
-  if(xxx > temperMAX)
-    temperMAX = xxx;
-
   //shiki mod
   if(!fieldIsVisible(temperaturePosition))
     return;
@@ -182,25 +179,6 @@ void displayMode(void)
   }
   screenBuffer[xx] = 0;
   MAX7456_WriteString(screenBuffer,getPosition(GPS_numSatPosition)+4);
-
-/*  
- alternative bundicator
-    xx=0;
-    if(MwSensorActive&mode_baro){
-      screenBuffer[2]=0;
-      screenBuffer[0]=SYM_BARO10; 
-      screenBuffer[1]=SYM_BARO11;
-    xx++;
-    MAX7456_WriteString(screenBuffer,getPosition(sensorPosition)+LINE+xx*LINE);
-    }
-    if(MwSensorActive&mode_mag){
-      screenBuffer[2]=0;
-      screenBuffer[0]=SYM_MAG10;
-      screenBuffer[1]=SYM_MAG11;
-    xx++; 
-    MAX7456_WriteString(screenBuffer,getPosition(sensorPosition)+LINE+xx*LINE);
-    }
-*/
   }
 }
 
@@ -208,7 +186,7 @@ void displayArmed(void)
 {
   if(!armed){
     MAX7456_WriteString_P(disarmed_text, getPosition(motorArmedPosition));
-    armedtimer=50;
+    armedtimer=20;
   }
   else if(Blink10hz&&armedtimer){
     armedtimer--;
@@ -290,6 +268,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
   if(rollAngle>400) rollAngle=400;
   if(rollAngle<-400) rollAngle=-400;
 
+if(Settings[S_DISPLAY_HORIZON_BR]){
   for(uint8_t X=0; X<=8; X++) {
     int Y = (rollAngle * (4-X)) / 64;
     Y -= pitchAngle / 8;
@@ -319,12 +298,13 @@ if (Settings[S_HORIZON_ELEVATION]){
   }
  
 }
-  if(Settings[S_DISPLAY_HORIZON_BR]){
-
-//Draw center screen
-    screen[position+2*LINE+7-1] = SYM_AH_CENTER_LINE;
-    screen[position+2*LINE+7+1] = SYM_AH_CENTER_LINE_RIGHT;
-    screen[position+2*LINE+7] =   SYM_AH_CENTER;
+}
+  if(!Settings[S_ENABLEADC]){
+    if(Settings[S_DISPLAY_HORIZON_BR]){
+      screen[position+2*LINE+7-1] = SYM_AH_CENTER_LINE;
+      screen[position+2*LINE+7+1] = SYM_AH_CENTER_LINE_RIGHT;
+      screen[position+2*LINE+7] =   SYM_AH_CENTER;
+    }
   }
   if (Settings[S_WITHDECORATION]){
     // Draw AH sides
@@ -470,7 +450,11 @@ void displayDebug(void)
 #if defined DEBUG
   if(!Settings[S_DEBUG])
     return;
-//    debug[0]=X;
+    debug[0]=Settings[S_AMPMAXL];
+    debug[1]=Settings[S_AMPMAXH];
+    debug[2]=S16_AMPMAX;
+    debug[3]=Settings[S_AMPMIN];
+
   for(uint8_t X=0; X<4; X++) {
     ItoaPadded(debug[X], screenBuffer+2,7,0);     
     screenBuffer[0] = 0x30+X;
@@ -498,20 +482,10 @@ void displaypMeterSum(void)
   //Shiki mod
   if(!fieldIsVisible(pMeterSumPosition))
     return;
-  //
-  if (!Settings[S_AMPERAGE_VIRTUAL]){
-    pMeterSum = amperagesum;
-  }
-
- //Shiki mod - virtual current sensor
 
   screenBuffer[0]=SYM_MAH;
 
-  int xx= 0;
-  if (Settings[S_AMPERAGE_VIRTUAL])
-    xx= amperagesum;
-  else
-    xx= pMeterSum / EST_PMSum;
+  int xx=amperagesum;
 
   itoa(xx,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(pMeterSumPosition));
@@ -559,7 +533,9 @@ void displayHeading(void)
 void displayHeadingGraph(void)
 {
  //Shiki Mod
- if(!fieldIsVisible(MwHeadingGraphPosition)||!Settings[S_COMPASS])
+ if (!fieldIsVisible(MwHeadingGraphPosition))
+    return;
+ if (!Settings[S_COMPASS])
     return;
  //
   int xx;
@@ -581,23 +557,22 @@ void displayIntro(void)
   else
     MAX7456_WriteString_P(message1, KVTeamVersionPosition+30);
 
+/* removed temp because lack of memory
     
  //haydent - Time Zone & DST Setting//
   MAX7456_WriteString_P(message10, KVTeamVersionPosition+30+LINE);
   
-/* removed temp because lack of memeory
-
   if(abs(Settings[S_GPSTZ]) >= 100)ItoaPadded(Settings[S_GPSTZ], screenBuffer, 5, 4);
   else ItoaPadded(Settings[S_GPSTZ], screenBuffer, 4, 3);
   if(Settings[S_GPSTZAHEAD] || Settings[S_GPSTZ] == 0)screenBuffer[0] = '+';
   else screenBuffer[0] = '-';
    
   MAX7456_WriteString(screenBuffer, KVTeamVersionPosition+37+LINE); 
-*/
 
   MAX7456_WriteString_P(message11, KVTeamVersionPosition+43+LINE);
   MAX7456_WriteString(itoa(Settings[S_GPSDS], screenBuffer,10), KVTeamVersionPosition+47+LINE);
   //haydent - Time Zone & DST Setting//
+*/
 
   MAX7456_WriteString_P(MultiWiiLogoL1Add, KVTeamVersionPosition+120);
   MAX7456_WriteString_P(MultiWiiLogoL2Add, KVTeamVersionPosition+120+LINE);
@@ -611,13 +586,8 @@ void displayIntro(void)
   MAX7456_WriteString_P(message8, KVTeamVersionPosition+125+LINE+LINE+LINE+LINE+LINE+LINE+LINE);
   
   MAX7456_WriteString_P(message9, KVTeamVersionPosition+120+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE);
-   if(Settings[S_DISPLAY_CS]){
-      for(uint8_t X=0; X<10; X++) {
-          screenBuffer[X] = char(Settings[S_CS0 + X]);
-      }
-   if (Blink2hz)
-   MAX7456_WriteString(screenBuffer, KVTeamVersionPosition+130+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE);;     // Call Sign on the beggining of the transmission (blink 2hz)  
-   }
+  displayCallsign();
+   
 }
 
 void displayGPSPosition(void)
@@ -625,9 +595,10 @@ void displayGPSPosition(void)
   if(!GPS_fix)
     return;
   // Shiki Mod
-  if(!fieldIsVisible(MwGPSLatPosition)|!MwSensorActive&mode_gpshome)
+  if(!fieldIsVisible(MwGPSLatPosition))
     return;
-//     if(MwSensorActive&mode_gpshome)
+  if (!MwSensorActive&mode_gpshome)
+    return;
 
   // Shiki Mod - display LAT/LON in  mode gpshome
   if(Settings[S_COORDINATES]|MwSensorActive&mode_gpshome){
@@ -711,8 +682,9 @@ void displayGPS_speed(void)
 
 void displayGPS_time(void)       //local time of coord calc - haydent
 {
-  if(!GPS_fix||!Settings[S_GPSTIME]||!fieldIsVisible(GPS_timePosition)) return;
-
+  if(!GPS_fix) return;
+  if(!Settings[S_GPSTIME]) return;
+  if(!fieldIsVisible(GPS_timePosition)) return;
 
 //convert to local   
   int TZ_SIGN = (Settings[S_GPSTZAHEAD] ? 1 :-1);
@@ -997,7 +969,12 @@ void displayConfigScreen(void)
   {
     ProcessAnalogue();
 
-    MAX7456_WriteString_P(configMsg30, 35);
+//    MAX7456_WriteString_P(configMsg30, 35);
+//   ItoaPadded(voltage, screenBuffer, 4, 3);
+//    screenBuffer[4] = SYM_VOLT;
+//    screenBuffer[5] = 0;
+//    MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE);
+    MAX7456_WriteString(itoa(voltage,screenBuffer,10),ROLLD-LINE-LINE);
 //R1:    
     MAX7456_WriteString_P(configMsg31, ROLLT);
     if(Settings[S_DISPLAYVOLTAGE]){
@@ -1008,7 +985,7 @@ void displayConfigScreen(void)
     }
 //R2:     
     MAX7456_WriteString_P(configMsg32, PITCHT);
-    MAX7456_WriteString(itoa(voltage,screenBuffer,10),PITCHD);
+    MAX7456_WriteString(itoa(Settings[S_DIVIDERRATIO],screenBuffer,10),PITCHD);
 //R3:
     MAX7456_WriteString_P(configMsg33, YAWT);
     MAX7456_WriteString(itoa(Settings[S_VOLTAGEMIN],screenBuffer,10),YAWD);
@@ -1036,7 +1013,14 @@ void displayConfigScreen(void)
   if(configPage==4)
   {
     MAX7456_WriteString_P(configMsg40, 35);
-    MAX7456_WriteString(itoa(rssi,screenBuffer,10),ROLLD-LINE);
+
+//    screenBuffer[0] = SYM_RSSI;
+//   itoa(rssi,screenBuffer+1,10);
+//    uint8_t xx = FindNull();
+//    screenBuffer[xx++] = '%';
+//    screenBuffer[xx] = 0;
+//    MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE);
+    MAX7456_WriteString(itoa(rssi,screenBuffer,10),ROLLD-LINE-LINE);
 
 //R1:
     MAX7456_WriteString_P(configMsg42, ROLLT);
@@ -1052,7 +1036,7 @@ void displayConfigScreen(void)
       MAX7456_WriteString(itoa(rssiTimer,screenBuffer,10),PITCHD);
     }
     else {
-    MAX7456_WriteString_P(configMsgOFF, PITCHD);
+    MAX7456_WriteString("-", PITCHD);
     }
 //R3:
     MAX7456_WriteString_P(configMsg45, YAWT);
@@ -1075,7 +1059,12 @@ void displayConfigScreen(void)
 
   if(configPage==5)
   {
-    MAX7456_WriteString_P(configMsg50, 35);
+//    MAX7456_WriteString_P(configMsg50, 35);
+//    ItoaPadded(amperage, screenBuffer, 4, 3);     // 99.9 ampere max!
+//    screenBuffer[4] = SYM_AMP;
+//    screenBuffer[5] = 0;
+//    MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE);
+    MAX7456_WriteString(itoa(amperage,screenBuffer,10),ROLLD-LINE-LINE);
 //R1:
     MAX7456_WriteString_P(configMsg51, ROLLT);
     if(Settings[S_AMPERAGE]){
@@ -1243,7 +1232,7 @@ void displayConfigScreen(void)
     MAX7456_WriteString(screenBuffer,VELD-4);
 
     MAX7456_WriteString_P(configMsg86, LEVT);
-    xx= pMeterSum / EST_PMSum;
+//    xx= pMeterSum / EST_PMSum;
     MAX7456_WriteString(itoa(xx,screenBuffer,10),LEVD-3);
     }
     
@@ -1253,43 +1242,51 @@ void displayConfigScreen(void)
 void mapmode(void) {
 
 #ifdef MAPMODE
+
+  if ((MwSensorActive&mode_osd_switch))
+  return;
+
   int8_t xdir;
   int8_t ydir;
   int16_t targetx;
   int16_t targety;
   int16_t range=200;
-  int8_t angle;
+  int16_t angle;
   int16_t targetpos;
   int16_t centerpos;
   uint16_t maxdistance;
   uint8_t mapsymbolcenter;
   uint8_t mapsymboltarget;
   uint8_t mapsymbolrange;
-  
-  uint8_t tmp = GPS_directionToHome/90;
+  int16_t tmp;
+  if (MAPMODE==1) {
+    angle=(180+360+GPS_directionToHome-armedangle)%360;
+  }
+  else {
+    angle=GPS_directionToHome;  
+  }
+  tmp = angle/90;
   switch (tmp) {
     case 0:
       xdir=+1;
       ydir=-1;
-      angle=GPS_directionToHome;
       break;
     case 1:    
       xdir=+1;
       ydir=+1;
-      angle=180-GPS_directionToHome;
+      angle=180-angle;
       break;
     case 2:    
       xdir=-1;
       ydir=+1;
-      angle=GPS_directionToHome-180;
+      angle=angle-180;
       break;
     case 3: 
       xdir=-1;
       ydir=-1;
-      angle=360-GPS_directionToHome;
+      angle=360-angle;
       break;   
     }  
-  if (MAPMODE==1) angle=(angle+180 + MwHeading + 360)%360;
 
   float rad  = angle * PI / 180;    // convert to radians  
   uint16_t x = GPS_distanceToHome * sin(rad);
@@ -1324,7 +1321,6 @@ void mapmode(void) {
   centerpos=getPosition(horizonPosition)+67;
   targetpos= centerpos + targetx + (LINE*targety); 
 
-
   if (MAPMODE==1) {
     mapsymbolcenter = SYM_HOME;
     mapsymboltarget = SYM_AIRCRAFT;
@@ -1337,15 +1333,22 @@ void mapmode(void) {
   screenBuffer[0] = mapsymbolcenter;
   screenBuffer[1] = 0;
   MAX7456_WriteString(screenBuffer,centerpos);
-  screenBuffer[0] = mapsymboltarget;
+
+  if (MAPMODE==1) {
+    tmp=(360+382+MwHeading-armedangle)%360/45;
+    screenBuffer[0] = SYM_DIRECTION + tmp;
+  }
+  else {
+    screenBuffer[0] = mapsymboltarget;
+  }
+
   screenBuffer[1] = 0;
   MAX7456_WriteString(screenBuffer,targetpos);
 
-  if (MAPMODE==1) {
-  }
   screenBuffer[0] = mapsymbolrange;
   screenBuffer[1] = 0;
   MAX7456_WriteString(screenBuffer,getPosition(GPS_directionToHomePosition)+LINE);
  
 #endif
 }
+

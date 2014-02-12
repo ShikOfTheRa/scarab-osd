@@ -247,6 +247,10 @@ public void READ(){
 }
 
 public void WRITE(){
+
+  confItem[GetSetting("S_AMPMAXL")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())&0xFF); // for 8>>16 bit EEPROM
+  confItem[GetSetting("S_AMPMAXH")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())>>8);
+
   CheckCallSign();
   PortWrite = true;
   MakePorts();
@@ -625,15 +629,16 @@ public void evaluateCommand(byte cmd, int size) {
             for(int i = 0; i < CONFIGITEMS; i++){
               SetConfigItem(i, read8());
             }
+              S16_AMPMAX=(int(confItem[GetSetting("S_AMPMAXH")].value())<<8)+ int(confItem[GetSetting("S_AMPMAXL")].value()); // for 8>>16 bit EEPROM
+              SetConfigItem(GetSetting("S_AMPDIVIDERRATIO"), (int) S16_AMPMAX);
+
             // Send a NULL reply
             //headSerialReply(MSP_OSD, 1);
             //serialize8(OSD_NULL);
             if (FontMode == false){
               toggleMSP_Data = false;
               g_serial.clear();
-              
-              
-            }
+             }
           }
         }
 

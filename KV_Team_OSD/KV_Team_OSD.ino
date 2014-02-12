@@ -40,8 +40,6 @@ uint32_t queuedMSPRequests;
 // May be moved in GlobalVariables.h
 unsigned long previous_millis_low=0;
 unsigned long previous_millis_high =0;
-uint8_t hi_speed_cycle = 50;
-uint8_t lo_speed_cycle = 100;
 //----------------
 
 
@@ -125,14 +123,13 @@ void setMspRequests() {
 
   // so we do not send requests that are not needed.
   queuedMSPRequests &= modeMSPRequests;
+  lastCallSign = onTime;
+
 }
 
 void loop()
 {
  
-  ProcessAnalogue();       // using analogue sensors
-  if (Settings[S_DISPLAYRSSI])                 ProcessRSSI();           
-  if (Settings[S_AMPERAGE_VIRTUAL])            ProcessVirtualSensors(); // using virtual sensors
 
   // Blink Basic Sanity Test Led at 1hz
   if(tenthSec>10)
@@ -145,14 +142,16 @@ void loop()
 
   if((currentMillis - previous_millis_low) >= lo_speed_cycle)  // 10 Hz (Executed every 100ms)
   {
-    previous_millis_low = currentMillis;    
+    previous_millis_low = previous_millis_low+lo_speed_cycle;    
     if(!fontMode)
       blankserialRequest(MSP_ATTITUDE);
+    if (Settings[S_DISPLAYRSSI])                 ProcessRSSI();           
+
    }  // End of slow Timed Service Routine (100ms loop)
 
   if((currentMillis - previous_millis_high) >= hi_speed_cycle)  // 20 Hz (Executed every 50ms)
   {
-    previous_millis_high = currentMillis;   
+    previous_millis_high = previous_millis_high+hi_speed_cycle;   
 
     tenthSec++;
     halfSec++;
@@ -215,10 +214,12 @@ void loop()
       if(!fontMode)
       blankserialRequest(MSPcmdsend);      
 
+  ProcessAnalogue();       // using analogue sensors
+  if (Settings[S_AMPERAGE_VIRTUAL]) ProcessVirtualSensors(); // using virtual sensors
+
     MAX7456_DrawScreen();
-    if( allSec < 5 ){
+    if( allSec < 7 ){
       displayIntro();
-      lastCallSign = onTime;
     }  
     else
     {
@@ -226,8 +227,10 @@ void loop()
         previousarmedstatus=1;
       }
       if(previousarmedstatus && !armed){
-        armedangle = MwHeading;
-        armedtimer=30;
+#ifndef MAPMODENORTH
+        armedangle=MwHeading;
+#endif
+        armedtimer=20;
         configPage=8;
         ROW=10;
         COL=1;
@@ -265,7 +268,7 @@ void loop()
        }
 
         if(MwSensorPresent&ACCELEROMETER)
-           if(!Settings[S_ENABLEADC]) displayHorizon(MwAngle[0],MwAngle[1]);
+           displayHorizon(MwAngle[0],MwAngle[1]);
 
 
         if(MwSensorPresent&MAGNETOMETER) {
@@ -305,13 +308,7 @@ void loop()
     tenthSec=0;
     onTime++;
 
- //Shiki mod - virtual current sensor
-if (Settings[S_AMPERAGE_VIRTUAL])
-  amperagesum += amperage *100/ AMPDIVISION; //(mAh)
-else
-  amperagesum += amperage / AMPDIVISION; //(mAh)
-
-
+  amperagesum += amperage;
 
     if(!armed) {
       // Shiki mod to prevent reset of flytime when disarming
@@ -359,8 +356,10 @@ void calculateTrip(void)
 
 void writeEEPROM(void)
 {
+  Settings[S_AMPMAXH] = S16_AMPMAX>>8;
+  Settings[S_AMPMAXL] = S16_AMPMAX&0xFF;
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
-    if (EEPROM.read(en) != Settings[en]) EEPROM.write(en,Settings[en]);
+    EEPROM.write(en,Settings[en]);
   } 
 }
 
@@ -369,8 +368,9 @@ void readEEPROM(void)
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
      Settings[en] = EEPROM.read(en);
   }
+  S16_AMPMAX=(Settings[S_AMPMAXH]<<8)+Settings[S_AMPMAXL];
+//  S16_AMPMAX=Settings[S_AMPMAXL];
 }
-
 
 // for first run to ini
 void checkEEPROM(void)
@@ -378,8 +378,7 @@ void checkEEPROM(void)
   uint8_t EEPROM_Loaded = EEPROM.read(0);
   if (!EEPROM_Loaded){
     for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
-      if (EEPROM.read(en) != EEPROM_DEFAULT[en])
-        EEPROM.write(en,EEPROM_DEFAULT[en]);
+      EEPROM.write(en,EEPROM_DEFAULT[en]);
     }
   }
 }
@@ -453,13 +452,13 @@ int16_t getNextCharToRequest() {
 void ProcessAnalogue(void) {
 
   if (Settings[S_DISPLAYTEMPERATURE]){
-    temperature=(analogRead(temperaturePin)-102)/2.048; 
+    temperature=(analogRead(TEMPPIN)-102)/2.048; 
   }
 
   if (!Settings[S_MAINVOLTAGE_VBAT]){ // not MWII
     static uint16_t ind = 0;
     static uint32_t voltageRawArray[8];
-    voltageRawArray[(ind++)%8] = analogRead(voltagePin);                  
+    voltageRawArray[(ind++)%8] = analogRead(VOLTAGEPIN);                  
     uint16_t voltageRaw = 0;
     for (uint16_t i=0;i<8;i++)
       voltageRaw += voltageRawArray[i];
@@ -473,32 +472,33 @@ void ProcessAnalogue(void) {
 
   if (!Settings[S_VIDVOLTAGE_VBAT]) {
     if (!Settings[S_VREFERENCE]){
-      vidvoltage = float(analogRead(vidvoltagePin)) * Settings[S_VIDDIVIDERRATIO] * (1.1/102.3/4);
+      vidvoltage = float(analogRead(VIDVOLTAGEPIN)) * Settings[S_VIDDIVIDERRATIO] * (1.1/102.3/4);
     }
     else {
-      vidvoltage = float(analogRead(vidvoltagePin)) * Settings[S_VIDDIVIDERRATIO] * (1.1/102.3);
+      vidvoltage = float(analogRead(VIDVOLTAGEPIN)) * Settings[S_VIDDIVIDERRATIO] * (1.1/102.3);
     }
   }
 
   if (!Settings[S_AMPERAGE_VIRTUAL]) {
-    amperage = (AMPRERAGE_OFFSET - (analogRead(amperagePin)*AMPERAGE_CAL))/10.23;
+//    amperage = (AMPRERAGE_OFFSET - (analogRead(amperagePin)*AMPERAGE_CAL))/10.23;
+    processAmperage();
   }  
 }
 
 void ProcessVirtualSensors(void){
   uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],1000,2000);
   Vthrottle = constrain((Vthrottle-1000)/10,10,100);
-    amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings[S_AMPDIVIDERRATIO]*0.01;
+//    amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings[S_AMPDIVIDERRATIO]*0.01;
+    amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*S16_AMPMAX*0.01;
 if(armed)
-  amperage += AMPERAGE_VIRTUAL_IDLE;
+  amperage += Settings[S_AMPMIN];
 else 
-  amperage = AMPERAGE_VIRTUAL_IDLE;
+  amperage = Settings[S_AMPMIN];
 }
 
 void ProcessRSSI(void){
-  static uint8_t rssiloop;
   if (Settings[S_PWMRSSI]){
-    rssi = pulseIn(PWMRSSIPIN, HIGH,30000)>>3;
+    rssi = pulseIn(PWMRSSIPIN, HIGH,21000)>>3;
   }
   else if(Settings[S_MWRSSI]) {
     rssi = MwRssi;
@@ -521,8 +521,13 @@ void ProcessRSSI(void){
   rssi = map(rssi, Settings[S_RSSIMIN], Settings[S_RSSIMAX], 0, 100);
   if (rssi < 0) rssi=0;
   else if (rssi > 100) rssi=100;
-
 }
 
+void processAmperage(void) {
+  amperage = analogRead(AMPERAGEPIN);
+  amperage = map(amperage, Settings[S_AMPMIN], S16_AMPMAX, 0, 999);
+  if (amperage < 0) amperage=0;
+//  else if (amperage > 999) amperage=999;
+}
 
 

@@ -43,13 +43,15 @@
 #define SYM_HEADING_LINE 0X1D
 
 // Map mode
-#define SYM_HOME     0x04
-#define SYM_AIRCRAFT 0X05
+#define SYM_HOME       0x04
+#define SYM_AIRCRAFT   0X05
 #define SYM_RANGE_50   0x21
 #define SYM_RANGE_250  0x22
 #define SYM_RANGE_750  0x23
 #define SYM_RANGE_2500 0x24
 #define SYM_RANGE_MAX  0x26
+#define SYM_HOME       0x04
+#define SYM_DIRECTION  0x72
 
 // GPS Coordinates and Altitude
 #define SYM_LAT 0xCA
