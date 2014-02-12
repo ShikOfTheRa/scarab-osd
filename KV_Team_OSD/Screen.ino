@@ -969,7 +969,7 @@ void displayConfigScreen(void)
   {
     ProcessAnalogue();
 
-//    MAX7456_WriteString_P(configMsg30, 35);
+    MAX7456_WriteString_P(configMsg30, 35);
 //   ItoaPadded(voltage, screenBuffer, 4, 3);
 //    screenBuffer[4] = SYM_VOLT;
 //    screenBuffer[5] = 0;
@@ -1020,7 +1020,7 @@ void displayConfigScreen(void)
 //    screenBuffer[xx++] = '%';
 //    screenBuffer[xx] = 0;
 //    MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE);
-    MAX7456_WriteString(itoa(rssi,screenBuffer,10),ROLLD-LINE-LINE);
+//    MAX7456_WriteString(itoa(rssi,screenBuffer,10),ROLLD-LINE-LINE);
 
 //R1:
     MAX7456_WriteString_P(configMsg42, ROLLT);
@@ -1059,7 +1059,7 @@ void displayConfigScreen(void)
 
   if(configPage==5)
   {
-//    MAX7456_WriteString_P(configMsg50, 35);
+    MAX7456_WriteString_P(configMsg50, 35);
 //    ItoaPadded(amperage, screenBuffer, 4, 3);     // 99.9 ampere max!
 //    screenBuffer[4] = SYM_AMP;
 //    screenBuffer[5] = 0;
