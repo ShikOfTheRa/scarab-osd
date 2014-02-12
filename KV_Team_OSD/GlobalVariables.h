@@ -3,13 +3,9 @@
 
 #define METRIC 0
 #define IMPERIAL 1
-//Analog input defines
-const uint16_t voltagePin=0;
-const uint16_t vidvoltagePin=2;
-const uint16_t amperagePin=1;
-const uint16_t temperaturePin=6;            // Temperature pin 6 for original Rushduino Board V1.2
-//const uint8_t rssiSample=30;
-//const uint8_t lowrssiAlarm=RSSI_ALARM;     // This will make blink the Rssi if lower then this value
+
+#define hi_speed_cycle  50
+#define lo_speed_cycle  100
 
 //General use variables
 uint8_t tenthSec=0;
@@ -21,7 +17,7 @@ uint8_t rssiTimer=0;
 uint8_t accCalibrationTimer=0;
 uint8_t magCalibrationTimer=0;
 uint16_t debug[4];
-
+int8_t menudir;
 unsigned int allSec=0;
 uint8_t armedtimer=255;
 
@@ -105,6 +101,9 @@ enum Setting_ {
   S_TIMER,
   S_MODESENSOR,
   S_SIDEBARTOPS,
+  S_AMPMIN,
+  S_AMPMAXL,
+  S_AMPMAXH,
   S_CS0,
   S_CS1,
   S_CS2,
@@ -118,6 +117,8 @@ enum Setting_ {
   // EEPROM_SETTINGS must be last!
   EEPROM_SETTINGS
 };
+
+uint16_t S16_AMPMAX = 999; // 16 bit eeprom setting of AMPMAX  
 
 uint8_t Settings[EEPROM_SETTINGS];
 
@@ -138,7 +139,7 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 0,   // S_MAINVOLTAGE_VBAT          11
 0,   // S_AMPERAGE                  12
 0,   // S_AMPER_HOUR                13
-0,   // S_AMPERAGE_VIRTUAL,
+1,   // S_AMPERAGE_VIRTUAL,
 150, // S_AMPDIVIDERRATIO,
 0,   // S_VIDVOLTAGE                14
 200, // S_VIDDIVIDERRATIO           15
@@ -169,7 +170,7 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 0,   // GPSTZ +/-                   37b
 0,   // GPSTZ                       37c
 0,   // GPSDS                       37d
-0,   // DEBUG                       37e
+1,   // DEBUG                       37e
 1,   // SCROLOLING LADDERS          37f
 1,   // SHOW GIMBAL ICON            37g
 1,   // SHOW VARIO                  37h
@@ -179,6 +180,9 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 1,   // S_TIMER                     41h
 1,   // S_MODESENSOR                42h
 0,   // S_SIDEBARTOPS               43h
+4,   // S_AMPMIN,
+150,  // S_AMPMAXL,
+0,   // S_AMPMAXH,
 0,   // S_CS0,
 0,   // S_CS1,
 0,   // S_CS2,
@@ -217,7 +221,7 @@ uint8_t MwVBat=0;
 int16_t MwVario=0;
 uint8_t armed=0;
 uint8_t previousarmedstatus=0;  // for statistics after disarming
-uint8_t armedangle=0;           // for capturing direction at arming
+uint16_t armedangle=0;           // for capturing direction at arming
 int16_t GPS_distanceToHome=0;
 uint8_t GPS_fix=0;
 int32_t GPS_latitude;
@@ -279,7 +283,6 @@ int16_t temperature=0;                  // temperature in degrees Centigrade
 
 // For Statistics
 uint16_t speedMAX=0;
-int8_t temperMAX=0;
 int16_t altitudeMAX=0;
 int16_t distanceMAX=0;
 float trip=0;
@@ -359,8 +362,8 @@ const char message6[] PROGMEM = "MENU:THRT MIDDLE";
 const char message7[] PROGMEM = "YAW RIGHT";
 const char message8[] PROGMEM = "PITCH FULL";
 const char message9[] PROGMEM = "UNIQUE ID:";         // Call Sign on the beggining of the transmission   
-const char message10[] PROGMEM = "TZ UTC:"; //haydent - Time Zone & DST Setting
-const char message11[] PROGMEM = "DST:"; //haydent - Time Zone & DST Setting
+//const char message10[] PROGMEM = "TZ UTC:"; //haydent - Time Zone & DST Setting
+//const char message11[] PROGMEM = "DST:"; //haydent - Time Zone & DST Setting
 
 // For Config menu common
 const char configMsgON[] PROGMEM = "ON";

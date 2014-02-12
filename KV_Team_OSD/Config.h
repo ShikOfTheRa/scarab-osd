@@ -1,17 +1,21 @@
 
 /*--------------------------------------------------       configurable parameters      ----------------------------------------------------*/
  
-#define MAPMODE 1  // 1 for MAP - home is center, map shows location of aircraft relative to home and take off direction 
+#define MAPMODE 1       // 1 for MAP - home is center, map shows location of aircraft relative to home 
+                        // 0 for RADAR - home is aircraft, map shows location of home relative to aircraft 
+//#define MAPMODENORTH // Enable to use North as MAP reference in MODE 1 instead of take off direction (Default = disable) 
 
 /********************       USE HARDWARE SYNC      *********************/
 
 //#define USE_VSYNC // Remove "sparklies" on boards that support VSYNC 
  
-/********************       RSSI      *********************/
-#define PWMRSSIPIN A3              
-#define RSSIPIN    A3              
-
-/********************       LED      *********************/
+/********************       HARDWARE PINS      *********************/
+#define PWMRSSIPIN    A3              
+#define RSSIPIN       A3              
+#define TEMPPIN       6           
+#define VOLTAGEPIN    0
+#define VIDVOLTAGEPIN 2
+#define AMPERAGEPIN   1
 #define LEDPIN     7
 
 /********************       MW 2.0 / 2.1 support      *********************/
@@ -29,14 +33,6 @@
 /***************************************         Amperage        ********************************************/
 #define AMPERAGE_VIRTUAL_IDLE 4     // Set AMPERAGE_VIRTUAL_IDLE value for motors off current draw * 10. 4 = 0.4A (typical FPV equipment current draw) 
 
-#define EST_PMSum 1                 /****  NOTE  **** If you use hardware CURRENT sensor on OSD use (#define EST_PMSum 1) BEFORE ANY ADJUSTMENT OR CALIBRATION
-                                                        this value is empirical and is for fine tunning your consumption using the same instructions as for POWERMETER adjustment
-                                                        on Mwc (first you have to MWC fine tune your voltage (VBat)).                                                       ****/
-
-#define AMPDIVISION 3600            // Hardware current sensor division ratio
-#define AMPERAGE_CAL 1.1            // Amperage calibration
-#define AMPRERAGE_OFFSET 512        // Amperage = AMPRERAGE_OFFSET - analogRead * AMPERAGE_CAL / 10.23
-
 /**********************************         Display Settings         ************************/
 
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
@@ -44,7 +40,7 @@
 
 /**********************************   MSP Options and compatibility **********************/
 
-#define BOX_OSD_SWITCH              // Comment to use LLIGHT switch instead. ( OSD switch will be default and only option after MW 2.2 release. It is used to hide your AH, side bars, and coordinates).
+#define BOX_OSD_SWITCH              // Comment to use LLIGHT switch instead. ( OSD switch will be default and only option after MW 2.2 release).
 
 /********************       For Sensors presence      *********************/
 
@@ -160,10 +156,12 @@
 
 #define SAVEP 93+(30*9)
 
-//#define DEBUG   // For developers - remove if memory required
-//#define DEV     // For developers - current DEV section remove if memory required
-#define HORIZON // For developpers - remove horizon if required
+/*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
 
-#ifdef MAPMODE 
-  #undef HORIZON
-#endif
+//#define DEBUG   // For developers - remove if memory required
+#define HORIZON // For developers - remove horizon if required
+
+//#ifdef MAPMODE 
+//  #undef HORIZON
+//  #undef DEBUG
+//#endif

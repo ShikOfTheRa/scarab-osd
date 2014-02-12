@@ -158,6 +158,7 @@ int currentCol = 0;
 int currentRow = 0;  
 //Boolean SimulateMW = true;
 
+int S16_AMPMAX = 0; //16bit from 8 EEPROM value
 
 ControlP5 controlP5;
 ControlP5 SmallcontrolP5;
@@ -211,7 +212,7 @@ int xMot        = 690;        int yMot        = 155; //850,155
 int xButton     = 845;        int yButton     = 231; //685,222
 int xBox        = 415;        int yBox        = 10;
 //int xGPS        = 853;        int yGPS        = 438; //693,438
-int XSim        = DisplayWindowX+WindowAdjX;        int YSim        = 305-WindowShrinkY + 85;
+int XSim        = DisplayWindowX+WindowAdjX+10;        int YSim        = 305-WindowShrinkY + 95;
 
 //DisplayWindowX+WindowAdjX, DisplayWindowY+WindowAdjY, 360-WindowShrinkX, 288-WindowShrinkY);
 // Box locations -------------------------------------------------------------------------
@@ -219,16 +220,20 @@ int Col1Width = 180;        int Col2Width = 200;    int Col3Width = 165;
 
 int XEEPROM    = 120;        int YEEPROM    = 5;  //hidden do not remove
 int XBoard     = 120;        int YBoard   = 5;
-int XRSSI      = 120;        int YRSSI    = 46;
-int XVolts     = 120;        int YVolts    = 172;
-int XAmps      = 120;        int YAmps    = 281;
-int XVVolts    = 120;        int YVVolts  = 373;
-int XTemp      = 120;        int YTemp    = 449;
+int XRSSI      = 120;        int YRSSI    = 339;
+int XVREF      = 120;        int YVREF    = 465;
+int XVolts     = 120;        int YVolts    = 46;
+int XAmps      = 120;        int YAmps    = 230;
+int XVVolts    = 120;        int YVVolts  = 155;
+int XTemp      = 510;        int YTemp    = 243;
 int XCS        = 120;        int YCS    = 506;
 int XGPS       = 510;        int YGPS    = 5;
+int XCOMPASS   = 510;        int YCOMPASS    = 98;
 //int XGPS       = 305;        int YGPS    = 5;
-int XTIME      = 510;        int YTIME    = 150;
+int XTIME      = 510;        int YTIME    = 190;
 //int XTIME      = 510;        int YTIME    = 5;
+int XHUD       = 305;        int YHUD     = 240;
+int XDisplay     = 305;        int YDisplay   = 114; //48;
 
 int XOther     = 305;        int YOther   = 5; //48;
 //int XOther     = 305;        int YOther   = 150; //48;
@@ -271,23 +276,23 @@ String[] ConfigNames = {
   "RSSI Max",
   "RSSI Alarm",
   "Display RSSI",
-  "RSSI Over MW",
-  "PWM RSSI",
+  "Use MWii",
+  "Use PWM",
   
   "Display Voltage",
-  "Voltage Min",
+  "Voltage Alarm",
   "Battery Cells",
-  "Main Voltage Divider",
-  "Main Voltage MW",
+  "Voltage Adjust",
+  "Use MWii",
   
-  "Display Amperage",
-  "Display Amperage Used",
-  "Virtual Sensor",
-  "Amperage Divider",
+  "Display Amps",
+  "Display mAh",
+  "Use Virtual Sensor",
+  "Amps Adjust",
   
   "Display Video Voltage",
-  "Video Voltage Devider",
-  "Video Voltage MW",
+  "Voltage Adjust",
+  "Use MWii",
   
   "Display Temperature",
   "Temperature Max",
@@ -295,9 +300,9 @@ String[] ConfigNames = {
   "", // for Board type do not remove
   
   "Display GPS",
-  "Display GPS Coords",
-  "Display Coords on Top",
-  "Display GPS Altitude",
+  " - GPS Coords",
+  " - Coords on Top",
+  " - GPS Altitude",
   "Display Angle to Home",
   "Display Heading",
   "Display Heading 360",
@@ -307,9 +312,9 @@ String[] ConfigNames = {
   "Display Throttle Position",
   "Display Horizon Bar",
   "Display Side Bars",
-  "Display Battery Evo",
+  "Display Battery Status",
   "Reset Stats After Arm",
-  "Enable OSD Read ADC",
+  "Enable Map mode",
   "Enable ADC 5v ref",
   "Use BoxNames",
   "Display Flight Mode",
@@ -320,15 +325,18 @@ String[] ConfigNames = {
   "Time Zone offset",
   "DST Minutes",
   "Debug",
-  "Scrolling Side Bars",
+  " - SB Scrolling",
   "Display Gimbal",
   "Display Vario",
   "Display BARO ALT",
   "Display Compass",
-  "Display Horizon Elevation",
+  " - HB Elevation",
   "Display Timer",
-  "Display Flight Sensors",  
-  "Display Side Bar arrows",  
+  " - FM sensors",  
+  " - SB direction",  
+  "Zero Adjust",
+  "Amperage 16L",  
+  "Amperage 16H",  
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -342,51 +350,51 @@ String[] ConfigNames = {
 };
 
 String[] ConfigHelp = {
-  "EEPROM Loaded:",
+  "EEPROM Loaded",
   
-  "RSSI Min:",
-  "RSSI Max:",
+  "RSSI Min",
+  "RSSI Max",
   "RSSI Alarm",
-  "Display RSSI:",
-  "RSSI Over MW",
-  "PWM RSSI",
+  "Display RSSI",
+  "Use MWii",
+  "Use PWM",
   
-  "Display Voltage:",
-  "Voltage Min:",
+  "Display Voltage",
+  "Voltage Alarm",
   "Battery Cells",
-  "Main Voltage Devider:",
-  "Main Voltage MW:",
+  "Voltage Adjust",
+  "Use MWii",
   
-  "Display Amperage:",
-  "Diplay Amperage Used:",
-  "Virtual Sensor",
-  "Amperage Divider",
+  "Display Amps",
+  "Display mAh",
+  "Use Virtual Sensor",
+  "Amps Adjust",
   
-  "Display Video Voltage:",
-  "Video Voltage Devider:",
-  "Video Voltage MW:",
+  "Display Video Voltage",
+  "Voltage Adjust",
+  "Use MWii",
   
-  "Display Temperature:",
-  "Temperature Max:",
+  "Display Temperature",
+  "Temperature Max",
   
-  "Board Type:",
+  "", // for Board type do not remove
   
-  "Display GPS:",
-  "Display GPS Coords:",
-  "Display Coords on Top",
-  "Display GPS Altitude",
+  "Display GPS",
+  " - GPS Coords",
+  " - Coords on Top",
+  " - GPS Altitude",
   "Display Angle to Home",
-  "Display Heading:",
-  "Display Heading 360:",
+  "Display Heading",
+  "Display Heading 360",
   
-  "Unit System:",
-  "Screen Type NTSC / PAL:",
+  "Units",
+  "Video Signal",
   "Display Throttle Position",
   "Display Horizon Bar",
   "Display Side Bars",
-  "Display Battery Evo",
+  "Display Battery Status",
   "Reset Stats After Arm",
-  "Enable OSD Read ADC",
+  "Enable Map mode",
   "Enable ADC 5v ref",
   "Use BoxNames",
   "Display Flight Mode",
@@ -397,15 +405,18 @@ String[] ConfigHelp = {
   "Time Zone offset",
   "DST Minutes",
   "Debug",
-  "Scrolling Side Bars",
+  " - SB Scrolling",
   "Display Gimbal",
   "Display Vario",
   "Display BARO ALT",
   "Display Compass",
-  "Display Horizon Elevation",
+  " - HB Elevation",
   "Display Timer",
-  "Display Flight Sensors",
-  "Display Side Bar arrows",  
+  " - FM sensors",  
+  " - SB direction",  
+  "Zero Adjust",
+  "Amperage 16L",  
+  "Amperage 16H",  
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -416,7 +427,6 @@ String[] ConfigHelp = {
   "S_CS7",
   "S_CS8",
   "S_CS9",
-  
   };
 
 
@@ -445,7 +455,7 @@ int[] ConfigRanges = {
 1,     // S_AMPERAGE,              12
 1,     // S_AMPER_HOUR,            13
 1,     // S_AMPERAGE_VIRTUAL,
-255,   // S_AMPDIVIDERRATIO,
+1023,   // S_AMPDIVIDERRATIO,      // note this is 8>>16 bit EPROM var
 
 1,     // S_VIDVOLTAGE             14
 255,   // S_VIDDIVIDERRATIO        15    
@@ -491,6 +501,9 @@ int[] ConfigRanges = {
 1,     // S_TIMER                  41h
 1,     // S_MODESENSOR             42h
 1,     //S_SIDEBARTOPS             43h
+1023,  // S_AMPMIN,
+255,   // S_AMPMAXL,
+3,     // S_AMPMAXH,
 255,
 255,
  255,
@@ -580,7 +593,11 @@ Group MGUploadF,
   G_Other,
   G_CallSign,
   G_PortStatus,
-  G_TIME
+  G_TIME,
+  G_VREF,
+  G_HUD,
+  G_COMPASS,
+  G_DISPLAY
   
   ;
 
@@ -679,34 +696,38 @@ OSDBackground = loadImage("Background.jpg");
 // EEPROM----------------------------------------------------------------
 
 CreateItem(GetSetting("S_CHECK_"), 5, 0, G_EEPROM);
+CreateItem(GetSetting("S_AMPMAXL"), 5, 0, G_EEPROM);
+CreateItem(GetSetting("S_AMPMAXH"), 5, 0, G_EEPROM);
+CreateItem(GetSetting("S_USE_BOXNAMES"),  5,0, G_EEPROM);
 
 // RSSI  ---------------------------------------------------------------------------
 
-CreateItem(GetSetting("S_RSSIMIN"), 5, 0, G_RSSI);
-CreateItem(GetSetting("S_RSSIMAX"), 5,1*17, G_RSSI);
-CreateItem(GetSetting("S_RSSI_ALARM"), 5,2*17, G_RSSI);
-CreateItem(GetSetting("S_DISPLAYRSSI"), 5, 3*17, G_RSSI);
-CreateItem(GetSetting("S_MWRSSI"),  5,4*17, G_RSSI);
-CreateItem(GetSetting("S_PWMRSSI"),  5,5*17, G_RSSI);
+CreateItem(GetSetting("S_DISPLAYRSSI"), 5, 0, G_RSSI);
+CreateItem(GetSetting("S_MWRSSI"),  5,1*17, G_RSSI);
+CreateItem(GetSetting("S_PWMRSSI"),  5,2*17, G_RSSI);
+CreateItem(GetSetting("S_RSSIMIN"), 5, 3*17, G_RSSI);
+CreateItem(GetSetting("S_RSSIMAX"), 5,4*17, G_RSSI);
+CreateItem(GetSetting("S_RSSI_ALARM"), 5,5*17, G_RSSI);
 
 // Voltage  ------------------------------------------------------------------------
 
 CreateItem(GetSetting("S_DISPLAYVOLTAGE"), 5,0, G_Voltage);
-CreateItem(GetSetting("S_VOLTAGEMIN"), 5,1*17, G_Voltage);
-CreateItem(GetSetting("S_BATCELLS"), 5,2*17, G_Voltage);
-CreateItem(GetSetting("S_DIVIDERRATIO"), 5,3*17, G_Voltage);
-CreateItem(GetSetting("S_MAINVOLTAGE_VBAT"), 5,4*17, G_Voltage);
+CreateItem(GetSetting("S_MAINVOLTAGE_VBAT"), 5,1*17, G_Voltage);
+CreateItem(GetSetting("S_DIVIDERRATIO"), 5,2*17, G_Voltage);
+CreateItem(GetSetting("S_BATCELLS"), 5,3*17, G_Voltage);
+CreateItem(GetSetting("S_VOLTAGEMIN"), 5,4*17, G_Voltage);
 
 // Amperage  ------------------------------------------------------------------------
 CreateItem(GetSetting("S_AMPERAGE"),  5,0, G_Amperage);
 CreateItem(GetSetting("S_AMPER_HOUR"),  5,1*17, G_Amperage);
 CreateItem(GetSetting("S_AMPERAGE_VIRTUAL"),  5,2*17, G_Amperage);
 CreateItem(GetSetting("S_AMPDIVIDERRATIO"),  5,3*17, G_Amperage);
+CreateItem(GetSetting("S_AMPMIN"), 5, 4*17, G_Amperage);
 
 // Video Voltage  ------------------------------------------------------------------------
 CreateItem(GetSetting("S_VIDVOLTAGE"),  5,0, G_VVoltage);
-CreateItem(GetSetting("S_VIDDIVIDERRATIO"),  5,1*17, G_VVoltage);
-CreateItem(GetSetting("S_VIDVOLTAGE_VBAT"),  5,2*17, G_VVoltage);
+CreateItem(GetSetting("S_VIDVOLTAGE_VBAT"),  5,1*17, G_VVoltage);
+CreateItem(GetSetting("S_VIDDIVIDERRATIO"),  5,2*17, G_VVoltage);
 
 //  Temperature  --------------------------------------------------------------------
 CreateItem(GetSetting("S_DISPLAYTEMPERATURE"),  5,0, G_Temperature);
@@ -725,10 +746,23 @@ CreateItem(GetSetting("S_DISPLAYGPS"), 5,0, G_GPS);
 CreateItem(GetSetting("S_COORDINATES"),  5,1*17, G_GPS);
 CreateItem(GetSetting("S_GPSCOORDTOP"),  5,2*17, G_GPS);
 CreateItem(GetSetting("S_GPSALTITUDE"),  5,3*17, G_GPS);
-CreateItem(GetSetting("S_ANGLETOHOME"),  5,4*17, G_GPS);
-CreateItem(GetSetting("S_SHOWHEADING"),  5,5*17, G_GPS);
-CreateItem(GetSetting("S_HEADING360"),  5,6*17, G_GPS);
 
+//  HUD  ----------------------------------------------------------------------------
+CreateItem(GetSetting("S_DISPLAY_HORIZON_BR"),  5,0*17, G_HUD);
+CreateItem(GetSetting("S_HORIZON_ELEVATION"),  5,1*17, G_HUD);
+CreateItem(GetSetting("S_WITHDECORATION"),  5,2*17, G_HUD);
+CreateItem(GetSetting("S_SCROLLING"),  5,3*17, G_HUD);
+CreateItem(GetSetting("S_SIDEBARTOPS"),  5,4*17, G_HUD);
+CreateItem(GetSetting("S_ENABLEADC"),  5,5*17, G_HUD);
+
+//  VREF  ----------------------------------------------------------------------------
+CreateItem(GetSetting("S_VREFERENCE"),  5,0*17, G_VREF);
+
+//  Compass ---------------------------------------------------------------------------
+CreateItem(GetSetting("S_COMPASS"),  5,0*17, G_COMPASS);
+CreateItem(GetSetting("S_SHOWHEADING"),  5,1*17, G_COMPASS);
+CreateItem(GetSetting("S_HEADING360"),  5,2*17, G_COMPASS);
+CreateItem(GetSetting("S_ANGLETOHOME"),  5,3*17, G_COMPASS);
 
 
 //  Other ---------------------------------------------------------------------------
@@ -737,23 +771,16 @@ BuildRadioButton(GetSetting("S_UNITSYSTEM"),  5,0, G_Other, "Metric","Imperial")
 CreateItem(GetSetting("S_VIDEOSIGNALTYPE"),  5,1*17, G_Other);
 BuildRadioButton(GetSetting("S_VIDEOSIGNALTYPE"),  5,1*17, G_Other, "NTSC","PAL");
 CreateItem(GetSetting("S_THROTTLEPOSITION"),  5,2*17, G_Other);
-CreateItem(GetSetting("S_DISPLAY_HORIZON_BR"),  5,3*17, G_Other);
-CreateItem(GetSetting("S_WITHDECORATION"),  5,4*17, G_Other);
-CreateItem(GetSetting("S_SHOWBATLEVELEVOLUTION"),  5,5*17, G_Other);
-CreateItem(GetSetting("S_RESETSTATISTICS"),  5,6*17, G_Other);
-CreateItem(GetSetting("S_ENABLEADC"),  5,7*17, G_Other);
-CreateItem(GetSetting("S_VREFERENCE"),  5,8*17, G_Other);
-CreateItem(GetSetting("S_USE_BOXNAMES"),  5,9*17, G_Other);
-CreateItem(GetSetting("S_MODEICON"),  5,10*17, G_Other);
-CreateItem(GetSetting("S_SCROLLING"),  5,11*17, G_Other);
-CreateItem(GetSetting("S_GIMBAL"),  5,12*17, G_Other);
-CreateItem(GetSetting("S_VARIO"),  5,13*17, G_Other);
-CreateItem(GetSetting("S_BAROALT"),  5,14*17, G_Other);
-CreateItem(GetSetting("S_COMPASS"),  5,15*17, G_Other);
-CreateItem(GetSetting("S_HORIZON_ELEVATION"),  5,16*17, G_Other);
-CreateItem(GetSetting("S_TIMER"),  5,17*17, G_Other);
-CreateItem(GetSetting("S_MODESENSOR"),  5,18*17, G_Other);
-CreateItem(GetSetting("S_SIDEBARTOPS"),  5,19*17, G_Other);
+CreateItem(GetSetting("S_SHOWBATLEVELEVOLUTION"),  5,3*17, G_Other);
+CreateItem(GetSetting("S_RESETSTATISTICS"),  5,4*17, G_Other);
+
+//  Display ---------------------------------------------------------------------------
+CreateItem(GetSetting("S_MODEICON"),  5,0*17, G_DISPLAY);
+CreateItem(GetSetting("S_MODESENSOR"),  5,1*17, G_DISPLAY);
+CreateItem(GetSetting("S_GIMBAL"),  5,2*17, G_DISPLAY);
+CreateItem(GetSetting("S_VARIO"),  5,3*17, G_DISPLAY);
+CreateItem(GetSetting("S_BAROALT"),  5,4*17, G_DISPLAY);
+CreateItem(GetSetting("S_TIMER"),  5,5*17, G_DISPLAY);
 
 //  TIME  ----------------------------------------------------------------------------
 CreateItem(GetSetting("S_GPSTIME"),  5,0*17, G_TIME);
@@ -792,7 +819,7 @@ controlP5.addTextfield("CallSign")
 
        
   // CheckBox "Hide Background"
-  ShowSimBackground = controlP5.addCheckBox("ShowSimBackground",XSim,YSim+1);
+  ShowSimBackground = controlP5.addCheckBox("ShowSimBackground",XSim,YSim-80);
   ShowSimBackground.setColorActive(color(255));
   ShowSimBackground.setColorBackground(color(120));
   ShowSimBackground.setItemsPerRow(1);

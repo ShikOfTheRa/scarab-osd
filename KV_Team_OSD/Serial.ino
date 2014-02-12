@@ -382,100 +382,64 @@ void handleRawRC() {
       else if(!previousarmedstatus&&configMode&&(MwRcData[YAWSTICK]<MINSTICK)) // DECREASE
       {
 	waitStick = 1;
-
-	if(configPage == 1) {
-	  if(ROW >= 1 && ROW <= 5) {
-	    if(COL==1) P8[ROW-1]--;
-	    if(COL==2) I8[ROW-1]--;
-	    if(COL==3) D8[ROW-1]--;
-	  }
-
-	  if(ROW == 6) {
-	    if(COL==1) P8[7]--;
-	    if(COL==2) I8[7]--;
-	    if(COL==3) D8[7]--;
-	  }
-
-	  if((ROW==7)&&(COL==1)) P8[8]--;
-	}
-
-	if(configPage == 2 && COL == 3) {
-	  if(ROW==1) rcRate8--;
-	  if(ROW==2) rcExpo8--;
-	  if(ROW==3) rollPitchRate--;
-	  if(ROW==4) yawRate--;
-	  if(ROW==5) dynThrPID--;
-	}
-
-	if(configPage == 3 && COL == 3) {
-	  if(ROW==2) Settings[S_DIVIDERRATIO]--;
-	  if(ROW==3) Settings[S_VOLTAGEMIN]--;
-	  if(ROW==5) Settings[S_BATCELLS]--;
-	}
-
-	if(configPage == 5 && COL == 3) {
-	  if(ROW==4) Settings[S_AMPDIVIDERRATIO]--;
-	}
-
-	if(configPage == 9 && COL == 3) {
-	  if(ROW==5) magCalibrationTimer=0;
-	}
-
-	if((ROW==10)&&(COL==3)) configPage--;
-	if(configPage<MINPAGE) configPage = MAXPAGE;
+        menudir=-1;
         serialMenuCommon();  
       }
       else if(!previousarmedstatus&&configMode&&(MwRcData[YAWSTICK]>MAXSTICK)) // INCREASE
-      {
+      { 
 	waitStick =1;
-
-	if(configPage == 1) {
-	  if(ROW >= 1 && ROW <= 5) {
-	    if(COL==1) P8[ROW-1]++;
-	    if(COL==2) I8[ROW-1]++;
-	    if(COL==3) D8[ROW-1]++;
-	  }
-	  if(ROW == 6) {
-	    if(COL==1) P8[7]++;
-	    if(COL==2) I8[7]++;
-	    if(COL==3) D8[7]++;
-	  }
-
-	  if((ROW==7)&&(COL==1)) P8[8]++;
-	}
-
-	if(configPage == 2 && COL == 3) {
-	  if(ROW==1) rcRate8++;
-	  if(ROW==2) rcExpo8++;
-	  if(ROW==3) rollPitchRate++;
-	  if(ROW==4) yawRate++;
-	  if(ROW==5) dynThrPID++;
-	}
-
-	if(configPage == 3 && COL == 3) {
-	  if(ROW==2) Settings[S_DIVIDERRATIO]++;
-	  if(ROW==3) Settings[S_VOLTAGEMIN]++;
-	  if(ROW==5) Settings[S_BATCELLS]++;
-	}
-
-	if(configPage == 5 && COL == 3) {
-	  if(ROW==4) Settings[S_AMPDIVIDERRATIO]++;
-	}
-
-	if((ROW==10)&&(COL==3)) configPage++;
-	if(configPage>MAXPAGE) configPage = MINPAGE;
+        menudir=1;
+	if(configPage == 9 && COL == 3) {
+	  if(ROW==5) magCalibrationTimer=0;
+        }
         serialMenuCommon();  
+      }      
     }
-      
-    }
-
     if(waitStick == 1)
       stickTime = millis();
   }
 }
 void serialMenuCommon()
 {
+	if((ROW==10)&&(COL==3)) configPage=configPage+menudir;
+	if(configPage<MINPAGE) configPage = MAXPAGE;
+	if(configPage>MAXPAGE) configPage = MINPAGE;
+
+	if(configPage == 1) {
+	  if(ROW >= 1 && ROW <= 5) {
+	    if(COL==1) P8[ROW-1]=P8[ROW-1]+menudir;
+	    if(COL==2) I8[ROW-1]=I8[ROW-1]+menudir;
+	    if(COL==3) D8[ROW-1]=D8[ROW-1]+menudir;
+	  }
+
+	  if(ROW == 6) {
+	    if(COL==1) P8[7]=P8[7]+menudir;
+	    if(COL==2) I8[7]=I8[7]+menudir;
+	    if(COL==3) D8[7]=D8[7]+menudir;
+	  }
+
+	  if((ROW==7)&&(COL==1)) P8[8]=P8[8]+menudir;
+	}
+
+	if(configPage == 2 && COL == 3) {
+	  if(ROW==1) rcRate8=rcRate8+menudir;
+	  if(ROW==2) rcExpo8=rcExpo8+menudir;
+	  if(ROW==3) rollPitchRate=rollPitchRate+menudir;
+	  if(ROW==4) yawRate=yawRate+menudir;
+	  if(ROW==5) dynThrPID=dynThrPID+menudir;
+	}
+
 	if(configPage == 3 && COL == 3) {
+	  if(ROW==2) Settings[S_DIVIDERRATIO]=Settings[S_DIVIDERRATIO]+menudir;
+	  if(ROW==3) Settings[S_VOLTAGEMIN]=Settings[S_VOLTAGEMIN]+menudir;
+	  if(ROW==5) Settings[S_BATCELLS]=Settings[S_BATCELLS]+menudir;
+	}
+
+	if(configPage == 5 && COL == 3) {
+	  if(ROW==4) Settings[S_AMPDIVIDERRATIO]=Settings[S_AMPDIVIDERRATIO]+menudir;
+	}
+  
+  	if(configPage == 3 && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAYVOLTAGE]=!Settings[S_DISPLAYVOLTAGE];
 	  if(ROW==4) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
 	  if(ROW==6) Settings[S_MAINVOLTAGE_VBAT]=!Settings[S_MAINVOLTAGE_VBAT];
@@ -515,7 +479,6 @@ void serialMenuCommon()
 	  if(ROW==4) Settings[S_DEBUG]=!Settings[S_DEBUG];
 	  if(ROW==5) magCalibrationTimer=CALIBRATION_DELAY;
 	}
-
   	if((ROW==10)&&(COL==1)) configExit();
 	if((ROW==10)&&(COL==2)) configSave();
 
@@ -600,7 +563,6 @@ void configExit()
     distanceMAX=0;
     altitudeMAX=0;
     speedMAX=0;
-    temperMAX =0;
     flyingTime=0;
   }
   setMspRequests();
