@@ -371,6 +371,7 @@ const char configMsgOFF[] PROGMEM = "OFF";
 const char configMsgEXT[] PROGMEM = "EXIT";
 const char configMsgSAVE[] PROGMEM = "SAVE+EXIT";
 const char configMsgPGS[] PROGMEM = "<PAGE>";
+const char configMsgMWII[] PROGMEM = "USE MWII";
 
 // For Config pages
 //-----------------------------------------------------------Page1
@@ -397,14 +398,12 @@ const char configMsg32[] PROGMEM = "ADJUST VOLTS";
 const char configMsg33[] PROGMEM = "MAIN VOLTS ALARM";
 const char configMsg34[] PROGMEM = "DISPLAY VID VOLTS";
 const char configMsg35[] PROGMEM = "CELLS";
-const char configMsg36[] PROGMEM = "USE MWII";
 //-----------------------------------------------------------Page4
 const char configMsg40[] PROGMEM = "RSSI";
 //const char configMsg41[] PROGMEM = "ACTUAL RSSI";
 const char configMsg42[] PROGMEM = "DISPLAY RSSI";
 const char configMsg43[] PROGMEM = "SET RSSI";
 //const char configMsg44[] PROGMEM = "SET RSSI MAX";
-const char configMsg45[] PROGMEM = "USE MWII";
 const char configMsg46[] PROGMEM = "USE PWM";
 
 //-----------------------------------------------------------Page5

@@ -19,6 +19,7 @@ This work is based on the following open source work :-
  We only make a few changes! 
 */
             
+    uint32_t voltageRawArray[8];
 
 
 #include <avr/pgmspace.h>
@@ -457,7 +458,7 @@ void ProcessAnalogue(void) {
 
   if (!Settings[S_MAINVOLTAGE_VBAT]){ // not MWII
     static uint16_t ind = 0;
-    static uint32_t voltageRawArray[8];
+    //static uint32_t voltageRawArray[8];
     voltageRawArray[(ind++)%8] = analogRead(VOLTAGEPIN);                  
     uint16_t voltageRaw = 0;
     for (uint16_t i=0;i<8;i++)

@@ -12,11 +12,11 @@
 /********************       HARDWARE PINS      *********************/
 #define PWMRSSIPIN    A3              
 #define RSSIPIN       A3              
-#define TEMPPIN       6           
-#define VOLTAGEPIN    0
-#define VIDVOLTAGEPIN 2
-#define AMPERAGEPIN   1
-#define LEDPIN     7
+#define TEMPPIN       A6           
+#define VOLTAGEPIN    A0
+#define VIDVOLTAGEPIN A2
+#define AMPERAGEPIN   A1
+#define LEDPIN        7
 
 /********************       MW 2.0 / 2.1 support      *********************/
 //#define BOXNAMES                 // required to support multiwii 2.1 / 2.0 
