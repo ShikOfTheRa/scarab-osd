@@ -445,24 +445,6 @@ void displayTime(void)
   MAX7456_WriteString(screenBuffer,getPosition(onTimePosition));
 }
 
-void displayDebug(void)
-{
-#if defined DEBUG
-  if(!Settings[S_DEBUG])
-    return;
-    debug[0]=Settings[S_AMPMAXL];
-    debug[1]=Settings[S_AMPMAXH];
-    debug[2]=S16_AMPMAX;
-    debug[3]=Settings[S_AMPMIN];
-
-  for(uint8_t X=0; X<4; X++) {
-    ItoaPadded(debug[X], screenBuffer+2,7,0);     
-    screenBuffer[0] = 0x30+X;
-    screenBuffer[1] = 0X3A;
-    MAX7456_WriteString(screenBuffer,getPosition(debugPosition)+(X*LINE));
-  }  
-#endif
-}
 
 void displayAmperage(void)
 {
@@ -485,7 +467,7 @@ void displaypMeterSum(void)
 
   screenBuffer[0]=SYM_MAH;
 
-  int xx=amperagesum;
+  int xx=amperagesum/36;
 
   itoa(xx,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(pMeterSumPosition));
@@ -970,7 +952,7 @@ void displayConfigScreen(void)
     ProcessAnalogue();
 
     MAX7456_WriteString_P(configMsg30, 35);
-//   ItoaPadded(voltage, screenBuffer, 4, 3);
+//    ItoaPadded(voltage, screenBuffer, 4, 3);
 //    screenBuffer[4] = SYM_VOLT;
 //    screenBuffer[5] = 0;
 //    MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE);
@@ -1001,7 +983,7 @@ void displayConfigScreen(void)
     MAX7456_WriteString_P(configMsg35, VELT);   
     MAX7456_WriteString(itoa(Settings[S_BATCELLS],screenBuffer,10),VELD);
 //R6:
-    MAX7456_WriteString_P(configMsg36, LEVT);   
+    MAX7456_WriteString_P(configMsgMWII, LEVT);   
     if(Settings[S_MAINVOLTAGE_VBAT]){
       MAX7456_WriteString_P(configMsgON, LEVD);
     }
@@ -1013,14 +995,12 @@ void displayConfigScreen(void)
   if(configPage==4)
   {
     MAX7456_WriteString_P(configMsg40, 35);
-
-//    screenBuffer[0] = SYM_RSSI;
-//   itoa(rssi,screenBuffer+1,10);
+//   itoa(rssi,screenBuffer,10);
 //    uint8_t xx = FindNull();
 //    screenBuffer[xx++] = '%';
 //    screenBuffer[xx] = 0;
 //    MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE);
-//    MAX7456_WriteString(itoa(rssi,screenBuffer,10),ROLLD-LINE-LINE);
+    MAX7456_WriteString(itoa(rssi,screenBuffer,10),ROLLD-LINE-LINE);
 
 //R1:
     MAX7456_WriteString_P(configMsg42, ROLLT);
@@ -1039,7 +1019,7 @@ void displayConfigScreen(void)
     MAX7456_WriteString("-", PITCHD);
     }
 //R3:
-    MAX7456_WriteString_P(configMsg45, YAWT);
+    MAX7456_WriteString_P(configMsgMWII, YAWT);
     if(Settings[S_MWRSSI]){
       MAX7456_WriteString_P(configMsgON, YAWD);
     }
@@ -1091,7 +1071,8 @@ void displayConfigScreen(void)
     }
 //R4:
     MAX7456_WriteString_P(configMsg54, ALTT);   
-    MAX7456_WriteString(itoa(Settings[S_AMPDIVIDERRATIO],screenBuffer,10),ALTD);
+    MAX7456_WriteString(itoa(S16_AMPMAX,screenBuffer,10),ALTD);
+//    MAX7456_WriteString(itoa(amperage,screenBuffer,10),ROLLD-LINE-LINE);
   }
   
   if(configPage==6)
@@ -1231,9 +1212,9 @@ void displayConfigScreen(void)
     formatTime(flyingTime, screenBuffer, 1);
     MAX7456_WriteString(screenBuffer,VELD-4);
 
-    MAX7456_WriteString_P(configMsg86, LEVT);
-//    xx= pMeterSum / EST_PMSum;
-    MAX7456_WriteString(itoa(xx,screenBuffer,10),LEVD-3);
+//    MAX7456_WriteString_P(configMsg86, LEVT);
+//    xx=amperagesum/36;
+//    MAX7456_WriteString(itoa(xx,screenBuffer,10),LEVD-3);
     }
     
   displayCursor();
@@ -1349,6 +1330,25 @@ void mapmode(void) {
   screenBuffer[1] = 0;
   MAX7456_WriteString(screenBuffer,getPosition(GPS_directionToHomePosition)+LINE);
  
+#endif
+}
+
+void displayDebug(void)
+{
+#if defined DEBUG
+  if(!Settings[S_DEBUG])
+    return;
+    debug[0]=voltageRawArray[0];
+    debug[1]=Settings[S_AMPMAXH];
+    debug[2]=S16_AMPMAX;
+    debug[3]=Settings[S_AMPMIN];
+
+  for(uint8_t X=0; X<4; X++) {
+    ItoaPadded(debug[X], screenBuffer+2,7,0);     
+    screenBuffer[0] = 0x30+X;
+    screenBuffer[1] = 0X3A;
+    MAX7456_WriteString(screenBuffer,getPosition(debugPosition)+(X*LINE));
+  }  
 #endif
 }
 

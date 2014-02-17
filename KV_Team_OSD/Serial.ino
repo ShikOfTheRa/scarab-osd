@@ -126,7 +126,12 @@ void serialMSPCheck()
     GPS_latitude = read32();
     GPS_longitude = read32();
     GPS_altitude = read16();
+
+#if defined I2CGPS
+    GPS_speed = read16()*10;
+#else
     GPS_speed = read16();
+#endif
   }
 
   if (cmdMSP==MSP_COMP_GPS)
@@ -436,7 +441,7 @@ void serialMenuCommon()
 	}
 
 	if(configPage == 5 && COL == 3) {
-	  if(ROW==4) Settings[S_AMPDIVIDERRATIO]=Settings[S_AMPDIVIDERRATIO]+menudir;
+	  if(ROW==4) S16_AMPMAX=S16_AMPMAX+menudir;
 	}
   
   	if(configPage == 3 && COL == 3) {
