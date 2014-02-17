@@ -19,6 +19,7 @@ This work is based on the following open source work :-
  We only make a few changes! 
 */
             
+    uint32_t voltageRawArray[8];
 
 
 #include <avr/pgmspace.h>
@@ -259,13 +260,16 @@ void loop()
         if (Settings[S_THROTTLEPOSITION])
           displayCurrentThrottle();
 
+#if defined CALLSIGNALWAYS
+        displayCallsign();       
+#else 
         if ( (onTime > (lastCallSign+300)) || (onTime < (lastCallSign+4)))
        {
            // Displays 4 sec every 5min (no blink during flight)
         if ( onTime > (lastCallSign+300))lastCallSign = onTime; 
-        displayCallsign(); 
-       
+        displayCallsign();       
        }
+#endif
 
         if(MwSensorPresent&ACCELEROMETER)
            displayHorizon(MwAngle[0],MwAngle[1]);
@@ -457,7 +461,7 @@ void ProcessAnalogue(void) {
 
   if (!Settings[S_MAINVOLTAGE_VBAT]){ // not MWII
     static uint16_t ind = 0;
-    static uint32_t voltageRawArray[8];
+    //static uint32_t voltageRawArray[8];
     voltageRawArray[(ind++)%8] = analogRead(VOLTAGEPIN);                  
     uint16_t voltageRaw = 0;
     for (uint16_t i=0;i<8;i++)

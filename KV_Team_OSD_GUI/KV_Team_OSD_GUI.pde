@@ -225,7 +225,7 @@ int XVREF      = 120;        int YVREF    = 465;
 int XVolts     = 120;        int YVolts    = 46;
 int XAmps      = 120;        int YAmps    = 230;
 int XVVolts    = 120;        int YVVolts  = 155;
-int XTemp      = 510;        int YTemp    = 243;
+int XTemp      = 510;        int YTemp    = 283;
 int XCS        = 120;        int YCS    = 506;
 int XGPS       = 510;        int YGPS    = 5;
 int XCOMPASS   = 510;        int YCOMPASS    = 98;
