@@ -256,7 +256,7 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 0,   // S_HORIZON_ELEVATION         40h
 1,   // S_TIMER                     41h
 1,   // S_MODESENSOR                42h
-0,   // S_SIDEBARTOPS               43h
+1,   // S_SIDEBARTOPS               43h
 4,   // S_AMPMIN,
 150,  // S_AMPMAXL,
 0,   // S_AMPMAXH,

@@ -270,30 +270,31 @@ void displayHorizon(int rollAngle, int pitchAngle)
 
 if(Settings[S_DISPLAY_HORIZON_BR]){
   for(uint8_t X=0; X<=8; X++) {
+    if (X==3) X=6;
     int Y = (rollAngle * (4-X)) / 64;
     Y -= pitchAngle / 8;
     Y += 41;
     if(Y >= 0 && Y <= 81) {
       uint16_t pos = position + LINE*(Y/9) + 3 - 2*LINE + X;
       screen[pos] = SYM_AH_BAR9_0+(Y%9);
-      if(Y>=9 && (Y%9) == 0)
-        screen[pos-LINE] = SYM_AH_BAR9_9;
     }
   }
-
+        
 if (Settings[S_HORIZON_ELEVATION]){                   
 
-    for(int X=3; X<=5; X++) {
+    for(int X=2; X<=6; X++) {
+    if (X==4) X=5;
     int Y = (rollAngle * (4-X)) / 64;
     Y -= pitchAngle / 8;
     Y += 41;
     if(Y >= 0 && Y <= 81) {
       uint16_t pos = position + LINE*(Y/9) + 3 - 2*LINE + X;
-      screen[pos-1*LINE] = SYM_AH_BAR9_0+(Y%9);
-      screen[pos+1*LINE] = SYM_AH_BAR9_0+(Y%9);
-      if(Y>=9 && (Y%9) == 0)
-        screen[pos-2*LINE] = SYM_AH_BAR9_9;
-        screen[pos] = SYM_AH_BAR9_9;
+    pos = pos - 3*LINE;
+    if(pos >= 60 && pos <= 360) 
+      screen[pos] = SYM_AH_BAR9_0+(Y%9);
+    pos = pos + 2*3*LINE;
+    if(pos >= 60 && pos <= 330) 
+      screen[pos] = SYM_AH_BAR9_0+(Y%9);
     }
   }
  
