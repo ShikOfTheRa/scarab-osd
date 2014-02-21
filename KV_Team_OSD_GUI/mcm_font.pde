@@ -150,7 +150,7 @@ void CreateFontFile(){
   int fullpixels = 0;
   String OutputLine = "";
   
-  Output = createWriter("data/MW_OSD_Team.mcm");
+  Output = createWriter("data/SCARAB_OSD_FONT.mcm");
   
   Output.println("MAX7456"); // write header
   for(int id = 0; id < 256; id++) {
@@ -185,7 +185,7 @@ void CreateFontFile(){
  //Output.println("done");
  Output.flush(); // Writes the remaining data to the file
   Output.close();  
-  img_Clear = LoadFont("MW_OSD_Team.mcm");  
+  img_Clear = LoadFont("SCARAB_OSD_FONT.mcm");  
 }
 
 
