@@ -244,7 +244,7 @@ int XControlBox= 5;          int YControlBox   = 450;  //389
 int XRCSim     = XSim;       int YRCSim = 30;
 
 
-String FontFileName = "data/MW_OSD_Team.mcm";
+String FontFileName = "data/SCARAB_OSD_FONT.mcm";
 
 //File FontFile;
 int activeTab = 1;
