@@ -267,7 +267,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
   if(pitchAngle<-250) pitchAngle=-250;
   if(rollAngle>400) rollAngle=400;
   if(rollAngle<-400) rollAngle=-400;
-
+pitchAngle=pitchAngle+10;
 if(Settings[S_DISPLAY_HORIZON_BR]){
   for(uint8_t X=0; X<=8; X++) {
     if (X==3) X=6;
@@ -1276,18 +1276,14 @@ void mapmode(void) {
 
   if (y > x) maxdistance=y;
   else maxdistance=x;
-  if (maxdistance < 50) {
-    range = 50;
-    mapsymbolrange=SYM_RANGE_50;
+  if (maxdistance < 100) {
+    range = 100;
+    mapsymbolrange=SYM_RANGE_100;
   }
-  else if (maxdistance < 250) {
-    range = 250;
-    mapsymbolrange=SYM_RANGE_250;
+  else if (maxdistance < 500) {
+    range = 500;
+    mapsymbolrange=SYM_RANGE_500;
   }
-  else if (maxdistance < 750) {
-    range = 750;
-    mapsymbolrange=SYM_RANGE_750;
-  }  
   else if (maxdistance < 2500) {
     range = 2500;
     mapsymbolrange=SYM_RANGE_2500;

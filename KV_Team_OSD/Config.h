@@ -23,9 +23,10 @@
 
 
 /**********************************         Display Settings         ************************/
-#define DECIMAL '.'     // Decimal point character, change to what suits you best (.) (,)
-//#define SHIFTDOWN      // Select if your monitor cannot display top line fully. It shifts some lines down
-//#define CALLSIGNALWAYS // Enable to permanently display callsign
+#define DECIMAL '.'          // Decimal point character, change to what suits you best (.) (,)
+//#define SHIFTDOWN          // Select if your monitor cannot display top line fully. It shifts some lines down
+//#define CALLSIGNALWAYS 310 // Enable to permanently display callsign. Number =screen position (row*30 + column)
+#define ALT_CENTER         // Enbale alternative center crosshair
 
 /**********************       Serial speed      ************************/
 //#define SERIAL_SPEED 115200
