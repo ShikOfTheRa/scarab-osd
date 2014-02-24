@@ -45,12 +45,10 @@
 // Map mode
 #define SYM_HOME       0x04
 #define SYM_AIRCRAFT   0X05
-#define SYM_RANGE_50   0x21
-#define SYM_RANGE_250  0x22
-#define SYM_RANGE_750  0x23
-#define SYM_RANGE_2500 0x24
-#define SYM_RANGE_MAX  0x26
-#define SYM_HOME       0x04
+#define SYM_RANGE_100  0x21
+#define SYM_RANGE_500  0x22
+#define SYM_RANGE_2500 0x23
+#define SYM_RANGE_MAX  0x24
 #define SYM_DIRECTION  0x72
 
 // GPS Coordinates and Altitude
@@ -85,18 +83,23 @@
 
 // AH Center screen Graphics
 //#define SYM_AH_CENTER 0X01
-#define SYM_AH_CENTER 0X7E
+#ifdef ALT_CENTER
+  #define SYM_AH_CENTER_LINE 0XB0
+  #define SYM_AH_CENTER 0XB1
+  #define SYM_AH_CENTER_LINE_RIGHT 0XB2
+#else
+  #define SYM_AH_CENTER_LINE 0X00
+  #define SYM_AH_CENTER 0X7E
+  #define SYM_AH_CENTER_LINE_RIGHT 0XBC
+#endif
 #define SYM_AH_RIGHT 0X02
 #define SYM_AH_LEFT 0X03
-#define SYM_AH_CENTER_LINE 0X00
-#define SYM_AH_CENTER_LINE_RIGHT 0XBC
 #define SYM_AH_DECORATION_UP 0XC9
 #define SYM_AH_DECORATION_DOWN 0XCF
 
 
 // AH Bars
-#define SYM_AH_BAR9_0 0x81
-#define SYM_AH_BAR9_9 0x89
+#define SYM_AH_BAR9_0 0x80
 
 
 // Temperature
