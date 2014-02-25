@@ -126,7 +126,12 @@ void serialMSPCheck()
     GPS_latitude = read32();
     GPS_longitude = read32();
     GPS_altitude = read16();
+
+#if defined I2CGPS
+    GPS_speed = read16()*10;
+#else
     GPS_speed = read16();
+#endif
   }
 
   if (cmdMSP==MSP_COMP_GPS)

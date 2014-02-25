@@ -260,13 +260,16 @@ void loop()
         if (Settings[S_THROTTLEPOSITION])
           displayCurrentThrottle();
 
+#if defined CALLSIGNALWAYS
+        displayCallsign();       
+#else 
         if ( (onTime > (lastCallSign+300)) || (onTime < (lastCallSign+4)))
        {
            // Displays 4 sec every 5min (no blink during flight)
         if ( onTime > (lastCallSign+300))lastCallSign = onTime; 
-        displayCallsign(); 
-       
+        displayCallsign();       
        }
+#endif
 
         if(MwSensorPresent&ACCELEROMETER)
            displayHorizon(MwAngle[0],MwAngle[1]);
