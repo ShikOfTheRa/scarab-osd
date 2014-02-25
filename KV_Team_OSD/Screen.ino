@@ -270,30 +270,31 @@ void displayHorizon(int rollAngle, int pitchAngle)
 pitchAngle=pitchAngle+10;
 if(Settings[S_DISPLAY_HORIZON_BR]){
   for(uint8_t X=0; X<=8; X++) {
+    if (X==3) X=6;
     int Y = (rollAngle * (4-X)) / 64;
     Y -= pitchAngle / 8;
     Y += 41;
     if(Y >= 0 && Y <= 81) {
       uint16_t pos = position + LINE*(Y/9) + 3 - 2*LINE + X;
       screen[pos] = SYM_AH_BAR9_0+(Y%9);
-      if(Y>=9 && (Y%9) == 0)
-        screen[pos-LINE] = SYM_AH_BAR9_9;
     }
   }
-
+        
 if (Settings[S_HORIZON_ELEVATION]){                   
 
-    for(int X=3; X<=5; X++) {
+    for(int X=2; X<=6; X++) {
+    if (X==4) X=5;
     int Y = (rollAngle * (4-X)) / 64;
     Y -= pitchAngle / 8;
     Y += 41;
     if(Y >= 0 && Y <= 81) {
       uint16_t pos = position + LINE*(Y/9) + 3 - 2*LINE + X;
-      screen[pos-1*LINE] = SYM_AH_BAR9_0+(Y%9);
-      screen[pos+1*LINE] = SYM_AH_BAR9_0+(Y%9);
-      if(Y>=9 && (Y%9) == 0)
-        screen[pos-2*LINE] = SYM_AH_BAR9_9;
-        screen[pos] = SYM_AH_BAR9_9;
+    pos = pos - 3*LINE;
+    if(pos >= 60 && pos <= 360) 
+      screen[pos] = SYM_AH_BAR9_0+(Y%9);
+    pos = pos + 2*3*LINE;
+    if(pos >= 60 && pos <= 330) 
+      screen[pos] = SYM_AH_BAR9_0+(Y%9);
     }
   }
  
@@ -951,8 +952,8 @@ void displayConfigScreen(void)
   {
     ProcessAnalogue();
 
-//    MAX7456_WriteString_P(configMsg30, 35);
-//   ItoaPadded(voltage, screenBuffer, 4, 3);
+    MAX7456_WriteString_P(configMsg30, 35);
+//    ItoaPadded(voltage, screenBuffer, 4, 3);
 //    screenBuffer[4] = SYM_VOLT;
 //    screenBuffer[5] = 0;
 //    MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE);
@@ -995,9 +996,7 @@ void displayConfigScreen(void)
   if(configPage==4)
   {
     MAX7456_WriteString_P(configMsg40, 35);
-
-//    screenBuffer[0] = SYM_RSSI;
-//   itoa(rssi,screenBuffer+1,10);
+//   itoa(rssi,screenBuffer,10);
 //    uint8_t xx = FindNull();
 //    screenBuffer[xx++] = '%';
 //    screenBuffer[xx] = 0;
@@ -1041,7 +1040,7 @@ void displayConfigScreen(void)
 
   if(configPage==5)
   {
-//    MAX7456_WriteString_P(configMsg50, 35);
+    MAX7456_WriteString_P(configMsg50, 35);
 //    ItoaPadded(amperage, screenBuffer, 4, 3);     // 99.9 ampere max!
 //    screenBuffer[4] = SYM_AMP;
 //    screenBuffer[5] = 0;
