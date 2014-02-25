@@ -24,8 +24,8 @@ This work is based on the following open source work :-
 
 #include <avr/pgmspace.h>
 #include <EEPROM.h> //Needed to access eeprom read/write functions
-#include "symbols.h"
 #include "Config.h"
+#include "symbols.h"
 #include "GlobalVariables.h"
 
 // Screen is the Screen buffer between program an MAX7456 that will be writen to the screen at 10hz
