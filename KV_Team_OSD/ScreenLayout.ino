@@ -45,7 +45,11 @@ const uint16_t screenPosition[] PROGMEM = {
   POS(LINE13+10, 2, OSDOFF25), // amperagePosition
   POS(LINE13+16, 2, OSDOFF26), // pMeterSumPosition
   POS(LINE05+7,  1, OSDOFF27),  // horizonPosition
+#ifdef CALLSIGNALWAYS
+  POS(CALLSIGNALWAYS, 2, OSDOFF28), // CallSign Position
+#else
   POS(LINE10+10, 2, OSDOFF28), // CallSign Position
+#endif
   POS(LINE08+10, 2, OSDOFF29), // Debug Position
   POS(LINE05+2,  0, OSDOFF08), // Gimbal Position
   POS(LINE12+11, 2, OSDOFF31), // GPS_time Position
