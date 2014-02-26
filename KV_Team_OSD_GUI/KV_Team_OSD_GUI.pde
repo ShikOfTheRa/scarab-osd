@@ -305,7 +305,7 @@ String[] ConfigNames = {
   " - GPS Altitude",
   "Display Angle to Home",
   "Display Heading",
-  "Display Heading 360",
+  " - Heading 360",
   
   "Units",
   "Video Signal",
@@ -385,7 +385,7 @@ String[] ConfigHelp = {
   " - GPS Altitude",
   "Display Angle to Home",
   "Display Heading",
-  "Display Heading 360",
+  " - Heading 360",
   
   "Units",
   "Video Signal",
