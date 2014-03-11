@@ -80,7 +80,7 @@ void Font_Editor_setup() {
     
     
     
-// RawFont = LoadFont("MW_OSD_Team.mcm");
+// RawFont = LoadFont("MW_OSD.mcm");
 for (int i=0; i<256; i++) {
     int boxX = XFullFont+(i % 16) * (12+gap);
     int boxY = YFullFont + (i / 16) * (18+gap);

@@ -10,10 +10,13 @@
 #define AMPERAGEPIN   A1
 #define LEDPIN        7
 //#define USE_VSYNC // Remove "sparklies" on boards that support VSYNC 
+#define AMPERAGEMAX     500  // size of current sensor * 10 e.g. 50A sensor = 500
+#define AMPERAGEOFFSET  0    // optional extra for high offset sensors not supported in GUI (typically bidirectional sensors use a value of 256-512) 
 
 
 /********************       GPS type settings      *********************/
-//#define I2CGPS          // Undefine this if you are using I2CGPS - to provide correct speed               
+//#define I2CGPS_SPEED       // Undefine this if you are using I2CGPS - and need to correct for speed error (10x too slow)               
+//#define I2CGPS_DISTANCE    // Undefine this if you are using I2CGPS - and need to correct for distance error (650m max) UNTESTED               
 
 
 /********************       MAP MODE Settings       *********************/
@@ -33,8 +36,7 @@
 
 
 /**********************************   MSP Options and compatibility **********************/
-#define BOX_OSD_SWITCH   // Comment to use LLIGHT switch instead. ( OSD switch will be default and only option after MW 2.2 release).
-//#define BOXNAMES       // required to support multiwii 2.1 / 2.0 
+//#define BOXNAMES           // required to support multiwii 2.1 / 2.0 
 
 
 /********************       For OSD SWITCH      *********************/
@@ -75,6 +77,7 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-//#define DEBUG         // Remove to enable debug  
-#define HORIZON         // Remove to disable HORIZON and temporarily free memory
+//#define DEBUG         // Enable/disable option to display Mutltiwii debug values to free memory 
+#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude) to free memory
+#define HORIZON         // Remove to disable HORIZON and temporarily free memory to free memory
 
