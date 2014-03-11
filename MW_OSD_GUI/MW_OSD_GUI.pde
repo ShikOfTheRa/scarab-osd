@@ -1,29 +1,24 @@
 
-// Modifications based on work by guys below + many others...
-// All credits to the incredible contributions to all below + many others...
+/*
+MultiWii NG OSD ...
 
-//   KV Team OSD GUI
-//   http://code.google.com/p/rush-osd-development/
-//   July  2013  V_r370
-//   This program is free software: you can redistribute it and/or modify
-//   it under the terms of the GNU General Public License as published by
-//   the Free Software Foundation, either version 3 of the License, or
-//   any later version. see http://www.gnu.org/licenses/
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ any later version. see http://www.gnu.org/licenses/
 
-              /***********************************************************************************************************************************************/
-              /*                                                            KV_OSD_Team_GUI                                                                  */
-              /*                                                                                                                                             */
-              /*                                                                                                                                             */
-              /*                                             This software is the result of a team work                                                      */
-              /*                                                                                                                                             */
-              /*                           POWER67             KATAVENTOS               ITAIN                    CARLONB                                     */
-              /*                                                                                                                                             */
-              /*                                                                                                                                             */
-              /*                                                                                                                                             */
-              /*                                                                                                                                             */
-              /*                                                                                                                                             */
-              /***********************************************************************************************************************************************/
+This work is based on the following open source work :-
+ Rush OSD Development GUI  https://code.google.com/p/rush-osd-development/
 
+And to a lesser extent code from the following :-
+ Rushduino                 http://code.google.com/p/rushduino-osd/
+ Minim OSD                 https://code.google.com/p/arducam-osd/wiki/minimosd
+
+ Its base is taken from "Rush OSD Development" R370
+
+ All credit and full acknowledgement to the incredible work and hours from the many developers, contributors and testers that have helped along the way.
+ Jean Gabriel Maurice. He started the revolution. He was the first....
+*/
 
  
 
@@ -52,7 +47,7 @@ import java.text.DecimalFormat;
 
 
 
-String KV_OSD_GUI_Version = "R1";
+String MW_OSD_GUI_Version = "R1";
 
 
 PImage img_Clear,OSDBackground,RadioPot;
@@ -619,7 +614,7 @@ void setup() {
 OnTimer = millis();
   frameRate(30); 
 OSDBackground = loadImage("Background.jpg");
-//RadioPot = loadImage("kvImage.jpg");
+//RadioPot = loadImage("MWImage.jpg");
 //PGraphics icon = createGraphics(16, 16, P3D);
 //icon.beginDraw();
 //icon.beginShape();
@@ -1064,7 +1059,7 @@ void draw() {
   fill(255, 255, 255);
   text("MWII OSD NG",10,19);
   text("GUI V: ",10,35);
-  text(KV_OSD_GUI_Version, 74, 35);
+  text(MW_OSD_GUI_Version, 74, 35);
   fill(0, 0, 0);
   strokeWeight(3);stroke(0);
   rectMode(CORNERS);
@@ -1522,7 +1517,7 @@ public void updateConfig(){
   File file = new File(dataPath("GUI.Config"));
   try{
     out = new FileOutputStream(file) ;
-    ConfigClass.conf.storeToXML(out, "KV_Team_OSD GUI Configuration File  " + new  Date().toString());
+    ConfigClass.conf.storeToXML(out, "MW_OSD GUI Configuration File  " + new  Date().toString());
     }catch(FileNotFoundException e){
       error = e.getCause().toString();
       }catch( IOException ioe){

@@ -217,7 +217,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
   if (Settings[S_SCROLLING]||Settings[S_SIDEBARTOPS]){
       if(!armed) GPS_speed=0;
   // Scrolling decoration
-      if (GPS_speed > old_GPS_speed+15){
+      if (GPS_speed > (old_GPS_speed+15)){
         sidebarsMillis = millis();
         sidebarsdir = 2;
         old_GPS_speed = GPS_speed;
@@ -226,7 +226,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
           SYM_AH_DECORATION_LEFT=0x15;
       }
 
-      else if (GPS_speed+15 < old_GPS_speed){
+      else if ((GPS_speed+15) < old_GPS_speed){
         sidebarsMillis = millis();
         sidebarsdir = 1;
        old_GPS_speed = GPS_speed;
@@ -316,7 +316,7 @@ if (Settings[S_HORIZON_ELEVATION]){
     screen[position+X*LINE+14] =  SYM_AH_DECORATION_RIGHT;
   }
 
-
+#ifdef SBDIRECTION
     if (Settings[S_SIDEBARTOPS]) {
       if (millis()<(sidebarsMillis + 1000)) {
         if (sidebarsdir == 2){
@@ -335,7 +335,7 @@ if (Settings[S_HORIZON_ELEVATION]){
         }
       }
     }
-
+#endif
   }
 
 }
@@ -533,42 +533,42 @@ void displayHeadingGraph(void)
 void displayIntro(void)
 {
 
-  MAX7456_WriteString_P(message0, KVTeamVersionPosition);
+  MAX7456_WriteString_P(message0, MWOSDVersionPosition);
 
   if (Settings[S_VIDEOSIGNALTYPE])
-    MAX7456_WriteString_P(message2, KVTeamVersionPosition+30);
+    MAX7456_WriteString_P(message2, MWOSDVersionPosition+30);
   else
-    MAX7456_WriteString_P(message1, KVTeamVersionPosition+30);
+    MAX7456_WriteString_P(message1, MWOSDVersionPosition+30);
 
 /* removed temp because lack of memory
     
  //haydent - Time Zone & DST Setting//
-  MAX7456_WriteString_P(message10, KVTeamVersionPosition+30+LINE);
+  MAX7456_WriteString_P(message10, MWOSDVersionPosition+30+LINE);
   
   if(abs(Settings[S_GPSTZ]) >= 100)ItoaPadded(Settings[S_GPSTZ], screenBuffer, 5, 4);
   else ItoaPadded(Settings[S_GPSTZ], screenBuffer, 4, 3);
   if(Settings[S_GPSTZAHEAD] || Settings[S_GPSTZ] == 0)screenBuffer[0] = '+';
   else screenBuffer[0] = '-';
    
-  MAX7456_WriteString(screenBuffer, KVTeamVersionPosition+37+LINE); 
+  MAX7456_WriteString(screenBuffer, MWOSDVersionPosition+37+LINE); 
 
-  MAX7456_WriteString_P(message11, KVTeamVersionPosition+43+LINE);
-  MAX7456_WriteString(itoa(Settings[S_GPSDS], screenBuffer,10), KVTeamVersionPosition+47+LINE);
+  MAX7456_WriteString_P(message11, MWOSDVersionPosition+43+LINE);
+  MAX7456_WriteString(itoa(Settings[S_GPSDS], screenBuffer,10), MWOSDVersionPosition+47+LINE);
   //haydent - Time Zone & DST Setting//
 */
 
-  MAX7456_WriteString_P(MultiWiiLogoL1Add, KVTeamVersionPosition+120);
-  MAX7456_WriteString_P(MultiWiiLogoL2Add, KVTeamVersionPosition+120+LINE);
-  MAX7456_WriteString_P(MultiWiiLogoL3Add, KVTeamVersionPosition+120+LINE+LINE);
+  MAX7456_WriteString_P(MultiWiiLogoL1Add, MWOSDVersionPosition+120);
+  MAX7456_WriteString_P(MultiWiiLogoL2Add, MWOSDVersionPosition+120+LINE);
+  MAX7456_WriteString_P(MultiWiiLogoL3Add, MWOSDVersionPosition+120+LINE+LINE);
 
-  MAX7456_WriteString_P(message5, KVTeamVersionPosition+120+LINE+LINE+LINE);
-  MAX7456_WriteString(itoa(MwVersion,screenBuffer,10),KVTeamVersionPosition+131+LINE+LINE+LINE);
+  MAX7456_WriteString_P(message5, MWOSDVersionPosition+120+LINE+LINE+LINE);
+  MAX7456_WriteString(itoa(MwVersion,screenBuffer,10),MWOSDVersionPosition+131+LINE+LINE+LINE);
 
-  MAX7456_WriteString_P(message6, KVTeamVersionPosition+120+LINE+LINE+LINE+LINE+LINE);
-  MAX7456_WriteString_P(message7, KVTeamVersionPosition+125+LINE+LINE+LINE+LINE+LINE+LINE);
-  MAX7456_WriteString_P(message8, KVTeamVersionPosition+125+LINE+LINE+LINE+LINE+LINE+LINE+LINE);
+  MAX7456_WriteString_P(message6, MWOSDVersionPosition+120+LINE+LINE+LINE+LINE+LINE);
+  MAX7456_WriteString_P(message7, MWOSDVersionPosition+125+LINE+LINE+LINE+LINE+LINE+LINE);
+  MAX7456_WriteString_P(message8, MWOSDVersionPosition+125+LINE+LINE+LINE+LINE+LINE+LINE+LINE);
   
-  MAX7456_WriteString_P(message9, KVTeamVersionPosition+120+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE);
+  MAX7456_WriteString_P(message9, MWOSDVersionPosition+120+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE);
   displayCallsign();
    
 }
@@ -1335,11 +1335,10 @@ void displayDebug(void)
 #if defined DEBUG
   if(!Settings[S_DEBUG])
     return;
-    debug[0]=voltageRawArray[0];
-    debug[1]=Settings[S_AMPMAXH];
-    debug[2]=S16_AMPMAX;
-    debug[3]=Settings[S_AMPMIN];
-
+//    debug[0]=0;
+//    debug[1]=1;
+//    debug[2]=2;
+//    debug[3]=3;
   for(uint8_t X=0; X<4; X++) {
     ItoaPadded(debug[X], screenBuffer+2,7,0);     
     screenBuffer[0] = 0x30+X;

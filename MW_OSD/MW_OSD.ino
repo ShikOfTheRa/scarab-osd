@@ -1,6 +1,5 @@
 /*
-MultiWii NG OSD aka Scarab OSD because we fly Scarabs...
-Jan 2014 - R1
+MultiWii NG OSD ...
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -8,18 +7,18 @@ Jan 2014 - R1
  any later version. see http://www.gnu.org/licenses/
 
 This work is based on the following open source work :-
- Rushduino   http://code.google.com/p/rushduino-osd/
- KVTeam      https://code.google.com/p/rush-osd-development/
- Minim OSD   https://code.google.com/p/arducam-osd/wiki/minimosd
+ Rushduino                 http://code.google.com/p/rushduino-osd/
+ Rush OSD Development      https://code.google.com/p/rush-osd-development/
+ Minim OSD                 https://code.google.com/p/arducam-osd/wiki/minimosd
 
- Its base is taken from KVT R370
+ Its base is taken from "Rush OSD Development" R370
 
  All credit and full acknowledgement to the incredible work and hours from the many developers, contributors and testers that have helped along the way.
  Jean Gabriel Maurice. He started the revolution. He was the first....
- We only make a few changes! 
+ 
 */
             
-    uint32_t voltageRawArray[8];
+uint32_t voltageRawArray[8];
 
 
 #include <avr/pgmspace.h>
@@ -102,8 +101,9 @@ void setMspRequests() {
       REQ_MSP_ATTITUDE|
       REQ_MSP_ALTITUDE;
 
-    if(!mode_llights == 0)
+#ifdef DEBUG
       modeMSPRequests |= REQ_MSP_DEBUG;
+#endif
 
     if(MwVersion == 0)
       modeMSPRequests |= REQ_MSP_IDENT;
@@ -529,9 +529,25 @@ void ProcessRSSI(void){
 
 void processAmperage(void) {
   amperage = analogRead(AMPERAGEPIN);
-  amperage = map(amperage, Settings[S_AMPMIN], S16_AMPMAX, 0, 999);
+  amperage = map(amperage, Settings[S_AMPMIN]+AMPERAGEOFFSET, S16_AMPMAX, 0, AMPERAGEMAX);
   if (amperage < 0) amperage=0;
 //  else if (amperage > 999) amperage=999;
 }
 
-
+void gpsdistancefix(void){
+  int8_t speedband;
+  static int8_t oldspeedband;
+  static int8_t speedcorrection=0;
+  if (GPS_distanceToHome < 10000) speedband = 0;
+  else if (GPS_distanceToHome > 50000) speedband = 2;
+  else{
+    speedband = 1;
+    oldspeedband = speedband;
+  }    
+  if (speedband==oldspeedband){
+    if (oldspeedband==0) speedcorrection--;
+    if (oldspeedband==2) speedcorrection++;
+    oldspeedband = speedband;
+  }
+  GPS_distanceToHome=(speedcorrection*65535) + GPS_distanceToHome;
+}  

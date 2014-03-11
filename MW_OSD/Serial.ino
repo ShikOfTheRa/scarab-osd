@@ -127,8 +127,9 @@ void serialMSPCheck()
     GPS_longitude = read32();
     GPS_altitude = read16();
 
-#if defined I2CGPS
+#if defined I2CGPS_SPEED
     GPS_speed = read16()*10;
+//    gpsfix(); untested
 #else
     GPS_speed = read16();
 #endif
@@ -137,6 +138,10 @@ void serialMSPCheck()
   if (cmdMSP==MSP_COMP_GPS)
   {
     GPS_distanceToHome=read16();
+#ifdef I2CGPS_DISTANCE
+    gpsdistancefix();
+#endif
+    
     GPS_directionToHome=read16();
     read8(); //missing
     GPS_time = read32();        //local time of coord calc - haydent
@@ -239,10 +244,8 @@ void serialMSPCheck()
           if(lastc == 'D') // "GPS HOLD;"
             mode_gpshold |= bit;
         }
-        #ifdef BOX_OSD_SWITCH
         if(firstc == 'O' && lastc == 'W') // "OSD SW;"
           mode_osd_switch |= bit;
-        #endif
 
         len = 0;
         bit <<= 1L;
@@ -250,9 +253,6 @@ void serialMSPCheck()
       lastc = c;
       --remaining;
     }
-    #ifndef BOX_OSD_SWITCH
-      mode_osd_switch = mode_llights;
-    #endif
     modeMSPRequests &=~ REQ_MSP_BOX;
   }
 #else  
@@ -267,7 +267,7 @@ void serialMSPCheck()
     mode_mag = 0;
     mode_gpshome = 0;
     mode_gpshold = 0;
-    mode_llights = 0;
+//    mode_llights = 0;
     mode_osd_switch = 0;
     mode_camstab = 0;
 
@@ -298,21 +298,16 @@ void serialMSPCheck()
       case 11:
         mode_gpshold |= bit;
         break;
-      case 16:
-        mode_llights |= bit;
-        break;
-#ifdef BOX_OSD_SWITCH
+//      case 16:
+//        mode_llights |= bit;
+//        break;
       case 19:
         mode_osd_switch |= bit;
         break;
-#endif
       }
       bit <<= 1;
       --remaining;
     }
-#ifndef BOX_OSD_SWITCH
-    mode_osd_switch = mode_llights;
-#endif
     modeMSPRequests &=~ REQ_MSP_BOX;
   }
 #endif

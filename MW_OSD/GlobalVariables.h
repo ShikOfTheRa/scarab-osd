@@ -117,7 +117,7 @@ uint32_t mode_baro;
 uint32_t mode_mag;
 uint32_t mode_gpshome;
 uint32_t mode_gpshold;
-uint32_t mode_llights;
+//uint32_t mode_llights;
 uint32_t mode_osd_switch;
 uint32_t mode_camstab;
 
@@ -545,7 +545,7 @@ const unsigned char GPS_distanceToHomeAdd[2]={
   0xbb,0xb9};
 const unsigned char MwGPSAltPositionAdd[2]={
   0xa7,0xa8};
-const char KVTeamVersionPosition = 33;
+const char MWOSDVersionPosition = 33;
 
 
 // All screen locations defines in ScreenLayout.ino
