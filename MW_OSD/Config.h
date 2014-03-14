@@ -15,8 +15,8 @@
 
 
 /********************       GPS type settings      *********************/
-//#define I2CGPS_SPEED       // Undefine this if you are using I2CGPS - and need to correct for speed error (10x too slow)               
-//#define I2CGPS_DISTANCE    // Undefine this if you are using I2CGPS - and need to correct for distance error (650m max) UNTESTED               
+//#define I2CGPS_SPEED       // Undefine this if you are using older I2CGPS - and need to correct for speed error (10x too slow)               
+//#define I2CGPS_DISTANCE    // Undefine this if you are using older I2CGPS - and need to correct for distance error (650m max) UNTESTED               
 
 
 /********************       MAP MODE Settings       *********************/
