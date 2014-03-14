@@ -228,9 +228,6 @@ void loop()
         previousarmedstatus=1;
       }
       if(previousarmedstatus && !armed){
-#ifndef MAPMODENORTH
-        armedangle=MwHeading;
-#endif
         armedtimer=20;
         configPage=8;
         ROW=10;
@@ -315,8 +312,9 @@ void loop()
   amperagesum += amperage;
 
     if(!armed) {
-      // Shiki mod to prevent reset of flytime when disarming
-      //flyTime=0;
+#ifndef MAPMODENORTH
+        armedangle=MwHeading;
+#endif
     }
     else {
       flyTime++;
