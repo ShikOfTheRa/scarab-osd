@@ -1342,7 +1342,7 @@ public void bSAVE() {
         String error = null;
         try{
           out = new FileOutputStream(file) ;
-          MWI.conf.storeToXML(out, "RUSH_OSD Configuration File  " + new  Date().toString());
+          MWI.conf.storeToXML(out, "MWOSD Configuration File  " + new  Date().toString());
           JOptionPane.showMessageDialog(null,new StringBuffer().append("configuration saved : ").append(file.toURI()) );
         }catch(FileNotFoundException e){
          
@@ -1434,7 +1434,7 @@ public class MwiFileFilter extends FileFilter {
   } 
 
   public String getDescription() {
-    return "*.osd Rush_OSD configuration file";
+    return "*.osd MWOSD configuration file";
   }   
 }
 
