@@ -292,9 +292,15 @@ void loop()
           displayGPSPosition();
           displayGPS_time();
           if(Settings[S_ENABLEADC]) mapmode();
+#ifdef FIXEDWING // required because FW does not use BARO / MAG
+          displayAltitude();
+          displayClimbRate();
+          displayHeadingGraph();
+          displayHeading();
+#endif
         }
-         displayMode();       
-         displayDebug();
+        displayMode();       
+        displayDebug();
       }
     }
   }  // End of fast Timed Service Routine (50ms loop)

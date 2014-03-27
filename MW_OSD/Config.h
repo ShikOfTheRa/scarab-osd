@@ -17,7 +17,7 @@
 /********************       GPS type settings      *********************/
 //#define I2CGPS_SPEED       // Undefine this if you are using older I2CGPS - and need to correct for speed error (10x too slow)               
 //#define I2CGPS_DISTANCE    // Undefine this if you are using older I2CGPS - and need to correct for distance error (650m max) UNTESTED               
-
+//#define FIXEDWING          // Undefine this if you are using MW fixed wing from PatrickE - to use GPS heading and altitude instead of BARO/MAG
 
 /********************       MAP MODE Settings       *********************/
 #define MAPMODE 1       // 1 for MAP - home is center, map shows location of aircraft relative to home 
@@ -30,6 +30,7 @@
 //#define SHIFTDOWN          // Select if your monitor cannot display top line fully. It shifts some lines down
 //#define CALLSIGNALWAYS 340 // Enable to permanently display callsign. Number =screen position (row*30 + column)
 //#define ALT_CENTER         // Enbale alternative center crosshair
+
 
 /**********************       Serial speed      ************************/
 //#define SERIAL_SPEED 115200
