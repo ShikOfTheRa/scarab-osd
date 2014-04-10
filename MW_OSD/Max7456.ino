@@ -92,10 +92,6 @@
 #define MAX7456ADD_OSDBL        0x6c
 #define MAX7456ADD_STAT         0xA0
 
-// Selectable by board type
-uint8_t MAX7456SELECT;		// output pin
-uint8_t MAX7456RESET;		// output pin
-
 // Selectable by video mode
 //uint8_t ENABLE_display;
 //uint8_t ENABLE_display_vert;
@@ -118,9 +114,7 @@ void MAX7456Setup(void)
   uint8_t MAX7456_reset;
   uint8_t MAX_screen_rows;
 
-  
-  MAX7456Configure();
-
+ 
   if(Settings[S_VIDEOSIGNALTYPE]) {    // PAL
     //ENABLE_display = 0x48;
     //ENABLE_display_vert = 0x4c;
@@ -164,12 +158,19 @@ void MAX7456Setup(void)
   // force soft reset on Max7456
   digitalWrite(MAX7456SELECT,LOW);
   MAX7456_Send(VM0_reg, MAX7456_reset);
-  digitalWrite(MAX7456SELECT,HIGH);
   delay(500);
 
-  // set all rows to same charactor white level, 90%
-  digitalWrite(MAX7456SELECT,LOW);
-  
+#ifdef FASTPIXEL 
+  // force fast pixel timing
+  MAX7456_Send(MAX7456ADD_OSDM, 0x00);
+  // MAX7456_Send(MAX7456ADD_OSDM, 0xEC);
+  // uint8_t srdata = spi_transfer(0xFF); //get data byte
+  // srdata = srdata & 0xEF;
+  // MAX7456_Send(0x6c, srdata);
+  delay(500);
+#endif
+
+  // set all rows to same charactor white level, 120%
   uint8_t x;
   for(x = 0; x < MAX_screen_rows; x++) {
     MAX7456_Send(MAX7456ADD_RB0+x, WHITE_level_120);
@@ -265,17 +266,7 @@ void MAX7456_Send(uint8_t add, uint8_t data)
   spi_transfer(data);
 }
 
-void MAX7456Configure() {
-  // todo - automatically recognising card.
-  if(Settings[S_BOARDTYPE] == 0) {	// Rush
-    MAX7456SELECT = 10;      // ss 
-    MAX7456RESET  = 9;       // RESET
-  }
-  else if(Settings[S_BOARDTYPE] == 1) {	// MinimOSD
-    MAX7456SELECT = 6;       // ss
-    MAX7456RESET = 10;       // RESET
-  }
-}
+
 //MAX7456 commands
 
 #define WRITE_TO_MAX7456

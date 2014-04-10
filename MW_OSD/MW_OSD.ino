@@ -18,14 +18,16 @@ This work is based on the following open source work :-
  
 */
             
-uint32_t voltageRawArray[8];
-
+#define SENSORFILTERSIZE 8
+#define SENSORTOTAL 5
+int16_t sensorfilter[SENSORTOTAL][SENSORFILTERSIZE+2]; 
 
 #include <avr/pgmspace.h>
 #include <EEPROM.h> //Needed to access eeprom read/write functions
 #include "Config.h"
 #include "symbols.h"
 #include "GlobalVariables.h"
+
 
 // Screen is the Screen buffer between program an MAX7456 that will be writen to the screen at 10hz
 char screen[480];
@@ -45,6 +47,7 @@ unsigned long previous_millis_high =0;
 
 void setup()
 {
+
   Serial.begin(115200);
 //---- override UBRR with MWC settings
   uint8_t h = ((F_CPU  / 4 / (115200) -1) / 2) >> 8;
@@ -63,7 +66,7 @@ void setup()
   checkEEPROM();
   readEEPROM();
   MAX7456Setup();
-  
+ 
   if (Settings[S_VREFERENCE])
     analogReference(DEFAULT);
   else
@@ -72,7 +75,15 @@ void setup()
   setMspRequests();
 
   blankserialRequest(MSP_IDENT);
-}
+  
+  sensorfilter[0][SENSORFILTERSIZE+1]=VOLTAGEPIN;
+  sensorfilter[1][SENSORFILTERSIZE+1]=VIDVOLTAGEPIN;
+  sensorfilter[2][SENSORFILTERSIZE+1]=AMPERAGEPIN;
+  sensorfilter[3][SENSORFILTERSIZE+1]=TEMPPIN;
+  sensorfilter[4][SENSORFILTERSIZE+1]=RSSIPIN;
+  }
+
+
 void (* resetFunc)(void)=0;
 
 
@@ -146,7 +157,6 @@ void loop()
     previous_millis_low = previous_millis_low+lo_speed_cycle;    
     if(!fontMode)
       blankserialRequest(MSP_ATTITUDE);
-    if (Settings[S_DISPLAYRSSI])                 ProcessRSSI();           
 
    }  // End of slow Timed Service Routine (100ms loop)
 
@@ -215,8 +225,7 @@ void loop()
       if(!fontMode)
       blankserialRequest(MSPcmdsend);      
 
-  ProcessAnalogue();       // using analogue sensors
-  if (Settings[S_AMPERAGE_VIRTUAL]) ProcessVirtualSensors(); // using virtual sensors
+  ProcessSensors();       // using analogue sensors
 
     MAX7456_DrawScreen();
     if( allSec < 7 ){
@@ -247,9 +256,9 @@ void loop()
         if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(Blink2hz))) displayRSSI();
 
         displayTime();
-        
+#ifdef TEMPSENSOR
         if(Settings[S_DISPLAYTEMPERATURE]&&((temperature<Settings[S_TEMPERATUREMAX])||(Blink2hz))) displayTemperature();
-
+#endif
         if(Settings[S_AMPERAGE]) displayAmperage();
 
         if(Settings[S_AMPER_HOUR])  displaypMeterSum();
@@ -352,6 +361,7 @@ void loop()
 }  // End of main loop
 //---------------------  End of Timed Service Routine ---------------------------------------
 
+
 void calculateTrip(void)
 {
   if(GPS_fix && armed && (GPS_speed>0)) {
@@ -362,6 +372,7 @@ void calculateTrip(void)
   }
 }
 
+
 void writeEEPROM(void)
 {
   Settings[S_AMPMAXH] = S16_AMPMAX>>8;
@@ -371,16 +382,16 @@ void writeEEPROM(void)
   } 
 }
 
+
 void readEEPROM(void)
 {
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
      Settings[en] = EEPROM.read(en);
   }
   S16_AMPMAX=(Settings[S_AMPMAXH]<<8)+Settings[S_AMPMAXL];
-//  S16_AMPMAX=Settings[S_AMPMAXL];
 }
 
-// for first run to ini
+
 void checkEEPROM(void)
 {
   uint8_t EEPROM_Loaded = EEPROM.read(0);
@@ -391,9 +402,11 @@ void checkEEPROM(void)
   }
 }
 
+
 uint8_t safeMode() {
   return 1;	// XXX
 }
+
 
 // Font upload queue implementation.
 // Implement a window for curr + the previous 6 requests.
@@ -409,6 +422,7 @@ void initFontMode() {
   fontMode = 1;
   setMspRequests();
 }
+
 
 void fontCharacterReceived(uint8_t cindex) {
   if(!fontMode)
@@ -457,86 +471,6 @@ int16_t getNextCharToRequest() {
   return temp2;
 }
 
-void ProcessAnalogue(void) {
-
-  if (Settings[S_DISPLAYTEMPERATURE]){
-    temperature=(analogRead(TEMPPIN)-102)/2.048; 
-  }
-
-  if (!Settings[S_MAINVOLTAGE_VBAT]){ // not MWII
-    static uint16_t ind = 0;
-    //static uint32_t voltageRawArray[8];
-    voltageRawArray[(ind++)%8] = analogRead(VOLTAGEPIN);                  
-    uint16_t voltageRaw = 0;
-    for (uint16_t i=0;i<8;i++)
-      voltageRaw += voltageRawArray[i];
-    if (!Settings[S_VREFERENCE]){
-      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (0.0001);  
-    }
-    else {
-      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (0.0005);     
-    }
-    }
-
-  if (!Settings[S_VIDVOLTAGE_VBAT]) {
-    if (!Settings[S_VREFERENCE]){
-      vidvoltage = float(analogRead(VIDVOLTAGEPIN)) * Settings[S_VIDDIVIDERRATIO] * (1.1/102.3/4);
-    }
-    else {
-      vidvoltage = float(analogRead(VIDVOLTAGEPIN)) * Settings[S_VIDDIVIDERRATIO] * (1.1/102.3);
-    }
-  }
-
-  if (!Settings[S_AMPERAGE_VIRTUAL]) {
-//    amperage = (AMPRERAGE_OFFSET - (analogRead(amperagePin)*AMPERAGE_CAL))/10.23;
-    processAmperage();
-  }  
-}
-
-void ProcessVirtualSensors(void){
-  uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],1000,2000);
-  Vthrottle = constrain((Vthrottle-1000)/10,10,100);
-//    amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings[S_AMPDIVIDERRATIO]*0.01;
-    amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*S16_AMPMAX*0.01;
-if(armed)
-  amperage += Settings[S_AMPMIN];
-else 
-  amperage = Settings[S_AMPMIN];
-}
-
-void ProcessRSSI(void){
-  if (Settings[S_PWMRSSI]){
-    rssi = pulseIn(PWMRSSIPIN, HIGH,21000)>>3;
-  }
-  else if(Settings[S_MWRSSI]) {
-    rssi = MwRssi;
-  }
-  else { 
-    rssi = analogRead(RSSIPIN);
-    rssi=(rssi+oldrssi)>>1;
-    if (rssi > oldrssi) oldrssi++;
-    else if (rssi < oldrssi) oldrssi--;
-    rssi = oldrssi>>2;                 // move to 8 bit  
-  }
-
-  if((rssiTimer==15)&&(configMode)) {
-    Settings[S_RSSIMAX]=rssi; // tx on
-  }
-  if((rssiTimer==1)&&(configMode)) {
-    Settings[S_RSSIMIN]=rssi; // tx off
-    rssiTimer=0;
-  }
-  rssi = map(rssi, Settings[S_RSSIMIN], Settings[S_RSSIMAX], 0, 100);
-  if (rssi < 0) rssi=0;
-  else if (rssi > 100) rssi=100;
-}
-
-void processAmperage(void) {
-  amperage = analogRead(AMPERAGEPIN);
-  amperage = map(amperage, Settings[S_AMPMIN]+AMPERAGEOFFSET, S16_AMPMAX, 0, AMPERAGEMAX);
-  if (amperage < 0) amperage=0;
-//  else if (amperage > 999) amperage=999;
-}
 
 void gpsdistancefix(void){
   int8_t speedband;
@@ -554,4 +488,104 @@ void gpsdistancefix(void){
     oldspeedband = speedband;
   }
   GPS_distanceToHome=(speedcorrection*65535) + GPS_distanceToHome;
-}  
+} 
+
+
+void ProcessSensors(void) {
+  /*
+    special note about filter: last but row of array = averaged reading
+    special note about filter: last row of array = analog pin no
+  */ 
+//-------------- ADC and PWM RSSI sensor read into filter array
+  static uint8_t sensorindex;
+  for (uint8_t sensor=0;sensor<SENSORTOTAL;sensor++) {
+    sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
+    int16_t sensortemp;
+    uint8_t sensorpin = sensorfilter[sensor][SENSORFILTERSIZE+1];
+    sensortemp = analogRead(sensor);
+    if (Settings[S_PWMRSSI]){
+      if (sensor ==4)
+        sensortemp = pulseIn(sensorpin, HIGH,21000)>>1;
+    }
+
+#ifdef STAGE2FILTER     
+    sensorfilter[sensor][sensorindex] = sensorfilter[sensor][sensorindex] + ((sensortemp - sensorfilter[sensor][sensorindex])>>1);
+#else
+    sensorfilter[sensor][sensorindex] = sensortemp;
+#endif
+    sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] + sensorfilter[sensor][sensorindex];
+  } 
+
+//-------------- Voltage
+  if (!Settings[S_MAINVOLTAGE_VBAT]){ // not MWII
+    uint16_t voltageRaw = sensorfilter[0][SENSORFILTERSIZE];
+    if (!Settings[S_VREFERENCE]){
+      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (0.0001);  
+    }
+    else {
+      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (0.0005);     
+    }
+  }
+
+  if (!Settings[S_VIDVOLTAGE_VBAT]) {
+    uint16_t vidvoltageRaw = sensorfilter[1][SENSORFILTERSIZE];
+    if (!Settings[S_VREFERENCE]){
+      vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (0.0001);
+    }
+    else {
+      vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (0.0005);
+    }
+  }
+
+//-------------- Temperature
+#ifdef TEMPSENSOR
+    temperature=((sensorfilter[3][SENSORFILTERSIZE])>>3)-102)/2.048; 
+#endif
+
+//-------------- Current
+  if (!Settings[S_AMPERAGE_VIRTUAL]) { // Analogue
+    amperage = sensorfilter[2][SENSORFILTERSIZE]>>3;
+    amperage = map(amperage, Settings[S_AMPMIN]+AMPERAGEOFFSET, S16_AMPMAX, 0, AMPERAGEMAX);
+    if (amperage < 0) amperage=0;
+  }  
+  else {  // Virtual
+    uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],1000,2000);
+    Vthrottle = constrain((Vthrottle-1000)/10,10,100);
+    amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*S16_AMPMAX*0.01;
+    if(armed)
+      amperage += Settings[S_AMPMIN];
+    else 
+      amperage = Settings[S_AMPMIN];
+  }  
+
+
+//-------------- RSSI
+  if (Settings[S_DISPLAYRSSI]) {           
+    if(Settings[S_MWRSSI]) {
+      rssi = MwRssi;
+    }
+    else { 
+      rssi = sensorfilter[4][SENSORFILTERSIZE]>>5; // filter and move to 8 bit
+    }
+
+    if((rssiTimer==15)&&(configMode)) {
+      Settings[S_RSSIMAX]=rssi; // tx on
+    }
+    if((rssiTimer==1)&&(configMode)) {
+      Settings[S_RSSIMIN]=rssi; // tx off
+      rssiTimer=0;
+    }
+
+    rssi = map(rssi, Settings[S_RSSIMIN], Settings[S_RSSIMAX], 0, 100);
+    if (rssi < 0) rssi=0;
+    else if (rssi > 100) rssi=100;
+  }
+
+//-------------- For filter support
+  sensorindex++;                    
+  if (sensorindex >= SENSORFILTERSIZE)              
+    sensorindex = 0;                           
+}
+ 
+
+

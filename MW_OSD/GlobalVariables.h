@@ -1,3 +1,5 @@
+
+
 #define MPH 1
 #define KMH 0
 
@@ -97,7 +99,7 @@ uint16_t debug[4];
 int8_t menudir;
 unsigned int allSec=0;
 uint8_t armedtimer=255;
-
+uint16_t debugerror;
 // Config status and cursor location
 uint8_t ROW=10;
 uint8_t COL=3;
@@ -435,9 +437,9 @@ const char message0[] PROGMEM = "MULTIWII NG OSD - R1";
 const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
 const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
 const char message5[] PROGMEM = "MW VERSION:";
-const char message6[] PROGMEM = "MENU:THRT MIDDLE";
-const char message7[] PROGMEM = "YAW RIGHT";
-const char message8[] PROGMEM = "PITCH FULL";
+//const char message6[] PROGMEM = "MENU:THRT MIDDLE";
+//const char message7[] PROGMEM = "YAW RIGHT";
+//const char message8[] PROGMEM = "PITCH FULL";
 const char message9[] PROGMEM = "UNIQUE ID:";         // Call Sign on the beggining of the transmission   
 //const char message10[] PROGMEM = "TZ UTC:"; //haydent - Time Zone & DST Setting
 //const char message11[] PROGMEM = "DST:"; //haydent - Time Zone & DST Setting
@@ -480,15 +482,17 @@ const char configMsg40[] PROGMEM = "RSSI";
 //const char configMsg41[] PROGMEM = "ACTUAL RSSI";
 const char configMsg42[] PROGMEM = "DISPLAY RSSI";
 const char configMsg43[] PROGMEM = "SET RSSI";
-//const char configMsg44[] PROGMEM = "SET RSSI MAX";
+const char configMsg44[] PROGMEM = "SET RSSI MAX";
+const char configMsg45[] PROGMEM = "SET RSSI MIN";
 const char configMsg46[] PROGMEM = "USE PWM";
 
 //-----------------------------------------------------------Page5
 const char configMsg50[] PROGMEM = "CURRENT";
 const char configMsg51[] PROGMEM = "DISPLAY AMPS";
 const char configMsg52[] PROGMEM = "DISPLAY MAH";
-const char configMsg53[] PROGMEM = "USE VIRTUAL AMPS";
+const char configMsg53[] PROGMEM = "USE VIRTUAL SENSOR";
 const char configMsg54[] PROGMEM = "ADJUST AMPS";
+const char configMsg55[] PROGMEM = "ADJUST ZERO";
 //-----------------------------------------------------------Page6
 const char configMsg60[] PROGMEM = "DISPLAY";
 const char configMsg61[] PROGMEM = "HORIZON";
