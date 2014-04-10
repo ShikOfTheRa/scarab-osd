@@ -1,5 +1,9 @@
 
 char *ItoaPadded(int val, char *str, uint8_t bytes, uint8_t decimalpos)  {
+// Val to convert
+// Return String
+// Length
+// Decimal position
   uint8_t neg = 0;
   if(val < 0) {
     neg = 1;
@@ -95,10 +99,9 @@ void displayTemperature(void)        // WILL WORK ONLY WITH V1.2
   else
     xxx = temperature;
 
-  //shiki mod
   if(!fieldIsVisible(temperaturePosition))
     return;
-  //
+
   itoa(xxx,screenBuffer,10);
   uint8_t xx = FindNull();   // find the NULL
   screenBuffer[xx++]=temperatureUnitAdd[Settings[S_UNITSYSTEM]];
@@ -108,12 +111,10 @@ void displayTemperature(void)        // WILL WORK ONLY WITH V1.2
 
 void displayMode(void)
 {
-  // Shiki Mod
   if ((MwSensorActive&mode_osd_switch))
   return;
-  //
   
-    int16_t dist;
+  int16_t dist;
   if(Settings[S_UNITSYSTEM])
     dist = GPS_distanceToHome * 3.2808;           // mt to feet
   else
@@ -196,7 +197,7 @@ void displayArmed(void)
 
 void displayCallsign(void)
 {
-  uint16_t position = getPosition(callSignPosition);
+//  uint16_t position = getPosition(callSignPosition);
   if(Settings[S_DISPLAY_CS]){
       for(uint8_t X=0; X<10; X++) {
           screenBuffer[X] = char(Settings[S_CS0 + X]);
@@ -349,11 +350,6 @@ void displayVoltage(void)
   if (Settings[S_MAINVOLTAGE_VBAT]){
     voltage=MwVBat;
   }
-  ItoaPadded(voltage, screenBuffer, 4, 3);
-  screenBuffer[4] = SYM_VOLT;
-  screenBuffer[5] = 0;
-  MAX7456_WriteString(screenBuffer,getPosition(voltagePosition));
-
   if (Settings[S_SHOWBATLEVELEVOLUTION]){
     // For battery evolution display
     int BATTEV1 =Settings[S_BATCELLS] * 35;
@@ -362,7 +358,6 @@ void displayVoltage(void)
     int BATTEV4 =Settings[S_BATCELLS] * 38;
     int BATTEV5 =Settings[S_BATCELLS] * 40;
     int BATTEV6 = Settings[S_BATCELLS] * 41;
-
     if (voltage < BATTEV1) screenBuffer[0]=SYM_BATT_EMPTY;
     else if (voltage < BATTEV2) screenBuffer[0]=SYM_BATT_1;
     else if (voltage < BATTEV3) screenBuffer[0]=SYM_BATT_2;
@@ -374,51 +369,46 @@ void displayVoltage(void)
   else {
     screenBuffer[0]=SYM_MAIN_BATT;
   }
-  screenBuffer[1]=0;
+  ItoaPadded(voltage, screenBuffer+1, 4, 3);
+  screenBuffer[5] = SYM_VOLT;
+  screenBuffer[6] = 0;
   MAX7456_WriteString(screenBuffer,getPosition(voltagePosition)-1);
 
   if (Settings[S_VIDVOLTAGE]){
-    ItoaPadded(vidvoltage, screenBuffer, 4, 3);
-    screenBuffer[4]=SYM_VOLT;
-    screenBuffer[5]=0;
-    MAX7456_WriteString(screenBuffer,getPosition(vidvoltagePosition));
     screenBuffer[0]=SYM_VID_BAT;
-    screenBuffer[1]=0;
+    ItoaPadded(vidvoltage, screenBuffer+1, 4, 3);
+    screenBuffer[5] = SYM_VOLT;
+    screenBuffer[6] = 0;    
     MAX7456_WriteString(screenBuffer,getPosition(vidvoltagePosition)-1);
   }
 }
 
 void displayCurrentThrottle(void)
 {
-  // Shiki mod
   if(!fieldIsVisible(CurrentThrottlePosition))
     return;
-  //
+
   if (MwRcData[THROTTLESTICK] > HighT) HighT = MwRcData[THROTTLESTICK] -5;
   if (MwRcData[THROTTLESTICK] < LowT) LowT = MwRcData[THROTTLESTICK];      // Calibrate high and low throttle settings  --defaults set in GlobalVariables.h 1100-1900
-  screenBuffer[0]=SYM_THR;
-  screenBuffer[1]=0;
-  MAX7456_WriteString(screenBuffer,getPosition(CurrentThrottlePosition));
   if(!armed) {
-    screenBuffer[0]=' ';
-    screenBuffer[1]=' ';
-    screenBuffer[2]='-';
-    screenBuffer[3]='-';
-    screenBuffer[4]=0;
-    MAX7456_WriteString(screenBuffer,getPosition(CurrentThrottlePosition)+2);
+    screenBuffer[2]=' ';
+    screenBuffer[3]=' ';
+    screenBuffer[4]='-';
+    screenBuffer[5]='-';
   }
   else
   {
-
     int CurThrottle = map(MwRcData[THROTTLESTICK],LowT,HighT,0,100);
-    ItoaPadded(CurThrottle,screenBuffer,3,0);
-    screenBuffer[3]='%';
-    screenBuffer[4]=0;
-    MAX7456_WriteString(screenBuffer,getPosition(CurrentThrottlePosition)+2);
+    ItoaPadded(CurThrottle,screenBuffer+2,3,0);
+    screenBuffer[5]='%';
   }
+    screenBuffer[0]=SYM_THR;
+    screenBuffer[1]=' ';
+    screenBuffer[6]=0;
+    MAX7456_WriteString(screenBuffer,getPosition(CurrentThrottlePosition));
 }
 
-void displayTime(void)
+void olddisplayTime(void)
 { 
     if(!Settings[S_TIMER])
     return;
@@ -447,41 +437,63 @@ void displayTime(void)
 }
 
 
+void displayTime(void) 
+{ 
+  if(!Settings[S_TIMER])
+    return;
+  uint32_t displaytime;
+  if (armed) { 
+    if(flyTime < 3600) {
+      screenBuffer[0] = SYM_FLY_M;
+      displaytime = flyTime;
+    }
+    else {
+      screenBuffer[0] = SYM_FLY_H;
+      displaytime = flyTime/60;
+    }
+  }
+  else {
+    if(onTime < 3600) {
+      screenBuffer[0] = SYM_ON_M;
+      displaytime = onTime;
+    }
+    else {
+      screenBuffer[0] = SYM_ON_H;
+      displaytime = onTime/60;
+    }
+  }
+  formatTime(displaytime, screenBuffer+1, 0);
+  MAX7456_WriteString(screenBuffer,getPosition(onTimePosition));
+}
+
+
 void displayAmperage(void)
 {
- // Shiki Mod
- if(!fieldIsVisible(amperagePosition))
+  if(!fieldIsVisible(amperagePosition))
     return;
- //
-  // Real Ampere is ampere / 10
   ItoaPadded(amperage, screenBuffer, 4, 3);     // 99.9 ampere max!
   screenBuffer[4] = SYM_AMP;
   screenBuffer[5] = 0;
   MAX7456_WriteString(screenBuffer,getPosition(amperagePosition));
 }
 
+
 void displaypMeterSum(void)
 {
-  //Shiki mod
   if(!fieldIsVisible(pMeterSumPosition))
     return;
-
   screenBuffer[0]=SYM_MAH;
-
   int xx=amperagesum/36;
-
   itoa(xx,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(pMeterSumPosition));
 }
 
+
 void displayRSSI(void)
 {
-  // Shiki mod
   if(!fieldIsVisible(rssiPosition))
     return;
-  //
   screenBuffer[0] = SYM_RSSI;
-  // Calcul et affichage du Rssi
   itoa(rssi,screenBuffer+1,10);
   uint8_t xx = FindNull();
   screenBuffer[xx++] = '%';
@@ -489,46 +501,44 @@ void displayRSSI(void)
   MAX7456_WriteString(screenBuffer,getPosition(rssiPosition));
 }
 
+
 void displayHeading(void)
 {
- //Shiki mod
  if(!fieldIsVisible(MwHeadingPosition))
     return;
- //
  if (Settings[S_SHOWHEADING]) {  
-      int16_t heading = MwHeading;
-      if (Settings[S_HEADING360]) {
-        if(heading < 0)
-          heading += 360;
-        ItoaPadded(heading,screenBuffer,3,0);
-        screenBuffer[3]=SYM_DEGREES;
-        screenBuffer[4]=0;
-      }
-      else {
-        ItoaPadded(heading,screenBuffer,4,0);
-        screenBuffer[4]=SYM_DEGREES;
-        screenBuffer[5]=0;
-      }
-      MAX7456_WriteString(screenBuffer,getPosition(MwHeadingPosition));
+   int16_t heading = MwHeading;
+   if (Settings[S_HEADING360]) {
+     if(heading < 0)
+       heading += 360;
+       ItoaPadded(heading,screenBuffer,3,0);
+       screenBuffer[3]=SYM_DEGREES;
+       screenBuffer[4]=0;
+    }
+    else {
+      ItoaPadded(heading,screenBuffer,4,0);
+      screenBuffer[4]=SYM_DEGREES;
+      screenBuffer[5]=0;
+    }
+    MAX7456_WriteString(screenBuffer,getPosition(MwHeadingPosition));
   }  
 }
 
+
 void displayHeadingGraph(void)
 {
- //Shiki Mod
- if (!fieldIsVisible(MwHeadingGraphPosition))
+  if (!fieldIsVisible(MwHeadingGraphPosition))
     return;
- if (!Settings[S_COMPASS])
+  if (!Settings[S_COMPASS])
     return;
- //
   int xx;
   xx = MwHeading * 4;
   xx = xx + 720 + 45;
   xx = xx / 90;
-
   uint16_t pos = getPosition(MwHeadingGraphPosition)+1;
   memcpy_P(screen+pos, headGraph+xx+1, 9);
 }
+
 
 void displayIntro(void)
 {
@@ -564,78 +574,64 @@ void displayIntro(void)
   MAX7456_WriteString_P(message5, MWOSDVersionPosition+120+LINE+LINE+LINE);
   MAX7456_WriteString(itoa(MwVersion,screenBuffer,10),MWOSDVersionPosition+131+LINE+LINE+LINE);
 
-  MAX7456_WriteString_P(message6, MWOSDVersionPosition+120+LINE+LINE+LINE+LINE+LINE);
-  MAX7456_WriteString_P(message7, MWOSDVersionPosition+125+LINE+LINE+LINE+LINE+LINE+LINE);
-  MAX7456_WriteString_P(message8, MWOSDVersionPosition+125+LINE+LINE+LINE+LINE+LINE+LINE+LINE);
+//  MAX7456_WriteString_P(message6, MWOSDVersionPosition+120+LINE+LINE+LINE+LINE+LINE);
+//  MAX7456_WriteString_P(message7, MWOSDVersionPosition+125+LINE+LINE+LINE+LINE+LINE+LINE);
+//  MAX7456_WriteString_P(message8, MWOSDVersionPosition+125+LINE+LINE+LINE+LINE+LINE+LINE+LINE);
   
   MAX7456_WriteString_P(message9, MWOSDVersionPosition+120+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE);
   displayCallsign();
    
 }
 
+
 void displayGPSPosition(void)
 {
+  uint16_t position;
   if(!GPS_fix)
     return;
-  // Shiki Mod
   if(!fieldIsVisible(MwGPSLatPosition))
     return;
   if (!MwSensorActive&mode_gpshome)
     return;
-
-  // Shiki Mod - display LAT/LON in  mode gpshome
   if(Settings[S_COORDINATES]|MwSensorActive&mode_gpshome){
     if(fieldIsVisible(MwGPSLatPosition)|MwSensorActive&mode_gpshome) {
+      if(!Settings[S_GPSCOORDTOP])
+        position = getPosition(MwGPSLatPosition);
+      else
+        position = getPosition(MwGPSLatPositionTop);  
       screenBuffer[0] = SYM_LAT;
       FormatGPSCoord(GPS_latitude,screenBuffer+1,4,'N','S');
-      if(!Settings[S_GPSCOORDTOP])
-        MAX7456_WriteString(screenBuffer,getPosition(MwGPSLatPosition));
-      else
-        MAX7456_WriteString(screenBuffer,getPosition(MwGPSLatPositionTop));  
-    }
-
-    if(fieldIsVisible(MwGPSLatPosition)|!MwSensorActive&mode_gpshome) {
+      MAX7456_WriteString(screenBuffer, position);  
       screenBuffer[0] = SYM_LON;
       FormatGPSCoord(GPS_longitude,screenBuffer+1,4,'E','W');
-      if(!Settings[S_GPSCOORDTOP])
-        MAX7456_WriteString(screenBuffer,getPosition(MwGPSLonPosition));
-      else
-        MAX7456_WriteString(screenBuffer,getPosition(MwGPSLonPositionTop));          
+      MAX7456_WriteString(screenBuffer, position+13);  
     }
   }
-  
   if(Settings[S_GPSALTITUDE]){
     if(!fieldIsVisible(MwGPSAltPosition))
     return;
-   //
-      screenBuffer[0] = MwGPSAltPositionAdd[Settings[S_UNITSYSTEM]];
-      uint16_t xx;
-      if(Settings[S_UNITSYSTEM])
-        xx = GPS_altitude * 3.2808; // Mt to Feet
-      else
-        xx = GPS_altitude;          // Mt
-      itoa(xx,screenBuffer+1,10);
-      MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
-      }
+    screenBuffer[0] = MwGPSAltPositionAdd[Settings[S_UNITSYSTEM]];
+    uint16_t xx;
+    if(Settings[S_UNITSYSTEM])
+      xx = GPS_altitude * 3.2808; // Mt to Feet
+    else
+      xx = GPS_altitude;          // Mt
+    itoa(xx,screenBuffer+1,10);
+    MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
+  }
 }
+
 
 void displayNumberOfSat(void)
 {
-  // Shiki mod
   if(!GPS_fix)
     return;
   if(!fieldIsVisible(GPS_numSatPosition))
     return;
-  //
   screenBuffer[0] = SYM_SAT_L;
   screenBuffer[1] = SYM_SAT_R;
   itoa(GPS_numSat,screenBuffer+2,10);
-
-// Shiki Mod - display Sats alway sin same place
-//  if(!Settings[S_GPSCOORDTOP])
-    MAX7456_WriteString(screenBuffer,getPosition(GPS_numSatPosition));
-//  else 
-//    MAX7456_WriteString(screenBuffer,getPosition(GPS_numSatPositionTop)); 
+  MAX7456_WriteString(screenBuffer,getPosition(GPS_numSatPosition));
 }
 
 
@@ -644,24 +640,20 @@ void displayGPS_speed(void)
 
   if(!GPS_fix) return;
   if(!armed) GPS_speed=0;
-
   int xx;
   if(!Settings[S_UNITSYSTEM])
     xx = GPS_speed * 0.036;           // From MWii cm/sec to Km/h
   else
     xx = GPS_speed * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
-
   if(xx > speedMAX)
     speedMAX = xx;
-
-  //Shiki Mod
   if(!fieldIsVisible(speedPosition))
     return;
-  // 
   screenBuffer[0]=speedUnitAdd[Settings[S_UNITSYSTEM]];
   itoa(xx,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(speedPosition));
 }
+
 
 void displayGPS_time(void)       //local time of coord calc - haydent
 {
@@ -671,7 +663,7 @@ void displayGPS_time(void)       //local time of coord calc - haydent
 
 //convert to local   
   int TZ_SIGN = (Settings[S_GPSTZAHEAD] ? 1 :-1);
-  uint32_t local = GPS_time + (((Settings[S_GPSTZ] * 60 * TZ_SIGN / 10) + Settings[S_GPSDS]) * 60000);//make correction for time zone and dst
+  uint32_t local = GPS_time + (((Settings[S_GPSTZ] * 60 * TZ_SIGN / 10)) * 60000);//make correction for time zone
   local = local % 604800000;//prob not necessary but keeps day of week accurate <= 7
 //convert to local
 
@@ -681,17 +673,15 @@ void displayGPS_time(void)       //local time of coord calc - haydent
   
   formatTime(seconds, screenBuffer, 1);
   if(screenBuffer[0] == ' ')screenBuffer[0] = '0';//put leading zero if empty space
-//shiki no dec
-  screenBuffer[8] = 0;//equivalent of new line or end of buffer
 /*
   screenBuffer[8] = '.';//add milli indicator
   screenBuffer[9] = '0' + (milli / 100);//only show first digit of milli due to limit of gps rate
   screenBuffer[10] = 0;//equivalent of new line or end of buffer
 */   
+  screenBuffer[8] = 0;//equivalent of new line or end of buffer
   MAX7456_WriteString(screenBuffer,getPosition(GPS_timePosition));
-//format and display
+}
 
-}     //local time of coord calc - haydent
 
 void displayAltitude(void)
 {
@@ -703,30 +693,27 @@ void displayAltitude(void)
 
   if(armed && allSec>5 && altitude > altitudeMAX)
     altitudeMAX = altitude;
-  //Shiki Mod
   if(!fieldIsVisible(MwAltitudePosition))
     return;
   if(!Settings[S_BAROALT])
     return;
-  //
   screenBuffer[0]=MwAltitudeAdd[Settings[S_UNITSYSTEM]];
   itoa(altitude,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition));
 }
 
+
 void displayClimbRate(void)
 {
-
   if(!fieldIsVisible(MwClimbRatePosition))
     return;
   if(!Settings[S_VARIO])
     return;
-
     uint16_t position = getPosition(horizonPosition);
     for(int X=1; X<=3; X++) {
       screen[position+X*LINE+15] =  0x7F;
     }
-      
+  
     if     (MwVario > 120)  screen[position+1*LINE+15] =  0x8F;
     else if(MwVario > 105)  screen[position+1*LINE+15] =  0x8E;
     else if(MwVario > 90)  screen[position+1*LINE+15] =  0x8D;
@@ -752,42 +739,37 @@ void displayDistanceToHome(void)
 {
   if(!GPS_fix)
     return;
-
   int16_t dist;
   if(Settings[S_UNITSYSTEM])
     dist = GPS_distanceToHome * 3.2808;           // mt to feet
   else
     dist = GPS_distanceToHome;                    // Mt
-
   if(dist > distanceMAX)
     distanceMAX = dist;
-  //Shiki mod
   if(!fieldIsVisible(GPS_distanceToHomePosition))
     return;
-  //
   screenBuffer[0] = GPS_distanceToHomeAdd[Settings[S_UNITSYSTEM]];
   itoa(dist, screenBuffer+1, 10);
   MAX7456_WriteString(screenBuffer,getPosition(GPS_distanceToHomePosition));
 }
 
+
 void displayAngleToHome(void)
 {
   if(!GPS_fix)
       return;
-// SHiki Mod
  if(!fieldIsVisible(GPS_angleToHomePosition))
     return;
- //     
   if(Settings[S_ANGLETOHOME]){
     if(GPS_distanceToHome <= 2 && Blink2hz)
       return;
-  
     ItoaPadded(GPS_directionToHome,screenBuffer,3,0);
     screenBuffer[3] = SYM_DEGREES;
     screenBuffer[4] = 0;
     MAX7456_WriteString(screenBuffer,getPosition(GPS_angleToHomePosition));
-    }
+  }
 }
+
 
 void displayDirectionToHome(void)
 {
@@ -795,23 +777,19 @@ void displayDirectionToHome(void)
     return;
   if(GPS_distanceToHome <= 2 && Blink2hz)
     return;
-
   uint16_t position;
   if ((MwSensorActive&mode_osd_switch))
     position=getPosition(GPS_directionToHomePositionBottom);
   else
     position=getPosition(GPS_directionToHomePosition);
-  
   int16_t d = MwHeading + 180 + 360 - GPS_directionToHome;
   d *= 4;
   d += 45;
   d = (d/90)%16;
-
   screenBuffer[0] = SYM_ARROW_SOUTH + d;
   screenBuffer[1] = 0;
   MAX7456_WriteString(screenBuffer,position);
 }
-
 
 
 void displayCursor(void)
@@ -823,7 +801,8 @@ void displayCursor(void)
     if(COL==1) cursorpos=SAVEP-1;       // exit
     if(COL==2) cursorpos=SAVEP+6-1;     // save/exit
   }
-  if(ROW<10){
+  if(ROW<10)
+    {
     if(configPage==1){
       if (ROW==8) ROW=10;
       if (ROW==9) ROW=7;
@@ -831,7 +810,7 @@ void displayCursor(void)
       if(COL==2) cursorpos=(ROW+2)*30+10+6;
       if(COL==3) cursorpos=(ROW+2)*30+10+6+6;
       if(ROW==7) {cursorpos=(ROW+2)*30+10;COL=1;}
-       }
+     }
     if(configPage==2){
       COL=3;
       if (ROW==6) ROW=10;
@@ -840,32 +819,28 @@ void displayCursor(void)
       }
     if(configPage==3){
       COL=3;
-      if (ROW==7) ROW=10;
-      if (ROW==9) ROW=6;
-      cursorpos=(ROW+2)*30+10+6+6;
-     
+      if (ROW==8) ROW=10;
+      if (ROW==9) ROW=7;
+      cursorpos=(ROW+2)*30+10+6+6;     
       }
     if(configPage==4){
       COL=3;
-      if (ROW==5) ROW=10;
-      if (ROW==9) ROW=4;
+      if (ROW==7) ROW=10;
+      if (ROW==9) ROW=6;
       cursorpos=(ROW+2)*30+10+6+6;
-      }
-      
+      }    
     if(configPage==5)
       {  
       COL=3;
-      if (ROW==9) ROW=4;
-      if (ROW==5) ROW=10;
+      if (ROW==9) ROW=5;
+      if (ROW==6) ROW=10;
       cursorpos=(ROW+2)*30+10+6+6;
       }
-
     if(configPage==6)
       {  
       COL=3;
       cursorpos=(ROW+2)*30+10+6+6;
       }
-
     if(configPage==7)
       {  
       COL=3;
@@ -873,8 +848,8 @@ void displayCursor(void)
       if (ROW==6) ROW=10;
        cursorpos=(ROW+2)*30+10+6+6;
       }
-
-    if(configPage==8){
+    if(configPage==8)
+      {
       ROW=10;
       }
   }
@@ -927,7 +902,7 @@ void displayConfigScreen(void)
     MAX7456_WriteString_P(configMsg17, MAGT);
     MAX7456_WriteString(itoa(P8[8],screenBuffer,10),MAGP);
 
-     MAX7456_WriteString("P",71);
+    MAX7456_WriteString("P",71);
     MAX7456_WriteString("I",77);
     MAX7456_WriteString("D",83);
   }
@@ -950,15 +925,21 @@ void displayConfigScreen(void)
 
   if(configPage==3)
   {
-    ProcessAnalogue();
-
+    ProcessSensors();
     MAX7456_WriteString_P(configMsg30, 35);
-//    ItoaPadded(voltage, screenBuffer, 4, 3);
-//    screenBuffer[4] = SYM_VOLT;
-//    screenBuffer[5] = 0;
-//    MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE);
-    MAX7456_WriteString(itoa(voltage,screenBuffer,10),ROLLD-LINE-LINE);
-//R1:    
+
+    screenBuffer[0]=SYM_MAIN_BATT;
+    ItoaPadded(voltage, screenBuffer+1, 4, 3);
+    screenBuffer[5] = SYM_VOLT;
+    screenBuffer[6] = 0;
+    MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE-1);
+
+    screenBuffer[0]=SYM_VID_BAT;
+    ItoaPadded(vidvoltage, screenBuffer+1, 4, 3);
+    screenBuffer[5] = SYM_VOLT;
+    screenBuffer[6] = 0;
+    MAX7456_WriteString(screenBuffer,ROLLI-LINE-LINE-3);
+ //R1:    
     MAX7456_WriteString_P(configMsg31, ROLLT);
     if(Settings[S_DISPLAYVOLTAGE]){
       MAX7456_WriteString_P(configMsgON, ROLLD);
@@ -991,17 +972,20 @@ void displayConfigScreen(void)
     else{
       MAX7456_WriteString_P(configMsgOFF, LEVD);
   }
+//R7:     
+    MAX7456_WriteString_P(configMsg32, MAGT);
+    MAX7456_WriteString(itoa(Settings[S_VIDDIVIDERRATIO],screenBuffer,10),MAGD);
   }
 
   if(configPage==4)
   {
     MAX7456_WriteString_P(configMsg40, 35);
-//   itoa(rssi,screenBuffer,10);
-//    uint8_t xx = FindNull();
-//    screenBuffer[xx++] = '%';
-//    screenBuffer[xx] = 0;
-//    MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE);
-    MAX7456_WriteString(itoa(rssi,screenBuffer,10),ROLLD-LINE-LINE);
+    itoa(rssi,screenBuffer,10);
+    uint8_t xx = FindNull();
+    screenBuffer[xx++] = '%';
+    screenBuffer[xx] = 0;
+    MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE);
+//    MAX7456_WriteString(itoa(rssi,screenBuffer,10),ROLLD-LINE-LINE);
 
 //R1:
     MAX7456_WriteString_P(configMsg42, ROLLT);
@@ -1035,17 +1019,23 @@ void displayConfigScreen(void)
     else{
       MAX7456_WriteString_P(configMsgOFF, ALTD);
   }
+//R5:
+    MAX7456_WriteString_P(configMsg44, VELT);   
+    MAX7456_WriteString(itoa(Settings[S_RSSIMAX],screenBuffer,10),VELD);
+//R6:
+    MAX7456_WriteString_P(configMsg45, LEVT);   
+    MAX7456_WriteString(itoa(Settings[S_RSSIMIN],screenBuffer,10),LEVD);
 
   }
 
   if(configPage==5)
   {
     MAX7456_WriteString_P(configMsg50, 35);
-//    ItoaPadded(amperage, screenBuffer, 4, 3);     // 99.9 ampere max!
-//    screenBuffer[4] = SYM_AMP;
-//    screenBuffer[5] = 0;
-//    MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE);
-    MAX7456_WriteString(itoa(amperage,screenBuffer,10),ROLLD-LINE-LINE);
+    ItoaPadded(amperage, screenBuffer, 4, 3);     // 99.9 ampere max!
+    screenBuffer[4] = SYM_AMP;
+    screenBuffer[5] = 0;
+    MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE-1);
+//    MAX7456_WriteString(itoa(amperage,screenBuffer,10),ROLLD-LINE-LINE);
 //R1:
     MAX7456_WriteString_P(configMsg51, ROLLT);
     if(Settings[S_AMPERAGE]){
@@ -1073,6 +1063,10 @@ void displayConfigScreen(void)
 //R4:
     MAX7456_WriteString_P(configMsg54, ALTT);   
     MAX7456_WriteString(itoa(S16_AMPMAX,screenBuffer,10),ALTD);
+//    MAX7456_WriteString(itoa(amperage,screenBuffer,10),ROLLD-LINE-LINE);
+//R5:
+    MAX7456_WriteString_P(configMsg55, VELT);   
+    MAX7456_WriteString(itoa(Settings[S_AMPMIN],screenBuffer,10),VELD);
 //    MAX7456_WriteString(itoa(amperage,screenBuffer,10),ROLLD-LINE-LINE);
   }
   
@@ -1335,10 +1329,10 @@ void displayDebug(void)
 #if defined DEBUG
   if(!Settings[S_DEBUG])
     return;
-//    debug[0]=0;
-//    debug[1]=1;
-//    debug[2]=2;
-//    debug[3]=3;
+    debug[0]=sensorfilter[0][SENSORFILTERSIZE];
+    debug[1]=sensorfilter[1][SENSORFILTERSIZE];
+    debug[2]=sensorfilter[2][SENSORFILTERSIZE];
+    debug[3]=sensorfilter[3][SENSORFILTERSIZE];
   for(uint8_t X=0; X<4; X++) {
     ItoaPadded(debug[X], screenBuffer+2,7,0);     
     screenBuffer[0] = 0x30+X;

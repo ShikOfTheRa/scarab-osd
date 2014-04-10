@@ -152,6 +152,9 @@ void serialMSPCheck()
     for(uint8_t i=0;i<2;i++)
       MwAngle[i] = read16();
     MwHeading = read16();
+#ifdef BASEFLIGHT
+    MwHeading = MwHeading - 180;
+#endif
     read16();
   }
 
@@ -433,10 +436,17 @@ void serialMenuCommon()
 	  if(ROW==2) Settings[S_DIVIDERRATIO]=Settings[S_DIVIDERRATIO]+menudir;
 	  if(ROW==3) Settings[S_VOLTAGEMIN]=Settings[S_VOLTAGEMIN]+menudir;
 	  if(ROW==5) Settings[S_BATCELLS]=Settings[S_BATCELLS]+menudir;
+	  if(ROW==7) Settings[S_VIDDIVIDERRATIO]=Settings[S_VIDDIVIDERRATIO]+menudir;
+	}
+
+	if(configPage == 4 && COL == 3) {
+	  if(ROW==5) Settings[S_RSSIMAX]=Settings[S_RSSIMAX]+menudir;
+	  if(ROW==6) Settings[S_RSSIMIN]=Settings[S_RSSIMIN]+menudir;
 	}
 
 	if(configPage == 5 && COL == 3) {
 	  if(ROW==4) S16_AMPMAX=S16_AMPMAX+menudir;
+	  if(ROW==5) Settings[S_AMPMIN]=Settings[S_AMPMIN]+menudir;
 	}
   
   	if(configPage == 3 && COL == 3) {

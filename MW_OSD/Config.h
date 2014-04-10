@@ -1,35 +1,35 @@
-
-/*--------------------------------------------------       configurable parameters      ----------------------------------------------------*/
+/*--------------------------       configurable parameters      ----------------------------------------------------*/
 
 /********************       HARDWARE settings      *********************/
-#define PWMRSSIPIN    A3              
-#define RSSIPIN       A3              
-#define TEMPPIN       A6           
-#define VOLTAGEPIN    A0
-#define VIDVOLTAGEPIN A2
-#define AMPERAGEPIN   A1
-#define LEDPIN        7
-//#define USE_VSYNC // Remove "sparklies" on boards that support VSYNC 
-#define AMPERAGEMAX     500  // size of current sensor * 10 e.g. 50A sensor = 500
-#define AMPERAGEOFFSET  0    // optional extra for high offset sensors not supported in GUI (typically bidirectional sensors use a value of 256-512) 
+//#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
+//#define TEMPSENSOR                // Enable is you have a hardware temperature sensor
+#define AMPERAGEMAX     500         // Size of current sensor * 10 e.g. 50A sensor = 500
+#define AMPERAGEOFFSET  0           // Optional extra for high offset sensors not supported in GUI (typically bidirectional sensors use a value of 256-512) 
+#define MINIM                       // Select board type - RUSHDUINO or MINIM
+#define STAGE2FILTER                // Optional 2nd stage filter for all ADC and PWM RSSI. Enable for smoother readings 
+//#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
+
+/********************       CONTROLLER settings      *********************/
+//#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / others to correct for incorrect heading
+//#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrickE - to use GPS heading and altitude instead of BARO/MAG
 
 
 /********************       GPS type settings      *********************/
-//#define I2CGPS_SPEED       // Undefine this if you are using older I2CGPS - and need to correct for speed error (10x too slow)               
-//#define I2CGPS_DISTANCE    // Undefine this if you are using older I2CGPS - and need to correct for distance error (650m max) UNTESTED               
-//#define FIXEDWING          // Undefine this if you are using MW fixed wing from PatrickE - to use GPS heading and altitude instead of BARO/MAG
+//#define I2CGPS_SPEED              // Undefine this if you are using older I2CGPS - and need to correct for speed error (10x too slow)               
+//#define I2CGPS_DISTANCE           // Undefine this if you are using older I2CGPS - and need to correct for distance error (650m max) UNTESTED               
+
 
 /********************       MAP MODE Settings       *********************/
-#define MAPMODE 1       // 1 for MAP - home is center, map shows location of aircraft relative to home 
-                        // 0 for RADAR - home is aircraft, map shows location of home relative to aircraft 
-//#define MAPMODENORTH  // Enable to use North as MAP reference in MODE 1 instead of take off direction (Default = disable) 
+#define MAPMODE 1                   // 1 for MAP - home is center, map shows location of aircraft relative to home 
+                                    // 0 for RADAR - home is aircraft, map shows location of home relative to aircraft 
+//#define MAPMODENORTH              // Enable to use North as MAP reference in MODE 1 instead of take off direction (Default = disable) 
 
 
 /**********************************         Display Settings         ************************/
-#define DECIMAL '.'          // Decimal point character, change to what suits you best (.) (,)
-//#define SHIFTDOWN          // Select if your monitor cannot display top line fully. It shifts some lines down
-//#define CALLSIGNALWAYS 340 // Enable to permanently display callsign. Number =screen position (row*30 + column)
-//#define ALT_CENTER         // Enbale alternative center crosshair
+#define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
+//#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts some lines down
+//#define CALLSIGNALWAYS 340        // Enable to permanently display callsign. Number =screen position (row*30 + column)
+//#define ALT_CENTER                // Enbale alternative center crosshair
 
 
 /**********************       Serial speed      ************************/
@@ -37,7 +37,24 @@
 
 
 /**********************************   MSP Options and compatibility **********************/
-//#define BOXNAMES           // required to support multiwii 2.1 / 2.0 
+//#define BOXNAMES                  // required to support multiwii 2.1 / 2.0 
+
+
+/********************       HARDWARE PINS settings      *********************/
+#define VOLTAGEPIN    A0
+#define VIDVOLTAGEPIN A2
+#define AMPERAGEPIN   A1
+#define TEMPPIN       A6           
+#define RSSIPIN       A3              
+#define PWMRSSIPIN    A3              
+#define LEDPIN        7
+#ifdef  MINIM               // MINIM  
+    # define MAX7456SELECT 6         // ss
+    # define MAX7456RESET  10        // RESET
+#else                       //RUSHDUINO
+    # define MAX7456SELECT 10        // ss 
+    # define MAX7456RESET  9         // RESET
+#endif
 
 
 /********************       For OSD SWITCH      *********************/
