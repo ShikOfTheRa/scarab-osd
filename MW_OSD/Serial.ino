@@ -153,7 +153,7 @@ void serialMSPCheck()
       MwAngle[i] = read16();
     MwHeading = read16();
 #ifdef BASEFLIGHT
-    MwHeading = MwHeading - 180;
+    if (MwHeading >= + 180) MwHeading -= 360;
 #endif
     read16();
   }

@@ -30,7 +30,7 @@
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts some lines down
 //#define CALLSIGNALWAYS 340        // Enable to permanently display callsign. Number =screen position (row*30 + column)
 //#define ALT_CENTER                // Enbale alternative center crosshair
-
+//#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 
 /**********************       Serial speed      ************************/
 //#define SERIAL_SPEED 115200
@@ -95,7 +95,7 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-//#define DEBUG         // Enable/disable option to display Mutltiwii debug values to free memory 
+#define DEBUG         // Enable/disable option to display Mutltiwii debug values to free memory 
 #define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude) to free memory
 #define HORIZON         // Remove to disable HORIZON and temporarily free memory to free memory
 
