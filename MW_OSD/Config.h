@@ -1,13 +1,13 @@
 /*--------------------------       configurable parameters      ----------------------------------------------------*/
 
 /********************       HARDWARE settings      *********************/
+//#define RUSHDUINO                 // Select board type - RUSHDUINO. Defaults to MINIM
 //#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
 //#define TEMPSENSOR                // Enable is you have a hardware temperature sensor
 #define AMPERAGEMAX     500         // Size of current sensor * 10 e.g. 50A sensor = 500
 #define AMPERAGEOFFSET  0           // Optional extra for high offset sensors not supported in GUI (typically bidirectional sensors use a value of 256-512) 
-#define MINIM                       // Select board type - RUSHDUINO or MINIM
 #define STAGE2FILTER                // Optional 2nd stage filter for all ADC and PWM RSSI. Enable for smoother readings 
-//#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
+
 
 /********************       CONTROLLER settings      *********************/
 //#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / others to correct for incorrect heading
@@ -25,20 +25,24 @@
 //#define MAPMODENORTH              // Enable to use North as MAP reference in MODE 1 instead of take off direction (Default = disable) 
 
 
-/**********************************         Display Settings         ************************/
+/********************       Display Settings         ************************/
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts some lines down
 //#define CALLSIGNALWAYS 340        // Enable to permanently display callsign. Number =screen position (row*30 + column)
 //#define ALT_CENTER                // Enbale alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
+//#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 
-/**********************       Serial speed      ************************/
+
+/********************       Serial speed      ************************/
 //#define SERIAL_SPEED 115200
 
 
-/**********************************   MSP Options and compatibility **********************/
+/********************  MSP Options and compatibility **********************/
 //#define BOXNAMES                  // required to support multiwii 2.1 / 2.0 
 
+
+/*--------------------------       advanced parameters      ----------------------------------------------------*/
 
 /********************       HARDWARE PINS settings      *********************/
 #define VOLTAGEPIN    A0
@@ -48,12 +52,12 @@
 #define RSSIPIN       A3              
 #define PWMRSSIPIN    A3              
 #define LEDPIN        7
-#ifdef  MINIM               // MINIM  
-    # define MAX7456SELECT 6         // ss
-    # define MAX7456RESET  10        // RESET
-#else                       //RUSHDUINO
+#ifdef RUSHDUINO                     //RUSHDUINO
     # define MAX7456SELECT 10        // ss 
     # define MAX7456RESET  9         // RESET
+#else                                // MINIM  
+    # define MAX7456SELECT 6         // ss
+    # define MAX7456RESET  10        // RESET
 #endif
 
 
@@ -95,7 +99,7 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-#define DEBUG         // Enable/disable option to display Mutltiwii debug values to free memory 
-#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude) to free memory
-#define HORIZON         // Remove to disable HORIZON and temporarily free memory to free memory
+#define DEBUG         // Enable/disable option to display Mutltiwii debug values or free memory 
+#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude) or free memory
+#define HORIZON         // Enable/disable HORIZON indicator or free memory
 

@@ -156,7 +156,7 @@ void displayMode(void)
       screenBuffer[0]=SYM_ACRO;
       screenBuffer[1]=SYM_ACRO1;
     }
-    if(MwSensorActive&&Settings[S_MODEICON]){
+    if(Settings[S_MODEICON]){
       MAX7456_WriteString(screenBuffer,getPosition(sensorPosition)+LINE);
     }
     if(MwSensorActive&mode_camstab&&Settings[S_GIMBAL]){
