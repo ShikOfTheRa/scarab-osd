@@ -293,6 +293,11 @@ int MwAngle[2]={0,0};           // Those will hold Accelerator Angle
 static uint16_t MwRcData[8]={   // This hold receiver pulse signal
   1500,1500,1500,1500,1500,1500,1500,1500} ;
 
+// for analogue / PWM sensor filtering 
+#define SENSORFILTERSIZE 8
+#define SENSORTOTAL 5
+int16_t sensorfilter[SENSORTOTAL][SENSORFILTERSIZE+1]; 
+
 uint16_t  MwSensorPresent=0;
 uint32_t  MwSensorActive=0;
 uint8_t MwVersion=0;

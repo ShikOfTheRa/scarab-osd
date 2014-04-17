@@ -1334,10 +1334,21 @@ void displayDebug(void)
   if(!Settings[S_DEBUG])
     return;
  
-  debug[0]=sensorfilter[2][SENSORFILTERSIZE+1]; // Amperage pin - through array
-  debug[1]=sensorfilter[2][SENSORFILTERSIZE];   // Average reading
-  debug[2]=sensorfilter[2][0];                  // Actual reading for index 0
-  debug[3]=analogRead(AMPERAGEPIN);             // Actual reading - direct
+//  debug[0]=S16_AMPMAX;
+//  debug[1]=Settings[S_AMPDIVIDERRATIO];
+//  debug[2]=Settings[S_AMPMAXL];
+//  debug[3]=Settings[S_AMPMAXH];
+
+//  debug[0]=sensorpinarray[0];
+//  debug[1]=sensorpinarray[1];
+//  debug[2]=sensorpinarray[2];
+//  debug[3]=sensorpinarray[3];
+
+  debug[0]=sensorfilter[0][0];
+  debug[1]=sensorfilter[1][0];
+  debug[2]=sensorfilter[2][0];
+  debug[3]=analogRead(AMPERAGEPIN);
+
   for(uint8_t X=0; X<4; X++) {
     ItoaPadded(debug[X], screenBuffer+2,7,0);     
     screenBuffer[0] = 0x30+X;
