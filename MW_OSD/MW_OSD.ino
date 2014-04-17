@@ -18,10 +18,6 @@ This work is based on the following open source work :-
  
 */
             
-#define SENSORFILTERSIZE 8
-#define SENSORTOTAL 5
-int16_t sensorfilter[SENSORTOTAL][SENSORFILTERSIZE+2]; 
-
 #include <avr/pgmspace.h>
 #include <EEPROM.h> //Needed to access eeprom read/write functions
 #include "Config.h"
@@ -36,6 +32,7 @@ char screenBuffer[20];
 
 uint32_t modeMSPRequests;
 uint32_t queuedMSPRequests;
+uint8_t sensorpinarray[]={VOLTAGEPIN,VIDVOLTAGEPIN,AMPERAGEPIN,TEMPPIN,RSSIPIN};  
 
 //-------------- Timed Service Routine vars (No more needed Metro.h library)
 
@@ -73,14 +70,7 @@ void setup()
     analogReference(INTERNAL);
 
   setMspRequests();
-
   blankserialRequest(MSP_IDENT);
-  
-  sensorfilter[0][SENSORFILTERSIZE+1]=VOLTAGEPIN;
-  sensorfilter[1][SENSORFILTERSIZE+1]=VIDVOLTAGEPIN;
-  sensorfilter[2][SENSORFILTERSIZE+1]=AMPERAGEPIN;
-  sensorfilter[3][SENSORFILTERSIZE+1]=TEMPPIN;
-  sensorfilter[4][SENSORFILTERSIZE+1]=RSSIPIN;
   }
 
 
@@ -493,23 +483,22 @@ void gpsdistancefix(void){
 
 void ProcessSensors(void) {
   /*
-    special note about filter: last but row of array = averaged reading
-    special note about filter: last row of array = analog pin no
+    special note about filter: last row of array = averaged reading
   */ 
 //-------------- ADC and PWM RSSI sensor read into filter array
   static uint8_t sensorindex;
   for (uint8_t sensor=0;sensor<SENSORTOTAL;sensor++) {
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
     int16_t sensortemp;
-    uint8_t sensorpin = sensorfilter[sensor][SENSORFILTERSIZE+1];
-    sensortemp = analogRead(sensor);
-    if (Settings[S_PWMRSSI]){
-      if (sensor ==4)
-        sensortemp = pulseIn(sensorpin, HIGH,21000)>>1;
+//    uint8_t sensorpin = sensorpinarray[sensor];
+    sensortemp = analogRead(sensorpinarray[sensor]);
+    if (sensor ==4) { 
+      if (Settings[S_PWMRSSI]){
+        sensortemp = pulseIn(PWMRSSIPIN, HIGH,21000)>>1;
+      }
     }
-
 #ifdef STAGE2FILTER     
-    sensorfilter[sensor][sensorindex] = sensorfilter[sensor][sensorindex] + ((sensortemp - sensorfilter[sensor][sensorindex])>>1);
+    sensorfilter[sensor][sensorindex] = (sensorfilter[sensor][sensorindex] + sensortemp)>>1;
 #else
     sensorfilter[sensor][sensorindex] = sensortemp;
 #endif
@@ -562,7 +551,7 @@ void ProcessSensors(void) {
 //-------------- RSSI
   if (Settings[S_DISPLAYRSSI]) {           
     if(Settings[S_MWRSSI]) {
-      rssi = MwRssi;
+      rssi = MwRssi>>2;
     }
     else { 
       rssi = sensorfilter[4][SENSORFILTERSIZE]>>5; // filter and move to 8 bit
@@ -580,6 +569,17 @@ void ProcessSensors(void) {
     if (rssi < 0) rssi=0;
     else if (rssi > 100) rssi=100;
   }
+
+/*
+Serial.print(sensorindex);
+  Serial.print(" ");
+  Serial.print(sensorfilter[2][SENSORFILTERSIZE]);  
+  for (uint8_t x=0;x<5;x++) {
+    Serial.print(" ");
+    Serial.print(sensorfilter[x][sensorindex]);  
+  }    
+  Serial.println(" ");
+*/
 
 //-------------- For filter support
   sensorindex++;                    
