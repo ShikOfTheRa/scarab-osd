@@ -20,7 +20,7 @@ bugfix: MWII RSSI bug fixed
 bugfix: incorrect anal pin handling
 +: added ability to hide ARMED/DISARMED status via config.H if required
 +: added fastpixel support - *may* improve display for hi-res cameras 650tvl+
-
+                     
 
 Under review for next release:
 
