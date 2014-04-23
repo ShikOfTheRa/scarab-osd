@@ -4,6 +4,10 @@
 
 #define VSYNC 2                 // INT0
 
+#ifndef WHITEBRIGHTNESS
+  #define WHITEBRIGHTNESS 0x01
+#endif
+
 //MAX7456 opcodes
 #define DMM_reg   0x04
 #define DMAH_reg  0x05
@@ -55,10 +59,6 @@
 #define CLEAR_display_vert 0x06
 #define END_string 0xff
 
-#define WHITE_level_80 0x03
-#define WHITE_level_90 0x02
-#define WHITE_level_100 0x01
-#define WHITE_level_120 0x00
 
 #define MAX7456ADD_VM0          0x00  //0b0011100// 00 // 00             ,0011100
 #define MAX7456ADD_VM1          0x01
@@ -173,7 +173,7 @@ void MAX7456Setup(void)
   // set all rows to same charactor white level, 120%
   uint8_t x;
   for(x = 0; x < MAX_screen_rows; x++) {
-    MAX7456_Send(MAX7456ADD_RB0+x, WHITE_level_120);
+    MAX7456_Send(MAX7456ADD_RB0+x, WHITEBRIGHTNESS);
   }
 
   // make sure the Max7456 is enabled

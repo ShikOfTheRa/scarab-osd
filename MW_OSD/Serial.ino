@@ -103,7 +103,7 @@ void serialMSPCheck()
     I2CError=read16();
     MwSensorPresent = read16();
     MwSensorActive = read32();
-    armed = (MwSensorActive & mode_armed) != 0;
+    armed = (MwSensorActive & mode.armed) != 0;
   }
 
   if (cmdMSP==MSP_RAW_IMU)
@@ -208,15 +208,15 @@ void serialMSPCheck()
     uint8_t len = 0;
     char firstc, lastc;
 
-    mode_armed = 0;
-    mode_stable = 0;
-    mode_baro = 0;
-    mode_mag = 0;
-    mode_gpshome = 0;
-    mode_gpshold = 0;
-    mode_llights = 0;
-    mode_camstab = 0;
-    mode_osd_switch = 0;
+    mode.armed = 0;
+    mode.stable = 0;
+    mode.baro = 0;
+    mode.mag = 0;
+    mode.gpshome = 0;
+    mode.gpshold = 0;
+    mode.llights = 0;
+    mode.camstab = 0;
+    mode.osd_switch = 0;
 
     while(remaining > 0) {
       char c = read8();
@@ -227,28 +227,28 @@ void serialMSPCheck()
         // Found end of name; set bit if first and last c matches.
         if(firstc == 'A') {
           if(lastc == 'M') // "ARM;"
-            mode_armed |= bit;
+            mode.armed |= bit;
           if(lastc == 'E') // "ANGLE;"
-            mode_stable |= bit;
+            mode.stable |= bit;
         }
         if(firstc == 'H' && lastc == 'N') // "HORIZON;"
-          mode_horizon |= bit;
+          mode.horizon |= bit;
         if(firstc == 'M' && lastc == 'G') // "MAG;"
-           mode_mag |= bit;
+           mode.mag |= bit;
         if(firstc == 'B' && lastc == 'O') // "BARO;"
-          mode_baro |= bit;
+          mode.baro |= bit;
         if(firstc == 'L' && lastc == 'S') // "LLIGHTS;"
-          mode_llights |= bit;
+          mode.llights |= bit;
         if(firstc == 'C' && lastc == 'B') // "CAMSTAB;"
-          mode_camstab |= bit;
+          mode.camstab |= bit;
         if(firstc == 'G') {
           if(lastc == 'E') // "GPS HOME;"
-            mode_gpshome |= bit;
+            mode.gpshome |= bit;
           if(lastc == 'D') // "GPS HOLD;"
-            mode_gpshold |= bit;
+            mode.gpshold |= bit;
         }
         if(firstc == 'O' && lastc == 'W') // "OSD SW;"
-          mode_osd_switch |= bit;
+          mode.osd_switch |= bit;
 
         len = 0;
         bit <<= 1L;
@@ -263,49 +263,49 @@ void serialMSPCheck()
     uint32_t bit = 1;
     uint8_t remaining = dataSize;
 
-    mode_armed = 0;
-    mode_stable = 0;
-    mode_horizon = 0;
-    mode_baro = 0;
-    mode_mag = 0;
-    mode_gpshome = 0;
-    mode_gpshold = 0;
-//    mode_llights = 0;
-    mode_osd_switch = 0;
-    mode_camstab = 0;
+    mode.armed = 0;
+    mode.stable = 0;
+    mode.horizon = 0;
+    mode.baro = 0;
+    mode.mag = 0;
+    mode.gpshome = 0;
+    mode.gpshold = 0;
+//    mode.llights = 0;
+    mode.osd_switch = 0;
+    mode.camstab = 0;
 
     while(remaining > 0) {
       char c = read8();
       switch(c) {
       case 0:
-        mode_armed |= bit;
+        mode.armed |= bit;
         break;
       case 1:
-        mode_stable |= bit;
+        mode.stable |= bit;
         break;
       case 2:
-        mode_horizon |= bit;
+        mode.horizon |= bit;
         break;
       case 3:
-        mode_baro |= bit;
+        mode.baro |= bit;
         break;
       case 5:
-        mode_mag |= bit;
+        mode.mag |= bit;
         break;
       case 8:
-        mode_camstab |= bit;
+        mode.camstab |= bit;
         break;
       case 10:
-        mode_gpshome |= bit;
+        mode.gpshome |= bit;
         break;
       case 11:
-        mode_gpshold |= bit;
+        mode.gpshold |= bit;
         break;
 //      case 16:
-//        mode_llights |= bit;
+//        mode.llights |= bit;
 //        break;
       case 19:
-        mode_osd_switch |= bit;
+        mode.osd_switch |= bit;
         break;
       }
       bit <<= 1;
@@ -393,7 +393,7 @@ void handleRawRC() {
 	waitStick =1;
         menudir=1;
 	if(configPage == 9 && COL == 3) {
-	  if(ROW==5) magCalibrationTimer=0;
+	  if(ROW==5) timer.magCalibrationTimer=0;
         }
         serialMenuCommon();  
       }      
@@ -457,7 +457,7 @@ void serialMenuCommon()
 
 	if(configPage == 4 && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
-	  if(ROW==2) rssiTimer=15; // 15 secs to turn off tx anwait to read min RSSI
+	  if(ROW==2) timer.rssiTimer=15; // 15 secs to turn off tx anwait to read min RSSI
 	  if(ROW==3) Settings[S_MWRSSI]=!Settings[S_MWRSSI];
 	  if(ROW==4) Settings[S_PWMRSSI]=!Settings[S_PWMRSSI];
 	}
@@ -487,7 +487,7 @@ void serialMenuCommon()
 	    }
 	  if(ROW==3) Settings[S_VREFERENCE]=!Settings[S_VREFERENCE];
 	  if(ROW==4) Settings[S_DEBUG]=!Settings[S_DEBUG];
-	  if(ROW==5) magCalibrationTimer=CALIBRATION_DELAY;
+	  if(ROW==5) timer.magCalibrationTimer=CALIBRATION_DELAY;
 	}
   	if((ROW==10)&&(COL==1)) configExit();
 	if((ROW==10)&&(COL==2)) configSave();

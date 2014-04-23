@@ -3,7 +3,7 @@
 /********************       HARDWARE settings      *********************/
 //#define RUSHDUINO                 // Select board type - RUSHDUINO. Defaults to MINIM
 //#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
-//#define TEMPSENSOR                // Enable is you have a hardware temperature sensor
+//#define TEMPSENSOR                // Enable if you have a hardware temperature sensor
 #define AMPERAGEMAX     500         // Size of current sensor * 10 e.g. 50A sensor = 500
 #define AMPERAGEOFFSET  0           // Optional extra for high offset sensors not supported in GUI (typically bidirectional sensors use a value of 256-512) 
 #define STAGE2FILTER                // Optional 2nd stage filter for all ADC and PWM RSSI. Enable for smoother readings 
@@ -11,7 +11,7 @@
 
 /********************       CONTROLLER settings      *********************/
 //#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / others to correct for incorrect heading
-//#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrickE - to use GPS heading and altitude instead of BARO/MAG
+//#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE - to use GPS heading and altitude instead of BARO/MAG
 
 
 /********************       GPS type settings      *********************/
@@ -32,7 +32,7 @@
 //#define ALT_CENTER                // Enbale alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
-
+//#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x10=90%0x11=80%  default is 0x01=100%,
 
 /********************       Serial speed      ************************/
 //#define SERIAL_SPEED 115200
@@ -99,7 +99,7 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-#define DEBUG         // Enable/disable option to display Mutltiwii debug values or free memory 
+//#define DEBUG         // Enable/disable option to display Mutltiwii debug values or free memory 
 #define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude) or free memory
 #define HORIZON         // Enable/disable HORIZON indicator or free memory
 

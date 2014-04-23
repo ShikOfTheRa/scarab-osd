@@ -16,6 +16,7 @@ This work is based on the following open source work :-
  All credit and full acknowledgement to the incredible work and hours from the many developers, contributors and testers that have helped along the way.
  Jean Gabriel Maurice. He started the revolution. He was the first....
  
+ Please refer to credits.txt for list of individual contributions
 */
             
 #include <avr/pgmspace.h>
@@ -112,7 +113,7 @@ void setMspRequests() {
     if(!armed || Settings[S_THROTTLEPOSITION] || fieldIsVisible(pMeterSumPosition) || fieldIsVisible(amperagePosition) )
       modeMSPRequests |= REQ_MSP_RC;
 
-    if(mode_armed == 0) {
+    if(mode.armed == 0) {
         modeMSPRequests |= REQ_MSP_BOX;
 
     }
@@ -125,7 +126,7 @@ void setMspRequests() {
 
   // so we do not send requests that are not needed.
   queuedMSPRequests &= modeMSPRequests;
-  lastCallSign = onTime;
+  timer.lastCallSign = onTime;
 
 }
 
@@ -134,7 +135,7 @@ void loop()
  
 
   // Blink Basic Sanity Test Led at 1hz
-  if(tenthSec>10)
+  if(timer.tenthSec>10)
     digitalWrite(LEDPIN,HIGH);
   else
     digitalWrite(LEDPIN,LOW);
@@ -154,9 +155,9 @@ void loop()
   {
     previous_millis_high = previous_millis_high+hi_speed_cycle;   
 
-    tenthSec++;
-    halfSec++;
-    Blink10hz=!Blink10hz;
+    timer.tenthSec++;
+    timer.halfSec++;
+    timer.Blink10hz=!timer.Blink10hz;
     calculateTrip();
     
       uint8_t MSPcmdsend;
@@ -242,8 +243,8 @@ void loop()
       {
        // CollectStatistics();      DO NOT DELETE
 
-        if(Settings[S_DISPLAYVOLTAGE]&&((voltage>Settings[S_VOLTAGEMIN])||(Blink2hz))) displayVoltage();
-        if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(Blink2hz))) displayRSSI();
+        if(Settings[S_DISPLAYVOLTAGE]&&((voltage>Settings[S_VOLTAGEMIN])||(timer.Blink2hz))) displayVoltage();
+        if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz))) displayRSSI();
 
         displayTime();
 #ifdef TEMPSENSOR
@@ -259,10 +260,10 @@ void loop()
 #if defined CALLSIGNALWAYS
         displayCallsign();       
 #else 
-        if ( (onTime > (lastCallSign+300)) || (onTime < (lastCallSign+4)))
+        if ( (onTime > (timer.lastCallSign+300)) || (onTime < (timer.lastCallSign+4)))
        {
            // Displays 4 sec every 5min (no blink during flight)
-        if ( onTime > (lastCallSign+300))lastCallSign = onTime; 
+        if ( onTime > (timer.lastCallSign+300))timer.lastCallSign = onTime; 
         displayCallsign();       
        }
 #endif
@@ -291,7 +292,7 @@ void loop()
           displayGPSPosition();
           displayGPS_time();
           if(Settings[S_ENABLEADC]) mapmode();
-#ifdef FIXEDWING // required because FW does not use BARO / MAG
+#ifdef FIXEDWING // required because FW can fly without BARO / MAG
           displayAltitude();
           displayClimbRate();
           displayHeadingGraph();
@@ -304,14 +305,14 @@ void loop()
     }
   }  // End of fast Timed Service Routine (50ms loop)
 
-  if(halfSec >= 10) {
-    halfSec = 0;
-    Blink2hz =! Blink2hz;
+  if(timer.halfSec >= 10) {
+    timer.halfSec = 0;
+    timer.Blink2hz =! timer.Blink2hz;
   }
 
-  if(tenthSec >= 20)     // this execute 1 time a second
+  if(timer.tenthSec >= 20)     // this execute 1 time a second
   {
-    tenthSec=0;
+    timer.tenthSec=0;
     onTime++;
 
   amperagesum += amperage;
@@ -329,20 +330,20 @@ void loop()
     }
     allSec++;
 
-    if((accCalibrationTimer==1)&&(configMode)) {
+    if((timer.accCalibrationTimer==1)&&(configMode)) {
       blankserialRequest(MSP_ACC_CALIBRATION);
-      accCalibrationTimer=0;
+      timer.accCalibrationTimer=0;
     }
 
-    if((magCalibrationTimer==1)&&(configMode)) {
+    if((timer.magCalibrationTimer==1)&&(configMode)) {
       blankserialRequest(MSP_MAG_CALIBRATION);
-      magCalibrationTimer=0;
+      timer.magCalibrationTimer=0;
     }
 
 //    if(accCalibrationTimer>0) accCalibrationTimer--;
-    if(magCalibrationTimer>0) magCalibrationTimer--;
+    if(timer.magCalibrationTimer>0) timer.magCalibrationTimer--;
 
-    if(rssiTimer>0) rssiTimer--;
+    if(timer.rssiTimer>0) timer.rssiTimer--;
   }
 
   serialMSPreceive();
@@ -481,6 +482,15 @@ void gpsdistancefix(void){
 } 
 
 
+uint8_t * heapptr, * stackptr;
+void check_mem() {
+  stackptr = (uint8_t *)malloc(4);          
+  heapptr = stackptr;                    
+  free(stackptr);      
+  stackptr =  (uint8_t *)(SP);          
+}
+
+
 void ProcessSensors(void) {
   /*
     special note about filter: last row of array = averaged reading
@@ -557,12 +567,12 @@ void ProcessSensors(void) {
       rssi = sensorfilter[4][SENSORFILTERSIZE]>>5; // filter and move to 8 bit
     }
 
-    if((rssiTimer==15)&&(configMode)) {
+    if((timer.rssiTimer==15)&&(configMode)) {
       Settings[S_RSSIMAX]=rssi; // tx on
     }
-    if((rssiTimer==1)&&(configMode)) {
+    if((timer.rssiTimer==1)&&(configMode)) {
       Settings[S_RSSIMIN]=rssi; // tx off
-      rssiTimer=0;
+      timer.rssiTimer=0;
     }
 
     rssi = map(rssi, Settings[S_RSSIMIN], Settings[S_RSSIMAX], 0, 100);
@@ -586,6 +596,5 @@ Serial.print(sensorindex);
   if (sensorindex >= SENSORFILTERSIZE)              
     sensorindex = 0;                           
 }
- 
 
 

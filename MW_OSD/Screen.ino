@@ -111,7 +111,7 @@ void displayTemperature(void)        // WILL WORK ONLY WITH V1.2
 
 void displayMode(void)
 {
-  if ((MwSensorActive&mode_osd_switch))
+  if (MwSensorActive&mode.osd_switch)
   return;
   
   int16_t dist;
@@ -130,23 +130,23 @@ void displayMode(void)
    screenBuffer[xx++] =SYM_FT;
    screenBuffer[xx++] =0;
   
-    if(MwSensorActive&mode_gpshome){
+    if(MwSensorActive&mode.gpshome){
       screenBuffer[8]=0;
       screenBuffer[0] = SYM_GHOME;
       screenBuffer[1] = SYM_GHOME1;
       screenBuffer[2] = SYM_COLON;
     }
-    else if(MwSensorActive&mode_gpshold){
+    else if(MwSensorActive&mode.gpshold){
       screenBuffer[2]=0;
       screenBuffer[0] = SYM_GHOLD;
       screenBuffer[1] = SYM_GHOLD1;
     }
-    else if(MwSensorActive&mode_stable){
+    else if(MwSensorActive&mode.stable){
       screenBuffer[2]=0;
       screenBuffer[0]=SYM_STABLE;
       screenBuffer[1]=SYM_STABLE1;
     }
-    else if(MwSensorActive&mode_horizon){
+    else if(MwSensorActive&mode.horizon){
       screenBuffer[2]=0;
       screenBuffer[0]=SYM_HORIZON;
       screenBuffer[1]=SYM_HORIZON1;
@@ -159,7 +159,7 @@ void displayMode(void)
     if(Settings[S_MODEICON]){
       MAX7456_WriteString(screenBuffer,getPosition(sensorPosition)+LINE);
     }
-    if(MwSensorActive&mode_camstab&&Settings[S_GIMBAL]){
+    if((MwSensorActive&mode.camstab)&&Settings[S_GIMBAL]){
       screenBuffer[2]=0;
       screenBuffer[0]=SYM_GIMBAL;
       screenBuffer[1]=SYM_GIMBAL1;  
@@ -168,15 +168,15 @@ void displayMode(void)
 
   if(Settings[S_MODESENSOR]){
     xx = 0;
-  if(MwSensorActive&mode_stable||MwSensorActive&mode_horizon){
+  if(MwSensorActive&mode.stable||MwSensorActive&mode.horizon){
     screenBuffer[xx] = SYM_ACC;
     xx++;
     }
-  if (MwSensorActive&mode_mag){
+  if (MwSensorActive&mode.mag){
     screenBuffer[xx] = SYM_MAG;
     xx++;
   }
-  if (MwSensorActive&mode_baro){
+  if (MwSensorActive&mode.baro){
     screenBuffer[xx] = SYM_BAR;
     xx++;
   }
@@ -192,7 +192,7 @@ void displayArmed(void)
     MAX7456_WriteString_P(disarmed_text, getPosition(motorArmedPosition));
     armedtimer=20;
   }
-  else if(Blink10hz&&armedtimer){
+  else if(timer.Blink10hz&&armedtimer){
     armedtimer--;
     MAX7456_WriteString_P(armed_text, getPosition(motorArmedPosition));
   }
@@ -595,10 +595,10 @@ void displayGPSPosition(void)
     return;
   if(!fieldIsVisible(MwGPSLatPosition))
     return;
-  if (!MwSensorActive&mode_gpshome)
+  if (!MwSensorActive&mode.gpshome)
     return;
-  if(Settings[S_COORDINATES]|MwSensorActive&mode_gpshome){
-    if(fieldIsVisible(MwGPSLatPosition)|MwSensorActive&mode_gpshome) {
+  if(Settings[S_COORDINATES]|MwSensorActive&mode.gpshome){
+    if(fieldIsVisible(MwGPSLatPosition)|MwSensorActive&mode.gpshome) {
       if(!Settings[S_GPSCOORDTOP])
         position = getPosition(MwGPSLatPosition);
       else
@@ -765,7 +765,7 @@ void displayAngleToHome(void)
  if(!fieldIsVisible(GPS_angleToHomePosition))
     return;
   if(Settings[S_ANGLETOHOME]){
-    if(GPS_distanceToHome <= 2 && Blink2hz)
+    if(GPS_distanceToHome <= 2 && timer.Blink2hz)
       return;
     ItoaPadded(GPS_directionToHome,screenBuffer,3,0);
     screenBuffer[3] = SYM_DEGREES;
@@ -779,10 +779,10 @@ void displayDirectionToHome(void)
 {
   if(!GPS_fix)
     return;
-  if(GPS_distanceToHome <= 2 && Blink2hz)
+  if(GPS_distanceToHome <= 2 && timer.Blink2hz)
     return;
   uint16_t position;
-  if ((MwSensorActive&mode_osd_switch))
+  if ((MwSensorActive&mode.osd_switch))
     position=getPosition(GPS_directionToHomePositionBottom);
   else
     position=getPosition(GPS_directionToHomePosition);
@@ -857,7 +857,7 @@ void displayCursor(void)
       ROW=10;
       }
   }
-  if(Blink10hz)
+  if(timer.Blink10hz)
     screen[cursorpos] = SYM_CURSOR;
 }
 
@@ -1001,8 +1001,8 @@ void displayConfigScreen(void)
     }
 //R2:
     MAX7456_WriteString_P(configMsg43, PITCHT);
-    if(rssiTimer>0) {
-      MAX7456_WriteString(itoa(rssiTimer,screenBuffer,10),PITCHD);
+    if(timer.rssiTimer>0) {
+      MAX7456_WriteString(itoa(timer.rssiTimer,screenBuffer,10),PITCHD);
     }
     else {
     MAX7456_WriteString("-", PITCHD);
@@ -1183,8 +1183,8 @@ void displayConfigScreen(void)
       }
 //R5:
     MAX7456_WriteString_P(configMsg75, VELT);
-    if(magCalibrationTimer>0)
-      MAX7456_WriteString(itoa(magCalibrationTimer,screenBuffer,10),VELD);
+    if(timer.magCalibrationTimer>0)
+      MAX7456_WriteString(itoa(timer.magCalibrationTimer,screenBuffer,10),VELD);
     else
       MAX7456_WriteString("-",VELD);
    }
@@ -1223,7 +1223,7 @@ void mapmode(void) {
 
 #ifdef MAPMODE
 
-  if ((MwSensorActive&mode_osd_switch))
+  if ((MwSensorActive&mode.osd_switch))
   return;
 
   int8_t xdir;
@@ -1334,20 +1334,14 @@ void displayDebug(void)
   if(!Settings[S_DEBUG])
     return;
  
-//  debug[0]=S16_AMPMAX;
-//  debug[1]=Settings[S_AMPDIVIDERRATIO];
-//  debug[2]=Settings[S_AMPMAXL];
-//  debug[3]=Settings[S_AMPMAXH];
+//  check_mem();
+//  debug[0]=(int16_t)heapptr;
+//  debug[1]=(int16_t)stackptr;
 
 //  debug[0]=sensorpinarray[0];
 //  debug[1]=sensorpinarray[1];
 //  debug[2]=sensorpinarray[2];
 //  debug[3]=sensorpinarray[3];
-
-  debug[0]=sensorfilter[0][0];
-  debug[1]=sensorfilter[1][0];
-  debug[2]=sensorfilter[2][0];
-  debug[3]=analogRead(AMPERAGEPIN);
 
   for(uint8_t X=0; X<4; X++) {
     ItoaPadded(debug[X], screenBuffer+2,7,0);     
