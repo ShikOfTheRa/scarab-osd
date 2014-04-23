@@ -2,7 +2,7 @@
 
 Credits for the many who developed this software for the Multiwii community:
 
-Major code contributors:
+Code contributors:
 Jean Gabriel Maurice - Johhnygab
 Itai Nahshon - Itai
 Carlo Nebuloni - Carlonb
