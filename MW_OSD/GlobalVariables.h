@@ -87,19 +87,24 @@
 //#define SONAR         16//0b00010000
 
 //General use variables
-uint8_t tenthSec=0;
-uint8_t halfSec=0;
-uint8_t Blink2hz=0;                             // This is turing on and off at 2hz
-uint8_t Blink10hz=0;                            // This is turing on and off at 10hz
-int lastCallSign=0;                          //callsign_timer
-uint8_t rssiTimer=0;
-uint8_t accCalibrationTimer=0;
-uint8_t magCalibrationTimer=0;
-uint16_t debug[4];
+struct {
+uint8_t tenthSec;
+uint8_t halfSec;
+uint8_t Blink2hz;                          // This is turing on and off at 2hz
+uint8_t Blink10hz;                         // This is turing on and off at 10hz
+int lastCallSign;                          // Callsign_timer
+uint8_t rssiTimer;
+uint8_t accCalibrationTimer;
+uint8_t magCalibrationTimer;
+}
+timer;
+
+uint16_t debug[4];   // int32_t ?...
 int8_t menudir;
 unsigned int allSec=0;
 uint8_t armedtimer=255;
 uint16_t debugerror;
+
 // Config status and cursor location
 uint8_t ROW=10;
 uint8_t COL=3;
@@ -112,16 +117,19 @@ uint8_t lastCharToRequest;
 uint8_t retransmitQueue;
 
 // Mode bits
-uint32_t mode_armed;
-uint32_t mode_stable;
-uint32_t mode_horizon;
-uint32_t mode_baro;
-uint32_t mode_mag;
-uint32_t mode_gpshome;
-uint32_t mode_gpshold;
-//uint32_t mode_llights;
-uint32_t mode_osd_switch;
-uint32_t mode_camstab;
+struct {
+  uint8_t armed;
+  uint8_t stable;
+  uint8_t horizon;
+  uint8_t baro;
+  uint8_t mag;
+  uint16_t gpshome;
+  uint16_t gpshold;
+  //uint8_t lights;
+  uint32_t osd_switch;
+  uint16_t camstab;
+;}mode;
+
 
 // Settings Locations
 enum Setting_ {
@@ -286,7 +294,7 @@ static uint8_t thrExpo8;
 
 static uint16_t  MwAccSmooth[3]={0,0,0};       // Those will hold Accelerator data
 int32_t  MwAltitude=0;                         // This hold barometric value
-int32_t  old_MwAltitude=0;                         // This hold barometric value
+int32_t  old_MwAltitude=0;                     // This hold barometric value
 
 
 int MwAngle[2]={0,0};           // Those will hold Accelerator Angle
@@ -306,7 +314,7 @@ int16_t MwVario=0;
 uint8_t armed=0;
 uint8_t previousarmedstatus=0;  // for statistics after disarming
 uint16_t armedangle=0;           // for capturing direction at arming
-int16_t GPS_distanceToHome=0;
+uint16_t GPS_distanceToHome=0;
 uint8_t GPS_fix=0;
 int32_t GPS_latitude;
 int32_t GPS_longitude;
@@ -315,11 +323,11 @@ uint16_t GPS_speed;
 uint16_t old_GPS_speed;
 int16_t GPS_directionToHome=0;
 uint8_t GPS_numSat=0;
-int16_t I2CError=0;
+uint16_t I2CError=0;
 uint16_t cycleTime=0;
 uint16_t pMeterSum=0;
 uint16_t MwRssi=0;
-int32_t GPS_time = 0;        //local time of coord calc - haydent
+uint32_t GPS_time = 0;        //local time of coord calc - haydent
 
 // For decoration
 uint8_t SYM_AH_DECORATION_LEFT = 0x10;
@@ -334,8 +342,8 @@ unsigned long sidebarsMillis = 0;
 unsigned long sidebaraMillis = 0;
 
 //For Current Throttle
-int LowT = 1100;
-int HighT = 1900;
+uint16_t LowT = 1100;
+uint16_t HighT = 1900;
 
 // For Time
 uint16_t onTime=0;
@@ -351,8 +359,8 @@ float amperage = 0;                // its the real value x10
 float amperagesum = 0;
 
 // Rssi
-int rssi =0;
-int oldrssi;
+uint16_t rssi =0;   // uint8_t ?
+uint16_t oldrssi;   // uint8_t ?
 //int rssiADC=0;
 //int rssi_Int=0;
 

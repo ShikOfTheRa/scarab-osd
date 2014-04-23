@@ -6,19 +6,15 @@ Major code contributors:
 Jean Gabriel Maurice - Johhnygab
 Itai Nahshon - Itai
 Carlo Nebuloni - Carlonb
-Ross Power - Power67 main GUI
-Kataventos - Henrietta
-Alex Dubus (initial GUI framework) - AlexinParis
+Ross Power - Power67 for introduction of main GUI
 Gary Moscardini - Shikra
 Hayden Thring - Haydent
 Liam O'Brien - LIMA2317
-
-Code improvement / identifying bugs: 
 Andi Sch
 PatrikE
 Okan Vitaliy
-VVK
 Bicycle
+Henrietta - Kataventos
 
 Special thanks to other contributors - testing / feedback / User help:
 Deet
@@ -27,7 +23,8 @@ HFman
 
 
 Also special thanks:
-Q @  www.multiwiicopter.com for providing hardware to test
+Alex Dubus - AlexinParis - For MultiWii!
+www.multiwiicopter.com for providing hardware to test
 
 
 Please report any missing names and aplogies if not already included...

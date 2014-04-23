@@ -43,6 +43,7 @@ Multiple HUD choices
 Display anal / PWM sensors on GUI - via MW OSD protocol
 Improve PWM RSSI filtering for extreme values. Recheck or constrain value
 Migrate relevant items from config.h to GUI
+Add current used to flight summary screen
 OSD Menu
  - re-add timezone correction into menu
  - review and add additional features wher epossible
@@ -55,6 +56,7 @@ Review alternative look / feel
  - ARROW icon
  - Throttle ICON / 
  - Longer VARIO option
+ - Map mode distance indicator
  - Revised startup display
  - Add clear AUTOPILOT / PILOT ASSIST type text message
  - LARGE FONT
