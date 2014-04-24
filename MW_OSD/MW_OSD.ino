@@ -542,21 +542,25 @@ void ProcessSensors(void) {
 #endif
 
 //-------------- Current
-  if (!Settings[S_AMPERAGE_VIRTUAL]) { // Analogue
-    amperage = sensorfilter[2][SENSORFILTERSIZE]>>3;
-    amperage = map(amperage, Settings[S_AMPMIN]+AMPERAGEOFFSET, S16_AMPMAX, 0, AMPERAGEMAX);
-    if (amperage < 0) amperage=0;
-  }  
-  else {  // Virtual
-    uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],1000,2000);
-    Vthrottle = constrain((Vthrottle-1000)/10,10,100);
-    amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*S16_AMPMAX*0.01;
-    if(armed)
-      amperage += Settings[S_AMPMIN];
-    else 
-      amperage = Settings[S_AMPMIN];
-  }  
-
+  
+  if(!Settings[S_MWAMPERAGE]) {
+    if (!Settings[S_AMPERAGE_VIRTUAL]) { // Analogue
+      amperage = sensorfilter[2][SENSORFILTERSIZE]>>3;
+      amperage = map(amperage, Settings[S_AMPMIN]+AMPERAGEOFFSET, S16_AMPMAX, 0, AMPERAGEMAX);
+      if (amperage < 0) amperage=0;
+    }  
+    else {  // Virtual
+      uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],1000,2000);
+      Vthrottle = constrain((Vthrottle-1000)/10,10,100);
+      amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*S16_AMPMAX*0.01;
+      if(armed)
+        amperage += Settings[S_AMPMIN];
+      else 
+        amperage = Settings[S_AMPMIN];
+    }  
+  }else{
+      amperage = MWAmperage / 100;
+  }
 
 //-------------- RSSI
   if (Settings[S_DISPLAYRSSI]) {           

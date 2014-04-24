@@ -146,6 +146,7 @@ enum Setting_ {
   S_DIVIDERRATIO,
   S_MAINVOLTAGE_VBAT,
   S_AMPERAGE,
+  S_MWAMPERAGE,
   S_AMPER_HOUR,
   S_AMPERAGE_VIRTUAL,
   S_AMPDIVIDERRATIO,
@@ -225,6 +226,7 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 200, // S_DIVIDERRATIO              10
 0,   // S_MAINVOLTAGE_VBAT          11
 0,   // S_AMPERAGE                  12
+0,   // S_MWAMPERAGE                ??
 0,   // S_AMPER_HOUR                13
 1,   // S_AMPERAGE_VIRTUAL,
 150, // S_AMPDIVIDERRATIO,
@@ -357,6 +359,7 @@ static int16_t MwHeading=0;
 // For Amperage
 float amperage = 0;                // its the real value x10
 float amperagesum = 0;
+uint16_t MWAmperage=0;
 
 // Rssi
 uint16_t rssi =0;   // uint8_t ?

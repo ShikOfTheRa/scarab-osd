@@ -177,6 +177,7 @@ void serialMSPCheck()
     MwVBat=read8();
     pMeterSum=read16();
     MwRssi = read16();
+    MWAmperage = read16();
   }
 
   if (cmdMSP==MSP_RC_TUNING)
