@@ -5,7 +5,6 @@ void SetupGroups(){
   //G_Amperage,
  // G_VVoltage,
  // G_Temperature,
- // G_Board,
  // G_GPS,
 //  G_Other
  
@@ -105,7 +104,7 @@ G_Voltage = GroupcontrolP5.addGroup("G_Voltage")
                 .setBarHeight(15)
                 .setBackgroundColor(color(30,255))
                 .setColorActive(red_)
-                .setBackgroundHeight((5*17) +5)
+                .setBackgroundHeight((6*17) +5)
                 .setLabel("Amperage")
                 //.setGroup(SG)
                 .disableCollapse() 
@@ -191,24 +190,7 @@ G_GPS = GroupcontrolP5.addGroup("G_GPS")
                 .toUpperCase(false)
                 .align(controlP5.CENTER,controlP5.CENTER)
                 ;        
-G_Board = GroupcontrolP5.addGroup("G_Board")
-                .setPosition(XBoard,YBoard+15)
-                .setWidth(Col1Width)
-                .setBarHeight(15)
-                .setColorForeground(color(30,255))
-                .setColorBackground(color(30,255))
-                .setColorLabel(color(0, 110, 220))
-                .setBarHeight(15)
-                .setBackgroundColor(color(30,255))
-                .setColorActive(red_)
-                .setBackgroundHeight((1*17) +5)
-                .setLabel("Board Type")
-                //.setGroup(SG)
-                .disableCollapse(); 
-                G_Board.captionLabel()
-                .toUpperCase(false)
-                .align(controlP5.CENTER,controlP5.CENTER)
-                ;  
+
                
 G_CallSign = GroupcontrolP5.addGroup("G_CallSign")
                 .setPosition(XCS,YCS+15)

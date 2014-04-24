@@ -217,9 +217,9 @@ int XEEPROM    = 120;        int YEEPROM    = 5;  //hidden do not remove
 int XBoard     = 120;        int YBoard   = 5;
 int XRSSI      = 120;        int YRSSI    = 339;
 int XVREF      = 120;        int YVREF    = 465;
-int XVolts     = 120;        int YVolts    = 46;
-int XAmps      = 120;        int YAmps    = 230;
-int XVVolts    = 120;        int YVVolts  = 155;
+int XVolts     = 120;        int YVolts    = 5;
+int XAmps      = 120;        int YAmps    = 190;
+int XVVolts    = 120;        int YVVolts  = 114;
 int XTemp      = 510;        int YTemp    = 283;
 int XCS        = 120;        int YCS    = 506;
 int XGPS       = 510;        int YGPS    = 5;
@@ -281,6 +281,7 @@ String[] ConfigNames = {
   "Use MWii",
   
   "Display Amps",
+  "Use MWii",
   "Display mAh",
   "Use Virtual Sensor",
   "Amps Adjust",
@@ -291,8 +292,6 @@ String[] ConfigNames = {
   
   "Display Temperature",
   "Temperature Max",
-  
-  "", // for Board type do not remove
   
   "Display GPS",
   " - GPS Coords",
@@ -342,6 +341,7 @@ String[] ConfigNames = {
   "S_CS7",
   "S_CS8",
   "S_CS9",
+  
 };
 
 String[] ConfigHelp = {
@@ -361,6 +361,7 @@ String[] ConfigHelp = {
   "Use MWii",
   
   "Display Amps",
+  "Use MWii",
   "Display mAh",
   "Use Virtual Sensor",
   "Amps Adjust",
@@ -371,8 +372,6 @@ String[] ConfigHelp = {
   
   "Display Temperature",
   "Temperature Max",
-  
-  "", // for Board type do not remove
   
   "Display GPS",
   " - GPS Coords",
@@ -421,7 +420,7 @@ String[] ConfigHelp = {
   "S_CS6",
   "S_CS7",
   "S_CS8",
-  "S_CS9",
+  "S_CS9", 
   };
 
 
@@ -448,6 +447,7 @@ int[] ConfigRanges = {
 1,     // S_MAINVOLTAGE_VBAT       11
 
 1,     // S_AMPERAGE,              12
+1,     // S_MWAMPERAGE                12 
 1,     // S_AMPER_HOUR,            13
 1,     // S_AMPERAGE_VIRTUAL,
 1023,   // S_AMPDIVIDERRATIO,      // note this is 8>>16 bit EPROM var
@@ -459,7 +459,6 @@ int[] ConfigRanges = {
 1,     // S_DISPLAYTEMPERATURE     17
 255,   // S_TEMPERATUREMAX         18
 
-1,     // S_BOARDTYPE              19
 
 1,     // S_DISPLAYGPS             20
 1,     // S_COORDINATES            21
@@ -507,7 +506,7 @@ int[] ConfigRanges = {
  255,
  255,
  255,
- 255,
+ 255, 
  255,
 
 };
@@ -583,7 +582,6 @@ Group MGUploadF,
   G_VVoltage,
   G_Temperature,
   G_Debug,
-  G_Board,
   G_GPS,
   G_Other,
   G_CallSign,
@@ -714,10 +712,11 @@ CreateItem(GetSetting("S_VOLTAGEMIN"), 5,4*17, G_Voltage);
 
 // Amperage  ------------------------------------------------------------------------
 CreateItem(GetSetting("S_AMPERAGE"),  5,0, G_Amperage);
-CreateItem(GetSetting("S_AMPER_HOUR"),  5,1*17, G_Amperage);
-CreateItem(GetSetting("S_AMPERAGE_VIRTUAL"),  5,2*17, G_Amperage);
-CreateItem(GetSetting("S_AMPDIVIDERRATIO"),  5,3*17, G_Amperage);
-CreateItem(GetSetting("S_AMPMIN"), 5, 4*17, G_Amperage);
+CreateItem(GetSetting("S_MWAMPERAGE"),  5,1*17, G_Amperage);
+CreateItem(GetSetting("S_AMPER_HOUR"),  5,2*17, G_Amperage);
+CreateItem(GetSetting("S_AMPERAGE_VIRTUAL"),  5,3*17, G_Amperage);
+CreateItem(GetSetting("S_AMPDIVIDERRATIO"),  5,4*17, G_Amperage);
+CreateItem(GetSetting("S_AMPMIN"), 5, 5*17, G_Amperage);
 
 // Video Voltage  ------------------------------------------------------------------------
 CreateItem(GetSetting("S_VIDVOLTAGE"),  5,0, G_VVoltage);
@@ -730,10 +729,6 @@ CreateItem(GetSetting("S_TEMPERATUREMAX"),  5,1*17, G_Temperature);
 
 //  Debug  --------------------------------------------------------------------
 CreateItem(GetSetting("S_DEBUG"),  5,0, G_Debug);
-
-//  Board ---------------------------------------------------------------------------
-CreateItem(GetSetting("S_BOARDTYPE"),  5,0, G_Board);
-BuildRadioButton(GetSetting("S_BOARDTYPE"),  5,0, G_Board, "Rush","Minim");
 
 
 //  GPS  ----------------------------------------------------------------------------
