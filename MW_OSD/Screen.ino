@@ -348,12 +348,15 @@ if (Settings[S_HORIZON_ELEVATION]){
 
 void displayVoltage(void)
 {
+ 
+ 
   if (Settings[S_VIDVOLTAGE_VBAT]){
     vidvoltage=MwVBat;
   }
   if (Settings[S_MAINVOLTAGE_VBAT]){
     voltage=MwVBat;
   }
+
   if (Settings[S_SHOWBATLEVELEVOLUTION]){
     // For battery evolution display
     int BATTEV1 =Settings[S_BATCELLS] * 35;
@@ -373,10 +376,15 @@ void displayVoltage(void)
   else {
     screenBuffer[0]=SYM_MAIN_BATT;
   }
-  ItoaPadded(voltage, screenBuffer+1, 4, 3);
-  screenBuffer[5] = SYM_VOLT;
-  screenBuffer[6] = 0;
-  MAX7456_WriteString(screenBuffer,getPosition(voltagePosition)-1);
+
+  if(fieldIsVisible(voltagePosition)) {
+    ItoaPadded(voltage, screenBuffer+1, 4, 3);
+    screenBuffer[5] = SYM_VOLT;
+    screenBuffer[6] = 0;
+    MAX7456_WriteString(screenBuffer,getPosition(voltagePosition)-1);
+  }
+  if(!fieldIsVisible(vidvoltagePosition))
+    return;
 
   if (Settings[S_VIDVOLTAGE]){
     screenBuffer[0]=SYM_VID_BAT;
@@ -410,34 +418,6 @@ void displayCurrentThrottle(void)
     screenBuffer[1]=' ';
     screenBuffer[6]=0;
     MAX7456_WriteString(screenBuffer,getPosition(CurrentThrottlePosition));
-}
-
-void olddisplayTime(void)
-{ 
-    if(!Settings[S_TIMER])
-    return;
-
-  if(flyTime < 3600) {
-    screenBuffer[0] = SYM_FLY_M;
-    formatTime(flyTime, screenBuffer+1, 0);
-  }
-  else {
-    screenBuffer[0] = SYM_FLY_H;
-    formatTime(flyTime/60, screenBuffer+1, 0);
-  }
-  MAX7456_WriteString(screenBuffer,getPosition(flyTimePosition));
-
-  if (armed) return ;
-  uint16_t position = getPosition(onTimePosition);
-  if(onTime < 3600) {
-    screenBuffer[0] = SYM_ON_M;
-    formatTime(onTime, screenBuffer+1, 0);
-  }
-  else {
-    screenBuffer[0] = SYM_ON_H;
-    formatTime(onTime/60, screenBuffer+1, 0);
-  }
-  MAX7456_WriteString(screenBuffer,getPosition(onTimePosition));
 }
 
 
@@ -1206,10 +1186,15 @@ void displayConfigScreen(void)
     MAX7456_WriteString_P(configMsg84, ALTT);
     MAX7456_WriteString(itoa(speedMAX,screenBuffer,10),ALTD-3);
 
-    MAX7456_WriteString_P(configMsg85, VELT);
+    xx=amperagesum/36;
+    itoa(xx,screenBuffer,10);
+    MAX7456_WriteString_P(configMsg86, VELT);
+    MAX7456_WriteString(itoa(xx,screenBuffer,10),VELD-3);
+
+    MAX7456_WriteString_P(configMsg85, LEVT);
 
     formatTime(flyingTime, screenBuffer, 1);
-    MAX7456_WriteString(screenBuffer,VELD-4);
+    MAX7456_WriteString(screenBuffer,LEVD-4);
 
 //    MAX7456_WriteString_P(configMsg86, LEVT);
 //    xx=amperagesum/36;

@@ -99,7 +99,7 @@
 #define  OSDOFF21 DISPLAY_MIN_OFF // rssiPosition
 #define  OSDOFF22 DISPLAY_MIN_OFF // temperaturePosition
 #define  OSDOFF23 DISPLAY_ALWAYS // voltagePosition
-#define  OSDOFF24 DISPLAY_ALWAYS // vidvoltagePosition
+#define  OSDOFF24 DISPLAY_MIN_OFF // vidvoltagePosition
 #define  OSDOFF25 DISPLAY_MIN_OFF // amperagePosition
 #define  OSDOFF26 DISPLAY_MIN_OFF // pMeterSumPosition
 #define  OSDOFF27 DISPLAY_MIN_OFF  // horizonPosition

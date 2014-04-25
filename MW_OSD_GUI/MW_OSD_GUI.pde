@@ -680,8 +680,8 @@ OSDBackground = loadImage("Background.jpg");
   buttonIMPORT = controlP5.addButton("bIMPORT",1,50,45,40,19); buttonIMPORT.setLabel("LOAD"); buttonIMPORT.setColorBackground(red_); 
   
   buttonREAD = controlP5.addButton("READ",1,XControlBox+30,YControlBox+25,45,16);buttonREAD.setColorBackground(red_);
-  buttonRESET = controlP5.addButton("RESET",1,XControlBox+30,YControlBox+50,45,16);buttonRESET.setColorBackground(red_);
-  buttonWRITE = controlP5.addButton("WRITE",1,XControlBox+30,YControlBox+75,45,16);buttonWRITE.setColorBackground(red_);
+  buttonWRITE = controlP5.addButton("WRITE",1,XControlBox+30,YControlBox+50,45,16);buttonWRITE.setColorBackground(red_);
+  buttonRESET = controlP5.addButton("DEFAULT",1,XControlBox+25,YControlBox+75,55,16);buttonRESET.setColorBackground(red_);
   buttonRESTART = controlP5.addButton("RESTART",1,XControlBox+25,YControlBox+100,55,16);buttonRESTART.setColorBackground(red_);
     
     

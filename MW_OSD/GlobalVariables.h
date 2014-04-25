@@ -157,7 +157,7 @@ enum Setting_ {
   S_VIDVOLTAGE_VBAT,
   S_DISPLAYTEMPERATURE,
   S_TEMPERATUREMAX,
-  S_BOARDTYPE,
+//  S_BOARDTYPE,
   S_DISPLAYGPS,
   S_COORDINATES,
   S_GPSCOORDTOP,
@@ -228,7 +228,7 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 200, // S_DIVIDERRATIO              10
 0,   // S_MAINVOLTAGE_VBAT          11
 0,   // S_AMPERAGE                  12
-0,   // S_MWAMPERAGE                ??
+0,   // S_MWAMPERAGE                12a :)
 0,   // S_AMPER_HOUR                13
 1,   // S_AMPERAGE_VIRTUAL,
 150, // S_AMPDIVIDERRATIO,
@@ -237,7 +237,7 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 0,   // S_VIDVOLTAGE_VBAT           16 
 0,   // S_DISPLAYTEMPERATURE        17
 255, // S_TEMPERATUREMAX            18
-1,   // S_BOARDTYPE                 19
+//1,   // S_BOARDTYPE                 19 SPARE
 1,   // S_DISPLAYGPS                20
 0,   // S_COORDINATES               21
 1,   // S_GPSCOORDTOP               22
@@ -539,12 +539,12 @@ const char configMsg75[] PROGMEM = "MAG CAL";
 //const char configMsg76[] PROGMEM = "TOP SHIFT";
 //-----------------------------------------------------------Page8
 const char configMsg80[] PROGMEM = "STATISTICS";
-const char configMsg81[] PROGMEM = "TRIP";
+const char configMsg81[] PROGMEM = "TOT DISTANCE";
 const char configMsg82[] PROGMEM = "MAX DISTANCE";
 const char configMsg83[] PROGMEM = "MAX ALTITUDE";
 const char configMsg84[] PROGMEM = "MAX SPEED";
-const char configMsg85[] PROGMEM = "FLYING TIME";
-const char configMsg86[] PROGMEM = "AMPS DRAINED";
+const char configMsg85[] PROGMEM = "FLY TIME";
+const char configMsg86[] PROGMEM = "MAH USED";
 
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456

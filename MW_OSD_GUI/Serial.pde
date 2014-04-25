@@ -331,10 +331,10 @@ public void SendChar(){
 }
 
 
-public void RESET(){
+public void DEFAULT(){
  if (init_com==1){
     noLoop();
-    int Reset_result = JOptionPane.showConfirmDialog(this,"Are you sure you wish to RESET?", "RESET OSD MEMORY",JOptionPane.WARNING_MESSAGE,JOptionPane.YES_NO_CANCEL_OPTION);
+    int Reset_result = JOptionPane.showConfirmDialog(this,"Are you sure you wish to set OSD to DEFAULT values?", "RESET OSD MEMORY",JOptionPane.WARNING_MESSAGE,JOptionPane.YES_NO_CANCEL_OPTION);
     loop();
     switch (Reset_result) {
       case JOptionPane.YES_OPTION:
