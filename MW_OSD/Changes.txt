@@ -22,7 +22,8 @@ bugfix: incorrect anal pin handling
 + added fastpixel support - *may* improve display for hi-res cameras 650tvl+
 + added amperage support from multiwii - haydent                     
 + added option to hid voltage, video voltage and timer within options for OSD switch control
-+ added current used bacl into flight summary screen
++ added current used back into flight summary screen
++ GUI: renamed reset to defaults for extra clarity
 
 
 
