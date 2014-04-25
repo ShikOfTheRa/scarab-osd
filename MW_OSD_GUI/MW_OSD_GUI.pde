@@ -49,7 +49,7 @@ import java.text.DecimalFormat;
 
 String MW_OSD_GUI_Version = "R1";
 
-
+int MSP_sendOrder =0;
 PImage img_Clear,OSDBackground,RadioPot;
 
 // ScreenType---------- NTSC = 0, PAL = 1 ---------------------------------
@@ -976,59 +976,90 @@ void draw() {
     MakePorts();
     MWData_Com();
     if (!FontMode) PortRead = false;
-    
   }
-  
+
   //PortWrite = false;
-  if ((SendSim ==1) && (ClosePort == false)){
+  if ((SendSim ==1) && (ClosePort == false)) {
     //PortWrite = true;
-      //MakePorts();
- 
-    if ((init_com==1)  && (time-time5 >5000) && (toggleMSP_Data == false) && (!FontMode)){
-      if(ClosePort) return;
-      time5 = time;
-       
-      if (init_com==1){
-        SendCommand(MSP_BOXNAMES);
-        SendCommand(MSP_BOXIDS);
+    //MakePorts();
+
+
+    if (!FontMode) {
+
+      if (init_com==1) {
+        if (ClosePort) return;
+
+        if ((time-time5 >50000) && (toggleMSP_Data == false)) {
+          time5 = time;
+          if (init_com==1) {
+            SendCommand(MSP_BOXNAMES);
+            SendCommand(MSP_BOXIDS);
+          }
+        }
+
+        MSP_sendOrder++;
+        switch(MSP_sendOrder) {
+        case 1:
+          if (init_com==1)SendCommand(MSP_ANALOG);
+          if (init_com==1)SendCommand(MSP_COMP_GPS); 
+          break;
+        case 2:
+          if (init_com==1)SendCommand(MSP_STATUS);
+          break;
+        case 3:
+          if (init_com==1)SendCommand(MSP_RC);
+          break;
+        case 4:
+          if (init_com==1)SendCommand(MSP_RAW_GPS);
+          break;
+        case 5:
+          PortWrite = !PortWrite;      
+          if (init_com==1)SendCommand(MSP_ATTITUDE);
+          if (init_com==1)SendCommand(MSP_ALTITUDE);
+          break;
+        case 6: 
+          if (init_com==1)SendCommand(MSP_RC);
+          if(time-time5 < 10000)MSP_sendOrder=0;
+          break;
+        case 7: 
+          if (toggleMSP_Data == true && (time-time5 < 5000)) MSP_sendOrder=0;
+          if (toggleMSP_Data == false) SendCommand(MSP_BOXNAMES);
+          break;
+        case 8:
+          time5 = time;
+          if (toggleMSP_Data == false) SendCommand(MSP_BOXIDS);
+          MSP_sendOrder=0;
+          break;
+        case 9:
+          break;
+        case 10:
+          break;
+        case 11:
+          break;
+        }
+// Unused timers.        
+//        if ((time-time4 >200)) {
+//          time4 = time; 
+//          //PortWrite = !PortWrite;
+//          //MakePorts();
+//        }
+//
+//        if ((time-time1 >40)) {
+//          time1 = time; 
+//          //PortWrite = false;
+//        }
+
       }
-      //PortWrite = false;
-    }
-    if ((init_com==1)  && (time-time4 >200) && (!FontMode)){
-      if(ClosePort) return;
-      time4 = time; 
-      //PortWrite = !PortWrite;
-      //MakePorts();
-      if (init_com==1)SendCommand(MSP_ANALOG);
-      if (init_com==1)SendCommand(MSP_STATUS);
-      if (init_com==1)SendCommand(MSP_RC);
-      if (init_com==1)SendCommand(MSP_ALTITUDE);
-      if (init_com==1)SendCommand(MSP_RAW_GPS);
-      if (init_com==1)SendCommand(MSP_COMP_GPS);
-      
-      
-    }
-    if ((init_com==1)  && (time-time1 >40) && (!FontMode)){
-      if(ClosePort) return;
-      time1 = time; 
-      PortWrite = !PortWrite;
-      
-      if (init_com==1)SendCommand(MSP_ATTITUDE);
-      //PortWrite = false;
-    }
+    } // End !FontMode
   }
   else
   {
-    if (!FontMode) PortWrite = false; 
+    if (!FontMode) PortWrite = false;
   }
 
-
-  
-  
-  if ((FontMode) && (time-time2 >100)){
+  if ((FontMode) && (time-time2 >100)) {
     SendChar();
-   }
-    
+  }
     
   MakePorts();  
   
