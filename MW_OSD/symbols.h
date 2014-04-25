@@ -167,3 +167,6 @@
 //Misc
 #define SYM_COLON 0X2D
 
+//sport
+#define SYM_MIN 0xB3
+#define SYM_AVG 0xB4

@@ -105,6 +105,8 @@ unsigned int allSec=0;
 uint8_t armedtimer=255;
 uint16_t debugerror;
 
+uint16_t cell_data[6];
+
 // Config status and cursor location
 uint8_t ROW=10;
 uint8_t COL=3;
@@ -409,6 +411,7 @@ uint16_t flyingTime=0;
 #define MSP_PIDNAMES             117   //out message         the PID names
 #define MSP_WP                   118   //out message         get a WP, WP# is in the payload, returns (WP#, lat, lon, alt, flags) WP#0-home, WP#16-poshold
 #define MSP_BOXIDS               119   //out message         get the permanent IDs associated to BOXes
+#define MSP_CELLS                121   //out message         FrSky SPort Telemtry
 
 #define MSP_SET_RAW_RC           200   //in message          8 rc chan
 #define MSP_SET_RAW_GPS          201   //in message          fix, numsat, lat, lon, alt, speed
@@ -551,11 +554,11 @@ const unsigned char temperatureUnitAdd[2] = {
   0x0e,0x0d};
 
 const char MultiWiiLogoL1Add[17] PROGMEM = {
-  0xd0,0xd1,0xd2,0xd3,0xd4,0xd5,0xd6,0xd7,0xd8,0xd9,0xda,0xdb,0xdc,0xdd,0xde,0};
+  0xd0,0xd1,0xd2,0xd3,0xd4,0xd5,0xd6,0xd7,0xd8,0xd9,0xda,0xdb,0xdc,0xdd,0xd5,0};
 const char MultiWiiLogoL2Add[17] PROGMEM = {
   0xe0,0xe1,0xe2,0xe3,0xe4,0xe5,0xe6,0xe7,0xe8,0xe9,0xea,0xeb,0xec,0xed,0xee,0};
 const char MultiWiiLogoL3Add[17] PROGMEM = {
-  0xf0,0xf1,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa,0xfb,0xfc,0xfd,0xfe,0};
+  0xf0,0xf1,0xf2,0xf3,0xd5,0xd5,0xd5,0xd5,0xd5,0xd5,0xd5,0xd5,0xd5,0xd5,0xd5,0};
 
 const unsigned char MwAltitudeAdd[2]={
   0xa7,0xa8};
@@ -618,3 +621,4 @@ enum Positions {
 #define REQ_MSP_BOX       (1 << 11)
 #define REQ_MSP_FONT      (1 << 12)
 #define REQ_MSP_DEBUG     (1 << 13)
+#define REQ_MSP_CELLS     (1 << 14)

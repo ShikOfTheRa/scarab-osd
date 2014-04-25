@@ -1352,3 +1352,68 @@ void displayDebug(void)
 #endif
 }
 
+void displayCells(void){
+#if defined SPORT_CELLS
+  #ifndef MIN_CELL
+    #define MIN_CELL 300
+  #endif
+    uint16_t sum = 0;
+    uint16_t low = 0;
+    uint8_t cells = 0;   
+  
+    for(uint8_t i=0; i<6; i++) {
+      
+      uint16_t volt = cell_data[i];
+      if(!volt)continue;//empty cell
+      ++cells;
+      sum += volt;
+      if(volt < low || !low)low = volt;
+      
+      if((volt>MIN_CELL)||(timer.Blink2hz)){
+       
+          if (volt < 300) screenBuffer[i]=0xFF;//Min
+          else if (volt < 350) screenBuffer[i]=0xFE;
+          else if (volt < 355) screenBuffer[i]=0xFD;
+          else if (volt < 360) screenBuffer[i]=0xFC;
+          else if (volt < 365) screenBuffer[i]=0xFB;
+          else if (volt < 370) screenBuffer[i]=0xFA;
+          else if (volt < 375) screenBuffer[i]=0xF9;
+          else if (volt < 380) screenBuffer[i]=0xF8;
+          else if (volt < 385) screenBuffer[i]=0xF7;
+          else if (volt < 390) screenBuffer[i]=0xF6;
+          else if (volt < 395) screenBuffer[i]=0xF5;
+          else if (volt < 400) screenBuffer[i]=0xF4;
+          else if (volt < 405) screenBuffer[i]=0xEF;
+          else if (volt < 410) screenBuffer[i]=0xDF;
+          else if (volt < 415) screenBuffer[i]=0xDE;
+          else screenBuffer[i]=0xC3;//Max
+      
+      }else screenBuffer[i]=' ';
+      
+    }
+    
+      if(cells){
+        screenBuffer[cells] = 0;       
+        MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+(2*LINE)-1+(6-cells));//bar chart
+      }
+
+      ItoaPadded(low, screenBuffer+1,4,2);
+      screenBuffer[0] = SYM_MIN;
+      screenBuffer[5] = SYM_VOLT;
+      screenBuffer[6] = 0;
+    
+    if((low>MIN_CELL)||(timer.Blink2hz))
+          MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+(3*LINE)-1);//lowest
+    
+    
+      uint16_t avg = 0;
+      if(cells)avg = sum / cells;
+      ItoaPadded( avg, screenBuffer+1,4,2);
+      screenBuffer[0] = SYM_AVG;
+      screenBuffer[5] = SYM_VOLT;
+      screenBuffer[6] = 0;
+    
+    if((avg>MIN_CELL)||(timer.Blink2hz))
+          MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+(4*LINE)-1);//average     
+#endif 
+}
