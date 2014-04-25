@@ -21,6 +21,8 @@ bugfix: incorrect anal pin handling
 + added ability to hide ARMED/DISARMED status via config.H if required
 + added fastpixel support - *may* improve display for hi-res cameras 650tvl+
 + added amperage support from multiwii - haydent                     
++ added option to hid voltage, video voltage and timer within options for OSD switch control
++ added current used bacl into flight summary screen
 
 
 
@@ -35,7 +37,6 @@ Callsign
   - Provide location
   - Triggered by a switch - use for text display - .e.g missile lock LOL....
   
-Include voltage and timer within options for OSD switch control
 Add "Disarmed" enable / disable option to GUI
 Migrate OSD switch to toggle switch - flip between sceen layouts
 Alarms for distance / Altitude / Speed / mah / Current
@@ -49,10 +50,9 @@ Multiple HUD choices
 Display anal / PWM sensors on GUI - via MW OSD protocol
 Improve PWM RSSI filtering for extreme values. Recheck or constrain value
 Migrate relevant items from config.h to GUI
-Add current used to flight summary screen
 OSD Menu
  - re-add timezone correction into menu
- - review and add additional features wher epossible
+ - review and add additional features where possible
  
 Review alternative look / feel
  - Sensor indicator ICONS
@@ -72,4 +72,6 @@ Code quality
  - Generally review and improve code quality
  - Reduce memory for future functionality 
 
+ GUI todo:
+ 
 */     
