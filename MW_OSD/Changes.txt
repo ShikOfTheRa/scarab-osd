@@ -18,9 +18,13 @@ bugfix: compass heading reversed in baseflight mode
 bugfix: now able to disable mode icon if required
 bugfix: MWII RSSI bug fixed
 bugfix: incorrect anal pin handling
-+: added ability to hide ARMED/DISARMED status via config.H if required
-+: added fastpixel support - *may* improve display for hi-res cameras 650tvl+
-                     
++ added ability to hide ARMED/DISARMED status via config.H if required
++ added fastpixel support - *may* improve display for hi-res cameras 650tvl+
++ added amperage support from multiwii - haydent                     
+
+
+
+
 
 Under review for next release:
 
@@ -29,11 +33,13 @@ Callsign
   - Choose location
   - GUI to support
   - Provide location
-Current sensor via Mutltiwii
+  - Triggered by a switch - use for text display - .e.g missile lock LOL....
+  
+Include voltage and timer within options for OSD switch control
 Add "Disarmed" enable / disable option to GUI
 Migrate OSD switch to toggle switch - flip between sceen layouts
 Alarms for distance / Altitude / Speed / mah / Current
-Descrition chracter font for for heading / angle to home
+Add description chracter font for for heading / angle to home
 Double resolution for MAP mode
 Additional MAP mode
 Multiple HUD choices
