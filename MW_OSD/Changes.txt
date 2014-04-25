@@ -24,8 +24,7 @@ bugfix: incorrect anal pin handling
 + added option to hid voltage, video voltage and timer within options for OSD switch control
 + added current used back into flight summary screen
 + GUI: renamed reset to defaults for extra clarity
-
-
++ GUI: task switcher for faster serial. Closer to realtime - PatrikE 
 
 
 
