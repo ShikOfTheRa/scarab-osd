@@ -35,7 +35,7 @@ enum Settings {
   S_WITHDECORATION,
   S_SHOWBATLEVELEVOLUTION,
   S_RESETSTATISTICS,
-  S_ENABLEADC,
+  S_MAPMODE,
   S_VREFERENCE,
   S_USE_BOXNAMES,
   S_MODEICON,
@@ -43,7 +43,7 @@ enum Settings {
   S_GPSTIME,
   S_GPSTZAHEAD,
   S_GPSTZ,
-  S_GPSDS,
+  S_GPSDS, // reserved for future use
   S_DEBUG,
   S_SCROLLING,
   S_GIMBAL,
