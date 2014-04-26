@@ -297,7 +297,7 @@ void loop()
           displayGPS_speed();
           displayGPSPosition();
           displayGPS_time();
-          if(Settings[S_ENABLEADC]) mapmode();
+          if(Settings[S_MAPMODE]) mapmode();
 #ifdef FIXEDWING // required because FW can fly without BARO / MAG
           displayAltitude();
           displayClimbRate();

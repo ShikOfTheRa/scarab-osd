@@ -305,7 +305,7 @@ if (Settings[S_HORIZON_ELEVATION]){
  
 }
 }
-  if(!Settings[S_ENABLEADC]){
+  if(!Settings[S_MAPMODE]){
     if(Settings[S_DISPLAY_HORIZON_BR]){
       screen[position+2*LINE+7-1] = SYM_AH_CENTER_LINE;
       screen[position+2*LINE+7+1] = SYM_AH_CENTER_LINE_RIGHT;
@@ -1117,8 +1117,8 @@ void displayConfigScreen(void)
     }
 //R7:     
     MAX7456_WriteString_P(configMsg69, MAGT+LINE);
-    MAX7456_WriteString(itoa(Settings[S_ENABLEADC],screenBuffer,10),MAGD+LINE);
-    if(Settings[S_ENABLEADC]){
+    MAX7456_WriteString(itoa(Settings[S_MAPMODE],screenBuffer,10),MAGD+LINE);
+    if(Settings[S_MAPMODE]){
       MAX7456_WriteString_P(configMsgON, MAGD+LINE);
     }
     else{

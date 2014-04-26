@@ -215,13 +215,13 @@ int Col1Width = 180;        int Col2Width = 200;    int Col3Width = 165;
 
 int XEEPROM    = 120;        int YEEPROM    = 5;  //hidden do not remove
 int XBoard     = 120;        int YBoard   = 5;
-int XRSSI      = 120;        int YRSSI    = 339;
-int XVREF      = 120;        int YVREF    = 465;
+int XRSSI      = 120;        int YRSSI    = 317;
+int XVREF      = 120;        int YVREF    = 444;
 int XVolts     = 120;        int YVolts    = 5;
 int XAmps      = 120;        int YAmps    = 190;
 int XVVolts    = 120;        int YVVolts  = 114;
-int XTemp      = 510;        int YTemp    = 283;
-int XCS        = 120;        int YCS    = 506;
+int XTemp      = 510;        int YTemp    = 266;
+int XCS        = 120;        int YCS    = 486;
 int XGPS       = 510;        int YGPS    = 5;
 int XCOMPASS   = 510;        int YCOMPASS    = 98;
 //int XGPS       = 305;        int YGPS    = 5;
@@ -317,7 +317,7 @@ String[] ConfigNames = {
   "Display GPS time",
   "Time Zone +/-",
   "Time Zone offset",
-  "DST Minutes",
+  "",  //"DST Minutes", //reserved for future use
   "Debug",
   " - SB Scrolling",
   "Display Gimbal",
@@ -397,7 +397,7 @@ String[] ConfigHelp = {
   "Display GPS time",
   "Time Zone +/-",
   "Time Zone offset",
-  "DST Minutes",
+  "", //"DST Minutes", //reserved for future use
   "Debug",
   " - SB Scrolling",
   "Display Gimbal",
@@ -475,7 +475,7 @@ int[] ConfigRanges = {
 1,     // S_WITHDECORATION         31
 1,     // S_SHOWBATLEVELEVOLUTION  32
 1,     // S_RESETSTATISTICS        33
-1,     // S_ENABLEADC              34
+1,     // S_MAPMODE              34
 1,     // S_VREFERENCE,
 1,     // S_USE_BOXNAMES           35
 1,     // S_MODEICON               36
@@ -484,7 +484,7 @@ int[] ConfigRanges = {
 1,     // GPStime                  37a
 1,     // GPSTZ +/-                37b
 13,    // GPSTZ                    37c
-60,    // GPSDS                    37d
+60,    // GPSDS                    37d // reserved for future use
 1,     // Debug                    37e
 1,     // S_SCROLLING              37f
 1,     // S_GIMBAL                 37g
@@ -743,7 +743,7 @@ CreateItem(GetSetting("S_HORIZON_ELEVATION"),  5,1*17, G_HUD);
 CreateItem(GetSetting("S_WITHDECORATION"),  5,2*17, G_HUD);
 CreateItem(GetSetting("S_SCROLLING"),  5,3*17, G_HUD);
 CreateItem(GetSetting("S_SIDEBARTOPS"),  5,4*17, G_HUD);
-CreateItem(GetSetting("S_ENABLEADC"),  5,5*17, G_HUD);
+CreateItem(GetSetting("S_MAPMODE"),  5,5*17, G_HUD);
 
 //  VREF  ----------------------------------------------------------------------------
 CreateItem(GetSetting("S_VREFERENCE"),  5,0*17, G_VREF);
@@ -779,19 +779,20 @@ CreateItem(GetSetting("S_GPSTZ"),  5,1*17, G_TIME);
   confItem[GetSetting("S_GPSTZ")].setDecimalPrecision(1);
 CreateItem(GetSetting("S_GPSTZAHEAD"),  5,2*17, G_TIME);
 CreateItem(GetSetting("S_GPSDS"),  5,3*17, G_TIME);
-   confItem[GetSetting("S_GPSDS")].setMultiplier(15);
+  confItem[GetSetting("S_GPSDS")].setMultiplier(15);
+  confItem[GetSetting("S_GPSDS")].hide();
 
 //  Call Sign ---------------------------------------------------------------------------
 CreateItem(GetSetting("S_DISPLAY_CS"),  5,0, G_CallSign);
 
-controlP5.addTextfield("CallSign")
-     .setPosition(5,1*17)
+controlP5.addTextfield("")
+     .setPosition(5,18)
      .setSize(105,15)
      .setFont(font10)
      .setAutoClear(false)
      .setGroup(G_CallSign);
      ;
- controlP5.addTextlabel("TXTCallSign","Call Sign",120,1*17)
+ controlP5.addTextlabel("TXTCallSign","CallSign",120,1*17)
  .setGroup(G_CallSign);
  CreateCS(GetSetting("S_CS0"),  0,0, G_CallSign);
  CreateCS(GetSetting("S_CS1"),  0,0, G_CallSign);

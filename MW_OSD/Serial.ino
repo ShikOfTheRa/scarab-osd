@@ -483,7 +483,7 @@ void serialMenuCommon()
 	  if(ROW==5) Settings[S_COORDINATES]=!Settings[S_COORDINATES];
 	  if(ROW==6) Settings[S_MODEICON]=!Settings[S_MODEICON];
 	  if(ROW==7) Settings[S_GIMBAL]=!Settings[S_GIMBAL];
-	  if(ROW==8) Settings[S_ENABLEADC]=!Settings[S_ENABLEADC];
+	  if(ROW==8) Settings[S_MAPMODE]=!Settings[S_MAPMODE];
 	}
 
 	if(configPage == 7 && COL == 3) {
