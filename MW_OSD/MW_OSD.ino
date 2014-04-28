@@ -63,6 +63,11 @@ void setup()
  
   checkEEPROM();
   readEEPROM();
+  
+#ifdef STARTUPDELAY
+  delay(2000);
+#endif
+
   MAX7456Setup();
  
   if (Settings[S_VREFERENCE])
@@ -235,7 +240,7 @@ void loop()
       }
       if(previousarmedstatus && !armed){
         armedtimer=20;
-        configPage=8;
+        configPage=0;
         ROW=10;
         COL=1;
         configMode=1;
@@ -264,13 +269,13 @@ void loop()
           displayCurrentThrottle();
 
 #if defined CALLSIGNALWAYS
-        displayCallsign();       
+        if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition));       
 #else 
         if ( (onTime > (timer.lastCallSign+300)) || (onTime < (timer.lastCallSign+4)))
        {
            // Displays 4 sec every 5min (no blink during flight)
         if ( onTime > (timer.lastCallSign+300))timer.lastCallSign = onTime; 
-        displayCallsign();       
+        if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition));       
        }
 #endif
 
