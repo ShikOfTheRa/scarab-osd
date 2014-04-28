@@ -293,6 +293,8 @@ String[] ConfigNames = {
   "Display Temperature",
   "Temperature Max",
   
+//  "", // for Board type do not remove
+  
   "Display GPS",
   " - GPS Coords",
   " - Coords on Top",
@@ -317,7 +319,7 @@ String[] ConfigNames = {
   "Display GPS time",
   "Time Zone +/-",
   "Time Zone offset",
-  "",  //"DST Minutes", //reserved for future use
+  "",
   "Debug",
   " - SB Scrolling",
   "Display Gimbal",
@@ -341,7 +343,6 @@ String[] ConfigNames = {
   "S_CS7",
   "S_CS8",
   "S_CS9",
-  
 };
 
 String[] ConfigHelp = {
@@ -373,6 +374,8 @@ String[] ConfigHelp = {
   "Display Temperature",
   "Temperature Max",
   
+//  "", // for Board type do not remove
+  
   "Display GPS",
   " - GPS Coords",
   " - Coords on Top",
@@ -397,7 +400,7 @@ String[] ConfigHelp = {
   "Display GPS time",
   "Time Zone +/-",
   "Time Zone offset",
-  "", //"DST Minutes", //reserved for future use
+  "",
   "Debug",
   " - SB Scrolling",
   "Display Gimbal",
@@ -420,7 +423,7 @@ String[] ConfigHelp = {
   "S_CS6",
   "S_CS7",
   "S_CS8",
-  "S_CS9", 
+  "S_CS9",
   };
 
 
@@ -447,7 +450,7 @@ int[] ConfigRanges = {
 1,     // S_MAINVOLTAGE_VBAT       11
 
 1,     // S_AMPERAGE,              12
-1,     // S_MWAMPERAGE                12 
+1,     // S_MWAMPERAGE,              12a
 1,     // S_AMPER_HOUR,            13
 1,     // S_AMPERAGE_VIRTUAL,
 1023,   // S_AMPDIVIDERRATIO,      // note this is 8>>16 bit EPROM var
@@ -459,6 +462,7 @@ int[] ConfigRanges = {
 1,     // S_DISPLAYTEMPERATURE     17
 255,   // S_TEMPERATUREMAX         18
 
+//1,     // S_BOARDTYPE              19
 
 1,     // S_DISPLAYGPS             20
 1,     // S_COORDINATES            21
@@ -475,7 +479,7 @@ int[] ConfigRanges = {
 1,     // S_WITHDECORATION         31
 1,     // S_SHOWBATLEVELEVOLUTION  32
 1,     // S_RESETSTATISTICS        33
-1,     // S_MAPMODE              34
+1,     // S_ENABLEADC              34
 1,     // S_VREFERENCE,
 1,     // S_USE_BOXNAMES           35
 1,     // S_MODEICON               36
@@ -484,7 +488,7 @@ int[] ConfigRanges = {
 1,     // GPStime                  37a
 1,     // GPSTZ +/-                37b
 13,    // GPSTZ                    37c
-60,    // GPSDS                    37d // reserved for future use
+60,    // GPSDS                    37d
 1,     // Debug                    37e
 1,     // S_SCROLLING              37f
 1,     // S_GIMBAL                 37g
@@ -506,7 +510,7 @@ int[] ConfigRanges = {
  255,
  255,
  255,
- 255, 
+ 255,
  255,
 
 };
@@ -582,6 +586,7 @@ Group MGUploadF,
   G_VVoltage,
   G_Temperature,
   G_Debug,
+  G_Board,
   G_GPS,
   G_Other,
   G_CallSign,
@@ -712,11 +717,11 @@ CreateItem(GetSetting("S_VOLTAGEMIN"), 5,4*17, G_Voltage);
 
 // Amperage  ------------------------------------------------------------------------
 CreateItem(GetSetting("S_AMPERAGE"),  5,0, G_Amperage);
-CreateItem(GetSetting("S_MWAMPERAGE"),  5,1*17, G_Amperage);
-CreateItem(GetSetting("S_AMPER_HOUR"),  5,2*17, G_Amperage);
-CreateItem(GetSetting("S_AMPERAGE_VIRTUAL"),  5,3*17, G_Amperage);
-CreateItem(GetSetting("S_AMPDIVIDERRATIO"),  5,4*17, G_Amperage);
-CreateItem(GetSetting("S_AMPMIN"), 5, 5*17, G_Amperage);
+CreateItem(GetSetting("S_MWAMPERAGE"),  5,5*17, G_Amperage);
+CreateItem(GetSetting("S_AMPER_HOUR"),  5,1*17, G_Amperage);
+CreateItem(GetSetting("S_AMPERAGE_VIRTUAL"),  5,2*17, G_Amperage);
+CreateItem(GetSetting("S_AMPDIVIDERRATIO"),  5,3*17, G_Amperage);
+CreateItem(GetSetting("S_AMPMIN"), 5, 4*17, G_Amperage);
 
 // Video Voltage  ------------------------------------------------------------------------
 CreateItem(GetSetting("S_VIDVOLTAGE"),  5,0, G_VVoltage);
@@ -729,6 +734,10 @@ CreateItem(GetSetting("S_TEMPERATUREMAX"),  5,1*17, G_Temperature);
 
 //  Debug  --------------------------------------------------------------------
 CreateItem(GetSetting("S_DEBUG"),  5,0, G_Debug);
+
+//  Board ---------------------------------------------------------------------------
+//CreateItem(GetSetting("S_BOARDTYPE"),  5,0, G_Board);
+//BuildRadioButton(GetSetting("S_BOARDTYPE"),  5,0, G_Board, "Rush","Minim");
 
 
 //  GPS  ----------------------------------------------------------------------------
@@ -743,7 +752,7 @@ CreateItem(GetSetting("S_HORIZON_ELEVATION"),  5,1*17, G_HUD);
 CreateItem(GetSetting("S_WITHDECORATION"),  5,2*17, G_HUD);
 CreateItem(GetSetting("S_SCROLLING"),  5,3*17, G_HUD);
 CreateItem(GetSetting("S_SIDEBARTOPS"),  5,4*17, G_HUD);
-CreateItem(GetSetting("S_MAPMODE"),  5,5*17, G_HUD);
+CreateItem(GetSetting("S_ENABLEADC"),  5,5*17, G_HUD);
 
 //  VREF  ----------------------------------------------------------------------------
 CreateItem(GetSetting("S_VREFERENCE"),  5,0*17, G_VREF);
@@ -779,20 +788,20 @@ CreateItem(GetSetting("S_GPSTZ"),  5,1*17, G_TIME);
   confItem[GetSetting("S_GPSTZ")].setDecimalPrecision(1);
 CreateItem(GetSetting("S_GPSTZAHEAD"),  5,2*17, G_TIME);
 CreateItem(GetSetting("S_GPSDS"),  5,3*17, G_TIME);
-  confItem[GetSetting("S_GPSDS")].setMultiplier(15);
-  confItem[GetSetting("S_GPSDS")].hide();
+   confItem[GetSetting("S_GPSDS")].setMultiplier(15);
+   confItem[GetSetting("S_GPSDS")].hide();
 
 //  Call Sign ---------------------------------------------------------------------------
 CreateItem(GetSetting("S_DISPLAY_CS"),  5,0, G_CallSign);
 
-controlP5.addTextfield("")
-     .setPosition(5,18)
+controlP5.addTextfield("CallSign")
+     .setPosition(5,1*17)
      .setSize(105,15)
      .setFont(font10)
      .setAutoClear(false)
      .setGroup(G_CallSign);
      ;
- controlP5.addTextlabel("TXTCallSign","CallSign",120,1*17)
+ controlP5.addTextlabel("TXTCallSign","Call Sign",120,1*17)
  .setGroup(G_CallSign);
  CreateCS(GetSetting("S_CS0"),  0,0, G_CallSign);
  CreateCS(GetSetting("S_CS1"),  0,0, G_CallSign);

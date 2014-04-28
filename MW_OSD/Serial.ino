@@ -496,6 +496,11 @@ void serialMenuCommon()
 	  if(ROW==4) Settings[S_DEBUG]=!Settings[S_DEBUG];
 	  if(ROW==5) timer.magCalibrationTimer=CALIBRATION_DELAY;
 	}
+	if(configPage == 8 && COL == 3) {
+	  if(ROW==1) Settings[S_GPSTIME]=!Settings[S_GPSTIME];
+	  if(ROW==2) Settings[S_GPSTZAHEAD]=!Settings[S_GPSTZAHEAD];
+	  if(ROW==5) Settings[S_GPSTZ]=Settings[S_GPSTZ]+menudir;
+	}
   	if((ROW==10)&&(COL==1)) configExit();
 	if((ROW==10)&&(COL==2)) configSave();
 

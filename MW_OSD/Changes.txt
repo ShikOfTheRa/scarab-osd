@@ -23,6 +23,8 @@ bugfix: incorrect anal pin handling
 + added amperage support from multiwii - haydent                     
 + added option to hid voltage, video voltage and timer within options for OSD switch control
 + added current used back into flight summary screen
++ added GPS timezone and options into OSD menu - haydent
++ added default startup delay - support for MAX chip voltage rise issue
 + GUI: renamed reset to defaults for extra clarity
 + GUI: task switcher for faster serial. Closer to realtime - PatrikE 
 
