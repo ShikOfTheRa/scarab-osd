@@ -1306,10 +1306,10 @@ void displayDebug(void)
 //  debug[0]=(int16_t)heapptr;
 //  debug[1]=(int16_t)stackptr;
 
-//  debug[0]=sensorpinarray[0];
-//  debug[1]=sensorpinarray[1];
-//  debug[2]=sensorpinarray[2];
-//  debug[3]=sensorpinarray[3];
+  debug[0]=sensorfilter[0][SENSORFILTERSIZE];
+  debug[1]=sensorfilter[0][SENSORFILTERSIZE+1];
+  debug[2]=sensorfilter[2][0];
+//  debug[3]=sensorfilter[3][SENSORFILTERSIZE];
 
   for(uint8_t X=0; X<4; X++) {
     ItoaPadded(debug[X], screenBuffer+2,7,0);     
