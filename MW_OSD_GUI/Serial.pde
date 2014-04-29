@@ -223,7 +223,7 @@ void RESTART(){
     tailSerialReply();
   }
   toggleMSP_Data = false;
-  delay(1500);
+  delay(3500);
   READ();
 }  
 

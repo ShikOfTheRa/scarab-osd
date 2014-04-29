@@ -268,13 +268,13 @@ void loop()
         if (Settings[S_THROTTLEPOSITION])
           displayCurrentThrottle();
 
-#if defined CALLSIGNALWAYS
-        if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition));       
+#ifdef CALLSIGNALWAYS
+        if(Settings[S_DISPLAY_CS]) displayCallsign(CALLSIGNALWAYS);       
 #else 
         if ( (onTime > (timer.lastCallSign+300)) || (onTime < (timer.lastCallSign+4)))
        {
            // Displays 4 sec every 5min (no blink during flight)
-        if ( onTime > (timer.lastCallSign+300))timer.lastCallSign = onTime; 
+        if ( onTime > (timer.lastCallSign+300)) timer.lastCallSign = onTime; 
         if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition));       
        }
 #endif

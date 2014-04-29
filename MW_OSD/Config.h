@@ -4,7 +4,7 @@
 //#define RUSHDUINO                 // Select board type - RUSHDUINO. Defaults to MINIM
 //#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
 //#define TEMPSENSOR                // Enable if you have a hardware temperature sensor
-//#define STARTUPDELAY                // Enable startup delay of 2 secs to allow MAX chip voltage to rise fully and initialise before configuring 
+#define STARTUPDELAY                // Enable startup delay of 2 secs to allow MAX chip voltage to rise fully and initialise before configuring 
 #define AMPERAGEMAX     500         // Size of current sensor * 10 e.g. 50A sensor = 500
 #define AMPERAGEOFFSET  0           // Optional extra for high offset sensors not supported in GUI (typically bidirectional sensors use a value of 256-512) 
 #define STAGE2FILTER                // Optional 2nd stage filter for all ADC and PWM RSSI. Enable for smoother readings 
