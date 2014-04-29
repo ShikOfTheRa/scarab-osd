@@ -521,9 +521,25 @@ void ProcessSensors(void) {
         sensortemp = pulseIn(PWMRSSIPIN, HIGH,21000)>>1;
       }
     }
-#ifdef STAGE2FILTER     
+#if defined STAGE2FILTER // Use averaged change    
     sensorfilter[sensor][sensorindex] = (sensorfilter[sensor][sensorindex] + sensortemp)>>1;
-#else
+#elif defined SMOOTHFILTER // use trending variable constaint. Smooth filering of small changes, but react fast to continual large changes
+    if (abs(sensorfilter[sensor][sensorindex] - sensortemp) > 25) {
+      sensorfilter[sensor][SENSORFILTERSIZE+1] << 1;
+    }
+    else {
+      sensorfilter[sensor][SENSORFILTERSIZE+1] >>1;
+    }
+    if (sensorfilter[sensor][SENSORFILTERSIZE+1] <1) {
+      sensorfilter[sensor][SENSORFILTERSIZE+1] = 1;
+    }
+    else if (sensorfilter[sensor][SENSORFILTERSIZE+1] > 256) {
+      sensorfilter[sensor][SENSORFILTERSIZE+1] = 512;
+    }
+    if (sensortemp > sensorfilter[sensor][SENSORFILTERSIZE+1]) { 
+      sensorfilter[sensor][sensorindex] = sensorfilter[sensor][SENSORFILTERSIZE+1]; //constrained value
+    }     
+#else // Use abasic averaging filter
     sensorfilter[sensor][sensorindex] = sensortemp;
 #endif
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] + sensorfilter[sensor][sensorindex];
