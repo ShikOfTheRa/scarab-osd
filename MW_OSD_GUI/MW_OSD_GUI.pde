@@ -215,13 +215,13 @@ int Col1Width = 180;        int Col2Width = 200;    int Col3Width = 165;
 
 int XEEPROM    = 120;        int YEEPROM    = 5;  //hidden do not remove
 int XBoard     = 120;        int YBoard   = 5;
-int XRSSI      = 120;        int YRSSI    = 339;
-int XVREF      = 120;        int YVREF    = 465;
+int XRSSI      = 120;        int YRSSI    = 317;
+int XVREF      = 120;        int YVREF    = 444;
 int XVolts     = 120;        int YVolts    = 5;
 int XAmps      = 120;        int YAmps    = 190;
 int XVVolts    = 120;        int YVVolts  = 114;
-int XTemp      = 510;        int YTemp    = 283;
-int XCS        = 120;        int YCS    = 506;
+int XTemp      = 510;        int YTemp    = 266;
+int XCS        = 120;        int YCS    = 486;
 int XGPS       = 510;        int YGPS    = 5;
 int XCOMPASS   = 510;        int YCOMPASS    = 98;
 //int XGPS       = 305;        int YGPS    = 5;
@@ -293,6 +293,8 @@ String[] ConfigNames = {
   "Display Temperature",
   "Temperature Max",
   
+//  "", // for Board type do not remove
+  
   "Display GPS",
   " - GPS Coords",
   " - Coords on Top",
@@ -317,7 +319,7 @@ String[] ConfigNames = {
   "Display GPS time",
   "Time Zone +/-",
   "Time Zone offset",
-  "DST Minutes",
+  "",
   "Debug",
   " - SB Scrolling",
   "Display Gimbal",
@@ -341,7 +343,6 @@ String[] ConfigNames = {
   "S_CS7",
   "S_CS8",
   "S_CS9",
-  
 };
 
 String[] ConfigHelp = {
@@ -373,6 +374,8 @@ String[] ConfigHelp = {
   "Display Temperature",
   "Temperature Max",
   
+//  "", // for Board type do not remove
+  
   "Display GPS",
   " - GPS Coords",
   " - Coords on Top",
@@ -397,7 +400,7 @@ String[] ConfigHelp = {
   "Display GPS time",
   "Time Zone +/-",
   "Time Zone offset",
-  "DST Minutes",
+  "",
   "Debug",
   " - SB Scrolling",
   "Display Gimbal",
@@ -420,7 +423,7 @@ String[] ConfigHelp = {
   "S_CS6",
   "S_CS7",
   "S_CS8",
-  "S_CS9", 
+  "S_CS9",
   };
 
 
@@ -447,7 +450,7 @@ int[] ConfigRanges = {
 1,     // S_MAINVOLTAGE_VBAT       11
 
 1,     // S_AMPERAGE,              12
-1,     // S_MWAMPERAGE                12 
+1,     // S_MWAMPERAGE,              12a
 1,     // S_AMPER_HOUR,            13
 1,     // S_AMPERAGE_VIRTUAL,
 1023,   // S_AMPDIVIDERRATIO,      // note this is 8>>16 bit EPROM var
@@ -459,6 +462,7 @@ int[] ConfigRanges = {
 1,     // S_DISPLAYTEMPERATURE     17
 255,   // S_TEMPERATUREMAX         18
 
+//1,     // S_BOARDTYPE              19
 
 1,     // S_DISPLAYGPS             20
 1,     // S_COORDINATES            21
@@ -506,7 +510,7 @@ int[] ConfigRanges = {
  255,
  255,
  255,
- 255, 
+ 255,
  255,
 
 };
@@ -582,6 +586,7 @@ Group MGUploadF,
   G_VVoltage,
   G_Temperature,
   G_Debug,
+  G_Board,
   G_GPS,
   G_Other,
   G_CallSign,
@@ -712,11 +717,11 @@ CreateItem(GetSetting("S_VOLTAGEMIN"), 5,4*17, G_Voltage);
 
 // Amperage  ------------------------------------------------------------------------
 CreateItem(GetSetting("S_AMPERAGE"),  5,0, G_Amperage);
-CreateItem(GetSetting("S_MWAMPERAGE"),  5,1*17, G_Amperage);
-CreateItem(GetSetting("S_AMPER_HOUR"),  5,2*17, G_Amperage);
-CreateItem(GetSetting("S_AMPERAGE_VIRTUAL"),  5,3*17, G_Amperage);
-CreateItem(GetSetting("S_AMPDIVIDERRATIO"),  5,4*17, G_Amperage);
-CreateItem(GetSetting("S_AMPMIN"), 5, 5*17, G_Amperage);
+CreateItem(GetSetting("S_MWAMPERAGE"),  5,5*17, G_Amperage);
+CreateItem(GetSetting("S_AMPER_HOUR"),  5,1*17, G_Amperage);
+CreateItem(GetSetting("S_AMPERAGE_VIRTUAL"),  5,2*17, G_Amperage);
+CreateItem(GetSetting("S_AMPDIVIDERRATIO"),  5,3*17, G_Amperage);
+CreateItem(GetSetting("S_AMPMIN"), 5, 4*17, G_Amperage);
 
 // Video Voltage  ------------------------------------------------------------------------
 CreateItem(GetSetting("S_VIDVOLTAGE"),  5,0, G_VVoltage);
@@ -729,6 +734,10 @@ CreateItem(GetSetting("S_TEMPERATUREMAX"),  5,1*17, G_Temperature);
 
 //  Debug  --------------------------------------------------------------------
 CreateItem(GetSetting("S_DEBUG"),  5,0, G_Debug);
+
+//  Board ---------------------------------------------------------------------------
+//CreateItem(GetSetting("S_BOARDTYPE"),  5,0, G_Board);
+//BuildRadioButton(GetSetting("S_BOARDTYPE"),  5,0, G_Board, "Rush","Minim");
 
 
 //  GPS  ----------------------------------------------------------------------------
@@ -780,6 +789,7 @@ CreateItem(GetSetting("S_GPSTZ"),  5,1*17, G_TIME);
 CreateItem(GetSetting("S_GPSTZAHEAD"),  5,2*17, G_TIME);
 CreateItem(GetSetting("S_GPSDS"),  5,3*17, G_TIME);
    confItem[GetSetting("S_GPSDS")].setMultiplier(15);
+   confItem[GetSetting("S_GPSDS")].hide();
 
 //  Call Sign ---------------------------------------------------------------------------
 CreateItem(GetSetting("S_DISPLAY_CS"),  5,0, G_CallSign);
@@ -979,7 +989,61 @@ void draw() {
   }
 
   //PortWrite = false;
-  if ((SendSim ==1) && (ClosePort == false)) {
+  if ((SendSim ==1) && (ClosePort == false)) 
+
+// OLD SKOOL
+
+{
+    //time2 = time;
+    PortRead = true;
+    MakePorts();
+    MWData_Com();
+    if (!FontMode) PortRead = false;
+    
+  }
+  
+  //PortWrite = false;
+  if ((SendSim ==1) && (ClosePort == false)){
+    //PortWrite = true;
+      //MakePorts();
+ 
+    if ((init_com==1)  && (time-time5 >5000) && (toggleMSP_Data == false) && (!FontMode)){
+      if(ClosePort) return;
+      time5 = time;
+       
+      if (init_com==1){
+        SendCommand(MSP_BOXNAMES);
+        SendCommand(MSP_BOXIDS);
+      }
+      //PortWrite = false;
+    }
+    if ((init_com==1)  && (time-time4 >200) && (!FontMode)){
+      if(ClosePort) return;
+      time4 = time; 
+      //PortWrite = !PortWrite;
+      //MakePorts();
+      if (init_com==1)SendCommand(MSP_ANALOG);
+      if (init_com==1)SendCommand(MSP_STATUS);
+      if (init_com==1)SendCommand(MSP_RC);
+      if (init_com==1)SendCommand(MSP_ALTITUDE);
+      if (init_com==1)SendCommand(MSP_RAW_GPS);
+      if (init_com==1)SendCommand(MSP_COMP_GPS);
+      
+      
+    }
+    if ((init_com==1)  && (time-time1 >40) && (!FontMode)){
+      if(ClosePort) return;
+      time1 = time; 
+      PortWrite = !PortWrite;
+      
+      if (init_com==1)SendCommand(MSP_ATTITUDE);
+      //PortWrite = false;
+    }
+  }
+
+
+/* PatrikE
+  {
     //PortWrite = true;
     //MakePorts();
 
@@ -1052,6 +1116,7 @@ void draw() {
       }
     } // End !FontMode
   }
+*/
   else
   {
     if (!FontMode) PortWrite = false;

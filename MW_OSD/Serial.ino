@@ -483,7 +483,7 @@ void serialMenuCommon()
 	  if(ROW==5) Settings[S_COORDINATES]=!Settings[S_COORDINATES];
 	  if(ROW==6) Settings[S_MODEICON]=!Settings[S_MODEICON];
 	  if(ROW==7) Settings[S_GIMBAL]=!Settings[S_GIMBAL];
-	  if(ROW==8) Settings[S_ENABLEADC]=!Settings[S_ENABLEADC];
+	  if(ROW==8) Settings[S_MAPMODE]=!Settings[S_MAPMODE];
 	}
 
 	if(configPage == 7 && COL == 3) {
@@ -495,6 +495,11 @@ void serialMenuCommon()
 	  if(ROW==3) Settings[S_VREFERENCE]=!Settings[S_VREFERENCE];
 	  if(ROW==4) Settings[S_DEBUG]=!Settings[S_DEBUG];
 	  if(ROW==5) timer.magCalibrationTimer=CALIBRATION_DELAY;
+	}
+	if(configPage == 8 && COL == 3) {
+	  if(ROW==1) Settings[S_GPSTIME]=!Settings[S_GPSTIME];
+	  if(ROW==2) Settings[S_GPSTZAHEAD]=!Settings[S_GPSTZAHEAD];
+	  if(ROW==5) Settings[S_GPSTZ]=Settings[S_GPSTZ]+menudir;
 	}
   	if((ROW==10)&&(COL==1)) configExit();
 	if((ROW==10)&&(COL==2)) configSave();

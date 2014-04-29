@@ -191,6 +191,27 @@ G_GPS = GroupcontrolP5.addGroup("G_GPS")
                 .align(controlP5.CENTER,controlP5.CENTER)
                 ;        
 
+G_Board= GroupcontrolP5.addGroup("G_Board")
+                .hide()
+                .setPosition(XBoard,YBoard+15)
+                .setWidth(Col1Width)
+                .setBarHeight(15)
+                .setColorForeground(color(30,255))
+                .setColorBackground(color(30,255))
+                .setColorLabel(color(0, 110, 220))
+                .setBarHeight(15)
+                .setBackgroundColor(color(30,255))
+                .setColorActive(red_)
+                .setBackgroundHeight((1*17) +5)
+                .setLabel("Board Type")
+                //.setGroup(SG)
+                .disableCollapse(); 
+                G_Board.captionLabel()
+                .toUpperCase(false)
+                .align(controlP5.CENTER,controlP5.CENTER)
+                ;  
+
+
                
 G_CallSign = GroupcontrolP5.addGroup("G_CallSign")
                 .setPosition(XCS,YCS+15)
@@ -230,6 +251,8 @@ G_Other = GroupcontrolP5.addGroup("G_Other")
                 .toUpperCase(false)
                 .align(controlP5.CENTER,controlP5.CENTER)
                 ;                                          
+
+
 
 G_DISPLAY = GroupcontrolP5.addGroup("G_DISPLAY")
                 .setPosition(XDisplay,YDisplay+15)
@@ -323,7 +346,7 @@ G_TIME = GroupcontrolP5.addGroup("G_TIME")
                 .setBarHeight(16)
                 .setBackgroundColor(color(30,255))
                 .setColorActive(red_)
-                .setBackgroundHeight((4*17) +5)
+                .setBackgroundHeight((3*17) +5)
                 .setLabel("Time Settings")
                 //.setGroup(SG)
                 .disableCollapse() 

@@ -13,7 +13,7 @@
 #define EEPROM_WRITE_DELAY 5       // Calibration timeouts
 
 // DEFINE CONFIGURATION MENU PAGES
-#define MINPAGE 1
+#define MINPAGE 0
 #define MAXPAGE 8
 
 #define PIDITEMS 10
@@ -110,7 +110,7 @@ uint16_t cell_data[6];
 // Config status and cursor location
 uint8_t ROW=10;
 uint8_t COL=3;
-uint8_t configPage=MINPAGE;
+int8_t configPage=1;
 uint8_t configMode=0;
 uint8_t fontMode = 0;
 uint8_t fontData[54];
@@ -157,7 +157,6 @@ enum Setting_ {
   S_VIDVOLTAGE_VBAT,
   S_DISPLAYTEMPERATURE,
   S_TEMPERATUREMAX,
-//  S_BOARDTYPE,
   S_DISPLAYGPS,
   S_COORDINATES,
   S_GPSCOORDTOP,
@@ -172,7 +171,7 @@ enum Setting_ {
   S_WITHDECORATION,
   S_SHOWBATLEVELEVOLUTION,
   S_RESETSTATISTICS,
-  S_ENABLEADC,
+  S_MAPMODE,
   S_VREFERENCE,
   S_USE_BOXNAMES,
   S_MODEICON,
@@ -237,7 +236,6 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 0,   // S_VIDVOLTAGE_VBAT           16 
 0,   // S_DISPLAYTEMPERATURE        17
 255, // S_TEMPERATUREMAX            18
-//1,   // S_BOARDTYPE                 19 SPARE
 1,   // S_DISPLAYGPS                20
 0,   // S_COORDINATES               21
 1,   // S_GPSCOORDTOP               22
@@ -452,14 +450,14 @@ const char armed_text[] PROGMEM = " ARMED";
 
 
 // For Intro
-const char message0[] PROGMEM = "MULTIWII NG OSD - R1";
-const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
-const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
+const char message0[] PROGMEM = "MULTIWII MWOSD - R1";
+//const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
+//const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
 const char message5[] PROGMEM = "MW VERSION:";
 //const char message6[] PROGMEM = "MENU:THRT MIDDLE";
 //const char message7[] PROGMEM = "YAW RIGHT";
 //const char message8[] PROGMEM = "PITCH FULL";
-const char message9[] PROGMEM = "UNIQUE ID:";         // Call Sign on the beggining of the transmission   
+const char message9[] PROGMEM = "ID:";         // Call Sign on the beggining of the transmission   
 //const char message10[] PROGMEM = "TZ UTC:"; //haydent - Time Zone & DST Setting
 //const char message11[] PROGMEM = "DST:"; //haydent - Time Zone & DST Setting
 
@@ -472,6 +470,14 @@ const char configMsgPGS[] PROGMEM = "<PAGE>";
 const char configMsgMWII[] PROGMEM = "USE MWII";
 
 // For Config pages
+//-----------------------------------------------------------Page0
+const char configMsg00[] PROGMEM = "STATISTICS";
+const char configMsg01[] PROGMEM = "TOT DISTANCE";
+const char configMsg02[] PROGMEM = "MAX DISTANCE";
+const char configMsg03[] PROGMEM = "MAX ALTITUDE";
+const char configMsg04[] PROGMEM = "MAX SPEED";
+const char configMsg05[] PROGMEM = "FLY TIME";
+const char configMsg06[] PROGMEM = "MAH USED";
 //-----------------------------------------------------------Page1
 const char configMsg10[] PROGMEM = "PID CONFIG";
 const char configMsg11[] PROGMEM = "ROLL";
@@ -538,13 +544,10 @@ const char configMsg74[] PROGMEM = "DEBUG";
 const char configMsg75[] PROGMEM = "MAG CAL";
 //const char configMsg76[] PROGMEM = "TOP SHIFT";
 //-----------------------------------------------------------Page8
-const char configMsg80[] PROGMEM = "STATISTICS";
-const char configMsg81[] PROGMEM = "TOT DISTANCE";
-const char configMsg82[] PROGMEM = "MAX DISTANCE";
-const char configMsg83[] PROGMEM = "MAX ALTITUDE";
-const char configMsg84[] PROGMEM = "MAX SPEED";
-const char configMsg85[] PROGMEM = "FLY TIME";
-const char configMsg86[] PROGMEM = "MAH USED";
+const char configMsg80[] PROGMEM = "GPS TIME";
+const char configMsg81[] PROGMEM = "DISPLAY";
+const char configMsg82[] PROGMEM = "TZ FORWARD";
+const char configMsg83[] PROGMEM = "TZ ADJUST";
 
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
@@ -568,7 +571,7 @@ const unsigned char GPS_distanceToHomeAdd[2]={
   0xbb,0xb9};
 const unsigned char MwGPSAltPositionAdd[2]={
   0xa7,0xa8};
-const char MWOSDVersionPosition = 33;
+const char MWOSDVersionPosition = 65;
 
 
 // All screen locations defines in ScreenLayout.ino
