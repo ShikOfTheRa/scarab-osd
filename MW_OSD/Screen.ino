@@ -1183,8 +1183,7 @@ void displayConfigScreen(void)
 //R3:
     MAX7456_WriteString_P(configMsg83, YAWT);
     MAX7456_WriteString(itoa(Settings[S_GPSTZ],screenBuffer,10),YAWD);
-  }
-      
+  }    
   displayCursor();
 }
 

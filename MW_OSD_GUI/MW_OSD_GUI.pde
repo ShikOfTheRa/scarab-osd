@@ -989,7 +989,61 @@ void draw() {
   }
 
   //PortWrite = false;
-  if ((SendSim ==1) && (ClosePort == false)) {
+  if ((SendSim ==1) && (ClosePort == false)) 
+
+// OLD SKOOL
+
+{
+    //time2 = time;
+    PortRead = true;
+    MakePorts();
+    MWData_Com();
+    if (!FontMode) PortRead = false;
+    
+  }
+  
+  //PortWrite = false;
+  if ((SendSim ==1) && (ClosePort == false)){
+    //PortWrite = true;
+      //MakePorts();
+ 
+    if ((init_com==1)  && (time-time5 >5000) && (toggleMSP_Data == false) && (!FontMode)){
+      if(ClosePort) return;
+      time5 = time;
+       
+      if (init_com==1){
+        SendCommand(MSP_BOXNAMES);
+        SendCommand(MSP_BOXIDS);
+      }
+      //PortWrite = false;
+    }
+    if ((init_com==1)  && (time-time4 >200) && (!FontMode)){
+      if(ClosePort) return;
+      time4 = time; 
+      //PortWrite = !PortWrite;
+      //MakePorts();
+      if (init_com==1)SendCommand(MSP_ANALOG);
+      if (init_com==1)SendCommand(MSP_STATUS);
+      if (init_com==1)SendCommand(MSP_RC);
+      if (init_com==1)SendCommand(MSP_ALTITUDE);
+      if (init_com==1)SendCommand(MSP_RAW_GPS);
+      if (init_com==1)SendCommand(MSP_COMP_GPS);
+      
+      
+    }
+    if ((init_com==1)  && (time-time1 >40) && (!FontMode)){
+      if(ClosePort) return;
+      time1 = time; 
+      PortWrite = !PortWrite;
+      
+      if (init_com==1)SendCommand(MSP_ATTITUDE);
+      //PortWrite = false;
+    }
+  }
+
+
+/* PatrikE
+  {
     //PortWrite = true;
     //MakePorts();
 
@@ -1062,6 +1116,7 @@ void draw() {
       }
     } // End !FontMode
   }
+*/
   else
   {
     if (!FontMode) PortWrite = false;

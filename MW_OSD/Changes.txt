@@ -21,6 +21,7 @@ bugfix: incorrect anal pin handling
 + added ability to hide ARMED/DISARMED status via config.H if required
 + added fastpixel support - *may* improve display for hi-res cameras 650tvl+
 + added amperage support from multiwii - haydent                     
++ added FRSKY hub support - cell voltage / current / baro
 + added option to hid voltage, video voltage and timer within options for OSD switch control
 + added current used back into flight summary screen
 + added GPS timezone and options into OSD menu - haydent
