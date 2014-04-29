@@ -306,7 +306,7 @@ static uint16_t MwRcData[8]={   // This hold receiver pulse signal
 // for analogue / PWM sensor filtering 
 #define SENSORFILTERSIZE 8
 #define SENSORTOTAL 5
-int16_t sensorfilter[SENSORTOTAL][SENSORFILTERSIZE+1]; 
+int16_t sensorfilter[SENSORTOTAL][SENSORFILTERSIZE+2]; 
 
 uint16_t  MwSensorPresent=0;
 uint32_t  MwSensorActive=0;
