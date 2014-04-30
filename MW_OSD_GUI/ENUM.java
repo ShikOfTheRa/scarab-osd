@@ -44,6 +44,7 @@ enum Settings {
   S_GPSTIME,
   S_GPSTZAHEAD,
   S_GPSTZ,
+//  S_GPDS,
   S_DEBUG,
   S_SCROLLING,
   S_GIMBAL,

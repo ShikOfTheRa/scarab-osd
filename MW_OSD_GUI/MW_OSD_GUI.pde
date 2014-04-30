@@ -320,6 +320,7 @@ String[] ConfigNames = {
   "Display GPS time",
   "Time Zone +/-",
   "Time Zone offset",
+//  "",
   "Debug",
   " - SB Scrolling",
   "Display Gimbal",
@@ -400,7 +401,7 @@ String[] ConfigHelp = {
   "Display GPS time",
   "Time Zone +/-",
   "Time Zone offset",
-  "",
+//  "",
   "Debug",
   " - SB Scrolling",
   "Display Gimbal",
@@ -488,7 +489,7 @@ int[] ConfigRanges = {
 1,     // GPStime                  37a
 1,     // GPSTZ +/-                37b
 13,    // GPSTZ                    37c
-60,    // GPSDS                    37d
+//60,    // GPSDS                    37d
 1,     // Debug                    37e
 1,     // S_SCROLLING              37f
 1,     // S_GIMBAL                 37g
@@ -998,7 +999,7 @@ void draw() {
   if ((SendSim ==1) && (ClosePort == false)) 
 
 // OLD SKOOL
-
+/*
 {
     //time2 = time;
     PortRead = true;
@@ -1047,8 +1048,8 @@ void draw() {
     }
   }
 
-
-/* PatrikE
+*/
+// PatrikE
   {
     //PortWrite = true;
     //MakePorts();
@@ -1122,7 +1123,7 @@ void draw() {
       }
     } // End !FontMode
   }
-*/
+
   else
   {
     if (!FontMode) PortWrite = false;

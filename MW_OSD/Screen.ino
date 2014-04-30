@@ -1308,7 +1308,7 @@ void displayDebug(void)
 
   debug[0]=sensorfilter[0][SENSORFILTERSIZE];
   debug[1]=sensorfilter[0][SENSORFILTERSIZE+1];
-  debug[2]=sensorfilter[2][0];
+  debug[2]=sensorfilter[0][0];
 //  debug[3]=sensorfilter[3][SENSORFILTERSIZE];
 
   for(uint8_t X=0; X<4; X++) {
