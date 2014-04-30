@@ -1,0 +1,32 @@
+/*
+
+Credits for the many who developed this software for the Multiwii community:
+
+Code contributors:
+Jean Gabriel Maurice - Johhnygab
+Itai Nahshon - Itai
+Carlo Nebuloni - Carlonb
+Ross Power - Power67 for introduction of main GUI
+Gary Moscardini - Shikra
+Hayden Thring - Haydent
+Liam O'Brien - LIMA2317
+Andi Sch
+PatrikE
+Okan Vitaliy
+Bicycle
+Henrietta - Kataventos
+
+Special thanks to other contributors - testing / feedback / User help:
+Deet
+Subaru4WD
+HFman
+
+
+Also special thanks:
+Alex Dubus - AlexinParis - For MultiWii!
+www.multiwiicopter.com for providing hardware to test
+
+
+Please report any missing names and aplogies if not already included...
+
+*/

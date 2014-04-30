@@ -512,7 +512,6 @@ void ProcessSensors(void) {
 //-------------- ADC and PWM RSSI sensor read into filter array
   static uint8_t sensorindex;
   for (uint8_t sensor=0;sensor<SENSORTOTAL;sensor++) {
-    sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
     int16_t sensortemp;
 //    uint8_t sensorpin = sensorpinarray[sensor];
     sensortemp = analogRead(sensorpinarray[sensor]);
@@ -522,30 +521,48 @@ void ProcessSensors(void) {
       }
     }
 #if defined STAGE2FILTER // Use averaged change    
+    sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
     sensorfilter[sensor][sensorindex] = (sensorfilter[sensor][sensorindex] + sensortemp)>>1;
-#elif defined SMOOTHFILTER // use trending variable constaint. Smooth filtering of small changes, but react fast to continual large changes
-    if (abs(sensorfilter[sensor][sensorindex] - sensortemp) > 5) {
-      sensorfilter[sensor][SENSORFILTERSIZE+1] << 1;
+#elif defined SMOOTHFILTER // Shiki variable constraint probability trend change filter. Smooth filtering of small changes, but react fast to consistent changes
+    #define FILTERMAX 128 //maximum change permitted each iteration 
+    uint8_t filterdir;
+    static uint8_t oldfilterdir;
+    int16_t sensoraverage=sensorfilter[sensor][SENSORFILTERSIZE]>>3;
+    sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
+    if (sensorfilter[sensor][SENSORFILTERSIZE+1]<1) sensorfilter[sensor][SENSORFILTERSIZE+1]=1;
+
+    // determine direction of change
+    if (sensortemp > sensoraverage ) {  //increasing
+      filterdir=1;
     }
-    else {
-      sensorfilter[sensor][SENSORFILTERSIZE+1] >>1;
+    else if (sensortemp < sensoraverage ) {  //increasing
+      filterdir=0;
     }
-    if (sensorfilter[sensor][SENSORFILTERSIZE+1] <1) {
-      sensorfilter[sensor][SENSORFILTERSIZE+1] = 1;
+    // compare to previous direction of change
+    if (filterdir!=oldfilterdir){ // direction changed => lost trust in value - reset value truth probability to lowest
+      sensorfilter[sensor][SENSORFILTERSIZE+1] = 1; 
     }
-    else if (sensorfilter[sensor][SENSORFILTERSIZE+1] > 64) {
-      sensorfilter[sensor][SENSORFILTERSIZE+1] = 128;
+    else { // direction same => increase trust that change is valid - increase value truth probability
+      sensorfilter[sensor][SENSORFILTERSIZE+1]=sensorfilter[sensor][SENSORFILTERSIZE+1] <<1;
     }
-    if (sensortemp > sensortemp+sensorfilter[sensor][SENSORFILTERSIZE+1]) { 
-      sensorfilter[sensor][sensorindex] = sensortemp+sensorfilter[sensor][SENSORFILTERSIZE+1]; //constrained value
+    // set maximum trust permitted per sensor read
+    if (sensorfilter[sensor][SENSORFILTERSIZE+1] > FILTERMAX) {
+      sensorfilter[sensor][SENSORFILTERSIZE+1] = FILTERMAX;
+    }
+    // set constrained value or if within limits, start to narrow filter 
+    if (sensortemp > sensoraverage+sensorfilter[sensor][SENSORFILTERSIZE+1]) { 
+      sensorfilter[sensor][sensorindex] = sensoraverage+sensorfilter[sensor][SENSORFILTERSIZE+1]; 
     }  
-    else if (sensortemp < sensortemp-sensorfilter[sensor][SENSORFILTERSIZE+1]){
-      sensorfilter[sensor][sensorindex] = sensortemp-sensorfilter[sensor][SENSORFILTERSIZE+1]; //constrained value
+    else if (sensortemp < sensoraverage-sensorfilter[sensor][SENSORFILTERSIZE+1]){
+      sensorfilter[sensor][sensorindex] = sensoraverage-sensorfilter[sensor][SENSORFILTERSIZE+1]; 
     } 
     else { 
      sensorfilter[sensor][sensorindex] = sensortemp; 
+     if (sensorfilter[sensor][SENSORFILTERSIZE+1]>1) sensorfilter[sensor][SENSORFILTERSIZE+1]=sensorfilter[sensor][SENSORFILTERSIZE+1] >>1;
     }
-#else // Use abasic averaging filter
+    oldfilterdir=filterdir;
+#else // Use a basic averaging filter
+    sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
     sensorfilter[sensor][sensorindex] = sensortemp;
 #endif
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] + sensorfilter[sensor][sensorindex];
