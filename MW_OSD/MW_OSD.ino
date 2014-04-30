@@ -526,7 +526,7 @@ void ProcessSensors(void) {
 #elif defined SMOOTHFILTER // Shiki variable constraint probability trend change filter. Smooth filtering of small changes, but react fast to consistent changes
     #define FILTERMAX 128 //maximum change permitted each iteration 
     uint8_t filterdir;
-    static uint8_t oldfilterdir;
+    static uint8_t oldfilterdir[SENSORTOTAL];
     int16_t sensoraverage=sensorfilter[sensor][SENSORFILTERSIZE]>>3;
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
     if (sensorfilter[sensor][SENSORFILTERSIZE+1]<1) sensorfilter[sensor][SENSORFILTERSIZE+1]=1;
@@ -539,7 +539,7 @@ void ProcessSensors(void) {
       filterdir=0;
     }
     // compare to previous direction of change
-    if (filterdir!=oldfilterdir){ // direction changed => lost trust in value - reset value truth probability to lowest
+    if (filterdir!=oldfilterdir[sensor]){ // direction changed => lost trust in value - reset value truth probability to lowest
       sensorfilter[sensor][SENSORFILTERSIZE+1] = 1; 
     }
     else { // direction same => increase trust that change is valid - increase value truth probability
@@ -560,7 +560,7 @@ void ProcessSensors(void) {
      sensorfilter[sensor][sensorindex] = sensortemp; 
      if (sensorfilter[sensor][SENSORFILTERSIZE+1]>1) sensorfilter[sensor][SENSORFILTERSIZE+1]=sensorfilter[sensor][SENSORFILTERSIZE+1] >>1;
     }
-    oldfilterdir=filterdir;
+    oldfilterdir[sensor]=filterdir;
 #else // Use a basic averaging filter
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
     sensorfilter[sensor][sensorindex] = sensortemp;
