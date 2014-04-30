@@ -13,19 +13,20 @@ Changelog: R1.a1.b0
 + Freed up memory for future additions
 + I2C GPS distance fix - for OSD with issues at distance > 650m 
 
-Changelog: R1.not packaged yet
+Changelog: R1.a2.b1
 bugfix: compass heading reversed in baseflight mode
 bugfix: now able to disable mode icon if required
 bugfix: MWII RSSI bug fixed
 bugfix: incorrect anal pin handling
++ added additional smoothing filter
 + added ability to hide ARMED/DISARMED status via config.H if required
 + added fastpixel support - *may* improve display for hi-res cameras 650tvl+
 + added amperage support from multiwii - haydent                     
-+ added FRSKY hub support - cell voltage / current / baro
++ added FRSKY hub support - cell voltage / current / baro - haydent
 + added option to hid voltage, video voltage and timer within options for OSD switch control
 + added current used back into flight summary screen
 + added GPS timezone and options into OSD menu - haydent
-+ added default startup delay - support for MAX chip voltage rise issue
++ added default startup delay - support for MAX chip voltage rise issue - suggested by bicycle
 + GUI: renamed reset to defaults for extra clarity
 + GUI: task switcher for faster serial. Closer to realtime - PatrikE 
 
