@@ -145,7 +145,7 @@
 +     s_struct((uint8_t*)&sport_alt,6);
 +     break;
 +   #else
-+      case MSP_ALTITUDE:  
++   case MSP_ALTITUDE:  
       s_struct((uint8_t*)&alt,6);
       break;
 +   #endif
