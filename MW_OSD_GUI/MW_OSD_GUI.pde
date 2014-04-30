@@ -229,6 +229,7 @@ int XTIME      = 510;        int YTIME    = 190;
 //int XTIME      = 510;        int YTIME    = 5;
 int XHUD       = 305;        int YHUD     = 240;
 int XDisplay     = 305;        int YDisplay   = 114; //48;
+int XSPORT      = 510;        int YSPORT    = 353;
 
 int XOther     = 305;        int YOther   = 5; //48;
 //int XOther     = 305;        int YOther   = 150; //48;
@@ -319,7 +320,6 @@ String[] ConfigNames = {
   "Display GPS time",
   "Time Zone +/-",
   "Time Zone offset",
-  "",
   "Debug",
   " - SB Scrolling",
   "Display Gimbal",
@@ -557,7 +557,7 @@ Textlabel FileUploadText, TXText, RXText;
 // textlabels -------------------------------------------------------------------------------------------------------------
 
 // Buttons------------------------------------------------------------------------------------------------------------------
-Button buttonIMPORT,buttonSAVE,buttonREAD,buttonRESET,buttonWRITE,buttonRESTART;
+Button buttonIMPORT,buttonSAVE,buttonREAD,buttonRESET,buttonWRITE,buttonRESTART, buttonGPSTIMELINK, buttonSPORTLINK;
 // Buttons------------------------------------------------------------------------------------------------------------------
 
 // Toggles------------------------------------------------------------------------------------------------------------------
@@ -595,8 +595,8 @@ Group MGUploadF,
   G_VREF,
   G_HUD,
   G_COMPASS,
-  G_DISPLAY
-  
+  G_DISPLAY,
+  G_SPORT  
   ;
 
 // Timers --------------------------------------------------------------------------------------------------------------------
@@ -787,9 +787,15 @@ CreateItem(GetSetting("S_GPSTZ"),  5,1*17, G_TIME);
   confItem[GetSetting("S_GPSTZ")].setMultiplier(0.5);//30min increments, kathmandu would require 15min, it can use DST 
   confItem[GetSetting("S_GPSTZ")].setDecimalPrecision(1);
 CreateItem(GetSetting("S_GPSTZAHEAD"),  5,2*17, G_TIME);
-CreateItem(GetSetting("S_GPSDS"),  5,3*17, G_TIME);
-   confItem[GetSetting("S_GPSDS")].setMultiplier(15);
-   confItem[GetSetting("S_GPSDS")].hide();
+
+buttonGPSTIMELINK = controlP5.addButton("GPSTIMELINK",1, 20,3*17,130,16);
+buttonGPSTIMELINK.setGroup(G_TIME);
+buttonGPSTIMELINK.setCaptionLabel("View Requirements");
+
+//  SPORT  ----------------------------------------------------------------------------
+buttonSPORTLINK = controlP5.addButton("SPORTLINK",1, 20,3,130,16);
+buttonSPORTLINK.setGroup(G_SPORT);
+buttonSPORTLINK.setCaptionLabel("View Requirements");
 
 //  Call Sign ---------------------------------------------------------------------------
 CreateItem(GetSetting("S_DISPLAY_CS"),  5,0, G_CallSign);
@@ -1762,4 +1768,11 @@ void SketchUploader(){
   super.exit();
 }
 
+
+public void GPSTIMELINK(){
+ link("http://code.google.com/p/scarab-osd/wiki/GPS_Time"); 
+}
+public void SPORTLINK(){
+ link("http://code.google.com/p/scarab-osd/wiki/Frsky_SPort"); 
+}
 

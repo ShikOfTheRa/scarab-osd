@@ -179,7 +179,6 @@ enum Setting_ {
   S_GPSTIME,
   S_GPSTZAHEAD,
   S_GPSTZ,
-  S_GPSDS,
   S_DEBUG,
   S_SCROLLING,
   S_GIMBAL,

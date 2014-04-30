@@ -227,10 +227,6 @@ void RESTART(){
   READ();
 }  
 
-
-
-
-
 public void READ(){
   
   for(int i = 0; i < CONFIGITEMS; i++){
@@ -801,9 +797,3 @@ void MWData_Com() {
       }
     }
 }
-
-
-
-
-
-      
