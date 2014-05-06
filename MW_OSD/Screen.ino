@@ -577,6 +577,8 @@ void displayNumberOfSat(void)
 {
   if(!GPS_fix)
     return;
+  if((GPS_numSat<5)&&(timer.Blink2hz))
+    return;
   if(!fieldIsVisible(GPS_numSatPosition))
     return;
   screenBuffer[0] = SYM_SAT_L;
