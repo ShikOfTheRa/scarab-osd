@@ -277,7 +277,7 @@ void serialMSPCheck()
     mode.mag = 0;
     mode.gpshome = 0;
     mode.gpshold = 0;
-//    mode.llights = 0;
+    mode.llights = 0;
     mode.osd_switch = 0;
     mode.camstab = 0;
 
@@ -308,9 +308,9 @@ void serialMSPCheck()
       case 11:
         mode.gpshold |= bit;
         break;
-//      case 16:
-//        mode.llights |= bit;
-//        break;
+      case 16:
+        mode.llights |= bit;
+        break;
       case 19:
         mode.osd_switch |= bit;
         break;

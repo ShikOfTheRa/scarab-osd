@@ -65,7 +65,7 @@ void setup()
   readEEPROM();
   
 #ifdef STARTUPDELAY
-  delay(2000);
+  delay(1000);
 #endif
 
   MAX7456Setup();
@@ -269,7 +269,9 @@ void loop()
           displayCurrentThrottle();
 
 #ifdef CALLSIGNALWAYS
-        if(Settings[S_DISPLAY_CS]) displayCallsign(CALLSIGNALWAYS);       
+        if(Settings[S_DISPLAY_CS]) displayCallsign(CALLSIGNALWAYS); 
+#elif  CALLSIGNSWITCH
+        if (MwSensorActive&mode.llights) displayCallsign(CALLSIGNSWITCH); 
 #else 
         if ( (onTime > (timer.lastCallSign+300)) || (onTime < (timer.lastCallSign+4)))
        {
@@ -531,36 +533,45 @@ void ProcessSensors(void) {
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
     if (sensorfilter[sensor][SENSORFILTERSIZE+1]<1) sensorfilter[sensor][SENSORFILTERSIZE+1]=1;
 
-    // determine direction of change
-    if (sensortemp > sensoraverage ) {  //increasing
-      filterdir=1;
+    if (sensortemp != sensoraverage ){
+
+      // determine direction of change
+      if (sensortemp > sensoraverage ) {  //increasing
+        filterdir=1;
+      }
+      else if (sensortemp < sensoraverage ) {  //increasing
+        filterdir=0;
+      }
+      // compare to previous direction of change
+      if (filterdir!=oldfilterdir[sensor]){ // direction changed => lost trust in value - reset value truth probability to lowest
+        sensorfilter[sensor][SENSORFILTERSIZE+1] = 1; 
+      }
+      else { // direction same => increase trust that change is valid - increase value truth probability
+        sensorfilter[sensor][SENSORFILTERSIZE+1]=sensorfilter[sensor][SENSORFILTERSIZE+1] <<1;
+      }
+      // set maximum trust permitted per sensor read
+      if (sensorfilter[sensor][SENSORFILTERSIZE+1] > FILTERMAX) {
+        sensorfilter[sensor][SENSORFILTERSIZE+1] = FILTERMAX;
+      }
+      // set constrained value or if within limits, start to narrow filter 
+      if (sensortemp > sensoraverage+sensorfilter[sensor][SENSORFILTERSIZE+1]) { 
+        sensorfilter[sensor][sensorindex] = sensoraverage+sensorfilter[sensor][SENSORFILTERSIZE+1]; 
+      }  
+      else if (sensortemp < sensoraverage-sensorfilter[sensor][SENSORFILTERSIZE+1]){
+        sensorfilter[sensor][sensorindex] = sensoraverage-sensorfilter[sensor][SENSORFILTERSIZE+1]; 
+      }
+      // as within limits, start to narrow filter 
+      else { 
+        sensorfilter[sensor][sensorindex] = sensortemp; 
+        sensorfilter[sensor][SENSORFILTERSIZE+1]=sensorfilter[sensor][SENSORFILTERSIZE+1] >>2;
+      }
+      oldfilterdir[sensor]=filterdir;
     }
-    else if (sensortemp < sensoraverage ) {  //increasing
-      filterdir=0;
-    }
-    // compare to previous direction of change
-    if (filterdir!=oldfilterdir[sensor]){ // direction changed => lost trust in value - reset value truth probability to lowest
-      sensorfilter[sensor][SENSORFILTERSIZE+1] = 1; 
-    }
-    else { // direction same => increase trust that change is valid - increase value truth probability
-      sensorfilter[sensor][SENSORFILTERSIZE+1]=sensorfilter[sensor][SENSORFILTERSIZE+1] <<1;
-    }
-    // set maximum trust permitted per sensor read
-    if (sensorfilter[sensor][SENSORFILTERSIZE+1] > FILTERMAX) {
-      sensorfilter[sensor][SENSORFILTERSIZE+1] = FILTERMAX;
-    }
-    // set constrained value or if within limits, start to narrow filter 
-    if (sensortemp > sensoraverage+sensorfilter[sensor][SENSORFILTERSIZE+1]) { 
-      sensorfilter[sensor][sensorindex] = sensoraverage+sensorfilter[sensor][SENSORFILTERSIZE+1]; 
-    }  
-    else if (sensortemp < sensoraverage-sensorfilter[sensor][SENSORFILTERSIZE+1]){
-      sensorfilter[sensor][sensorindex] = sensoraverage-sensorfilter[sensor][SENSORFILTERSIZE+1]; 
-    } 
-    else { 
-     sensorfilter[sensor][sensorindex] = sensortemp; 
-     if (sensorfilter[sensor][SENSORFILTERSIZE+1]>1) sensorfilter[sensor][SENSORFILTERSIZE+1]=sensorfilter[sensor][SENSORFILTERSIZE+1] >>1;
-    }
-    oldfilterdir[sensor]=filterdir;
+    // no change, reset filter 
+    else {
+      sensorfilter[sensor][sensorindex] = sensortemp; 
+      sensorfilter[sensor][SENSORFILTERSIZE+1]=1;  
+    }    
 #else // Use a basic averaging filter
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
     sensorfilter[sensor][sensorindex] = sensortemp;
