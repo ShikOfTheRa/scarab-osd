@@ -127,9 +127,9 @@ struct {
   uint8_t mag;
   uint16_t gpshome;
   uint16_t gpshold;
-  //uint8_t lights;
-  uint32_t osd_switch;
   uint16_t camstab;
+  uint32_t osd_switch;
+  uint32_t llights;
 ;}mode;
 
 

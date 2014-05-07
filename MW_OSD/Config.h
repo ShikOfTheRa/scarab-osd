@@ -4,10 +4,10 @@
 //#define RUSHDUINO                 // Select board type - RUSHDUINO. Defaults to MINIM
 //#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
 //#define TEMPSENSOR                // Enable if you have a hardware temperature sensor
-#define STARTUPDELAY                // Enable startup delay of 2 secs to allow MAX chip voltage to rise fully and initialise before configuring 
+#define STARTUPDELAY                // Enable startup delay of 1 sec to allow MAX chip voltage to rise fully and initialise before configuring 
 #define AMPERAGEMAX     500         // Size of current sensor * 10 e.g. 50A sensor = 500
 #define AMPERAGEOFFSET  0           // Optional extra for high offset sensors not supported in GUI (typically bidirectional sensors use a value of 256-512) 
-//#define STAGE2FILTER                // Optional 2nd stage filter for all ADC and PWM RSSI. Enable for smoother readings 
+//#define STAGE2FILTER                // Optional experimental 2nd stage filter for all ADC and PWM RSSI. Enable for smoother readings. Memory intensive
 //#define SMOOTHFILTER                // Alternative 2nd stage filter for all ADC and PWM RSSI. Enable for smoothest readings.
 
 
@@ -41,8 +41,9 @@
 /********************       Display Settings         ************************/
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts some lines down
-//#define CALLSIGNALWAYS 340        // Enable to permanently display callsign. Number =screen position (row*30 + column)
+//#define CALLSIGNALWAYS 341        // Enable to permanently display callsign. Number =screen position (row*30 + column)
 //#define CALLSIGNSTARTUP           // Enable to display callsign at startup
+//#define CALLSIGNSWITCH 342        // Enable to enable callsign/freetext when LLIGHTS Switch active on TX. Number = screen position (row*30 + column)
 //#define ALT_CENTER                // Enbale alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams

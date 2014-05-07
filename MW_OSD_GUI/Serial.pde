@@ -223,7 +223,7 @@ void RESTART(){
     tailSerialReply();
   }
   toggleMSP_Data = false;
-  delay(3500);
+  delay(2500);
   READ();
 }  
 
@@ -377,6 +377,7 @@ void SendCommand(int cmd){
         if(toggleModeItems[6].getValue()> 0) modebits |=1<<10;
         if(toggleModeItems[7].getValue()> 0) modebits |=1<<11;
         if(toggleModeItems[8].getValue()> 0) modebits |=1<<19;
+        if(toggleModeItems[8].getValue()> 0) modebits |=1<<16; //Also send LLIGHTS when OSD enabled - for testing
         serialize32(modebits);
         serialize8(0);   // current setting
         tailSerialReply();

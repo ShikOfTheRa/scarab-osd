@@ -893,7 +893,7 @@ void GetModes(){
     if (boxnames[c] == "GPS HOME;") mode_gpshome |= bit;
     if (boxnames[c] == "GPS HOLD;") mode_gpshold |= bit;
     if (boxnames[c] == "OSD SW;") mode_osd_switch |= bit;
-    
+   
     bit <<= 1L;
   }
   
