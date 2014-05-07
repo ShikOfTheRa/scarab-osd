@@ -1355,22 +1355,22 @@ Suggestion to replace below?
         }
 */
 
-        if (volt < 300) screenBuffer[i]=0xFF;//Min
-          else if (volt < 350) screenBuffer[i]=0xFE;
-          else if (volt < 355) screenBuffer[i]=0xFD;
-          else if (volt < 360) screenBuffer[i]=0xFC;
-          else if (volt < 365) screenBuffer[i]=0xFB;
-          else if (volt < 370) screenBuffer[i]=0xFA;
-          else if (volt < 375) screenBuffer[i]=0xF9;
-          else if (volt < 380) screenBuffer[i]=0xF8;
-          else if (volt < 385) screenBuffer[i]=0xF7;
-          else if (volt < 390) screenBuffer[i]=0xF6;
-          else if (volt < 395) screenBuffer[i]=0xF5;
-          else if (volt < 400) screenBuffer[i]=0xF4;
-          else if (volt < 405) screenBuffer[i]=0xEF;
-          else if (volt < 410) screenBuffer[i]=0xDF;
-          else if (volt < 415) screenBuffer[i]=0xDE;
-          else screenBuffer[i]=0xC3;//Max
+        if (volt < 300) screenBuffer[i]=SYM_CELL0;//Min
+          else if (volt < 350) screenBuffer[i]=SYM_CELL1;
+          else if (volt < 355) screenBuffer[i]=SYM_CELL2;
+          else if (volt < 360) screenBuffer[i]=SYM_CELL3;
+          else if (volt < 365) screenBuffer[i]=SYM_CELL4;
+          else if (volt < 370) screenBuffer[i]=SYM_CELL5;
+          else if (volt < 375) screenBuffer[i]=SYM_CELL6;
+          else if (volt < 380) screenBuffer[i]=SYM_CELL7;
+          else if (volt < 385) screenBuffer[i]=SYM_CELL8;
+          else if (volt < 390) screenBuffer[i]=SYM_CELL9;
+          else if (volt < 395) screenBuffer[i]=SYM_CELLA;
+          else if (volt < 400) screenBuffer[i]=SYM_CELLB;
+          else if (volt < 405) screenBuffer[i]=SYM_CELLC;
+          else if (volt < 410) screenBuffer[i]=SYM_CELLD;
+          else if (volt < 415) screenBuffer[i]=SYM_CELLE;
+          else screenBuffer[i]=SYM_CELLF;//Max
      
       }else screenBuffer[i]=' ';
       
