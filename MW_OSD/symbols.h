@@ -42,6 +42,24 @@
 #define SYM_HEADING_DIVIDED_LINE 0X1C
 #define SYM_HEADING_LINE 0X1D
 
+// FRSKY HUB
+#define SYM_CELL0      0xF0
+#define SYM_CELL1      0xF1
+#define SYM_CELL2      0xF2
+#define SYM_CELL3      0xF3
+#define SYM_CELL4      0xF4
+#define SYM_CELL5      0xF5
+#define SYM_CELL6      0xF6
+#define SYM_CELL7      0xF7
+#define SYM_CELL8      0xF8
+#define SYM_CELL9      0xF9
+#define SYM_CELLA      0xFA
+#define SYM_CELLB      0xFB
+#define SYM_CELLC      0xFC
+#define SYM_CELLD      0xFD
+#define SYM_CELLE      0xFE
+#define SYM_CELLF      0xC3
+
 // Map mode
 #define SYM_HOME       0x04
 #define SYM_AIRCRAFT   0X05
