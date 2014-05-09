@@ -121,4 +121,4 @@
 //#define DEBUG         // Enable/disable option to display Mutltiwii debug values or free memory 
 #define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude) or free memory
 #define HORIZON         // Enable/disable HORIZON indicator or free memory
-
+//TEST
