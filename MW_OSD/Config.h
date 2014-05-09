@@ -43,7 +43,8 @@
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts some lines down
 //#define CALLSIGNALWAYS 341        // Enable to permanently display callsign. Number =screen position (row*30 + column)
 //#define CALLSIGNSTARTUP           // Enable to display callsign at startup
-//#define CALLSIGNSWITCH 342        // Enable to enable callsign/freetext when LLIGHTS Switch active on TX. Number = screen position (row*30 + column)
+//#define CALLSIGNLLIGHTS 342       // Enable to enable callsign/freetext when LLIGHTS Switch active on TX. Number = screen position (row*30 + column)
+//#define CALLSIGNGIMBAL  342       // Enable to enable callsign/freetext when GIMBAL Switch active on TX. Number = screen position (row*30 + column)
 //#define ALT_CENTER                // Enbale alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams

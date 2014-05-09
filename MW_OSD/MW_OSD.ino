@@ -270,8 +270,10 @@ void loop()
 
 #ifdef CALLSIGNALWAYS
         if(Settings[S_DISPLAY_CS]) displayCallsign(CALLSIGNALWAYS); 
-#elif  CALLSIGNSWITCH
-        if (MwSensorActive&mode.llights) displayCallsign(CALLSIGNSWITCH); 
+#elif  CALLSIGNLLIGHTS
+        if (MwSensorActive&mode.llights) displayCallsign(CALLSIGNLLIGHTS); 
+#elif  CALLSIGNGIMBAL
+        if (MwSensorActive&mode.camstab) displayCallsign(CALLSIGNGIMBAL); 
 #else 
         if ( (onTime > (timer.lastCallSign+300)) || (onTime < (timer.lastCallSign+4)))
        {
