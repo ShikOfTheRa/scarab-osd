@@ -14,6 +14,7 @@
 /********************       CONTROLLER settings      *********************/
 //#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / others to correct for incorrect heading
 //#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE - to use GPS heading and altitude instead of BARO/MAG
+//#define FASTPWMRSSI               // Undefine this if you are using non standard PWM for RSSI ( doubles resolution ) 
 
 
 /********************       GPS type settings      *********************/

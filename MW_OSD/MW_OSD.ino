@@ -1,5 +1,5 @@
 /*
-MultiWii NG OSD ...
+MultiWii NG OSD ... 
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -521,7 +521,11 @@ void ProcessSensors(void) {
     sensortemp = analogRead(sensorpinarray[sensor]);
     if (sensor ==4) { 
       if (Settings[S_PWMRSSI]){
+#if defined FASTPWMRSSI
+        sensortemp = FastpulseIn(PWMRSSIPIN, HIGH,250);
+#else
         sensortemp = pulseIn(PWMRSSIPIN, HIGH,21000)>>1;
+#endif
       }
     }
 #if defined STAGE2FILTER // Use averaged change    
@@ -624,7 +628,8 @@ void ProcessSensors(void) {
       else 
         amperage = Settings[S_AMPMIN];
     }  
-  }else{
+  }
+  else{
       amperage = MWAmperage / 100;
   }
 
@@ -667,4 +672,28 @@ Serial.print(sensorindex);
     sensorindex = 0;                           
 }
 
+unsigned long FastpulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
+{
+  uint8_t bit = digitalPinToBitMask(pin);
+  uint8_t port = digitalPinToPort(pin);
+  uint8_t stateMask = (state ? bit : 0);
+  unsigned long width = 0;
+  unsigned long numloops = 0;
+  unsigned long maxloops = timeout;
+	
+  while ((*portInputRegister(port) & bit) == stateMask)
+    if (numloops++ == maxloops)
+      return 0;
+	
+  while ((*portInputRegister(port) & bit) != stateMask)
+    if (numloops++ == maxloops)
+      return 0;
+	
+  while ((*portInputRegister(port) & bit) == stateMask) {
+    if (numloops++ == maxloops)
+      return 0;
+    width++;
+  }
+  return width; 
+}
 
