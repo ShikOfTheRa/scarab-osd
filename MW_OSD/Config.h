@@ -46,7 +46,7 @@
 //#define CALLSIGNSTARTUP           // Enable to display callsign at startup
 //#define CALLSIGNLLIGHTS 342       // Enable to enable callsign/freetext when LLIGHTS Switch active on TX. Number = screen position (row*30 + column)
 //#define CALLSIGNGIMBAL  342       // Enable to enable callsign/freetext when GIMBAL Switch active on TX. Number = screen position (row*30 + column)
-//#define ALT_CENTER                // Enbale alternative center crosshair
+//#define ALT_CENTER                // Enable alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x10=90%0x11=80%  default is 0x01=100%,
@@ -122,4 +122,4 @@
 //#define DEBUG         // Enable/disable option to display Mutltiwii debug values or free memory 
 #define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude) or free memory
 #define HORIZON         // Enable/disable HORIZON indicator or free memory
-//TEST
+

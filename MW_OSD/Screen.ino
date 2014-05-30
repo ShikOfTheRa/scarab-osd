@@ -129,7 +129,13 @@ void displayMode(void)
   else
    screenBuffer[xx++] =SYM_FT;
    screenBuffer[xx++] =0;
-  
+
+    if(MwSensorActive&mode.passthru){ // Remove All mode Icons Create a Manual.
+      screenBuffer[2]=0;
+      screenBuffer[0] = 0;
+      screenBuffer[1] = 0;
+    }
+ 
     if(MwSensorActive&mode.gpshome){
       screenBuffer[8]=0;
       screenBuffer[0] = SYM_GHOME;
@@ -168,17 +174,24 @@ void displayMode(void)
 
   if(Settings[S_MODESENSOR]){
     xx = 0;
-  if(MwSensorActive&mode.stable||MwSensorActive&mode.horizon){
-    screenBuffer[xx] = SYM_ACC;
-    xx++;
+    if(MwSensorActive&mode.passthru){
+      screenBuffer[xx] = SYM_MAN;  xx++;
+      screenBuffer[xx] = SYM_MAN1;  xx++;
+      screenBuffer[xx] = SYM_MAN2;  xx++;
     }
-  if (MwSensorActive&mode.mag){
-    screenBuffer[xx] = SYM_MAG;
-    xx++;
-  }
-  if (MwSensorActive&mode.baro){
-    screenBuffer[xx] = SYM_BAR;
-    xx++;
+  else {
+    if(MwSensorActive&mode.stable||MwSensorActive&mode.horizon){
+      screenBuffer[xx] = SYM_ACC;
+      xx++;
+    }
+    if (MwSensorActive&mode.mag){
+      screenBuffer[xx] = SYM_MAG;
+      xx++;
+    }
+    if (MwSensorActive&mode.baro){
+      screenBuffer[xx] = SYM_BAR;
+      xx++;
+    }
   }
   screenBuffer[xx] = 0;
   MAX7456_WriteString(screenBuffer,getPosition(GPS_numSatPosition)+4);

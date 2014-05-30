@@ -516,7 +516,7 @@ void ProcessSensors(void) {
 //-------------- ADC and PWM RSSI sensor read into filter array
   static uint8_t sensorindex;
   for (uint8_t sensor=0;sensor<SENSORTOTAL;sensor++) {
-    int16_t sensortemp;
+    uint16_t sensortemp;
 //    uint8_t sensorpin = sensorpinarray[sensor];
     sensortemp = analogRead(sensorpinarray[sensor]);
     if (sensor ==4) { 

@@ -254,6 +254,7 @@ void serialMSPCheck()
           if(lastc == 'D') // "GPS HOLD;"
             mode.gpshold |= bit;
         }
+        if(firstc == 'P' && lastc == 'U')  mode.passthru |= bit; // "Passthru;"
         if(firstc == 'O' && lastc == 'W') // "OSD SW;"
           mode.osd_switch |= bit;
 
@@ -278,6 +279,7 @@ void serialMSPCheck()
     mode.gpshome = 0;
     mode.gpshold = 0;
     mode.llights = 0;
+    mode.passthru = 0;
     mode.osd_switch = 0;
     mode.camstab = 0;
 
@@ -307,6 +309,9 @@ void serialMSPCheck()
         break;
       case 11:
         mode.gpshold |= bit;
+        break;
+      case 12:
+        mode.passthru  |= bit;
         break;
       case 16:
         mode.llights |= bit;
