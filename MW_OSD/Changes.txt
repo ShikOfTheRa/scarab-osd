@@ -1,0 +1,84 @@
+/*
+Changelog: R1.a1.b0
++ Filter changed to 8 point ring + optional 2nd stage expo filter
++ All sensors now filtered - Battery / Video / Current / RSSI PWM RSSI
++ MWII sensor data remains as from FC
++ Vid voltage divider moved to "approx" same as main voltage
++ Vidvoltage added to OSD menu - with visual display
++ Zero amps adjust added to OSD menu
++ RSSI adjust max + min added to OSD menu
++ Amps and volts in the OSD menu now in Human readable form
++ Heading correction option for to support Baseflight & others added to config.h file
++ Added the plane support changes into a #define for config.h
++ Freed up memory for future additions
++ I2C GPS distance fix - for OSD with issues at distance > 650m 
+
+Changelog: R1.a2.b1
+bugfix: compass heading reversed in baseflight mode
+bugfix: now able to disable mode icon if required
+bugfix: MWII RSSI bug fixed
+bugfix: incorrect anal pin handling
++ added additional smoothing filter
++ added ability to hide ARMED/DISARMED status via config.H if required
++ added fastpixel support - *may* improve display for hi-res cameras 650tvl+
++ added brightness support into config.h
++ added amperage support from multiwii - haydent                     
++ added FRSKY hub support - cell voltage / current / baro - haydent
++ added option to hid voltage, video voltage and timer within options for OSD config.h switch control
++ added current used back into flight summary screen
++ added GPS timezone and options into OSD menu - haydent
++ added default startup delay - support for MAX chip voltage rise issue - suggested by bicycle
++ GUI: renamed reset to defaults for extra clarity
++ GUI: task switcher for faster serial. Closer to realtime - PatrikE 
+
+Changelog: R1.x
++ added sats warning if <5 sats - suggested by disq
++ added freetext that can be enabled / displayed using LLIGHT SWITCH
+
+Under review for next release:
+
+Callsign
+  - Permananet / timed display
+  - Choose location
+  - GUI to support
+  - Provide location
+  - Triggered by a switch - use for text display - .e.g missile lock LOL....
+  
+Add "Disarmed" enable / disable option to GUI
+Migrate OSD switch to toggle switch - flip between sceen layouts
+Alarms for distance / Altitude / Speed / mah / Current
+Add description chracter font for for heading / angle to home
+Double resolution for MAP mode
+Additional MAP mode
+Multiple HUD choices
+ - different layouts
+ - different sidebars
+ - different default positions and items enabled / disabled
+Display anal / PWM sensors on GUI - via MW OSD protocol
+Improve PWM RSSI filtering for extreme values. Recheck or constrain value
+Migrate relevant items from config.h to GUI
+OSD Menu
+ - re-add timezone correction into menu
+ - review and add additional features where possible
+ 
+Review alternative look / feel
+ - Sensor indicator ICONS
+ - Sat icon
+ - Center crosshair
+ - BAT icon
+ - ARROW icon
+ - Throttle ICON / 
+ - Longer VARIO option
+ - Map mode distance indicator
+ - Revised startup display
+ - Add clear AUTOPILOT / PILOT ASSIST type text message
+ - LARGE FONT
+
+Code quality
+ - Tidy up float calcs
+ - Generally review and improve code quality
+ - Reduce memory for future functionality 
+
+ GUI todo:
+ 
+*/     
