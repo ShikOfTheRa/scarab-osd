@@ -78,16 +78,6 @@
  void go_arm() {
    if(calibratingG == 0
    #if defined(ONLYARMWHENFLAT)
-@@ -1340,6 +1351,8 @@
- #endif
-   mixTable();
-   // do not update servos during unarmed calibration of sensors which are sensitive to vibration
-   if ( (f.ARMED) || ((!calibratingG) && (!calibratingA)) ) writeServos();
-   writeMotors();
--}
-+  
-+
-+}
 --- Protocol.cpp	Thu Nov 07 23:56:18 2013
 +++ Protocol.cpp	Fri Apr 25 19:24:31 2014
 @@ -8,10 +8,11 @@
@@ -140,7 +130,7 @@
       s_struct((uint8_t*)&att,6);
       break;
 -   case MSP_ALTITUDE:
-+   #ifdef SPORT_VARIO //bring in sport vario data instead
++   #if defined(SPORT_VARIO) && SPORT_PRESENT //bring in sport vario data instead
 +   case MSP_ALTITUDE:  
 +     s_struct((uint8_t*)&sport_alt,6);
 +     break;
