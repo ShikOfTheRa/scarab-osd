@@ -589,20 +589,20 @@ void ProcessSensors(void) {
   if (!Settings[S_MAINVOLTAGE_VBAT]){ // not MWII
     uint16_t voltageRaw = sensorfilter[0][SENSORFILTERSIZE];
     if (!Settings[S_VREFERENCE]){
-      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (0.0001);  
+      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (DIVIDER1v1);  
     }
     else {
-      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (0.0005);     
+      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (DIVIDER5v);     
     }
   }
 
   if (!Settings[S_VIDVOLTAGE_VBAT]) {
     uint16_t vidvoltageRaw = sensorfilter[1][SENSORFILTERSIZE];
     if (!Settings[S_VREFERENCE]){
-      vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (0.0001);
+      vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER1v1);
     }
     else {
-      vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (0.0005);
+      vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER5v);
     }
   }
 
