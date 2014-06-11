@@ -122,9 +122,7 @@ void setMspRequests() {
         modeMSPRequests |= REQ_MSP_BOX;
 
     }
-#if defined SPORT_CELLS    
     modeMSPRequests |= REQ_MSP_CELLS;
-#endif
   }
  
   if(Settings[S_MAINVOLTAGE_VBAT] ||
@@ -316,9 +314,7 @@ void loop()
         }
         displayMode();       
         displayDebug();
-#if defined SPORT_CELLS
         if(MwSensorPresent)displayCells();
-#endif
       }
     }
   }  // End of fast Timed Service Routine (50ms loop)

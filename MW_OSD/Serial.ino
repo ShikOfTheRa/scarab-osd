@@ -165,13 +165,11 @@ void serialMSPCheck()
       debug[i] = read16();
   }
 #endif
-#if defined SPORT_CELLS
   if (cmdMSP==MSP_CELLS)
   {
     for(uint8_t i=0;i<6;i++)
       cell_data[i] = read16();
   }
-#endif
   if (cmdMSP==MSP_ALTITUDE)
   {
     MwAltitude =read32();

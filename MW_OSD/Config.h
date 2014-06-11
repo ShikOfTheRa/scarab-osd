@@ -31,13 +31,12 @@
 /********************       FrSky S.Port settings      *********************/
 //enables data transfer from frsky reciever s.port to osd via multiwii
 //requires serial inverter cable & multiwii with s.port code
-//To show cell graph from s.port, uncomment SPORT_CELLS below, 16 steps @ 0.05v 
+//Auto detected cell graph from s.port, 16 steps @ 0.05v 
 //To show battery voltage from s.port, enable "Use MWii" under "Main Voltage" in GUI
 //To show amperage from s.port, enable "Use MWii" under Amperage in GUI
 //more details: http://code.google.com/p/scarab-osd/wiki/Frsky_SPort
 
-//#define SPORT_CELLS
-//#define MIN_CELL 320 //Cell Low Flash - No decimal, 3 Digits ie 320 = 3.20v
+#define MIN_CELL 320 //Cell Low Flash - No decimal, 3 Digits ie 320 = 3.20v
 
 /********************       Display Settings         ************************/
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
