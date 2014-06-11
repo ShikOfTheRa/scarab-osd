@@ -1,0 +1,45 @@
+--- GPS.cpp	Mon Oct 21 23:22:00 2013
++++ GPS.cpp	Sat Dec 28 11:51:11 2013
+@@ -1253,6 +1253,7 @@
+         GPS_coord[LON] = _buffer.posllh.longitude;
+         GPS_coord[LAT] = _buffer.posllh.latitude;
+         GPS_altitude   = _buffer.posllh.altitude_msl / 1000;      //alt in m
++        GPS_time       = _buffer.posllh.time;     //UTC mstow - haydent     
+       }
+       f.GPS_FIX = _fix_ok;
+       return true;        // POSLLH message received, allow blink GUI icon and LED
+--- MultiWii.cpp	Fri Nov 08 00:56:18 2013
++++ MultiWii.cpp	Sat Dec 28 11:54:08 2013
+@@ -311,6 +311,7 @@
+   uint16_t GPS_ground_course = 0;                       //                   - unit: degree*10
+   uint8_t  GPS_Present = 0;                             // Checksum from Gps serial
+   uint8_t  GPS_Enable  = 0;
++  uint32_t GPS_time;                                    //UTC time of coord calc - haydent
+ 
+   // The desired bank towards North (Positive) or South (Negative) : latitude
+   // The desired bank towards East (Positive) or West (Negative)   : longitude
+--- MultiWii.h	Fri Nov 08 00:51:54 2013
++++ MultiWii.h	Sat Dec 28 11:46:15 2013
+@@ -133,6 +133,7 @@
+   extern uint16_t GPS_ground_course;                       //                   - unit: degree*10
+   extern uint8_t  GPS_Present;                             // Checksum from Gps serial
+   extern uint8_t  GPS_Enable;
++  extern uint32_t GPS_time;                                //UTC time of coord calc - haydent
+ 
+   #define LAT  0
+   #define LON  1
+--- Protocol.cpp	Fri Nov 08 00:56:18 2013
++++ Protocol.cpp	Sat Dec 28 11:47:50 2013
+@@ -458,10 +458,11 @@
+      serialize16(GPS_ground_course);        // added since r1172
+      break;
+    case MSP_COMP_GPS:
+-     headSerialReply(5);
++     headSerialReply(9);
+      serialize16(GPS_distanceToHome);
+      serialize16(GPS_directionToHome);
+      serialize8(GPS_update & 1);
++     serialize32(GPS_time);       //UTC time of coord calc - haydent -- where should it go ? (no room in MSP_RAW_GPS)
+      break;
+    #endif
+    case MSP_ATTITUDE:
