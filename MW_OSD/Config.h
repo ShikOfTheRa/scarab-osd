@@ -1,20 +1,27 @@
 /*--------------------------       configurable parameters      ----------------------------------------------------*/
 
 /********************       HARDWARE settings      *********************/
-//#define RUSHDUINO                 // Select board type - RUSHDUINO. Defaults to MINIM
 //#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
-//#define TEMPSENSOR                // Enable if you have a hardware temperature sensor
-#define STARTUPDELAY                // Enable startup delay of 1 sec to allow MAX chip voltage to rise fully and initialise before configuring 
-#define AMPERAGEMAX     500         // Size of current sensor * 10 e.g. 50A sensor = 500
+#define AMPERAGEMAX     500         // Size of current sensor / maximum current draw (* 10) e.g. 50A sensor = 500, 100A sensor = 1000
 #define AMPERAGEOFFSET  0           // Optional extra for high offset sensors not supported in GUI (typically bidirectional sensors use a value of 256-512) 
-//#define STAGE2FILTER              // Optional experimental 2nd stage filter for all ADC and PWM RSSI. Enable for smoother readings. Memory intensive
-//#define SMOOTHFILTER              // Alternative 2nd stage filter for all ADC and PWM RSSI. Enable for smoothest readings.
+
+
+/********************       FILTER settings      *********************/
+//#define STAGE2FILTER              // Enable for smoother readings of voltage / current / RSSI. 
+//#define SMOOTHFILTER              // Enable for smoothest readings of voltage / current / RSSI. Uses more memory.
 
 
 /********************       CONTROLLER settings      *********************/
 //#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / others to correct for incorrect heading
 //#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE - to use GPS heading and altitude instead of BARO/MAG
 //#define FASTPWMRSSI               // Undefine this if you are using non standard PWM for RSSI ( doubles resolution ) 
+
+
+/********************       CALLSIGN settings      *********************/
+//#define CALLSIGNSTARTUP           // Enable to display callsign at startup
+//#define CALLSIGNALWAYS  341       // Enable to permanently display callsign. Number =screen position (row*30 + column)
+//#define CALLSIGNLLIGHTS 342       // Enable to enable callsign/freetext when LLIGHTS Switch active on TX. Number = screen position (row*30 + column)
+//#define CALLSIGNGIMBAL  342       // Enable to enable callsign/freetext when GIMBAL Switch active on TX. Number = screen position (row*30 + column)
 
 
 /********************       GPS type settings      *********************/
@@ -37,31 +44,31 @@
 //more details: http://code.google.com/p/scarab-osd/wiki/Frsky_SPort
 
 #define MIN_CELL 320 //Cell Low Flash - No decimal, 3 Digits ie 320 = 3.20v
-
 /********************       Display Settings         ************************/
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts some lines down
-//#define CALLSIGNALWAYS 341        // Enable to permanently display callsign. Number =screen position (row*30 + column)
-//#define CALLSIGNSTARTUP           // Enable to display callsign at startup
-//#define CALLSIGNLLIGHTS 342       // Enable to enable callsign/freetext when LLIGHTS Switch active on TX. Number = screen position (row*30 + column)
-//#define CALLSIGNGIMBAL  342       // Enable to enable callsign/freetext when GIMBAL Switch active on TX. Number = screen position (row*30 + column)
-//#define ALT_CENTER                // Enbale alternative center crosshair
+//#define ALT_CENTER                // Enable alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x10=90%0x11=80%  default is 0x01=100%,
 
-/********************       Serial speed      ************************/
-//#define SERIAL_SPEED 115200
-
 
 /********************  MSP Options and compatibility **********************/
-//#define BOXNAMES                  // required to support multiwii 2.1 / 2.0 
+//#define BOXNAMES                  // required to support multiwii 2.1 / 2.0 and HARIKIRI
 
 
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
+
+/********************       ADVANCED HARDWARE settings      *********************/
+//#define RUSHDUINO                 // Select board type - RUSHDUINO. Defaults to MINIM
+//#define TEMPSENSOR                // Enable if you have a hardware temperature sensor
+#define STARTUPDELAY                // Enable startup delay of 1 sec to allow MAX chip voltage to rise fully and initialise before configuring 
+#define DIVIDER1v1      0.0001      // Voltage divider for 1.1v reference. Use 0.0001 default unless advised otherwise.
+#define DIVIDER5v       0.0005      // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
+
 
 /********************       HARDWARE PINS settings      *********************/
 #define VOLTAGEPIN    A0
@@ -121,4 +128,4 @@
 //#define DEBUG         // Enable/disable option to display Mutltiwii debug values or free memory 
 #define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude) or free memory
 #define HORIZON         // Enable/disable HORIZON indicator or free memory
-//TEST
+

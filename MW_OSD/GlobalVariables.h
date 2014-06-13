@@ -125,9 +125,10 @@ struct {
   uint8_t horizon;
   uint8_t baro;
   uint8_t mag;
+  uint16_t camstab;
   uint16_t gpshome;
   uint16_t gpshold;
-  uint16_t camstab;
+  uint16_t passthru;
   uint32_t osd_switch;
   uint32_t llights;
 ;}mode;
@@ -361,8 +362,8 @@ float amperagesum = 0;
 uint16_t MWAmperage=0;
 
 // Rssi
-uint16_t rssi =0;   // uint8_t ?
-uint16_t oldrssi;   // uint8_t ?
+int16_t rssi =0;   // uint8_t ?
+int16_t oldrssi;   // uint8_t ?
 //int rssiADC=0;
 //int rssi_Int=0;
 

@@ -93,6 +93,9 @@
 #define SYM_MAG 0XA1
 #define SYM_BAR 0XA2
 #define SYM_GPS 0XA3
+#define SYM_MAN 0XC0
+#define SYM_MAN1 0XC1
+#define SYM_MAN2 0XC2
 #define SYM_CHECK 0XBE
 #define SYM_BARO10 0XB7
 #define SYM_BARO11 0XB8
