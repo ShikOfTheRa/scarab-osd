@@ -497,7 +497,7 @@ void serialMenuCommon()
 	if(configPage == 8 && COL == 3) {
 	  if(ROW==1) Settings[S_GPSTIME]=!Settings[S_GPSTIME];
 	  if(ROW==2) Settings[S_GPSTZAHEAD]=!Settings[S_GPSTZAHEAD];
-	  if(ROW==5) Settings[S_GPSTZ]=Settings[S_GPSTZ]+menudir;
+	  if(ROW==3) if((menudir == 1 && Settings[S_GPSTZ] < 130) || (menudir == -1 && Settings[S_GPSTZ] > 0))Settings[S_GPSTZ]=Settings[S_GPSTZ]+menudir*5;
 	}
   	if((ROW==10)&&(COL==1)) configExit();
 	if((ROW==10)&&(COL==2)) configSave();
