@@ -44,6 +44,8 @@
 //more details: http://code.google.com/p/scarab-osd/wiki/Frsky_SPort
 
 #define MIN_CELL 320 //Cell Low Flash - No decimal, 3 Digits ie 320 = 3.20v
+
+
 /********************       Display Settings         ************************/
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts some lines down
