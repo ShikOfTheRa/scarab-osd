@@ -70,10 +70,11 @@ void setup()
 
   MAX7456Setup();
  
-  if (Settings[S_VREFERENCE])
-    analogReference(DEFAULT);
-  else
+#ifdef ADC_1V1_REF
     analogReference(INTERNAL);
+#else
+    analogReference(DEFAULT);
+#endif
 
   setMspRequests();
   blankserialRequest(MSP_IDENT);
@@ -228,7 +229,7 @@ void loop()
   ProcessSensors();       // using analogue sensors
 
     MAX7456_DrawScreen();
-    if( allSec < 7 ){
+    if( allSec < INTRO_DELAY ){
       displayIntro();
     }  
     else
@@ -314,7 +315,9 @@ void loop()
         }
         displayMode();       
         displayDebug();
+#ifdef SPORT        
         if(MwSensorPresent)displayCells();
+#endif
       }
     }
   }  // End of fast Timed Service Routine (50ms loop)
@@ -369,12 +372,14 @@ void loop()
 
 void calculateTrip(void)
 {
+  static float tripSum = 0; 
   if(GPS_fix && armed && (GPS_speed>0)) {
     if(Settings[S_UNITSYSTEM])
-      trip += GPS_speed *0.0016404;     //  50/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
+      tripSum += GPS_speed *0.0016404;     //  50/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
     else
-      trip += GPS_speed *0.0005;        //  50/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)      
+      tripSum += GPS_speed *0.0005;        //  50/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)      
   }
+  trip = (int) tripSum;
 }
 
 
@@ -584,22 +589,20 @@ void ProcessSensors(void) {
 //-------------- Voltage
   if (!Settings[S_MAINVOLTAGE_VBAT]){ // not MWII
     uint16_t voltageRaw = sensorfilter[0][SENSORFILTERSIZE];
-    if (!Settings[S_VREFERENCE]){
+#ifdef ADC_1V1_REF
       voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (DIVIDER1v1);  
-    }
-    else {
+#else
       voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (DIVIDER5v);     
-    }
+#endif
   }
 
   if (!Settings[S_VIDVOLTAGE_VBAT]) {
     uint16_t vidvoltageRaw = sensorfilter[1][SENSORFILTERSIZE];
-    if (!Settings[S_VREFERENCE]){
+#ifdef ADC_1V1_REF
       vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER1v1);
-    }
-    else {
+#else
       vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER5v);
-    }
+#endif
   }
 
 //-------------- Temperature
