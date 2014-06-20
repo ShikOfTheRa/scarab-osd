@@ -9,7 +9,7 @@
 /********************       FILTER settings      *********************/
 //#define STAGE2FILTER              // Enable for smoother readings of voltage / current / RSSI. 
 //#define SMOOTHFILTER              // Enable for smoothest readings of voltage / current / RSSI. Uses more memory.
-#define ADC_1V1_REF              //1.1V or 5V ADC Reference, Be cautious commenting this out, ie enabling 1.1V REF if you are putting more than that into a Analog Pin
+//#define ADC_1V1_REF              //1.1V or 5V ADC Reference, Be cautious commenting this out, ie enabling 1.1V REF if you are putting more than that into a Analog Pin
 
 /********************       CONTROLLER settings      *********************/
 //#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / others to correct for incorrect heading
@@ -69,6 +69,7 @@
 #define PAGE6 //DISPLAY
 #define PAGE7 // ADVANCED
 #define PAGE8 //GPS TIME
+
 /********************  MSP Options and compatibility **********************/
 //#define BOXNAMES                  // required to support multiwii 2.1 / 2.0 and HARIKIRI
 
