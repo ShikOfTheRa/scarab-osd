@@ -9,7 +9,7 @@
 /********************       FILTER settings      *********************/
 //#define STAGE2FILTER              // Enable for smoother readings of voltage / current / RSSI. 
 //#define SMOOTHFILTER              // Enable for smoothest readings of voltage / current / RSSI. Uses more memory.
-
+#define ADC_1V1_REF              //1.1V or 5V ADC Reference, Be cautious commenting this out, ie enabling 1.1V REF if you are putting more than that into a Analog Pin
 
 /********************       CONTROLLER settings      *********************/
 //#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / others to correct for incorrect heading
@@ -43,6 +43,7 @@
 //To show amperage from s.port, enable "Use MWii" under Amperage in GUI
 //more details: http://code.google.com/p/scarab-osd/wiki/Frsky_SPort
 
+//#define SPORT           // Enable/disable FRSKY S.PORT cells code to free memory
 #define MIN_CELL 320 //Cell Low Flash - No decimal, 3 Digits ie 320 = 3.20v
 
 
@@ -53,8 +54,21 @@
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x10=90%0x11=80%  default is 0x01=100%,
+#define INTRO_DELAY 22             // Seconds intro screen should show for
+#define TIMEZONESTARTUP            // Enable to display timezone at startup
+
+/********************   ENABLE/DISABLE CONFIG PAGES via STICK MENU     *********************/
+//large memory savings if not needed, comment to disable
 
 
+#define PAGE1 //PID CONFIG
+#define PAGE2 //RC TUNING
+#define PAGE3 //VOLTAGE
+#define PAGE4 //RSSI
+#define PAGE5 //CURRENT
+#define PAGE6 //DISPLAY
+#define PAGE7 // ADVANCED
+#define PAGE8 //GPS TIME
 /********************  MSP Options and compatibility **********************/
 //#define BOXNAMES                  // required to support multiwii 2.1 / 2.0 and HARIKIRI
 
