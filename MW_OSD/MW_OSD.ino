@@ -70,11 +70,10 @@ void setup()
 
   MAX7456Setup();
  
-#ifdef ADC_1V1_REF
-    analogReference(INTERNAL);
-#else
+  if (Settings[S_VREFERENCE])
     analogReference(DEFAULT);
-#endif
+  else
+    analogReference(INTERNAL);
 
   setMspRequests();
   blankserialRequest(MSP_IDENT);
@@ -589,20 +588,22 @@ void ProcessSensors(void) {
 //-------------- Voltage
   if (!Settings[S_MAINVOLTAGE_VBAT]){ // not MWII
     uint16_t voltageRaw = sensorfilter[0][SENSORFILTERSIZE];
-#ifdef ADC_1V1_REF
+    if (!Settings[S_VREFERENCE]){
       voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (DIVIDER1v1);  
-#else
+    }
+    else {
       voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (DIVIDER5v);     
-#endif
+    }
   }
 
   if (!Settings[S_VIDVOLTAGE_VBAT]) {
     uint16_t vidvoltageRaw = sensorfilter[1][SENSORFILTERSIZE];
-#ifdef ADC_1V1_REF
+    if (!Settings[S_VREFERENCE]){
       vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER1v1);
-#else
+    }
+    else {
       vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER5v);
-#endif
+    }
   }
 
 //-------------- Temperature
