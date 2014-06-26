@@ -551,6 +551,7 @@ void displayIntro(void)
   MAX7456_WriteString_P(message9, MWOSDVersionPosition+LINE+LINE+LINE);
   displayCallsign(MWOSDVersionPosition+LINE+LINE+LINE+4);
 #endif   
+#ifdef GPSTIME
 #ifdef TIMEZONESTARTUP
 //timezone
   MAX7456_WriteString_P(message10, MWOSDVersionPosition+LINE+LINE+LINE+LINE); 
@@ -559,6 +560,7 @@ void displayIntro(void)
   if(Settings[S_GPSTZAHEAD] || Settings[S_GPSTZ] == 0)screenBuffer[0] = '+';
   else screenBuffer[0] = '-';   
   MAX7456_WriteString(screenBuffer, MWOSDVersionPosition+LINE+LINE+LINE+LINE+8); 
+#endif
 #endif
 //menu instruct
   MAX7456_WriteString_P(message6, MWOSDVersionPosition+LINE+LINE+LINE+LINE+LINE+LINE);
@@ -1278,7 +1280,7 @@ void mapmode(void) {
   uint8_t mapsymboltarget;
   uint8_t mapsymbolrange;
   int16_t tmp;
-  if (MAPMODE==1) {
+  if (MAPTYPE==1) {
     angle=(180+360+GPS_directionToHome-armedangle)%360;
   }
   else {
@@ -1336,7 +1338,7 @@ void mapmode(void) {
   centerpos=getPosition(horizonPosition)+67;
   targetpos= centerpos + targetx + (LINE*targety); 
 
-  if (MAPMODE==1) {
+  if (MAPTYPE==1) {
     mapsymbolcenter = SYM_HOME;
     mapsymboltarget = SYM_AIRCRAFT;
   }
@@ -1349,7 +1351,7 @@ void mapmode(void) {
   screenBuffer[1] = 0;
   MAX7456_WriteString(screenBuffer,centerpos);
 
-  if (MAPMODE==1) {
+  if (MAPTYPE==1) {
     tmp=(360+382+MwHeading-armedangle)%360/45;
     screenBuffer[0] = SYM_DIRECTION + tmp;
   }
@@ -1397,49 +1399,45 @@ void displayCells(void){
   #ifndef MIN_CELL
     #define MIN_CELL 300
   #endif
-    uint16_t sum = 0;
-    uint16_t low = 0;
-    uint8_t cells = 0;   
+  uint16_t sum = 0;
+  uint16_t low = 0;
+  uint8_t cells = 0;   
   
-    for(uint8_t i=0; i<6; i++) {
-      
-      uint16_t volt = cell_data[i];
-      if(!volt)continue;//empty cell
-      ++cells;
-      sum += volt;
-      if(volt < low || !low)low = volt;
-      
-      if((volt>MIN_CELL)||(timer.Blink2hz)){
-       
-    int tempvolt=constrain(volt,300,415);
-    tempvolt = map(tempvolt,300,415,0,14);
-    screenBuffer[i]=SYM_CELL0+tempvolt;
+  for(uint8_t i=0; i<6; i++) {
+    uint16_t volt = cell_data[i];
+    if(!volt)continue;//empty cell
+    ++cells;
+    sum += volt;
+    if(volt < low || !low)low = volt;
+    if((volt>MIN_CELL)||(timer.Blink2hz)){
+      int tempvolt=constrain(volt,300,415);
+      tempvolt = map(tempvolt,300,415,0,14);
+      screenBuffer[i]=SYM_CELL0+tempvolt;
 /*
-        if (volt < 300) screenBuffer[i]=SYM_CELL0;//Min
-          else if (volt < 350) screenBuffer[i]=SYM_CELL1;
-          else if (volt < 355) screenBuffer[i]=SYM_CELL2;
-          else if (volt < 360) screenBuffer[i]=SYM_CELL3;
-          else if (volt < 365) screenBuffer[i]=SYM_CELL4;
-          else if (volt < 370) screenBuffer[i]=SYM_CELL5;
-          else if (volt < 375) screenBuffer[i]=SYM_CELL6;
-          else if (volt < 380) screenBuffer[i]=SYM_CELL7;
-          else if (volt < 385) screenBuffer[i]=SYM_CELL8;
-          else if (volt < 390) screenBuffer[i]=SYM_CELL9;
-          else if (volt < 395) screenBuffer[i]=SYM_CELLA;
-          else if (volt < 400) screenBuffer[i]=SYM_CELLB;
-          else if (volt < 405) screenBuffer[i]=SYM_CELLC;
-          else if (volt < 410) screenBuffer[i]=SYM_CELLD;
-          else if (volt < 415) screenBuffer[i]=SYM_CELLE;
-          else screenBuffer[i]=SYM_CELLF;//Max
+      if (volt < 300) screenBuffer[i]=SYM_CELL0;//Min
+        else if (volt < 350) screenBuffer[i]=SYM_CELL1;
+        else if (volt < 355) screenBuffer[i]=SYM_CELL2;
+        else if (volt < 360) screenBuffer[i]=SYM_CELL3;
+        else if (volt < 365) screenBuffer[i]=SYM_CELL4;
+        else if (volt < 370) screenBuffer[i]=SYM_CELL5;
+        else if (volt < 375) screenBuffer[i]=SYM_CELL6;
+        else if (volt < 380) screenBuffer[i]=SYM_CELL7;
+        else if (volt < 385) screenBuffer[i]=SYM_CELL8;
+        else if (volt < 390) screenBuffer[i]=SYM_CELL9;
+        else if (volt < 395) screenBuffer[i]=SYM_CELLA;
+        else if (volt < 400) screenBuffer[i]=SYM_CELLB;
+        else if (volt < 405) screenBuffer[i]=SYM_CELLC;
+        else if (volt < 410) screenBuffer[i]=SYM_CELLD;
+        else if (volt < 415) screenBuffer[i]=SYM_CELLE;
+        else screenBuffer[i]=SYM_CELLF;//Max
   */   
-      }else screenBuffer[i]=' ';
-      
+      }
+      else screenBuffer[i]=' ';      
     }
     
     if(cells){
-        screenBuffer[cells] = 0;       
-        MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+(2*LINE)-1+(6-cells));//bar chart
-    
+      screenBuffer[cells] = 0;       
+      MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+(2*LINE)-1+(6-cells));//bar chart
 
       ItoaPadded(low, screenBuffer+1,4,2);
       screenBuffer[0] = SYM_MIN;
@@ -1447,8 +1445,7 @@ void displayCells(void){
       screenBuffer[6] = 0;
     
     if((low>MIN_CELL)||(timer.Blink2hz))
-          MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+(3*LINE)-1);//lowest
-    
+      MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+(3*LINE)-1);//lowest
     
       uint16_t avg = 0;
       if(cells)avg = sum / cells;
@@ -1458,7 +1455,6 @@ void displayCells(void){
       screenBuffer[6] = 0;
     
     if((avg>MIN_CELL)||(timer.Blink2hz))
-          MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+(4*LINE)-1);//average     
+      MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+(4*LINE)-1);//average     
   }
-  
 }
