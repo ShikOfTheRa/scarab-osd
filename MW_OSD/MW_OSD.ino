@@ -232,6 +232,10 @@ void loop()
   ProcessSensors();       // using analogue sensors
 
     MAX7456_DrawScreen();
+
+#ifndef INTRO_DELAY 
+#define INTRO_DELAY 11
+#endif
     if( allSec < INTRO_DELAY ){
       displayIntro();
     }  
@@ -274,10 +278,10 @@ void loop()
 
 #ifdef CALLSIGNALWAYS
         if(Settings[S_DISPLAY_CS]) displayCallsign(CALLSIGNALWAYS); 
-#elif  CALLSIGNLLIGHTS
-        if (MwSensorActive&mode.llights) displayCallsign(CALLSIGNLLIGHTS); 
-#elif  CALLSIGNGIMBAL
-        if (MwSensorActive&mode.camstab) displayCallsign(CALLSIGNGIMBAL); 
+#elif  FREETEXTLLIGHTS
+        if (MwSensorActive&mode.llights) displayCallsign(FREETEXTLLIGHTS); 
+#elif  FREETEXTGIMBAL
+        if (MwSensorActive&mode.camstab) displayCallsign(FREETEXTGIMBAL); 
 #else 
         if ( (onTime > (timer.lastCallSign+300)) || (onTime < (timer.lastCallSign+4)))
        {
@@ -308,9 +312,13 @@ void loop()
           displayDistanceToHome();
           displayAngleToHome();
           displayGPS_speed();
-          displayGPSPosition();
+          displayGPSPosition();        
+#ifdef GPSTIME
           displayGPS_time();
+#endif
+#ifdef MAPMODE
           if(Settings[S_MAPMODE]) mapmode();
+#endif
 #ifdef FIXEDWING // required because FW can fly without BARO / MAG
           displayAltitude();
           displayClimbRate();

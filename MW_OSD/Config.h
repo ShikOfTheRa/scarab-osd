@@ -1,36 +1,52 @@
 /*--------------------------       configurable parameters      ----------------------------------------------------*/
 
-/********************       HARDWARE settings      *********************/
+
+
+/********************       FEATURES      *********************/
+// Currently thre is not enough memory to run all options
+// Disable features if you require memory for other features
+// Further configuration may be require elsewhere in config.h + option enabled on GUI
+#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
+#define HORIZON         // Enable/disable HORIZON indicator
+#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
+#define GPSTIME         // Enable/disable GPS Time functions
+#define SPORT           // Enable/disable FRSKY S.PORT cell code
+
+
+/********************       HARDWARE OSD settings      *********************/
 //#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
+
+
+/********************       HARDWARE CURRENT sensor settings      *********************/
 #define AMPERAGEMAX     500         // Size of current sensor / maximum current draw (* 10) e.g. 50A sensor = 500, 100A sensor = 1000
 #define AMPERAGEOFFSET  0           // Optional extra for high offset sensors not supported in GUI (typically bidirectional sensors use a value of 256-512) 
 
 
 /********************       FILTER settings      *********************/
 #define STAGE2FILTER              // Enable for smoother readings of voltage / current / RSSI. 
-//#define SMOOTHFILTER              // Enable for smoothest readings of voltage / current / RSSI. Uses more memory.
+//#define SMOOTHFILTER              // Enable for smoothest readings of voltage / current / RSSI. Uses more memory. NOT FINISHED
 
 
 /********************       CONTROLLER settings      *********************/
-#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / others to correct for incorrect heading
+//#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / others to correct for incorrect heading
 //#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE - to use GPS heading and altitude instead of BARO/MAG
-#define FASTPWMRSSI               // Undefine this if you are using non standard PWM for RSSI ( doubles resolution ) 
+//#define FASTPWMRSSI               // Undefine this if you are using non standard PWM for RSSI ( doubles resolution ) 
 
 
 /********************       CALLSIGN settings      *********************/
 //#define CALLSIGNSTARTUP           // Enable to display callsign at startup
-//#define CALLSIGNALWAYS  341       // Enable to permanently display callsign. Number =screen position (row*30 + column)
-//#define CALLSIGNLLIGHTS 342       // Enable to enable callsign/freetext when LLIGHTS Switch active on TX. Number = screen position (row*30 + column)
-//#define CALLSIGNGIMBAL  342       // Enable to enable callsign/freetext when GIMBAL Switch active on TX. Number = screen position (row*30 + column)
+//#define CALLSIGNALWAYS  341       // Enable to permanently display callsign. Number = screen position (row*30 + column)
+//#define FREETEXTLLIGHTS 342       // Enable to display freetext (or callsign) when LLIGHTS Switch active on TX. Number = screen position (row*30 + column)
+//#define FREETEXTGIMBAL  342       // Enable to display freetext (or callsign) when GIMBAL Switch active on TX. Number = screen position (row*30 + column)
 
 
 /********************       GPS type settings      *********************/
-#define I2CGPS_SPEED              // Undefine this if you are using older I2CGPS - and need to correct for speed error (10x too slow)               
+//#define I2CGPS_SPEED              // Undefine this if you are using older I2CGPS - and need to correct for speed error (10x too slow)               
 //#define I2CGPS_DISTANCE           // Undefine this if you are using older I2CGPS - and need to correct for distance error (650m max) UNTESTED               
 
 
 /********************       MAP MODE Settings       *********************/
-#define MAPMODE 1                   // 1 for MAP - home is center, map shows location of aircraft relative to home 
+#define MAPTYPE 1                   // 1 for MAP - home is center, map shows location of aircraft relative to home 
                                     // 0 for RADAR - home is aircraft, map shows location of home relative to aircraft 
 //#define MAPMODENORTH              // Enable to use North as MAP reference in MODE 1 instead of take off direction (Default = disable) 
 
@@ -42,8 +58,6 @@
 //To show battery voltage from s.port, enable "Use MWii" under "Main Voltage" in GUI
 //To show amperage from s.port, enable "Use MWii" under Amperage in GUI
 //more details: http://code.google.com/p/scarab-osd/wiki/Frsky_SPort
-
-//#define SPORT           // Enable/disable FRSKY S.PORT cells code to free memory
 #define MIN_CELL 320 //Cell Low Flash - No decimal, 3 Digits ie 320 = 3.20v
 
 
@@ -52,25 +66,25 @@
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts some lines down
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
-#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
-#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x10=90%0x11=80%  default is 0x01=100%,
-#define INTRO_DELAY 22             // Seconds intro screen should show for
-#define TIMEZONESTARTUP            // Enable to display timezone at startup
+#define FASTPIXEL                   // Optional - may improve resolution - especially hi res cams
+#define WHITEBRIGHTNESS 0x00        // Optional change from default 0x00=120%,0x10=90%0x11=80%  default is 0x01=100%,
+//#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
+#define TIMEZONESTARTUP             // Enable to display timezone at startup - if GPS TIME is enabled
+
 
 /********************   ENABLE/DISABLE CONFIG PAGES via STICK MENU     *********************/
 //large memory savings if not needed, comment to disable
-
-
 #define PAGE1 //PID CONFIG
 #define PAGE2 //RC TUNING
 #define PAGE3 //VOLTAGE
 #define PAGE4 //RSSI
 #define PAGE5 //CURRENT
 #define PAGE6 //DISPLAY
-#define PAGE7 // ADVANCED
+#define PAGE7 //ADVANCED
 #define PAGE8 //GPS TIME
 
-/********************  MSP Options and compatibility **********************/
+
+/********************  LEGACY compatibility **********************/
 //#define BOXNAMES                  // required to support multiwii 2.1 / 2.0 and HARIKIRI
 
 
@@ -143,6 +157,4 @@
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
 //#define DEBUG         // Enable/disable option to display Mutltiwii debug values or free memory 
-#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude) or free memory
-#define HORIZON         // Enable/disable HORIZON indicator or free memory
 
