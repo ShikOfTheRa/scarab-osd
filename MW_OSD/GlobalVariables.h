@@ -325,8 +325,8 @@ uint16_t GPS_speed;
 uint16_t old_GPS_speed;
 int16_t GPS_directionToHome=0;
 uint8_t GPS_numSat=0;
-uint16_t I2CError=0;
-uint16_t cycleTime=0;
+//uint16_t I2CError=0;
+//uint16_t cycleTime=0;
 uint16_t pMeterSum=0;
 uint16_t MwRssi=0;
 uint32_t GPS_time = 0;        //local time of coord calc - haydent
@@ -380,7 +380,7 @@ int16_t temperature=0;                  // temperature in degrees Centigrade
 uint16_t speedMAX=0;
 int16_t altitudeMAX=0;
 int16_t distanceMAX=0;
-float trip=0;
+int trip=0;//needs determining what int to be
 uint16_t flyingTime=0; 
 
 
@@ -454,12 +454,12 @@ const char message0[] PROGMEM = "MULTIWII MWOSD - R1.1";
 //const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
 //const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
 const char message5[] PROGMEM = "MW VERSION:";
-//const char message6[] PROGMEM = "MENU:THRT MIDDLE";
-//const char message7[] PROGMEM = "YAW RIGHT";
-//const char message8[] PROGMEM = "PITCH FULL";
+const char message6[] PROGMEM = "OPEN MENU: THRT MIDDLE";
+const char message7[] PROGMEM = "+YAW RIGHT";
+const char message8[] PROGMEM = "+PITCH FULL";
 const char message9[] PROGMEM = "ID:";         // Call Sign on the beggining of the transmission   
-//const char message10[] PROGMEM = "TZ UTC:"; //haydent - Time Zone & DST Setting
-//const char message11[] PROGMEM = "DST:"; //haydent - Time Zone & DST Setting
+const char message10[] PROGMEM = "TZ UTC:"; //haydent - Time Zone & DST Setting
+const char message11[] PROGMEM = "MORE IN: GUI+CONFIG.H"; 
 
 // For Config menu common
 const char configMsgON[] PROGMEM = "ON";
@@ -573,7 +573,7 @@ const unsigned char GPS_distanceToHomeAdd[2]={
   0xbb,0xb9};
 const unsigned char MwGPSAltPositionAdd[2]={
   0xa7,0xa8};
-const char MWOSDVersionPosition = 65;
+const char MWOSDVersionPosition = 34;
 
 
 // All screen locations defines in ScreenLayout.ino

@@ -122,9 +122,7 @@ void setMspRequests() {
         modeMSPRequests |= REQ_MSP_BOX;
 
     }
-#if defined SPORT_CELLS    
     modeMSPRequests |= REQ_MSP_CELLS;
-#endif
   }
  
   if(Settings[S_MAINVOLTAGE_VBAT] ||
@@ -234,7 +232,7 @@ void loop()
   ProcessSensors();       // using analogue sensors
 
     MAX7456_DrawScreen();
-    if( allSec < 7 ){
+    if( allSec < INTRO_DELAY ){
       displayIntro();
     }  
     else
@@ -322,7 +320,7 @@ void loop()
         }
         displayMode();       
         displayDebug();
-#if defined SPORT_CELLS
+#ifdef SPORT        
         if(MwSensorPresent)
           displayCells();
 #endif
@@ -380,12 +378,14 @@ void loop()
 
 void calculateTrip(void)
 {
+  static float tripSum = 0; 
   if(GPS_fix && armed && (GPS_speed>0)) {
     if(Settings[S_UNITSYSTEM])
-      trip += GPS_speed *0.0016404;     //  50/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
+      tripSum += GPS_speed *0.0016404;     //  50/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
     else
-      trip += GPS_speed *0.0005;        //  50/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)      
+      tripSum += GPS_speed *0.0005;        //  50/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)      
   }
+  trip = (int) tripSum;
 }
 
 
