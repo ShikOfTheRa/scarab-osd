@@ -99,8 +99,8 @@ void serialMSPCheck()
 
   if (cmdMSP==MSP_STATUS)
   {
-    cycleTime=read16();
-    I2CError=read16();
+    read16();//cycleTime=read16();
+    read16();//I2CError=read16();
     MwSensorPresent = read16();
     MwSensorActive = read32();
     armed = (MwSensorActive & mode.armed) != 0;
@@ -165,13 +165,11 @@ void serialMSPCheck()
       debug[i] = read16();
   }
 #endif
-#if defined SPORT_CELLS
   if (cmdMSP==MSP_CELLS)
   {
     for(uint8_t i=0;i<6;i++)
       cell_data[i] = read16();
   }
-#endif
   if (cmdMSP==MSP_ALTITUDE)
   {
     MwAltitude =read32();
@@ -420,6 +418,10 @@ void serialMenuCommon()
 	if(configPage<MINPAGE) configPage = MAXPAGE;
 	if(configPage>MAXPAGE) configPage = MINPAGE;
 
+#ifdef PAGE0
+//comment
+#endif
+#ifdef PAGE1
 	if(configPage == 1) {
 	  if(ROW >= 1 && ROW <= 5) {
 	    if(COL==1) P8[ROW-1]=P8[ROW-1]+menudir;
@@ -435,7 +437,8 @@ void serialMenuCommon()
 
 	  if((ROW==7)&&(COL==1)) P8[8]=P8[8]+menudir;
 	}
-
+#endif
+#ifdef PAGE2
 	if(configPage == 2 && COL == 3) {
 	  if(ROW==1) rcRate8=rcRate8+menudir;
 	  if(ROW==2) rcExpo8=rcExpo8+menudir;
@@ -443,43 +446,41 @@ void serialMenuCommon()
 	  if(ROW==4) yawRate=yawRate+menudir;
 	  if(ROW==5) dynThrPID=dynThrPID+menudir;
 	}
-
+#endif
+#ifdef PAGE3
 	if(configPage == 3 && COL == 3) {
+	  if(ROW==1) Settings[S_DISPLAYVOLTAGE]=!Settings[S_DISPLAYVOLTAGE];  
 	  if(ROW==2) Settings[S_DIVIDERRATIO]=Settings[S_DIVIDERRATIO]+menudir;
 	  if(ROW==3) Settings[S_VOLTAGEMIN]=Settings[S_VOLTAGEMIN]+menudir;
+	  if(ROW==4) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
 	  if(ROW==5) Settings[S_BATCELLS]=Settings[S_BATCELLS]+menudir;
+	  if(ROW==6) Settings[S_MAINVOLTAGE_VBAT]=!Settings[S_MAINVOLTAGE_VBAT];
 	  if(ROW==7) Settings[S_VIDDIVIDERRATIO]=Settings[S_VIDDIVIDERRATIO]+menudir;
 	}
+#endif
+#ifdef PAGE4
 
-	if(configPage == 4 && COL == 3) {
-	  if(ROW==5) Settings[S_RSSIMAX]=Settings[S_RSSIMAX]+menudir;
-	  if(ROW==6) Settings[S_RSSIMIN]=Settings[S_RSSIMIN]+menudir;
-	}
-
-	if(configPage == 5 && COL == 3) {
-	  if(ROW==4) S16_AMPMAX=S16_AMPMAX+menudir;
-	  if(ROW==5) Settings[S_AMPMIN]=Settings[S_AMPMIN]+menudir;
-	}
   
-  	if(configPage == 3 && COL == 3) {
-	  if(ROW==1) Settings[S_DISPLAYVOLTAGE]=!Settings[S_DISPLAYVOLTAGE];
-	  if(ROW==4) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
-	  if(ROW==6) Settings[S_MAINVOLTAGE_VBAT]=!Settings[S_MAINVOLTAGE_VBAT];
-	}
 
 	if(configPage == 4 && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
 	  if(ROW==2) timer.rssiTimer=15; // 15 secs to turn off tx anwait to read min RSSI
 	  if(ROW==3) Settings[S_MWRSSI]=!Settings[S_MWRSSI];
 	  if(ROW==4) Settings[S_PWMRSSI]=!Settings[S_PWMRSSI];
+	  if(ROW==5) Settings[S_RSSIMAX]=Settings[S_RSSIMAX]+menudir;
+	  if(ROW==6) Settings[S_RSSIMIN]=Settings[S_RSSIMIN]+menudir;
 	}
-
+#endif
+#ifdef PAGE5
 	if(configPage == 5 && COL == 3) {
 	  if(ROW==1) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
 	  if(ROW==2) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
 	  if(ROW==3) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
+	  if(ROW==4) S16_AMPMAX=S16_AMPMAX+menudir;
+	  if(ROW==5) Settings[S_AMPMIN]=Settings[S_AMPMIN]+menudir;
 	}
-
+#endif
+#ifdef PAGE6
 	if(configPage == 6 && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAY_HORIZON_BR]=!Settings[S_DISPLAY_HORIZON_BR];
 	  if(ROW==2) Settings[S_WITHDECORATION]=!Settings[S_WITHDECORATION];
@@ -490,7 +491,8 @@ void serialMenuCommon()
 	  if(ROW==7) Settings[S_GIMBAL]=!Settings[S_GIMBAL];
 	  if(ROW==8) Settings[S_MAPMODE]=!Settings[S_MAPMODE];
 	}
-
+#endif
+#ifdef PAGE7
 	if(configPage == 7 && COL == 3) {
 	  if(ROW==1) Settings[S_UNITSYSTEM]=!Settings[S_UNITSYSTEM];
 	  if(ROW==2) {
@@ -501,11 +503,14 @@ void serialMenuCommon()
 	  if(ROW==4) Settings[S_DEBUG]=!Settings[S_DEBUG];
 	  if(ROW==5) timer.magCalibrationTimer=CALIBRATION_DELAY;
 	}
+#endif
+#ifdef PAGE8
 	if(configPage == 8 && COL == 3) {
 	  if(ROW==1) Settings[S_GPSTIME]=!Settings[S_GPSTIME];
 	  if(ROW==2) Settings[S_GPSTZAHEAD]=!Settings[S_GPSTZAHEAD];
-	  if(ROW==5) Settings[S_GPSTZ]=Settings[S_GPSTZ]+menudir;
+	  if(ROW==3) if((menudir == 1 && Settings[S_GPSTZ] < 130) || (menudir == -1 && Settings[S_GPSTZ] > 0))Settings[S_GPSTZ]=Settings[S_GPSTZ]+menudir*5;
 	}
+#endif
   	if((ROW==10)&&(COL==1)) configExit();
 	if((ROW==10)&&(COL==2)) configSave();
 
