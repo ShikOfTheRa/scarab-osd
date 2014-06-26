@@ -7,14 +7,14 @@
 
 
 /********************       FILTER settings      *********************/
-//#define STAGE2FILTER              // Enable for smoother readings of voltage / current / RSSI. 
+#define STAGE2FILTER              // Enable for smoother readings of voltage / current / RSSI. 
 //#define SMOOTHFILTER              // Enable for smoothest readings of voltage / current / RSSI. Uses more memory.
 
 
 /********************       CONTROLLER settings      *********************/
-//#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / others to correct for incorrect heading
+#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / others to correct for incorrect heading
 //#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE - to use GPS heading and altitude instead of BARO/MAG
-//#define FASTPWMRSSI               // Undefine this if you are using non standard PWM for RSSI ( doubles resolution ) 
+#define FASTPWMRSSI               // Undefine this if you are using non standard PWM for RSSI ( doubles resolution ) 
 
 
 /********************       CALLSIGN settings      *********************/
@@ -25,7 +25,7 @@
 
 
 /********************       GPS type settings      *********************/
-//#define I2CGPS_SPEED              // Undefine this if you are using older I2CGPS - and need to correct for speed error (10x too slow)               
+#define I2CGPS_SPEED              // Undefine this if you are using older I2CGPS - and need to correct for speed error (10x too slow)               
 //#define I2CGPS_DISTANCE           // Undefine this if you are using older I2CGPS - and need to correct for distance error (650m max) UNTESTED               
 
 
@@ -52,8 +52,8 @@
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts some lines down
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
-//#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
-//#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x10=90%0x11=80%  default is 0x01=100%,
+#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
+#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x10=90%0x11=80%  default is 0x01=100%,
 
 
 /********************  MSP Options and compatibility **********************/

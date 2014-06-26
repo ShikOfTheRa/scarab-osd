@@ -28,7 +28,7 @@ This work is based on the following open source work :-
 
 // Screen is the Screen buffer between program an MAX7456 that will be writen to the screen at 10hz
 char screen[480];
-// ScreenBuffer is an intermietary buffer to created Strings to send to Screen buffer
+// ScreenBuffer is an intermediate buffer to created Strings to send to Screen buffer
 char screenBuffer[20];
 
 uint32_t modeMSPRequests;
@@ -217,12 +217,16 @@ void loop()
        case REQ_MSP_FONT:
          MSPcmdsend = MSP_OSD;
          break;
+#if defined DEBUG
        case REQ_MSP_DEBUG:
          MSPcmdsend = MSP_DEBUG;
          break;
+#endif
+#if defined SPORT_CELLS
        case REQ_MSP_CELLS:
          MSPcmdsend = MSP_CELLS;
          break;
+#endif
     }
       if(!fontMode)
       blankserialRequest(MSPcmdsend);      
@@ -254,8 +258,10 @@ void loop()
       {
        // CollectStatistics();      DO NOT DELETE
 
-        if(Settings[S_DISPLAYVOLTAGE]&&((voltage>Settings[S_VOLTAGEMIN])||(timer.Blink2hz))) displayVoltage();
-        if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz))) displayRSSI();
+        if(Settings[S_DISPLAYVOLTAGE]&&((voltage>Settings[S_VOLTAGEMIN])||(timer.Blink2hz))) 
+          displayVoltage();
+        if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz))) 
+          displayRSSI();
 
         displayTime();
 #ifdef TEMPSENSOR
@@ -317,7 +323,8 @@ void loop()
         displayMode();       
         displayDebug();
 #if defined SPORT_CELLS
-        if(MwSensorPresent)displayCells();
+        if(MwSensorPresent)
+          displayCells();
 #endif
       }
     }
@@ -333,11 +340,12 @@ void loop()
     timer.tenthSec=0;
     onTime++;
 
-  amperagesum += amperage;
+    if (Settings[S_AMPER_HOUR]) 
+      amperagesum += amperage;
 
     if(!armed) {
 #ifndef MAPMODENORTH
-        armedangle=MwHeading;
+      armedangle=MwHeading;
 #endif
     }
     else {
@@ -358,7 +366,6 @@ void loop()
       timer.magCalibrationTimer=0;
     }
 
-//    if(accCalibrationTimer>0) accCalibrationTimer--;
     if(timer.magCalibrationTimer>0) timer.magCalibrationTimer--;
 
     if(timer.rssiTimer>0) timer.rssiTimer--;

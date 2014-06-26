@@ -370,7 +370,8 @@ void displayVoltage(void)
 
   if (Settings[S_SHOWBATLEVELEVOLUTION]){
     // For battery evolution display
-    int BATTEV1 =Settings[S_BATCELLS] * 35;
+
+/*    int BATTEV1 =Settings[S_BATCELLS] * 35;
     int BATTEV2 =Settings[S_BATCELLS] * 36;
     int BATTEV3 =Settings[S_BATCELLS] * 37;
     int BATTEV4 =Settings[S_BATCELLS] * 38;
@@ -383,6 +384,11 @@ void displayVoltage(void)
     else if (voltage < BATTEV5) screenBuffer[0]=SYM_BATT_4;
     else if (voltage < BATTEV6) screenBuffer[0]=SYM_BATT_5;
     else screenBuffer[0]=SYM_BATT_FULL;                              // Max charge icon
+*/
+    int battev=voltage/Settings[S_BATCELLS];
+    battev=constrain(battev,34,41);
+    battev = map(battev, 35, 41, 0, 6);
+    screenBuffer[0]=SYM_BATT_FULL+battev;
   }
   else {
     screenBuffer[0]=SYM_MAIN_BATT;
@@ -1355,20 +1361,10 @@ void displayCells(void){
       
       if((volt>MIN_CELL)||(timer.Blink2hz)){
        
+    int tempvolt=constrain(volt,300,415);
+    tempvolt = map(tempvolt,300,415,0,14);
+    screenBuffer[i]=SYM_CELL0+tempvolt;
 /*
-Suggestion to replace below?
-        if (volt < 300) {
-          screenBuffer[i]=0xFF;//Min
-        }
-        else {
-          uint8_t xx=volt;
-          if (volt>=415) volt=415;
-          if (volt<350) volt=350;
-          xx=map(volt,350,415,0,14);
-          screenBuffer[i]=0xF0+xx;
-        }
-*/
-
         if (volt < 300) screenBuffer[i]=SYM_CELL0;//Min
           else if (volt < 350) screenBuffer[i]=SYM_CELL1;
           else if (volt < 355) screenBuffer[i]=SYM_CELL2;
@@ -1385,7 +1381,7 @@ Suggestion to replace below?
           else if (volt < 410) screenBuffer[i]=SYM_CELLD;
           else if (volt < 415) screenBuffer[i]=SYM_CELLE;
           else screenBuffer[i]=SYM_CELLF;//Max
-     
+  */   
       }else screenBuffer[i]=' ';
       
     }
