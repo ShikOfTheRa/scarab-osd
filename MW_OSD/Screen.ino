@@ -1397,7 +1397,7 @@ void displayDebug(void)
 void displayCells(void){
 
   #ifndef MIN_CELL
-    #define MIN_CELL 300
+    #define MIN_CELL 320
   #endif
   uint16_t sum = 0;
   uint16_t low = 0;
