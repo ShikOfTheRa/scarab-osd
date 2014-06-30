@@ -635,8 +635,36 @@ void ShowAmps(){
 
 void ShowUTC(){
   if(confItem[GetSetting("S_GPSTIME")].value() > 0) {
-  makeText("10:27:07", UTCPosition[ScreenType]);
-  }}
+    int seconds = second();
+    int minutes = minute();
+    int hours = hour();
+    String PCTimerString ="";
+
+    if (hours < 10){
+      PCTimerString = "0" + str(hours) ;
+    }
+    else
+    {
+      PCTimerString =  str(hours);
+    }
+    if (minutes < 10){
+      PCTimerString = PCTimerString +":0" + str(minutes)  ;
+    }
+    else
+    {
+      PCTimerString =  PCTimerString +":" + str(minutes);
+    }
+    if (seconds < 10){
+      PCTimerString = PCTimerString +":0" + str(seconds);
+    }
+    else
+    {
+      PCTimerString =  PCTimerString +":" + str(seconds);
+    }
+  
+    makeText(PCTimerString, UTCPosition[ScreenType]);
+  }
+}
 
 void displayHeading()
 {
