@@ -1,0 +1,21 @@
+To apply .patch file to source code:
+
+1: Extract and run TortoiseMerge.exe from TortoiseDiff-1.5.0.13316.zip
+2: Choose "Apply unified diff"
+3: Select .patch file in "Diff file" option box
+4: Select multiwii source folder in "Directory" option box
+5: Choose "OK" button
+
+You will see list of files to be modified in far left window
+
+* Decide if you want to patch all files automatically 
+(suitable if patching a 'vanilla' source folder)
+
+* Or alternatively patch each file individually by previewing proposed changes first
+(suitable for modified source where there may be conflict)
+
+To patch all automatically, right click in the far left window, and choose "Patch all"
+
+To preview and patch each file individually, double click a file in the list & review changes.
+
+Click save if happy, proceed to next file...
