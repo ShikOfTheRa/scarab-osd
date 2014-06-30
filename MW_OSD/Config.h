@@ -3,14 +3,14 @@
 
 
 /********************       FEATURES      *********************/
-// Currently thre is not enough memory to run all options
+// Currently there is not enough memory to run all options
 // Disable features if you require memory for other features
 // Further configuration may be require elsewhere in config.h + option enabled on GUI
 #define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
 #define HORIZON         // Enable/disable HORIZON indicator
 #define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
-#define GPSTIME         // Enable/disable GPS Time functions
-#define SPORT           // Enable/disable FRSKY S.PORT cell code
+//#define GPSTIME         // Enable/disable GPS Time functions
+//#define SPORT           // Enable/disable FRSKY S.PORT cell code
 
 
 /********************       HARDWARE OSD settings      *********************/
@@ -66,8 +66,8 @@
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts some lines down
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
-#define FASTPIXEL                   // Optional - may improve resolution - especially hi res cams
-#define WHITEBRIGHTNESS 0x00        // Optional change from default 0x00=120%,0x10=90%0x11=80%  default is 0x01=100%,
+//#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
+//#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x10=90%0x11=80%  default is 0x01=100%,
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
 #define TIMEZONESTARTUP             // Enable to display timezone at startup - if GPS TIME is enabled
 
@@ -156,5 +156,5 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-//#define DEBUG         // Enable/disable option to display Mutltiwii debug values or free memory 
+//#define DEBUG         // Enable/disable option to display Mutltiwii debug values 
 

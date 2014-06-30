@@ -21,11 +21,11 @@ int SendSim = 0;
 boolean[] keys = new boolean[526];
 boolean armed = false;
 
-Group SG,SGControlBox,SGModes,SGAtitude,SGRadio,SGSensors1,SGGPS; 
+Group SG,SGControlBox,SGModes,SGAtitude,SGRadio,SGSensors1,SGGPS,SGFRSKY; 
 
 // Checkboxs
 CheckBox checkboxSimItem[] = new CheckBox[SIMITEMS] ;
-CheckBox ShowSimBackground, UnlockControls, SGPS_FIX;
+CheckBox ShowSimBackground, UnlockControls, SGPS_FIX,SFRSKY;
 //Toggles
 Toggle toggleModeItems[] = new Toggle[boxnames.length] ;
 Toggle SimControlToggle;
@@ -137,6 +137,19 @@ SGGPS = ScontrolP5.addGroup("SGGPS")
                 //.close() 
                ;
 
+SGFRSKY = ScontrolP5.addGroup("SGFRSKY")
+                .setPosition(186,150)
+                .setWidth(200)
+                .setBarHeight(15)
+                .activateEvent(true)
+                .disableCollapse()
+                .setBackgroundColor(color(30,255))
+                .setBackgroundHeight(33)
+                .setLabel("FRSKY")
+                .setGroup(SG)
+                //.close() 
+               ;   
+
 SGControlBox = ScontrolP5.addGroup("SGControlBox")
                 .setPosition(5,150)
                 .setWidth(175)
@@ -150,6 +163,8 @@ SGControlBox = ScontrolP5.addGroup("SGControlBox")
                 //.close() 
                ;   
 
+
+
 SimControlToggle = (controlP5.Toggle) hideLabel(controlP5.addToggle("SendSim"));
 SimControlToggle.setPosition(5,5);
 SimControlToggle.setSize(35,10);
@@ -159,7 +174,14 @@ SimControlToggle.setValue(1);
 
 SimControlText = controlP5.addTextlabel("SimControlText","Simulate on OSD",45,3);
 SimControlText.setGroup(SGControlBox);
+
                
+SFRSKY =  ScontrolP5.addCheckBox("SFRSKY",5,5);
+    SFRSKY.setColorBackground(color(120));
+    SFRSKY.setColorActive(color(255));
+    SFRSKY.addItem("Simulate FRSKY cells",1);
+    SFRSKY.setGroup(SGFRSKY);
+//    SFRSKY.activate(0);
 
 SGPS_FIX =  ScontrolP5.addCheckBox("GPS_FIX",5,5);
     SGPS_FIX.setColorBackground(color(120));

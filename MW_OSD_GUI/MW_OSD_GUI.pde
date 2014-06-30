@@ -1076,6 +1076,7 @@ void draw() {
           break;
         case 2:
           if (init_com==1)SendCommand(MSP_STATUS);
+          if (init_com==1)SendCommand(MSP_CELLS);
           break;
         case 3:
           if (init_com==1)SendCommand(MSP_RC);

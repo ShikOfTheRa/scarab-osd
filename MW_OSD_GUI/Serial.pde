@@ -70,6 +70,7 @@ private static final int
   MSP_PIDNAMES             =117,
   MSP_BOXIDS               =119,
   MSP_RSSI                 =120,
+  MSP_CELLS                =121,
   MSP_SET_RAW_RC           =200,
   MSP_SET_RAW_GPS          =201,
   MSP_SET_PID              =202,
@@ -409,6 +410,25 @@ void SendCommand(int cmd){
         PortIsWriting = false;
       break;
  
+      case MSP_CELLS:
+        PortIsWriting = true;
+        headSerialReply(MSP_CELLS, 12);
+        if (SFRSKY.arrayValue()[0]<1) break;
+       if (int(confItem[GetSetting("S_BATCELLS")].value()) <1) break;
+        int cellvolt= (int(sVBat * 100))/int(confItem[GetSetting("S_BATCELLS")].value());
+        for (int i=0; i<6; i++) {
+          if (i < int(confItem[GetSetting("S_BATCELLS")].value())) {
+            serialize16(cellvolt);
+          }
+          else {
+            serialize16(0);
+          }
+        }
+        tailSerialReply();
+        PortIsWriting = false;
+      break;
+
+
       case MSP_BOXNAMES:
         PortIsWriting = true;
         headSerialReply(MSP_BOXNAMES,strBoxNames.length());
@@ -466,12 +486,20 @@ void SendCommand(int cmd){
     
   
     case MSP_COMP_GPS:
-      headSerialReply(MSP_COMP_GPS,5);
+      if(confItem[GetSetting("S_GPSTIME")].value()>0)
+        headSerialReply(MSP_COMP_GPS,9);
+      else
+        headSerialReply(MSP_COMP_GPS,5);
       serialize16(int(SGPS_distanceToHome.value()));
       int GPSheading = int(SGPSHeadHome.value());
       if(GPSheading < 0) GPSheading += 360;
       serialize16(GPSheading);
       serialize8(0);
+      if(confItem[GetSetting("S_GPSTIME")].value()>0) {
+        int osdtime=hour()*3600+minute()*60+second();
+        osdtime = osdtime*1000;
+        serialize32(osdtime);
+      }
     break;
     
     
