@@ -1211,6 +1211,14 @@ void displayConfigScreen(void)
       MAX7456_WriteString_P(configMsg721, PITCHD);
       }
 //R3:
+    MAX7456_WriteString_P(configMsg73, YAWT);
+    if(Settings[S_VREFERENCE]){
+      MAX7456_WriteString_P(configMsg730, YAWD);
+    }
+    else {
+      MAX7456_WriteString_P(configMsg731, YAWD);
+      }
+//R5:
     MAX7456_WriteString_P(configMsg74, ALTT);
     if(Settings[S_DEBUG]){
       MAX7456_WriteString_P(configMsgON, ALTD);
@@ -1218,7 +1226,7 @@ void displayConfigScreen(void)
     else {
       MAX7456_WriteString_P(configMsgOFF, ALTD);
       }
-//R4:
+//R6:
     MAX7456_WriteString_P(configMsg75, VELT);
     if(timer.magCalibrationTimer>0)
       MAX7456_WriteString(itoa(timer.magCalibrationTimer,screenBuffer,10),VELD);

@@ -31,6 +31,7 @@ void serialMSPCheck()
 
   if (cmdMSP == MSP_OSD) {
     uint8_t cmd = read8();
+
     if(cmd == OSD_READ_CMD) {
       uint8_t txCheckSum, txSize;
       headSerialRequest();
@@ -50,10 +51,37 @@ void serialMSPCheck()
       
     }
 
+/*
+    if (cmd == OSD_SENSORS) {
+      uint8_t txCheckSum, txSize;
+      uint16_t osd_voltage,osd_vidvoltage,osd_RSSI,osd_amperage;
+      headSerialRequest();
+      txCheckSum=0;
+      txSize = 8; // no. bytes to tx
+      Serial.write(txSize);
+      txCheckSum ^= txSize;
+      Serial.write(OSD_SENSORS);
+      txCheckSum ^= OSD_SENSORS;
+      Serial.write(cmd);
+      txCheckSum ^= cmd;
+
+      Serial.write(osd_voltage);
+      txCheckSum ^= osd_voltage;
+      Serial.write(osd_vidvoltage);
+      txCheckSum ^= osd_vidvoltage;
+      Serial.write(osd_RSSI);
+      txCheckSum ^= osd_RSSI;
+      Serial.write(osd_amperage);
+      txCheckSum ^= osd_amperage;
+
+      Serial.write(txCheckSum);
+    }
+*/
+
     if (cmd == OSD_WRITE_CMD) {
       for(uint8_t en=0;en<EEPROM_SETTINGS; en++){
 	uint8_t inSetting = read8();
-	if (inSetting != Settings[en])
+//	if (inSetting != Settings[en])
 	  EEPROM.write(en,inSetting);
 	Settings[en] = inSetting;
       }

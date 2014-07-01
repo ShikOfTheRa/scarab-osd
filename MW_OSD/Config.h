@@ -9,8 +9,8 @@
 #define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
 #define HORIZON         // Enable/disable HORIZON indicator
 #define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
-//#define GPSTIME         // Enable/disable GPS Time functions
-//#define SPORT           // Enable/disable FRSKY S.PORT cell code
+#define GPSTIME         // Enable/disable GPS Time functions
+#define SPORT           // Enable/disable FRSKY S.PORT cell code
 
 
 /********************       HARDWARE OSD settings      *********************/
@@ -23,7 +23,7 @@
 
 
 /********************       FILTER settings      *********************/
-#define STAGE2FILTER              // Enable for smoother readings of voltage / current / RSSI. 
+//#define STAGE2FILTER              // Enable for smoother readings of voltage / current / RSSI. 
 //#define SMOOTHFILTER              // Enable for smoothest readings of voltage / current / RSSI. Uses more memory. NOT FINISHED
 
 
