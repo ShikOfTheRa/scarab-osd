@@ -443,6 +443,7 @@ uint16_t flyingTime=0;
 #define OSD_SERIAL_SPEED         4
 #define OSD_RESET                5
 #define OSD_DEFAULT              6
+#define OSD_SENSORS              7
 // End private MSP for use with the GUI
 
 const char disarmed_text[] PROGMEM = "DISARMED";
