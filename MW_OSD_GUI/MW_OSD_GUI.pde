@@ -42,7 +42,6 @@ import java.util.*;
 import java.io.FileNotFoundException;
 import java.text.DecimalFormat;
 
-
 //added new imports to support proccessing 2.0b7
 
 
@@ -75,6 +74,8 @@ int LINE14  =  390;
 int LINE15  =  420;
 int LINE16  =  450;
 int TestLine = 300;
+
+int TOPSHIFT = 0;
 
 // TOP OF THE SCREEN
 int[] GPS_numSatPosition = {
@@ -334,6 +335,7 @@ String[] ConfigNames = {
   "Zero Adjust",
   "Amperage 16L",  
   "Amperage 16H",  
+  "HUD layout",  
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -415,6 +417,7 @@ String[] ConfigHelp = {
   "Zero Adjust",
   "Amperage 16L",  
   "Amperage 16H",  
+  "HUD layout",  
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -503,6 +506,7 @@ int[] ConfigRanges = {
 1023,  // S_AMPMIN,
 255,   // S_AMPMAXL,
 3,     // S_AMPMAXH,
+2,     // S_HUD,  
 255,
 255,
  255,
@@ -515,6 +519,8 @@ int[] ConfigRanges = {
  255,
 
 };
+
+
 String[] SimNames= {
   "Armed:",
   "Acro/Stable:",
@@ -748,12 +754,13 @@ CreateItem(GetSetting("S_GPSCOORDTOP"),  5,2*17, G_GPS);
 CreateItem(GetSetting("S_GPSALTITUDE"),  5,3*17, G_GPS);
 
 //  HUD  ----------------------------------------------------------------------------
-CreateItem(GetSetting("S_DISPLAY_HORIZON_BR"),  5,0*17, G_HUD);
-CreateItem(GetSetting("S_HORIZON_ELEVATION"),  5,1*17, G_HUD);
-CreateItem(GetSetting("S_WITHDECORATION"),  5,2*17, G_HUD);
-CreateItem(GetSetting("S_SCROLLING"),  5,3*17, G_HUD);
-CreateItem(GetSetting("S_SIDEBARTOPS"),  5,4*17, G_HUD);
-CreateItem(GetSetting("S_ENABLEADC"),  5,5*17, G_HUD);
+CreateItem(GetSetting("S_HUD"),  5,0*17, G_HUD);
+CreateItem(GetSetting("S_DISPLAY_HORIZON_BR"),  5,1*17, G_HUD);
+CreateItem(GetSetting("S_HORIZON_ELEVATION"),  5,2*17, G_HUD);
+CreateItem(GetSetting("S_WITHDECORATION"),  5,3*17, G_HUD);
+CreateItem(GetSetting("S_SCROLLING"),  5,4*17, G_HUD);
+CreateItem(GetSetting("S_SIDEBARTOPS"),  5,5*17, G_HUD);
+CreateItem(GetSetting("S_ENABLEADC"),  5,6*17, G_HUD);
 
 //  VREF  ----------------------------------------------------------------------------
 CreateItem(GetSetting("S_VREFERENCE"),  5,0*17, G_VREF);

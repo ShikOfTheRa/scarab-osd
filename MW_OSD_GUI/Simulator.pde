@@ -60,7 +60,7 @@ void SimSetup(){
  
 
   SG = ScontrolP5.addGroup("SG")
-    .setPosition(305,YSim + 38)
+    .setPosition(305,YSim + 44)
     .setWidth(733)
     .setBarHeight(13)
     .activateEvent(true)
@@ -73,7 +73,7 @@ void SimSetup(){
                 
  
   SGModes = ScontrolP5.addGroup("SGModes")
-                .setPosition(629,25)
+                .setPosition(629,18)
                 .setWidth(100)
                 .setBarHeight(15)
                 .activateEvent(true)
@@ -87,7 +87,7 @@ void SimSetup(){
                ; 
                
   SGAtitude = ScontrolP5.addGroup("SGAtitude")
-                .setPosition(525,25)
+                .setPosition(525,18)
                 .setWidth(100)
                 .setBarHeight(15)
                 .activateEvent(true)
@@ -100,7 +100,7 @@ void SimSetup(){
                ;
                
  SGRadio = ScontrolP5.addGroup("SGRadio")
-                .setPosition(391,25)
+                .setPosition(391,18)
                 .setWidth(130)
                 .setBarHeight(15)
                 .activateEvent(true)
@@ -113,7 +113,7 @@ void SimSetup(){
                ; 
 
 SGSensors1 = ScontrolP5.addGroup("SGSensors1")
-                .setPosition(5,25)
+                .setPosition(5,18)
                 .setWidth(175)
                 .setBarHeight(15)
                 .activateEvent(true)
@@ -125,20 +125,20 @@ SGSensors1 = ScontrolP5.addGroup("SGSensors1")
                 //.close() 
                ;                                  
 SGGPS = ScontrolP5.addGroup("SGGPS")
-                .setPosition(186,25)
+                .setPosition(186,18)
                 .setWidth(200)
                 .setBarHeight(15)
                 .activateEvent(true)
                 .disableCollapse()
                 .setBackgroundColor(color(30,255))
-                .setBackgroundHeight(111)
+                .setBackgroundHeight(110)
                 .setLabel("GPS")
                 .setGroup(SG)
                 //.close() 
                ;
 
 SGFRSKY = ScontrolP5.addGroup("SGFRSKY")
-                .setPosition(186,150)
+                .setPosition(186,145)
                 .setWidth(200)
                 .setBarHeight(15)
                 .activateEvent(true)
@@ -151,7 +151,7 @@ SGFRSKY = ScontrolP5.addGroup("SGFRSKY")
                ;   
 
 SGControlBox = ScontrolP5.addGroup("SGControlBox")
-                .setPosition(5,150)
+                .setPosition(5,145)
                 .setWidth(175)
                 .setBarHeight(15)
                 .activateEvent(true)
