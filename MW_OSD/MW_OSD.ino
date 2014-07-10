@@ -221,7 +221,7 @@ void loop()
          MSPcmdsend = MSP_DEBUG;
          break;
 #endif
-#if defined SPORT_CELLS
+#if defined SPORT
        case REQ_MSP_CELLS:
          MSPcmdsend = MSP_CELLS;
          break;
