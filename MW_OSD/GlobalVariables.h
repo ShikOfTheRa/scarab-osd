@@ -1,4 +1,20 @@
+#define POS_MASK        0x01FF
+#define PAL_MASK        0x0003
+#define PAL_SHFT             9
+#define DISPLAY_MASK    0xC000
+#define DISPLAY_ALWAYS  0xC000
+#define DISPLAY_NEVER   0x0000
+#define DISPLAY_COND    0x4000
+#define DISPLAY_MIN_OFF     0x8000
 
+#define POS(pos, pal_off, disp)  (((pos)&POS_MASK)|((pal_off)<<PAL_SHFT)|(disp))
+#if defined SHIFTDOWN
+#define TOPSHIFT        LINE
+#else
+#define TOPSHIFT        0
+#endif
+
+//@@@@@@@@@@@@@@@
 
 #define MPH 1
 #define KMH 0
@@ -193,6 +209,7 @@ enum Setting_ {
   S_AMPMIN,
   S_AMPMAXL,
   S_AMPMAXH,
+  S_HUD,
   S_CS0,
   S_CS1,
   S_CS2,
@@ -203,13 +220,87 @@ enum Setting_ {
   S_CS7,
   S_CS8,
   S_CS9,
+
+  // ************** Only put 16 bit EEPROM values after this! ************
+  EEPROM16_SETTINGS_START, // (  S16_0_0,)
+  // ************** Only put 16 bit EEPROM values after this! ************
+  S16_0_1,
+  S16_1_0,
+  S16_1_1,
+  S16_2_0,
+  S16_2_1,
+  S16_3_0,
+  S16_3_1,
+  S16_4_0,
+  S16_4_1,
+  S16_5_0,
+  S16_5_1,
+  S16_6_0,
+  S16_6_1,
+  S16_7_0,
+  S16_7_1,
+  S16_8_0,
+  S16_8_1,
+  S16_9_0,
+  S16_9_1,
+  S16_10_0,
+  S16_10_1,
+  S16_11_0,
+  S16_11_1,
+  S16_12_0,
+  S16_12_1,
+  S16_13_0,
+  S16_13_1,
+  S16_14_0,
+  S16_14_1,
+  S16_15_0,
+  S16_15_1,
+  S16_16_0,
+  S16_16_1,
+  S16_17_0,
+  S16_17_1,
+  S16_18_0,
+  S16_18_1,
+  S16_19_0,
+  S16_19_1,
+  S16_20_0,
+  S16_20_1,
+  S16_21_0,
+  S16_21_1,
+  S16_22_0,
+  S16_22_1,
+  S16_23_0,
+  S16_23_1,
+  S16_24_0,
+  S16_24_1,
+  S16_25_0,
+  S16_25_1,
+  S16_26_0,
+  S16_26_1,
+  S16_27_0,
+  S16_27_1,
+  S16_28_0,
+  S16_28_1,
+  S16_29_0,
+  S16_29_1,
+  S16_30_0,
+  S16_30_1,
+  S16_31_0,
+  S16_31_1,
+  S16_32_0,
+  S16_32_1,
+  S16_33_0,
+  S16_33_1,
+  
   // EEPROM_SETTINGS must be last!
   EEPROM_SETTINGS
 };
 
+
 uint16_t S16_AMPMAX = 999; // 16 bit eeprom setting of AMPMAX  
 
 uint8_t Settings[EEPROM_SETTINGS];
+uint16_t screenPosition[(EEPROM_SETTINGS-EEPROM16_SETTINGS_START)/2];
 
 
 // For Settings Defaults
@@ -272,6 +363,7 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 4,   // S_AMPMIN,
 150,  // S_AMPMAXL,
 0,   // S_AMPMAXH,
+0,   // S_HUD
 0,   // S_CS0,
 0,   // S_CS1,
 0,   // S_CS2,
@@ -282,7 +374,81 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 0,   // S_CS7,
 0,   // S_CS8,
 0,   // S_CS9,
+
+  // ************** Only put 16 bit EEPROM values after this! ************
+POS(LINE02+2+TOPSHIFT,  0, OSDOFF01 ) & 0xFF,  // GPS_numSatPosition
+POS(LINE02+2+TOPSHIFT,  0, OSDOFF01 ) >>8,     
+POS(LINE01+13+TOPSHIFT,  0, OSDOFF02) & 0xFF,  // GPS_numSatPosition      // On top of screen
+POS(LINE01+13+TOPSHIFT,  0, OSDOFF02) >>8,
+POS(LINE02+22+TOPSHIFT, 0, OSDOFF03) & 0xFF,   // GPS_directionToHomePosition
+POS(LINE02+22+TOPSHIFT, 0, OSDOFF03) >>8,
+POS(LINE02+22+TOPSHIFT, 0, OSDOFF03) & 0xFF,   // GPS_directionToHomePositionOSDSW
+POS(LINE02+22+TOPSHIFT, 0, OSDOFF03) >>8,
+POS(LINE02+24+TOPSHIFT, 0, OSDOFF04) & 0xFF,   // GPS_distanceToHomePosition
+POS(LINE02+24+TOPSHIFT, 0, OSDOFF04) >>8,
+POS(LINE07+3, 1, OSDOFF05) & 0xFF,   // speedPosition
+POS(LINE07+3, 1, OSDOFF05) >>8,
+POS(LINE05+24+TOPSHIFT, 0, OSDOFF06) & 0xFF,   // GPS_angleToHomePosition
+POS(LINE05+24+TOPSHIFT, 0, OSDOFF06) >>8,
+POS(LINE03+24+TOPSHIFT, 0, OSDOFF07) & 0xFF,   // MwGPSAltPosition
+POS(LINE03+24+TOPSHIFT, 0, OSDOFF07) >>8,
+POS(LINE03+2,  0, OSDOFF08) & 0xFF,   // sensorPosition
+POS(LINE03+2,  0, OSDOFF08) >>8,
+POS(LINE04+24+TOPSHIFT, 0, OSDOFF09) & 0xFF,   // MwHeadingPosition
+POS(LINE04+24+TOPSHIFT, 0, OSDOFF09) >>8,
+POS(LINE02+9+TOPSHIFT, 0, OSDOFF10) & 0xFF,   // MwHeadingGraphPosition
+POS(LINE02+9+TOPSHIFT, 0, OSDOFF10) >>8,
+POS(LINE07+23,  1, OSDOFF11) & 0xFF,   // MwAltitudePosition
+POS(LINE07+23,  1, OSDOFF11) >>8,
+POS(LINE03+23+TOPSHIFT, 0, OSDOFF12) & 0xFF,   // MwClimbRatePosition
+POS(LINE03+23+TOPSHIFT, 0, OSDOFF12) >>8,
+POS(LINE12+22, 2, OSDOFF13) & 0xFF,   // CurrentThrottlePosition
+POS(LINE12+22, 2, OSDOFF13) >>8,
+POS(LINE13+22, 2, OSDOFF14) & 0xFF,   // flyTimePosition
+POS(LINE13+22, 2, OSDOFF14) >>8,
+POS(LINE13+22, 2, OSDOFF15) & 0xFF,   // onTimePosition
+POS(LINE13+22, 2, OSDOFF15) >>8,
+POS(LINE11+11, 2, OSDOFF16) & 0xFF,   // motorArmedPosition
+POS(LINE11+11, 2, OSDOFF16) >>8,
+POS(LINE10+2,  2, OSDOFF17) & 0xFF,   // MwGPSLatPosition
+POS(LINE10+2,  2, OSDOFF17) >>8,
+POS(LINE10+15, 2, OSDOFF18) & 0xFF,   // MwGPSLonPosition
+POS(LINE10+15, 2, OSDOFF18) >>8,
+POS(LINE01+2+TOPSHIFT,  0, OSDOFF19) & 0xFF,   // MwGPSLatPositionTop      // On top of screen
+POS(LINE01+2+TOPSHIFT,  0, OSDOFF19) >>8,
+POS(LINE01+15+TOPSHIFT, 0, OSDOFF20) & 0xFF,   // MwGPSLonPositionTop      // On top of screen
+POS(LINE01+15+TOPSHIFT, 0, OSDOFF20) >>8,
+POS(LINE12+2,  2, OSDOFF21) & 0xFF,   // rssiPosition
+POS(LINE12+2,  2, OSDOFF21) >>8,
+POS(LINE09+2,  2, OSDOFF22) & 0xFF,   // temperaturePosition
+POS(LINE09+2,  2, OSDOFF22) >>8,
+POS(LINE13+3,  2, OSDOFF23) & 0xFF,   // voltagePosition
+POS(LINE13+3,  2, OSDOFF23) >>8,
+POS(LINE11+3,  2, OSDOFF24) & 0xFF,   // vidvoltagePosition
+POS(LINE11+3,  2, OSDOFF24) >>8,
+POS(LINE13+9, 2, OSDOFF25) & 0xFF,   // amperagePosition
+POS(LINE13+9, 2, OSDOFF25) >>8,
+POS(LINE13+16, 2, OSDOFF26) & 0xFF,   // pMeterSumPosition
+POS(LINE13+16, 2, OSDOFF26) >>8,
+POS(LINE05+7,  1, OSDOFF27) & 0xFF,   // horizonPosition
+POS(LINE05+7,  1, OSDOFF27) >>8,
+#ifdef CALLSIGNALWAYS
+POS(CALLSIGNALWAYS, 2, OSDOFF28) & 0xFF,   // CallSign Position
+POS(CALLSIGNALWAYS, 2, OSDOFF28) >>8,
+#else
+POS(LINE10+10, 2, OSDOFF28) & 0xFF,   // CallSign Position
+POS(LINE10+10, 2, OSDOFF28) >>8,
+#endif
+POS(LINE08+10, 2, OSDOFF29) & 0xFF,   // Debug Position
+POS(LINE08+10, 2, OSDOFF29) >>8,
+POS(LINE05+2,  0, OSDOFF08) & 0xFF,   // Gimbal Position
+POS(LINE05+2,  0, OSDOFF08) >>8,
+POS(LINE12+11, 2, OSDOFF31) & 0xFF,   // GPS_time Position
+POS(LINE12+11, 2, OSDOFF31) >>8,
+POS(LINE09+22,  1, OSDOFF11)  & 0xFF,   // Sport Position
+POS(LINE09+22,  1, OSDOFF11)  >>8,
 };
+
 
 static uint8_t P8[PIDITEMS], I8[PIDITEMS], D8[PIDITEMS];
 
@@ -577,7 +743,6 @@ const unsigned char MwGPSAltPositionAdd[2]={
 const char MWOSDVersionPosition = 34;
 
 
-// All screen locations defines in ScreenLayout.ino
 enum Positions {
   GPS_numSatPosition,
   GPS_numSatPositionTop,
@@ -610,7 +775,8 @@ enum Positions {
   callSignPosition,
   debugPosition,
   gimbalPosition,
-  GPS_timePosition
+  GPS_timePosition,
+  SportPosition
 };
 
 #define REQ_MSP_IDENT     (1 <<  0)
