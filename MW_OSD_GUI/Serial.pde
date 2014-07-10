@@ -256,11 +256,25 @@ public void WRITE(){
   inBuf[0] = OSD_WRITE_CMD;
   //evaluateCommand((byte)MSP_OSD, 1);
   for (int txTimes = 0; txTimes<2; txTimes++) {
-    headSerialReply(MSP_OSD, CONFIGITEMS+1);
+    headSerialReply(MSP_OSD, CONFIGITEMS+1+(CONFIGITEMS16*2));
+
     serialize8(OSD_WRITE_CMD);
     for(int i = 0; i < CONFIGITEMS; i++){
      if(i == GetSetting("S_GPSTZ")) serialize8(int(confItem[i].value()*10));//preserve decimal, maybe can go elsewhere - haydent
      else serialize8(int(confItem[i].value()));
+    }
+    
+     for(int i = 0; i < (CONFIGITEMS16); i++){
+       if(confItem[GetSetting("S_HUD")].value()==2) 
+         CONFIG16[i]=CONFIG16_2[i];
+       else if(confItem[GetSetting("S_HUD")].value()==1) 
+         CONFIG16[i]=CONFIG16_1[i];
+       else  
+         CONFIG16[i]=CONFIG16_0[i];
+       serialize8(int(CONFIG16[i]&0xFF));
+       serialize8(int(CONFIG16[i]>>8));
+//     System.out.println(int(CONFIG16[i]&0xFF));
+//     System.out.println(int(CONFIG16[i]>>8));
     }
     tailSerialReply();
   }

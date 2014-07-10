@@ -8,13 +8,15 @@
 // Further configuration may be require elsewhere in config.h + option enabled on GUI
 #define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
 #define HORIZON         // Enable/disable HORIZON indicator
-#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
+//#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
 #define GPSTIME         // Enable/disable GPS Time functions
 #define SPORT           // Enable/disable FRSKY S.PORT cell code
 
 
 /********************       HARDWARE OSD settings      *********************/
 //#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
+//#define WITESPYV2                 // If using Witespy V2 OSD, select this to use alternative resistors / pinouts 
+//#define RUSHDUINO                 // If using Rushduino, select this
 
 
 /********************       HARDWARE CURRENT sensor settings      *********************/
@@ -27,10 +29,15 @@
 //#define SMOOTHFILTER              // Enable for smoothest readings of voltage / current / RSSI. Uses more memory. NOT FINISHED
 
 
+/********************       RSSI settings      *********************/
+//#define FASTPWMRSSI               // Undefine this if you are using non standard PWM for RSSI ( high frequency ) 
+
+
 /********************       CONTROLLER settings      *********************/
 //#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / others to correct for incorrect heading
+//#define HARIKIRI                  // Undefine this if you are using HARIKIRI for compatibility
 //#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE - to use GPS heading and altitude instead of BARO/MAG
-//#define FASTPWMRSSI               // Undefine this if you are using non standard PWM for RSSI ( doubles resolution ) 
+//#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1
 
 
 /********************       CALLSIGN settings      *********************/
@@ -72,6 +79,14 @@
 #define TIMEZONESTARTUP             // Enable to display timezone at startup - if GPS TIME is enabled
 
 
+
+
+
+/*--------------------------       advanced parameters      ----------------------------------------------------*/
+/*--------------------------       advanced parameters      ----------------------------------------------------*/
+/*--------------------------       advanced parameters      ----------------------------------------------------*/
+/*--------------------------       advanced parameters      ----------------------------------------------------*/
+
 /********************   ENABLE/DISABLE CONFIG PAGES via STICK MENU     *********************/
 //large memory savings if not needed, comment to disable
 #define PAGE1 //PID CONFIG
@@ -85,36 +100,41 @@
 
 
 /********************  LEGACY compatibility **********************/
-//#define BOXNAMES                  // required to support multiwii 2.1 / 2.0 and HARIKIRI
-
-
-/*--------------------------       advanced parameters      ----------------------------------------------------*/
-/*--------------------------       advanced parameters      ----------------------------------------------------*/
-/*--------------------------       advanced parameters      ----------------------------------------------------*/
-/*--------------------------       advanced parameters      ----------------------------------------------------*/
+#ifdef HARIKIRI                     
+    #define BOXNAMES                // required to support HARIKIRI
+#endif
+#ifdef MULTIWII_V21                     
+    #define BOXNAMES                // required to support multiwii 2.1 / 2.0
+#endif
 
 /********************       ADVANCED HARDWARE settings      *********************/
-//#define RUSHDUINO                 // Select board type - RUSHDUINO. Defaults to MINIM
 //#define TEMPSENSOR                // Enable if you have a hardware temperature sensor
-#define STARTUPDELAY                // Enable startup delay of 1 sec to allow MAX chip voltage to rise fully and initialise before configuring 
-#define DIVIDER1v1      0.0001      // Voltage divider for 1.1v reference. Use 0.0001 default unless advised otherwise.
-#define DIVIDER5v       0.0005      // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
+//#define STARTUPDELAY 2000         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
 
 /********************       HARDWARE PINS settings      *********************/
-#define VOLTAGEPIN    A0
-#define VIDVOLTAGEPIN A2
 #define AMPERAGEPIN   A1
 #define TEMPPIN       A6           
 #define RSSIPIN       A3              
 #define PWMRSSIPIN    A3              
 #define LEDPIN        7
-#ifdef RUSHDUINO                     //RUSHDUINO
+#ifdef RUSHDUINO                     
     # define MAX7456SELECT 10        // ss 
     # define MAX7456RESET  9         // RESET
-#else                                // MINIM  
+#else                                  
     # define MAX7456SELECT 6         // ss
     # define MAX7456RESET  10        // RESET
+#endif
+#ifdef WITESPYV2                     
+    #define VOLTAGEPIN    A2
+    #define VIDVOLTAGEPIN A0
+    #define DIVIDER1v1      0.0002      // Voltage divider for 1.1v reference. 
+    #define DIVIDER5v       0.0008      // Voltage divider for 5v reference. 
+#else                                  
+    #define VOLTAGEPIN    A0
+    #define VIDVOLTAGEPIN A2
+    #define DIVIDER1v1      0.0001      // Voltage divider for 1.1v reference. Use 0.0001 default unless advised otherwise.
+    #define DIVIDER5v       0.0005      // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
 #endif
 
 

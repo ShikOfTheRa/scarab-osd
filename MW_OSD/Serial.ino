@@ -212,7 +212,10 @@ void serialMSPCheck()
     pMeterSum=read16();
     MwRssi = read16();
     MWAmperage = read16();
-  }
+ #ifdef BASEFLIGHT
+    MWAmperage = MWAmperage * 10;
+#endif
+ }
 
   if (cmdMSP==MSP_RC_TUNING)
   {

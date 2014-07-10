@@ -60,13 +60,15 @@ void setup()
   
   //Led output
   pinMode(LEDPIN,OUTPUT);
- 
+
+//  EEPROM.write(0,0); //;test
   checkEEPROM();
   readEEPROM();
   
-#ifdef STARTUPDELAY
-  delay(1000);
+#ifndef STARTUPDELAY
+  #define STARTUPDELAY 1000
 #endif
+  delay(STARTUPDELAY);
 
   MAX7456Setup();
  
@@ -138,8 +140,7 @@ void setMspRequests() {
 
 void loop()
 {
- 
-
+  
   // Blink Basic Sanity Test Led at 1hz
   if(timer.tenthSec>10)
     digitalWrite(LEDPIN,HIGH);
@@ -399,8 +400,7 @@ void calculateTrip(void)
 
 void writeEEPROM(void)
 {
-  Settings[S_AMPMAXH] = S16_AMPMAX>>8;
-  Settings[S_AMPMAXL] = S16_AMPMAX&0xFF;
+  s16write();
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
     EEPROM.write(en,Settings[en]);
   } 
@@ -412,7 +412,27 @@ void readEEPROM(void)
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
      Settings[en] = EEPROM.read(en);
   }
+  s16read();
+}
+
+void s16read(void)
+{
   S16_AMPMAX=(Settings[S_AMPMAXH]<<8)+Settings[S_AMPMAXL];
+  for(uint8_t en=0;en<(EEPROM_SETTINGS-EEPROM16_SETTINGS_START)/2;en++){
+    screenPosition[en]= Settings[EEPROM16_SETTINGS_START + (en*2)]+(Settings[EEPROM16_SETTINGS_START + 1 + (en*2)]<<8);
+  }
+}
+
+void s16write(void)
+{
+  Settings[S_AMPMAXH] = S16_AMPMAX>>8;
+  Settings[S_AMPMAXL] = S16_AMPMAX&0xFF;
+
+  for(uint8_t en=0;en<(EEPROM_SETTINGS-EEPROM16_SETTINGS_START)/2;en++){
+    Settings[EEPROM16_SETTINGS_START + (en*2)] = screenPosition[en] &0xFF;
+    Settings[EEPROM16_SETTINGS_START + 1 + (en*2)] = screenPosition[en]>>8;
+  }
+
 }
 
 
@@ -669,17 +689,6 @@ void ProcessSensors(void) {
     if (rssi < 0) rssi=0;
     else if (rssi > 100) rssi=100;
   }
-
-/*
-Serial.print(sensorindex);
-  Serial.print(" ");
-  Serial.print(sensorfilter[2][SENSORFILTERSIZE]);  
-  for (uint8_t x=0;x<5;x++) {
-    Serial.print(" ");
-    Serial.print(sensorfilter[x][sensorindex]);  
-  }    
-  Serial.println(" ");
-*/
 
 //-------------- For filter support
   sensorindex++;                    

@@ -91,6 +91,34 @@ uint8_t FindNull(void)
   return xx;
 }
 
+uint16_t getPosition(uint8_t pos) {
+
+//  uint16_t val = (uint16_t)pgm_read_word(&screenPosition[pos]);
+  uint16_t val = screenPosition[pos];
+
+  uint16_t ret = val&POS_MASK;
+
+  if(Settings[S_VIDEOSIGNALTYPE]) {
+    ret += LINE * ((val >> PAL_SHFT) & PAL_MASK);
+  }
+
+  return ret;
+}
+
+uint8_t fieldIsVisible(uint8_t pos) {
+//  uint16_t val = (uint16_t)pgm_read_word(&screenPosition[pos]);
+  uint16_t val = screenPosition[pos];
+  switch(val & DISPLAY_MASK) {
+  case DISPLAY_ALWAYS:
+    return 1;
+  case DISPLAY_NEVER:
+    return 0;
+  case DISPLAY_COND:
+    return !!(MwSensorActive&mode.osd_switch);
+  case DISPLAY_MIN_OFF:
+    return !(MwSensorActive&mode.osd_switch);
+  }
+}
 void displayTemperature(void)        // WILL WORK ONLY WITH V1.2
 {
   int xxx;
@@ -111,8 +139,10 @@ void displayTemperature(void)        // WILL WORK ONLY WITH V1.2
 
 void displayMode(void)
 {
+  if (screenPosition[sensorPosition]<512)
+    return;
   if (MwSensorActive&mode.osd_switch)
-  return;
+    return;
   
   int16_t dist;
   if(Settings[S_UNITSYSTEM])
@@ -442,6 +472,9 @@ void displayTime(void)
 { 
   if(!Settings[S_TIMER])
     return;
+  if (screenPosition[onTimePosition]<512)
+    return;
+
   uint32_t displaytime;
   if (armed) { 
     if(flyTime < 3600) {
@@ -472,7 +505,7 @@ void displayAmperage(void)
 {
   if(!fieldIsVisible(amperagePosition))
     return;
-  ItoaPadded(amperage, screenBuffer, 4, 3);     // 99.9 ampere max!
+  ItoaPadded(amperage, screenBuffer, 5, 4);     // 999.9 ampere max!
   screenBuffer[4] = SYM_AMP;
   screenBuffer[5] = 0;
   MAX7456_WriteString(screenBuffer,getPosition(amperagePosition));
@@ -717,6 +750,7 @@ void displayDistanceToHome(void)
 {
   if(!GPS_fix)
     return;
+
   int16_t dist;
   if(Settings[S_UNITSYSTEM])
     dist = GPS_distanceToHome * 3.2808;           // mt to feet
@@ -753,6 +787,11 @@ void displayDirectionToHome(void)
 {
   if(!GPS_fix)
     return;
+  if (screenPosition[GPS_directionToHomePosition]<512)
+    return;
+  if (MwSensorActive&mode.osd_switch)
+    return;
+
   if(GPS_distanceToHome <= 2 && timer.Blink2hz)
     return;
   uint16_t position;
@@ -1275,6 +1314,9 @@ void mapmode(void) {
   if ((MwSensorActive&mode.osd_switch))
   return;
 
+  if(!GPS_fix)
+    return;
+
   int8_t xdir;
   int8_t ydir;
   int16_t targetx;
@@ -1387,9 +1429,10 @@ void displayDebug(void)
 //  debug[0]=(int16_t)heapptr;
 //  debug[1]=(int16_t)stackptr;
 
-  debug[0]=Settings[S_AMPMIN];
-  debug[1]=Settings[S16_AMPMAX];
-  debug[2]=sensorfilter[2][SENSORFILTERSIZE]>>3;
+
+  debug[0]=(EEPROM_SETTINGS-EEPROM_SETTINGS_16_START)/2;
+  debug[1]=Settings16[0];
+  debug[2]=Settings16[S16_00];
   debug[3]=amperage;
 //  debug[3]=sensorfilter[3][SENSORFILTERSIZE];
 
@@ -1445,7 +1488,7 @@ void displayCells(void){
     
     if(cells){
       screenBuffer[cells] = 0;       
-      MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+(2*LINE)-1+(6-cells));//bar chart
+      MAX7456_WriteString(screenBuffer,getPosition(SportPosition)+(6-cells));//bar chart
 
       ItoaPadded(low, screenBuffer+1,4,2);
       screenBuffer[0] = SYM_MIN;
@@ -1453,7 +1496,7 @@ void displayCells(void){
       screenBuffer[6] = 0;
     
     if((low>MIN_CELL)||(timer.Blink2hz))
-      MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+(3*LINE)-1);//lowest
+      MAX7456_WriteString(screenBuffer,getPosition(SportPosition)+LINE);//lowest
     
       uint16_t avg = 0;
       if(cells)avg = sum / cells;
@@ -1463,6 +1506,6 @@ void displayCells(void){
       screenBuffer[6] = 0;
     
     if((avg>MIN_CELL)||(timer.Blink2hz))
-      MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+(4*LINE)-1);//average     
+      MAX7456_WriteString(screenBuffer,getPosition(SportPosition)+(2*LINE));//average     
   }
 }
