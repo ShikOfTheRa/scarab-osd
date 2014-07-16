@@ -291,6 +291,8 @@ enum Setting_ {
   S16_32_1,
   S16_33_0,
   S16_33_1,
+  S16_34_0,
+  S16_34_1,
   
   // EEPROM_SETTINGS must be last!
   EEPROM_SETTINGS
@@ -375,15 +377,15 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 0,   // S_CS8,
 0,   // S_CS9,
 
-  // ************** Only put 16 bit EEPROM values after this! ************
+  // ************** Only put 16 bit EEPROM values after this! ************ 
 POS(LINE02+2+TOPSHIFT,  0, OSDOFF01 ) & 0xFF,  // GPS_numSatPosition
 POS(LINE02+2+TOPSHIFT,  0, OSDOFF01 ) >>8,     
 POS(LINE01+13+TOPSHIFT,  0, OSDOFF02) & 0xFF,  // GPS_numSatPosition      // On top of screen
 POS(LINE01+13+TOPSHIFT,  0, OSDOFF02) >>8,
 POS(LINE02+22+TOPSHIFT, 0, OSDOFF03) & 0xFF,   // GPS_directionToHomePosition
 POS(LINE02+22+TOPSHIFT, 0, OSDOFF03) >>8,
-POS(LINE02+22+TOPSHIFT, 0, OSDOFF03) & 0xFF,   // GPS_directionToHomePositionOSDSW
-POS(LINE02+22+TOPSHIFT, 0, OSDOFF03) >>8,
+POS(LINE13+20+TOPSHIFT, 0, OSDOFF03) & 0xFF,   // GPS_directionToHomePositionOSDSW
+POS(LINE13+20+TOPSHIFT, 0, OSDOFF03) >>8,
 POS(LINE02+24+TOPSHIFT, 0, OSDOFF04) & 0xFF,   // GPS_distanceToHomePosition
 POS(LINE02+24+TOPSHIFT, 0, OSDOFF04) >>8,
 POS(LINE07+3, 1, OSDOFF05) & 0xFF,   // speedPosition
@@ -392,16 +394,16 @@ POS(LINE05+24+TOPSHIFT, 0, OSDOFF06) & 0xFF,   // GPS_angleToHomePosition
 POS(LINE05+24+TOPSHIFT, 0, OSDOFF06) >>8,
 POS(LINE03+24+TOPSHIFT, 0, OSDOFF07) & 0xFF,   // MwGPSAltPosition
 POS(LINE03+24+TOPSHIFT, 0, OSDOFF07) >>8,
-POS(LINE03+2,  0, OSDOFF08) & 0xFF,   // sensorPosition
-POS(LINE03+2,  0, OSDOFF08) >>8,
+POS(LINE02+6,  0, OSDOFF08) & 0xFF,   // sensorPosition
+POS(LINE02+6,  0, OSDOFF08) >>8,
 POS(LINE04+24+TOPSHIFT, 0, OSDOFF09) & 0xFF,   // MwHeadingPosition
 POS(LINE04+24+TOPSHIFT, 0, OSDOFF09) >>8,
-POS(LINE02+9+TOPSHIFT, 0, OSDOFF10) & 0xFF,   // MwHeadingGraphPosition
+POS(LINE02+10+TOPSHIFT, 0, OSDOFF10) & 0xFF,   // MwHeadingGraphPosition
 POS(LINE02+9+TOPSHIFT, 0, OSDOFF10) >>8,
 POS(LINE07+23,  1, OSDOFF11) & 0xFF,   // MwAltitudePosition
 POS(LINE07+23,  1, OSDOFF11) >>8,
-POS(LINE03+23+TOPSHIFT, 0, OSDOFF12) & 0xFF,   // MwClimbRatePosition
-POS(LINE03+23+TOPSHIFT, 0, OSDOFF12) >>8,
+POS(LINE07+23+TOPSHIFT, 1, OSDOFF12) & 0xFF,   // MwClimbRatePosition
+POS(LINE07+23+TOPSHIFT, 1, OSDOFF12) >>8,
 POS(LINE12+22, 2, OSDOFF13) & 0xFF,   // CurrentThrottlePosition
 POS(LINE12+22, 2, OSDOFF13) >>8,
 POS(LINE13+22, 2, OSDOFF14) & 0xFF,   // flyTimePosition
@@ -418,20 +420,20 @@ POS(LINE01+2+TOPSHIFT,  0, OSDOFF19) & 0xFF,   // MwGPSLatPositionTop      // On
 POS(LINE01+2+TOPSHIFT,  0, OSDOFF19) >>8,
 POS(LINE01+15+TOPSHIFT, 0, OSDOFF20) & 0xFF,   // MwGPSLonPositionTop      // On top of screen
 POS(LINE01+15+TOPSHIFT, 0, OSDOFF20) >>8,
-POS(LINE12+2,  2, OSDOFF21) & 0xFF,   // rssiPosition
-POS(LINE12+2,  2, OSDOFF21) >>8,
+POS(LINE12+3,  2, OSDOFF21) & 0xFF,   // rssiPosition
+POS(LINE12+3,  2, OSDOFF21) >>8,
 POS(LINE09+2,  2, OSDOFF22) & 0xFF,   // temperaturePosition
 POS(LINE09+2,  2, OSDOFF22) >>8,
 POS(LINE13+3,  2, OSDOFF23) & 0xFF,   // voltagePosition
 POS(LINE13+3,  2, OSDOFF23) >>8,
 POS(LINE11+3,  2, OSDOFF24) & 0xFF,   // vidvoltagePosition
 POS(LINE11+3,  2, OSDOFF24) >>8,
-POS(LINE13+9, 2, OSDOFF25) & 0xFF,   // amperagePosition
-POS(LINE13+9, 2, OSDOFF25) >>8,
+POS(LINE13+8, 2, OSDOFF25) & 0xFF,   // amperagePosition
+POS(LINE13+8, 2, OSDOFF25) >>8,
 POS(LINE13+16, 2, OSDOFF26) & 0xFF,   // pMeterSumPosition
 POS(LINE13+16, 2, OSDOFF26) >>8,
-POS(LINE05+7,  1, OSDOFF27) & 0xFF,   // horizonPosition
-POS(LINE05+7,  1, OSDOFF27) >>8,
+POS(LINE07+7,  1, OSDOFF27) & 0xFF,   // horizonPosition
+POS(LINE07+7,  1, OSDOFF27) >>8,
 #ifdef CALLSIGNALWAYS
 POS(CALLSIGNALWAYS, 2, OSDOFF28) & 0xFF,   // CallSign Position
 POS(CALLSIGNALWAYS, 2, OSDOFF28) >>8,
@@ -447,6 +449,9 @@ POS(LINE12+11, 2, OSDOFF31) & 0xFF,   // GPS_time Position
 POS(LINE12+11, 2, OSDOFF31) >>8,
 POS(LINE09+22,  1, OSDOFF11)  & 0xFF,   // Sport Position
 POS(LINE09+22,  1, OSDOFF11)  >>8,
+POS(LINE04+2,  0, OSDOFF08) & 0xFF,   // ModePosition
+POS(LINE04+2,  0, OSDOFF08) >>8,
+
 };
 
 
@@ -776,7 +781,8 @@ enum Positions {
   debugPosition,
   gimbalPosition,
   GPS_timePosition,
-  SportPosition
+  SportPosition,
+  ModePosition
 };
 
 #define REQ_MSP_IDENT     (1 <<  0)

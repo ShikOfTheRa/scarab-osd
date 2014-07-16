@@ -48,6 +48,43 @@ import java.text.DecimalFormat;
 
 String MW_OSD_GUI_Version = "R1";
 
+
+
+int  GPS_numSatPosition = 0;
+int  GPS_numSatPositionTop = 1;
+int  GPS_directionToHomePosition = 2;
+int  GPS_directionToHomePositionBottom = 3;
+int  GPS_distanceToHomePosition = 4;
+int  speedPosition = 5;
+int  GPS_angleToHomePosition = 6;
+int  MwGPSAltPosition = 7;
+int  sensorPosition = 8;
+int  MwHeadingPosition = 9;
+int  MwHeadingGraphPosition = 10;
+int  MwAltitudePosition = 11;
+int  MwClimbRatePosition = 12;
+int  CurrentThrottlePosition = 13;
+int  flyTimePosition = 14;
+int  onTimePosition = 15;
+int  motorArmedPosition = 16;
+int  MwGPSLatPosition = 17;
+int  MwGPSLonPosition = 18;
+int  MwGPSLatPositionTop = 19;
+int  MwGPSLonPositionTop = 20;
+int  rssiPosition = 21;
+int  temperaturePosition = 22;
+int  voltagePosition = 23;
+int  vidvoltagePosition = 24;
+int  amperagePosition = 25;
+int  pMeterSumPosition = 26;
+int  horizonPosition = 27;
+int  callSignPosition = 28;
+int  debugPosition = 29;
+int  gimbalPosition = 30;
+int  GPS_timePosition = 31;
+int  SportPosition = 32;
+int  ModePosition = 33;
+
 int MSP_sendOrder =0;
 PImage img_Clear,OSDBackground,RadioPot;
 
@@ -77,69 +114,6 @@ int TestLine = 300;
 
 int TOPSHIFT = 0;
 
-// TOP OF THE SCREEN
-int[] GPS_numSatPosition = {
- LINE02+2,LINE02+2};
-int[] GPS_directionToHomePosition=    {
-  LINE02+21 ,LINE02+21};
-int[] MwGPSLatPosition =              {
-  LINE01+2,LINE01+2};
-int[] MwGPSLonPosition =              {
-  LINE01+13+2,LINE01+13+2};
-int[] GPS_distanceToHomePosition=  {
-  LINE02+23  ,LINE02+23 };
-int[] GPS_angleToHomePosition=  {
-  LINE05+23 ,LINE05+23};
-int[] MwGPSAltPosition =        {
-  LINE03+23  ,LINE03+23};
-int[] sensorPosition=           {
-  LINE02+6 ,LINE02+6};
-int[] MwHeadingPosition =       {
-  LINE04+23 ,LINE04+23};
-int[] MwHeadingGraphPosition =  {
-  LINE02+10 ,LINE02+10};
-int[] statusPosition = {
- LINE04+2,LINE04+2};
-int[] gimbalPosition = {
- LINE05+2,LINE05+2};
-
-// MIDDLE OF THE SCREEN
-int[] GPS_speedPosition = {     
-  LINE07+3,LINE07+3 };  // [0] En Km/h   [1] En Mph
-int[] temperaturePosition= {
-  LINE09+2   ,LINE09+2+30};
-int[] MwAltitudePosition=  {
-  LINE07+22,LINE07+22 };
-int[] MwClimbRatePosition=  {
-  LINE07+27 ,LINE07+28 };
-
-int[] MwGPSMidLatPosition =              {
-  LINE10+2,LINE10+2+60};
-int[] MwGPSMidLonPosition =              {
-  LINE10+13+2,LINE10+13+2+60};
-
-int[] CurrentThrottlePosition = {
-  LINE12+23,LINE12+24+60};
-int[] flyTimePosition=                {
-  LINE13+23,LINE13+24+60};
-//int[] onTimePosition=                 {
- // LINE13+23,LINE13+24+60};
-int[] motorArmedPosition=            {
-  LINE11+11,LINE10+11+60};
-int[]  rssiPosition = {
-  LINE12+2 ,LINE12+2+60};
-int[] UTCPosition =     {
-  LINE12+11,LINE11+11+60};
-int[] voltagePosition =                {
-  LINE13+2  ,LINE13+2+60 };
-int[] vidvoltagePosition =   {
-  LINE11+3  ,LINE11+3+60};
-int[] amperagePosition =     {
-  LINE13+17,LINE13+19+60};
-int[] pMeterSumPosition =       {
-  LINE15+30,LINE15+30+60};
-int[] debugPosition =       {
-  LINE08+10,LINE07+10+60};
  
   
 int DisplayWindowX = 681; //500;
@@ -875,7 +849,7 @@ controlP5.addTextfield("CallSign")
   CloseMode = 0;
   LoadConfig();
   
-  
+ 
 }
 
 
@@ -1181,6 +1155,25 @@ void draw() {
 // Display
 //################################################################################################################################################################################ 
 
+ for(int i = 0; i < (CONFIGITEMS16); i++){
+       if(confItem[GetSetting("S_HUD")].value()==2) 
+         SimPosn[i]=CONFIG16_2[i];
+       else if(confItem[GetSetting("S_HUD")].value()==1) 
+         SimPosn[i]=CONFIG16_1[i];
+       else  
+         SimPosn[i]=CONFIG16_0[i];
+
+   int minimalscreen=0;
+   if (toggleModeItems[8].getValue()>0) minimalscreen=1 ;
+
+   if (((SimPosn[i]&DISPLAY_MIN_OFF)>0)&&(minimalscreen==1)||((SimPosn[i]&0xF000)==0)){
+      SimPosn[i]=0x3FF;
+   }
+   else {
+      SimPosn[i]=SimPosn[i]&0x1FF;
+   }
+  }
+
   if(confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() > 0) displayHorizon(int(MW_Pitch_Roll.arrayValue()[0])*10,int(MW_Pitch_Roll.arrayValue()[1])*10*-1);
   SimulateTimer();
   CalcAlt_Vario(); 
@@ -1216,7 +1209,8 @@ void draw() {
  
   MatchConfigs();
   MakePorts();
-
+  
+  ShowSPort();
   
   if ((ClosePort ==true)&& (PortWrite == false)){ //&& (init_com==1)
     ClosePort();
@@ -1784,4 +1778,5 @@ public void GPSTIMELINK(){
 public void SPORTLINK(){
  link("http://code.google.com/p/scarab-osd/wiki/Frsky_SPort"); 
 }
+
 
