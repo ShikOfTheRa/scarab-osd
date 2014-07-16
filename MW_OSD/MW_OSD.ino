@@ -420,6 +420,10 @@ void s16read(void)
   S16_AMPMAX=(Settings[S_AMPMAXH]<<8)+Settings[S_AMPMAXL];
   for(uint8_t en=0;en<(EEPROM_SETTINGS-EEPROM16_SETTINGS_START)/2;en++){
     screenPosition[en]= Settings[EEPROM16_SETTINGS_START + (en*2)]+(Settings[EEPROM16_SETTINGS_START + 1 + (en*2)]<<8);
+    if(Settings[S_VIDEOSIGNALTYPE]){
+      if ((screenPosition[en]&0x1FF)>LINE06) screenPosition[en] = screenPosition[en] +LINE;
+      if ((screenPosition[en]&0x1FF)>LINE09) screenPosition[en] = screenPosition[en] +LINE;
+    }
   }
 }
 

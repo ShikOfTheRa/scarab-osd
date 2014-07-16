@@ -1,3 +1,41 @@
+/*
+enum Positions {
+  GPS_numSatPosition,
+  GPS_numSatPositionTop,
+  GPS_directionToHomePosition,
+  GPS_directionToHomePositionBottom,
+  GPS_distanceToHomePosition,
+  speedPosition,
+  GPS_angleToHomePosition,
+  MwGPSAltPosition,
+  sensorPosition,
+  MwHeadingPosition,
+  MwHeadingGraphPosition,
+  MwAltitudePosition,
+  MwClimbRatePosition,
+  CurrentThrottlePosition,
+  flyTimePosition,
+  onTimePosition,
+  motorArmedPosition,
+  MwGPSLatPosition,
+  MwGPSLonPosition,
+  MwGPSLatPositionTop,
+  MwGPSLonPositionTop,
+  rssiPosition,
+  temperaturePosition,
+  voltagePosition,
+  vidvoltagePosition,
+  amperagePosition,
+  pMeterSumPosition,
+  horizonPosition,
+  callSignPosition,
+  debugPosition,
+  gimbalPosition,
+  GPS_timePosition,
+  SportPosition
+};
+*/
+
 enum Settings {
   S_CHECK_,    // used for check
   S_RSSIMIN,

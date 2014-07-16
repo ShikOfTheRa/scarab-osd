@@ -98,9 +98,9 @@ uint16_t getPosition(uint8_t pos) {
 
   uint16_t ret = val&POS_MASK;
 
-  if(Settings[S_VIDEOSIGNALTYPE]) {
-    ret += LINE * ((val >> PAL_SHFT) & PAL_MASK);
-  }
+//  if(Settings[S_VIDEOSIGNALTYPE]) {
+//    ret += LINE * ((val >> PAL_SHFT) & PAL_MASK);
+//  }
 
   return ret;
 }
@@ -193,7 +193,7 @@ void displayMode(void)
       screenBuffer[1]=SYM_ACRO1;
     }
     if(Settings[S_MODEICON]){
-      MAX7456_WriteString(screenBuffer,getPosition(sensorPosition)+LINE);
+      MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
     }
     if((MwSensorActive&mode.camstab)&&Settings[S_GIMBAL]){
       screenBuffer[2]=0;
@@ -214,17 +214,17 @@ void displayMode(void)
       screenBuffer[xx] = SYM_ACC;
       xx++;
     }
-    if (MwSensorActive&mode.mag){
-      screenBuffer[xx] = SYM_MAG;
-      xx++;
-    }
     if (MwSensorActive&mode.baro){
       screenBuffer[xx] = SYM_BAR;
       xx++;
     }
+    if (MwSensorActive&mode.mag){
+      screenBuffer[xx] = SYM_MAG;
+      xx++;
+    }
   }
   screenBuffer[xx] = 0;
-  MAX7456_WriteString(screenBuffer,getPosition(GPS_numSatPosition)+4);
+  MAX7456_WriteString(screenBuffer,getPosition(sensorPosition));
   }
 }
 
@@ -307,7 +307,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
      SYM_AH_DECORATION_RIGHT=0x13;
   } 
   
-  uint16_t position = getPosition(horizonPosition);
+  uint16_t position = getPosition(horizonPosition)-(2*LINE);
 
   if(pitchAngle>200) pitchAngle=200;
   if(pitchAngle<-250) pitchAngle=-250;
@@ -363,21 +363,22 @@ if (Settings[S_HORIZON_ELEVATION]){
   }
 
 #ifdef SBDIRECTION
+
     if (Settings[S_SIDEBARTOPS]) {
       if (millis()<(sidebarsMillis + 1000)) {
         if (sidebarsdir == 2){
-          screen[getPosition(horizonPosition)-LINE] = SYM_AH_DECORATION_UP;
+          screen[position-LINE] = SYM_AH_DECORATION_UP;
         }
         else{
-          screen[getPosition(horizonPosition)+5*LINE] = SYM_AH_DECORATION_DOWN;
+          screen[position+5*LINE] = SYM_AH_DECORATION_DOWN;
         }
       }
       if (millis()<(sidebaraMillis + 1000)) { 
         if (sidebaradir == 2){
-          screen[getPosition(horizonPosition)+14-LINE] = SYM_AH_DECORATION_UP;
+          screen[position+14-LINE] = SYM_AH_DECORATION_UP;
         }
         else{
-          screen[getPosition(horizonPosition)+5*LINE+14] = SYM_AH_DECORATION_DOWN;
+          screen[position+5*LINE+14] = SYM_AH_DECORATION_DOWN;
         }
       }
     }
@@ -416,9 +417,9 @@ void displayVoltage(void)
     else screenBuffer[0]=SYM_BATT_FULL;                              // Max charge icon
 */
     int battev=voltage/Settings[S_BATCELLS];
-    battev=constrain(battev,34,41);
-    battev = map(battev, 35, 41, 0, 6);
-    screenBuffer[0]=SYM_BATT_FULL+battev;
+    battev=constrain(battev,34,42);
+    battev = map(battev, 34, 42, 0, 6);
+    screenBuffer[0]=SYM_BATT_EMPTY-battev;
   }
   else {
     screenBuffer[0]=SYM_MAIN_BATT;
@@ -506,8 +507,8 @@ void displayAmperage(void)
   if(!fieldIsVisible(amperagePosition))
     return;
   ItoaPadded(amperage, screenBuffer, 5, 4);     // 999.9 ampere max!
-  screenBuffer[4] = SYM_AMP;
-  screenBuffer[5] = 0;
+  screenBuffer[5] = SYM_AMP;
+  screenBuffer[6] = 0;
   MAX7456_WriteString(screenBuffer,getPosition(amperagePosition));
 }
 
@@ -532,7 +533,7 @@ void displayRSSI(void)
   uint8_t xx = FindNull();
   screenBuffer[xx++] = '%';
   screenBuffer[xx] = 0;
-  MAX7456_WriteString(screenBuffer,getPosition(rssiPosition));
+  MAX7456_WriteString(screenBuffer,getPosition(rssiPosition)-1);
 }
 
 
@@ -569,7 +570,7 @@ void displayHeadingGraph(void)
   xx = MwHeading * 4;
   xx = xx + 720 + 45;
   xx = xx / 90;
-  uint16_t pos = getPosition(MwHeadingGraphPosition)+1;
+  uint16_t pos = getPosition(MwHeadingGraphPosition);
   memcpy_P(screen+pos, headGraph+xx+1, 9);
 }
 
@@ -731,18 +732,17 @@ void displayClimbRate(void)
     return;
   if(!Settings[S_VARIO])
     return;
-    uint16_t position = getPosition(horizonPosition);
-    for(int X=1; X<=3; X++) {
-      screen[position+X*LINE+15] =  0x7F;
+    uint16_t position = getPosition(MwClimbRatePosition);
+    for(int8_t X=-1; X<=1; X++) {
+      screen[position+(X*LINE)] =  SYM_VARIO;
     }
-   position=position+LINE;
    int8_t xx=MwVario;
    if (MwVario>120) xx=120;
    if (MwVario<-120) xx=-120;
    xx=map(xx,120,-120,0,17);
-   int8_t varline=xx/6;
+   int8_t varline=(xx/6)-1;
    int8_t varsymbol=xx%6;
-   screen[position+(varline*LINE)+15] = 0x8F-varsymbol;
+   screen[position+(varline*LINE)] = 0x8F-varsymbol;
 }
 
 
@@ -787,10 +787,10 @@ void displayDirectionToHome(void)
 {
   if(!GPS_fix)
     return;
-  if (screenPosition[GPS_directionToHomePosition]<512)
-    return;
-  if (MwSensorActive&mode.osd_switch)
-    return;
+//  if (screenPosition[GPS_directionToHomePosition]<512)
+//    return;
+//  if (MwSensorActive&mode.osd_switch)
+//    return;
 
   if(GPS_distanceToHome <= 2 && timer.Blink2hz)
     return;
@@ -1430,11 +1430,10 @@ void displayDebug(void)
 //  debug[1]=(int16_t)stackptr;
 
 
-  debug[0]=(EEPROM_SETTINGS-EEPROM_SETTINGS_16_START)/2;
-  debug[1]=Settings16[0];
-  debug[2]=Settings16[S16_00];
-  debug[3]=amperage;
-//  debug[3]=sensorfilter[3][SENSORFILTERSIZE];
+  debug[0]=0;
+  debug[1]=1;
+  debug[2]=2;
+  debug[3]=3;
 
   for(uint8_t X=0; X<4; X++) {
     ItoaPadded(debug[X], screenBuffer+2,7,0);     

@@ -8,7 +8,7 @@
 // Further configuration may be require elsewhere in config.h + option enabled on GUI
 #define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
 #define HORIZON         // Enable/disable HORIZON indicator
-//#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
+#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
 #define GPSTIME         // Enable/disable GPS Time functions
 #define SPORT           // Enable/disable FRSKY S.PORT cell code
 
@@ -25,7 +25,7 @@
 
 
 /********************       FILTER settings      *********************/
-//#define STAGE2FILTER              // Enable for smoother readings of voltage / current / RSSI. 
+#define STAGE2FILTER              // Enable for smoother readings of voltage / current / RSSI. 
 //#define SMOOTHFILTER              // Enable for smoothest readings of voltage / current / RSSI. Uses more memory. NOT FINISHED
 
 
@@ -176,5 +176,5 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-//#define DEBUG         // Enable/disable option to display Mutltiwii debug values 
+#define DEBUG         // Enable/disable option to display Mutltiwii debug values 
 

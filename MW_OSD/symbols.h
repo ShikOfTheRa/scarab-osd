@@ -136,6 +136,9 @@
 #define SYM_BATT_1 0X95
 #define SYM_BATT_EMPTY 0X96
 
+// Vario
+#define SYM_VARIO 0x7F
+
 // Batt Icon´s
 #define SYM_MAIN_BATT 0X97
 #define SYM_VID_BAT 0XBF
