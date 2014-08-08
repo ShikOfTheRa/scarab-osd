@@ -1,5 +1,5 @@
 
-#define SERIALBUFFERSIZE 256
+#define SERIALBUFFERSIZE 300
 static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string
 static uint8_t receiverIndex;
 static uint8_t dataSize;
@@ -81,13 +81,17 @@ void serialMSPCheck()
     if (cmd == OSD_WRITE_CMD) {
       for(uint8_t en=0;en<EEPROM_SETTINGS; en++){
 	uint8_t inSetting = read8();
-//	if (inSetting != Settings[en])
-	  EEPROM.write(en,inSetting);
-	Settings[en] = inSetting;
+        EEPROM.write(en,inSetting);
+      }
+
+      for(uint8_t en=0;en<(POSITIONS_SETTINGS*2*2); en++){ // 2 Huds, 2 * 8 bit settings
+	uint8_t inSetting = read8();
+	EEPROM.write(EEPROM_SETTINGS+en,inSetting);
       }
       readEEPROM();
       setMspRequests();
     }
+
 
     if(cmd == OSD_GET_FONT) {
       if(dataSize == 5) {
@@ -95,7 +99,7 @@ void serialMSPCheck()
           nextCharToRequest = read8();
           lastCharToRequest = read8();
           initFontMode();
-      }
+        }
       }
       else if(dataSize == 56) {
         for(uint8_t i = 0; i < 54; i++)
@@ -107,8 +111,10 @@ void serialMSPCheck()
       }
     }
     if(cmd == OSD_DEFAULT) {
-    EEPROM.write(0,0);
-    resetFunc();
+      for(uint8_t i = 0; i < 256; i++){
+        EEPROM.write(i,0);
+      }
+      resetFunc();
     }
     if(cmd == OSD_RESET) {
     resetFunc();

@@ -75,8 +75,8 @@
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x10=90%0x11=80%  default is 0x01=100%,
-//#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
-#define TIMEZONESTARTUP             // Enable to display timezone at startup - if GPS TIME is enabled
+#define INTRO_DELAY 8             // Seconds intro screen should show for. Default is 8 
+//#define TIMEZONESTARTUP             // Enable to display timezone at startup - if GPS TIME is enabled
 
 
 
@@ -136,43 +136,6 @@
     #define DIVIDER1v1      0.0001      // Voltage divider for 1.1v reference. Use 0.0001 default unless advised otherwise.
     #define DIVIDER5v       0.0005      // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
 #endif
-
-
-/********************       For OSD SWITCH      *********************/
-// In following defines, use DISPLAY_MIN_OFF to hide when using OSD_SWITCH
-// Otherwise select DISPLAY_ALWAYS (it can be enabled / disbled by GUI
-
-#define  OSDOFF01 DISPLAY_MIN_OFF // GPS_numSatPosition
-#define  OSDOFF02 DISPLAY_MIN_OFF // GPS_numSatPositionTop      // On top of screen
-#define  OSDOFF03 DISPLAY_MIN_OFF // GPS_directionToHomePosition
-#define  OSDOFF04 DISPLAY_MIN_OFF // GPS_distanceToHomePosition
-#define  OSDOFF05 DISPLAY_MIN_OFF // speedPosition
-#define  OSDOFF06 DISPLAY_MIN_OFF // GPS_angleToHomePosition
-#define  OSDOFF07 DISPLAY_MIN_OFF // MwGPSAltPosition
-#define  OSDOFF08 DISPLAY_MIN_OFF // sensorPosition
-#define  OSDOFF09 DISPLAY_MIN_OFF // MwHeadingPosition
-#define  OSDOFF10 DISPLAY_MIN_OFF // MwHeadingGraphPosition
-#define  OSDOFF11 DISPLAY_MIN_OFF // MwAltitudePosition
-#define  OSDOFF12 DISPLAY_MIN_OFF // MwClimbRatePosition
-#define  OSDOFF13 DISPLAY_MIN_OFF // CurrentThrottlePosition
-#define  OSDOFF14 DISPLAY_ALWAYS // flyTimePosition
-#define  OSDOFF15 DISPLAY_ALWAYS // onTimePosition
-#define  OSDOFF16 DISPLAY_ALWAYS // motorArmedPosition
-#define  OSDOFF17 DISPLAY_MIN_OFF  // MwGPSLatPosition
-#define  OSDOFF18 DISPLAY_MIN_OFF  // MwGPSLonPosition
-#define  OSDOFF19 DISPLAY_MIN_OFF  // MwGPSLatPositionTop      // On top of screen
-#define  OSDOFF20 DISPLAY_MIN_OFF  // MwGPSLonPositionTop      // On top of screen
-#define  OSDOFF21 DISPLAY_MIN_OFF // rssiPosition
-#define  OSDOFF22 DISPLAY_MIN_OFF // temperaturePosition
-#define  OSDOFF23 DISPLAY_ALWAYS // voltagePosition
-#define  OSDOFF24 DISPLAY_MIN_OFF // vidvoltagePosition
-#define  OSDOFF25 DISPLAY_MIN_OFF // amperagePosition
-#define  OSDOFF26 DISPLAY_MIN_OFF // pMeterSumPosition
-#define  OSDOFF27 DISPLAY_MIN_OFF  // horizonPosition
-#define  OSDOFF28 DISPLAY_MIN_OFF // CallSign Position
-#define  OSDOFF29 DISPLAY_ALWAYS // Debug Position
-//#define  OSDOFF30 DISPLAY_MIN_OFF // Gimbal Position
-#define  OSDOFF31 DISPLAY_MIN_OFF // GPS_time Position
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
