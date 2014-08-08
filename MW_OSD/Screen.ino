@@ -91,17 +91,10 @@ uint8_t FindNull(void)
   return xx;
 }
 
+ 
 uint16_t getPosition(uint8_t pos) {
-
-//  uint16_t val = (uint16_t)pgm_read_word(&screenPosition[pos]);
   uint16_t val = screenPosition[pos];
-
   uint16_t ret = val&POS_MASK;
-
-//  if(Settings[S_VIDEOSIGNALTYPE]) {
-//    ret += LINE * ((val >> PAL_SHFT) & PAL_MASK);
-//  }
-
   return ret;
 }
 
@@ -139,10 +132,6 @@ void displayTemperature(void)        // WILL WORK ONLY WITH V1.2
 
 void displayMode(void)
 {
-  if (screenPosition[sensorPosition]<512)
-    return;
-  if (MwSensorActive&mode.osd_switch)
-    return;
   
   int16_t dist;
   if(Settings[S_UNITSYSTEM])
@@ -193,13 +182,17 @@ void displayMode(void)
       screenBuffer[1]=SYM_ACRO1;
     }
     if(Settings[S_MODEICON]){
+//    if (!screenPosition[ModePosition]<512)
+    if(fieldIsVisible(ModePosition))
       MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
     }
     if((MwSensorActive&mode.camstab)&&Settings[S_GIMBAL]){
       screenBuffer[2]=0;
       screenBuffer[0]=SYM_GIMBAL;
       screenBuffer[1]=SYM_GIMBAL1;  
-    MAX7456_WriteString(screenBuffer,getPosition(gimbalPosition));
+//    if (!screenPosition[gimbalPosition]<512)
+    if(fieldIsVisible(gimbalPosition))
+      MAX7456_WriteString(screenBuffer,getPosition(gimbalPosition));
     }
 
   if(Settings[S_MODESENSOR]){
@@ -224,13 +217,17 @@ void displayMode(void)
     }
   }
   screenBuffer[xx] = 0;
-  MAX7456_WriteString(screenBuffer,getPosition(sensorPosition));
+//  if (!screenPosition[sensorPosition]<512)
+  if(fieldIsVisible(sensorPosition))
+    MAX7456_WriteString(screenBuffer,getPosition(sensorPosition));
   }
 }
 
 void displayArmed(void)
 {
 #ifndef HIDEARMEDSTATUS
+  if(!fieldIsVisible(motorArmedPosition))
+    return;
   if(!armed){
     MAX7456_WriteString_P(disarmed_text, getPosition(motorArmedPosition));
     armedtimer=20;
@@ -346,7 +343,7 @@ if (Settings[S_HORIZON_ELEVATION]){
  
 }
 }
-  if(!Settings[S_MAPMODE]){
+  if(!fieldIsVisible(MapModePosition)){
     if(Settings[S_DISPLAY_HORIZON_BR]){
       screen[position+2*LINE+7-1] = SYM_AH_CENTER_LINE;
       screen[position+2*LINE+7+1] = SYM_AH_CENTER_LINE_RIGHT;
@@ -787,18 +784,12 @@ void displayDirectionToHome(void)
 {
   if(!GPS_fix)
     return;
-//  if (screenPosition[GPS_directionToHomePosition]<512)
-//    return;
-//  if (MwSensorActive&mode.osd_switch)
-//    return;
+  if (screenPosition[GPS_directionToHomePosition]<512)
+    return;
 
   if(GPS_distanceToHome <= 2 && timer.Blink2hz)
     return;
-  uint16_t position;
-  if ((MwSensorActive&mode.osd_switch))
-    position=getPosition(GPS_directionToHomePositionBottom);
-  else
-    position=getPosition(GPS_directionToHomePosition);
+  uint16_t position=getPosition(GPS_directionToHomePosition);
   int16_t d = MwHeading + 180 + 360 - GPS_directionToHome;
   d *= 4;
   d += 45;
@@ -1311,12 +1302,13 @@ void mapmode(void) {
 
 #ifdef MAPMODE
 
-  if ((MwSensorActive&mode.osd_switch))
-  return;
-
   if(!GPS_fix)
     return;
-
+  if(!fieldIsVisible(MapModePosition))
+    return;
+//  if(!Settings[S_MAPMODE]) 
+//    return;
+    
   int8_t xdir;
   int8_t ydir;
   int16_t targetx;
@@ -1385,7 +1377,7 @@ void mapmode(void) {
   targetx = xdir*map(x, 0, range, 0, 5);
   targety = ydir*map(y, 0, range, 0, 5);
   
-  centerpos=getPosition(horizonPosition)+67;
+  centerpos=getPosition(MapCenterPosition);
   targetpos= centerpos + targetx + (LINE*targety); 
 
   if (MAPTYPE==1) {
@@ -1414,7 +1406,7 @@ void mapmode(void) {
 
   screenBuffer[0] = mapsymbolrange;
   screenBuffer[1] = 0;
-  MAX7456_WriteString(screenBuffer,getPosition(GPS_directionToHomePosition)+LINE);
+  MAX7456_WriteString(screenBuffer,getPosition(MapModePosition));
  
 #endif
 }
@@ -1433,7 +1425,7 @@ void displayDebug(void)
   debug[0]=0;
   debug[1]=1;
   debug[2]=2;
-  debug[3]=3;
+  debug[3]=MwVersion;
 
   for(uint8_t X=0; X<4; X++) {
     ItoaPadded(debug[X], screenBuffer+2,7,0);     

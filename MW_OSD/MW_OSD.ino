@@ -79,7 +79,7 @@ void setup()
 
   setMspRequests();
   blankserialRequest(MSP_IDENT);
-  }
+}
 
 
 void (* resetFunc)(void)=0;
@@ -114,16 +114,14 @@ void setMspRequests() {
       modeMSPRequests |= REQ_MSP_DEBUG;
 #endif
 
-    if(MwVersion == 0)
-      modeMSPRequests |= REQ_MSP_IDENT;
 
     if(!armed || Settings[S_THROTTLEPOSITION] || fieldIsVisible(pMeterSumPosition) || fieldIsVisible(amperagePosition) )
       modeMSPRequests |= REQ_MSP_RC;
 
     if(mode.armed == 0) {
         modeMSPRequests |= REQ_MSP_BOX;
-
-    }
+       
+     }
     modeMSPRequests |= REQ_MSP_CELLS;
   }
  
@@ -140,7 +138,16 @@ void setMspRequests() {
 
 void loop()
 {
-  
+
+  if (MwSensorActive&mode.osd_switch)
+    screenlayout=1;
+  else  
+    screenlayout=0;
+  if (!screenlayout==oldscreenlayout){
+    oldscreenlayout=screenlayout;
+    readEEPROM_screenlayout();
+  }
+    
   // Blink Basic Sanity Test Led at 1hz
   if(timer.tenthSec>10)
     digitalWrite(LEDPIN,HIGH);
@@ -166,6 +173,7 @@ void loop()
     timer.halfSec++;
     timer.Blink10hz=!timer.Blink10hz;
     calculateTrip();
+ 
     
       uint8_t MSPcmdsend;
       if(queuedMSPRequests == 0)
@@ -288,7 +296,7 @@ void loop()
        {
            // Displays 4 sec every 5min (no blink during flight)
         if ( onTime > (timer.lastCallSign+300)) timer.lastCallSign = onTime; 
-        if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition));       
+        if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition));      
        }
 #endif
 
@@ -318,7 +326,7 @@ void loop()
           displayGPS_time();
 #endif
 #ifdef MAPMODE
-          if(Settings[S_MAPMODE]) mapmode();
+          mapmode();
 #endif
 #ifdef FIXEDWING // required because FW can fly without BARO / MAG
           displayAltitude();
@@ -398,12 +406,14 @@ void calculateTrip(void)
 }
 
 
-void writeEEPROM(void)
+void writeEEPROM(void) // OSD will only change 8 bit values. GUI changes directly
 {
-  s16write();
+  Settings[S_AMPMAXH] = S16_AMPMAX>>8;
+  Settings[S_AMPMAXL] = S16_AMPMAX&0xFF;
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
     EEPROM.write(en,Settings[en]);
   } 
+  writeEEPROM16();
 }
 
 
@@ -412,31 +422,35 @@ void readEEPROM(void)
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
      Settings[en] = EEPROM.read(en);
   }
-  s16read();
+  S16_AMPMAX=(Settings[S_AMPMAXH]<<8)+Settings[S_AMPMAXL];
+  readEEPROM_screenlayout();
 }
 
-void s16read(void)
+
+void readEEPROM_screenlayout(void)
 {
-  S16_AMPMAX=(Settings[S_AMPMAXH]<<8)+Settings[S_AMPMAXL];
-  for(uint8_t en=0;en<(EEPROM_SETTINGS-EEPROM16_SETTINGS_START)/2;en++){
-    screenPosition[en]= Settings[EEPROM16_SETTINGS_START + (en*2)]+(Settings[EEPROM16_SETTINGS_START + 1 + (en*2)]<<8);
+  uint16_t EEPROMscreenoffset=EEPROM_SETTINGS+(screenlayout*POSITIONS_SETTINGS*2);
+  for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
+    uint16_t pos=(en*2)+EEPROMscreenoffset;
+    screenPosition[en] = EEPROM.read(pos);
+    uint16_t xx=EEPROM.read(pos+1)<<8;
+    screenPosition[en] = screenPosition[en] + xx;
     if(Settings[S_VIDEOSIGNALTYPE]){
-      if ((screenPosition[en]&0x1FF)>LINE06) screenPosition[en] = screenPosition[en] +LINE;
-      if ((screenPosition[en]&0x1FF)>LINE09) screenPosition[en] = screenPosition[en] +LINE;
+      if ((screenPosition[en]&0x1FF)>LINE06) screenPosition[en] = screenPosition[en] + LINE;
+      if ((screenPosition[en]&0x1FF)>LINE09) screenPosition[en] = screenPosition[en] + LINE;
     }
   }
 }
 
-void s16write(void)
-{
-  Settings[S_AMPMAXH] = S16_AMPMAX>>8;
-  Settings[S_AMPMAXL] = S16_AMPMAX&0xFF;
 
+void writeEEPROM16(void)
+{
+/*
   for(uint8_t en=0;en<(EEPROM_SETTINGS-EEPROM16_SETTINGS_START)/2;en++){
     Settings[EEPROM16_SETTINGS_START + (en*2)] = screenPosition[en] &0xFF;
     Settings[EEPROM16_SETTINGS_START + 1 + (en*2)] = screenPosition[en]>>8;
   }
-
+*/
 }
 
 
@@ -444,11 +458,21 @@ void checkEEPROM(void)
 {
   uint8_t EEPROM_Loaded = EEPROM.read(0);
   if (!EEPROM_Loaded){
+
     for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
       EEPROM.write(en,EEPROM_DEFAULT[en]);
     }
+
+    for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
+      EEPROM.write(EEPROM_SETTINGS+(en*2),SCREENLAYOUT_DEFAULT[en]&0xFF);
+      EEPROM.write(EEPROM_SETTINGS+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
+      EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*2)+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]&0xFF);
+      EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*2)+1+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]>>8);
+    }
   }
 }
+
+
 
 
 uint8_t safeMode() {

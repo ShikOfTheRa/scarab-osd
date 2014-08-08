@@ -119,8 +119,7 @@ void InitSerial(float portValue) {
       buttonRESTART.setColorBackground(green_);
       
       g_serial.buffer(256);
-      System.out.println("Port Turned On " );
-      FileUploadText.setText("");
+            FileUploadText.setText("");
       delay(1500);
       SendCommand(MSP_IDENT);
      
@@ -224,7 +223,7 @@ void RESTART(){
     tailSerialReply();
   }
   toggleMSP_Data = false;
-  READ();
+//  delay(2000);
 }  
 
 public void READ(){
@@ -242,8 +241,10 @@ public void READ(){
    }
 }
 
+
 public void WRITE(){
 
+//  SimControlToggle.setValue(0);
   confItem[GetSetting("S_AMPMAXL")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())&0xFF); // for 8>>16 bit EEPROM
   confItem[GetSetting("S_AMPMAXH")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())>>8);
 
@@ -253,35 +254,41 @@ public void WRITE(){
   toggleMSP_Data = true;
   p = 0;
   inBuf[0] = OSD_WRITE_CMD;
-  //evaluateCommand((byte)MSP_OSD, 1);
+//  delay (100); 
   for (int txTimes = 0; txTimes<2; txTimes++) {
-    headSerialReply(MSP_OSD, CONFIGITEMS+1+(CONFIGITEMS16*2));
-
+    headSerialReply(MSP_OSD, CONFIGITEMS + (CONFIGITEMS16*2*2) +1);
+//    headSerialReply(MSP_OSD, CONFIGITEMS +1);
     serialize8(OSD_WRITE_CMD);
+
+confItem[GetSetting("S_MAPMODE")].setValue(1);
+
     for(int i = 0; i < CONFIGITEMS; i++){
      if(i == GetSetting("S_GPSTZ")) serialize8(int(confItem[i].value()*10));//preserve decimal, maybe can go elsewhere - haydent
      else serialize8(int(confItem[i].value()));
+//    System.out.println("Loc: "+i+ " Val: "+ int(confItem[i].value()) );
     }
-    
+
+     int clayout=int(confItem[GetSetting("S_HUD")].value()); 
      for(int i = 0; i < (CONFIGITEMS16); i++){
-       if(confItem[GetSetting("S_HUD")].value()==2) 
-         CONFIG16[i]=CONFIG16_2[i];
-       else if(confItem[GetSetting("S_HUD")].value()==1) 
-         CONFIG16[i]=CONFIG16_1[i];
-       else  
-         CONFIG16[i]=CONFIG16_0[i];
-       serialize8(int(CONFIG16[i]&0xFF));
-       serialize8(int(CONFIG16[i]>>8));
-//     System.out.println(int(CONFIG16[i]&0xFF));
-//     System.out.println(int(CONFIG16[i]>>8));
-    }
+       serialize8(int(ConfigLayout[0][i]&0xFF));
+       serialize8(int(ConfigLayout[0][i]>>8));
+     }
+     for(int i = 0; i < (CONFIGITEMS16); i++){
+       serialize8(int(ConfigLayout[1][i]&0xFF));
+       serialize8(int(ConfigLayout[1][i]>>8));
+     }
+
     tailSerialReply();
   }
   
   toggleMSP_Data = false;
   g_serial.clear();
   PortWrite = false;
+//  SimControlToggle.setValue(0);
+//  delay(2000);
+
 }
+
 
 public void FONT_UPLOAD(){
   if (init_com==0){
@@ -343,20 +350,29 @@ public void SendChar(){
 
 public void DEFAULT(){
  if (init_com==1){
-    SimControlToggle.setValue(0);
-    toggleConfItem[0].setValue(0);
+//    toggleConfItem[0].setValue(0);
     noLoop();
     int Reset_result = JOptionPane.showConfirmDialog(this,"Are you sure you wish to set OSD to DEFAULT values?", "RESET OSD MEMORY",JOptionPane.WARNING_MESSAGE,JOptionPane.YES_NO_CANCEL_OPTION);
     loop();
     switch (Reset_result) {
       case JOptionPane.YES_OPTION:
+//        SimControlToggle.setValue(0);
+        System.out.println("Reset start: ");
         confItem[0].setValue(0);
+        System.out.println("Reset write: ");
         WRITE();
-        RESTART();
+        WRITE();
+        delay(100);
+        confCheck = 0;
+        resCheck = 0;
+        READ();
+        System.out.println("Reset complete: ");
         return;
       case JOptionPane.CANCEL_OPTION:
+//        SimControlToggle.setValue(1);
         return;
       default:
+//        SimControlToggle.setValue(1);
         return;
     }
  }else
@@ -365,6 +381,7 @@ public void DEFAULT(){
    JOptionPane.showConfirmDialog(null,"Please Select a Port", "Not Connected", JOptionPane.PLAIN_MESSAGE,JOptionPane.WARNING_MESSAGE);
    loop();
  }
+
 }
 
 
@@ -463,7 +480,7 @@ void SendCommand(int cmd){
 
      
       case MSP_ATTITUDE:
-        PortIsWriting = true;
+//                PortIsWriting = true;
         headSerialReply(MSP_ATTITUDE, 8);
         serialize16(int(MW_Pitch_Roll.arrayValue()[0])*10);
         serialize16(int(MW_Pitch_Roll.arrayValue()[1])*10);
@@ -665,9 +682,18 @@ public void evaluateCommand(byte cmd, int size) {
           }
           else {
             // Returned result from OSD.
+            confCheck=0;
             for(int i = 0; i < CONFIGITEMS; i++){
-              SetConfigItem(i, read8());
+              int xx = read8();
+              if (i==0){
+                confCheck=xx;
+              }
+              if (confCheck>0){
+              SetConfigItem(i, xx);
+              resCheck=1;
+              }
             }
+//    System.out.println(confCheck);
               S16_AMPMAX=(int(confItem[GetSetting("S_AMPMAXH")].value())<<8)+ int(confItem[GetSetting("S_AMPMAXL")].value()); // for 8>>16 bit EEPROM
               SetConfigItem(GetSetting("S_AMPDIVIDERRATIO"), (int) S16_AMPMAX);
 
@@ -807,6 +833,7 @@ void MWData_Com() {
             try{
               if ((init_com==1)  && (toggleMSP_Data == true)) {
                   evaluateCommand(cmd, (int)dataSize);
+                  //System.out.println("CMD: "+cmd);
                   //PortRead = false;
               }
               else{

@@ -51,39 +51,39 @@ String MW_OSD_GUI_Version = "R1";
 
 
 int  GPS_numSatPosition = 0;
-int  GPS_numSatPositionTop = 1;
-int  GPS_directionToHomePosition = 2;
-int  GPS_directionToHomePositionBottom = 3;
-int  GPS_distanceToHomePosition = 4;
-int  speedPosition = 5;
-int  GPS_angleToHomePosition = 6;
-int  MwGPSAltPosition = 7;
-int  sensorPosition = 8;
-int  MwHeadingPosition = 9;
-int  MwHeadingGraphPosition = 10;
-int  MwAltitudePosition = 11;
-int  MwClimbRatePosition = 12;
-int  CurrentThrottlePosition = 13;
-int  flyTimePosition = 14;
-int  onTimePosition = 15;
-int  motorArmedPosition = 16;
-int  MwGPSLatPosition = 17;
-int  MwGPSLonPosition = 18;
-int  MwGPSLatPositionTop = 19;
-int  MwGPSLonPositionTop = 20;
-int  rssiPosition = 21;
-int  temperaturePosition = 22;
-int  voltagePosition = 23;
-int  vidvoltagePosition = 24;
-int  amperagePosition = 25;
-int  pMeterSumPosition = 26;
-int  horizonPosition = 27;
-int  callSignPosition = 28;
-int  debugPosition = 29;
-int  gimbalPosition = 30;
-int  GPS_timePosition = 31;
-int  SportPosition = 32;
-int  ModePosition = 33;
+int  GPS_directionToHomePosition = 1;
+int  GPS_distanceToHomePosition = 2;
+int  speedPosition = 3;
+int  GPS_angleToHomePosition = 4;
+int  MwGPSAltPosition = 5;
+int  sensorPosition = 6;
+int  MwHeadingPosition = 7;
+int  MwHeadingGraphPosition = 8;
+int  MwAltitudePosition = 9;
+int  MwClimbRatePosition = 10;
+int  CurrentThrottlePosition = 11;
+int  flyTimePosition = 12;
+int  onTimePosition = 13;
+int  motorArmedPosition = 14;
+int  MwGPSLatPosition = 15;
+int  MwGPSLonPosition = 16;
+int  MwGPSLatPositionTop = 17;
+int  MwGPSLonPositionTop = 18;
+int  rssiPosition = 19;
+int  temperaturePosition = 20;
+int  voltagePosition = 21;
+int  vidvoltagePosition = 22;
+int  amperagePosition = 23;
+int  pMeterSumPosition = 24;
+int  horizonPosition = 25;
+int  callSignPosition = 26;
+int  debugPosition = 27;
+int  gimbalPosition = 28;
+int  GPS_timePosition = 29;
+int  SportPosition = 30;
+int  ModePosition = 31;
+int  MapModePosition = 32;
+int  MapCenterPosition = 33;
 
 int MSP_sendOrder =0;
 PImage img_Clear,OSDBackground,RadioPot;
@@ -223,7 +223,10 @@ int xx=0;
 int YLocation = 0;
 int Roll = 0;
 int Pitch = 0;
-
+int confmillis = 1000;
+int confCheck = 0;
+int resmillis = 5000;
+int resCheck = 1;
 int OnTimer = 0;
 int FlyTimer = 0;
 float SimItem0= 0;
@@ -310,6 +313,7 @@ String[] ConfigNames = {
   "Amperage 16L",  
   "Amperage 16H",  
   "HUD layout",  
+  "HUD layout - OSD SW",  
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -392,6 +396,7 @@ String[] ConfigHelp = {
   "Amperage 16L",  
   "Amperage 16H",  
   "HUD layout",  
+  "HUD layout - OSD SW",  
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -410,6 +415,9 @@ String[] ConfigHelp = {
 static int CHECKBOXITEMS=0;
 int CONFIGITEMS=ConfigNames.length;
 static int SIMITEMS=6;
+
+//     System.out.println("MSP: ");
+
   
 int[] ConfigRanges = {
 1,   // used for check             0
@@ -457,7 +465,7 @@ int[] ConfigRanges = {
 1,     // S_WITHDECORATION         31
 1,     // S_SHOWBATLEVELEVOLUTION  32
 1,     // S_RESETSTATISTICS        33
-1,     // S_ENABLEADC              34
+1,     // S_MAPMODE              34 //map mode
 1,     // S_VREFERENCE,
 1,     // S_USE_BOXNAMES           35
 1,     // S_MODEICON               36
@@ -480,7 +488,8 @@ int[] ConfigRanges = {
 1023,  // S_AMPMIN,
 255,   // S_AMPMAXL,
 3,     // S_AMPMAXH,
-2,     // S_HUD,  
+4,     // S_HUD,  
+4,     // S_HUDOSDSW,  
 255,
 255,
  255,
@@ -678,6 +687,7 @@ CreateItem(GetSetting("S_CHECK_"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_AMPMAXL"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_AMPMAXH"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_USE_BOXNAMES"),  5,0, G_EEPROM);
+CreateItem(GetSetting("S_MAPMODE"),  5,0, G_EEPROM);
 
 // RSSI  ---------------------------------------------------------------------------
 
@@ -729,12 +739,12 @@ CreateItem(GetSetting("S_GPSALTITUDE"),  5,3*17, G_GPS);
 
 //  HUD  ----------------------------------------------------------------------------
 CreateItem(GetSetting("S_HUD"),  5,0*17, G_HUD);
-CreateItem(GetSetting("S_DISPLAY_HORIZON_BR"),  5,1*17, G_HUD);
-CreateItem(GetSetting("S_HORIZON_ELEVATION"),  5,2*17, G_HUD);
-CreateItem(GetSetting("S_WITHDECORATION"),  5,3*17, G_HUD);
-CreateItem(GetSetting("S_SCROLLING"),  5,4*17, G_HUD);
-CreateItem(GetSetting("S_SIDEBARTOPS"),  5,5*17, G_HUD);
-CreateItem(GetSetting("S_ENABLEADC"),  5,6*17, G_HUD);
+CreateItem(GetSetting("S_HUDOSDSW"),  5,1*17, G_HUD);
+CreateItem(GetSetting("S_DISPLAY_HORIZON_BR"),  5,2*17, G_HUD);
+CreateItem(GetSetting("S_HORIZON_ELEVATION"),  5,3*17, G_HUD);
+CreateItem(GetSetting("S_WITHDECORATION"),  5,4*17, G_HUD);
+CreateItem(GetSetting("S_SCROLLING"),  5,5*17, G_HUD);
+CreateItem(GetSetting("S_SIDEBARTOPS"),  5,6*17, G_HUD);
 
 //  VREF  ----------------------------------------------------------------------------
 CreateItem(GetSetting("S_VREFERENCE"),  5,0*17, G_VREF);
@@ -1031,23 +1041,39 @@ void draw() {
 
 */
 // PatrikE
+
   {
     //PortWrite = true;
     //MakePorts();
 
 
     if (!FontMode) {
-
       if (init_com==1) {
-        if (ClosePort) return;
 
-        if ((time-time5 >50000) && (toggleMSP_Data == false)) {
-          time5 = time;
-          if (init_com==1) {
-            SendCommand(MSP_BOXNAMES);
-            SendCommand(MSP_BOXIDS);
+        if(confCheck == 0) {
+          if (millis()>confmillis){
+            READ();
+            if(confCheck > 0)
+              resCheck = 1;
+            confmillis=millis()+500;
           }
         }
+
+        if(resCheck == 0) {
+          if (millis()>resmillis){
+            READ();
+            if(confCheck == 0)
+              RESTART();
+            resmillis=millis()+3000;
+          }
+        }         
+
+
+        
+        if (ClosePort) return;
+          SendCommand(MSP_BOXNAMES);
+          SendCommand(MSP_BOXIDS);
+          SendCommand(MSP_IDENT);
 
         MSP_sendOrder++;
         switch(MSP_sendOrder) {
@@ -1072,14 +1098,11 @@ void draw() {
           break;
         case 6: 
           if (init_com==1)SendCommand(MSP_RC);
-          if(time-time5 < 10000)MSP_sendOrder=0;
           break;
         case 7: 
-          if (toggleMSP_Data == true && (time-time5 < 5000)) MSP_sendOrder=0;
           if (toggleMSP_Data == false) SendCommand(MSP_BOXNAMES);
           break;
         case 8:
-          time5 = time;
           if (toggleMSP_Data == false) SendCommand(MSP_BOXIDS);
           MSP_sendOrder=0;
           break;
@@ -1090,18 +1113,6 @@ void draw() {
         case 11:
           break;
         }
-// Unused timers.        
-//        if ((time-time4 >200)) {
-//          time4 = time; 
-//          //PortWrite = !PortWrite;
-//          //MakePorts();
-//        }
-//
-//        if ((time-time1 >40)) {
-//          time1 = time; 
-//          //PortWrite = false;
-//        }
-
       }
     } // End !FontMode
   }
@@ -1155,23 +1166,49 @@ void draw() {
 // Display
 //################################################################################################################################################################################ 
 
+
+
  for(int i = 0; i < (CONFIGITEMS16); i++){
-       if(confItem[GetSetting("S_HUD")].value()==2) 
-         SimPosn[i]=CONFIG16_2[i];
+       if(confItem[GetSetting("S_HUD")].value()==4) 
+         ConfigLayout[0][i]=CONFIG16_4[i];
+       else if(confItem[GetSetting("S_HUD")].value()==3) 
+         ConfigLayout[0][i]=CONFIG16_3[i];
+       else if(confItem[GetSetting("S_HUD")].value()==2) 
+         ConfigLayout[0][i]=CONFIG16_2[i];
        else if(confItem[GetSetting("S_HUD")].value()==1) 
-         SimPosn[i]=CONFIG16_1[i];
+         ConfigLayout[0][i]=CONFIG16_1[i];
        else  
-         SimPosn[i]=CONFIG16_0[i];
+         ConfigLayout[0][i]=CONFIG16_0[i];
+
+
+       if(confItem[GetSetting("S_HUDOSDSW")].value()==4) 
+         ConfigLayout[1][i]=CONFIG16_4[i];
+       else if(confItem[GetSetting("S_HUDOSDSW")].value()==3) 
+         ConfigLayout[1][i]=CONFIG16_3[i];
+       else if(confItem[GetSetting("S_HUDOSDSW")].value()==2) 
+         ConfigLayout[1][i]=CONFIG16_2[i];
+       else if(confItem[GetSetting("S_HUDOSDSW")].value()==1) 
+         ConfigLayout[1][i]=CONFIG16_1[i];
+       else  
+         ConfigLayout[1][i]=CONFIG16_0[i];
 
    int minimalscreen=0;
    if (toggleModeItems[8].getValue()>0) minimalscreen=1 ;
 
-   if (((SimPosn[i]&DISPLAY_MIN_OFF)>0)&&(minimalscreen==1)||((SimPosn[i]&0xF000)==0)){
-      SimPosn[i]=0x3FF;
+   if (minimalscreen==1){
+      SimPosn[i]=ConfigLayout[1][i];
    }
    else {
-      SimPosn[i]=SimPosn[i]&0x1FF;
+      SimPosn[i]=ConfigLayout[0][i];
    }
+
+   if (SimPosn[i]<0x4000){
+     SimPosn[i]=0x3FF; 
+   }
+   else{
+   SimPosn[i]=SimPosn[i]&0x3FF;
+ }
+   
   }
 
   if(confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() > 0) displayHorizon(int(MW_Pitch_Roll.arrayValue()[0])*10,int(MW_Pitch_Roll.arrayValue()[1])*10*-1);
@@ -1207,6 +1244,8 @@ void draw() {
   ShowDirection();
  }
  
+  ShowMapMode();
+    
   MatchConfigs();
   MakePorts();
   
