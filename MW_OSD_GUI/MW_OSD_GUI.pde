@@ -86,6 +86,7 @@ int  SportPosition = 32;
 int  ModePosition = 33;
 int  MapModePosition = 34;
 int  MapCenterPosition = 35;
+int  APstatusPosition = 36;
 
 int MSP_sendOrder =0;
 PImage img_Clear,OSDBackground,RadioPot;
@@ -1248,6 +1249,7 @@ void draw() {
   displayHeading();
   ShowDebug();
   ShowSideBarArrows();
+  ShowAPstatus();
 
   if(confItem[GetSetting("S_DISPLAYGPS")].value() > 0) {
   ShowGPSAltitude();

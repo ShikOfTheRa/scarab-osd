@@ -1,65 +1,59 @@
 /*
-Changelog: R1.a1.b0
-+ Filter changed to 8 point ring + optional 2nd stage expo filter
-+ All sensors now filtered - Battery / Video / Current / RSSI PWM RSSI
-+ MWII sensor data remains as from FC
-+ Vid voltage divider moved to "approx" same as main voltage
-+ Vidvoltage added to OSD menu - with visual display
-+ Zero amps adjust added to OSD menu
-+ RSSI adjust max + min added to OSD menu
-+ Amps and volts in the OSD menu now in Human readable form
-+ Heading correction option for to support Baseflight & others added to config.h file
-+ Added the plane support changes into a #define for config.h
-+ Freed up memory for future additions
-+ I2C GPS distance fix - for OSD with issues at distance > 650m 
+Key Improvements for `R1.2`:- OSD
 
-Changelog: R1.a2.b1
-bugfix: compass heading reversed in baseflight mode
-bugfix: now able to disable mode icon if required
-bugfix: MWII RSSI bug fixed
-bugfix: incorrect anal pin handling
-+ added additional smoothing filter
-+ added ability to hide ARMED/DISARMED status via config.H if required
-+ added fastpixel support - *may* improve display for hi-res cameras 650tvl+
-+ added brightness support into config.h
-+ added amperage support from multiwii - haydent                     
-+ added FRSKY hub support - cell voltage / current / baro - haydent
-+ added option to hid voltage, video voltage and timer within options for OSD config.h switch control
-+ added current used back into flight summary screen
-+ added GPS timezone and options into OSD menu - haydent
-+ added default startup delay - support for MAX chip voltage rise issue - suggested by bicycle
-+ GUI: renamed reset to defaults for extra clarity
-+ GUI: task switcher for faster serial. Closer to realtime - PatrikE 
++ OSD - Support for HUD layouts set by GUI
++ GUI - 8 Preset OSD layouts can be selected from GUI
 
-Changelog: R1.x
-+ added sats warning if <5 sats - suggested by disq
-+ added freetext that can be enabled / displayed using LLIGHT SWITCH
++ OSD - 2 Layouts can be assigned to OSD SWITCH
++ OSD - OSD ready for future GUI with option to define custom layout
++ OSD - Increased Amperage display to 999A
++ OSD - Increased resolution of MAP mode by approx 900%
++ OSD - MAP mode operation changed - Legacy retained as option
++ OSD - autodisplay FRSKY cell data if connected
++ OSD - Added default Baseflight amperage and heading correction support
++ OSD - vario font amended for sharper display
++ OSD - MAX chip startup delay configurable for boards with low voltage rise time
++ OSD - AUTOPILOT indicator as default. Legacy RTH distance retained as option
++ OSD - Fixedwing Passthrough MODE display support(PatrikE)
++ OSD - Sats warning if <5 sats
 
-Under review for next release:
++ GUI: Layouts can be assigned to OSD SWITCH. Choice reflected on GUI sim
++ GUI: Simulator - Add FRSKY cells to simulator
++ GUI: Simulator - Display GPS time and support when OSD GPSTIME enabled
++ GUI: Simulator - Added support to show map mode
++ GUI: Many changes to support OSD changes
+
++ CONFIG - All major options are now supported by default within memory
++ CONFIG - Added support for boards with different resistors / pinout
++ CONFIG - Specified support for HARIKIRI / BASEFLIGHT / MULTIWII
++ CONFIG - Added specified support for witespy v2 boards
++ CONFIG - Amperage support for MW2.4 changes
++ CONFIG - Baud rate option in config.h
++ CONFIG - FRSKY SPORT option in config.h
++ CONFIG - FAST PWM RX RSSI support
++ CONFIG - Intro delay option in config.h
++ CONFIG - Time zone intro display option in config.h
++ CONFIG - Freetext displayed using a switch (e.g. "TARGET LOCK" indicator !)
+
+bugfix - GPS time ignored when GPSTIME disabled in config
+bugfix - min_cell volt correction
+bugfix - Fix for RSSI when tx switched off (negative value)
+
+
+Requests under review for future releases:
 
 Callsign
-  - Permananet / timed display
-  - Choose location
-  - GUI to support
-  - Provide location
-  - Triggered by a switch - use for text display - .e.g missile lock LOL....
-  
+  - GUI to support location  
+Power consumtion W/Hr  
 Add "Disarmed" enable / disable option to GUI
-Migrate OSD switch to toggle switch - flip between sceen layouts
 Alarms for distance / Altitude / Speed / mah / Current
 Add description chracter font for for heading / angle to home
-Double resolution for MAP mode
 Additional MAP mode
-Multiple HUD choices
+Increased HUD layout choices
  - different layouts
  - different sidebars
- - different default positions and items enabled / disabled
+ - Full GUI customisable layout
 Display anal / PWM sensors on GUI - via MW OSD protocol
-Improve PWM RSSI filtering for extreme values. Recheck or constrain value
-Migrate relevant items from config.h to GUI
-OSD Menu
- - re-add timezone correction into menu
- - review and add additional features where possible
  
 Review alternative look / feel
  - Sensor indicator ICONS
@@ -71,14 +65,10 @@ Review alternative look / feel
  - Longer VARIO option
  - Map mode distance indicator
  - Revised startup display
- - Add clear AUTOPILOT / PILOT ASSIST type text message
  - LARGE FONT
 
 Code quality
  - Tidy up float calcs
  - Generally review and improve code quality
- - Reduce memory for future functionality 
-
- GUI todo:
  
 */     

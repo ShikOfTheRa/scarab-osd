@@ -381,12 +381,12 @@ LINE01+15 |DISPLAY_NEVER,   // MwGPSLonPositionTop      // On top of screen
 LINE12+2 |DISPLAY_NEVER,   // rssiPosition
 LINE09+2 |DISPLAY_NEVER,   // temperaturePosition
 LINE13+3 |DISPLAY_ALWAYS,  // voltagePosition
-LINE11+3 |DISPLAY_NEVER,   // vidvoltagePosition
+LINE11+3 |DISPLAY_ALWAYS,   // vidvoltagePosition
 LINE13+13 |DISPLAY_NEVER,   // amperagePosition
 LINE13+23 |DISPLAY_NEVER,   // pMeterSumPosition
 LINE05+7 |DISPLAY_NEVER,   // horizonPosition
-LINE07+7 |DISPLAY_ALWAYS,   // SideBarPosition
-LINE07+7 |DISPLAY_ALWAYS,   // SideBarScrollPosition
+LINE07+7 |DISPLAY_NEVER,   // SideBarPosition
+LINE07+7 |DISPLAY_NEVER,   // SideBarScrollPosition
 LINE10+10 |DISPLAY_NEVER,   // CallSign Position
 LINE08+10 |DISPLAY_NEVER,   // Debug Position
 LINE05+2 |DISPLAY_NEVER,   // Gimbal Position
