@@ -569,7 +569,7 @@ const char APHOLDtext[] PROGMEM = "AUTO HOLD";
 
 
 // For Intro
-const char message0[] PROGMEM = "MULTIWII MWOSD - R1.1";
+const char message0[] PROGMEM = "MULTIWII MWOSD - R1.2";
 //const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
 //const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
 const char message5[] PROGMEM = "MW VERSION:";
