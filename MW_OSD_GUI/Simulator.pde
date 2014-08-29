@@ -620,6 +620,27 @@ void ShowRSSI(){
   makeText(output + "%", SimPosn[rssiPosition]+1);
 }}
 
+void ShowAPstatus(){
+   if (SimPosn[APstatusPosition]==0x3FF)
+      return;
+
+  String output="";
+  int SimModebits = 0;
+  int SimBitCounter = 1;
+    for (int i=0; i<boxnames.length; i++) {
+      if(toggleModeItems[i].getValue() > 0) SimModebits |= SimBitCounter;
+      SimBitCounter += SimBitCounter;
+}
+  if((SimModebits&mode_gpshome) >0){
+  output = "AUTOPILOT";
+    }
+  else if((SimModebits&mode_gpshold) >0){
+  output = "AUTO HOLD";
+  }
+  makeText(output, SimPosn[APstatusPosition]);
+}
+
+
 void ShowAmperage(){
   if(confItem[GetSetting("S_AMPER_HOUR")].value() > 0) {
   mapchar(0xa4, SimPosn[pMeterSumPosition]);
@@ -794,11 +815,11 @@ void displayMode()
     if((SimModebits&mode_gpshome) >0){
       mapchar(0x9d,SimPosn[ModePosition]);
       mapchar(0x9e,SimPosn[ModePosition]+1);
-      mapchar(0x2d,SimPosn[ModePosition]+2);
+//      mapchar(0x2d,SimPosn[ModePosition]+2);
 //      mapchar(0x9e,SimPosn[statusPosition]+3);
-      String output = str(int(SGPS_distanceToHome.getValue()));
-      makeText(output,SimPosn[ModePosition]+3);
-      mapchar(0x0c,SimPosn[ModePosition]+3+output.length());
+//      String output = str(int(SGPS_distanceToHome.getValue()));
+//      makeText(output,SimPosn[ModePosition]+3);
+//      mapchar(0x0c,SimPosn[ModePosition]+3+output.length());
     }
     else if((SimModebits&mode_gpshold) >0){
       mapchar(0xcd,SimPosn[ModePosition]);
@@ -1036,7 +1057,7 @@ int SYM_DIRECTION = 0x72;
   int armedangle=0;
 //  int MwHeading=Mwheading;
   
-  if (1==1) {
+  if (1==0) {
     angle=(360+180+GPS_directionToHome-armedangle)%360;
   }
   else {
@@ -1121,21 +1142,26 @@ int SYM_DIRECTION = 0x72;
     mapsymboltarget = SYM_DIRECTION + tmp;
   }
 */
+ 
     int symx = (int)abs(targetx)%2;
     int symy = (int)abs(targety)%3;
     if (ydir==1)
       symy=2-symy;
     if (xdir==-1)
       symx=1-symx;
+    if (abs(targety)<3)
+      symy = 1 - ydir;
+    if (abs(targetx)<2){
+      if (targetx<0)
+        symx=0;
+      else
+        symx=1;
+    }
     tmp = 0xD0 + symy + (symx*3);
-
-
-
+//System.out.println(xdir+" "+ydir+" "+symx+" "+symy+" "+targetx+" "+targety+" "+tmp);
   mapchar(mapsymbolrange,SimPosn[MapModePosition]);
   mapchar(tmp,targetpos);
  
-
-
 }
 
 
