@@ -133,8 +133,8 @@ void serialMSPCheck()
 
   if (cmdMSP==MSP_STATUS)
   {
-    read16();//cycleTime=read16();
-    read16();//I2CError=read16();
+    cycleTime=read16();
+    I2CError=read16();
     MwSensorPresent = read16();
     MwSensorActive = read32();
     armed = (MwSensorActive & mode.armed) != 0;
@@ -188,7 +188,7 @@ void serialMSPCheck()
     for(uint8_t i=0;i<2;i++)
       MwAngle[i] = read16();
     MwHeading = read16();
-#ifdef BASEFLIGHT
+#ifdef HEADINGCORRECT
     if (MwHeading >= + 180) MwHeading -= 360;
 #endif
     read16();
@@ -218,7 +218,7 @@ void serialMSPCheck()
     pMeterSum=read16();
     MwRssi = read16();
     MWAmperage = read16();
- #ifdef BASEFLIGHT
+ #ifdef AMPERAGECORRECT
     MWAmperage = MWAmperage * 10;
 #endif
  }

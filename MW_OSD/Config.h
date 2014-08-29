@@ -1,9 +1,6 @@
 /*--------------------------       configurable parameters      ----------------------------------------------------*/
 
-
-
 /********************       FEATURES      *********************/
-// Currently there is not enough memory to run all options
 // Disable features if you require memory for other features
 // Further configuration may be require elsewhere in config.h + option enabled on GUI
 #define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
@@ -25,8 +22,9 @@
 
 
 /********************       FILTER settings      *********************/
+// Choose only one of the following
 #define STAGE2FILTER              // Enable for smoother readings of voltage / current / RSSI. 
-//#define SMOOTHFILTER              // Enable for smoothest readings of voltage / current / RSSI. Uses more memory. NOT FINISHED
+//#define SMOOTHFILTER              // Enable for smoothest readings of voltage / current / RSSI. Uses more memory. Prototype
 
 
 /********************       RSSI settings      *********************/
@@ -34,10 +32,12 @@
 
 
 /********************       CONTROLLER settings      *********************/
-//#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / others to correct for incorrect heading
-//#define HARIKIRI                  // Undefine this if you are using HARIKIRI for compatibility
+//#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / others to correct for heading dispaly issues
+//#define HARIKIRI                  // Undefine this if you are using HARIKIRI (for BOXNAMES compatibility)
 //#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE - to use GPS heading and altitude instead of BARO/MAG
-//#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1
+//#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
+#define MULTIWII_V23              // Undefine this if you are using MW versions 2.2/2.3  
+//#define MULTIWII_V24              // Undefine this if you are using MW versions 2.4  
 
 
 /********************       CALLSIGN settings      *********************/
@@ -53,8 +53,9 @@
 
 
 /********************       MAP MODE Settings       *********************/
-#define MAPTYPE 1                   // 1 for MAP - home is center, map shows location of aircraft relative to home 
-                                    // 0 for RADAR - home is aircraft, map shows location of home relative to aircraft 
+#define MAPTYPE 0                   // 0 for RADAR - home is aircraft, map shows location of home relative to aircraft 
+                                    // 1 for MAP - home is center, map shows location of aircraft relative to home 
+//#define MAPRESLOW                 // enable to use low res original directional arrow in map mode 1. Disable to use high res position 
 //#define MAPMODENORTH              // Enable to use North as MAP reference in MODE 1 instead of take off direction (Default = disable) 
 
 
@@ -70,14 +71,17 @@
 
 /********************       Display Settings         ************************/
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
-//#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts some lines down
+//#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x10=90%0x11=80%  default is 0x01=100%,
 #define INTRO_DELAY 8             // Seconds intro screen should show for. Default is 8 
-//#define TIMEZONESTARTUP             // Enable to display timezone at startup - if GPS TIME is enabled
+//#define TIMEZONESTARTUP           // Enable to display timezone at startup - if GPS TIME is enabled
+#define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 
+/********************       Serial speed settings      *********************/
+#define BAUDRATE 115200              // Serial comms speed               
 
 
 
@@ -99,25 +103,39 @@
 #define PAGE8 //GPS TIME
 
 
-/********************  LEGACY compatibility **********************/
+/********************  CONTROLLER compatibility **********************/
+#ifdef BASEFLIGHT                     
+    #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
+    #define HEADINGCORRECT          // required to use alternative MW heading -180 to +180
+#endif
 #ifdef HARIKIRI                     
     #define BOXNAMES                // required to support HARIKIRI
 #endif
 #ifdef MULTIWII_V21                     
     #define BOXNAMES                // required to support multiwii 2.1 / 2.0
 #endif
+#ifdef MULTIWII_V24                     
+    #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
+#endif
+#ifdef FIXEDWING                     
+#endif
 
-/********************       ADVANCED HARDWARE settings      *********************/
+
+/********************  ADVANCED HARDWARE settings      *********************/
 //#define TEMPSENSOR                // Enable if you have a hardware temperature sensor
 //#define STARTUPDELAY 2000         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
 
-/********************       HARDWARE PINS settings      *********************/
+/********************  HARDWARE PINS settings      *********************/
 #define AMPERAGEPIN   A1
 #define TEMPPIN       A6           
 #define RSSIPIN       A3              
 #define PWMRSSIPIN    A3              
 #define LEDPIN        7
+
+
+/********************  OSD HARDWARE BOARD SPECIFIC settings      *********************/
+
 #ifdef RUSHDUINO                     
     # define MAX7456SELECT 10        // ss 
     # define MAX7456RESET  9         // RESET

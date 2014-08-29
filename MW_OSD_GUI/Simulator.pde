@@ -237,7 +237,7 @@ SGPS_altitude = ScontrolP5.addNumberbox("SGPS_altitude",0,5,40,40,14);
     SGPS_distanceToHome.setMax(1000);
     SGPS_distanceToHome.setDecimalPrecision(0);
     SGPS_distanceToHome.setGroup(SGGPS); 
-    SGPS_distanceToHome.setValue(500);
+    SGPS_distanceToHome.setValue(350);
  ScontrolP5.getController("SGPS_distanceToHome").getCaptionLabel()
    .align(ControlP5.LEFT, ControlP5.RIGHT_OUTSIDE).setPaddingX(45);   
                  
@@ -273,7 +273,7 @@ SGPS_altitude = ScontrolP5.addNumberbox("SGPS_altitude",0,5,40,40,14);
  
  HeadingKnob = ScontrolP5.addKnob("MwHeading")
    .setRange(-180,+180)
-   .setValue(-90)
+   .setValue(0)
    .setPosition(25,80)
    .setRadius(25)
    .setLabel("Heading")
@@ -623,7 +623,7 @@ void ShowRSSI(){
 void ShowAmperage(){
   if(confItem[GetSetting("S_AMPER_HOUR")].value() > 0) {
   mapchar(0xa4, SimPosn[pMeterSumPosition]);
-  makeText("1221", SimPosn[pMeterSumPosition]);
+  makeText("1221", SimPosn[pMeterSumPosition]+1);
 }}
 
 void ShowTemp(){
@@ -829,9 +829,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
   int minimalscreen=0 ; 
   if (toggleModeItems[8].getValue()>0) minimalscreen=1 ;
 
-   if (SimPosn[horizonPosition]==0x3FF){
-      return;
-   }
+   if (SimPosn[horizonPosition]<0x3FF){
 
   
   if(pitchAngle>250) pitchAngle=250;                //250
@@ -881,8 +879,9 @@ void displayHorizon(int rollAngle, int pitchAngle)
     mapchar(0x00, 224-30-1);
     mapchar(0xbc, 224-30+1);
   }
+  }
   
-  //if (WITHDECORATION){
+if (SimPosn[SideBarPosition]<0x3FF){
   if(confItem[GetSetting("S_WITHDECORATION")].value() > 0) {
     mapchar(0xC7,128);
     mapchar(0xC7,128+30);
@@ -898,11 +897,14 @@ void displayHorizon(int rollAngle, int pitchAngle)
     mapchar(0x03, 219-30);
   }
 }
+}
 
-void ShowSideBArArrows(){
-   if (SimPosn[horizonPosition]==0x3FF){
+void ShowSideBarArrows(){
+   if (SimPosn[horizonPosition]==0x3FF)
       return;
-   }
+   if (SimPosn[SideBarScrollPosition]==0x3FF)
+      return;
+   
 
 
   if(confItem[GetSetting("S_SIDEBARTOPS")].value() > 0) {
@@ -1030,11 +1032,12 @@ int SYM_DIRECTION = 0x72;
   int mapsymbolrange=0;
   int tmp=0;
   int GPS_directionToHome=int(SGPSHeadHome.value());
+    if(GPS_directionToHome < 0) GPS_directionToHome += 360;
   int armedangle=0;
 //  int MwHeading=Mwheading;
   
   if (1==1) {
-    angle=(360+180-GPS_directionToHome-armedangle)%360;
+    angle=(360+180+GPS_directionToHome-armedangle)%360;
   }
   else {
     angle=GPS_directionToHome;  
@@ -1085,14 +1088,14 @@ int SYM_DIRECTION = 0x72;
     mapsymbolrange=SYM_RANGE_MAX;
   }
 
-  targetx = int(xdir*map(x, 0, range, 0, 5));
-  targety = int(ydir*map(y, 0, range, 0, 5));
-//       mapchar(0xa0,SimPosn[sensorPosition]);
+  targetx = int(xdir*map(x, 0, range, 0, 16));
+  targety = int(ydir*map(y, 0, range, 0, 15));
  
   centerpos=SimPosn[MapCenterPosition];
-  targetpos= centerpos + targetx + (LINE*targety); 
+  targetpos= centerpos + (targetx/2) + (LINE*(targety/3)); 
 
-  if (1==1) {
+
+  if (1==0) {
     mapsymbolcenter = SYM_HOME;
     mapsymboltarget = SYM_AIRCRAFT;
   }
@@ -1101,17 +1104,31 @@ int SYM_DIRECTION = 0x72;
     mapsymboltarget = SYM_HOME;
   }
   
-//  screenBuffer[0] = mapsymbolcenter;
-//  MAX7456_WriteString(screenBuffer,centerpos);
   mapchar(mapsymbolcenter,centerpos);
 
-  if (1==1) {
+/*
+  if (1==0) {
     tmp=(360+382+MwHeading-armedangle)%360/45;
     tmp = SYM_DIRECTION + tmp;
   }
   else {
     tmp = mapsymboltarget;
   }
+*/
+
+/*  if (MAPTYPE==1) {
+    tmp=(360+382+MwHeading-armedangle)%360/45;
+    mapsymboltarget = SYM_DIRECTION + tmp;
+  }
+*/
+    int symx = (int)abs(targetx)%2;
+    int symy = (int)abs(targety)%3;
+    if (ydir==1)
+      symy=2-symy;
+    if (xdir==-1)
+      symx=1-symx;
+    tmp = 0xD0 + symy + (symx*3);
+
 
 
   mapchar(mapsymbolrange,SimPosn[MapModePosition]);

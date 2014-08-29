@@ -76,14 +76,16 @@ int  vidvoltagePosition = 22;
 int  amperagePosition = 23;
 int  pMeterSumPosition = 24;
 int  horizonPosition = 25;
-int  callSignPosition = 26;
-int  debugPosition = 27;
-int  gimbalPosition = 28;
-int  GPS_timePosition = 29;
-int  SportPosition = 30;
-int  ModePosition = 31;
-int  MapModePosition = 32;
-int  MapCenterPosition = 33;
+int  SideBarPosition =26; 
+int  SideBarScrollPosition = 27;
+int  callSignPosition = 28;
+int  debugPosition = 29;
+int  gimbalPosition = 30;
+int  GPS_timePosition = 31;
+int  SportPosition = 32;
+int  ModePosition = 33;
+int  MapModePosition = 34;
+int  MapCenterPosition = 35;
 
 int MSP_sendOrder =0;
 PImage img_Clear,OSDBackground,RadioPot;
@@ -488,8 +490,8 @@ int[] ConfigRanges = {
 1023,  // S_AMPMIN,
 255,   // S_AMPMAXL,
 3,     // S_AMPMAXH,
-4,     // S_HUD,  
-4,     // S_HUDOSDSW,  
+7,     // S_HUD,  
+7,     // S_HUDOSDSW,  
 255,
 255,
  255,
@@ -1169,7 +1171,13 @@ void draw() {
 
 
  for(int i = 0; i < (CONFIGITEMS16); i++){
-       if(confItem[GetSetting("S_HUD")].value()==4) 
+       if(confItem[GetSetting("S_HUD")].value()==7) 
+         ConfigLayout[0][i]=CONFIG16_7[i];
+       else if(confItem[GetSetting("S_HUD")].value()==6) 
+         ConfigLayout[0][i]=CONFIG16_6[i];
+       else if(confItem[GetSetting("S_HUD")].value()==5) 
+         ConfigLayout[0][i]=CONFIG16_5[i];
+       else if(confItem[GetSetting("S_HUD")].value()==4) 
          ConfigLayout[0][i]=CONFIG16_4[i];
        else if(confItem[GetSetting("S_HUD")].value()==3) 
          ConfigLayout[0][i]=CONFIG16_3[i];
@@ -1181,7 +1189,13 @@ void draw() {
          ConfigLayout[0][i]=CONFIG16_0[i];
 
 
-       if(confItem[GetSetting("S_HUDOSDSW")].value()==4) 
+       if(confItem[GetSetting("S_HUDOSDSW")].value()==7) 
+         ConfigLayout[1][i]=CONFIG16_7[i];
+       else if(confItem[GetSetting("S_HUDOSDSW")].value()==6) 
+         ConfigLayout[1][i]=CONFIG16_6[i];
+       else if(confItem[GetSetting("S_HUDOSDSW")].value()==5) 
+         ConfigLayout[1][i]=CONFIG16_5[i];
+       else if(confItem[GetSetting("S_HUDOSDSW")].value()==4) 
          ConfigLayout[1][i]=CONFIG16_4[i];
        else if(confItem[GetSetting("S_HUDOSDSW")].value()==3) 
          ConfigLayout[1][i]=CONFIG16_3[i];
@@ -1233,7 +1247,7 @@ void draw() {
   displayHeadingGraph();
   displayHeading();
   ShowDebug();
-  ShowSideBArArrows();
+  ShowSideBarArrows();
 
   if(confItem[GetSetting("S_DISPLAYGPS")].value() > 0) {
   ShowGPSAltitude();
