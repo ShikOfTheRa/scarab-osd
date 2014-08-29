@@ -156,15 +156,23 @@ void displayMode(void)
     }
  
     if(MwSensorActive&mode.gpshome){
-      screenBuffer[8]=0;
       screenBuffer[0] = SYM_GHOME;
       screenBuffer[1] = SYM_GHOME1;
+#ifdef APINDICATOR
+      displayAPstatus();
+      screenBuffer[2]=0;
+#else
       screenBuffer[2] = SYM_COLON;
+      screenBuffer[8]=0;
+#endif
     }
     else if(MwSensorActive&mode.gpshold){
       screenBuffer[2]=0;
       screenBuffer[0] = SYM_GHOLD;
       screenBuffer[1] = SYM_GHOLD1;
+#ifdef APINDICATOR
+      displayAPstatus();
+#endif
     }
     else if(MwSensorActive&mode.stable){
       screenBuffer[2]=0;
@@ -252,8 +260,6 @@ void displayCallsign(int cposition)
 //************************************************************************************************************************************************************************************
 void displayHorizon(int rollAngle, int pitchAngle)
 {
-  if(!fieldIsVisible(horizonPosition))
-    return;
 
 #ifdef HORIZON
 
@@ -310,58 +316,59 @@ void displayHorizon(int rollAngle, int pitchAngle)
   if(pitchAngle<-250) pitchAngle=-250;
   if(rollAngle>400) rollAngle=400;
   if(rollAngle<-400) rollAngle=-400;
-pitchAngle=pitchAngle+10;
-if(Settings[S_DISPLAY_HORIZON_BR]){
-  for(uint8_t X=0; X<=8; X++) {
-    if (X==3) X=6;
-    int Y = (rollAngle * (4-X)) / 64;
-    Y -= pitchAngle / 8;
-    Y += 41;
-    if(Y >= 0 && Y <= 81) {
-      uint16_t pos = position + LINE*(Y/9) + 3 - 2*LINE + X;
-      screen[pos] = SYM_AH_BAR9_0+(Y%9);
-    }
-  }
-        
-if (Settings[S_HORIZON_ELEVATION]){                   
+  pitchAngle=pitchAngle+10;
 
-    for(int X=2; X<=6; X++) {
-    if (X==4) X=5;
-    int Y = (rollAngle * (4-X)) / 64;
-    Y -= pitchAngle / 8;
-    Y += 41;
-    if(Y >= 0 && Y <= 81) {
-      uint16_t pos = position + LINE*(Y/9) + 3 - 2*LINE + X;
-    pos = pos - 3*LINE;
-    if(pos >= 60 && pos <= 360) 
-      screen[pos] = SYM_AH_BAR9_0+(Y%9);
-    pos = pos + 2*3*LINE;
-    if(pos >= 60 && pos <= 330) 
-      screen[pos] = SYM_AH_BAR9_0+(Y%9);
+  if(Settings[S_DISPLAY_HORIZON_BR]&fieldIsVisible(horizonPosition)){
+//if(fieldIsVisible(horizonPosition))
+    for(uint8_t X=0; X<=8; X++) {
+      if (X==3) X=6;
+      int Y = (rollAngle * (4-X)) / 64;
+      Y -= pitchAngle / 8;
+      Y += 41;
+      if(Y >= 0 && Y <= 81) {
+        uint16_t pos = position + LINE*(Y/9) + 3 - 2*LINE + X;
+        screen[pos] = SYM_AH_BAR9_0+(Y%9);
+      }
+    }
+        
+    if (Settings[S_HORIZON_ELEVATION]){                   
+      for(int X=2; X<=6; X++) { 
+        if (X==4) X=5;
+        int Y = (rollAngle * (4-X)) / 64;
+        Y -= pitchAngle / 8;
+        Y += 41;
+        if(Y >= 0 && Y <= 81) {
+          uint16_t pos = position + LINE*(Y/9) + 3 - 2*LINE + X;
+        pos = pos - 3*LINE;
+        if(pos >= 60 && pos <= 360) 
+          screen[pos] = SYM_AH_BAR9_0+(Y%9);
+        pos = pos + 2*3*LINE;
+        if(pos >= 60 && pos <= 330) 
+          screen[pos] = SYM_AH_BAR9_0+(Y%9);
+        }
+      }
+    }
+    if(!fieldIsVisible(MapModePosition)){
+      if(Settings[S_DISPLAY_HORIZON_BR]){
+        screen[position+2*LINE+7-1] = SYM_AH_CENTER_LINE;
+        screen[position+2*LINE+7+1] = SYM_AH_CENTER_LINE_RIGHT;
+        screen[position+2*LINE+7] =   SYM_AH_CENTER;
+      }
     }
   }
- 
-}
-}
-  if(!fieldIsVisible(MapModePosition)){
-    if(Settings[S_DISPLAY_HORIZON_BR]){
-      screen[position+2*LINE+7-1] = SYM_AH_CENTER_LINE;
-      screen[position+2*LINE+7+1] = SYM_AH_CENTER_LINE_RIGHT;
-      screen[position+2*LINE+7] =   SYM_AH_CENTER;
-    }
-  }
-  if (Settings[S_WITHDECORATION]){
+
+  if (Settings[S_WITHDECORATION]&fieldIsVisible(SideBarPosition)){
     // Draw AH sides
     screen[position+2*LINE+1] =   SYM_AH_LEFT;
     screen[position+2*LINE+13] =  SYM_AH_RIGHT;
-  for(int X=0; X<=4; X++) {
-    screen[position+X*LINE] =     SYM_AH_DECORATION_LEFT;
-    screen[position+X*LINE+14] =  SYM_AH_DECORATION_RIGHT;
-  }
+    for(int X=0; X<=4; X++) {
+      screen[position+X*LINE] =     SYM_AH_DECORATION_LEFT;
+      screen[position+X*LINE+14] =  SYM_AH_DECORATION_RIGHT;
+    }
 
 #ifdef SBDIRECTION
 
-    if (Settings[S_SIDEBARTOPS]) {
+    if (Settings[S_SIDEBARTOPS]&fieldIsVisible(SideBarScrollPosition)) {
       if (millis()<(sidebarsMillis + 1000)) {
         if (sidebarsdir == 2){
           screen[position-LINE] = SYM_AH_DECORATION_UP;
@@ -397,22 +404,7 @@ void displayVoltage(void)
   }
 
   if (Settings[S_SHOWBATLEVELEVOLUTION]){
-    // For battery evolution display
 
-/*    int BATTEV1 =Settings[S_BATCELLS] * 35;
-    int BATTEV2 =Settings[S_BATCELLS] * 36;
-    int BATTEV3 =Settings[S_BATCELLS] * 37;
-    int BATTEV4 =Settings[S_BATCELLS] * 38;
-    int BATTEV5 =Settings[S_BATCELLS] * 40;
-    int BATTEV6 = Settings[S_BATCELLS] * 41;
-    if (voltage < BATTEV1) screenBuffer[0]=SYM_BATT_EMPTY;
-    else if (voltage < BATTEV2) screenBuffer[0]=SYM_BATT_1;
-    else if (voltage < BATTEV3) screenBuffer[0]=SYM_BATT_2;
-    else if (voltage < BATTEV4) screenBuffer[0]=SYM_BATT_3;
-    else if (voltage < BATTEV5) screenBuffer[0]=SYM_BATT_4;
-    else if (voltage < BATTEV6) screenBuffer[0]=SYM_BATT_5;
-    else screenBuffer[0]=SYM_BATT_FULL;                              // Max charge icon
-*/
     int battev=voltage/Settings[S_BATCELLS];
     battev=constrain(battev,34,42);
     battev = map(battev, 34, 42, 0, 6);
@@ -533,6 +525,16 @@ void displayRSSI(void)
   MAX7456_WriteString(screenBuffer,getPosition(rssiPosition)-1);
 }
 
+void displayAPstatus()
+{
+  if(!fieldIsVisible(APstatusPosition))
+    return;
+  if (MwSensorActive&mode.gpshold) 
+    MAX7456_WriteString_P(APHOLDtext,getPosition(APstatusPosition));
+  else
+    MAX7456_WriteString_P(APRTHtext,getPosition(APstatusPosition));
+  
+}
 
 void displayHeading(void)
 {
@@ -591,14 +593,14 @@ void displayIntro(void)
   if(Settings[S_GPSTZAHEAD] || Settings[S_GPSTZ] == 0)screenBuffer[0] = '+';
   else screenBuffer[0] = '-';   
   MAX7456_WriteString(screenBuffer, MWOSDVersionPosition+LINE+LINE+LINE+LINE+8); 
+//more settings
+  MAX7456_WriteString_P(message11, MWOSDVersionPosition+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE);
 #endif
 #endif
 //menu instruct
   MAX7456_WriteString_P(message6, MWOSDVersionPosition+LINE+LINE+LINE+LINE+LINE+LINE);
   MAX7456_WriteString_P(message7,  MWOSDVersionPosition+LINE+LINE+LINE+LINE+LINE+LINE+LINE+10);
   MAX7456_WriteString_P(message8,  MWOSDVersionPosition+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE+10);  
-//more settings
-  MAX7456_WriteString_P(message11, MWOSDVersionPosition+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE);
 }
 
 
@@ -1352,8 +1354,8 @@ void mapmode(void) {
     }  
 
   float rad  = angle * PI / 180;    // convert to radians  
-  uint16_t x = GPS_distanceToHome * sin(rad);
-  uint16_t y = GPS_distanceToHome * cos(rad);
+  uint16_t x = (uint16_t)(GPS_distanceToHome * sin(rad));
+  uint16_t y = (uint16_t)(GPS_distanceToHome * cos(rad));
 
   if (y > x) maxdistance=y;
   else maxdistance=x;
@@ -1374,11 +1376,11 @@ void mapmode(void) {
     mapsymbolrange=SYM_RANGE_MAX;
   }
 
-  targetx = xdir*map(x, 0, range, 0, 5);
-  targety = ydir*map(y, 0, range, 0, 5);
+  targetx = xdir*map(x, 0, range, 0, 16);
+  targety = ydir*map(y, 0, range, 0, 15);
   
   centerpos=getPosition(MapCenterPosition);
-  targetpos= centerpos + targetx + (LINE*targety); 
+  targetpos= centerpos + (targetx/2) + (LINE*(targety/3)); 
 
   if (MAPTYPE==1) {
     mapsymbolcenter = SYM_HOME;
@@ -1388,25 +1390,41 @@ void mapmode(void) {
     mapsymbolcenter = SYM_AIRCRAFT;
     mapsymboltarget = SYM_HOME;
   }
-  
-  screenBuffer[0] = mapsymbolcenter;
-  screenBuffer[1] = 0;
-  MAX7456_WriteString(screenBuffer,centerpos);
-
-  if (MAPTYPE==1) {
-    tmp=(360+382+MwHeading-armedangle)%360/45;
-    screenBuffer[0] = SYM_DIRECTION + tmp;
-  }
-  else {
-    screenBuffer[0] = mapsymboltarget;
-  }
-
-  screenBuffer[1] = 0;
-  MAX7456_WriteString(screenBuffer,targetpos);
 
   screenBuffer[0] = mapsymbolrange;
   screenBuffer[1] = 0;
   MAX7456_WriteString(screenBuffer,getPosition(MapModePosition));
+
+#ifdef MAPRESLOW
+  if (MAPTYPE==1) {
+    tmp=(360+382+MwHeading-armedangle)%360/45;
+    mapsymboltarget = SYM_DIRECTION + tmp;
+  }
+#else
+    int8_t symx = (int8_t)abs(targetx)%2;
+    int8_t symy = (int8_t)abs(targety)%3;
+    if (ydir==1)
+      symy=2-symy;
+    if (xdir==-1)
+      symx=1-symx;
+    if (abs(targety)<3)
+      symy = 1 - ydir;
+    if (abs(targetx)<2){
+      if (targetx<0)
+        symx=0;
+      else
+        symx=1;
+    }
+    mapsymboltarget = 0xD0 + symy + (symx*3);
+#endif
+
+  screenBuffer[0] = mapsymboltarget;
+  screenBuffer[1] = 0;
+  MAX7456_WriteString(screenBuffer,targetpos);
+
+  screenBuffer[0] = mapsymbolcenter;
+  screenBuffer[1] = 0;
+  MAX7456_WriteString(screenBuffer,centerpos);
  
 #endif
 }
@@ -1421,11 +1439,10 @@ void displayDebug(void)
 //  debug[0]=(int16_t)heapptr;
 //  debug[1]=(int16_t)stackptr;
 
-
-  debug[0]=0;
-  debug[1]=1;
-  debug[2]=2;
-  debug[3]=MwVersion;
+  debug[0]=I2CError;
+  debug[1]=cycleTime;
+  debug[2]=MwVersion;
+  debug[3]=0;
 
   for(uint8_t X=0; X<4; X++) {
     ItoaPadded(debug[X], screenBuffer+2,7,0);     
@@ -1455,24 +1472,6 @@ void displayCells(void){
       int tempvolt=constrain(volt,300,415);
       tempvolt = map(tempvolt,300,415,0,14);
       screenBuffer[i]=SYM_CELL0+tempvolt;
-/*
-      if (volt < 300) screenBuffer[i]=SYM_CELL0;//Min
-        else if (volt < 350) screenBuffer[i]=SYM_CELL1;
-        else if (volt < 355) screenBuffer[i]=SYM_CELL2;
-        else if (volt < 360) screenBuffer[i]=SYM_CELL3;
-        else if (volt < 365) screenBuffer[i]=SYM_CELL4;
-        else if (volt < 370) screenBuffer[i]=SYM_CELL5;
-        else if (volt < 375) screenBuffer[i]=SYM_CELL6;
-        else if (volt < 380) screenBuffer[i]=SYM_CELL7;
-        else if (volt < 385) screenBuffer[i]=SYM_CELL8;
-        else if (volt < 390) screenBuffer[i]=SYM_CELL9;
-        else if (volt < 395) screenBuffer[i]=SYM_CELLA;
-        else if (volt < 400) screenBuffer[i]=SYM_CELLB;
-        else if (volt < 405) screenBuffer[i]=SYM_CELLC;
-        else if (volt < 410) screenBuffer[i]=SYM_CELLD;
-        else if (volt < 415) screenBuffer[i]=SYM_CELLE;
-        else screenBuffer[i]=SYM_CELLF;//Max
-  */   
       }
       else screenBuffer[i]=' ';      
     }

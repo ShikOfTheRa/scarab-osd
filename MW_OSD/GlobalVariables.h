@@ -123,6 +123,9 @@ uint8_t armedtimer=255;
 uint16_t debugerror;
 uint16_t debugval=0;
 uint16_t cell_data[6];
+uint16_t cycleTime;
+uint16_t I2CError;
+
 
 // Config status and cursor location
 uint8_t screenlayout=0;
@@ -313,25 +316,25 @@ uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 
 uint16_t SCREENLAYOUT_DEFAULT[EEPROM_SETTINGS] = {
 
-LINE02+2+TOPSHIFT |DISPLAY_ALWAYS,  // GPS_numSatPosition
-LINE02+22+TOPSHIFT |DISPLAY_ALWAYS,   // GPS_directionToHomePosition
-LINE02+24+TOPSHIFT |DISPLAY_ALWAYS,   // GPS_distanceToHomePosition
+LINE02+2 |DISPLAY_ALWAYS,  // GPS_numSatPosition
+LINE02+22 |DISPLAY_ALWAYS,   // GPS_directionToHomePosition
+LINE02+24 |DISPLAY_ALWAYS,   // GPS_distanceToHomePosition
 LINE07+3 |DISPLAY_ALWAYS,   // speedPosition
-LINE05+24+TOPSHIFT |DISPLAY_ALWAYS,   // GPS_angleToHomePosition
-LINE03+24+TOPSHIFT |DISPLAY_ALWAYS,   // MwGPSAltPosition
+LINE05+24 |DISPLAY_ALWAYS,   // GPS_angleToHomePosition
+LINE03+24 |DISPLAY_ALWAYS,   // MwGPSAltPosition
 LINE02+6 |DISPLAY_ALWAYS,   // sensorPosition
-LINE04+24+TOPSHIFT |DISPLAY_ALWAYS,   // MwHeadingPosition
-LINE02+10+TOPSHIFT |DISPLAY_ALWAYS,   // MwHeadingGraphPosition
+LINE04+24 |DISPLAY_ALWAYS,   // MwHeadingPosition
+LINE02+10 |DISPLAY_ALWAYS,   // MwHeadingGraphPosition
 LINE07+23 |DISPLAY_ALWAYS,   // MwAltitudePosition
-LINE07+22+TOPSHIFT |DISPLAY_ALWAYS,   // MwClimbRatePosition
+LINE07+22 |DISPLAY_ALWAYS,   // MwClimbRatePosition
 LINE12+22 |DISPLAY_ALWAYS,   // CurrentThrottlePosition
 LINE13+22 |DISPLAY_ALWAYS,   // flyTimePosition
 LINE13+22 |DISPLAY_ALWAYS,   // onTimePosition
 LINE11+11 |DISPLAY_ALWAYS,   // motorArmedPosition
 LINE10+2 |DISPLAY_ALWAYS,   // MwGPSLatPosition
 LINE10+15 |DISPLAY_ALWAYS,   // MwGPSLonPosition
-LINE01+2+TOPSHIFT |DISPLAY_ALWAYS,   // MwGPSLatPositionTop      // On top of screen
-LINE01+15+TOPSHIFT |DISPLAY_ALWAYS,   // MwGPSLonPositionTop      // On top of screen
+LINE01+2 |DISPLAY_ALWAYS,   // MwGPSLatPositionTop      // On top of screen
+LINE01+15 |DISPLAY_ALWAYS,   // MwGPSLonPositionTop      // On top of screen
 LINE12+3 |DISPLAY_ALWAYS,   // rssiPosition
 LINE09+3 |DISPLAY_ALWAYS,   // temperaturePosition
 LINE13+3 |DISPLAY_ALWAYS,  // voltagePosition
@@ -339,39 +342,42 @@ LINE11+3 |DISPLAY_ALWAYS,   // vidvoltagePosition
 LINE13+9 |DISPLAY_ALWAYS,   // amperagePosition
 LINE13+16 |DISPLAY_ALWAYS,   // pMeterSumPosition
 LINE07+7 |DISPLAY_ALWAYS,   // horizonPosition
+LINE07+7 |DISPLAY_ALWAYS,   // SideBarPosition
+LINE07+7 |DISPLAY_ALWAYS,   // SideBarScrollPosition
 LINE10+10 |DISPLAY_ALWAYS,   // CallSign Position
 LINE08+10 |DISPLAY_ALWAYS,   // Debug Position
 LINE05+2 |DISPLAY_ALWAYS,   // Gimbal Position
 LINE12+11 |DISPLAY_ALWAYS,  // GPS_time Position
 LINE09+22 |DISPLAY_ALWAYS,   // SportPosition
 LINE04+2 |DISPLAY_ALWAYS,   // modePosition
-LINE02+22+TOPSHIFT |DISPLAY_NEVER,   // MapModePosition
-LINE07+15+TOPSHIFT |DISPLAY_NEVER,   // MapCenterPosition
+LINE02+22 |DISPLAY_NEVER,   // MapModePosition
+LINE07+15 |DISPLAY_NEVER,   // MapCenterPosition
+LINE04+10 |DISPLAY_ALWAYS,   // APstatusPosition
 
 };
 
 
 uint16_t SCREENLAYOUT_DEFAULT_OSDSW[EEPROM_SETTINGS] = {
 
-LINE02+2+TOPSHIFT |DISPLAY_NEVER,  // GPS_numSatPosition
-LINE13+19+TOPSHIFT |DISPLAY_ALWAYS,   // GPS_directionToHomePosition
-LINE02+12+TOPSHIFT  |DISPLAY_NEVER,   // GPS_distanceToHomePosition
-LINE02+3+TOPSHIFT  |DISPLAY_NEVER,   // speedPosition
-LINE05+24+TOPSHIFT |DISPLAY_NEVER,   // GPS_angleToHomePosition
-LINE03+24+TOPSHIFT |DISPLAY_NEVER,   // MwGPSAltPosition
+LINE02+2 |DISPLAY_NEVER,  // GPS_numSatPosition
+LINE13+19 |DISPLAY_ALWAYS,   // GPS_directionToHomePosition
+LINE02+12  |DISPLAY_NEVER,   // GPS_distanceToHomePosition
+LINE02+3  |DISPLAY_NEVER,   // speedPosition
+LINE05+24 |DISPLAY_NEVER,   // GPS_angleToHomePosition
+LINE03+24 |DISPLAY_NEVER,   // MwGPSAltPosition
 LINE02+6 |DISPLAY_NEVER,   // sensorPosition
-LINE04+24+TOPSHIFT |DISPLAY_NEVER,   // MwHeadingPosition
-LINE02+9+TOPSHIFT |DISPLAY_NEVER,   // MwHeadingGraphPosition
-LINE02+23+TOPSHIFT |DISPLAY_NEVER,   // MwAltitudePosition
-LINE07+23+TOPSHIFT |DISPLAY_NEVER,   // MwClimbRatePosition
+LINE04+24 |DISPLAY_NEVER,   // MwHeadingPosition
+LINE02+9 |DISPLAY_NEVER,   // MwHeadingGraphPosition
+LINE02+23 |DISPLAY_NEVER,   // MwAltitudePosition
+LINE07+23 |DISPLAY_NEVER,   // MwClimbRatePosition
 LINE12+22 |DISPLAY_NEVER,   // CurrentThrottlePosition
 LINE13+22 |DISPLAY_ALWAYS,   // flyTimePosition
 LINE13+22 |DISPLAY_ALWAYS,   // onTimePosition
 LINE11+11 |DISPLAY_ALWAYS,   // motorArmedPosition
 LINE10+2 |DISPLAY_NEVER,   // MwGPSLatPosition
 LINE10+15 |DISPLAY_NEVER,   // MwGPSLonPosition
-LINE01+2+TOPSHIFT |DISPLAY_NEVER,   // MwGPSLatPositionTop      // On top of screen
-LINE01+15+TOPSHIFT |DISPLAY_NEVER,   // MwGPSLonPositionTop      // On top of screen
+LINE01+2 |DISPLAY_NEVER,   // MwGPSLatPositionTop      // On top of screen
+LINE01+15 |DISPLAY_NEVER,   // MwGPSLonPositionTop      // On top of screen
 LINE12+2 |DISPLAY_NEVER,   // rssiPosition
 LINE09+2 |DISPLAY_NEVER,   // temperaturePosition
 LINE13+3 |DISPLAY_ALWAYS,  // voltagePosition
@@ -379,14 +385,17 @@ LINE11+3 |DISPLAY_NEVER,   // vidvoltagePosition
 LINE13+13 |DISPLAY_NEVER,   // amperagePosition
 LINE13+23 |DISPLAY_NEVER,   // pMeterSumPosition
 LINE05+7 |DISPLAY_NEVER,   // horizonPosition
+LINE07+7 |DISPLAY_ALWAYS,   // SideBarPosition
+LINE07+7 |DISPLAY_ALWAYS,   // SideBarScrollPosition
 LINE10+10 |DISPLAY_NEVER,   // CallSign Position
 LINE08+10 |DISPLAY_NEVER,   // Debug Position
 LINE05+2 |DISPLAY_NEVER,   // Gimbal Position
 LINE12+11 |DISPLAY_NEVER,  // GPS_time Position
 LINE09+22 |DISPLAY_NEVER,   // SportPosition
 LINE04+2 |DISPLAY_NEVER,   // modePosition
-LINE02+22+TOPSHIFT |DISPLAY_NEVER,   // MapModePosition
-LINE07+17+TOPSHIFT |DISPLAY_NEVER,   // MapCenterPosition
+LINE02+22 |DISPLAY_NEVER,   // MapModePosition
+LINE07+17 |DISPLAY_NEVER,   // MapCenterPosition
+LINE04+10 |DISPLAY_NEVER,   // APstatusPosition
 
 };
 
@@ -555,6 +564,8 @@ uint16_t flyingTime=0;
 
 const char disarmed_text[] PROGMEM = "DISARMED";
 const char armed_text[] PROGMEM = " ARMED";
+const char APRTHtext[] PROGMEM = "AUTOPILOT";
+const char APHOLDtext[] PROGMEM = "AUTO HOLD";
 
 
 // For Intro
@@ -711,6 +722,8 @@ enum Positions {
   amperagePosition,
   pMeterSumPosition,
   horizonPosition,
+  SideBarPosition,
+  SideBarScrollPosition,
   callSignPosition,
   debugPosition,
   gimbalPosition,
@@ -719,6 +732,7 @@ enum Positions {
   ModePosition,
   MapModePosition,
   MapCenterPosition,
+  APstatusPosition,
   POSITIONS_SETTINGS
 };
 

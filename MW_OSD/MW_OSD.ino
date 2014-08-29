@@ -46,10 +46,10 @@ unsigned long previous_millis_high =0;
 void setup()
 {
 
-  Serial.begin(115200);
+  Serial.begin(BAUDRATE);
 //---- override UBRR with MWC settings
-  uint8_t h = ((F_CPU  / 4 / (115200) -1) / 2) >> 8;
-  uint8_t l = ((F_CPU  / 4 / (115200) -1) / 2);
+  uint8_t h = ((F_CPU  / 4 / (BAUDRATE) -1) / 2) >> 8;
+  uint8_t l = ((F_CPU  / 4 / (BAUDRATE) -1) / 2);
   UCSR0A  |= (1<<U2X0); UBRR0H = h; UBRR0L = l; 
 //---
   Serial.flush();
@@ -413,7 +413,6 @@ void writeEEPROM(void) // OSD will only change 8 bit values. GUI changes directl
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
     EEPROM.write(en,Settings[en]);
   } 
-  writeEEPROM16();
 }
 
 
@@ -439,18 +438,11 @@ void readEEPROM_screenlayout(void)
       if ((screenPosition[en]&0x1FF)>LINE06) screenPosition[en] = screenPosition[en] + LINE;
       if ((screenPosition[en]&0x1FF)>LINE09) screenPosition[en] = screenPosition[en] + LINE;
     }
-  }
-}
+#ifdef SHIFTDOWN
+      if ((screenPosition[en]&0x1FF)<LINE04) screenPosition[en] = screenPosition[en] + LINE;
+#endif
 
-
-void writeEEPROM16(void)
-{
-/*
-  for(uint8_t en=0;en<(EEPROM_SETTINGS-EEPROM16_SETTINGS_START)/2;en++){
-    Settings[EEPROM16_SETTINGS_START + (en*2)] = screenPosition[en] &0xFF;
-    Settings[EEPROM16_SETTINGS_START + 1 + (en*2)] = screenPosition[en]>>8;
   }
-*/
 }
 
 
