@@ -88,6 +88,7 @@ void serialMSPCheck()
 	uint8_t inSetting = read8();
 	EEPROM.write(EEPROM_SETTINGS+en,inSetting);
       }
+      EEPROM.write(0,MWOSDVER);
       readEEPROM();
       setMspRequests();
     }
@@ -111,13 +112,11 @@ void serialMSPCheck()
       }
     }
     if(cmd == OSD_DEFAULT) {
-      for(uint8_t i = 0; i < 256; i++){
-        EEPROM.write(i,0);
-      }
-      resetFunc();
+        EEPROM.write(0,0);
+        resetFunc();
     }
     if(cmd == OSD_RESET) {
-    resetFunc();
+        resetFunc();
     }
     if(cmd == OSD_SERIAL_SPEED) {
     
@@ -451,11 +450,12 @@ void handleRawRC() {
       stickTime = millis();
   }
 }
+
 void serialMenuCommon()
-{
-	if((ROW==10)&&(COL==3)) configPage=configPage+menudir;
-	if(configPage<MINPAGE) configPage = MAXPAGE;
-	if(configPage>MAXPAGE) configPage = MINPAGE;
+  {
+    if((ROW==10)&&(COL==3)) configPage=configPage+menudir;
+    if(configPage<MINPAGE) configPage = MAXPAGE;
+    if(configPage>MAXPAGE) configPage = MINPAGE;
 
 #ifdef PAGE0
 //comment

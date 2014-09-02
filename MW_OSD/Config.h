@@ -41,10 +41,16 @@
 
 
 /********************       CALLSIGN settings      *********************/
-//#define CALLSIGNSTARTUP           // Enable to display callsign at startup
 //#define CALLSIGNALWAYS  341       // Enable to permanently display callsign. Number = screen position (row*30 + column)
 //#define FREETEXTLLIGHTS 342       // Enable to display freetext (or callsign) when LLIGHTS Switch active on TX. Number = screen position (row*30 + column)
 //#define FREETEXTGIMBAL  342       // Enable to display freetext (or callsign) when GIMBAL Switch active on TX. Number = screen position (row*30 + column)
+
+
+/********************       STARTUP settings      *********************/
+//#define INTRO_CALLSIGN            // Enable to display callsign at startup
+//#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
+#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 8 
+#define INTRO_MENU                // Enable to display TX stick MENU 
 
 
 /********************       GPS type settings      *********************/
@@ -76,8 +82,7 @@
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x10=90%0x11=80%  default is 0x01=100%,
-#define INTRO_DELAY 8             // Seconds intro screen should show for. Default is 8 
-//#define TIMEZONESTARTUP           // Enable to display timezone at startup - if GPS TIME is enabled
+//#define FULLAHI                   // Enable to display a slightly longer AHI line
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 
 /********************       Serial speed settings      *********************/

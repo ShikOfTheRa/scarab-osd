@@ -18,7 +18,8 @@ This work is based on the following open source work :-
  
  Please refer to credits.txt for list of individual contributions
 */
-            
+  
+#define MWOSDVER 3            
 #include <avr/pgmspace.h>
 #include <EEPROM.h> //Needed to access eeprom read/write functions
 #include "Config.h"
@@ -243,7 +244,7 @@ void loop()
     MAX7456_DrawScreen();
 
 #ifndef INTRO_DELAY 
-#define INTRO_DELAY 11
+#define INTRO_DELAY 8
 #endif
     if( allSec < INTRO_DELAY ){
       displayIntro();
@@ -413,6 +414,7 @@ void writeEEPROM(void) // OSD will only change 8 bit values. GUI changes directl
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
     EEPROM.write(en,Settings[en]);
   } 
+  EEPROM.write(0,MWOSDVER);
 }
 
 
@@ -449,8 +451,7 @@ void readEEPROM_screenlayout(void)
 void checkEEPROM(void)
 {
   uint8_t EEPROM_Loaded = EEPROM.read(0);
-  if (!EEPROM_Loaded){
-
+  if (EEPROM_Loaded!=MWOSDVER){
     for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
       EEPROM.write(en,EEPROM_DEFAULT[en]);
     }

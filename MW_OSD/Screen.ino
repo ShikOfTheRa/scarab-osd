@@ -319,7 +319,18 @@ void displayHorizon(int rollAngle, int pitchAngle)
   pitchAngle=pitchAngle+10;
 
   if(Settings[S_DISPLAY_HORIZON_BR]&fieldIsVisible(horizonPosition)){
-//if(fieldIsVisible(horizonPosition))
+#ifdef FULLAHI
+    for(uint8_t X=0; X<=10; X++) {
+      if (X==4) X=7;
+      int Y = (rollAngle * (4-X)) / 64;
+      Y -= pitchAngle / 8;
+      Y += 41;
+      if(Y >= 0 && Y <= 81) {
+        uint16_t pos = position + LINE*(Y/9) + 3 - 2*LINE + X;
+        screen[pos] = SYM_AH_BAR9_0+(Y%9);
+      }
+    }
+#else
     for(uint8_t X=0; X<=8; X++) {
       if (X==3) X=6;
       int Y = (rollAngle * (4-X)) / 64;
@@ -330,7 +341,8 @@ void displayHorizon(int rollAngle, int pitchAngle)
         screen[pos] = SYM_AH_BAR9_0+(Y%9);
       }
     }
-        
+#endif
+
     if (Settings[S_HORIZON_ELEVATION]){                   
       for(int X=2; X<=6; X++) { 
         if (X==4) X=5;
@@ -527,6 +539,8 @@ void displayRSSI(void)
 
 void displayAPstatus()
 {
+  if(timer.Blink2hz)
+    return;
   if(!fieldIsVisible(APstatusPosition))
     return;
   if (MwSensorActive&mode.gpshold) 
@@ -576,16 +590,15 @@ void displayHeadingGraph(void)
 
 void displayIntro(void)
 {
-
   MAX7456_WriteString_P(message0, MWOSDVersionPosition);
   MAX7456_WriteString_P(message5, MWOSDVersionPosition+LINE+LINE);
   MAX7456_WriteString(ItoaPadded(MwVersion, screenBuffer, 4, 2),MWOSDVersionPosition+11+LINE+LINE+1);
-#ifdef CALLSIGNSTARTUP
+#ifdef INTRO_CALLSIGN
   MAX7456_WriteString_P(message9, MWOSDVersionPosition+LINE+LINE+LINE);
   displayCallsign(MWOSDVersionPosition+LINE+LINE+LINE+4);
 #endif   
 #ifdef GPSTIME
-#ifdef TIMEZONESTARTUP
+#ifdef INTRO_TIMEZONE
 //timezone
   MAX7456_WriteString_P(message10, MWOSDVersionPosition+LINE+LINE+LINE+LINE); 
   if(abs(Settings[S_GPSTZ]) >= 100)ItoaPadded(Settings[S_GPSTZ], screenBuffer, 5, 4);
@@ -597,10 +610,11 @@ void displayIntro(void)
   MAX7456_WriteString_P(message11, MWOSDVersionPosition+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE);
 #endif
 #endif
-//menu instruct
+#ifdef INTRO_MENU
   MAX7456_WriteString_P(message6, MWOSDVersionPosition+LINE+LINE+LINE+LINE+LINE+LINE);
   MAX7456_WriteString_P(message7,  MWOSDVersionPosition+LINE+LINE+LINE+LINE+LINE+LINE+LINE+10);
-  MAX7456_WriteString_P(message8,  MWOSDVersionPosition+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE+10);  
+  MAX7456_WriteString_P(message8,  MWOSDVersionPosition+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE+10); 
+ #endif 
 }
 
 
@@ -865,7 +879,15 @@ void displayCursor(void)
 #ifdef PAGE6      
     if(configPage==6)
       {  
-      COL=3;
+        if (ROW==9){
+          if (oldROW==8)
+            ROW=10;
+          else
+            ROW=8;
+        }
+        oldROW=ROW;
+
+        COL=3;
       cursorpos=(ROW+2)*30+10+6+6;
       }
 #endif
@@ -1440,9 +1462,9 @@ void displayDebug(void)
 //  debug[1]=(int16_t)stackptr;
 
   debug[0]=I2CError;
-  debug[1]=cycleTime;
+  debug[1]=MWOSDVER;
   debug[2]=MwVersion;
-  debug[3]=0;
+  debug[3]=MWOSDVER;
 
   for(uint8_t X=0; X<4; X++) {
     ItoaPadded(debug[X], screenBuffer+2,7,0);     

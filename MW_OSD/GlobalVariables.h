@@ -125,7 +125,7 @@ uint16_t debugval=0;
 uint16_t cell_data[6];
 uint16_t cycleTime;
 uint16_t I2CError;
-
+uint8_t oldROW=0;
 
 // Config status and cursor location
 uint8_t screenlayout=0;
@@ -241,7 +241,7 @@ uint8_t Settings[EEPROM_SETTINGS];
 
 // For Settings Defaults
 uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
-1,   // used for check              0
+MWOSDVER,   // used for check              0
 0,   // S_RSSIMIN                   1
 150, // S_RSSIMAX                   2
 60,  // S_RSSI_ALARM                3
