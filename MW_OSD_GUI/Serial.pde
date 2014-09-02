@@ -98,7 +98,8 @@ private static final int
   OSD_WRITE_CMD            =2,
   OSD_GET_FONT             =3,
   OSD_SERIAL_SPEED         =4,
-  OSD_RESET                =5;
+  OSD_RESET                =5,
+  OSD_DEFAULT              =6;
 
 
 // initialize the serial port selected in the listBox
@@ -356,17 +357,15 @@ public void DEFAULT(){
     loop();
     switch (Reset_result) {
       case JOptionPane.YES_OPTION:
-//        SimControlToggle.setValue(0);
-        System.out.println("Reset start: ");
-        confItem[0].setValue(0);
-        System.out.println("Reset write: ");
-        WRITE();
-        WRITE();
-        delay(100);
+        toggleMSP_Data = true;
+        for (int txTimes = 0; txTimes<2; txTimes++) {
+          headSerialReply(MSP_OSD, 1);
+          serialize8(OSD_DEFAULT);
+          tailSerialReply();
+        }
+        toggleMSP_Data = false;
         confCheck = 0;
         resCheck = 0;
-        READ();
-        System.out.println("Reset complete: ");
         return;
       case JOptionPane.CANCEL_OPTION:
 //        SimControlToggle.setValue(1);
