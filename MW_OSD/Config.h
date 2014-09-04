@@ -47,10 +47,11 @@
 
 
 /********************       STARTUP settings      *********************/
+#define INTRO_VERSION               "MULTIWII MWOSD - R1.2" // 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
-#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 8 
-#define INTRO_MENU                // Enable to display TX stick MENU 
+#define INTRO_DELAY 5               // Seconds intro screen should show for. Default is 8 
+#define INTRO_MENU                  // Enable to display TX stick MENU 
 
 
 /********************       GPS type settings      *********************/
