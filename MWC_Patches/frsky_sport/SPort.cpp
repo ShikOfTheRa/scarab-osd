@@ -22,26 +22,37 @@ alt_t sport_alt;
 
 void initSPort(void) {
   
+    LEDPIN_ON
     SerialEnd(SPORT_SERIAL);
     SerialOpen(SPORT_SERIAL, SPORT_SERIAL_BAUD); 
     delay(500);
     
-    for(uint8_t j=0;j<=5;j++){
-      checkSPort(); 
-      LEDPIN_ON
-      delay(20);
-      LEDPIN_OFF
-      delay(80);
+    for(uint8_t j=1;j<=100;j++){//check 100 times if sport active, takes about 70 but extra is not noticed     
+      checkSPort();      
+      delayMicroseconds(SPORT_HOST_INTERVAL);     
     }
+    
     if(!SPORT_PRESENT){//relase comport if sport device not detected
              SerialEnd(SPORT_SERIAL);
              SerialOpen(SPORT_SERIAL,SERIAL0_COM_SPEED);
-    }
+    }    
+    LEDPIN_OFF
 }
 
 void checkSPort(void) {
- 
-     while (SerialAvailable(SPORT_SERIAL)) {
+
+  #ifdef SPORT_HOST
+      static uint32_t lastRequest = 0;
+
+      if((currentTime-lastRequest) > SPORT_HOST_INTERVAL || !SPORT_PRESENT){
+          
+          SerialWrite(SPORT_SERIAL, START_STOP);//request header
+          SerialWrite(SPORT_SERIAL, SPORT_SENSOR_ID);//sensor id
+          lastRequest = currentTime;          
+      }
+  #endif
+  
+    while (SerialAvailable(SPORT_SERIAL)) {
         uint8_t data = SerialRead(SPORT_SERIAL);
         processSerialData(data); 
      }
