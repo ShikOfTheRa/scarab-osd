@@ -1,6 +1,6 @@
 --- config.h	Fri Nov 08 00:00:00 2013
 +++ config.h	Fri Apr 25 19:27:55 2014
-@@ -832,10 +832,31 @@
+@@ -832,10 +832,33 @@
                                     gives 1/2 Vss; that is approx 2.49Volt; */
      #define PINT2mA 132     /* (*) hard: one integer step on arduino analog translates to mA (example 4.9 / 37 * 1000) ;
                                     soft: use fictional value, start with 100.
@@ -25,6 +25,8 @@
 +     //#define SPORT_FLVSS   // cell & battery voltage module: battery voltage replaces VBAT if not used, cells > MSP
 +     //#define SPORT_FCS     // current & battery voltage module: replaces POWERMETER_HARD, POWERMETER_SOFT & VBAT if not used
 +     //#define SPORT_VARIO   // alt & vario module: only replaces alt.EstAlt & alt.vario in MSP, for now not used in flight model
++
++    //#define SPORT_HOST //  operate without s.port compatible reciever, see SPort.h to choose sensor, currently set to FLVSS
 +
 +
    /********************************************************************/

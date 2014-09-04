@@ -35,3 +35,12 @@ extern uint8_t SPORT_PRESENT;
 
 #define SPORT_DATA_S32(packet)  (*((int32_t *)(packet+4)))
 #define SPORT_DATA_U32(packet)  (*((uint32_t *)(packet+4)))
+
+
+//following code is sport host related
+//all sensor id's requested by x8r reciever
+//0, 161, 34, 131, 228, 69, 198, 103, 72, 233, 106, 203, 172, 13, 142, 47, 208, 113, 242, 83, 52, 149, 22, 183, 152, 57, 186, 27
+
+#define SPORT_HOST_INTERVAL   120000// 120000 //interval between sensor requests //x8r 12 millis
+#define SPORT_SENSOR_ID 0xA1 //161 cell monitor //currently only coded for one option
+
