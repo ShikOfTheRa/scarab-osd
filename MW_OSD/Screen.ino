@@ -112,6 +112,8 @@ uint8_t fieldIsVisible(uint8_t pos) {
     return !(MwSensorActive&mode.osd_switch);
   }
 }
+
+
 void displayTemperature(void)        // WILL WORK ONLY WITH V1.2
 {
   int xxx;
@@ -129,6 +131,7 @@ void displayTemperature(void)        // WILL WORK ONLY WITH V1.2
   screenBuffer[xx]=0;  // Restore the NULL
   MAX7456_WriteString(screenBuffer,getPosition(temperaturePosition));
 }
+
 
 void displayMode(void)
 {
@@ -525,6 +528,20 @@ void displaypMeterSum(void)
 }
 
 
+void displayI2CError(void)
+{
+#ifndef DEBUGI2C
+#define DEBUGI2C 1
+#endif
+  if (I2CError<DEBUGI2C)
+    return;
+  screenBuffer[0] = 0x49;
+  screenBuffer[1] = 0X3A;
+  itoa(I2CError,screenBuffer+2,7);
+  MAX7456_WriteString(screenBuffer,getPosition(temperaturePosition));
+}
+
+
 void displayRSSI(void)
 {
   if(!fieldIsVisible(rssiPosition))
@@ -536,6 +553,7 @@ void displayRSSI(void)
   screenBuffer[xx] = 0;
   MAX7456_WriteString(screenBuffer,getPosition(rssiPosition)-1);
 }
+
 
 void displayAPstatus()
 {
@@ -1347,10 +1365,10 @@ void mapmode(void) {
   uint8_t mapsymbolrange;
   int16_t tmp;
   if (MAPTYPE==1) {
-    angle=(180+360+GPS_directionToHome-armedangle)%360;
+    angle=(180+360+GPS_directionToHome-armedangle+MwHeading)%360;
   }
   else {
-    angle=GPS_directionToHome;  
+    angle=(360+GPS_directionToHome-MwHeading)%360;  
   }
   tmp = angle/90;
   switch (tmp) {
@@ -1471,7 +1489,8 @@ void displayDebug(void)
     screenBuffer[0] = 0x30+X;
     screenBuffer[1] = 0X3A;
     MAX7456_WriteString(screenBuffer,getPosition(debugPosition)+(X*LINE));
-  }  
+  } 
+ 
 #endif
 }
 

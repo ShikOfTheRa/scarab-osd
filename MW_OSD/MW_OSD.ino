@@ -338,6 +338,9 @@ void loop()
         }
         displayMode();       
         displayDebug();
+#ifdef DEBUGI2C
+        displayI2CError();
+#endif        
 #ifdef SPORT        
         if(MwSensorPresent)
           displayCells();
