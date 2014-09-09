@@ -47,7 +47,7 @@
 
 
 /********************       STARTUP settings      *********************/
-#define INTRO_VERSION               "MULTIWII MWOSD - R1.2" // 
+#define INTRO_VERSION               "MULTIWII MWOSD - R1.2" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 #define INTRO_DELAY 5               // Seconds intro screen should show for. Default is 8 
@@ -164,4 +164,5 @@
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
 #define DEBUG         // Enable/disable option to display Mutltiwii debug values 
+#define DEBUGI2C 1    // Autodisplay Mutltiwii I2C errors if exceeds specified count 
 

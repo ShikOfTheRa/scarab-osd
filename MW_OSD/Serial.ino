@@ -399,12 +399,7 @@ void handleRawRC() {
 	waitStick = 2;
 	configExit();
       }
-      if(!previousarmedstatus&&configMode&&(MwRcData[THROTTLESTICK]<MINSTICK)) // EXIT
-      {
-	waitStick = 2;
-	configExit();
-      }
-      else if(configMode&&(MwRcData[ROLLSTICK]>MAXSTICK)) // MOVE RIGHT
+if(configMode&&(MwRcData[ROLLSTICK]>MAXSTICK)) // MOVE RIGHT
       {
 	waitStick = 1;
 	COL++;
