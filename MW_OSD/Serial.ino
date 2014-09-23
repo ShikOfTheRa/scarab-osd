@@ -314,6 +314,8 @@ void serialMSPCheck()
     mode.mag = 0;
     mode.gpshome = 0;
     mode.gpshold = 0;
+    mode.gpsmission = 0;
+    mode.gpsland = 0;
     mode.llights = 0;
     mode.passthru = 0;
     mode.osd_switch = 0;
@@ -354,6 +356,12 @@ void serialMSPCheck()
         break;
       case 19:
         mode.osd_switch |= bit;
+        break;
+      case 20:
+        mode.gpsmission |= bit;
+        break;
+      case 21:
+        mode.gpsland |= bit;
         break;
       }
       bit <<= 1;

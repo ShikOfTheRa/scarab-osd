@@ -162,7 +162,6 @@ void displayMode(void)
       screenBuffer[0] = SYM_GHOME;
       screenBuffer[1] = SYM_GHOME1;
 #ifdef APINDICATOR
-      displayAPstatus();
       screenBuffer[2]=0;
 #else
       screenBuffer[2] = SYM_COLON;
@@ -173,9 +172,16 @@ void displayMode(void)
       screenBuffer[2]=0;
       screenBuffer[0] = SYM_GHOLD;
       screenBuffer[1] = SYM_GHOLD1;
-#ifdef APINDICATOR
-      displayAPstatus();
-#endif
+    }
+    else if(MwSensorActive&mode.gpsmission){
+      screenBuffer[2]=0;
+      screenBuffer[0] = SYM_GMISSION;
+      screenBuffer[1] = SYM_GMISSION1;
+    }
+    else if(MwSensorActive&mode.gpsland){
+      screenBuffer[2]=0;
+      screenBuffer[0] = SYM_GLAND;
+      screenBuffer[1] = SYM_GLAND1;
     }
     else if(MwSensorActive&mode.stable){
       screenBuffer[2]=0;
@@ -192,6 +198,9 @@ void displayMode(void)
       screenBuffer[0]=SYM_ACRO;
       screenBuffer[1]=SYM_ACRO1;
     }
+#ifdef APINDICATOR
+      displayAPstatus();
+#endif
     if(Settings[S_MODEICON]){
 //    if (!screenPosition[ModePosition]<512)
     if(fieldIsVisible(ModePosition))
@@ -561,11 +570,16 @@ void displayAPstatus()
     return;
   if(!fieldIsVisible(APstatusPosition))
     return;
-  if (MwSensorActive&mode.gpshold) 
-    MAX7456_WriteString_P(APHOLDtext,getPosition(APstatusPosition));
-  else
+  if (MwSensorActive&mode.gpshome)
     MAX7456_WriteString_P(APRTHtext,getPosition(APstatusPosition));
-  
+  else if (MwSensorActive&mode.gpshold)
+    MAX7456_WriteString_P(APHOLDtext,getPosition(APstatusPosition));
+  else if (MwSensorActive&mode.gpsmission)
+    MAX7456_WriteString_P(APWAYPOINTtext,getPosition(APstatusPosition));
+  else if (MwSensorActive&mode.gpsland)
+    MAX7456_WriteString_P(APLANDtext,getPosition(APstatusPosition));
+ 
+
 }
 
 void displayHeading(void)
@@ -1365,7 +1379,7 @@ void mapmode(void) {
   uint8_t mapsymbolrange;
   int16_t tmp;
   if (MAPTYPE==1) {
-    angle=(180+360+GPS_directionToHome-armedangle+MwHeading)%360;
+    angle=(180+360+GPS_directionToHome-armedangle)%360;
   }
   else {
     angle=(360+GPS_directionToHome-MwHeading)%360;  
@@ -1418,9 +1432,15 @@ void mapmode(void) {
 
   targetx = xdir*map(x, 0, range, 0, 16);
   targety = ydir*map(y, 0, range, 0, 15);
-  
+
+  if (maxdistance<20) {
+    targetx = 0;
+    targety = 0;  
+  }
+    
   centerpos=getPosition(MapCenterPosition);
   targetpos= centerpos + (targetx/2) + (LINE*(targety/3)); 
+
 
   if (MAPTYPE==1) {
     mapsymbolcenter = SYM_HOME;
@@ -1479,10 +1499,10 @@ void displayDebug(void)
 //  debug[0]=(int16_t)heapptr;
 //  debug[1]=(int16_t)stackptr;
 
-  debug[0]=I2CError;
-  debug[1]=MWOSDVER;
-  debug[2]=MwVersion;
-  debug[3]=MWOSDVER;
+//  debug[0]=I2CError;
+//  debug[1]=MWOSDVER;
+//  debug[2]=MwVersion;
+//  debug[3]=MWOSDVER;
 
   for(uint8_t X=0; X<4; X++) {
     ItoaPadded(debug[X], screenBuffer+2,7,0);     

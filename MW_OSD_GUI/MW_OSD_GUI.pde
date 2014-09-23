@@ -46,7 +46,7 @@ import java.text.DecimalFormat;
 
 
 
-String MW_OSD_GUI_Version = "R1";
+String MW_OSD_GUI_Version = "R1.2";
 
 
 
@@ -89,7 +89,7 @@ int  MapCenterPosition = 35;
 int  APstatusPosition = 36;
 
 int MSP_sendOrder =0;
-PImage img_Clear,OSDBackground,RadioPot;
+PImage img_Clear,GUIBackground,OSDBackground,RadioPot;
 
 // ScreenType---------- NTSC = 0, PAL = 1 ---------------------------------
 int ScreenType = 0;
@@ -198,7 +198,7 @@ int XVREF      = 120;        int YVREF    = 444;
 int XVolts     = 120;        int YVolts    = 5;
 int XAmps      = 120;        int YAmps    = 190;
 int XVVolts    = 120;        int YVVolts  = 114;
-int XTemp      = 510;        int YTemp    = 266;
+int XTemp      = 510;        int YTemp    = 268;
 int XCS        = 120;        int YCS    = 486;
 int XGPS       = 510;        int YGPS    = 5;
 int XCOMPASS   = 510;        int YCOMPASS    = 98;
@@ -207,7 +207,7 @@ int XTIME      = 510;        int YTIME    = 190;
 //int XTIME      = 510;        int YTIME    = 5;
 int XHUD       = 305;        int YHUD     = 240;
 int XDisplay     = 305;        int YDisplay   = 114; //48;
-int XSPORT      = 510;        int YSPORT    = 353;
+int XSPORT      = 510;        int YSPORT    = 357;
 
 int XOther     = 305;        int YOther   = 5; //48;
 //int XOther     = 305;        int YOther   = 150; //48;
@@ -236,6 +236,7 @@ float SimItem0= 0;
 int Armed = 0;
 int Showback = 1;
 int del = 0;
+int armedangle=0;
 // int variables
 
 // For Heading
@@ -609,7 +610,8 @@ void setup() {
 //Map<Settings, String> table = new EnumMap<Settings>(Settings.class);
 OnTimer = millis();
   frameRate(30); 
-OSDBackground = loadImage("Background.jpg");
+OSDBackground = loadImage("OSD_def.jpg");
+GUIBackground = loadImage("GUI_def.jpg");
 //RadioPot = loadImage("MWImage.jpg");
 //PGraphics icon = createGraphics(16, 16, P3D);
 //icon.beginDraw();
@@ -975,6 +977,8 @@ void MakePorts(){
 
 void draw() {
   time=millis();
+//    image(GUIBackground,0, 0, windowsX, windowsY); //529-WindowShrinkX, 360-WindowShrinkY);
+
   //hint(ENABLE_DEPTH_TEST);
   //pushMatrix();
   //PortRead = false; 
@@ -1013,7 +1017,7 @@ void draw() {
       time5 = time;
        
       if (init_com==1){
-        SendCommand(MSP_BOXNAMES);
+        SendCommand(MSP_S);
         SendCommand(MSP_BOXIDS);
       }
       //PortWrite = false;
@@ -1137,14 +1141,17 @@ void draw() {
   // Draw background control boxes
   // ------------------------------------------------------------------------
 
+  image(GUIBackground,0, 0, windowsX, windowsY); 
+
+
   // Coltrol Box
-  fill(100); strokeWeight(3);stroke(200); rectMode(CORNERS); rect(XControlBox,YControlBox, XControlBox+108, YControlBox+123); //108//130
-  textFont(font12); fill(255, 255, 255); text("OSD Controls",XControlBox + 15,YControlBox + 15);
+  fill(30,255); strokeWeight(3);stroke(0); rectMode(CORNERS); rect(XControlBox,YControlBox, XControlBox+108, YControlBox+123); //108//130
+  textFont(font12); fill(255,255,255); text("OSD Controls",XControlBox + 15,YControlBox + 15);
   if (activeTab == 1) {
   
   }
   
-  fill(40, 40, 40);
+  fill(30,255);
   strokeWeight(3);stroke(0);
   rectMode(CORNERS);
   rect(5,5,113,40);
@@ -1152,16 +1159,16 @@ void draw() {
   // version
   fill(255, 255, 255);
   text("MWII OSD NG",10,19);
-  text("GUI V: ",10,35);
-  text(MW_OSD_GUI_Version, 74, 35);
-  fill(0, 0, 0);
+  text("GUI v: ",10,35);
+  text(MW_OSD_GUI_Version, 55, 35);
+//  fill(255, 0, 0);
   strokeWeight(3);stroke(0);
   rectMode(CORNERS);
   if (int(ShowSimBackground.arrayValue()[0]) < 1){
     image(OSDBackground,DisplayWindowX+WindowAdjX+10, DisplayWindowY+WindowAdjY, 354-WindowShrinkX, 300-WindowShrinkY); //529-WindowShrinkX, 360-WindowShrinkY);
   }
   else{
-    fill(80, 80,80); strokeWeight(3);stroke(1); rectMode(CORNER); rect(DisplayWindowX+WindowAdjX, DisplayWindowY+WindowAdjY, 364-WindowShrinkX, 300-WindowShrinkY);  //335-WindowShrinkX, 288-WindowShrinkY);
+    fill(80, 80, 80); strokeWeight(3);stroke(1); rectMode(CORNER); rect(DisplayWindowX+WindowAdjX, DisplayWindowY+WindowAdjY, 364-WindowShrinkX, 300-WindowShrinkY);  //335-WindowShrinkX, 288-WindowShrinkY);
   }
 
 
@@ -1208,7 +1215,7 @@ void draw() {
          ConfigLayout[1][i]=CONFIG16_0[i];
 
    int minimalscreen=0;
-   if (toggleModeItems[8].getValue()>0) minimalscreen=1 ;
+   if (toggleModeItems[9].getValue()>0) minimalscreen=1 ;
 
    if (minimalscreen==1){
       SimPosn[i]=ConfigLayout[1][i];

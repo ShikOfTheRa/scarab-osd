@@ -5,8 +5,7 @@
  *
  */
 
-#define SYM_BLANK 0X20
-#define SYM_BLANK 0XCF
+#define SYM_BLANK 0X3F
 
 // Satellite Graphics
 #define SYM_SAT_L 0X1E
@@ -82,6 +81,10 @@
 #define SYM_GHOME1 0X9E
 #define SYM_GHOLD 0XCD
 #define SYM_GHOLD1 0XCE
+#define SYM_GMISSION 0XB5
+#define SYM_GMISSION1 0XB6
+#define SYM_GLAND 0XB7
+#define SYM_GLAND1 0XB8
 
 // Gimbal active Mode 
 #define SYM_GIMBAL 0X16 

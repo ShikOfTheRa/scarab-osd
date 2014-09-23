@@ -19,7 +19,7 @@ This work is based on the following open source work :-
  Please refer to credits.txt for list of individual contributions
 */
   
-#define MWOSDVER 3            
+#define MWOSDVER 4            
 #include <avr/pgmspace.h>
 #include <EEPROM.h> //Needed to access eeprom read/write functions
 #include "Config.h"
@@ -244,7 +244,7 @@ void loop()
     MAX7456_DrawScreen();
 
 #ifndef INTRO_DELAY 
-#define INTRO_DELAY 8
+#define INTRO_DELAY 10
 #endif
     if( allSec < INTRO_DELAY ){
       displayIntro();

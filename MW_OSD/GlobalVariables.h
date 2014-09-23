@@ -153,6 +153,8 @@ struct {
   uint16_t passthru;
   uint32_t osd_switch;
   uint32_t llights;
+  uint32_t gpsmission;
+  uint32_t gpsland;
 ;}mode;
 
 
@@ -564,15 +566,17 @@ uint16_t flyingTime=0;
 
 const char disarmed_text[] PROGMEM = "DISARMED";
 const char armed_text[] PROGMEM = " ARMED";
-const char APRTHtext[] PROGMEM = "AUTOPILOT";
+const char APRTHtext[] PROGMEM = "AUTO RTH";
 const char APHOLDtext[] PROGMEM = "AUTO HOLD";
+const char APWAYPOINTtext[] PROGMEM = " MISSION";
+const char APLANDtext[] PROGMEM = "LANDING";
 
 
 // For Intro
 #ifdef INTRO_VERSION
 const char message0[] PROGMEM = INTRO_VERSION;
 #else
-const char message0[] PROGMEM = "MWOSD TEST RELEASE";
+const char message0[] PROGMEM = "MULTIWII MWOSD - R1.2";
 #endif
 //const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
 //const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
