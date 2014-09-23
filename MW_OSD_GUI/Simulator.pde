@@ -12,6 +12,8 @@ int mode_baro = 0;
 int mode_mag = 0;
 int mode_gpshome = 0;
 int mode_gpshold = 0;
+int mode_gpsmission = 0;
+int mode_gpsland = 0;
 int mode_llights = 0;
 int mode_camstab = 0;
 int mode_osd_switch = 0;
@@ -66,7 +68,7 @@ void SimSetup(){
     .setBarHeight(13)
     .activateEvent(true)
     .disableCollapse()
-    .setBackgroundColor(color(0,255))
+//    .setBackgroundColor(color(0,255))
     .setBackgroundHeight(192)
    .setLabel("Simulator")
    .setMoveable(true);
@@ -74,7 +76,7 @@ void SimSetup(){
                 
  
   SGModes = ScontrolP5.addGroup("SGModes")
-                .setPosition(629,18)
+                .setPosition(632,18)
                 .setWidth(100)
                 .setBarHeight(15)
                 .activateEvent(true)
@@ -101,7 +103,7 @@ void SimSetup(){
                ;
                
  SGRadio = ScontrolP5.addGroup("SGRadio")
-                .setPosition(391,18)
+                .setPosition(388,18)
                 .setWidth(130)
                 .setBarHeight(15)
                 .activateEvent(true)
@@ -114,7 +116,7 @@ void SimSetup(){
                ; 
 
 SGSensors1 = ScontrolP5.addGroup("SGSensors1")
-                .setPosition(5,18)
+                .setPosition(0,18)
                 .setWidth(175)
                 .setBarHeight(15)
                 .activateEvent(true)
@@ -126,7 +128,7 @@ SGSensors1 = ScontrolP5.addGroup("SGSensors1")
                 //.close() 
                ;                                  
 SGGPS = ScontrolP5.addGroup("SGGPS")
-                .setPosition(186,18)
+                .setPosition(182,18)
                 .setWidth(200)
                 .setBarHeight(15)
                 .activateEvent(true)
@@ -139,7 +141,7 @@ SGGPS = ScontrolP5.addGroup("SGGPS")
                ;
 
 SGFRSKY = ScontrolP5.addGroup("SGFRSKY")
-                .setPosition(186,145)
+                .setPosition(182,145)
                 .setWidth(200)
                 .setBarHeight(15)
                 .activateEvent(true)
@@ -152,7 +154,7 @@ SGFRSKY = ScontrolP5.addGroup("SGFRSKY")
                ;   
 
 SGControlBox = ScontrolP5.addGroup("SGControlBox")
-                .setPosition(5,145)
+                .setPosition(0,145)
                 .setWidth(175)
                 .setBarHeight(15)
                 .activateEvent(true)
@@ -397,11 +399,11 @@ s_MRSSI = ScontrolP5.addSlider("sMRSSI")
 
   for(int i=0;i<boxnames.length ;i++) {
     toggleModeItems[i] = (controlP5.Toggle) hideLabel(ScontrolP5.addToggle("toggleModeItems"+i,false));
-    toggleModeItems[i].setPosition(5,3+i*17);
+    toggleModeItems[i].setPosition(5,3+i*16);
     toggleModeItems[i].setSize(10,10);
     //toggleConfItem[i].setMode(ControlP5.SWITCH);
     toggleModeItems[i].setGroup(SGModes);
-    txtlblModeItems[i] = controlP5.addTextlabel("ModeItems"+i,boxnames[i].substring(0, boxnames[i].length()-1) ,20,i*17);
+    txtlblModeItems[i] = controlP5.addTextlabel("ModeItems"+i,boxnames[i].substring(0, boxnames[i].length()-1) ,20,i*16);
     txtlblModeItems[i].setGroup(SGModes);
   }
  
@@ -632,10 +634,16 @@ void ShowAPstatus(){
       SimBitCounter += SimBitCounter;
 }
   if((SimModebits&mode_gpshome) >0){
-  output = "AUTOPILOT";
+  output = "AUTO RTH";
     }
   else if((SimModebits&mode_gpshold) >0){
   output = "AUTO HOLD";
+  }
+  else if((SimModebits&mode_gpsmission) >0){
+  output = " MISSION";
+  }
+  else if((SimModebits&mode_gpsland) >0){
+  output = "AUTO LAND";
   }
   makeText(output, SimPosn[APstatusPosition]);
 }
@@ -825,6 +833,14 @@ void displayMode()
       mapchar(0xcd,SimPosn[ModePosition]);
       mapchar(0xce,SimPosn[ModePosition]+1);
     }
+    else if((SimModebits&mode_gpsland) >0){
+      mapchar(0xb7,SimPosn[ModePosition]);
+      mapchar(0xb8,SimPosn[ModePosition]+1);
+    }
+    else if((SimModebits&mode_gpsmission) >0){
+      mapchar(0xb5,SimPosn[ModePosition]);
+      mapchar(0xb6,SimPosn[ModePosition]+1);
+    }
     else if((SimModebits&mode_stable) >0){
       mapchar(0xac,SimPosn[ModePosition]);
       mapchar(0xad,SimPosn[ModePosition]+1);
@@ -848,7 +864,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
 {
 
   int minimalscreen=0 ; 
-  if (toggleModeItems[8].getValue()>0) minimalscreen=1 ;
+  if (toggleModeItems[9].getValue()>0) minimalscreen=1 ;
 
    if (SimPosn[horizonPosition]<0x3FF){
 
@@ -981,6 +997,8 @@ void GetModes(){
   mode_mag = 0;
   mode_gpshome = 0;
   mode_gpshold = 0;
+  mode_gpsmission = 0;
+  mode_gpsland = 0;
   mode_llights = 0;
   mode_camstab = 0;
   mode_osd_switch = 0;
@@ -994,6 +1012,7 @@ void GetModes(){
     if (boxnames[c] == "GPS HOME;") mode_gpshome |= bit;
     if (boxnames[c] == "GPS HOLD;") mode_gpshold |= bit;
     if (boxnames[c] == "OSD SW;") mode_osd_switch |= bit;
+    if (boxnames[c] == "MISSION;") mode_gpsmission |= bit;
    
     bit <<= 1L;
   }
@@ -1053,15 +1072,20 @@ int SYM_DIRECTION = 0x72;
   int mapsymbolrange=0;
   int tmp=0;
   int GPS_directionToHome=int(SGPSHeadHome.value());
-    if(GPS_directionToHome < 0) GPS_directionToHome += 360;
-  int armedangle=0;
+
+  if(GPS_directionToHome < 0) GPS_directionToHome += 360;
+
+  if ((toggleModeItems[0].getValue() == 0 )){
+    armedangle=MwHeading;
+  }
+
 //  int MwHeading=Mwheading;
   
-  if (1==0) {
-    angle=(360+180+GPS_directionToHome-armedangle)%360;
+  if (1==1) {
+    angle=(180+360+GPS_directionToHome-armedangle+MwHeading)%360;
   }
   else {
-    angle=GPS_directionToHome;  
+    angle=(360+GPS_directionToHome-MwHeading)%360;  
   }
   tmp = angle/90;
   switch (tmp) {
@@ -1112,11 +1136,16 @@ int SYM_DIRECTION = 0x72;
   targetx = int(xdir*map(x, 0, range, 0, 16));
   targety = int(ydir*map(y, 0, range, 0, 15));
  
+  if (maxdistance<20) {
+    targetx = 0;
+    targety = 0;  
+  }
+
   centerpos=SimPosn[MapCenterPosition];
   targetpos= centerpos + (targetx/2) + (LINE*(targety/3)); 
 
 
-  if (1==0) {
+  if (1==1) {
     mapsymbolcenter = SYM_HOME;
     mapsymboltarget = SYM_AIRCRAFT;
   }
@@ -1160,7 +1189,11 @@ int SYM_DIRECTION = 0x72;
     tmp = 0xD0 + symy + (symx*3);
 //System.out.println(xdir+" "+ydir+" "+symx+" "+symy+" "+targetx+" "+targety+" "+tmp);
   mapchar(mapsymbolrange,SimPosn[MapModePosition]);
-  mapchar(tmp,targetpos);
+
+  if (maxdistance>20) {
+    mapchar(tmp,targetpos);
+  }
+
  
 }
 

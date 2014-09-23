@@ -42,6 +42,7 @@ String boxnames[] = { // names for dynamic generation of config GUI
     "CAMSTAB;",
     "GPS HOME;",
     "GPS HOLD;",
+    "MISSION;",
     "OSD SW;"    
   };
 String strBoxNames = join(boxnames,""); 
@@ -407,8 +408,9 @@ void SendCommand(int cmd){
         if(toggleModeItems[5].getValue()> 0) modebits |=1<<8;
         if(toggleModeItems[6].getValue()> 0) modebits |=1<<10;
         if(toggleModeItems[7].getValue()> 0) modebits |=1<<11;
-        if(toggleModeItems[8].getValue()> 0) modebits |=1<<19;
-        if(toggleModeItems[8].getValue()> 0) modebits |=1<<16; //Also send LLIGHTS when OSD enabled - for testing
+        if(toggleModeItems[8].getValue()> 0) modebits |=1<<20;
+        if(toggleModeItems[9].getValue()> 0) modebits |=1<<19;
+//        if(toggleModeItems[8].getValue()> 0) modebits |=1<<16; //Also send LLIGHTS when OSD enabled - for testing
         serialize32(modebits);
         serialize8(0);   // current setting
         tailSerialReply();
@@ -469,8 +471,8 @@ void SendCommand(int cmd){
       
       case MSP_BOXIDS:
         PortIsWriting = true;
-        headSerialReply(MSP_BOXIDS,21);
-        for (int i=0; i<21; i++) {
+        headSerialReply(MSP_BOXIDS,23);
+        for (int i=0; i<23; i++) {
         serialize8(i);
         }
         tailSerialReply();

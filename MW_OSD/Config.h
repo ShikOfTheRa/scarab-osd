@@ -32,7 +32,7 @@
 
 
 /********************       CONTROLLER settings      *********************/
-//#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / others to correct for heading dispaly issues
+//#define BASEFLIGHT/NAZE32         // Undefine this if you are using BASEFLIGHT / others to correct for heading dispaly issues
 //#define HARIKIRI                  // Undefine this if you are using HARIKIRI (for BOXNAMES compatibility)
 //#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE - to use GPS heading and altitude instead of BARO/MAG
 //#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
@@ -47,10 +47,10 @@
 
 
 /********************       STARTUP settings      *********************/
-#define INTRO_VERSION               "MULTIWII MWOSD - R1.2" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+//#define INTRO_VERSION               "SCARAB OSD - R1.2" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
-#define INTRO_DELAY 5               // Seconds intro screen should show for. Default is 8 
+//#define INTRO_DELAY 5               // Seconds intro screen should show for. Default is 10 
 #define INTRO_MENU                  // Enable to display TX stick MENU 
 
 
@@ -60,7 +60,7 @@
 
 
 /********************       MAP MODE Settings       *********************/
-#define MAPTYPE 0                   // 0 for RADAR - home is aircraft, map shows location of home relative to aircraft 
+#define MAPTYPE 1                   // 0 for RADAR - home is aircraft, map shows location of home relative to aircraft 
                                     // 1 for MAP - home is center, map shows location of aircraft relative to home 
 //#define MAPRESLOW                 // enable to use low res original directional arrow in map mode 1. Disable to use high res position 
 //#define MAPMODENORTH              // Enable to use North as MAP reference in MODE 1 instead of take off direction (Default = disable) 
