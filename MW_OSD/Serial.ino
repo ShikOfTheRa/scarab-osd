@@ -182,6 +182,17 @@ void serialMSPCheck()
 #endif
   }
 
+  if (cmdMSP==MSP_NAV_STATUS)
+  {
+     read8();
+     read8();
+     read8();
+     GPS_waypoint_step=read8();
+     read8();
+     read8();
+     read8();
+  }
+
   if (cmdMSP==MSP_ATTITUDE)
   {
     for(uint8_t i=0;i<2;i++)

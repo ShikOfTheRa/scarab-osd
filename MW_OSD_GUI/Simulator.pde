@@ -840,6 +840,7 @@ void displayMode()
     else if((SimModebits&mode_gpsmission) >0){
       mapchar(0xb5,SimPosn[ModePosition]);
       mapchar(0xb6,SimPosn[ModePosition]+1);
+      mapchar(0x30,SimPosn[ModePosition]+2);
     }
     else if((SimModebits&mode_stable) >0){
       mapchar(0xac,SimPosn[ModePosition]);

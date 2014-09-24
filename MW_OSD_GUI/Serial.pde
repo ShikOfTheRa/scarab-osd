@@ -71,7 +71,8 @@ private static final int
   MSP_PIDNAMES             =117,
   MSP_BOXIDS               =119,
   MSP_RSSI                 =120,
-  MSP_CELLS                =121,
+  MSP_NAV_STATUS           =121,
+  MSP_CELLS                =130,
   MSP_SET_RAW_RC           =200,
   MSP_SET_RAW_GPS          =201,
   MSP_SET_PID              =202,
@@ -503,7 +504,27 @@ void SendCommand(int cmd){
         PortIsWriting = false;
       break;
       
-      
+
+      case MSP_NAV_STATUS:
+        PortIsWriting = true;
+        headSerialReply(MSP_NAV_STATUS, 7);
+        if (millis()>oldwpmillis+2000){
+          oldwpmillis=millis();
+          wpno++;
+          if (wpno>15) wpno=0;
+        }
+        serialize8(0);
+        serialize8(0);
+        serialize8(0);
+        serialize8(wpno);
+        serialize8(0);
+        serialize8(0);
+        serialize8(0);
+        tailSerialReply();
+        PortIsWriting = false;
+      break;
+ 
+     
       case MSP_RAW_GPS:
         // We have: GPS_fix(0-2), GPS_numSat(0-15), GPS_coord[LAT & LON](signed, in 1/10 000 000 degres), GPS_altitude(signed, in meters) and GPS_speed(in cm/s)  
         headSerialReply(MSP_RAW_GPS,16);

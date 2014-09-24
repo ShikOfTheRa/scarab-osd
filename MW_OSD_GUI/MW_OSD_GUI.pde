@@ -237,6 +237,9 @@ int Armed = 0;
 int Showback = 1;
 int del = 0;
 int armedangle=0;
+int oldwpmillis;
+int wpno; 
+
 // int variables
 
 // For Heading
@@ -1111,9 +1114,10 @@ void draw() {
           break;
         case 8:
           if (toggleMSP_Data == false) SendCommand(MSP_BOXIDS);
-          MSP_sendOrder=0;
           break;
         case 9:
+          if (init_com==1)SendCommand(MSP_NAV_STATUS);
+          MSP_sendOrder=0;
           break;
         case 10:
           break;

@@ -443,6 +443,7 @@ uint16_t GPS_speed;
 uint16_t old_GPS_speed;
 int16_t GPS_directionToHome=0;
 uint8_t GPS_numSat=0;
+uint8_t GPS_waypoint_step=0;
 //uint16_t I2CError=0;
 //uint16_t cycleTime=0;
 uint16_t pMeterSum=0;
@@ -525,9 +526,10 @@ uint16_t flyingTime=0;
 #define MSP_MOTOR_PINS           115   //out message         which pins are in use for motors & servos, for GUI 
 #define MSP_BOXNAMES             116   //out message         the aux switch names
 #define MSP_PIDNAMES             117   //out message         the PID names
-#define MSP_WP                   118   //out message         get a WP, WP# is in the payload, returns (WP#, lat, lon, alt, flags) WP#0-home, WP#16-poshold
 #define MSP_BOXIDS               119   //out message         get the permanent IDs associated to BOXes
-#define MSP_CELLS                121   //out message         FrSky SPort Telemtry
+#define MSP_NAV_STATUS           121   //out message	     Returns navigation status
+
+#define MSP_CELLS                130   //out message         FrSky SPort Telemtry
 
 #define MSP_SET_RAW_RC           200   //in message          8 rc chan
 #define MSP_SET_RAW_GPS          201   //in message          fix, numsat, lat, lon, alt, speed
@@ -761,3 +763,4 @@ uint16_t screenPosition[POSITIONS_SETTINGS];
 #define REQ_MSP_FONT      (1 << 12)
 #define REQ_MSP_DEBUG     (1 << 13)
 #define REQ_MSP_CELLS     (1 << 14)
+#define REQ_MSP_WP        (1 << 15)
