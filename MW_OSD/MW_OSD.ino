@@ -175,7 +175,7 @@ void loop()
     timer.Blink10hz=!timer.Blink10hz;
     calculateTrip();
  
-    
+   
       uint8_t MSPcmdsend;
       if(queuedMSPRequests == 0)
         queuedMSPRequests = modeMSPRequests;
@@ -235,6 +235,11 @@ void loop()
          MSPcmdsend = MSP_CELLS;
          break;
 #endif
+       case REQ_MSP_WP:
+         if(MwSensorActive&mode.gpsmission)
+           MSPcmdsend = MSP_NAV_STATUS;
+         break;
+
     }
       if(!fontMode)
       blankserialRequest(MSPcmdsend);      

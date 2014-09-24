@@ -174,7 +174,8 @@ void displayMode(void)
       screenBuffer[1] = SYM_GHOLD1;
     }
     else if(MwSensorActive&mode.gpsmission){
-      screenBuffer[2]=0;
+      itoa(GPS_waypoint_step,screenBuffer+2,10);
+      screenBuffer[4]=0;
       screenBuffer[0] = SYM_GMISSION;
       screenBuffer[1] = SYM_GMISSION1;
     }
