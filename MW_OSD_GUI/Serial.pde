@@ -482,7 +482,7 @@ void SendCommand(int cmd){
 
      
       case MSP_ATTITUDE:
-//                PortIsWriting = true;
+                PortIsWriting = true;
         headSerialReply(MSP_ATTITUDE, 8);
         serialize16(int(MW_Pitch_Roll.arrayValue()[0])*10);
         serialize16(int(MW_Pitch_Roll.arrayValue()[1])*10);
@@ -492,6 +492,23 @@ void SendCommand(int cmd){
         PortIsWriting = false;
       break;
      
+
+
+      case MSP_DEBUG:
+        PortIsWriting = true;
+        headSerialReply(MSP_DEBUG, 8);
+
+        for (int i = 0; i < 4; i++) {
+        debug[i]++;
+        }
+
+        serialize16(debug[0]);
+        serialize16(debug[1]);
+        serialize16(debug[2]);
+        serialize16(debug[3]);
+        tailSerialReply();
+        PortIsWriting = false;
+      break;
      
      
       case MSP_ANALOG:

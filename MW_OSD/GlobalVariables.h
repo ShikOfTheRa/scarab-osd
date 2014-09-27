@@ -571,7 +571,7 @@ const char armed_text[] PROGMEM = " ARMED";
 const char APRTHtext[] PROGMEM = "AUTO RTH";
 const char APHOLDtext[] PROGMEM = "AUTO HOLD";
 const char APWAYPOINTtext[] PROGMEM = " MISSION";
-const char APLANDtext[] PROGMEM = "LANDING";
+//const char APLANDtext[] PROGMEM = "LANDING";
 
 
 // For Intro
@@ -763,4 +763,4 @@ uint16_t screenPosition[POSITIONS_SETTINGS];
 #define REQ_MSP_FONT      (1 << 12)
 #define REQ_MSP_DEBUG     (1 << 13)
 #define REQ_MSP_CELLS     (1 << 14)
-#define REQ_MSP_WP        (1 << 15)
+#define REQ_MSP_NAV_STATUS  32768 //(1 << 15)

@@ -1,3 +1,5 @@
+
+
 /*
 MultiWii NG OSD ... 
 
@@ -111,19 +113,18 @@ void setMspRequests() {
       REQ_MSP_ATTITUDE|
       REQ_MSP_ALTITUDE;
 
-#ifdef DEBUG
-      modeMSPRequests |= REQ_MSP_DEBUG;
-#endif
-
-
     if(!armed || Settings[S_THROTTLEPOSITION] || fieldIsVisible(pMeterSumPosition) || fieldIsVisible(amperagePosition) )
       modeMSPRequests |= REQ_MSP_RC;
-
-    if(mode.armed == 0) {
-        modeMSPRequests |= REQ_MSP_BOX;
-       
-     }
-    modeMSPRequests |= REQ_MSP_CELLS;
+    if(mode.armed == 0)
+      modeMSPRequests |= REQ_MSP_BOX;
+    if(MwSensorActive&mode.gpsmission)
+      modeMSPRequests |= REQ_MSP_NAV_STATUS;
+#ifdef DEBUGMW
+      modeMSPRequests |= REQ_MSP_DEBUG;
+#endif
+#ifdef SPORT      
+      modeMSPRequests |= REQ_MSP_CELLS;
+#endif
   }
  
   if(Settings[S_MAINVOLTAGE_VBAT] ||
@@ -183,7 +184,7 @@ void loop()
       queuedMSPRequests &= ~req;
       switch(req) {
       case REQ_MSP_IDENT:
-        MSPcmdsend = MSP_IDENT;
+       MSPcmdsend = MSP_IDENT;
         break;
       case REQ_MSP_STATUS:
         MSPcmdsend = MSP_STATUS;
@@ -222,29 +223,29 @@ void loop()
         MSPcmdsend = MSP_BOXIDS;
 #endif
          break;
-       case REQ_MSP_FONT:
+      case REQ_MSP_FONT:
          MSPcmdsend = MSP_OSD;
          break;
-#if defined DEBUG
-       case REQ_MSP_DEBUG:
+#if defined DEBUGMW
+      case REQ_MSP_DEBUG:
          MSPcmdsend = MSP_DEBUG;
          break;
 #endif
 #if defined SPORT
-       case REQ_MSP_CELLS:
+      case REQ_MSP_CELLS:
          MSPcmdsend = MSP_CELLS;
          break;
 #endif
-       case REQ_MSP_WP:
-         if(MwSensorActive&mode.gpsmission)
-           MSPcmdsend = MSP_NAV_STATUS;
-         break;
-
+      case REQ_MSP_NAV_STATUS:
+//           if(MwSensorActive&mode.gpsmission)
+         MSPcmdsend = MSP_NAV_STATUS;
+      break;
     }
-      if(!fontMode)
+    if(!fontMode){
       blankserialRequest(MSPcmdsend);      
+    }
 
-  ProcessSensors();       // using analogue sensors
+    ProcessSensors();       // using analogue sensors
 
     MAX7456_DrawScreen();
 
@@ -273,7 +274,6 @@ void loop()
       }
       else
       {
-       // CollectStatistics();      DO NOT DELETE
 
         if(Settings[S_DISPLAYVOLTAGE]&&((voltage>Settings[S_VOLTAGEMIN])||(timer.Blink2hz))) 
           displayVoltage();
@@ -343,7 +343,7 @@ void loop()
         }
         displayMode();       
         displayDebug();
-#ifdef DEBUGI2C
+#ifdef I2CERROR
         displayI2CError();
 #endif        
 #ifdef SPORT        
