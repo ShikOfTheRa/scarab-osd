@@ -537,6 +537,9 @@ void ShowDebug(){
   makeText("1:    001", SimPosn[debugPosition]+LINE);
   makeText("2:    010", SimPosn[debugPosition]+LINE+LINE);
 //  makeText("3:    011", SimPosn[debugPosition]+LINE+LINE+LINE);
+
+
+
 }}
 
 

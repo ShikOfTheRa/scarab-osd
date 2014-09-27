@@ -168,6 +168,7 @@ int commListMax = 0;
 int whichKey = -1;  // Variable to hold keystoke values
 int inByte = -1;    // Incoming serial data
 int[] serialInArray = new int[3];    // Where we'll put what we receive
+int[] debug = new int[4];    
 
 
 int serialCount = 0;                 // A count of how many bytes we receive
@@ -1117,9 +1118,10 @@ void draw() {
           break;
         case 9:
           if (init_com==1)SendCommand(MSP_NAV_STATUS);
-          MSP_sendOrder=0;
           break;
         case 10:
+          if (init_com==1)SendCommand(MSP_DEBUG);
+          MSP_sendOrder=0;
           break;
         case 11:
           break;

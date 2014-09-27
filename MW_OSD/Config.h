@@ -50,7 +50,7 @@
 //#define INTRO_VERSION               "SCARAB OSD - R1.2" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
-//#define INTRO_DELAY 5               // Seconds intro screen should show for. Default is 10 
+//#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
 #define INTRO_MENU                  // Enable to display TX stick MENU 
 
 
@@ -84,10 +84,11 @@
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x10=90%0x11=80%  default is 0x01=100%,
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
+//#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 
 /********************       Serial speed settings      *********************/
-#define BAUDRATE 115200              // Serial comms speed               
+#define BAUDRATE 115200             // Serial comms speed               
 
 
 
@@ -163,6 +164,6 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-#define DEBUG         // Enable/disable option to display Mutltiwii debug values 
-#define DEBUGI2C 1    // Autodisplay Mutltiwii I2C errors if exceeds specified count 
+#define DEBUG         // Enable/disable option to display OSD debug values 
+#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 

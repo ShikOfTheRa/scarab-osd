@@ -204,12 +204,12 @@ void serialMSPCheck()
     read16();
   }
 
-#if defined DEBUG
+#if defined DEBUGMW
   if (cmdMSP==MSP_DEBUG)
   {
-    for(uint8_t i=0;i<3;i++)
+    for(uint8_t i=0;i<4;i++)
       debug[i] = read16();
-  }
+ }
 #endif
   if (cmdMSP==MSP_CELLS)
   {

@@ -540,15 +540,14 @@ void displaypMeterSum(void)
 
 void displayI2CError(void)
 {
-#ifndef DEBUGI2C
-#define DEBUGI2C 1
-#endif
-  if (I2CError<DEBUGI2C)
+#ifdef I2CERROR
+  if (I2CError<=I2CERROR)
     return;
   screenBuffer[0] = 0x49;
   screenBuffer[1] = 0X3A;
   itoa(I2CError,screenBuffer+2,7);
   MAX7456_WriteString(screenBuffer,getPosition(temperaturePosition));
+#endif
 }
 
 
@@ -577,8 +576,8 @@ void displayAPstatus()
     MAX7456_WriteString_P(APHOLDtext,getPosition(APstatusPosition));
   else if (MwSensorActive&mode.gpsmission)
     MAX7456_WriteString_P(APWAYPOINTtext,getPosition(APstatusPosition));
-  else if (MwSensorActive&mode.gpsland)
-    MAX7456_WriteString_P(APLANDtext,getPosition(APstatusPosition));
+//  else if (MwSensorActive&mode.gpsland)
+//    MAX7456_WriteString_P(APLANDtext,getPosition(APstatusPosition));
  
 
 }
@@ -1492,7 +1491,7 @@ void mapmode(void) {
 
 void displayDebug(void)
 {
-#if defined DEBUG
+#if defined (DEBUG)||defined (DEBUGMW)
   if(!Settings[S_DEBUG])
     return;
  
