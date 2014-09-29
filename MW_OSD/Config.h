@@ -32,11 +32,11 @@
 
 
 /********************       CONTROLLER settings      *********************/
-//#define BASEFLIGHT/NAZE32         // Undefine this if you are using BASEFLIGHT / others to correct for heading dispaly issues
+//#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / NAZE32 to correct for heading dispaly issues
 //#define HARIKIRI                  // Undefine this if you are using HARIKIRI (for BOXNAMES compatibility)
 //#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE - to use GPS heading and altitude instead of BARO/MAG
 //#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
-#define MULTIWII_V23              // Undefine this if you are using MW versions 2.2/2.3  
+#define MULTIWII_V23                // Undefine this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V24              // Undefine this if you are using MW versions 2.4  
 
 
