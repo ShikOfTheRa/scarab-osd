@@ -122,7 +122,7 @@ unsigned int allSec=0;
 uint8_t armedtimer=255;
 uint16_t debugerror;
 uint16_t debugval=0;
-uint16_t cell_data[6];
+uint16_t cell_data[6]={0,0,0,0,0,0};
 uint16_t cycleTime;
 uint16_t I2CError;
 uint8_t oldROW=0;
