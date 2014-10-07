@@ -7,7 +7,7 @@
 #define HORIZON         // Enable/disable HORIZON indicator
 #define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
 #define GPSTIME         // Enable/disable GPS Time functions
-#define SPORT           // Enable/disable FRSKY S.PORT cell code
+//#define SPORT           // Enable/disable FRSKY S.PORT cell code
 
 
 /********************       HARDWARE OSD settings      *********************/
