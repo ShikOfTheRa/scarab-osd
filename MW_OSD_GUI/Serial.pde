@@ -525,7 +525,7 @@ void SendCommand(int cmd){
       case MSP_NAV_STATUS:
         PortIsWriting = true;
         headSerialReply(MSP_NAV_STATUS, 7);
-        if (millis()>oldwpmillis+2000){
+        if (millis()>oldwpmillis+1500){
           oldwpmillis=millis();
           wpno++;
           if (wpno>15) wpno=0;

@@ -1082,9 +1082,10 @@ void draw() {
 
         
         if (ClosePort) return;
-          SendCommand(MSP_BOXNAMES);
-          SendCommand(MSP_BOXIDS);
-          SendCommand(MSP_IDENT);
+
+        if (init_com==1)SendCommand(MSP_BOXNAMES);
+        if (init_com==1)SendCommand(MSP_BOXIDS);
+        if (init_com==1)SendCommand(MSP_IDENT);
 
         MSP_sendOrder++;
         switch(MSP_sendOrder) {
@@ -1103,7 +1104,6 @@ void draw() {
           if (init_com==1)SendCommand(MSP_RAW_GPS);
           break;
         case 5:
-          PortWrite = !PortWrite;      
           if (init_com==1)SendCommand(MSP_ATTITUDE);
           if (init_com==1)SendCommand(MSP_ALTITUDE);
           break;
@@ -1111,10 +1111,10 @@ void draw() {
           if (init_com==1)SendCommand(MSP_RC);
           break;
         case 7: 
-          if (toggleMSP_Data == false) SendCommand(MSP_BOXNAMES);
+          if ((init_com==1)&&(toggleMSP_Data == false)) SendCommand(MSP_BOXNAMES);
           break;
         case 8:
-          if (toggleMSP_Data == false) SendCommand(MSP_BOXIDS);
+          if ((init_com==1)&&(toggleMSP_Data == false)) SendCommand(MSP_BOXIDS);
           break;
         case 9:
           if (init_com==1)SendCommand(MSP_NAV_STATUS);
@@ -1126,6 +1126,7 @@ void draw() {
         case 11:
           break;
         }
+        PortWrite = !PortWrite; // toggle TX LED every other     
       }
     } // End !FontMode
   }
