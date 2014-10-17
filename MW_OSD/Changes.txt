@@ -1,58 +1,24 @@
-/*
-Key Improvements for `R1.2`:- OSD
-
-+ OSD - Support for HUD layouts set by GUI
-+ GUI - 8 Preset OSD layouts can be selected from GUI
-
-+ OSD - 2 Layouts can be assigned to OSD SWITCH
-+ OSD - OSD ready for future GUI with option to define custom layout
-+ OSD - Increased Amperage display to 999A
-+ OSD - Increased resolution of MAP mode by approx 900%
-+ OSD - MAP mode operation changed - Legacy retained as option
-+ OSD - autodisplay FRSKY cell data if connected
-+ OSD - Added default Baseflight amperage and heading correction support
-+ OSD - vario font amended for sharper display
-+ OSD - MAX chip startup delay configurable for boards with low voltage rise time
-+ OSD - AUTOPILOT indicator as default. Legacy RTH distance retained as option
-+ OSD - Fixedwing Passthrough MODE display support(PatrikE)
-+ OSD - Sats warning if <5 sats
-
-+ GUI: Layouts can be assigned to OSD SWITCH. Choice reflected on GUI sim
-+ GUI: Simulator - Add FRSKY cells to simulator
-+ GUI: Simulator - Display GPS time and support when OSD GPSTIME enabled
-+ GUI: Simulator - Added support to show map mode
-+ GUI: Many changes to support OSD changes
-
-+ CONFIG - All major options are now supported by default within memory
-+ CONFIG - Added support for boards with different resistors / pinout
-+ CONFIG - Specified support for HARIKIRI / BASEFLIGHT / MULTIWII
-+ CONFIG - Added specified support for witespy v2 boards
-+ CONFIG - Amperage support for MW2.4 changes
-+ CONFIG - Baud rate option in config.h
-+ CONFIG - FRSKY SPORT option in config.h
-+ CONFIG - FAST PWM RX RSSI support
-+ CONFIG - Intro delay option in config.h
-+ CONFIG - Time zone intro display option in config.h
-+ CONFIG - Freetext displayed using a switch (e.g. "TARGET LOCK" indicator !)
-
-bugfix - GPS time ignored when GPSTIME disabled in config
-bugfix - min_cell volt correction
-bugfix - Fix for RSSI when tx switched off (negative value)
-
 
 Requests under review for future releases:
 
-Callsign
-  - GUI to support location  
+#1 - Full GUI customisable layout
+#2 - Alarms for distance / Altitude / Speed / mah / Current 
+#3 - Large Font
+
+Auto PAL/NTSC detect
+Fixedwing use GPS data for ladders / vario - if not in FC code
+Filtering for MSP sensor data
+Flight path vector
+Navigation mode layout
+Callsign - GUI to support location  
 Power consumtion W/Hr  
 Add "Disarmed" enable / disable option to GUI
-Alarms for distance / Altitude / Speed / mah / Current
 Add description chracter font for for heading / angle to home
 Additional MAP mode
 Increased HUD layout choices
  - different layouts
  - different sidebars
- - Full GUI customisable layout
+
 Display anal / PWM sensors on GUI - via MW OSD protocol
  
 Review alternative look / feel
