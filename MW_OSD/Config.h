@@ -7,13 +7,24 @@
 #define HORIZON         // Enable/disable HORIZON indicator
 #define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
 #define GPSTIME         // Enable/disable GPS Time functions
-//#define SPORT           // Enable/disable FRSKY S.PORT cell code
+#define SPORT           // Enable/disable FRSKY S.PORT cell code
 
 
 /********************       HARDWARE OSD settings      *********************/
-//#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
-//#define WITESPYV2                 // If using Witespy V2 OSD, select this to use alternative resistors / pinouts 
-//#define RUSHDUINO                 // If using Rushduino, select this
+//Choose only one option:
+#define MINIMOSD                    // Choose this if using standard MINIMOSD hardware (default for 95% of boards) 
+//#define WITESPYV2                 // Choose this if using Witespy V2 OSD, select this to use alternative resistors / pinouts 
+//#define RUSHDUINO                 // Choose this if using Rushduino, select this
+
+
+/********************       CONTROLLER settings      *********************/
+//Choose only one option:
+//#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / NAZE32 for compatibility with heading and current data
+//#define HARIKIRI                  // Undefine this if you are using HARIKIRI (for BOXNAMES compatibility)
+//#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE - to use GPS heading and altitude instead of BARO/MAG
+//#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
+#define MULTIWII_V23                // Undefine this if you are using MW versions 2.2/2.3  
+//#define MULTIWII_V24              // Undefine this if you are using MW versions 2.4  
 
 
 /********************       HARDWARE CURRENT sensor settings      *********************/
@@ -22,22 +33,13 @@
 
 
 /********************       FILTER settings      *********************/
-// Choose only one of the following
+//Choose only one option:
 #define STAGE2FILTER              // Enable for smoother readings of voltage / current / RSSI. 
 //#define SMOOTHFILTER              // Enable for smoothest readings of voltage / current / RSSI. Uses more memory. Prototype
 
 
 /********************       RSSI settings      *********************/
 //#define FASTPWMRSSI               // Undefine this if you are using non standard PWM for RSSI ( high frequency ) 
-
-
-/********************       CONTROLLER settings      *********************/
-//#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / NAZE32 to correct for heading dispaly issues
-//#define HARIKIRI                  // Undefine this if you are using HARIKIRI (for BOXNAMES compatibility)
-//#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE - to use GPS heading and altitude instead of BARO/MAG
-//#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
-#define MULTIWII_V23                // Undefine this if you are using MW versions 2.2/2.3  
-//#define MULTIWII_V24              // Undefine this if you are using MW versions 2.4  
 
 
 /********************       CALLSIGN settings      *********************/
@@ -77,7 +79,9 @@
 
 
 /********************       Display Settings         ************************/
+//#define AUTOCAM                   // Enable autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings. Not recommended for > 600TVL cameras
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
+//#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status

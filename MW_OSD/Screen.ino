@@ -420,10 +420,6 @@ void displayHorizon(int rollAngle, int pitchAngle)
 void displayVoltage(void)
 {
  
- 
-  if (Settings[S_VIDVOLTAGE_VBAT]){
-    vidvoltage=MwVBat;
-  }
   if (Settings[S_MAINVOLTAGE_VBAT]){
     voltage=MwVBat;
   }
