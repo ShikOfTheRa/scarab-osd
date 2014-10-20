@@ -498,8 +498,8 @@ int16_t temperature=0;                  // temperature in degrees Centigrade
 // For Statistics
 uint16_t speedMAX=0;
 int16_t altitudeMAX=0;
-int16_t distanceMAX=0;
-int trip=0;//needs determining what int to be
+uint16_t distanceMAX=0;
+int32_t trip=0;
 uint16_t flyingTime=0; 
 
 
