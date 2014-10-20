@@ -7,6 +7,11 @@
 #ifndef WHITEBRIGHTNESS
   #define WHITEBRIGHTNESS 0x01
 #endif
+#ifndef BLACKBRIGHTNESS
+  #define BLACKBRIGHTNESS 0x00
+#endif
+
+#define BWBRIGHTNESS ((BLACKBRIGHTNESS << 2) | WHITEBRIGHTNESS)
 
 //MAX7456 opcodes
 #define DMM_reg   0x04
@@ -184,10 +189,10 @@ void MAX7456Setup(void)
   delay(500);
 #endif
 
-  // set all rows to same charactor white level, 120%
+  // set all rows to same charactor black/white level
   uint8_t x;
   for(x = 0; x < MAX_screen_rows; x++) {
-    MAX7456_Send(MAX7456ADD_RB0+x, WHITEBRIGHTNESS);
+    MAX7456_Send(MAX7456ADD_RB0+x, BWBRIGHTNESS);
   }
 
   // make sure the Max7456 is enabled
