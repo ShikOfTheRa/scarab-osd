@@ -339,7 +339,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
       Y -= pitchAngle / 8;
       Y += 41;
       if(Y >= 0 && Y <= 81) {
-        uint16_t pos = position + LINE*(Y/9) + 3 - 2*LINE + X;
+        uint16_t pos = position -1 + LINE*(Y/9) + 3 - 2*LINE + X;
         screen[pos] = SYM_AH_BAR9_0+(Y%9);
       }
     }
