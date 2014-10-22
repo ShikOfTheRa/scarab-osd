@@ -13,7 +13,7 @@
 /********************       HARDWARE OSD settings      *********************/
 //Choose only one option:
 #define MINIMOSD                    // Choose this if using standard MINIMOSD hardware (default for 95% of boards) 
-//#define WITESPYV2                 // Choose this if using Witespy V2 OSD, select this to use alternative resistors / pinouts 
+//#define WITESPYV1.1               // Choose this if using Witespy V1.1 OSD, select this to use alternative resistors / pinouts 
 //#define RUSHDUINO                 // Choose this if using Rushduino, select this
 
 
@@ -155,7 +155,7 @@
     # define MAX7456SELECT 6         // ss
     # define MAX7456RESET  10        // RESET
 #endif
-#ifdef WITESPYV2                     
+#ifdef WITESPYV1.1                     
     #define VOLTAGEPIN    A2
     #define VIDVOLTAGEPIN A0
     #define DIVIDER1v1      0.0002      // Voltage divider for 1.1v reference. 
