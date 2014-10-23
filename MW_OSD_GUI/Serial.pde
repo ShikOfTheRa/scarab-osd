@@ -259,7 +259,7 @@ public void WRITE(){
   inBuf[0] = OSD_WRITE_CMD;
 //  delay (100); 
   for (int txTimes = 0; txTimes<2; txTimes++) {
-    headSerialReply(MSP_OSD, CONFIGITEMS + (CONFIGITEMS16*2*2) +1);
+    headSerialReply(MSP_OSD, CONFIGITEMS + (hudoptions*2*2) +1);
 //    headSerialReply(MSP_OSD, CONFIGITEMS +1);
     serialize8(OSD_WRITE_CMD);
 
@@ -272,11 +272,11 @@ confItem[GetSetting("S_MAPMODE")].setValue(1);
     }
 
      int clayout=int(confItem[GetSetting("S_HUD")].value()); 
-     for(int i = 0; i < (CONFIGITEMS16); i++){
+     for(int i = 0; i < (hudoptions); i++){
        serialize8(int(ConfigLayout[0][i]&0xFF));
        serialize8(int(ConfigLayout[0][i]>>8));
      }
-     for(int i = 0; i < (CONFIGITEMS16); i++){
+     for(int i = 0; i < (hudoptions); i++){
        serialize8(int(ConfigLayout[1][i]&0xFF));
        serialize8(int(ConfigLayout[1][i]>>8));
      }
