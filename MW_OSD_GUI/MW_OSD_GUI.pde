@@ -155,8 +155,16 @@ boolean PortWrite = false;
 ControlGroup messageBox;
 Textlabel MessageText;
 
+// XML config variables
+int DISPLAY_STATE;
+int hudsavailable;
+int hudoptions;
+int xmlloaded=0;
+XML xml;
+int[][] CONFIGHUD;
 
-
+int[] SimPosn;
+int[][] ConfigLayout;
 
 // Int variables
 String OSname = System.getProperty("os.name");
@@ -610,6 +618,8 @@ controlP5.Controller hideLabel(controlP5.Controller c) {
 
 void setup() {
   size(windowsX,windowsY);
+  xml = loadXML("HUDLAYOUT.xml");
+  initxml();
  
 //Map<Settings, String> table = new EnumMap<Settings>(Settings.class);
 OnTimer = millis();
@@ -1185,41 +1195,10 @@ void draw() {
 
 
 
- for(int i = 0; i < (CONFIGITEMS16); i++){
-       if(confItem[GetSetting("S_HUD")].value()==7) 
-         ConfigLayout[0][i]=CONFIG16_7[i];
-       else if(confItem[GetSetting("S_HUD")].value()==6) 
-         ConfigLayout[0][i]=CONFIG16_6[i];
-       else if(confItem[GetSetting("S_HUD")].value()==5) 
-         ConfigLayout[0][i]=CONFIG16_5[i];
-       else if(confItem[GetSetting("S_HUD")].value()==4) 
-         ConfigLayout[0][i]=CONFIG16_4[i];
-       else if(confItem[GetSetting("S_HUD")].value()==3) 
-         ConfigLayout[0][i]=CONFIG16_3[i];
-       else if(confItem[GetSetting("S_HUD")].value()==2) 
-         ConfigLayout[0][i]=CONFIG16_2[i];
-       else if(confItem[GetSetting("S_HUD")].value()==1) 
-         ConfigLayout[0][i]=CONFIG16_1[i];
-       else  
-         ConfigLayout[0][i]=CONFIG16_0[i];
-
-
-       if(confItem[GetSetting("S_HUDOSDSW")].value()==7) 
-         ConfigLayout[1][i]=CONFIG16_7[i];
-       else if(confItem[GetSetting("S_HUDOSDSW")].value()==6) 
-         ConfigLayout[1][i]=CONFIG16_6[i];
-       else if(confItem[GetSetting("S_HUDOSDSW")].value()==5) 
-         ConfigLayout[1][i]=CONFIG16_5[i];
-       else if(confItem[GetSetting("S_HUDOSDSW")].value()==4) 
-         ConfigLayout[1][i]=CONFIG16_4[i];
-       else if(confItem[GetSetting("S_HUDOSDSW")].value()==3) 
-         ConfigLayout[1][i]=CONFIG16_3[i];
-       else if(confItem[GetSetting("S_HUDOSDSW")].value()==2) 
-         ConfigLayout[1][i]=CONFIG16_2[i];
-       else if(confItem[GetSetting("S_HUDOSDSW")].value()==1) 
-         ConfigLayout[1][i]=CONFIG16_1[i];
-       else  
-         ConfigLayout[1][i]=CONFIG16_0[i];
+ for(int i = 0; i < (hudoptions); i++){
+ 
+   ConfigLayout[0][i]=CONFIGHUD[int(confItem[GetSetting("S_HUD")].value())][i];
+   ConfigLayout[1][i]=CONFIGHUD[int(confItem[GetSetting("S_HUDOSDSW")].value())][i];
 
    int minimalscreen=0;
    if (toggleModeItems[9].getValue()>0) minimalscreen=1 ;
@@ -1848,4 +1827,33 @@ public void SPORTLINK(){
  link("http://code.google.com/p/scarab-osd/wiki/Frsky_SPort"); 
 }
 
+void initxml(){
+  int value;
+  int enabled;
+  int hud;
+  int hudindex;
+  int xx;
+
+  XML[] xmlhudconfig = xml.getChildren("CONFIG");
+  hudsavailable = xmlhudconfig[0].getInt("value");
+  XML[] allhudoptions = xml.getChildren("LAYOUT");
+  hudoptions = allhudoptions.length/hudsavailable;
+  CONFIGHUD= new int[hudsavailable][hudoptions];
+  for (int i = 0; i < allhudoptions.length; i++) {
+    value = allhudoptions[i].getInt("value");
+    enabled = allhudoptions[i].getInt("enabled");
+    hud = allhudoptions[i].getInt("hud");
+    hudindex = i%hudoptions;
+    if (enabled == 1)
+      DISPLAY_STATE=0xC000;
+    else
+      DISPLAY_STATE=0x0000;    
+    CONFIGHUD[hud][hudindex] = value | DISPLAY_STATE;  
+//    println("configHUD["+hud+"]["+hudindex+"] = "+CONFIGHUD[hud][hudindex]);
+  }
+//  int[] CONFIG16 = new int[hudoptions];
+SimPosn = new int[hudoptions];
+ConfigLayout= new int[4][hudoptions];
+
+}
 
