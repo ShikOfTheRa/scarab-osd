@@ -31,6 +31,8 @@ CheckBox ShowSimBackground, UnlockControls, SGPS_FIX,SFRSKY;
 //Toggles
 Toggle toggleModeItems[] = new Toggle[boxnames.length] ;
 Toggle SimControlToggle;
+// Toggle HudOptionEnabled;
+
 // Slider2d ---
 Slider2D Pitch_Roll, Throttle_Yaw,MW_Pitch_Roll;
 //Sliders ---
@@ -55,11 +57,84 @@ DecimalFormat OnePlaceDecimal = new DecimalFormat("0.0");
 DecimalFormat TwoPlaceDecimal = new DecimalFormat("0.00");
 
 
+void LayoutEditorSetup(){
+ Group LE;
+// CheckBox HudOptionEnabled;
+
+   LE = ScontrolP5.addGroup("LE")
+    .setPosition(690,275)
+    .setWidth(345)
+    .setBarHeight(13)
+    .activateEvent(true)
+//    .disableCollapse()
+//    .setBackgroundColor(color(0,255))
+    .setBackgroundHeight(192)
+   .setLabel("Layout Editor")
+//   .close()
+   .setMoveable(true);
+    ; 
+
+  buttonLPOSUP = controlP5.addButton("bPOSLUP",1,10,10,12,19)
+  .setLabel("-")
+  .setColorBackground(red_) 
+  .setGroup(LE);
+  buttonLPOSDOWN = controlP5.addButton("bPOSLDOWN",1,10,30,12,19)
+  .setLabel("+")
+  .setColorBackground(red_)
+  .setGroup(LE);
+  txtlblLayoutTxt = controlP5.addTextlabel("txtlblLayoutTxt","blah",25,25) 
+  .setGroup(LE);
+
+
+  buttonLPOSEN = controlP5.addButton("bPOSLEN",1,10,60,12,19)
+  .setLabel("*")
+  .setColorBackground(red_)
+  .setGroup(LE);
+
+  txtlblLayoutEnTxt = controlP5.addTextlabel("txtlblLayoutEnTxt","-",25,60) 
+  .setGroup(LE);
+
+  txtlblLayoutHudTxt = controlP5.addTextlabel("txtlblLayoutHudTxt","-",90,3) 
+  .setGroup(LE);
+ 
+
+  buttonLUP = controlP5.addButton("bLUP",1,185,10,40,19)
+  .setLabel("   UP")
+  .setColorBackground(red_)
+  .setGroup(LE);
+  buttonLDOWN = controlP5.addButton("bLDOWN",1,185,60,40,19)
+  .setLabel("DOWN")
+  .setColorBackground(red_)
+  .setGroup(LE);
+  buttonLLEFT = controlP5.addButton("bLLEFT",1,160,35,40,19)
+  .setLabel(" LEFT")
+  .setColorBackground(red_)
+  .setGroup(LE);
+  buttonLRIGHT = controlP5.addButton("bLRIGHT",1,210,35,40,19)
+  .setLabel("RIGHT")
+  .setColorBackground(red_)
+  .setGroup(LE);
+
+  buttonLSET = controlP5.addButton("bLSET",1,270,10,65,19)
+  .setLabel("Switches")
+  .setColorBackground(red_)
+  .setGroup(LE);
+  buttonLADD = controlP5.addButton("bLADD",1,270,35,65,19)
+  .setLabel("      ADD")
+  .setColorBackground(red_)
+  .setGroup(LE);
+  buttonLSAVE = controlP5.addButton("bLSAVE",1,270,60,65,19)
+  .setLabel("     SAVE")
+  .setColorBackground(red_)
+  .setGroup(LE);
+
+}
 
  
 void SimSetup(){
 
-  
+LayoutEditorSetup();
+   
  
 
   SG = ScontrolP5.addGroup("SG")
@@ -67,7 +142,7 @@ void SimSetup(){
     .setWidth(733)
     .setBarHeight(13)
     .activateEvent(true)
-    .disableCollapse()
+//    .disableCollapse()
 //    .setBackgroundColor(color(0,255))
     .setBackgroundHeight(192)
    .setLabel("Simulator")
