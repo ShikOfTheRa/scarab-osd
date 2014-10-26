@@ -5,7 +5,9 @@ Requests under review for future releases:
 #2 - Alarms for distance / Altitude / Speed / mah / Current 
 #3 - Large Font
 
-Auto PAL/NTSC detect
+GUI boxes - green for on
+GUI - single click input instead of drag/drop
+OSD switch - three positions
 Fixedwing use GPS data for ladders / vario - if not in FC code
 Filtering for MSP sensor data
 Flight path vector
@@ -36,5 +38,10 @@ Review alternative look / feel
 Code quality
  - Tidy up float calcs
  - Generally review and improve code quality
+
+
+
+Done pending test....
+Auto PAL/NTSC detect
  
 */     

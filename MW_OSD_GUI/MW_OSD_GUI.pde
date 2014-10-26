@@ -139,6 +139,7 @@ ControlP5 ScontrolP5;
 ControlP5 FontGroupcontrolP5;
 ControlP5 GroupcontrolP5;
 Textlabel txtlblWhichcom; 
+Textlabel txtlblLayoutTxt,txtlblLayoutEnTxt, txtlblLayoutHudTxt; 
 ListBox commListbox;
 
 //char serialBuffer[] = new char[128]; // this hold the imcoming string from serial O string
@@ -159,9 +160,17 @@ Textlabel MessageText;
 int DISPLAY_STATE;
 int hudsavailable;
 int hudoptions;
+int[][] hudenable;
+String[] hudpositiontext;
 int xmlloaded=0;
 XML xml;
 int[][] CONFIGHUD;
+int[][] CONFIGHUDEN;
+String[] CONFIGHUDTEXT;
+
+// XML config editorvariables
+int hudeditposition=0;
+
 
 int[] SimPosn;
 int[][] ConfigLayout;
@@ -564,6 +573,7 @@ Textlabel FileUploadText, TXText, RXText;
 
 // Buttons------------------------------------------------------------------------------------------------------------------
 Button buttonIMPORT,buttonSAVE,buttonREAD,buttonRESET,buttonWRITE,buttonRESTART, buttonGPSTIMELINK, buttonSPORTLINK;
+Button buttonLUP, buttonLDOWN, buttonLLEFT, buttonLRIGHT, buttonLPOSUP, buttonLPOSDOWN, buttonLPOSEN, buttonLSET, buttonLADD, buttonLSAVE;
 // Buttons------------------------------------------------------------------------------------------------------------------
 
 // Toggles------------------------------------------------------------------------------------------------------------------
@@ -571,8 +581,7 @@ Toggle toggleConfItem[] = new Toggle[CONFIGITEMS] ;
 // Toggles------------------------------------------------------------------------------------------------------------------    
 
 // checkboxes------------------------------------------------------------------------------------------------------------------
-CheckBox checkboxConfItem[] = new CheckBox[CONFIGITEMS] ;
-
+CheckBox checkboxConfItem[] = new CheckBox[CONFIGITEMS];
 
 // Toggles------------------------------------------------------------------------------------------------------------------    
 RadioButton RadioButtonConfItem[] = new RadioButton[CONFIGITEMS] ;
@@ -602,7 +611,7 @@ Group MGUploadF,
   G_HUD,
   G_COMPASS,
   G_DISPLAY,
-  G_SPORT  
+  G_SPORT
   ;
 
 // Timers --------------------------------------------------------------------------------------------------------------------
@@ -618,7 +627,8 @@ controlP5.Controller hideLabel(controlP5.Controller c) {
 
 void setup() {
   size(windowsX,windowsY);
-  xml = loadXML("HUDLAYOUT.xml");
+//  xml = loadXML("HUDLAYOUT.xml");
+  xml = loadXML("custom.xml");
   initxml();
  
 //Map<Settings, String> table = new EnumMap<Settings>(Settings.class);
@@ -697,7 +707,6 @@ GUIBackground = loadImage("GUI_def.jpg");
   buttonWRITE = controlP5.addButton("WRITE",1,XControlBox+30,YControlBox+50,45,16);buttonWRITE.setColorBackground(red_);
   buttonRESET = controlP5.addButton("DEFAULT",1,XControlBox+25,YControlBox+75,55,16);buttonRESET.setColorBackground(red_);
   buttonRESTART = controlP5.addButton("RESTART",1,XControlBox+25,YControlBox+100,55,16);buttonRESTART.setColorBackground(red_);
-    
     
 
 // EEPROM----------------------------------------------------------------
@@ -835,14 +844,6 @@ controlP5.addTextfield("CallSign")
 
 
        
-  // CheckBox "Hide Background"
-  ShowSimBackground = controlP5.addCheckBox("ShowSimBackground",XSim,YSim-80);
-  ShowSimBackground.setColorActive(color(255));
-  ShowSimBackground.setColorBackground(color(120));
-  ShowSimBackground.setItemsPerRow(1);
-  ShowSimBackground.setSpacingColumn(10);
-  ShowSimBackground.setLabel("Hide Background");
-  ShowSimBackground.addItem("Hide Background",1);
 
   for(int i=0;i<CONFIGITEMS;i++) {
     if (ConfigRanges[i] == 0) {
@@ -990,8 +991,27 @@ void MakePorts(){
 }
 
 void draw() {
+
   time=millis();
 //    image(GUIBackground,0, 0, windowsX, windowsY); //529-WindowShrinkX, 360-WindowShrinkY);
+
+// Layout editor.......
+  txtlblLayoutTxt.setValue(CONFIGHUDTEXT[hudeditposition]);
+
+  int hudid=0;
+  if (toggleModeItems[9].getValue()>0)
+    hudid = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  else
+    hudid = int(confItem[GetSetting("S_HUD")].value()); 
+  txtlblLayoutHudTxt.setValue("HUD: "+hudid);
+
+  if (CONFIGHUDEN[hudid][hudeditposition]>0)
+    txtlblLayoutEnTxt.setValue("Enabled");
+  else
+    txtlblLayoutEnTxt.setValue("Disabled");
+
+
+
 
   //hint(ENABLE_DEPTH_TEST);
   //pushMatrix();
@@ -1181,12 +1201,7 @@ void draw() {
 //  fill(255, 0, 0);
   strokeWeight(3);stroke(0);
   rectMode(CORNERS);
-  if (int(ShowSimBackground.arrayValue()[0]) < 1){
     image(OSDBackground,DisplayWindowX+WindowAdjX+10, DisplayWindowY+WindowAdjY, 354-WindowShrinkX, 300-WindowShrinkY); //529-WindowShrinkX, 360-WindowShrinkY);
-  }
-  else{
-    fill(80, 80, 80); strokeWeight(3);stroke(1); rectMode(CORNER); rect(DisplayWindowX+WindowAdjX, DisplayWindowY+WindowAdjY, 364-WindowShrinkX, 300-WindowShrinkY);  //335-WindowShrinkX, 288-WindowShrinkY);
-  }
 
 
 //################################################################################################################################################################################ 
@@ -1218,6 +1233,10 @@ void draw() {
  }
    
   }
+  
+      
+    if (int(confItem[GetSetting("S_DISPLAYRSSI")].value()) > 0)    ShowRSSI(); 
+
 
   if(confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() > 0) displayHorizon(int(MW_Pitch_Roll.arrayValue()[0])*10,int(MW_Pitch_Roll.arrayValue()[1])*10*-1);
   SimulateTimer();
@@ -1441,6 +1460,79 @@ void displaySensors()
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// BEGIN FILE OPS//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+public void bLUP() {
+  int i = 0;
+  if (toggleModeItems[9].getValue()>0)
+    i = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  else
+    i = int(confItem[GetSetting("S_HUD")].value()); 
+  CONFIGHUD[i][hudeditposition]-=30;
+//  CONFIGHUD[i][hudeditposition]&=0x3FF;
+  println(i+" "+CONFIGHUD[i][hudeditposition]);
+}
+
+public void bLDOWN() {
+  int i = 0;
+  if (toggleModeItems[9].getValue()>0)
+    i = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  else
+    i = int(confItem[GetSetting("S_HUD")].value()); 
+  CONFIGHUD[i][hudeditposition]+=30;
+//  CONFIGHUD[i][hudeditposition]&=0x3FF;
+}
+
+public void bLLEFT() {
+  int i = 0;
+  if (toggleModeItems[9].getValue()>0)
+    i = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  else
+    i = int(confItem[GetSetting("S_HUD")].value()); 
+  CONFIGHUD[i][hudeditposition]-=1;
+//  CONFIGHUD[i][hudeditposition]&=0x3FF;
+}
+
+public void bLRIGHT() {
+  int i = 0;
+  if (toggleModeItems[9].getValue()>0)
+    i = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  else
+    i = int(confItem[GetSetting("S_HUD")].value()); 
+  CONFIGHUD[i][hudeditposition]+=1;
+//  CONFIGHUD[i][hudeditposition]&=0x3FF;
+}
+  
+public void bPOSLUP() {
+  hudeditposition--;
+  hudeditposition= constrain(hudeditposition,0,hudoptions-1);
+//HudOptionEnabled.setValue(1);
+}
+public void bPOSLDOWN() {
+  hudeditposition++;
+  hudeditposition= constrain(hudeditposition,0,hudoptions-1);
+//HudOptionEnabled.setValue(0);
+}
+public void bPOSLEN() {
+  int i = 0;
+  if (toggleModeItems[9].getValue()>0)
+    i = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  else
+    i = int(confItem[GetSetting("S_HUD")].value()); 
+  if (CONFIGHUDEN[i][hudeditposition]>0){
+    CONFIGHUDEN[i][hudeditposition]=0;
+    CONFIGHUD[i][hudeditposition]&=0x3FF;
+  }
+  else{
+    CONFIGHUDEN[i][hudeditposition]=1;
+    CONFIGHUD[i][hudeditposition]|=0xC000;
+  }
+}
+public void bLSAVE() {
+  xmlsavelayout();
+}
+void changehudlpos(){
+}
 
 
 
@@ -1833,13 +1925,22 @@ void initxml(){
   int hud;
   int hudindex;
   int xx;
+  String text;
 
   XML[] xmlhudconfig = xml.getChildren("CONFIG");
   hudsavailable = xmlhudconfig[0].getInt("value");
+  XML[] xmlhuddescription = xml.getChildren("DESCRIPTION");
+  hudoptions = xmlhuddescription.length;
   XML[] allhudoptions = xml.getChildren("LAYOUT");
-  hudoptions = allhudoptions.length/hudsavailable;
+//  hudoptions = allhudoptions.length/hudsavailable;
   CONFIGHUD= new int[hudsavailable][hudoptions];
-  for (int i = 0; i < allhudoptions.length; i++) {
+  CONFIGHUDEN= new int[hudsavailable][hudoptions];
+  CONFIGHUDTEXT= new String[hudoptions];
+  for (int i = 0; i < hudoptions; i++) {
+    text = xmlhuddescription[i].getString("desc");
+    CONFIGHUDTEXT[i] = text;
+  }
+    for (int i = 0; i < allhudoptions.length; i++) {
     value = allhudoptions[i].getInt("value");
     enabled = allhudoptions[i].getInt("enabled");
     hud = allhudoptions[i].getInt("hud");
@@ -1849,11 +1950,23 @@ void initxml(){
     else
       DISPLAY_STATE=0x0000;    
     CONFIGHUD[hud][hudindex] = value | DISPLAY_STATE;  
-//    println("configHUD["+hud+"]["+hudindex+"] = "+CONFIGHUD[hud][hudindex]);
+    CONFIGHUDEN[hud][hudindex] = enabled;      
   }
-//  int[] CONFIG16 = new int[hudoptions];
 SimPosn = new int[hudoptions];
 ConfigLayout= new int[4][hudoptions];
-
 }
 
+
+void xmlsavelayout(){
+  XML[] allhudoptions = xml.getChildren("LAYOUT");
+  int i=0;
+
+  for (int hud = 0; hud < hudsavailable; hud++) {
+    for (int hudindex = 0; hudindex < hudoptions; hudindex++) {
+      allhudoptions[i].setInt("enabled",CONFIGHUDEN[hud][hudindex]);
+      allhudoptions[i].setInt("value",CONFIGHUD[hud][hudindex]&0x3FF);
+      i++;  
+    }    
+  }
+  saveXML(xml, dataPath("custom.xml"));
+}
