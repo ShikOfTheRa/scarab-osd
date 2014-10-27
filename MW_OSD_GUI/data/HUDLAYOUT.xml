@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <HUDLAYOUTS>
-  <CONFIG	value="8" desc="0 = Number of layout choices"/>
+  <CONFIG	value="8" desc="Number of layout choices"/>
 
   <DESCRIPTION	desc="Sat indicator"/>
   <DESCRIPTION	desc="Direction to home"/>

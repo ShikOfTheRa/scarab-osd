@@ -158,7 +158,7 @@ Textlabel MessageText;
 
 // XML config variables
 int DISPLAY_STATE;
-int hudsavailable;
+int hudsavailable=8;
 int hudoptions;
 int[][] hudenable;
 String[] hudpositiontext;
@@ -561,8 +561,13 @@ String[] SimNames= {
 PFont font8,font9,font10,font11,font12,font15;
 
 //Colors--------------------------------------------------------------------------------------------------------------------
-color yellow_ = color(200, 200, 20), green_ = color(30, 120, 30), red_ = color(120, 30, 30), blue_ = color(50, 50, 100),
-grey_ = color(30, 30, 30);
+color yellow_ = color(200, 200, 20), 
+      green_ = color(30, 120, 30), 
+      red_ = color(120, 30, 30), 
+      blue_ = color(50, 50, 100),
+      grey_ = color(30, 30, 30),
+      switches_ = color(30, 140, 30)
+      ;
 //Colors--------------------------------------------------------------------------------------------------------------------
 
 // textlabels -------------------------------------------------------------------------------------------------------------
@@ -573,7 +578,8 @@ Textlabel FileUploadText, TXText, RXText;
 
 // Buttons------------------------------------------------------------------------------------------------------------------
 Button buttonIMPORT,buttonSAVE,buttonREAD,buttonRESET,buttonWRITE,buttonRESTART, buttonGPSTIMELINK, buttonSPORTLINK;
-Button buttonLUP, buttonLDOWN, buttonLLEFT, buttonLRIGHT, buttonLPOSUP, buttonLPOSDOWN, buttonLPOSEN, buttonLSET, buttonLADD, buttonLSAVE;
+Button buttonLUP, buttonLDOWN, buttonLLEFT, buttonLRIGHT, buttonLPOSUP, buttonLPOSDOWN;
+Button buttonLHUDUP,buttonLPOSHUDDOWN,buttonLPOSEN, buttonLSET, buttonLADD, buttonLSAVE, buttonLCANCEL;
 // Buttons------------------------------------------------------------------------------------------------------------------
 
 // Toggles------------------------------------------------------------------------------------------------------------------
@@ -628,7 +634,8 @@ controlP5.Controller hideLabel(controlP5.Controller c) {
 void setup() {
   size(windowsX,windowsY);
 //  xml = loadXML("HUDLAYOUT.xml");
-  xml = loadXML("custom.xml");
+  xml = loadXML("hudlayout.xml");
+//  xml = loadXML(dataPath("hudlayout.xml"));
   initxml();
  
 //Map<Settings, String> table = new EnumMap<Settings>(Settings.class);
@@ -995,6 +1002,7 @@ void draw() {
   time=millis();
 //    image(GUIBackground,0, 0, windowsX, windowsY); //529-WindowShrinkX, 360-WindowShrinkY);
 
+
 // Layout editor.......
   txtlblLayoutTxt.setValue(CONFIGHUDTEXT[hudeditposition]);
 
@@ -1011,7 +1019,8 @@ void draw() {
     txtlblLayoutEnTxt.setValue("Disabled");
 
 
-
+// Colour switches when enabled......
+  coloriseswitches();
 
   //hint(ENABLE_DEPTH_TEST);
   //pushMatrix();
@@ -1468,9 +1477,12 @@ public void bLUP() {
     i = int(confItem[GetSetting("S_HUDOSDSW")].value());
   else
     i = int(confItem[GetSetting("S_HUD")].value()); 
-  CONFIGHUD[i][hudeditposition]-=30;
-//  CONFIGHUD[i][hudeditposition]&=0x3FF;
-  println(i+" "+CONFIGHUD[i][hudeditposition]);
+  int ii = CONFIGHUD[i][hudeditposition]&0x1FF;
+  ii-=30;
+  ii=constrain(ii,0,419);
+  println(ii);
+  CONFIGHUD[i][hudeditposition]&=0xFE00;
+  CONFIGHUD[i][hudeditposition]|=ii;
 }
 
 public void bLDOWN() {
@@ -1479,8 +1491,13 @@ public void bLDOWN() {
     i = int(confItem[GetSetting("S_HUDOSDSW")].value());
   else
     i = int(confItem[GetSetting("S_HUD")].value()); 
-  CONFIGHUD[i][hudeditposition]+=30;
-//  CONFIGHUD[i][hudeditposition]&=0x3FF;
+  int ii = CONFIGHUD[i][hudeditposition]&0x1FF;
+  ii+=30;
+  ii=constrain(ii,0,419);
+  println(ii);
+  CONFIGHUD[i][hudeditposition]&=0xFE00;
+  CONFIGHUD[i][hudeditposition]|=ii;
+//  CONFIGHUD[i][hudeditposition]+=30;
 }
 
 public void bLLEFT() {
@@ -1489,8 +1506,12 @@ public void bLLEFT() {
     i = int(confItem[GetSetting("S_HUDOSDSW")].value());
   else
     i = int(confItem[GetSetting("S_HUD")].value()); 
-  CONFIGHUD[i][hudeditposition]-=1;
-//  CONFIGHUD[i][hudeditposition]&=0x3FF;
+  int ii = CONFIGHUD[i][hudeditposition]&0x1FF;
+  ii-=1;
+  ii=constrain(ii,0,419);
+  println(ii);
+  CONFIGHUD[i][hudeditposition]&=0xFE00;
+  CONFIGHUD[i][hudeditposition]|=ii;
 }
 
 public void bLRIGHT() {
@@ -1499,19 +1520,21 @@ public void bLRIGHT() {
     i = int(confItem[GetSetting("S_HUDOSDSW")].value());
   else
     i = int(confItem[GetSetting("S_HUD")].value()); 
-  CONFIGHUD[i][hudeditposition]+=1;
-//  CONFIGHUD[i][hudeditposition]&=0x3FF;
+  int ii = CONFIGHUD[i][hudeditposition]&0x1FF;
+  ii+=1;
+  ii=constrain(ii,0,419);
+  println(ii);
+  CONFIGHUD[i][hudeditposition]&=0xFE00;
+  CONFIGHUD[i][hudeditposition]|=ii;
 }
   
 public void bPOSLUP() {
   hudeditposition--;
   hudeditposition= constrain(hudeditposition,0,hudoptions-1);
-//HudOptionEnabled.setValue(1);
 }
 public void bPOSLDOWN() {
   hudeditposition++;
   hudeditposition= constrain(hudeditposition,0,hudoptions-1);
-//HudOptionEnabled.setValue(0);
 }
 public void bPOSLEN() {
   int i = 0;
@@ -1531,10 +1554,42 @@ public void bPOSLEN() {
 public void bLSAVE() {
   xmlsavelayout();
 }
-void changehudlpos(){
+
+public void bLCANCEL() {
+  initxml();
+  READ();
 }
 
+public void bLSET() {
+  setset();
+}
 
+public void bLADD() {
+  addchild();
+}
+
+public void bHUDLUP() {
+  int hudid=0;
+  if (toggleModeItems[9].getValue()>0)
+    hudid = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  else
+    hudid = int(confItem[GetSetting("S_HUD")].value()); 
+  hudid--;
+  hudid= constrain(hudid,0,hudsavailable-1);
+  confItem[GetSetting("S_HUD")].setValue(hudid);
+  confItem[GetSetting("S_HUDOSDSW")].setValue(hudid);
+}
+public void bHUDLDOWN() {
+  int hudid=0;
+  if (toggleModeItems[9].getValue()>0)
+    hudid = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  else
+    hudid = int(confItem[GetSetting("S_HUD")].value()); 
+  hudid++;
+  hudid= constrain(hudid,0,hudsavailable-1);
+  confItem[GetSetting("S_HUD")].setValue(hudid);
+  confItem[GetSetting("S_HUDOSDSW")].setValue(hudid);
+}
 
 
 //save the content of the model to a file
@@ -1952,8 +2007,11 @@ void initxml(){
     CONFIGHUD[hud][hudindex] = value | DISPLAY_STATE;  
     CONFIGHUDEN[hud][hudindex] = enabled;      
   }
-SimPosn = new int[hudoptions];
-ConfigLayout= new int[4][hudoptions];
+  SimPosn = new int[hudoptions];
+  ConfigLayout= new int[4][hudoptions];
+  ConfigRanges[GetSetting("S_HUD")] = hudsavailable-1;
+  ConfigRanges[GetSetting("S_HUDOSDSW")] = hudsavailable-1;
+
 }
 
 
@@ -1968,5 +2026,75 @@ void xmlsavelayout(){
       i++;  
     }    
   }
-  saveXML(xml, dataPath("custom.xml"));
+  saveXML(xml, dataPath("hudlayout.xml"));
+  initxml();
+  confItem[GetSetting("S_HUD")].setMax(ConfigRanges[GetSetting("S_HUD")]);
+  confItem[GetSetting("S_HUDOSDSW")].setMax(ConfigRanges[GetSetting("S_HUDOSDSW")]);
+  READ();
 }
+
+
+void setset(){
+toggleConfItem[GetSetting("S_DISPLAYRSSI")].setValue(1);
+toggleConfItem[GetSetting("S_DISPLAYVOLTAGE")].setValue(1);
+toggleConfItem[GetSetting("S_AMPERAGE")].setValue(1);
+toggleConfItem[GetSetting("S_AMPER_HOUR")].setValue(1);
+toggleConfItem[GetSetting("S_VIDVOLTAGE")].setValue(1);
+toggleConfItem[GetSetting("S_DISPLAYGPS")].setValue(1);
+toggleConfItem[GetSetting("S_COORDINATES")].setValue(1);
+toggleConfItem[GetSetting("S_GPSCOORDTOP")].setValue(1);
+toggleConfItem[GetSetting("S_GPSALTITUDE")].setValue(1);
+toggleConfItem[GetSetting("S_DISPLAY_HORIZON_BR")].setValue(1);
+toggleConfItem[GetSetting("S_HORIZON_ELEVATION")].setValue(1);
+toggleConfItem[GetSetting("S_WITHDECORATION")].setValue(1);
+toggleConfItem[GetSetting("S_SCROLLING")].setValue(1);
+toggleConfItem[GetSetting("S_SIDEBARTOPS")].setValue(1);
+toggleConfItem[GetSetting("S_COMPASS")].setValue(1);
+toggleConfItem[GetSetting("S_SHOWHEADING")].setValue(1);
+toggleConfItem[GetSetting("S_ANGLETOHOME")].setValue(1);
+toggleConfItem[GetSetting("S_COORDINATES")].setValue(1);
+toggleConfItem[GetSetting("S_THROTTLEPOSITION")].setValue(1);
+toggleConfItem[GetSetting("S_MODEICON")].setValue(1);
+toggleConfItem[GetSetting("S_MODESENSOR")].setValue(1);
+toggleConfItem[GetSetting("S_GIMBAL")].setValue(1);
+toggleConfItem[GetSetting("S_VARIO")].setValue(1);
+toggleConfItem[GetSetting("S_BAROALT")].setValue(1);
+toggleConfItem[GetSetting("S_TIMER")].setValue(1);
+toggleConfItem[GetSetting("S_GPSTIME")].setValue(1);
+toggleConfItem[GetSetting("S_DISPLAY_CS")].setValue(1);
+toggleConfItem[GetSetting("S_DISPLAYTEMPERATURE")].setValue(1);
+}
+
+
+void addchild(){
+  for (int hudindex = 0; hudindex < hudoptions; hudindex++) {
+  XML newChild = xml.addChild("LAYOUT");
+      newChild.setString("desc",CONFIGHUDTEXT[hudindex]);
+      newChild.setInt("enabled",CONFIGHUDEN[0][hudindex]);
+      newChild.setInt("hud",hudsavailable);
+      newChild.setInt("value",CONFIGHUD[0][hudindex]&0x3FF);
+    }    
+  XML[] xmlhudconfig = xml.getChildren("CONFIG");
+  xmlhudconfig[0].setInt("value",hudsavailable+1);
+  saveXML(xml, dataPath("hudlayout.xml"));
+  initxml();
+  confItem[GetSetting("S_HUD")].setMax(ConfigRanges[GetSetting("S_HUD")]);
+  confItem[GetSetting("S_HUDOSDSW")].setMax(ConfigRanges[GetSetting("S_HUDOSDSW")]);
+  confItem[GetSetting("S_HUD")].setValue(hudsavailable-1);
+  confItem[GetSetting("S_HUDOSDSW")].setValue(hudsavailable-1);
+}
+
+
+void coloriseswitches(){
+  for(int i=0;i<CONFIGITEMS;i++) {
+    if (toggleConfItem[i].getValue()==1)
+      toggleConfItem[i].setColorActive(switches_);
+    else
+      toggleConfItem[i].setColorActive(red_);
+  }
+  if (SimControlToggle.getValue()==1)
+    SimControlToggle.setColorActive(switches_);
+  else
+    SimControlToggle.setColorActive(red_);
+}
+

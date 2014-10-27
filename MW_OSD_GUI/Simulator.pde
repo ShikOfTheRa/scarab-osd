@@ -67,65 +67,90 @@ void LayoutEditorSetup(){
     .setBarHeight(13)
     .activateEvent(true)
 //    .disableCollapse()
-//    .setBackgroundColor(color(0,255))
-    .setBackgroundHeight(192)
+    .setBackgroundColor(color(0,175))
+    .setBackgroundHeight(105)
    .setLabel("Layout Editor")
-//   .close()
+   .close()
    .setMoveable(true);
     ; 
 
-  buttonLPOSUP = controlP5.addButton("bPOSLUP",1,10,10,12,19)
+  buttonLPOSUP = controlP5.addButton("bPOSLUP",1,10,35,12,19)
   .setLabel("-")
-  .setColorBackground(red_) 
+  .setColorBackground(blue_)
+  .setColorCaptionLabel(yellow_)
   .setGroup(LE);
-  buttonLPOSDOWN = controlP5.addButton("bPOSLDOWN",1,10,30,12,19)
+  buttonLPOSDOWN = controlP5.addButton("bPOSLDOWN",1,23,35,12,19)
   .setLabel("+")
-  .setColorBackground(red_)
+  .setColorBackground(blue_)
+  .setColorCaptionLabel(yellow_)
   .setGroup(LE);
-  txtlblLayoutTxt = controlP5.addTextlabel("txtlblLayoutTxt","blah",25,25) 
+  txtlblLayoutTxt = controlP5.addTextlabel("txtlblLayoutTxt","blah",37,35) 
   .setGroup(LE);
 
 
-  buttonLPOSEN = controlP5.addButton("bPOSLEN",1,10,60,12,19)
+  buttonLPOSEN = controlP5.addButton("bPOSLEN",1,23,60,12,19)
   .setLabel("*")
-  .setColorBackground(red_)
+  .setColorBackground(blue_)
+  .setColorCaptionLabel(yellow_)
+  .setGroup(LE);
+  txtlblLayoutEnTxt = controlP5.addTextlabel("txtlblLayoutEnTxt","-",37,60)
   .setGroup(LE);
 
-  txtlblLayoutEnTxt = controlP5.addTextlabel("txtlblLayoutEnTxt","-",25,60) 
+  buttonLPOSUP = controlP5.addButton("bHUDLUP",1,10,10,12,19)
+  .setLabel("-")
+  .setColorBackground(blue_)
+  .setColorCaptionLabel(yellow_)
+  .setGroup(LE);
+  buttonLPOSDOWN = controlP5.addButton("bHUDLDOWN",1,23,10,12,19)
+  .setLabel("+")
+  .setColorBackground(blue_)
+  .setColorCaptionLabel(yellow_)
   .setGroup(LE);
 
-  txtlblLayoutHudTxt = controlP5.addTextlabel("txtlblLayoutHudTxt","-",90,3) 
+  txtlblLayoutHudTxt = controlP5.addTextlabel("txtlblLayoutHudTxt","-",37,10) 
   .setGroup(LE);
  
 
   buttonLUP = controlP5.addButton("bLUP",1,185,10,40,19)
   .setLabel("   UP")
-  .setColorBackground(red_)
+  .setColorBackground(blue_)
+  .setColorCaptionLabel(yellow_)
   .setGroup(LE);
   buttonLDOWN = controlP5.addButton("bLDOWN",1,185,60,40,19)
   .setLabel("DOWN")
-  .setColorBackground(red_)
+  .setColorBackground(blue_)
+  .setColorCaptionLabel(yellow_)
   .setGroup(LE);
   buttonLLEFT = controlP5.addButton("bLLEFT",1,160,35,40,19)
   .setLabel(" LEFT")
-  .setColorBackground(red_)
+  .setColorBackground(blue_)
+  .setColorCaptionLabel(yellow_)
   .setGroup(LE);
   buttonLRIGHT = controlP5.addButton("bLRIGHT",1,210,35,40,19)
   .setLabel("RIGHT")
-  .setColorBackground(red_)
+  .setColorBackground(blue_)
+  .setColorCaptionLabel(yellow_)
   .setGroup(LE);
 
-  buttonLSET = controlP5.addButton("bLSET",1,270,10,65,19)
+  buttonLSET = controlP5.addButton("bLSET",1,270,9,65,16)
   .setLabel("Switches")
-  .setColorBackground(red_)
+  .setColorBackground(blue_)
+  .setColorCaptionLabel(yellow_)
   .setGroup(LE);
-  buttonLADD = controlP5.addButton("bLADD",1,270,35,65,19)
+  buttonLADD = controlP5.addButton("bLADD",1,270,28,65,16)
   .setLabel("      ADD")
-  .setColorBackground(red_)
+  .setColorBackground(blue_)
+  .setColorCaptionLabel(yellow_)
   .setGroup(LE);
-  buttonLSAVE = controlP5.addButton("bLSAVE",1,270,60,65,19)
+  buttonLSAVE = controlP5.addButton("bLSAVE",1,270,47,65,16)
   .setLabel("     SAVE")
-  .setColorBackground(red_)
+  .setColorBackground(blue_)
+  .setColorCaptionLabel(yellow_)
+  .setGroup(LE);
+  buttonLSAVE = controlP5.addButton("bLCANCEL",1,270,66,65,16)
+  .setLabel("    CANCEL")
+  .setColorBackground(blue_)
+  .setColorCaptionLabel(yellow_)
   .setGroup(LE);
 
 }
@@ -142,7 +167,7 @@ LayoutEditorSetup();
     .setWidth(733)
     .setBarHeight(13)
     .activateEvent(true)
-//    .disableCollapse()
+    .disableCollapse()
 //    .setBackgroundColor(color(0,255))
     .setBackgroundHeight(192)
    .setLabel("Simulator")
