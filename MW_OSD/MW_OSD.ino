@@ -292,16 +292,16 @@ void loop()
           displayCurrentThrottle();
 
 #ifdef CALLSIGNALWAYS
-        if(Settings[S_DISPLAY_CS]) displayCallsign(CALLSIGNALWAYS); 
+        if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition)); 
 #elif  FREETEXTLLIGHTS
-        if (MwSensorActive&mode.llights) displayCallsign(FREETEXTLLIGHTS); 
+        if (MwSensorActive&mode.llights) displayCallsign(getPosition(callSignPosition)); 
 #elif  FREETEXTGIMBAL
-        if (MwSensorActive&mode.camstab) displayCallsign(FREETEXTGIMBAL); 
+        if (MwSensorActive&mode.camstab) displayCallsign(getPosition(callSignPosition)); 
 #else 
-        if ( (onTime > (timer.lastCallSign+300)) || (onTime < (timer.lastCallSign+4)))
+        if ( (onTime > (timer.lastCallSign+CALLSIGNINTERVAL)) || (onTime < (timer.lastCallSign+4)))
        {
            // Displays 4 sec every 5min (no blink during flight)
-        if ( onTime > (timer.lastCallSign+300)) timer.lastCallSign = onTime; 
+        if ( onTime > (timer.lastCallSign+CALLSIGNDURATION)) timer.lastCallSign = onTime; 
         if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition));      
        }
 #endif
