@@ -1,11 +1,10 @@
 
 Requests under review for future releases:
 
-#1 - Full GUI customisable layout
-#2 - Alarms for distance / Altitude / Speed / mah / Current 
-#3 - Large Font
+#1 - Alarms for distance / Altitude / Speed / mah / Current 
+#2 - Large Font
 
-GUI boxes - green for on
+OSD - prominent batt low text display
 GUI - single click input instead of drag/drop
 OSD switch - three positions
 Fixedwing use GPS data for ladders / vario - if not in FC code
@@ -14,7 +13,6 @@ Flight path vector
 Navigation mode layout
 Callsign - GUI to support location  
 Power consumtion W/Hr  
-Add "Disarmed" enable / disable option to GUI
 Add description chracter font for for heading / angle to home
 Additional MAP mode
 Increased HUD layout choices
@@ -42,6 +40,10 @@ Code quality
 
 
 Done pending test....
+#1 - Full GUI customisable layout
 Auto PAL/NTSC detect
+GUI boxes - green for on
+Add "Disarmed" enable / disable option to GUI
+
  
 */     

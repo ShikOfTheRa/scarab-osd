@@ -7,7 +7,7 @@
 #define HORIZON         // Enable/disable HORIZON indicator
 #define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
 #define GPSTIME         // Enable/disable GPS Time functions
-#define SPORT           // Enable/disable FRSKY S.PORT cell code
+//#define SPORT           // Enable/disable FRSKY S.PORT cell code
 
 
 /********************       HARDWARE OSD settings      *********************/
@@ -43,13 +43,15 @@
 
 
 /********************       CALLSIGN settings      *********************/
-//#define CALLSIGNALWAYS  341       // Enable to permanently display callsign. Number = screen position (row*30 + column)
-//#define FREETEXTLLIGHTS 342       // Enable to display freetext (or callsign) when LLIGHTS Switch active on TX. Number = screen position (row*30 + column)
-//#define FREETEXTGIMBAL  342       // Enable to display freetext (or callsign) when GIMBAL Switch active on TX. Number = screen position (row*30 + column)
+#define   CALLSIGNINTERVAL 60      // How frequently to display Callsign (in seconds)
+#define   CALLSIGNDURATION 4       // How long to display Callsign (in seconds)
+//#define CALLSIGNALWAYS           // Alternative option - enable to permanently display callsign.
+//#define FREETEXTLLIGHTS          // Alternative option - enable to display freetext (or callsign) when LLIGHTS Switch active on TX.
+//#define FREETEXTGIMBAL           // Alternative option - enable to display freetext (or callsign) when GIMBAL Switch active on TX.
 
 
 /********************       STARTUP settings      *********************/
-//#define INTRO_VERSION               "SCARAB OSD - R1.2" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+#define INTRO_VERSION               "SHIKI OSD - R1.2" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
@@ -118,7 +120,6 @@
 /********************  CONTROLLER compatibility **********************/
 #ifdef BASEFLIGHT                     
     #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
-    #define HEADINGCORRECT          // required to use alternative MW heading -180 to +180
 #endif
 #ifdef HARIKIRI                     
     #define BOXNAMES                // required to support HARIKIRI
