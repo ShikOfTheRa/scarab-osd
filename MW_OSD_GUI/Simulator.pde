@@ -72,60 +72,78 @@ void LayoutEditorSetup(){
     .disableCollapse()
     .hide()
     ;
+ LEW.captionLabel()
+    .toUpperCase(false);
 
-  buttonLPOSUP = controlP5.addButton("bPOSLUP",1,10,35,12,19)
+//  buttonLPOSUP = controlP5.addButton("bPOSLUP",1,10,35,12,19)
+  buttonLPOSUP = controlP5.addButton("bPOSLUP",1,10,10,12,19)
   .setLabel("-")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);
-  buttonLPOSDOWN = controlP5.addButton("bPOSLDOWN",1,23,35,12,19)
+//  buttonLPOSDOWN = controlP5.addButton("bPOSLDOWN",1,23,35,12,19)
+  buttonLPOSDOWN = controlP5.addButton("bPOSLDOWN",1,23,10,12,19)
   .setLabel("+")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);
-  txtlblLayoutTxt = controlP5.addTextlabel("txtlblLayoutTxt","blah",37,35) 
+//  txtlblLayoutTxt = controlP5.addTextlabel("txtlblLayoutTxt","blah",37,35) 
+  txtlblLayoutTxt = controlP5.addTextlabel("txtlblLayoutTxt","blah",70,10) 
+  .setGroup(LEW);
+  txtlblLayoutTxt2 = controlP5.addTextlabel("txtlblLayoutTxt2","Text",37,10) 
   .setGroup(LEW);
 
 
-  buttonLPOSEN = controlP5.addButton("bPOSLEN",1,23,60,12,19)
+
+//  buttonLPOSEN = controlP5.addButton("bPOSLEN",1,23,60,12,19)
+  buttonLPOSEN = controlP5.addButton("bPOSLEN",1,23,35,12,19)
   .setLabel("*")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);
-  txtlblLayoutEnTxt = controlP5.addTextlabel("txtlblLayoutEnTxt","-",37,60)
+//  txtlblLayoutEnTxt = controlP5.addTextlabel("txtlblLayoutEnTxt","-",37,60)
+  txtlblLayoutEnTxt = controlP5.addTextlabel("txtlblLayoutEnTxt","-",70,35)
+  .setGroup(LEW);
+  txtlblLayoutEnTxt2 = controlP5.addTextlabel("txtlblLayoutEnTxt2","Status",37,35)
   .setGroup(LEW);
 
-  buttonLPOSUP = controlP5.addButton("bHUDLUP",1,10,10,12,19)
+//  buttonLPOSUP = controlP5.addButton("bHUDLUP",1,10,10,12,19)
+  buttonLPOSUP = controlP5.addButton("bHUDLUP",1,10,60,12,19)
   .setLabel("-")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);
-  buttonLPOSDOWN = controlP5.addButton("bHUDLDOWN",1,23,10,12,19)
+//  buttonLPOSDOWN = controlP5.addButton("bHUDLDOWN",1,23,10,12,19)
+  buttonLPOSDOWN = controlP5.addButton("bHUDLDOWN",1,23,60,12,19)
   .setLabel("+")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);
 
-  txtlblLayoutHudTxt = controlP5.addTextlabel("txtlblLayoutHudTxt","-",37,10) 
+
+//  txtlblLayoutHudTxt = controlP5.addTextlabel("txtlblLayoutHudTxt","-",37,10) 
+  txtlblLayoutHudTxt = controlP5.addTextlabel("txtlblLayoutHudTxt","-",70,60) 
+  .setGroup(LEW);
+  txtlblLayoutHudTxt2 = controlP5.addTextlabel("txtlblLayoutHudTxt2","HUD",37,60) 
   .setGroup(LEW);
  
 
-  buttonLUP = controlP5.addButton("bLUP",1,185,10,40,19)
+  buttonLUP = controlP5.addButton("bLUP",1,195,10,40,19)
   .setLabel("   UP")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);
-  buttonLDOWN = controlP5.addButton("bLDOWN",1,185,60,40,19)
+  buttonLDOWN = controlP5.addButton("bLDOWN",1,195,60,40,19)
   .setLabel("DOWN")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);
-  buttonLLEFT = controlP5.addButton("bLLEFT",1,160,35,40,19)
+  buttonLLEFT = controlP5.addButton("bLLEFT",1,170,35,40,19)
   .setLabel(" LEFT")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);
-  buttonLRIGHT = controlP5.addButton("bLRIGHT",1,210,35,40,19)
+  buttonLRIGHT = controlP5.addButton("bLRIGHT",1,220,35,40,19)
   .setLabel("RIGHT")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
