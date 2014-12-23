@@ -58,108 +58,106 @@ DecimalFormat TwoPlaceDecimal = new DecimalFormat("0.00");
 
 
 void LayoutEditorSetup(){
- Group LE;
-// CheckBox HudOptionEnabled;
+// Group LEW;
 
-   LE = ScontrolP5.addGroup("LE")
-    .setPosition(690,275)
+  LEW = FontGroupcontrolP5.addGroup("LEW")
+    .setPosition(XLINKS,YLINKS)
     .setWidth(345)
-    .setBarHeight(13)
+    .setBarHeight(15)
     .activateEvent(true)
-//    .disableCollapse()
-    .setBackgroundColor(color(0,175))
-    .setBackgroundHeight(105)
-   .setLabel("Layout Editor")
-   .close()
-   .setMoveable(true);
-    ; 
+    .setBackgroundColor(color(30,255))
+    .setBackgroundHeight(103)
+    .setLabel("Layout Editor")
+    .setMoveable(true)
+    .disableCollapse()
+    .hide()
+    ;
 
   buttonLPOSUP = controlP5.addButton("bPOSLUP",1,10,35,12,19)
   .setLabel("-")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
-  .setGroup(LE);
+  .setGroup(LEW);
   buttonLPOSDOWN = controlP5.addButton("bPOSLDOWN",1,23,35,12,19)
   .setLabel("+")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
-  .setGroup(LE);
+  .setGroup(LEW);
   txtlblLayoutTxt = controlP5.addTextlabel("txtlblLayoutTxt","blah",37,35) 
-  .setGroup(LE);
+  .setGroup(LEW);
 
 
   buttonLPOSEN = controlP5.addButton("bPOSLEN",1,23,60,12,19)
   .setLabel("*")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
-  .setGroup(LE);
+  .setGroup(LEW);
   txtlblLayoutEnTxt = controlP5.addTextlabel("txtlblLayoutEnTxt","-",37,60)
-  .setGroup(LE);
+  .setGroup(LEW);
 
   buttonLPOSUP = controlP5.addButton("bHUDLUP",1,10,10,12,19)
   .setLabel("-")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
-  .setGroup(LE);
+  .setGroup(LEW);
   buttonLPOSDOWN = controlP5.addButton("bHUDLDOWN",1,23,10,12,19)
   .setLabel("+")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
-  .setGroup(LE);
+  .setGroup(LEW);
 
   txtlblLayoutHudTxt = controlP5.addTextlabel("txtlblLayoutHudTxt","-",37,10) 
-  .setGroup(LE);
+  .setGroup(LEW);
  
 
   buttonLUP = controlP5.addButton("bLUP",1,185,10,40,19)
   .setLabel("   UP")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
-  .setGroup(LE);
+  .setGroup(LEW);
   buttonLDOWN = controlP5.addButton("bLDOWN",1,185,60,40,19)
   .setLabel("DOWN")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
-  .setGroup(LE);
+  .setGroup(LEW);
   buttonLLEFT = controlP5.addButton("bLLEFT",1,160,35,40,19)
   .setLabel(" LEFT")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
-  .setGroup(LE);
+  .setGroup(LEW);
   buttonLRIGHT = controlP5.addButton("bLRIGHT",1,210,35,40,19)
   .setLabel("RIGHT")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
-  .setGroup(LE);
+  .setGroup(LEW);
 
   buttonLSET = controlP5.addButton("bLSET",1,270,9,65,16)
   .setLabel("Switches")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
-  .setGroup(LE);
+  .setGroup(LEW);
   buttonLADD = controlP5.addButton("bLADD",1,270,28,65,16)
   .setLabel("      ADD")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
-  .setGroup(LE);
+  .setGroup(LEW);
   buttonLSAVE = controlP5.addButton("bLSAVE",1,270,47,65,16)
   .setLabel("     SAVE")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
-  .setGroup(LE);
-  buttonLSAVE = controlP5.addButton("bLCANCEL",1,270,66,65,16)
-  .setLabel("    CANCEL")
+  .setGroup(LEW);
+  buttonLCANCEL = controlP5.addButton("bLCANCEL",1,270,66,65,16)
+  .setLabel("      EXIT")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
-  .setGroup(LE);
-
+  .setGroup(LEW);
 }
 
  
 void SimSetup(){
 
 LayoutEditorSetup();
-   
+LinksSetup() ;  
  
 
   SG = ScontrolP5.addGroup("SG")
@@ -759,10 +757,11 @@ void ShowAmperage(){
 }}
 
 void ShowTemp(){
-  if(confItem[GetSetting("S_DISPLAYTEMPERATURE")].value() > 0) {
-  makeText("30", SimPosn[temperaturePosition]);
-  mapchar(0x0e, SimPosn[temperaturePosition]+2);
-}}
+//  if(confItem[GetSetting("S_DISPLAYTEMPERATURE")].value() > 0) {
+//  makeText("30", SimPosn[temperaturePosition]);
+//  mapchar(0x0e, SimPosn[temperaturePosition]+2);
+//}
+}
 
 void ShowAmps(){
   if(confItem[GetSetting("S_AMPERAGE")].value() > 0) {
@@ -1161,8 +1160,9 @@ int SYM_RANGE_100 = 0x21;
 int SYM_RANGE_500 = 0x22;
 int SYM_RANGE_2500= 0x23;
 int SYM_RANGE_MAX = 0x24;
-int SYM_DIRECTION = 0x72;
-  int xdir=0;
+int SYM_DIRECTION = 0x72;  int xdir=0;
+  int mapstart=0;
+  int mapend=0;
   int ydir=0;
   int targetx=0;
   int targety=0;
@@ -1184,8 +1184,29 @@ int SYM_DIRECTION = 0x72;
   }
 
 //  int MwHeading=Mwheading;
-  
-  if (1==1) {
+
+
+  switch(int(confItem[GetSetting("S_MAPMODE")].value())) {
+    case 1:
+      mapstart=0;mapend=1;
+      break;
+    case 2:
+      mapstart=1;mapend=2;
+      break;
+    case 3:
+      mapstart=0;mapend=2;
+      break;
+    case 4:
+      mapstart=1;mapend=2;
+      break;
+    default:
+      return;
+  }
+
+ 
+for(int maptype=mapstart; maptype<mapend; maptype++) {
+
+  if (maptype==1) {
     angle=(180+360+GPS_directionToHome-armedangle+MwHeading)%360;
   }
   else {
@@ -1249,7 +1270,7 @@ int SYM_DIRECTION = 0x72;
   targetpos= centerpos + (targetx/2) + (LINE*(targety/3)); 
 
 
-  if (1==1) {
+  if (maptype==1) {
     mapsymbolcenter = SYM_HOME;
     mapsymboltarget = SYM_AIRCRAFT;
   }
@@ -1261,7 +1282,7 @@ int SYM_DIRECTION = 0x72;
   mapchar(mapsymbolcenter,centerpos);
 
 /*
-  if (1==0) {
+  if (maptype==0) {
     tmp=(360+382+MwHeading-armedangle)%360/45;
     tmp = SYM_DIRECTION + tmp;
   }
@@ -1270,7 +1291,7 @@ int SYM_DIRECTION = 0x72;
   }
 */
 
-/*  if (MAPTYPE==1) {
+/*  if (confItem[GetSetting("S_MAPMODE")].value()==4) {
     tmp=(360+382+MwHeading-armedangle)%360/45;
     mapsymboltarget = SYM_DIRECTION + tmp;
   }
@@ -1290,15 +1311,41 @@ int SYM_DIRECTION = 0x72;
       else
         symx=1;
     }
-    tmp = 0xD0 + symy + (symx*3);
+
+  if (maptype==0) 
+    tmp = 0xD6;
+  else {
+    tmp = 0xD0;
+/*  if (maptype==1) {
+    tmp=(360+382+MwHeading-armedangle)%360/45;
+    mapsymboltarget = SYM_DIRECTION + tmp;
+    0x72
+  }
+*/
+
+}
+  mapsymboltarget = mapsymboltarget + symy + (symx*3);
+
+
+    tmp = tmp+ symy + (symx*3);
 //System.out.println(xdir+" "+ydir+" "+symx+" "+symy+" "+targetx+" "+targety+" "+tmp);
   mapchar(mapsymbolrange,SimPosn[MapModePosition]);
+
+  if (confItem[GetSetting("S_MAPMODE")].value()==4) {
+    tmp=(360+382+MwHeading-armedangle)%360/45;
+    tmp = SYM_DIRECTION + tmp;
+  }
 
   if (maxdistance>20) {
     mapchar(tmp,targetpos);
   }
+}
 
  
+}
+
+void LinksSetup(){
+
 }
 
 

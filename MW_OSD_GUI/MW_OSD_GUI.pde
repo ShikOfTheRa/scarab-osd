@@ -1,4 +1,5 @@
 
+
 /*
 MultiWii NG OSD ...
 
@@ -46,8 +47,8 @@ import java.text.DecimalFormat;
 
 
 
-String MW_OSD_GUI_Version = "R1.2";
-
+String MW_OSD_GUI_Version = "MWOSD R1.3 - Next Generation MultiWii OSD";
+int MW_OSD_EEPROM_Version = 5;
 
 
 int  GPS_numSatPosition = 0;
@@ -138,9 +139,9 @@ ControlP5 SmallcontrolP5;
 ControlP5 ScontrolP5;
 ControlP5 FontGroupcontrolP5;
 ControlP5 GroupcontrolP5;
-Textlabel txtlblWhichcom; 
+Textlabel txtlblWhichcom,txtlblWhichbaud; 
 Textlabel txtlblLayoutTxt,txtlblLayoutEnTxt, txtlblLayoutHudTxt; 
-ListBox commListbox;
+ListBox commListbox,baudListbox;
 
 //char serialBuffer[] = new char[128]; // this hold the imcoming string from serial O string
 //String TestString = "";
@@ -179,6 +180,7 @@ int[][] ConfigLayout;
 String OSname = System.getProperty("os.name");
 String LoadPercent = "";
 String CallSign = "";
+String Title;
 
 int init_com = 0;
 int commListMax = 0;
@@ -225,18 +227,24 @@ int XTIME      = 510;        int YTIME    = 190;
 //int XTIME      = 510;        int YTIME    = 5;
 int XHUD       = 305;        int YHUD     = 240;
 int XDisplay     = 305;        int YDisplay   = 114; //48;
-int XSPORT      = 510;        int YSPORT    = 357;
+int XSPORT      = 810;        int YSPORT    = 357;
 
 int XOther     = 305;        int YOther   = 5; //48;
 //int XOther     = 305;        int YOther   = 150; //48;
-int XPortStat  = 5;          int YPortStat = 415;
-int XDebug     = 5;          int YDebug    = 240;
-int XFONTTOOLS = 5;          int YFONTTOOLS    = 296;
+int XPortStat  = 5;          int YPortStat = 20;
+int XDebug     = 5;          int YDebug    = 271;
+int XFONTTOOLS = 5;          int YFONTTOOLS    = 395;
+int XOSD_CONTROLS = 5;       int YOSD_CONTROLS    = 485;
+int XSAVE_LOAD = 5;       int YSAVE_LOAD    = 328;
+int XMESSAGE = 500;       int YMESSAGE    = 200;
+int XLINKS = 690;       int YLINKS    = 275;
+
 int XControlBox= 5;          int YControlBox   = 450;  //389
 int XRCSim     = XSim;       int YRCSim = 30;
 
 
 String FontFileName = "data/default.mcm";
+int BaudRate = 115200;
 
 //File FontFile;
 int activeTab = 1;
@@ -270,35 +278,27 @@ char MwHeadingUnitAdd=0xbd;
 
 String[] ConfigNames = {
   "EEPROM Loaded",
-  
   "RSSI Min",
   "RSSI Max",
   "RSSI Alarm",
   "Display RSSI",
   "Use MWii",
   "Use PWM",
-  
   "Display Voltage",
   "Voltage Alarm",
   "Battery Cells",
   "Voltage Adjust",
   "Use MWii",
-  
   "Display Amps",
   "Use MWii",
   "Display mAh",
   "Use Virtual Sensor",
   "Amps Adjust",
-  
   "Display Video Voltage",
   "Voltage Adjust",
   "Use MWii",
-  
-  "Display Temperature",
-  "Temperature Max",
-  
-//  "", // for Board type do not remove
-  
+  "x100 mAh Alarm",
+  "Amp Alarm",
   "Display GPS",
   " - GPS Coords",
   " - Coords on Top",
@@ -306,7 +306,6 @@ String[] ConfigNames = {
   "Display Angle to Home",
   "Display Heading",
   " - Heading 360",
-  
   "Units",
   "Video Signal",
   "Display Throttle Position",
@@ -314,16 +313,14 @@ String[] ConfigNames = {
   "Display Side Bars",
   "Display Battery Status",
   "Reset Stats After Arm",
-  "Enable Map mode",
+  " - Map mode",
   "Enable ADC 5v ref",
   "Use BoxNames",
   "Display Flight Mode",
-  
   "Display CallSign",
   "Display GPS time",
   "Time Zone +/-",
   "Time Zone offset",
-//  "",
   "Debug",
   " - SB Scrolling",
   "Display Gimbal",
@@ -339,6 +336,10 @@ String[] ConfigNames = {
   "Amperage 16H",  
   "HUD layout",  
   "HUD layout - OSD SW",  
+  "x100 Distance alarm",  
+  "x10   Altitude alarm",  
+  "Speed alarm",  
+  "Timer alarm",  
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -353,43 +354,34 @@ String[] ConfigNames = {
 
 String[] ConfigHelp = {
   "EEPROM Loaded",
-  
   "RSSI Min",
   "RSSI Max",
   "RSSI Alarm",
   "Display RSSI",
   "Use MWii",
   "Use PWM",
-  
   "Display Voltage",
   "Voltage Alarm",
   "Battery Cells",
   "Voltage Adjust",
   "Use MWii",
-  
   "Display Amps",
   "Use MWii",
   "Display mAh",
   "Use Virtual Sensor",
   "Amps Adjust",
-  
   "Display Video Voltage",
   "Voltage Adjust",
   "Use MWii",
-  
-  "Display Temperature",
-  "Temperature Max",
-  
-//  "", // for Board type do not remove
-  
+  "mAh Alarm",
+  "Amp Alarm",
   "Display GPS",
   " - GPS Coords",
   " - Coords on Top",
   " - GPS Altitude",
   "Display Angle to Home",
   "Display Heading",
-  " - Heading 360",
-  
+  " - Heading 360",  
   "Units",
   "Video Signal",
   "Display Throttle Position",
@@ -400,13 +392,11 @@ String[] ConfigHelp = {
   "Enable Map mode",
   "Enable ADC 5v ref",
   "Use BoxNames",
-  "Display Flight Mode",
-  
+  "Display Flight Mode",  
   "Display CallSign",
   "Display GPS time",
   "Time Zone +/-",
   "Time Zone offset",
-//  "",
   "Debug",
   " - SB Scrolling",
   "Display Gimbal",
@@ -422,6 +412,10 @@ String[] ConfigHelp = {
   "Amperage 16H",  
   "HUD layout",  
   "HUD layout - OSD SW",  
+  "Distance alarm",  
+  "Altitude alarm",  
+  "Speed alarm",  
+  "Timer alarm",  
   "S_CS0",
   "S_CS1",
   "S_CS2",
@@ -470,8 +464,8 @@ int[] ConfigRanges = {
 255,   // S_VIDDIVIDERRATIO        15    
 1,     // S_VIDVOLTAGE_VBAT        16
 
-1,     // S_DISPLAYTEMPERATURE     17
-255,   // S_TEMPERATUREMAX         18
+10000,     // S_AMPER_HOUR_ALARM       17
+255,   // S_AMPERAGE_ALARM         18
 
 //1,     // S_BOARDTYPE              19
 
@@ -490,7 +484,7 @@ int[] ConfigRanges = {
 1,     // S_WITHDECORATION         31
 1,     // S_SHOWBATLEVELEVOLUTION  32
 1,     // S_RESETSTATISTICS        33
-1,     // S_MAPMODE              34 //map mode
+4,     // S_MAPMODE              34 //map mode
 1,     // S_VREFERENCE,
 1,     // S_USE_BOXNAMES           35
 1,     // S_MODEICON               36
@@ -515,6 +509,10 @@ int[] ConfigRanges = {
 3,     // S_AMPMAXH,
 7,     // S_HUD,  
 7,     // S_HUDOSDSW,  
+255,   //S_DISTANCE_ALARM,
+255,   //S_ALTITUDE_ALARM,
+255,   //S_SPEED_ALARM,
+255,   //S_TIMER_ALARM,
 255,
 255,
  255,
@@ -566,7 +564,9 @@ color yellow_ = color(200, 200, 20),
       red_ = color(120, 30, 30), 
       blue_ = color(50, 50, 100),
       grey_ = color(30, 30, 30),
-      switches_ = color(30, 140, 30)
+      switches_ = color(30, 140, 30),
+      font_ = color(50, 50, 50),
+      osdcontr_ = color(50, 50, 50)
       ;
 //Colors--------------------------------------------------------------------------------------------------------------------
 
@@ -580,6 +580,8 @@ Textlabel FileUploadText, TXText, RXText;
 Button buttonIMPORT,buttonSAVE,buttonREAD,buttonRESET,buttonWRITE,buttonRESTART, buttonGPSTIMELINK, buttonSPORTLINK;
 Button buttonLUP, buttonLDOWN, buttonLLEFT, buttonLRIGHT, buttonLPOSUP, buttonLPOSDOWN;
 Button buttonLHUDUP,buttonLPOSHUDDOWN,buttonLPOSEN, buttonLSET, buttonLADD, buttonLSAVE, buttonLCANCEL;
+Button buttonLEW ;
+Button buttonGUIDELINK, buttonFAQLINK, buttonCALIBLINK, buttonSUPPORTLINK;
 // Buttons------------------------------------------------------------------------------------------------------------------
 
 // Toggles------------------------------------------------------------------------------------------------------------------
@@ -600,12 +602,17 @@ Numberbox confItem[] = new Numberbox[CONFIGITEMS] ;
 //  number boxes--------------------------------------------------------------------------------------------------------------
 
 Group MGUploadF,
+  LEW,
+  G_LINKS,
+  G_MESSAGE,
+  SAVE_LOAD,
+  OSD_CONTROLS,
   G_EEPROM,
   G_RSSI,
   G_Voltage,
   G_Amperage,
   G_VVoltage,
-  G_Temperature,
+  G_Alarms,
   G_Debug,
   G_Board,
   G_GPS,
@@ -690,12 +697,26 @@ GUIBackground = loadImage("GUI_def.jpg");
   SetupGroups();
 
 
+// BAUD RATE / COM PORT SELECTION ---------------------------------------
+  baudListbox = controlP5.addListBox("portBaudList",5,116,110,260); // make a listbox and populate it with the available comm ports
+  baudListbox.setItemHeight(15);
+  baudListbox.setBarHeight(15);
+  baudListbox.captionLabel().set("BAUD");
+  baudListbox.setColorBackground(red_);
+  baudListbox.addItem("115200",0);
+  baudListbox.addItem("57600",1);
+  baudListbox.addItem("38400",2);
+  baudListbox.addItem("19200",3);
+  baudListbox.setValue(1);
+  baudListbox.close();
+  txtlblWhichbaud = controlP5.addTextlabel("txtlblWhichbaud","Baud rate: "+str(BaudRate),5,37).setGroup(G_PortStatus); // textlabel(name,text,x,y)
 
 
-  commListbox = controlP5.addListBox("portComList",5,100,110,260); // make a listbox and populate it with the available comm ports
+// COM PORT SELECTION ---------------------------------------
+
+  commListbox = controlP5.addListBox("portComList",5,99,110,260); // make a listbox and populate it with the available comm ports
   commListbox.setItemHeight(15);
   commListbox.setBarHeight(15);
-
   commListbox.captionLabel().set("PORT COM");
   commListbox.setColorBackground(red_);
   for(int i=0;i<Serial.list().length;i++) {
@@ -704,16 +725,19 @@ GUIBackground = loadImage("GUI_def.jpg");
     commListMax = i;
   }
   commListbox.addItem("Close Comm",++commListMax); // addItem(name,value)
-  // text label for which comm port selected
-  txtlblWhichcom = controlP5.addTextlabel("txtlblWhichcom","No Port Selected",5,65); // textlabel(name,text,x,y)
+  txtlblWhichcom = controlP5.addTextlabel("txtlblWhichcom","No Port Selected",5,22).setGroup(G_PortStatus); // textlabel(name,text,x,y)
+
+// BUTTONS SELECTION ---------------------------------------
   
-  buttonSAVE = controlP5.addButton("bSAVE",1,5,45,40,19); buttonSAVE.setLabel("SAVE"); buttonSAVE.setColorBackground(red_);
-  buttonIMPORT = controlP5.addButton("bIMPORT",1,50,45,40,19); buttonIMPORT.setLabel("LOAD"); buttonIMPORT.setColorBackground(red_); 
-  
-  buttonREAD = controlP5.addButton("READ",1,XControlBox+30,YControlBox+25,45,16);buttonREAD.setColorBackground(red_);
-  buttonWRITE = controlP5.addButton("WRITE",1,XControlBox+30,YControlBox+50,45,16);buttonWRITE.setColorBackground(red_);
-  buttonRESET = controlP5.addButton("DEFAULT",1,XControlBox+25,YControlBox+75,55,16);buttonRESET.setColorBackground(red_);
-  buttonRESTART = controlP5.addButton("RESTART",1,XControlBox+25,YControlBox+100,55,16);buttonRESTART.setColorBackground(red_);
+  buttonSAVE = controlP5.addButton("bSAVE",1,20,5,60,16); buttonSAVE.setLabel("    SAVE").setGroup(SAVE_LOAD).setColorBackground(osdcontr_); 
+  buttonIMPORT = controlP5.addButton("bIMPORT",1,20,25,60,16); buttonIMPORT.setLabel("    LOAD").setGroup(SAVE_LOAD).setColorBackground(osdcontr_);   
+
+  buttonREAD = controlP5.addButton("READ",1,20,5,60,16);buttonREAD.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel("    READ");
+  buttonWRITE = controlP5.addButton("WRITE",1,20,25,60,16);buttonWRITE.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel("   WRITE");
+  buttonRESET = controlP5.addButton("DEFAULT",1,20,45,60,16);buttonRESET.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel(" DEFAULT");
+  buttonRESTART = controlP5.addButton("RESTART",1,20,65,60,16);buttonRESTART.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel(" RESTART");
+
+  buttonLEW = controlP5.addButton("LEW",1,10,10,92,16);buttonLEW.setColorBackground(osdcontr_).setGroup(G_LINKS).setLabel("Layout Editor");
     
 
 // EEPROM----------------------------------------------------------------
@@ -722,7 +746,7 @@ CreateItem(GetSetting("S_CHECK_"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_AMPMAXL"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_AMPMAXH"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_USE_BOXNAMES"),  5,0, G_EEPROM);
-CreateItem(GetSetting("S_MAPMODE"),  5,0, G_EEPROM);
+
 
 // RSSI  ---------------------------------------------------------------------------
 
@@ -743,11 +767,13 @@ CreateItem(GetSetting("S_VOLTAGEMIN"), 5,4*17, G_Voltage);
 
 // Amperage  ------------------------------------------------------------------------
 CreateItem(GetSetting("S_AMPERAGE"),  5,0, G_Amperage);
-CreateItem(GetSetting("S_MWAMPERAGE"),  5,5*17, G_Amperage);
 CreateItem(GetSetting("S_AMPER_HOUR"),  5,1*17, G_Amperage);
 CreateItem(GetSetting("S_AMPERAGE_VIRTUAL"),  5,2*17, G_Amperage);
-CreateItem(GetSetting("S_AMPDIVIDERRATIO"),  5,3*17, G_Amperage);
-CreateItem(GetSetting("S_AMPMIN"), 5, 4*17, G_Amperage);
+CreateItem(GetSetting("S_MWAMPERAGE"),  5,3*17, G_Amperage);
+CreateItem(GetSetting("S_AMPDIVIDERRATIO"),  5,4*17, G_Amperage);
+CreateItem(GetSetting("S_AMPMIN"), 5, 5*17, G_Amperage);
+CreateItem(GetSetting("S_AMPER_HOUR_ALARM"),  5,6*17, G_Amperage);
+CreateItem(GetSetting("S_AMPERAGE_ALARM"),  5,7*17, G_Amperage);
 
 // Video Voltage  ------------------------------------------------------------------------
 CreateItem(GetSetting("S_VIDVOLTAGE"),  5,0, G_VVoltage);
@@ -755,8 +781,8 @@ CreateItem(GetSetting("S_VIDVOLTAGE_VBAT"),  5,1*17, G_VVoltage);
 CreateItem(GetSetting("S_VIDDIVIDERRATIO"),  5,2*17, G_VVoltage);
 
 //  Temperature  --------------------------------------------------------------------
-CreateItem(GetSetting("S_DISPLAYTEMPERATURE"),  5,0, G_Temperature);
-CreateItem(GetSetting("S_TEMPERATUREMAX"),  5,1*17, G_Temperature);
+//CreateItem(GetSetting("S_DISPLAYTEMPERATURE"),  5,0, G_Alarms);
+//CreateItem(GetSetting("S_AMPERAGE_ALARM"),  5,1*17, G_Alarms);
 
 //  Debug  --------------------------------------------------------------------
 CreateItem(GetSetting("S_DEBUG"),  5,0, G_Debug);
@@ -771,7 +797,7 @@ CreateItem(GetSetting("S_DISPLAYGPS"), 5,0, G_GPS);
 CreateItem(GetSetting("S_COORDINATES"),  5,1*17, G_GPS);
 CreateItem(GetSetting("S_GPSCOORDTOP"),  5,2*17, G_GPS);
 CreateItem(GetSetting("S_GPSALTITUDE"),  5,3*17, G_GPS);
-
+CreateItem(GetSetting("S_MAPMODE"),      5,4*17, G_GPS);
 //  HUD  ----------------------------------------------------------------------------
 CreateItem(GetSetting("S_HUD"),  5,0*17, G_HUD);
 CreateItem(GetSetting("S_HUDOSDSW"),  5,1*17, G_HUD);
@@ -815,14 +841,30 @@ CreateItem(GetSetting("S_GPSTZ"),  5,1*17, G_TIME);
   confItem[GetSetting("S_GPSTZ")].setDecimalPrecision(1);
 CreateItem(GetSetting("S_GPSTZAHEAD"),  5,2*17, G_TIME);
 
-buttonGPSTIMELINK = controlP5.addButton("GPSTIMELINK",1, 20,3*17,130,16);
-buttonGPSTIMELINK.setGroup(G_TIME);
-buttonGPSTIMELINK.setCaptionLabel("View Requirements");
+//  LINKS  ----------------------------------------------------------------------------
+buttonGUIDELINK = controlP5.addButton("GUIDELINK",1,110,10,80,16);
+buttonGUIDELINK.setCaptionLabel("User Guide").setGroup(G_LINKS);
+buttonFAQLINK = controlP5.addButton("FAQLINK",1,110,30,80,16);
+buttonFAQLINK.setCaptionLabel("FAQ").setGroup(G_LINKS);
+buttonCALIBLINK = controlP5.addButton("CALIBLINK",1,110,50,80,16);
+buttonCALIBLINK.setCaptionLabel("Calibration").setGroup(G_LINKS);
+buttonSUPPORTLINK = controlP5.addButton("SUPPORTLINK",1,110,70,80,16);
+buttonSUPPORTLINK.setCaptionLabel("Support").setGroup(G_LINKS);
+buttonGPSTIMELINK = controlP5.addButton("GPSTIMELINK",1,200,10,125,16);
+buttonGPSTIMELINK.setCaptionLabel("GPS Requirements").setGroup(G_LINKS);
+buttonSPORTLINK = controlP5.addButton("SPORTLINK",1,200,30,125,16);
+buttonSPORTLINK.setCaptionLabel("FRSKY Requirements").setGroup(G_LINKS);
+
+
+
+//  ALARMS  ----------------------------------------------------------------------------
+CreateItem(GetSetting("S_DISTANCE_ALARM"),  5,0*17, G_Alarms);
+CreateItem(GetSetting("S_ALTITUDE_ALARM"),  5,1*17, G_Alarms);
+CreateItem(GetSetting("S_SPEED_ALARM"),  5,2*17, G_Alarms);
+CreateItem(GetSetting("S_TIMER_ALARM"),  5,3*17, G_Alarms);
 
 //  SPORT  ----------------------------------------------------------------------------
-buttonSPORTLINK = controlP5.addButton("SPORTLINK",1, 20,3,130,16);
-buttonSPORTLINK.setGroup(G_SPORT);
-buttonSPORTLINK.setCaptionLabel("View Requirements");
+
 
 //  Call Sign ---------------------------------------------------------------------------
 CreateItem(GetSetting("S_DISPLAY_CS"),  5,0, G_CallSign);
@@ -832,9 +874,10 @@ controlP5.addTextfield("CallSign")
      .setSize(105,15)
      .setFont(font10)
      .setAutoClear(false)
+    .setLabel(" ")
      .setGroup(G_CallSign);
      ;
- controlP5.addTextlabel("TXTCallSign","Call Sign",120,1*17)
+ controlP5.addTextlabel("TXTCallSign","",120,1*17)
  .setGroup(G_CallSign);
  CreateCS(GetSetting("S_CS0"),  0,0, G_CallSign);
  CreateCS(GetSetting("S_CS1"),  0,0, G_CallSign);
@@ -885,8 +928,6 @@ controlP5.addTextfield("CallSign")
   //toggleMSP_Data = true;
   CloseMode = 0;
   LoadConfig();
-  
- 
 }
 
 
@@ -955,6 +996,7 @@ void CreateItem(int ItemIndex, int XLoction, int YLocation, Group inGroup){
   confItem[ItemIndex].setMax(ConfigRanges[ItemIndex]);
   confItem[ItemIndex].setDecimalPrecision(0);
   confItem[ItemIndex].setGroup(inGroup);
+  //confItem[ItemIndex].setMultiplier(10);
   //Toggle
   toggleConfItem[ItemIndex] = (controlP5.Toggle) hideLabel(controlP5.addToggle("toggleValue"+ItemIndex));
   toggleConfItem[ItemIndex].setPosition(XLoction,YLocation+3);
@@ -1189,17 +1231,20 @@ void draw() {
 
   image(GUIBackground,0, 0, windowsX, windowsY); 
 
+//if (LE.isOpen());
 
-  // Coltrol Box
-  fill(30,255); strokeWeight(3);stroke(0); rectMode(CORNERS); rect(XControlBox,YControlBox, XControlBox+108, YControlBox+123); //108//130
-  textFont(font12); fill(255,255,255); text("OSD Controls",XControlBox + 15,YControlBox + 15);
+// Coltrol Box
+/* fill(30,255); strokeWeight(3);stroke(0); rectMode(CORNERS); rect(XControlBox,YControlBox, XControlBox+108, YControlBox+123); //108//130
+ textFont(font12); fill(255,255,255); text("OSD Controls",XControlBox + 15,YControlBox + 15);
   if (activeTab == 1) {
-  
   }
-  
+*/ 
+/*
   fill(30,255);
   strokeWeight(3);stroke(0);
+
   rectMode(CORNERS);
+
   rect(5,5,113,40);
   textFont(font12);
   // version
@@ -1207,6 +1252,9 @@ void draw() {
   text("MWII OSD NG",10,19);
   text("GUI v: ",10,35);
   text(MW_OSD_GUI_Version, 55, 35);
+
+*/
+
 //  fill(255, 0, 0);
   strokeWeight(3);stroke(0);
   rectMode(CORNERS);
@@ -1403,11 +1451,22 @@ public void controlEvent(ControlEvent theEvent) {
     System.out.println("error with Port");
   }
 
-if (theEvent.name()=="CallSign"){
-  CheckCallSign();
-}
+  if (theEvent.name()=="CallSign"){
+    CheckCallSign();
+  }
+    
 
-      
+    if (theEvent.name()=="portBaudList"){
+//      BaudRate=200;
+      if (int(theEvent.group().value()) ==3) BaudRate=19200;
+      else if (int(theEvent.group().value()) ==2) BaudRate=38400;
+      else if (int(theEvent.group().value()) ==1) BaudRate=57600;
+      else BaudRate=115200;
+//      BaudRate=int(theEvent.group().value());
+      txtlblWhichbaud.setValue("Baud rate: "+str(BaudRate));
+      updateConfig();
+    }
+        
   try{
   //for (int i=0;i<col.length;i++) {
     if ((theEvent.getController().getName().substring(0, 7).equals("CharPix")) && (theEvent.getController().isMousePressed())) {
@@ -1556,8 +1615,12 @@ public void bLSAVE() {
 }
 
 public void bLCANCEL() {
+  Lock_All_Controls(false);
+  LEW.hide();
+  G_LINKS.show(); 
   initxml();
-  READ();
+  if (init_com==1)
+    READ();
 }
 
 public void bLSET() {
@@ -1806,7 +1869,9 @@ public void updateConfig(){
   String error = null;
   FileOutputStream out =null;
   
-  ConfigClass.setProperty("StartFontFile",FontFileName);
+//  ConfigClass.setProperty("StartFontFile",FontFileName);
+  ConfigClass.setProperty("BaudRate",str(BaudRate));
+  ConfigClass.setProperty("Title",Title);
   
   
   File file = new File(dataPath("GUI.Config"));
@@ -1835,11 +1900,15 @@ public void updateConfig(){
 public void LoadConfig(){
   String error = null;
   FileInputStream in =null;  
+  BaudRate=0;
+
   try{
    
     in = new FileInputStream(dataPath("GUI.Config"));
   }catch(FileNotFoundException e){
     System.out.println("Configuration Failed- Creating Default");
+    BaudRate = 115200;
+    Title = MW_OSD_GUI_Version;
     updateConfig();
     }catch( IOException ioe){
       /*failed to write the file*/
@@ -1849,7 +1918,9 @@ public void LoadConfig(){
       if (in!=null){
         try{
           ConfigClass.conf.loadFromXML(in); 
-          FontFileName = ConfigClass.getProperty("StartFontFile");
+//          FontFileName = ConfigClass.getProperty("StartFontFile");
+          BaudRate =int(ConfigClass.getProperty("BaudRate"));
+          Title =ConfigClass.getProperty("Title");
           img_Clear = LoadFont(FontFileName);
           System.out.println("Configuration Successful");
           in.close();
@@ -1859,7 +1930,10 @@ public void LoadConfig(){
             JOptionPane.showMessageDialog(null, new StringBuffer().append("error : ").append(error) );
           }
     //}
-    
+      txtlblWhichbaud.setValue("Baud rate: "+str(BaudRate));
+      frame.setTitle(Title);
+
+//     System.out.println(BaudRate);   
 }
 
 //  our configuration 
@@ -1968,11 +2042,27 @@ void SketchUploader(){
 
 
 public void GPSTIMELINK(){
- link("http://code.google.com/p/scarab-osd/wiki/GPS_Time"); 
+ link("https://code.google.com/p/multiwii-osd/wiki/GPSTime"); 
 }
 public void SPORTLINK(){
- link("http://code.google.com/p/scarab-osd/wiki/Frsky_SPort"); 
+ link("https://code.google.com/p/multiwii-osd/wiki/Frsky_SPort"); 
 }
+public void CODELINK(){
+ link("https://code.google.com/p/multiwii-osd/"); 
+}
+public void FAQLINK(){
+ link("https://code.google.com/p/multiwii-osd/wiki/FAQ"); 
+}
+public void GUIDELINK(){
+ link("https://code.google.com/p/multiwii-osd/wiki/User_Guide"); 
+}
+public void SUPPORTLINK(){
+  link("http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI"); 
+}
+public void CALIBLINK(){
+ link("https://code.google.com/p/multiwii-osd/wiki/Calibration"); 
+}
+
 
 void initxml(){
   int value;
@@ -2030,7 +2120,8 @@ void xmlsavelayout(){
   initxml();
   confItem[GetSetting("S_HUD")].setMax(ConfigRanges[GetSetting("S_HUD")]);
   confItem[GetSetting("S_HUDOSDSW")].setMax(ConfigRanges[GetSetting("S_HUDOSDSW")]);
-  READ();
+  if (init_com==1)
+    READ();
 }
 
 
@@ -2062,7 +2153,7 @@ toggleConfItem[GetSetting("S_BAROALT")].setValue(1);
 toggleConfItem[GetSetting("S_TIMER")].setValue(1);
 toggleConfItem[GetSetting("S_GPSTIME")].setValue(1);
 toggleConfItem[GetSetting("S_DISPLAY_CS")].setValue(1);
-toggleConfItem[GetSetting("S_DISPLAYTEMPERATURE")].setValue(1);
+//confItem[GetSetting("S_MAPMODE")].setValue(1);
 }
 
 
@@ -2097,4 +2188,12 @@ void coloriseswitches(){
   else
     SimControlToggle.setColorActive(red_);
 }
+
+void LEW(){
+//  Lock_All_Controls(true);
+  G_LINKS.hide();
+  LEW.show();
+//  Lock_All_Controls(true);
+}
+
 

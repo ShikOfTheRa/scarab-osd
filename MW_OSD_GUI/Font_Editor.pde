@@ -165,33 +165,38 @@ String[] CharRows = {"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E"
                 .setBarHeight(15)
                 .activateEvent(true)
                 .setBackgroundColor(color(30,255))
-                .setBackgroundHeight(100)
-                .setLabel("Font Tools")
+                .setBackgroundHeight(70)
+                .setLabel("     Font Tools")
                 .disableCollapse();
                 //.close() 
                ; 
 
 FileUploadText = controlP5.addTextlabel("FileUploadText","",10,5)
+.setGroup(MGUploadF)
+.setColorBackground(font_);
+
+buttonEditFont = controlP5.addButton("EditFont",1,20,45,60,16)
+.setColorBackground(font_)
 .setGroup(MGUploadF);
+buttonEditFont.getCaptionLabel()
+.setText("Edit Font");
+
+buttonSendFile = controlP5.addButton("FONT_UPLOAD",1,20,25,60,16)
+.setColorBackground(font_)
+.setGroup(MGUploadF);
+buttonSendFile.getCaptionLabel()
+.setText("UPLOAD");
+
+buttonBrowseFile = controlP5.addButton("Browse",1,20,5,60,16)
+.setColorBackground(font_)
+.setGroup(MGUploadF);
+buttonBrowseFile.getCaptionLabel()
+.setText("  SELECT")
 ;
-
-buttonEditFont = controlP5.addButton("EditFont",1,20,25,60,16)
-.setGroup(MGUploadF);
- buttonEditFont.getCaptionLabel()
-.toUpperCase(false)
-.setText("Edit Font")
-;
-
-buttonSendFile = controlP5.addButton("FONT_UPLOAD",1,20,50,60,16)
-.setGroup(MGUploadF);
-
-buttonBrowseFile = controlP5.addButton("Browse",1,20,75,60,16)
-.setGroup(MGUploadF);
-
 
 buttonSendFile.getCaptionLabel()
     .toUpperCase(false)
-    .setText("Upload");
+    .setText(" UPLOAD");
  
 }
 

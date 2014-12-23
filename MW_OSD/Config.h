@@ -5,8 +5,8 @@
 // Further configuration may be require elsewhere in config.h + option enabled on GUI
 #define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
 #define HORIZON         // Enable/disable HORIZON indicator
-#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
-#define GPSTIME         // Enable/disable GPS Time functions
+//#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
+//#define GPSTIME         // Enable/disable GPS Time functions
 //#define SPORT           // Enable/disable FRSKY S.PORT cell code
 
 
@@ -51,11 +51,12 @@
 
 
 /********************       STARTUP settings      *********************/
-#define INTRO_VERSION               "SHIKI OSD - R1.2" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+//#define INTRO_VERSION               "SHIKI OSD - R1.3" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
 #define INTRO_MENU                  // Enable to display TX stick MENU 
+//#define STARTUPDELAY 2000         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
 
 /********************       GPS type settings      *********************/
@@ -64,9 +65,6 @@
 
 
 /********************       MAP MODE Settings       *********************/
-#define MAPTYPE 1                   // 0 for RADAR - home is aircraft, map shows location of home relative to aircraft 
-                                    // 1 for MAP - home is center, map shows location of aircraft relative to home 
-//#define MAPRESLOW                 // enable to use low res original directional arrow in map mode 1. Disable to use high res position 
 //#define MAPMODENORTH              // Enable to use North as MAP reference in MODE 1 instead of take off direction (Default = disable) 
 
 
@@ -83,7 +81,7 @@
 /********************       Display Settings         ************************/
 //#define AUTOCAM                   // Enable autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings. Not recommended for > 600TVL cameras
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
-//#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
+#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
@@ -92,6 +90,9 @@
 //#define BLACKBRIGHTNESS 0x00      // Optional change from default 0x00=0%,0x01=10%,0x10=20%0x11=30%  default is 0x00=0%
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
+//#define OSD_SWITCH_3WAY 3         // Enables midpoint on specified channel (def=6) to turn off OSD. For 3 way OSD switch
+//#define DISP_LOW_VOLTS_WARNING    // Enable prominent low voltage warning text
+//#define FORCE_DISP_LOW_VOLTS      // Enable display low voltage warning override for screen layouts where its disabled
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 
 /********************       Serial speed settings      *********************/
@@ -136,7 +137,6 @@
 
 /********************  ADVANCED HARDWARE settings      *********************/
 //#define TEMPSENSOR                // Enable if you have a hardware temperature sensor
-//#define STARTUPDELAY 2000         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
 
 /********************  HARDWARE PINS settings      *********************/
@@ -171,5 +171,5 @@
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
 #define DEBUG         // Enable/disable option to display OSD debug values 
-#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
+//#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 

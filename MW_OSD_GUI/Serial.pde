@@ -111,7 +111,7 @@ void InitSerial(float portValue) {
       try{
       String portPos = Serial.list()[int(portValue)];
       txtlblWhichcom.setValue("COM = " + shortifyPortName(portPos, 8));
-      g_serial = new Serial(this, portPos, 115200);
+      g_serial = new Serial(this, portPos, BaudRate);
       LastPort = portValue;
       init_com=1;
       toggleMSP_Data = true;
@@ -263,7 +263,7 @@ public void WRITE(){
 //    headSerialReply(MSP_OSD, CONFIGITEMS +1);
     serialize8(OSD_WRITE_CMD);
 
-confItem[GetSetting("S_MAPMODE")].setValue(1);
+//confItem[GetSetting("S_MAPMODE")].setValue(1);
 
     for(int i = 0; i < CONFIGITEMS; i++){
      if(i == GetSetting("S_GPSTZ")) serialize8(int(confItem[i].value()*10));//preserve decimal, maybe can go elsewhere - haydent
@@ -732,7 +732,14 @@ public void evaluateCommand(byte cmd, int size) {
               resCheck=1;
               }
             }
-//    System.out.println(confCheck);
+//System.out.println(MW_OSD_EEPROM_Version+" - "+confCheck);            
+          
+ if (MW_OSD_EEPROM_Version!=confCheck){
+   noLoop();
+   JOptionPane.showConfirmDialog(null,"GUI version does not match OSD version - a different version is required.", "Version Mismatch Warning", JOptionPane.PLAIN_MESSAGE,JOptionPane.WARNING_MESSAGE);
+   loop();      
+ }
+ 
               S16_AMPMAX=(int(confItem[GetSetting("S_AMPMAXH")].value())<<8)+ int(confItem[GetSetting("S_AMPMAXL")].value()); // for 8>>16 bit EEPROM
               SetConfigItem(GetSetting("S_AMPDIVIDERRATIO"), (int) S16_AMPMAX);
 

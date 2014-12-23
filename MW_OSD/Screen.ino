@@ -101,6 +101,11 @@ uint16_t getPosition(uint8_t pos) {
 uint8_t fieldIsVisible(uint8_t pos) {
 //  uint16_t val = (uint16_t)pgm_read_word(&screenPosition[pos]);
   uint16_t val = screenPosition[pos];
+  if ((val & DISPLAY_MASK)==DISPLAY_ALWAYS)
+    return 1;
+  else
+    return 0;  
+/*
   switch(val & DISPLAY_MASK) {
   case DISPLAY_ALWAYS:
     return 1;
@@ -111,10 +116,11 @@ uint8_t fieldIsVisible(uint8_t pos) {
   case DISPLAY_MIN_OFF:
     return !(MwSensorActive&mode.osd_switch);
   }
+*/
 }
 
 
-void displayTemperature(void)        // WILL WORK ONLY WITH V1.2
+void displayTemperature(void)        // DEPRECATED RUSHDUINO SUPPORT
 {
   int xxx;
   if (Settings[S_UNITSYSTEM])
@@ -146,6 +152,7 @@ void displayMode(void)
     distanceMAX = dist;
   itoa(dist, screenBuffer+3, 10);
   uint8_t xx = FindNull();
+
   if(Settings[S_UNITSYSTEM]==METRIC)
     screenBuffer[xx++] =SYM_M;
   else
@@ -203,7 +210,6 @@ void displayMode(void)
       displayAPstatus();
 #endif
     if(Settings[S_MODEICON]){
-//    if (!screenPosition[ModePosition]<512)
     if(fieldIsVisible(ModePosition))
       MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
     }
@@ -211,7 +217,6 @@ void displayMode(void)
       screenBuffer[2]=0;
       screenBuffer[0]=SYM_GIMBAL;
       screenBuffer[1]=SYM_GIMBAL1;  
-//    if (!screenPosition[gimbalPosition]<512)
     if(fieldIsVisible(gimbalPosition))
       MAX7456_WriteString(screenBuffer,getPosition(gimbalPosition));
     }
@@ -238,11 +243,11 @@ void displayMode(void)
     }
   }
   screenBuffer[xx] = 0;
-//  if (!screenPosition[sensorPosition]<512)
   if(fieldIsVisible(sensorPosition))
     MAX7456_WriteString(screenBuffer,getPosition(sensorPosition));
   }
 }
+
 
 void displayArmed(void)
 {
@@ -262,7 +267,6 @@ void displayArmed(void)
 
 void displayCallsign(int cposition)
 {
-//  uint16_t  = getPosition(callSignPosition);
       for(uint8_t X=0; X<10; X++) {
           screenBuffer[X] = char(Settings[S_CS0 + X]);
      }   
@@ -435,7 +439,17 @@ void displayVoltage(void)
     screenBuffer[0]=SYM_MAIN_BATT;
   }
 
-  if(fieldIsVisible(voltagePosition)) {
+#ifdef DISP_LOW_VOLTS_WARNING
+  if (voltage<=Settings[S_VOLTAGEMIN])
+    MAX7456_WriteString_P(lowvolts_text, getPosition(motorArmedPosition));
+#endif
+
+#ifdef FORCE_DISP_LOW_VOLTS
+  if(fieldIsVisible(voltagePosition)||(voltage<=Settings[S_VOLTAGEMIN])) 
+#else
+  if(fieldIsVisible(voltagePosition)) 
+#endif
+  {
     ItoaPadded(voltage, screenBuffer+1, 4, 3);
     screenBuffer[5] = SYM_VOLT;
     screenBuffer[6] = 0;
@@ -488,6 +502,9 @@ void displayTime(void)
 
   uint32_t displaytime;
   if (armed) { 
+    if(((flyTime/60)>=Settings[S_FLYTIME_ALARM])&&(timer.Blink2hz))
+      return;
+
     if(flyTime < 3600) {
       screenBuffer[0] = SYM_FLY_M;
       displaytime = flyTime;
@@ -678,6 +695,8 @@ void displayGPSPosition(void)
       xx = GPS_altitude * 3.2808; // Mt to Feet
     else
       xx = GPS_altitude;          // Mt
+    if(((xx/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
+      return;
     itoa(xx,screenBuffer+1,10);
     MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
   }
@@ -701,7 +720,6 @@ void displayNumberOfSat(void)
 
 void displayGPS_speed(void)
 {
-
   if(!GPS_fix) return;
   if(!armed) GPS_speed=0;
   int xx;
@@ -713,6 +731,8 @@ void displayGPS_speed(void)
     speedMAX = xx;
   if(!fieldIsVisible(speedPosition))
     return;
+  if((xx>Settings[S_SPEED_ALARM])&&(timer.Blink2hz))
+    return;    
   screenBuffer[0]=speedUnitAdd[Settings[S_UNITSYSTEM]];
   itoa(xx,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(speedPosition));
@@ -761,6 +781,8 @@ void displayAltitude(void)
     return;
   if(!Settings[S_BAROALT])
     return;
+  if(((altitude/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
+    return;   
   screenBuffer[0]=MwAltitudeAdd[Settings[S_UNITSYSTEM]];
   itoa(altitude,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition));
@@ -800,6 +822,8 @@ void displayDistanceToHome(void)
   if(dist > distanceMAX)
     distanceMAX = dist;
   if(!fieldIsVisible(GPS_distanceToHomePosition))
+    return;
+  if(((dist/100)>=Settings[S_DISTANCE_ALARM])&&(timer.Blink2hz))
     return;
   screenBuffer[0] = GPS_distanceToHomeAdd[Settings[S_UNITSYSTEM]];
   itoa(dist, screenBuffer+1, 10);
@@ -1350,7 +1374,7 @@ void displayConfigScreen(void)
   displayCursor();
 }
 
-void mapmode(void) {
+void originalmapmode(void) {
 
 #ifdef MAPMODE
 
@@ -1374,7 +1398,8 @@ void mapmode(void) {
   uint8_t mapsymboltarget;
   uint8_t mapsymbolrange;
   int16_t tmp;
-  if (MAPTYPE==1) {
+  
+  if (1==1) { //MAPTYPE
     angle=(180+360+GPS_directionToHome-armedangle)%360;
   }
   else {
@@ -1438,7 +1463,7 @@ void mapmode(void) {
   targetpos= centerpos + (targetx/2) + (LINE*(targety/3)); 
 
 
-  if (MAPTYPE==1) {
+  if (1==1) { //MAPTYPE
     mapsymbolcenter = SYM_HOME;
     mapsymboltarget = SYM_AIRCRAFT;
   }
@@ -1452,7 +1477,7 @@ void mapmode(void) {
   MAX7456_WriteString(screenBuffer,getPosition(MapModePosition));
 
 #ifdef MAPRESLOW
-  if (MAPTYPE==1) {
+  if (1==1) { //MAPTYPE
     tmp=(360+382+MwHeading-armedangle)%360/45;
     mapsymboltarget = SYM_DIRECTION + tmp;
   }
@@ -1556,3 +1581,280 @@ void displayCells(void){
       MAX7456_WriteString(screenBuffer,getPosition(SportPosition)+(2*LINE));//average     
   }
 }
+
+
+void mapmode(void) {
+
+#ifdef MAPRESLOW
+
+  if(!GPS_fix)
+    return;
+  if(!fieldIsVisible(MapModePosition))
+    return;
+//  if(!Settings[S_MAPMODE]) 
+//    return;
+    
+  int8_t xdir;
+  int8_t ydir;
+  int16_t targetx;
+  int16_t targety;
+  int16_t range=200;
+  int16_t angle;
+  int16_t targetpos;
+  int16_t centerpos;
+  uint16_t maxdistance;
+  uint8_t mapsymbolcenter;
+  uint8_t mapsymboltarget;
+  uint8_t mapsymbolrange;
+  int16_t tmp;
+  
+    angle=(180+360+GPS_directionToHome-armedangle)%360;
+  tmp = angle/90;
+  switch (tmp) {
+    case 0:
+      xdir=+1;
+      ydir=-1;
+      break;
+    case 1:    
+      xdir=+1;
+      ydir=+1;
+      angle=180-angle;
+      break;
+    case 2:    
+      xdir=-1;
+      ydir=+1;
+      angle=angle-180;
+      break;
+    case 3: 
+      xdir=-1;
+      ydir=-1;
+      angle=360-angle;
+      break;   
+    }  
+
+  float rad  = angle * PI / 180;    // convert to radians  
+  uint16_t x = (uint16_t)(GPS_distanceToHome * sin(rad));
+  uint16_t y = (uint16_t)(GPS_distanceToHome * cos(rad));
+
+  if (y > x) maxdistance=y;
+  else maxdistance=x;
+  if (maxdistance < 100) {
+    range = 100;
+    mapsymbolrange=SYM_RANGE_100;
+  }
+  else if (maxdistance < 500) {
+    range = 500;
+    mapsymbolrange=SYM_RANGE_500;
+  }
+  else if (maxdistance < 2500) {
+    range = 2500;
+    mapsymbolrange=SYM_RANGE_2500;
+  }
+  else {
+    range = maxdistance;
+    mapsymbolrange=SYM_RANGE_MAX;
+  }
+
+  targetx = xdir*map(x, 0, range, 0, 16);
+  targety = ydir*map(y, 0, range, 0, 15);
+
+  if (maxdistance<20) {
+    targetx = 0;
+    targety = 0;  
+  }
+    
+  centerpos=getPosition(MapCenterPosition);
+  targetpos= centerpos + (targetx/2) + (LINE*(targety/3)); 
+
+
+    mapsymbolcenter = SYM_HOME;
+    mapsymboltarget = SYM_AIRCRAFT;
+
+  screenBuffer[0] = mapsymbolrange;
+  screenBuffer[1] = 0;
+  MAX7456_WriteString(screenBuffer,getPosition(MapModePosition));
+
+    tmp=(360+382+MwHeading-armedangle)%360/45;
+    mapsymboltarget = SYM_DIRECTION + tmp;
+
+
+  screenBuffer[0] = mapsymboltarget;
+  screenBuffer[1] = 0;
+  MAX7456_WriteString(screenBuffer,targetpos);
+
+  screenBuffer[0] = mapsymbolcenter;
+  screenBuffer[1] = 0;
+  MAX7456_WriteString(screenBuffer,centerpos);
+ 
+#endif //end of LOWRES *************************************************
+
+#ifdef MAPMODE
+
+  int mapstart=0;
+  int mapend=0;
+
+  switch(Settings[S_MAPMODE]) {
+    case 1:
+      mapstart=0;mapend=1;
+      break;
+    case 2:
+      mapstart=1;mapend=2;
+      break;
+    case 3:
+      mapstart=0;mapend=2;
+      break;
+    case 4:
+      mapstart=1;mapend=2;
+      break;
+    default:
+      return;
+  }
+
+  if(!GPS_fix)
+    return;
+  if(!fieldIsVisible(MapModePosition))
+    return;
+//  if(!Settings[S_MAPMODE]) 
+//    return;
+    
+  int8_t xdir;
+  int8_t ydir;
+  int16_t targetx;
+  int16_t targety;
+  int16_t range=200;
+  int16_t angle;
+  int16_t targetpos;
+  int16_t centerpos;
+  uint16_t maxdistance;
+  uint8_t mapsymbolcenter;
+  uint8_t mapsymboltarget;
+  uint8_t mapsymbolrange;
+  int16_t tmp;
+
+
+for(uint8_t maptype=mapstart; maptype<mapend; maptype++) {
+
+
+debug[0]++;
+debug[1] = UntouchedStack();
+MAX7456_DrawScreen();
+displayDebug();
+
+  
+  if (maptype==1) {
+    angle=(180+360+GPS_directionToHome-armedangle)%360;
+  }
+  else {
+    angle=(360+GPS_directionToHome-MwHeading)%360;  
+  }
+  
+  tmp = angle/90;
+  switch (tmp) {
+    case 0:
+      xdir=+1;
+      ydir=-1;
+      break;
+    case 1:    
+      xdir=+1;
+      ydir=+1;
+      angle=180-angle;
+      break;
+    case 2:    
+      xdir=-1;
+      ydir=+1;
+      angle=angle-180;
+      break;
+    case 3: 
+      xdir=-1;
+      ydir=-1;
+      angle=360-angle;
+      break;   
+    }  
+
+  float rad  = angle * PI / 180;    // convert to radians  
+  uint16_t x = (uint16_t)(GPS_distanceToHome * sin(rad));
+  uint16_t y = (uint16_t)(GPS_distanceToHome * cos(rad));
+
+  if (y > x) maxdistance=y;
+  else maxdistance=x;
+  if (maxdistance < 100) {
+    range = 100;
+    mapsymbolrange=SYM_RANGE_100;
+  }
+  else if (maxdistance < 500) {
+    range = 500;
+    mapsymbolrange=SYM_RANGE_500;
+  }
+  else if (maxdistance < 2500) {
+    range = 2500;
+    mapsymbolrange=SYM_RANGE_2500;
+  }
+  else {
+    range = maxdistance;
+    mapsymbolrange=SYM_RANGE_MAX;
+  }
+
+  targetx = xdir*map(x, 0, range, 0, 16);
+  targety = ydir*map(y, 0, range, 0, 15);
+
+  if (maxdistance<20) {
+    targetx = 0;
+    targety = 0;  
+  }
+    
+  centerpos=getPosition(MapCenterPosition);
+  targetpos= centerpos + (targetx/2) + (LINE*(targety/3)); 
+
+  if (maptype==1) {
+    mapsymbolcenter = SYM_HOME;
+    mapsymboltarget = SYM_AIRCRAFT;
+  }
+  else {
+    mapsymbolcenter = SYM_AIRCRAFT;
+    mapsymboltarget = SYM_HOME;
+  }
+
+    int8_t symx = (int8_t)abs(targetx)%2;
+    int8_t symy = (int8_t)abs(targety)%3;
+    if (ydir==1)
+      symy=2-symy;
+    if (xdir==-1)
+      symx=1-symx;
+    if (abs(targety)<3)
+      symy = 1 - ydir;
+    if (abs(targetx)<2){
+      if (targetx<0)
+        symx=0;
+      else
+        symx=1;
+    }
+
+  if (maptype==0) 
+    mapsymboltarget = 0xD6;
+  else
+    mapsymboltarget = 0xD0;
+
+  mapsymboltarget = uint8_t( mapsymboltarget + symy + (symx*3));
+
+
+  if (Settings[S_MAPMODE]==4) {
+    tmp=(360+382+MwHeading-armedangle)%360/45;
+    mapsymboltarget = SYM_DIRECTION + tmp;
+  }
+
+  screenBuffer[0] = mapsymbolrange;
+  screenBuffer[1] = 0;
+  MAX7456_WriteString(screenBuffer,getPosition(MapModePosition));
+
+  screenBuffer[0] = mapsymboltarget;
+  screenBuffer[1] = 0;
+  MAX7456_WriteString(screenBuffer,targetpos);
+
+  screenBuffer[0] = mapsymbolcenter;
+  screenBuffer[1] = 0;
+  MAX7456_WriteString(screenBuffer,centerpos);
+  }
+ 
+#endif
+}
+
