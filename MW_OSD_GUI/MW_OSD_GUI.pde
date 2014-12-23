@@ -2182,6 +2182,10 @@ void addchild(){
     }    
   XML[] xmlhudconfig = xml.getChildren("CONFIG");
   xmlhudconfig[0].setInt("value",hudsavailable+1);
+  XML newChild = xml.addChild("HUDNAME");    
+      newChild.setString("hudname","Custom HUD "+hudsavailable);
+
+
   saveXML(xml, dataPath("hudlayout.xml"));
   initxml();
   confItem[GetSetting("S_HUD")].setMax(ConfigRanges[GetSetting("S_HUD")]);
