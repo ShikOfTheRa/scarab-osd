@@ -180,8 +180,8 @@ enum Setting_ {
   S_VIDVOLTAGE,
   S_VIDDIVIDERRATIO,
   S_VIDVOLTAGE_VBAT,
-  S_DISPLAYTEMPERATURE,
-  S_TEMPERATUREMAX,
+  S_AMPER_HOUR_ALARM,
+  S_AMPERAGE_ALARM,
   S_DISPLAYGPS,
   S_COORDINATES,
   S_GPSCOORDTOP,
@@ -219,6 +219,10 @@ enum Setting_ {
   S_AMPMAXH,
   S_HUD,
   S_HUDOSDSW,
+  S_DISTANCE_ALARM,
+  S_ALTITUDE_ALARM,
+  S_SPEED_ALARM,
+  S_FLYTIME_ALARM,
   S_CS0,
   S_CS1,
   S_CS2,
@@ -263,8 +267,8 @@ MWOSDVER,   // used for check              0
 0,   // S_VIDVOLTAGE                14
 200, // S_VIDDIVIDERRATIO           15
 0,   // S_VIDVOLTAGE_VBAT           16 
-0,   // S_DISPLAYTEMPERATURE        17
-255, // S_TEMPERATUREMAX            18
+50,  // S_AMPER_HOUR_ALARM          17
+100, // S_AMPERAGE_ALARM            18
 1,   // S_DISPLAYGPS                20
 0,   // S_COORDINATES               21
 1,   // S_GPSCOORDTOP               22
@@ -279,7 +283,7 @@ MWOSDVER,   // used for check              0
 1,   // S_WITHDECORATION            31
 0,   // S_SHOWBATLEVELEVOLUTION     32
 0,   // S_RESETSTATISTICS           33
-0,   // S_ENABLEADC                 34
+0,   // S_MAPMODE                 34
 0,   // S_VREFERENCE,
 0,   // S_USE_BOXNAMES              35
 1,   // S_MODEICON                  36
@@ -287,7 +291,6 @@ MWOSDVER,   // used for check              0
 0,   // GPStime                     37a
 0,   // GPSTZ +/-                   37b
 0,   // GPSTZ                       37c
-// 0,   // GPSDS                       37d
 0,   // DEBUG                       37e
 1,   // SCROLOLING LADDERS          37f
 1,   // SHOW GIMBAL ICON            37g
@@ -303,6 +306,10 @@ MWOSDVER,   // used for check              0
 0,   // S_AMPMAXH,
 0,   // S_HUD
 1,   // S_HUDOSDSW
+10,  // S_DISTANCE_ALARM,
+10,  // S_ALTITUDE_ALARM,
+100, // S_SPEED_ALARM,
+15,  // S_FLYTIME_ALARM
 0,   // S_CS0,
 0,   // S_CS1,
 0,   // S_CS2,
@@ -566,19 +573,21 @@ uint16_t flyingTime=0;
 #define OSD_SENSORS              7
 // End private MSP for use with the GUI
 
-const char disarmed_text[] PROGMEM = "DISARMED";
-const char armed_text[] PROGMEM = " ARMED";
-const char APRTHtext[] PROGMEM = "AUTO RTH";
-const char APHOLDtext[] PROGMEM = "AUTO HOLD";
+const char disarmed_text[] PROGMEM  = "DISARMED";
+const char armed_text[] PROGMEM     = " ARMED";
+const char APRTHtext[] PROGMEM      = "AUTO RTH";
+const char APHOLDtext[] PROGMEM     = "AUTO HOLD";
 const char APWAYPOINTtext[] PROGMEM = " MISSION";
 //const char APLANDtext[] PROGMEM = "LANDING";
-
+#ifdef DISP_LOW_VOLTS_WARNING
+const char lowvolts_text[] PROGMEM  = "LOW VOLTS";
+#endif
 
 // For Intro
 #ifdef INTRO_VERSION
 const char message0[] PROGMEM = INTRO_VERSION;
 #else
-const char message0[] PROGMEM = "MULTIWII MWOSD - R1.2";
+const char message0[] PROGMEM = "MULTIWII MWOSD - R1.3";
 #endif
 //const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
 //const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
@@ -588,7 +597,7 @@ const char message7[] PROGMEM = "+YAW RIGHT";
 const char message8[] PROGMEM = "+PITCH FULL";
 const char message9[] PROGMEM = "ID:";         // Call Sign on the beggining of the transmission   
 const char message10[] PROGMEM = "TZ UTC:"; //haydent - Time Zone & DST Setting
-const char message11[] PROGMEM = "MORE IN: GUI+CONFIG.H"; 
+//const char message11[] PROGMEM = "MORE IN: GUI+CONFIG.H"; 
 
 // For Config menu common
 const char configMsgON[] PROGMEM = "ON";
@@ -623,7 +632,6 @@ const char configMsg22[] PROGMEM = "EXPONENTIAL";
 const char configMsg23[] PROGMEM = "ROLL PITCH RATE";
 const char configMsg24[] PROGMEM = "YAW RATE";
 const char configMsg25[] PROGMEM = "THROTTLE PID ATT";
-const char configMsg26[] PROGMEM = "SAVE TO MULTIWII";
 //-----------------------------------------------------------Page3
 const char configMsg30[] PROGMEM = "VOLTAGE";
 const char configMsg31[] PROGMEM = "DISPLAY MAIN VOLTS";
@@ -633,7 +641,6 @@ const char configMsg34[] PROGMEM = "DISPLAY VID VOLTS";
 const char configMsg35[] PROGMEM = "CELLS";
 //-----------------------------------------------------------Page4
 const char configMsg40[] PROGMEM = "RSSI";
-//const char configMsg41[] PROGMEM = "ACTUAL RSSI";
 const char configMsg42[] PROGMEM = "DISPLAY RSSI";
 const char configMsg43[] PROGMEM = "SET RSSI";
 const char configMsg44[] PROGMEM = "SET RSSI MAX";
@@ -684,15 +691,6 @@ const unsigned char speedUnitAdd[2] ={
   0xa5,0xa6} ; // [0][0] and [0][1] = Km/h   [1][0] and [1][1] = Mph
 const unsigned char temperatureUnitAdd[2] = {
   0x0e,0x0d};
-
-/*
-const char MultiWiiLogoL1Add[17] PROGMEM = {
-  0xd0,0xd1,0xd2,0xd3,0xd4,0xd5,0xd6,0xd7,0xd8,0xd9,0xda,0xdb,0xdc,0xdd,0xd5,0};
-const char MultiWiiLogoL2Add[17] PROGMEM = {
-  0xe0,0xe1,0xe2,0xe3,0xe4,0xe5,0xe6,0xe7,0xe8,0xe9,0xea,0xeb,0xec,0xed,0xee,0};
-const char MultiWiiLogoL3Add[17] PROGMEM = {
-  0xf0,0xf1,0xf2,0xf3,0xd5,0xd5,0xd5,0xd5,0xd5,0xd5,0xd5,0xd5,0xd5,0xd5,0xd5,0};
-*/
 
 const unsigned char MwAltitudeAdd[2]={
   0xa7,0xa8};

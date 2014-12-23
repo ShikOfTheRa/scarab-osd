@@ -20,8 +20,44 @@ This work is based on the following open source work :-
  
  Please refer to credits.txt for list of individual contributions
 */
+
+extern uint8_t _end;  //end of program variables 
+extern uint8_t __stack; //start of stack (highest RAM address)
+
+void PaintStack(void) __attribute__ ((naked)) __attribute__ ((section (".init1")));    //Make sure this is executed at the first time
+
+void PaintStack(void) 
+{ 
+  //using asm since compiller could not be trusted here
+    __asm volatile ("    ldi r30,lo8(_end)\n" 
+                    "    ldi r31,hi8(_end)\n" 
+                    "    ldi r24,lo8(0xa5)\n" /* Paint color = 0xa5 */ 
+                    "    ldi r25,hi8(__stack)\n" 
+                    "    rjmp .cmp\n" 
+                    ".loop:\n" 
+                    "    st Z+,r24\n" 
+                    ".cmp:\n" 
+                    "    cpi r30,lo8(__stack)\n" 
+                    "    cpc r31,r25\n" 
+                    "    brlo .loop\n" 
+                    "    breq .loop"::); 
+} 
+
+uint16_t UntouchedStack(void) 
+{ 
+    const uint8_t *ptr = &_end; 
+    uint16_t       count = 0; 
+
+    while(*ptr == 0xa5 && ptr <= &__stack) 
+    { 
+        ptr++; count++; 
+    } 
+
+    return count; 
+} 
+
   
-#define MWOSDVER 4            
+#define MWOSDVER 5            
 #include <avr/pgmspace.h>
 #include <EEPROM.h> //Needed to access eeprom read/write functions
 #include "Config.h"
@@ -102,6 +138,12 @@ void setMspRequests() {
       REQ_MSP_ALTITUDE|
       REQ_MSP_RC_TUNING|
       REQ_MSP_PID|
+#ifdef DEBUGMW
+      REQ_MSP_DEBUG|
+#endif
+#ifdef SPORT      
+      REQ_MSP_CELLS|
+#endif
       REQ_MSP_RC;
   }
   else {
@@ -111,6 +153,12 @@ void setMspRequests() {
       REQ_MSP_RAW_GPS|
       REQ_MSP_COMP_GPS|
       REQ_MSP_ATTITUDE|
+#ifdef DEBUGMW
+      REQ_MSP_DEBUG|
+#endif
+#ifdef SPORT      
+      REQ_MSP_CELLS|
+#endif
       REQ_MSP_ALTITUDE;
 
     if(!armed || Settings[S_THROTTLEPOSITION] || fieldIsVisible(pMeterSumPosition) || fieldIsVisible(amperagePosition) )
@@ -119,12 +167,6 @@ void setMspRequests() {
       modeMSPRequests |= REQ_MSP_BOX;
     if(MwSensorActive&mode.gpsmission)
       modeMSPRequests |= REQ_MSP_NAV_STATUS;
-#ifdef DEBUGMW
-      modeMSPRequests |= REQ_MSP_DEBUG;
-#endif
-#ifdef SPORT      
-      modeMSPRequests |= REQ_MSP_CELLS;
-#endif
   }
  
   if(Settings[S_MAINVOLTAGE_VBAT] ||
@@ -140,11 +182,13 @@ void setMspRequests() {
 
 void loop()
 {
+debug[1] = UntouchedStack();
 
   if (MwSensorActive&mode.osd_switch)
     screenlayout=1;
   else  
     screenlayout=0;
+    
   if (!screenlayout==oldscreenlayout){
     oldscreenlayout=screenlayout;
     readEEPROM_screenlayout();
@@ -249,6 +293,7 @@ void loop()
 
     MAX7456_DrawScreen();
 
+
 #ifndef INTRO_DELAY 
 #define INTRO_DELAY 10
 #endif
@@ -279,14 +324,16 @@ void loop()
           displayVoltage();
         if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz))) 
           displayRSSI();
+        if(Settings[S_AMPERAGE]&&(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz))) 
+          displayAmperage();
+        if(Settings[S_AMPER_HOUR]&&((((amperagesum)/3600)<Settings[S_AMPER_HOUR_ALARM])||(timer.Blink2hz)))
+          displaypMeterSum();
 
         displayTime();
 #ifdef TEMPSENSOR
         if(Settings[S_DISPLAYTEMPERATURE]&&((temperature<Settings[S_TEMPERATUREMAX])||(Blink2hz))) displayTemperature();
 #endif
-        if(Settings[S_AMPERAGE]) displayAmperage();
 
-        if(Settings[S_AMPER_HOUR])  displaypMeterSum();
         displayArmed();
         if (Settings[S_THROTTLEPOSITION])
           displayCurrentThrottle();
@@ -544,7 +591,6 @@ int16_t getNextCharToRequest() {
   return temp2;
 }
 
-
 void gpsdistancefix(void){
   int8_t speedband;
   static int8_t oldspeedband;
@@ -562,15 +608,6 @@ void gpsdistancefix(void){
   }
   GPS_distanceToHome=(speedcorrection*65535) + GPS_distanceToHome;
 } 
-
-
-uint8_t * heapptr, * stackptr;
-void check_mem() {
-  stackptr = (uint8_t *)malloc(4);          
-  heapptr = stackptr;                    
-  free(stackptr);      
-  stackptr =  (uint8_t *)(SP);          
-}
 
 
 void ProcessSensors(void) {
@@ -706,17 +743,19 @@ void ProcessSensors(void) {
       rssi = sensorfilter[4][SENSORFILTERSIZE]>>5; // filter and move to 8 bit
     }
 
-    if((timer.rssiTimer==15)&&(configMode)) {
+    
+    if (configMode){
+    if((timer.rssiTimer==15)) {
       Settings[S_RSSIMAX]=rssi; // tx on
     }
-    if((timer.rssiTimer==1)&&(configMode)) {
+    if((timer.rssiTimer==1)) {
       Settings[S_RSSIMIN]=rssi; // tx off
       timer.rssiTimer=0;
     }
+}
 
     rssi = map(rssi, Settings[S_RSSIMIN], Settings[S_RSSIMAX], 0, 100);
-    if (rssi < 0) rssi=0;
-    else if (rssi > 100) rssi=100;
+    rssi=constrain(rssi,0,100);
   }
 
 //-------------- For filter support
