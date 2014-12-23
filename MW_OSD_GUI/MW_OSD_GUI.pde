@@ -141,6 +141,7 @@ ControlP5 FontGroupcontrolP5;
 ControlP5 GroupcontrolP5;
 Textlabel txtlblWhichcom,txtlblWhichbaud; 
 Textlabel txtlblLayoutTxt,txtlblLayoutEnTxt, txtlblLayoutHudTxt; 
+Textlabel txtlblLayoutTxt2,txtlblLayoutEnTxt2, txtlblLayoutHudTxt2; 
 ListBox commListbox,baudListbox;
 
 //char serialBuffer[] = new char[128]; // this hold the imcoming string from serial O string
@@ -161,6 +162,7 @@ Textlabel MessageText;
 int DISPLAY_STATE;
 int hudsavailable=8;
 int hudoptions;
+int hudnamelength;
 int[][] hudenable;
 String[] hudpositiontext;
 int xmlloaded=0;
@@ -168,6 +170,7 @@ XML xml;
 int[][] CONFIGHUD;
 int[][] CONFIGHUDEN;
 String[] CONFIGHUDTEXT;
+String[] CONFIGHUDNAME;
 
 // XML config editorvariables
 int hudeditposition=0;
@@ -1046,19 +1049,22 @@ void draw() {
 
 
 // Layout editor.......
-  txtlblLayoutTxt.setValue(CONFIGHUDTEXT[hudeditposition]);
+  txtlblLayoutTxt.setValue(" : "+ CONFIGHUDTEXT[hudeditposition]);
 
   int hudid=0;
   if (toggleModeItems[9].getValue()>0)
     hudid = int(confItem[GetSetting("S_HUDOSDSW")].value());
   else
     hudid = int(confItem[GetSetting("S_HUD")].value()); 
-  txtlblLayoutHudTxt.setValue("HUD: "+hudid);
+
+  txtlblLayoutHudTxt.setValue(" : "+hudid);
+
+  LEW.setLabel("Layout Editor for profile: "+hudid+" - "+CONFIGHUDNAME[hudid]);
 
   if (CONFIGHUDEN[hudid][hudeditposition]>0)
-    txtlblLayoutEnTxt.setValue("Enabled");
+    txtlblLayoutEnTxt.setValue(" : Enabled");
   else
-    txtlblLayoutEnTxt.setValue("Disabled");
+    txtlblLayoutEnTxt.setValue(" : Disabled");
 
 
 // Colour switches when enabled......
@@ -2071,20 +2077,29 @@ void initxml(){
   int hudindex;
   int xx;
   String text;
+  String hudname;
 
   XML[] xmlhudconfig = xml.getChildren("CONFIG");
   hudsavailable = xmlhudconfig[0].getInt("value");
   XML[] xmlhuddescription = xml.getChildren("DESCRIPTION");
   hudoptions = xmlhuddescription.length;
+  XML[] xmlhudname = xml.getChildren("HUDNAME");
+  hudnamelength = xmlhudname.length;
   XML[] allhudoptions = xml.getChildren("LAYOUT");
 //  hudoptions = allhudoptions.length/hudsavailable;
   CONFIGHUD= new int[hudsavailable][hudoptions];
   CONFIGHUDEN= new int[hudsavailable][hudoptions];
   CONFIGHUDTEXT= new String[hudoptions];
+  CONFIGHUDNAME= new String[hudnamelength];
   for (int i = 0; i < hudoptions; i++) {
     text = xmlhuddescription[i].getString("desc");
     CONFIGHUDTEXT[i] = text;
   }
+    for (int i = 0; i < hudnamelength; i++) {
+    text = xmlhudname[i].getString("hudname");
+    CONFIGHUDNAME[i] = text;
+  }
+
     for (int i = 0; i < allhudoptions.length; i++) {
     value = allhudoptions[i].getInt("value");
     enabled = allhudoptions[i].getInt("enabled");
@@ -2153,7 +2168,7 @@ toggleConfItem[GetSetting("S_BAROALT")].setValue(1);
 toggleConfItem[GetSetting("S_TIMER")].setValue(1);
 toggleConfItem[GetSetting("S_GPSTIME")].setValue(1);
 toggleConfItem[GetSetting("S_DISPLAY_CS")].setValue(1);
-//confItem[GetSetting("S_MAPMODE")].setValue(1);
+confItem[GetSetting("S_MAPMODE")].setValue(1);
 }
 
 
