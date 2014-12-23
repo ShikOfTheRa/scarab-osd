@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <HUDLAYOUTS>
-  <CONFIG desc="Number of layout choices" value="11"/>
+  <CONFIG desc="Number of layout choices" value="10"/>
   <DESCRIPTION desc="Sat indicator"/>
   <DESCRIPTION desc="Direction to home"/>
   <DESCRIPTION desc="Distance"/>
@@ -39,7 +39,7 @@
   <DESCRIPTION desc="Map center"/>
   <DESCRIPTION desc="AP status"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="1" hud="0" value="32"/>
-  <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="0" value="110"/>
+  <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="0" value="51"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="0" value="54"/>
   <LAYOUT desc="speedPosition" enabled="1" hud="0" value="183"/>
   <LAYOUT desc="GPS_angleToHomePosition" enabled="1" hud="0" value="144"/>
@@ -334,115 +334,78 @@
   <LAYOUT desc="MapModePosition" enabled="0" hud="7" value="46"/>
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="7" value="194"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="7" value="195"/>
-  <LAYOUT desc="Sat indicator" enabled="1" hud="8" value="32"/>
-  <LAYOUT desc="Direction to home" enabled="1" hud="8" value="110"/>
-  <LAYOUT desc="Distance" enabled="1" hud="8" value="54"/>
-  <LAYOUT desc="Speed" enabled="1" hud="8" value="183"/>
-  <LAYOUT desc="Angle to home" enabled="1" hud="8" value="144"/>
-  <LAYOUT desc="GPS altitude" enabled="1" hud="8" value="84"/>
-  <LAYOUT desc="Sensor" enabled="1" hud="8" value="36"/>
-  <LAYOUT desc="Heading" enabled="1" hud="8" value="114"/>
-  <LAYOUT desc="Compass" enabled="1" hud="8" value="40"/>
-  <LAYOUT desc="Altitude" enabled="1" hud="8" value="203"/>
-  <LAYOUT desc="ClimbRate" enabled="1" hud="8" value="202"/>
-  <LAYOUT desc="Throttle" enabled="1" hud="8" value="352"/>
+  <LAYOUT desc="Sat indicator" enabled="0" hud="8" value="32"/>
+  <LAYOUT desc="Direction to home" enabled="0" hud="8" value="51"/>
+  <LAYOUT desc="Distance" enabled="0" hud="8" value="54"/>
+  <LAYOUT desc="Speed" enabled="0" hud="8" value="183"/>
+  <LAYOUT desc="Angle to home" enabled="0" hud="8" value="144"/>
+  <LAYOUT desc="GPS altitude" enabled="0" hud="8" value="84"/>
+  <LAYOUT desc="Sensor" enabled="0" hud="8" value="36"/>
+  <LAYOUT desc="Heading" enabled="0" hud="8" value="114"/>
+  <LAYOUT desc="Compass" enabled="0" hud="8" value="40"/>
+  <LAYOUT desc="Altitude" enabled="0" hud="8" value="203"/>
+  <LAYOUT desc="ClimbRate" enabled="0" hud="8" value="202"/>
+  <LAYOUT desc="Throttle" enabled="0" hud="8" value="352"/>
   <LAYOUT desc="FlyTime" enabled="1" hud="8" value="382"/>
   <LAYOUT desc="OnTime" enabled="1" hud="8" value="382"/>
-  <LAYOUT desc="Armed Status" enabled="1" hud="8" value="311"/>
-  <LAYOUT desc="Latitude-mid" enabled="1" hud="8" value="272"/>
-  <LAYOUT desc="Longitude-mid" enabled="1" hud="8" value="285"/>
-  <LAYOUT desc="Latitude-top" enabled="1" hud="8" value="2"/>
-  <LAYOUT desc="Longitude-top" enabled="1" hud="8" value="15"/>
-  <LAYOUT desc="RSSI" enabled="1" hud="8" value="333"/>
-  <LAYOUT desc="Temperature" enabled="1" hud="8" value="213"/>
+  <LAYOUT desc="Armed Status" enabled="0" hud="8" value="311"/>
+  <LAYOUT desc="Latitude-mid" enabled="0" hud="8" value="272"/>
+  <LAYOUT desc="Longitude-mid" enabled="0" hud="8" value="285"/>
+  <LAYOUT desc="Latitude-top" enabled="0" hud="8" value="2"/>
+  <LAYOUT desc="Longitude-top" enabled="0" hud="8" value="15"/>
+  <LAYOUT desc="RSSI" enabled="1" hud="8" value="377"/>
+  <LAYOUT desc="Temperature" enabled="0" hud="8" value="213"/>
   <LAYOUT desc="Voltage" enabled="1" hud="8" value="363"/>
-  <LAYOUT desc="Vid voltage" enabled="1" hud="8" value="303"/>
-  <LAYOUT desc="Amps" enabled="1" hud="8" value="369"/>
-  <LAYOUT desc="mAh" enabled="1" hud="8" value="376"/>
-  <LAYOUT desc="AHI" enabled="1" hud="8" value="187"/>
-  <LAYOUT desc="Sidebar" enabled="1" hud="8" value="187"/>
-  <LAYOUT desc="Sidebar arrow" enabled="1" hud="8" value="187"/>
+  <LAYOUT desc="Vid voltage" enabled="0" hud="8" value="369"/>
+  <LAYOUT desc="Amps" enabled="0" hud="8" value="369"/>
+  <LAYOUT desc="mAh" enabled="0" hud="8" value="376"/>
+  <LAYOUT desc="AHI" enabled="0" hud="8" value="187"/>
+  <LAYOUT desc="Sidebar" enabled="0" hud="8" value="187"/>
+  <LAYOUT desc="Sidebar arrow" enabled="0" hud="8" value="187"/>
   <LAYOUT desc="CallSign" enabled="1" hud="8" value="280"/>
-  <LAYOUT desc="Debug" enabled="1" hud="8" value="220"/>
-  <LAYOUT desc="Gimbal" enabled="1" hud="8" value="122"/>
-  <LAYOUT desc="GPS time" enabled="1" hud="8" value="341"/>
-  <LAYOUT desc="FRSky cells" enabled="1" hud="8" value="232"/>
-  <LAYOUT desc="Mode" enabled="1" hud="8" value="92"/>
+  <LAYOUT desc="Debug" enabled="0" hud="8" value="220"/>
+  <LAYOUT desc="Gimbal" enabled="0" hud="8" value="122"/>
+  <LAYOUT desc="GPS time" enabled="0" hud="8" value="341"/>
+  <LAYOUT desc="FRSky cells" enabled="0" hud="8" value="232"/>
+  <LAYOUT desc="Mode" enabled="0" hud="8" value="92"/>
   <LAYOUT desc="Map mode" enabled="0" hud="8" value="46"/>
   <LAYOUT desc="Map center" enabled="0" hud="8" value="195"/>
-  <LAYOUT desc="AP status" enabled="1" hud="8" value="220"/>
-  <LAYOUT desc="Sat indicator" enabled="1" hud="9" value="32"/>
-  <LAYOUT desc="Direction to home" enabled="1" hud="9" value="110"/>
-  <LAYOUT desc="Distance" enabled="1" hud="9" value="54"/>
-  <LAYOUT desc="Speed" enabled="1" hud="9" value="183"/>
-  <LAYOUT desc="Angle to home" enabled="1" hud="9" value="144"/>
-  <LAYOUT desc="GPS altitude" enabled="1" hud="9" value="84"/>
-  <LAYOUT desc="Sensor" enabled="1" hud="9" value="36"/>
-  <LAYOUT desc="Heading" enabled="1" hud="9" value="114"/>
-  <LAYOUT desc="Compass" enabled="1" hud="9" value="40"/>
-  <LAYOUT desc="Altitude" enabled="1" hud="9" value="203"/>
-  <LAYOUT desc="ClimbRate" enabled="1" hud="9" value="202"/>
-  <LAYOUT desc="Throttle" enabled="1" hud="9" value="352"/>
+  <LAYOUT desc="AP status" enabled="0" hud="8" value="220"/>
+  <LAYOUT desc="Sat indicator" enabled="0" hud="9" value="32"/>
+  <LAYOUT desc="Direction to home" enabled="0" hud="9" value="51"/>
+  <LAYOUT desc="Distance" enabled="0" hud="9" value="54"/>
+  <LAYOUT desc="Speed" enabled="0" hud="9" value="183"/>
+  <LAYOUT desc="Angle to home" enabled="0" hud="9" value="144"/>
+  <LAYOUT desc="GPS altitude" enabled="0" hud="9" value="84"/>
+  <LAYOUT desc="Sensor" enabled="0" hud="9" value="36"/>
+  <LAYOUT desc="Heading" enabled="0" hud="9" value="114"/>
+  <LAYOUT desc="Compass" enabled="0" hud="9" value="40"/>
+  <LAYOUT desc="Altitude" enabled="0" hud="9" value="203"/>
+  <LAYOUT desc="ClimbRate" enabled="0" hud="9" value="202"/>
+  <LAYOUT desc="Throttle" enabled="0" hud="9" value="352"/>
   <LAYOUT desc="FlyTime" enabled="1" hud="9" value="382"/>
   <LAYOUT desc="OnTime" enabled="1" hud="9" value="382"/>
-  <LAYOUT desc="Armed Status" enabled="1" hud="9" value="311"/>
-  <LAYOUT desc="Latitude-mid" enabled="1" hud="9" value="272"/>
-  <LAYOUT desc="Longitude-mid" enabled="1" hud="9" value="285"/>
-  <LAYOUT desc="Latitude-top" enabled="1" hud="9" value="2"/>
-  <LAYOUT desc="Longitude-top" enabled="1" hud="9" value="15"/>
-  <LAYOUT desc="RSSI" enabled="1" hud="9" value="333"/>
-  <LAYOUT desc="Temperature" enabled="1" hud="9" value="213"/>
+  <LAYOUT desc="Armed Status" enabled="0" hud="9" value="311"/>
+  <LAYOUT desc="Latitude-mid" enabled="0" hud="9" value="272"/>
+  <LAYOUT desc="Longitude-mid" enabled="0" hud="9" value="285"/>
+  <LAYOUT desc="Latitude-top" enabled="0" hud="9" value="2"/>
+  <LAYOUT desc="Longitude-top" enabled="0" hud="9" value="15"/>
+  <LAYOUT desc="RSSI" enabled="1" hud="9" value="353"/>
+  <LAYOUT desc="Temperature" enabled="0" hud="9" value="213"/>
   <LAYOUT desc="Voltage" enabled="1" hud="9" value="363"/>
-  <LAYOUT desc="Vid voltage" enabled="1" hud="9" value="303"/>
+  <LAYOUT desc="Vid voltage" enabled="1" hud="9" value="333"/>
   <LAYOUT desc="Amps" enabled="1" hud="9" value="369"/>
   <LAYOUT desc="mAh" enabled="1" hud="9" value="376"/>
-  <LAYOUT desc="AHI" enabled="1" hud="9" value="187"/>
-  <LAYOUT desc="Sidebar" enabled="1" hud="9" value="187"/>
-  <LAYOUT desc="Sidebar arrow" enabled="1" hud="9" value="187"/>
+  <LAYOUT desc="AHI" enabled="0" hud="9" value="187"/>
+  <LAYOUT desc="Sidebar" enabled="0" hud="9" value="187"/>
+  <LAYOUT desc="Sidebar arrow" enabled="0" hud="9" value="187"/>
   <LAYOUT desc="CallSign" enabled="1" hud="9" value="280"/>
-  <LAYOUT desc="Debug" enabled="1" hud="9" value="220"/>
-  <LAYOUT desc="Gimbal" enabled="1" hud="9" value="122"/>
-  <LAYOUT desc="GPS time" enabled="1" hud="9" value="341"/>
-  <LAYOUT desc="FRSky cells" enabled="1" hud="9" value="232"/>
-  <LAYOUT desc="Mode" enabled="1" hud="9" value="92"/>
+  <LAYOUT desc="Debug" enabled="0" hud="9" value="220"/>
+  <LAYOUT desc="Gimbal" enabled="0" hud="9" value="122"/>
+  <LAYOUT desc="GPS time" enabled="0" hud="9" value="341"/>
+  <LAYOUT desc="FRSky cells" enabled="0" hud="9" value="232"/>
+  <LAYOUT desc="Mode" enabled="0" hud="9" value="92"/>
   <LAYOUT desc="Map mode" enabled="0" hud="9" value="46"/>
   <LAYOUT desc="Map center" enabled="0" hud="9" value="195"/>
-  <LAYOUT desc="AP status" enabled="1" hud="9" value="220"/>
-  <LAYOUT desc="Sat indicator" enabled="1" hud="10" value="32"/>
-  <LAYOUT desc="Direction to home" enabled="1" hud="10" value="110"/>
-  <LAYOUT desc="Distance" enabled="1" hud="10" value="54"/>
-  <LAYOUT desc="Speed" enabled="1" hud="10" value="183"/>
-  <LAYOUT desc="Angle to home" enabled="1" hud="10" value="144"/>
-  <LAYOUT desc="GPS altitude" enabled="1" hud="10" value="84"/>
-  <LAYOUT desc="Sensor" enabled="1" hud="10" value="32"/>
-  <LAYOUT desc="Heading" enabled="1" hud="10" value="114"/>
-  <LAYOUT desc="Compass" enabled="1" hud="10" value="40"/>
-  <LAYOUT desc="Altitude" enabled="1" hud="10" value="203"/>
-  <LAYOUT desc="ClimbRate" enabled="1" hud="10" value="202"/>
-  <LAYOUT desc="Throttle" enabled="1" hud="10" value="352"/>
-  <LAYOUT desc="FlyTime" enabled="1" hud="10" value="382"/>
-  <LAYOUT desc="OnTime" enabled="1" hud="10" value="382"/>
-  <LAYOUT desc="Armed Status" enabled="1" hud="10" value="311"/>
-  <LAYOUT desc="Latitude-mid" enabled="1" hud="10" value="272"/>
-  <LAYOUT desc="Longitude-mid" enabled="1" hud="10" value="285"/>
-  <LAYOUT desc="Latitude-top" enabled="1" hud="10" value="2"/>
-  <LAYOUT desc="Longitude-top" enabled="1" hud="10" value="15"/>
-  <LAYOUT desc="RSSI" enabled="1" hud="10" value="333"/>
-  <LAYOUT desc="Temperature" enabled="1" hud="10" value="213"/>
-  <LAYOUT desc="Voltage" enabled="1" hud="10" value="363"/>
-  <LAYOUT desc="Vid voltage" enabled="1" hud="10" value="303"/>
-  <LAYOUT desc="Amps" enabled="1" hud="10" value="369"/>
-  <LAYOUT desc="mAh" enabled="1" hud="10" value="376"/>
-  <LAYOUT desc="AHI" enabled="1" hud="10" value="187"/>
-  <LAYOUT desc="Sidebar" enabled="1" hud="10" value="187"/>
-  <LAYOUT desc="Sidebar arrow" enabled="1" hud="10" value="187"/>
-  <LAYOUT desc="CallSign" enabled="1" hud="10" value="280"/>
-  <LAYOUT desc="Debug" enabled="1" hud="10" value="220"/>
-  <LAYOUT desc="Gimbal" enabled="1" hud="10" value="122"/>
-  <LAYOUT desc="GPS time" enabled="1" hud="10" value="341"/>
-  <LAYOUT desc="FRSky cells" enabled="1" hud="10" value="232"/>
-  <LAYOUT desc="Mode" enabled="1" hud="10" value="92"/>
-  <LAYOUT desc="Map mode" enabled="0" hud="10" value="46"/>
-  <LAYOUT desc="Map center" enabled="0" hud="10" value="195"/>
-  <LAYOUT desc="AP status" enabled="1" hud="10" value="220"/>
+  <LAYOUT desc="AP status" enabled="0" hud="9" value="220"/>
 </HUDLAYOUTS>
