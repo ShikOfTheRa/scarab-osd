@@ -5,7 +5,7 @@
 // Further configuration may be require elsewhere in config.h + option enabled on GUI
 #define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
 #define HORIZON         // Enable/disable HORIZON indicator
-//#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
+#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
 //#define GPSTIME         // Enable/disable GPS Time functions
 //#define SPORT           // Enable/disable FRSKY S.PORT cell code
 
@@ -91,8 +91,8 @@
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
 //#define OSD_SWITCH_3WAY 3         // Enables midpoint on specified channel (def=6) to turn off OSD. For 3 way OSD switch
-//#define DISP_LOW_VOLTS_WARNING    // Enable prominent low voltage warning text
-//#define FORCE_DISP_LOW_VOLTS      // Enable display low voltage warning override for screen layouts where its disabled
+#define DISP_LOW_VOLTS_WARNING    // Enable prominent low voltage warning text
+#define FORCE_DISP_LOW_VOLTS      // Enable display low voltage warning override for screen layouts where its disabled
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 
 /********************       Serial speed settings      *********************/

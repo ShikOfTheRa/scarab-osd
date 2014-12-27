@@ -33,7 +33,7 @@ Toggle toggleModeItems[] = new Toggle[boxnames.length] ;
 Toggle SimControlToggle;
 // Toggle HudOptionEnabled;
 
-// Slider2d ---
+// Slider2d-
 Slider2D Pitch_Roll, Throttle_Yaw,MW_Pitch_Roll;
 //Sliders ---
 Slider s_Altitude,s_Vario,s_VBat,s_MRSSI;
@@ -50,7 +50,6 @@ Numberbox SGPS_numSat, SGPS_altitude, SGPS_speed, SGPS_ground_course,SGPS_distan
     //GPS_update=read8();
 
     
-//ControlWindow  Throttle_YawWindow;    
 
 //CheckBox checkboxModeItems[] = new CheckBox[boxnames.length] ;
 DecimalFormat OnePlaceDecimal = new DecimalFormat("0.0");
@@ -631,19 +630,18 @@ void ShowCurrentThrottlePosition(){
 
 void ShowLatLon(){
   if(confItem[GetSetting("S_COORDINATES")].value() > 0) {
-  if(confItem[GetSetting("S_GPSCOORDTOP")].value() > 0) {
+//  if(confItem[GetSetting("S_GPSCOORDTOP")].value() > 0) {
   mapchar(0xca, SimPosn[MwGPSLatPositionTop]);
   makeText(" 43.09486N", SimPosn[MwGPSLatPositionTop]+1);
   mapchar(0xcb, SimPosn[MwGPSLonPositionTop]);
   makeText(" 71.88970W", SimPosn[MwGPSLonPositionTop]+1);
-  }
-  else {
-  mapchar(0xca, SimPosn[MwGPSLatPosition]);
-  makeText(" 43.09486N", SimPosn[MwGPSLatPosition]+1);
-  mapchar(0xcb, SimPosn[MwGPSLonPosition]);
-  makeText(" 71.88970W", SimPosn[MwGPSLonPosition]+1);
-
-  }
+//  }
+//  else {
+//  mapchar(0xca, SimPosn[MwGPSLatPosition]);
+//  makeText(" 43.09486N", SimPosn[MwGPSLatPosition]+1);
+//  mapchar(0xcb, SimPosn[MwGPSLonPosition]);
+//  makeText(" 71.88970W", SimPosn[MwGPSLonPosition]+1);
+//  }
 }
 }
 
