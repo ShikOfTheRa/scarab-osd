@@ -674,10 +674,10 @@ void displayGPSPosition(void)
     return;
   if(Settings[S_COORDINATES]|MwSensorActive&mode.gpshome){
     if(fieldIsVisible(MwGPSLatPosition)|MwSensorActive&mode.gpshome) {
-      if(!Settings[S_GPSCOORDTOP])
-        position = getPosition(MwGPSLatPosition);
-      else
-        position = getPosition(MwGPSLatPositionTop);  
+//      if(!Settings[S_GPSCOORDTOP])
+//        position = getPosition(MwGPSLatPosition);
+//      else
+      position = getPosition(MwGPSLatPositionTop);  
       screenBuffer[0] = SYM_LAT;
       FormatGPSCoord(GPS_latitude,screenBuffer+1,4,'N','S');
       MAX7456_WriteString(screenBuffer, position);  

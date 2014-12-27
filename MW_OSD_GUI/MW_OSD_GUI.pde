@@ -92,6 +92,7 @@ int  APstatusPosition = 36;
 int MSP_sendOrder =0;
 PImage img_Clear,GUIBackground,OSDBackground,RadioPot;
 
+int readcounter=0;
 // ScreenType---------- NTSC = 0, PAL = 1 ---------------------------------
 int ScreenType = 0;
 
@@ -139,7 +140,7 @@ ControlP5 SmallcontrolP5;
 ControlP5 ScontrolP5;
 ControlP5 FontGroupcontrolP5;
 ControlP5 GroupcontrolP5;
-Textlabel txtlblWhichcom,txtlblWhichbaud; 
+Textlabel txtlblWhichcom,txtlblWhichbaud,txtdebug; 
 Textlabel txtlblLayoutTxt,txtlblLayoutEnTxt, txtlblLayoutHudTxt; 
 Textlabel txtlblLayoutTxt2,txtlblLayoutEnTxt2, txtlblLayoutHudTxt2; 
 ListBox commListbox,baudListbox;
@@ -153,7 +154,10 @@ ListBox commListbox,baudListbox;
 
 boolean PortRead = false;
 boolean PortWrite = false;
-
+int ReadConfig = 0;
+int ReadMillis = 0;
+int WriteConfig = 0;
+int WriteMillis = 0;
 
 ControlGroup messageBox;
 Textlabel MessageText;
@@ -178,7 +182,8 @@ int hudeditposition=0;
 
 int[] SimPosn;
 int[][] ConfigLayout;
-
+//int[] readcheck;
+int readerror=0;
 // Int variables
 String OSname = System.getProperty("os.name");
 String LoadPercent = "";
@@ -601,6 +606,7 @@ RadioButton R_PortStat;
 //  number boxes--------------------------------------------------------------------------------------------------------------
 
 Numberbox confItem[] = new Numberbox[CONFIGITEMS] ;
+int readcheck[] = new int[CONFIGITEMS] ;
 //Numberbox SimItem[] = new Numberbox[SIMITEMS] ;
 //  number boxes--------------------------------------------------------------------------------------------------------------
 
@@ -729,6 +735,7 @@ GUIBackground = loadImage("GUI_def.jpg");
   }
   commListbox.addItem("Close Comm",++commListMax); // addItem(name,value)
   txtlblWhichcom = controlP5.addTextlabel("txtlblWhichcom","No Port Selected",5,22).setGroup(G_PortStatus); // textlabel(name,text,x,y)
+  txtdebug = controlP5.addTextlabel("txtdebug","",5,200); // textdebug
 
 // BUTTONS SELECTION ---------------------------------------
   
@@ -1040,12 +1047,43 @@ void MakePorts(){
   {
     RXText.setColorValue(color(0,100,0));
   }
+//  delay(250);
 }
 
 void draw() {
 
   time=millis();
-//    image(GUIBackground,0, 0, windowsX, windowsY); //529-WindowShrinkX, 360-WindowShrinkY);
+  if (readerror==0) 
+    WriteConfig=0;
+  if (WriteConfig>0){
+    if (millis()>WriteMillis){
+      if (init_com==1){
+        WRITEconfig();
+        WriteMillis = millis()+250;
+        ReadMillis = millis();
+        ReadConfig=2;
+        WriteConfig--;
+      }
+    }
+  }
+//  String xxc=str(WriteConfig);
+//  txtdebug.setValue(xxc);
+
+  
+  if (ReadConfig>0){
+    if (millis()>ReadMillis){
+      if (init_com==1){
+        READconfig();
+        ReadMillis = millis()+250;
+        ReadConfig--;
+      }
+    }
+  }  
+  
+if ((ReadConfig==0)&&(WriteConfig==0))
+  SimControlToggle.setValue(1);
+//  String xxc=str(ReadConfig);
+//  txtdebug.setValue(xxc);
 
 
 // Layout editor.......
@@ -1141,14 +1179,14 @@ void draw() {
 // PatrikE
 
   {
-    //PortWrite = true;
-    //MakePorts();
+//    PortWrite = true;
+//    MakePorts();
 
 
-    if (!FontMode) {
+    if (!FontMode&&(ReadConfig==0)) {
       if (init_com==1) {
 
-        if(confCheck == 0) {
+/*        if(confCheck == 0) {
           if (millis()>confmillis){
             READ();
             if(confCheck > 0)
@@ -1165,37 +1203,38 @@ void draw() {
             resmillis=millis()+3000;
           }
         }         
-
+*/
 
         
         if (ClosePort) return;
+ //       if (SimControlToggle.getValue()==0) return;
 
-        if (init_com==1)SendCommand(MSP_BOXNAMES);
-        if (init_com==1)SendCommand(MSP_BOXIDS);
-        if (init_com==1)SendCommand(MSP_IDENT);
+          if (init_com==1)SendCommand(MSP_ATTITUDE);
+          if (init_com==1)SendCommand(MSP_RC);
+          if (init_com==1)SendCommand(MSP_STATUS);
 
         MSP_sendOrder++;
         switch(MSP_sendOrder) {
         case 1:
+          if (init_com==1)SendCommand(MSP_BOXNAMES);
+          if (init_com==1)SendCommand(MSP_BOXIDS);
+          if (init_com==1)SendCommand(MSP_IDENT);
+          break;
+        case 2:
           if (init_com==1)SendCommand(MSP_ANALOG);
           if (init_com==1)SendCommand(MSP_COMP_GPS); 
           break;
-        case 2:
-          if (init_com==1)SendCommand(MSP_STATUS);
-          if (init_com==1)SendCommand(MSP_CELLS);
-          break;
         case 3:
-          if (init_com==1)SendCommand(MSP_RC);
+          if (init_com==1)SendCommand(MSP_ATTITUDE);
           break;
         case 4:
           if (init_com==1)SendCommand(MSP_RAW_GPS);
           break;
         case 5:
-          if (init_com==1)SendCommand(MSP_ATTITUDE);
           if (init_com==1)SendCommand(MSP_ALTITUDE);
           break;
         case 6: 
-          if (init_com==1)SendCommand(MSP_RC);
+          if (init_com==1)SendCommand(MSP_CELLS);
           break;
         case 7: 
           if ((init_com==1)&&(toggleMSP_Data == false)) SendCommand(MSP_BOXNAMES);
@@ -1209,8 +1248,6 @@ void draw() {
         case 10:
           if (init_com==1)SendCommand(MSP_DEBUG);
           MSP_sendOrder=0;
-          break;
-        case 11:
           break;
         }
         PortWrite = !PortWrite; // toggle TX LED every other     
@@ -1626,7 +1663,7 @@ public void bLCANCEL() {
   G_LINKS.show(); 
   initxml();
   if (init_com==1)
-    READ();
+    READinit();
 }
 
 public void bLSET() {
@@ -2136,7 +2173,7 @@ void xmlsavelayout(){
   confItem[GetSetting("S_HUD")].setMax(ConfigRanges[GetSetting("S_HUD")]);
   confItem[GetSetting("S_HUDOSDSW")].setMax(ConfigRanges[GetSetting("S_HUDOSDSW")]);
   if (init_com==1)
-    READ();
+    READinit();
 }
 
 

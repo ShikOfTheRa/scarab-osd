@@ -184,7 +184,7 @@ enum Setting_ {
   S_AMPERAGE_ALARM,
   S_DISPLAYGPS,
   S_COORDINATES,
-  S_GPSCOORDTOP,
+  S_GPSCOORDTOP, //spare
   S_GPSALTITUDE,
   S_ANGLETOHOME,
   S_SHOWHEADING,
@@ -340,8 +340,8 @@ LINE12+22 |DISPLAY_ALWAYS,   // CurrentThrottlePosition
 LINE13+22 |DISPLAY_ALWAYS,   // flyTimePosition
 LINE13+22 |DISPLAY_ALWAYS,   // onTimePosition
 LINE11+11 |DISPLAY_ALWAYS,   // motorArmedPosition
-LINE10+2 |DISPLAY_ALWAYS,   // MwGPSLatPosition
-LINE10+15 |DISPLAY_ALWAYS,   // MwGPSLonPosition
+LINE10+2 |DISPLAY_ALWAYS,   // MwGPSLatPosition  SPARE
+LINE10+15 |DISPLAY_ALWAYS,   // MwGPSLonPosition SPARE
 LINE01+2 |DISPLAY_ALWAYS,   // MwGPSLatPositionTop      // On top of screen
 LINE01+15 |DISPLAY_ALWAYS,   // MwGPSLonPositionTop      // On top of screen
 LINE12+3 |DISPLAY_ALWAYS,   // rssiPosition
@@ -383,8 +383,8 @@ LINE12+22 |DISPLAY_NEVER,   // CurrentThrottlePosition
 LINE13+22 |DISPLAY_ALWAYS,   // flyTimePosition
 LINE13+22 |DISPLAY_ALWAYS,   // onTimePosition
 LINE11+11 |DISPLAY_ALWAYS,   // motorArmedPosition
-LINE10+2 |DISPLAY_NEVER,   // MwGPSLatPosition
-LINE10+15 |DISPLAY_NEVER,   // MwGPSLonPosition
+LINE10+2 |DISPLAY_NEVER,   // MwGPSLatPosition  SPARE
+LINE10+15 |DISPLAY_NEVER,   // MwGPSLonPosition SPARE
 LINE01+2 |DISPLAY_NEVER,   // MwGPSLatPositionTop      // On top of screen
 LINE01+15 |DISPLAY_NEVER,   // MwGPSLonPositionTop      // On top of screen
 LINE12+2 |DISPLAY_NEVER,   // rssiPosition

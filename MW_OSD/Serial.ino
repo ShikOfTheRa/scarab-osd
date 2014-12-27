@@ -1,5 +1,5 @@
 
-#define SERIALBUFFERSIZE 300
+#define SERIALBUFFERSIZE 250
 static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string
 static uint8_t receiverIndex;
 static uint8_t dataSize;
