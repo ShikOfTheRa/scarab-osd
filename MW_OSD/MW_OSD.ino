@@ -21,6 +21,12 @@ This work is based on the following open source work :-
  Please refer to credits.txt for list of individual contributions
 */
 
+//------------------------------------------------------------------------
+#define MEMCHECK 0 // to enable memeory checking and set debug[x] value
+#if 1
+__asm volatile ("nop");
+#endif
+#ifdef MEMCHECK
 extern uint8_t _end;  //end of program variables 
 extern uint8_t __stack; //start of stack (highest RAM address)
 
@@ -55,9 +61,11 @@ uint16_t UntouchedStack(void)
 
     return count; 
 } 
+#endif
+//------------------------------------------------------------------------
 
-  
-#define MWOSDVER 5            
+#define MWVERS "MULTIWII MWOSD - R1.3"  
+#define MWOSDVER 5      // for eeprom layout verification      
 #include <avr/pgmspace.h>
 #include <EEPROM.h> //Needed to access eeprom read/write functions
 #include "Config.h"
@@ -126,7 +134,7 @@ void (* resetFunc)(void)=0;
 
 void setMspRequests() {
   if(fontMode) {
-      modeMSPRequests = REQ_MSP_FONT;
+    modeMSPRequests = REQ_MSP_FONT;
   }
   else if(configMode) {
     modeMSPRequests = 
@@ -170,19 +178,21 @@ void setMspRequests() {
   }
  
   if(Settings[S_MAINVOLTAGE_VBAT] ||
-     Settings[S_VIDVOLTAGE_VBAT] ||
-     Settings[S_MWRSSI])
+    Settings[S_VIDVOLTAGE_VBAT] ||
+    Settings[S_MWRSSI])
     modeMSPRequests |= REQ_MSP_ANALOG;
 
   // so we do not send requests that are not needed.
   queuedMSPRequests &= modeMSPRequests;
   timer.lastCallSign = onTime;
-
 }
+
 
 void loop()
 {
-debug[1] = UntouchedStack();
+#ifdef MEMCHECK
+  debug[MEMCHECK] = UntouchedStack();
+#endif
 
   if (MwSensorActive&mode.osd_switch)
     screenlayout=1;
@@ -219,8 +229,7 @@ debug[1] = UntouchedStack();
     timer.halfSec++;
     timer.Blink10hz=!timer.Blink10hz;
     calculateTrip();
- 
-   
+    
       uint8_t MSPcmdsend;
       if(queuedMSPRequests == 0)
         queuedMSPRequests = modeMSPRequests;

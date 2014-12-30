@@ -6,8 +6,8 @@
 #define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
 #define HORIZON         // Enable/disable HORIZON indicator
 #define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
-//#define GPSTIME         // Enable/disable GPS Time functions
-//#define SPORT           // Enable/disable FRSKY S.PORT cell code
+#define GPSTIME         // Enable/disable GPS Time functions
+#define SPORT           // Enable/disable FRSKY S.PORT cell code
 
 
 /********************       HARDWARE OSD settings      *********************/
@@ -81,7 +81,7 @@
 /********************       Display Settings         ************************/
 //#define AUTOCAM                   // Enable autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings. Not recommended for > 600TVL cameras
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
-#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
+//#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
@@ -91,8 +91,8 @@
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
 //#define OSD_SWITCH_3WAY 3         // Enables midpoint on specified channel (def=6) to turn off OSD. For 3 way OSD switch
-#define DISP_LOW_VOLTS_WARNING    // Enable prominent low voltage warning text
-#define FORCE_DISP_LOW_VOLTS      // Enable display low voltage warning override for screen layouts where its disabled
+#define DISP_LOW_VOLTS_WARNING      // Enable prominent low voltage warning text
+#define FORCE_DISP_LOW_VOLTS        // Enable display low voltage warning override for screen layouts where its disabled
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 
 /********************       Serial speed settings      *********************/
@@ -116,6 +116,7 @@
 #define PAGE6 //DISPLAY
 #define PAGE7 //ADVANCED
 #define PAGE8 //GPS TIME
+#define PAGE9 //ALARMS
 
 
 /********************  CONTROLLER compatibility **********************/
@@ -136,7 +137,7 @@
 
 
 /********************  ADVANCED HARDWARE settings      *********************/
-//#define TEMPSENSOR                // Enable if you have a hardware temperature sensor
+//#define TEMPSENSOR                // Enable if you have a hardware temperature sensor - DEPRECATED
 
 
 /********************  HARDWARE PINS settings      *********************/
@@ -171,5 +172,5 @@
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
 #define DEBUG         // Enable/disable option to display OSD debug values 
-//#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
+#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 
