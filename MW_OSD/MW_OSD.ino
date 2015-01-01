@@ -184,7 +184,6 @@ void setMspRequests() {
 
   // so we do not send requests that are not needed.
   queuedMSPRequests &= modeMSPRequests;
-  timer.lastCallSign = onTime;
 }
 
 
@@ -254,9 +253,9 @@ void loop()
       case REQ_MSP_COMP_GPS:
         MSPcmdsend = MSP_COMP_GPS;
         break;
-      case REQ_MSP_ATTITUDE:
-        MSPcmdsend = MSP_ATTITUDE;
-        break;
+//      case REQ_MSP_ATTITUDE:
+//        MSPcmdsend = MSP_ATTITUDE;
+//        break;
       case REQ_MSP_ALTITUDE:
         MSPcmdsend = MSP_ALTITUDE;
         break;
@@ -290,7 +289,7 @@ void loop()
          break;
 #endif
       case REQ_MSP_NAV_STATUS:
-//           if(MwSensorActive&mode.gpsmission)
+           if(MwSensorActive&mode.gpsmission)
          MSPcmdsend = MSP_NAV_STATUS;
       break;
     }
@@ -304,10 +303,11 @@ void loop()
 
 
 #ifndef INTRO_DELAY 
-#define INTRO_DELAY 10
+#define INTRO_DELAY 8
 #endif
     if( allSec < INTRO_DELAY ){
       displayIntro();
+      timer.lastCallSign=onTime-CALLSIGNINTERVAL;
     }  
     else
     {
@@ -354,10 +354,10 @@ void loop()
 #elif  FREETEXTGIMBAL
         if (MwSensorActive&mode.camstab) displayCallsign(getPosition(callSignPosition)); 
 #else 
-        if ( (onTime > (timer.lastCallSign+CALLSIGNINTERVAL)) || (onTime < (timer.lastCallSign+4)))
+        if ( (onTime > (timer.lastCallSign+CALLSIGNINTERVAL)))
        {
            // Displays 4 sec every 5min (no blink during flight)
-        if ( onTime > (timer.lastCallSign+CALLSIGNDURATION)) timer.lastCallSign = onTime; 
+        if ( onTime > (timer.lastCallSign+CALLSIGNINTERVAL+CALLSIGNDURATION)) timer.lastCallSign = onTime; 
         if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition));      
        }
 #endif

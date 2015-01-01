@@ -766,6 +766,26 @@ void ShowAPstatus(){
 }
 
 
+void ShowCallsign(){
+  if(confItem[GetSetting("S_DISPLAY_CS")].value() > 0) {
+    if (LEWvisible==1){
+      if (millis() < (csmillis)+4000){
+        csmillis = (millis()-4000);
+      }
+    }
+
+
+    if (millis() > (csmillis)+5000){
+   
+      String CallSText = controlP5.get(Textfield.class,"CallSign").getText().toUpperCase();
+      makeText(CallSText, SimPosn[callSignPosition]);
+      if (millis() > (csmillis + 6000)){
+        csmillis = millis();
+      }
+      
+    }
+}}
+
 void ShowAmperage(){
   if(confItem[GetSetting("S_AMPER_HOUR")].value() > 0) {
   mapchar(0xa4, SimPosn[pMeterSumPosition]);
@@ -1223,7 +1243,9 @@ int SYM_DIRECTION = 0x72;  int xdir=0;
 for(int maptype=mapstart; maptype<mapend; maptype++) {
 
   if (maptype==1) {
-    angle=(180+360+GPS_directionToHome-armedangle+MwHeading)%360;
+    angle=(180+360+GPS_directionToHome-armedangle)
+    %360;
+//    angle=(180+360+GPS_directionToHome-armedangle+MwHeading)%360;
   }
   else {
     angle=(360+GPS_directionToHome-MwHeading)%360;  
