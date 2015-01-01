@@ -161,7 +161,7 @@ int WriteMillis = 0;
 
 ControlGroup messageBox;
 Textlabel MessageText;
-
+int LEWvisible=0;
 // XML config variables
 int DISPLAY_STATE;
 int hudsavailable=8;
@@ -261,6 +261,7 @@ int YLocation = 0;
 int Roll = 0;
 int Pitch = 0;
 int confmillis = 1000;
+int csmillis = 1000;
 int confCheck = 0;
 int resmillis = 5000;
 int resCheck = 1;
@@ -1352,6 +1353,7 @@ if ((ReadConfig==0)&&(WriteConfig==0))
   displayMode();
   ShowAmps();
   ShowAltitude();
+  ShowCallsign();
   ShownAngletohome();
   ShowAmperage();
   ShowVario();
@@ -1660,6 +1662,7 @@ public void bLSAVE() {
 public void bLCANCEL() {
   Lock_All_Controls(false);
   LEW.hide();
+  LEWvisible=0;
   G_LINKS.show(); 
   initxml();
   if (init_com==1)
@@ -2249,6 +2252,7 @@ void LEW(){
 //  Lock_All_Controls(true);
   G_LINKS.hide();
   LEW.show();
+  LEWvisible=1;
 //  Lock_All_Controls(true);
 }
 

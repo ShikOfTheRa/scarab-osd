@@ -264,6 +264,7 @@ public void WRITE(){
 public void WRITEinit(){
   WriteConfig=12;
   readerror=1;  
+  CheckCallSign();
   for(int i = 0; i < CONFIGITEMS; i++){
     readcheck[i]=int(confItem[i].value());
   }
