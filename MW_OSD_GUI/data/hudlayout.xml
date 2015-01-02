@@ -16,10 +16,10 @@
   <DESCRIPTION desc="FlyTime"/>
   <DESCRIPTION desc="OnTime"/>
   <DESCRIPTION desc="Armed Status"/>
-  <DESCRIPTION desc="Latitude-mid"/>
-  <DESCRIPTION desc="Longitude-mid"/>
-  <DESCRIPTION desc="Latitude-top"/>
-  <DESCRIPTION desc="Longitude-top"/>
+  <DESCRIPTION desc="Unused"/>
+  <DESCRIPTION desc="Unused"/>
+  <DESCRIPTION desc="Latitude"/>
+  <DESCRIPTION desc="Longitude"/>
   <DESCRIPTION desc="RSSI"/>
   <DESCRIPTION desc="Temperature"/>
   <DESCRIPTION desc="Voltage"/>
@@ -250,8 +250,8 @@
   <LAYOUT desc="motorArmedPosition" enabled="1" hud="5" hudname="F14" value="71"/>
   <LAYOUT desc="MwGPSLatPosition" enabled="1" hud="5" hudname="F14" value="272"/>
   <LAYOUT desc="MwGPSLonPosition" enabled="1" hud="5" hudname="F14" value="285"/>
-  <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="5" hudname="F14" value="2"/>
-  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="5" hudname="F14" value="15"/>
+  <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="5" hudname="F14" value="32"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="5" hudname="F14" value="45"/>
   <LAYOUT desc="rssiPosition" enabled="1" hud="5" hudname="F14" value="335"/>
   <LAYOUT desc="temperaturePosition" enabled="0" hud="5" hudname="F14" value="213"/>
   <LAYOUT desc="voltagePosition" enabled="1" hud="5" hudname="F14" value="275"/>
@@ -359,10 +359,10 @@
   <LAYOUT desc="FlyTime" enabled="1" hud="8" hudname="Groundstation" value="382"/>
   <LAYOUT desc="OnTime" enabled="1" hud="8" hudname="Groundstation" value="382"/>
   <LAYOUT desc="Armed Status" enabled="0" hud="8" hudname="Groundstation" value="311"/>
-  <LAYOUT desc="Latitude-mid" enabled="0" hud="8" hudname="Groundstation" value="272"/>
-  <LAYOUT desc="Longitude-mid" enabled="0" hud="8" hudname="Groundstation" value="285"/>
-  <LAYOUT desc="Latitude-top" enabled="0" hud="8" hudname="Groundstation" value="2"/>
-  <LAYOUT desc="Longitude-top" enabled="0" hud="8" hudname="Groundstation" value="15"/>
+  <LAYOUT desc="Unused" enabled="0" hud="8" hudname="Groundstation" value="272"/>
+  <LAYOUT desc="Unused" enabled="0" hud="8" hudname="Groundstation" value="285"/>
+  <LAYOUT desc="Latitude" enabled="0" hud="8" hudname="Groundstation" value="2"/>
+  <LAYOUT desc="Longitude" enabled="0" hud="8" hudname="Groundstation" value="15"/>
   <LAYOUT desc="RSSI" enabled="1" hud="8" hudname="Groundstation" value="377"/>
   <LAYOUT desc="Temperature" enabled="0" hud="8" hudname="Groundstation" value="213"/>
   <LAYOUT desc="Voltage" enabled="1" hud="8" hudname="Groundstation" value="363"/>
@@ -396,10 +396,10 @@
   <LAYOUT desc="FlyTime" enabled="1" hud="9" hudname="Standalone" value="382"/>
   <LAYOUT desc="OnTime" enabled="1" hud="9" hudname="Standalone" value="382"/>
   <LAYOUT desc="Armed Status" enabled="0" hud="9" hudname="Standalone" value="311"/>
-  <LAYOUT desc="Latitude-mid" enabled="0" hud="9" hudname="Standalone" value="272"/>
-  <LAYOUT desc="Longitude-mid" enabled="0" hud="9" hudname="Standalone" value="285"/>
-  <LAYOUT desc="Latitude-top" enabled="0" hud="9" hudname="Standalone" value="2"/>
-  <LAYOUT desc="Longitude-top" enabled="0" hud="9" hudname="Standalone" value="15"/>
+  <LAYOUT desc="Unused" enabled="0" hud="9" hudname="Standalone" value="272"/>
+  <LAYOUT desc="Unused" enabled="0" hud="9" hudname="Standalone" value="285"/>
+  <LAYOUT desc="Latitude" enabled="0" hud="9" hudname="Standalone" value="2"/>
+  <LAYOUT desc="Longitude" enabled="0" hud="9" hudname="Standalone" value="15"/>
   <LAYOUT desc="RSSI" enabled="1" hud="9" hudname="Standalone" value="354"/>
   <LAYOUT desc="Temperature" enabled="0" hud="9" hudname="Standalone" value="213"/>
   <LAYOUT desc="Voltage" enabled="1" hud="9" hudname="Standalone" value="363"/>

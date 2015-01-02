@@ -757,6 +757,7 @@ CreateItem(GetSetting("S_CHECK_"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_AMPMAXL"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_AMPMAXH"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_USE_BOXNAMES"),  5,0, G_EEPROM);
+CreateItem(GetSetting("S_GPSCOORDTOP"),  5,0*17, G_EEPROM);
 
 
 // RSSI  ---------------------------------------------------------------------------
@@ -806,9 +807,8 @@ CreateItem(GetSetting("S_DEBUG"),  5,0, G_Debug);
 //  GPS  ----------------------------------------------------------------------------
 CreateItem(GetSetting("S_DISPLAYGPS"), 5,0, G_GPS);
 CreateItem(GetSetting("S_COORDINATES"),  5,1*17, G_GPS);
-CreateItem(GetSetting("S_GPSCOORDTOP"),  5,2*17, G_GPS);
-CreateItem(GetSetting("S_GPSALTITUDE"),  5,3*17, G_GPS);
-CreateItem(GetSetting("S_MAPMODE"),      5,4*17, G_GPS);
+CreateItem(GetSetting("S_GPSALTITUDE"),  5,2*17, G_GPS);
+CreateItem(GetSetting("S_MAPMODE"),      5,3*17, G_GPS);
 //  HUD  ----------------------------------------------------------------------------
 CreateItem(GetSetting("S_HUD"),  5,0*17, G_HUD);
 CreateItem(GetSetting("S_HUDOSDSW"),  5,1*17, G_HUD);
