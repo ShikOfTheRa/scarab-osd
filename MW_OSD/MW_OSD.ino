@@ -22,7 +22,7 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
-#define MEMCHECK 0 // to enable memeory checking and set debug[x] value
+//#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
 #if 1
 __asm volatile ("nop");
 #endif
@@ -253,9 +253,9 @@ void loop()
       case REQ_MSP_COMP_GPS:
         MSPcmdsend = MSP_COMP_GPS;
         break;
-//      case REQ_MSP_ATTITUDE:
-//        MSPcmdsend = MSP_ATTITUDE;
-//        break;
+      case REQ_MSP_ATTITUDE:
+        MSPcmdsend = MSP_ATTITUDE;
+        break;
       case REQ_MSP_ALTITUDE:
         MSPcmdsend = MSP_ALTITUDE;
         break;

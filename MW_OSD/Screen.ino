@@ -991,9 +991,9 @@ void displayConfigScreen(void)
     int xx;
 //    MAX7456_WriteString_P(configMsg00, 35);
 
-#ifdef shortstats
-    strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_stats_item[1])));
-    MAX7456_WriteString(screenBuffer, ROLLT+ (1*30));
+#ifdef SHORTSTATS
+    strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_stats_item[0])));
+    MAX7456_WriteString(screenBuffer, ROLLT);
     formatTime(flyingTime, screenBuffer, 1);
     MAX7456_WriteString(screenBuffer,ROLLD-4);
 
@@ -1143,17 +1143,17 @@ void displayConfigScreen(void)
 //R3:
 //    MAX7456_WriteString_P(configMsg33, YAWT);
     MAX7456_WriteString(itoa(Settings[S_VOLTAGEMIN],screenBuffer,10),YAWD);
-//R4:     
+//R4:
+//    MAX7456_WriteString_P(configMsg35, VELT);   
+    MAX7456_WriteString(itoa(Settings[S_BATCELLS],screenBuffer,10),ALTD);
+//R5:     
 //    MAX7456_WriteString_P(configMsg34, ALTT);
     if(Settings[S_VIDVOLTAGE]){
-      MAX7456_WriteString_P(configMsgON, ALTD);
+      MAX7456_WriteString_P(configMsgON, VELD);
     }
     else{
-      MAX7456_WriteString_P(configMsgOFF, ALTD);
+      MAX7456_WriteString_P(configMsgOFF, VELD);
     }
-//R5:
-//    MAX7456_WriteString_P(configMsg35, VELT);   
-    MAX7456_WriteString(itoa(Settings[S_BATCELLS],screenBuffer,10),VELD);
 //R6:
 //    MAX7456_WriteString_P(configMsgMWII, LEVT);   
     if(Settings[S_MAINVOLTAGE_VBAT]){
@@ -1344,7 +1344,7 @@ void displayConfigScreen(void)
     }
 //R7:     
 //    MAX7456_WriteString_P(configMsg67, MAGT);
-    MAX7456_WriteString(itoa(Settings[S_GIMBAL],screenBuffer,10),MAGD);
+//    MAX7456_WriteString(itoa(Settings[S_GIMBAL],screenBuffer,10),MAGD);
     if(Settings[S_GIMBAL]){
       MAX7456_WriteString_P(configMsgON, MAGD);
     }
@@ -1354,12 +1354,12 @@ void displayConfigScreen(void)
 //R8:     
 //    MAX7456_WriteString_P(configMsg68, MAGT+LINE);
     MAX7456_WriteString(itoa(Settings[S_MAPMODE],screenBuffer,10),MAGD+LINE);
-    if(Settings[S_MAPMODE]){
-      MAX7456_WriteString_P(configMsgON, MAGD+LINE);
-    }
-    else{
-      MAX7456_WriteString_P(configMsgOFF, MAGD+LINE);
-    }   
+//    if(Settings[S_MAPMODE]){
+//      MAX7456_WriteString_P(configMsgON, MAGD+LINE);
+//    }
+//    else{
+//      MAX7456_WriteString_P(configMsgOFF, MAGD+LINE);
+//    }   
   }
 #else
     if(configPage == 6)configPage+=menudir;  

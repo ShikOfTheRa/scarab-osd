@@ -196,6 +196,7 @@ int whichKey = -1;  // Variable to hold keystoke values
 int inByte = -1;    // Incoming serial data
 int[] serialInArray = new int[3];    // Where we'll put what we receive
 int[] debug = new int[4];    
+String xxc="";
 
 
 int serialCount = 0;                 // A count of how many bytes we receive
@@ -736,7 +737,7 @@ GUIBackground = loadImage("GUI_def.jpg");
   }
   commListbox.addItem("Close Comm",++commListMax); // addItem(name,value)
   txtlblWhichcom = controlP5.addTextlabel("txtlblWhichcom","No Port Selected",5,22).setGroup(G_PortStatus); // textlabel(name,text,x,y)
-  txtdebug = controlP5.addTextlabel("txtdebug","",5,200); // textdebug
+  txtdebug = controlP5.addTextlabel("txtdebug","",3,250); // textdebug
 
 // BUTTONS SELECTION ---------------------------------------
   
@@ -1056,26 +1057,33 @@ void draw() {
   time=millis();
   if (readerror==0) 
     WriteConfig=0;
+//  String xxc="";
+  txtdebug.setValue(xxc);
   if (WriteConfig>0){
     if (millis()>WriteMillis){
       if (init_com==1){
+//        WRITEinit();
+        xxc="Save attempt: "+str(WriteConfig);
         WRITEconfig();
-        WriteMillis = millis()+250;
-        ReadMillis = millis();
+        WriteMillis = 250+millis();
+        ReadMillis = 30+millis();
         ReadConfig=2;
         WriteConfig--;
       }
     }
   }
-//  String xxc=str(WriteConfig);
-//  txtdebug.setValue(xxc);
+  else{
+   xxc="";
+  }
+//  if (confItem[GetSetting("S_DEBUG")].value() > 0)
+    txtdebug.setValue(xxc);
 
   
   if (ReadConfig>0){
     if (millis()>ReadMillis){
       if (init_com==1){
         READconfig();
-        ReadMillis = millis()+250;
+        ReadMillis = 100+millis();
         ReadConfig--;
       }
     }
@@ -1083,6 +1091,7 @@ void draw() {
   
 if ((ReadConfig==0)&&(WriteConfig==0))
   SimControlToggle.setValue(1);
+
 //  String xxc=str(ReadConfig);
 //  txtdebug.setValue(xxc);
 
@@ -1108,13 +1117,6 @@ if ((ReadConfig==0)&&(WriteConfig==0))
 
 // Colour switches when enabled......
   coloriseswitches();
-
-  //hint(ENABLE_DEPTH_TEST);
-  //pushMatrix();
-  //PortRead = false; 
-  //PortWrite = false; 
-  //del++; 
-  //System.out.println(del);
   if ((init_com==1)  && (toggleMSP_Data == true)) {
     //time2 = time;
     PortRead = true;
@@ -1126,87 +1128,15 @@ if ((ReadConfig==0)&&(WriteConfig==0))
   //PortWrite = false;
   if ((SendSim ==1) && (ClosePort == false)) 
 
-// OLD SKOOL
-/*
-{
-    //time2 = time;
-    PortRead = true;
-    MakePorts();
-    MWData_Com();
-    if (!FontMode) PortRead = false;
-    
-  }
-  
-  //PortWrite = false;
-  if ((SendSim ==1) && (ClosePort == false)){
-    //PortWrite = true;
-      //MakePorts();
- 
-    if ((init_com==1)  && (time-time5 >5000) && (toggleMSP_Data == false) && (!FontMode)){
-      if(ClosePort) return;
-      time5 = time;
-       
-      if (init_com==1){
-        SendCommand(MSP_S);
-        SendCommand(MSP_BOXIDS);
-      }
-      //PortWrite = false;
-    }
-    if ((init_com==1)  && (time-time4 >200) && (!FontMode)){
-      if(ClosePort) return;
-      time4 = time; 
-      //PortWrite = !PortWrite;
-      //MakePorts();
-      if (init_com==1)SendCommand(MSP_ANALOG);
-      if (init_com==1)SendCommand(MSP_STATUS);
-      if (init_com==1)SendCommand(MSP_RC);
-      if (init_com==1)SendCommand(MSP_ALTITUDE);
-      if (init_com==1)SendCommand(MSP_RAW_GPS);
-      if (init_com==1)SendCommand(MSP_COMP_GPS);
-      
-      
-    }
-    if ((init_com==1)  && (time-time1 >40) && (!FontMode)){
-      if(ClosePort) return;
-      time1 = time; 
-      PortWrite = !PortWrite;
-      
-      if (init_com==1)SendCommand(MSP_ATTITUDE);
-      //PortWrite = false;
-    }
-  }
-
-*/
-// PatrikE
 
   {
 //    PortWrite = true;
 //    MakePorts();
 
 
-    if (!FontMode&&(ReadConfig==0)) {
+    if (!FontMode&&(ReadConfig==0)&&(WriteConfig==0)) {
       if (init_com==1) {
-
-/*        if(confCheck == 0) {
-          if (millis()>confmillis){
-            READ();
-            if(confCheck > 0)
-              resCheck = 1;
-            confmillis=millis()+500;
-          }
-        }
-
-        if(resCheck == 0) {
-          if (millis()>resmillis){
-            READ();
-            if(confCheck == 0)
-              RESTART();
-            resmillis=millis()+3000;
-          }
-        }         
-*/
-
-        
+       
         if (ClosePort) return;
  //       if (SimControlToggle.getValue()==0) return;
 
