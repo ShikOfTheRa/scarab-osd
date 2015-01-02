@@ -48,6 +48,8 @@ void serialMSPCheck()
 	txCheckSum ^= Settings[i];
       }
       Serial.write(txCheckSum);
+debug[1]++;
+ 
       
     }
 
@@ -91,6 +93,7 @@ void serialMSPCheck()
       EEPROM.write(0,MWOSDVER);
       readEEPROM();
       setMspRequests();
+      debug[0]++;
     }
 
 
@@ -542,7 +545,7 @@ void serialMenuCommon()
 	  if(ROW==5) Settings[S_COORDINATES]=!Settings[S_COORDINATES];
 	  if(ROW==6) Settings[S_MODEICON]=!Settings[S_MODEICON];
 	  if(ROW==7) Settings[S_GIMBAL]=!Settings[S_GIMBAL];
-	  if(ROW==8) Settings[S_MAPMODE]=!Settings[S_MAPMODE];
+	  if(ROW==8) Settings[S_MAPMODE]=Settings[S_MAPMODE]+menudir;
 	}
 #endif
 #ifdef PAGE7

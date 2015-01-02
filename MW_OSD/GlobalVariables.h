@@ -639,8 +639,8 @@ prog_char configMsg30[] PROGMEM = "VOLTAGE";
 prog_char configMsg31[] PROGMEM = "DISPLAY MAIN VOLTS";
 prog_char configMsg32[] PROGMEM = "ADJUST VOLTS";
 prog_char configMsg33[] PROGMEM = "MAIN VOLTS ALARM";
-prog_char configMsg34[] PROGMEM = "DISPLAY VID VOLTS";
-prog_char configMsg35[] PROGMEM = "CELLS";
+prog_char configMsg34[] PROGMEM = "CELLS";
+prog_char configMsg35[] PROGMEM = "DISPLAY VID VOLTS";
 //-----------------------------------------------------------Page4
 prog_char configMsg40[] PROGMEM = "RSSI";
 prog_char configMsg42[] PROGMEM = "DISPLAY RSSI";
@@ -665,8 +665,7 @@ prog_char configMsg64[] PROGMEM = "THROTTLE";
 prog_char configMsg65[] PROGMEM = "GPS COORDS";
 prog_char configMsg66[] PROGMEM = "SENSORS";
 prog_char configMsg67[] PROGMEM = "GIMBAL";
-prog_char configMsg68[] PROGMEM = "GPS TIME";
-prog_char configMsg69[] PROGMEM = "MAP MODE";
+prog_char configMsg68[] PROGMEM = "MAP MODE";
 //-----------------------------------------------------------Page7
 prog_char configMsg70[] PROGMEM = "ADVANCED";
 const char configMsg71[] PROGMEM = "UNITS";

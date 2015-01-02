@@ -239,13 +239,13 @@ public void READ(){
 
 public void READinit(){
   ReadConfig=12;  
+  SimControlToggle.setValue(0);
   for(int i = 0; i < CONFIGITEMS; i++){
     SetConfigItem((byte)i, 0);
   }
 }
 
-public void READconfig(){
-  
+public void READconfig(){ 
   PortRead = true; 
   MakePorts();
    for (int txTimes = 0; txTimes<2; txTimes++) {
@@ -261,8 +261,10 @@ public void WRITE(){
   WRITEinit();;
 }
 
+
 public void WRITEinit(){
-  WriteConfig=12;
+  WriteConfig=20;
+  SimControlToggle.setValue(0);
   readerror=1;  
   CheckCallSign();
   for(int i = 0; i < CONFIGITEMS; i++){
@@ -271,9 +273,8 @@ public void WRITEinit(){
 }
 
 
-
   public void WRITEconfig(){
-
+  readerror=1;  
   SimControlToggle.setValue(0);
   confItem[GetSetting("S_AMPMAXL")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())&0xFF); // for 8>>16 bit EEPROM
   confItem[GetSetting("S_AMPMAXH")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())>>8);
@@ -758,16 +759,24 @@ public void evaluateCommand(byte cmd, int size) {
               if (i==0){
                 confCheck=xx;
               }
-
-//              System.out.println(readcounter+" "+WriteConfig+" "+readerror+" "+i+" "+xx+" "+readcheck[i]);
-
               if (i>1){
-                if ((xx!=readcheck[i]))
+                if ((xx!=readcheck[i])){
                   readerror=1;
+                  if (WriteConfig>0)
+                    System.out.println(readcounter+" "+WriteConfig+" "+readerror+" "+i+" "+xx+" "+readcheck[i]);
+                }
               }
                 if (confCheck>0)
                   SetConfigItem(i, xx);
               ReadConfig=0;
+//              if (readerror==0)
+//                SimControlToggle.setValue(1);
+//              else
+              if (readerror>0)
+                ReadConfig=1;
+//                for(int ii = 0; ii < CONFIGITEMS; ii++){
+//                  SetConfigItem(ii, readcheck[ii]);
+//                }
             }
 //System.out.println(MW_OSD_EEPROM_Version+" - "+confCheck);            
           

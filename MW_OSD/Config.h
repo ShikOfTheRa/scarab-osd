@@ -6,8 +6,8 @@
 #define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
 #define HORIZON         // Enable/disable HORIZON indicator
 #define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
-#define GPSTIME         // Enable/disable GPS Time functions
-#define SPORT           // Enable/disable FRSKY S.PORT cell code
+//#define GPSTIME         // Enable/disable GPS Time functions
+//#define SPORT           // Enable/disable FRSKY S.PORT cell code
 
 
 /********************       HARDWARE OSD settings      *********************/
@@ -90,7 +90,8 @@
 //#define BLACKBRIGHTNESS 0x00      // Optional change from default 0x00=0%,0x01=10%,0x10=20%0x11=30%  default is 0x00=0%
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
-//#define OSD_SWITCH_3WAY 3         // Enables midpoint on specified channel (def=6) to turn off OSD. For 3 way OSD switch
+//#define OSD_SWITCH_3WAY 5         // Enables midpoint on specified channel (range 0-7 def=5) to turn off OSD. For 3 way OSD switch
+//#define SHORTSTATS                // Display only timer on flight summary 
 #define DISP_LOW_VOLTS_WARNING      // Enable prominent low voltage warning text
 #define FORCE_DISP_LOW_VOLTS        // Enable display low voltage warning override for screen layouts where its disabled
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
@@ -172,5 +173,5 @@
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
 #define DEBUG         // Enable/disable option to display OSD debug values 
-#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
+//#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 
