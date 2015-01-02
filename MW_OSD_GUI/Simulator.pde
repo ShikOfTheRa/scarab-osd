@@ -1190,6 +1190,13 @@ void ShowSPort(){
 }
 
 void ShowMapMode(){
+  int mi;
+  if (toggleModeItems[9].getValue()>0)
+    mi = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  else
+    mi = int(confItem[GetSetting("S_HUD")].value()); 
+  if (CONFIGHUDEN[mi][MapModePosition]==0)
+    return;
 int SYM_HOME      = 0x04;
 int SYM_AIRCRAFT  = 0X05;
 int SYM_RANGE_100 = 0x21;
