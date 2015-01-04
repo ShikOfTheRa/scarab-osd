@@ -122,7 +122,7 @@ void InitSerial(float portValue) {
       buttonRESTART.setColorBackground(green_);
       
       g_serial.buffer(256);
-            FileUploadText.setText("");
+            txtmessage.setText("");
 //      delay(1500);
       SendCommand(MSP_IDENT);
      
@@ -337,7 +337,7 @@ public void FONT_UPLOAD(){
   PortWrite = true;
   MakePorts();
   FontCounter = 0;
-  FileUploadText.setText("  Please Wait");
+  txtmessage.setText("  Please Wait");
   p = 0;
   inBuf[0] = OSD_GET_FONT;
   //for (int txTimes = 0; txTimes<2; txTimes++) {
@@ -353,8 +353,12 @@ public void FONT_UPLOAD(){
 }
 
 public void SendChar(){
- time2=time;
+    time2=time;
     PortWrite = !PortWrite;  // toggle PortWrite to flash TX
+    if (PortWrite) 
+      txtmessage.setText("Please wait....");
+    else
+      txtmessage.setText("");
     MakePorts();
     System.out.println("Sent Char "+FontCounter);
     buttonSendFile.getCaptionLabel().setText("  " +nf(FontCounter, 3)+"/256");
@@ -373,7 +377,7 @@ public void SendChar(){
       FontMode = false;      
       System.out.println("Finished Uploading Font");
       buttonSendFile.getCaptionLabel().setText("  Upload");
-      FileUploadText.setText("");
+      txtmessage.setText("");
       READinit();
       ReadConfig=40;
       RESTART();
@@ -812,7 +816,7 @@ public void evaluateCommand(byte cmd, int size) {
           }
           if(size == 3) {
            
-            //FileUploadText.setText("  Please Wait");
+            //txtmessage.setText("  Please Wait");
            // PortRead = true;
             //PortWrite = true; 
             //int cindex = read16();
@@ -828,7 +832,7 @@ public void evaluateCommand(byte cmd, int size) {
               //FontMode = false;      
              // System.out.println("End marker "+cindex);
              // buttonSendFile.getCaptionLabel().setText("  Upload");
-             // FileUploadText.setText("");
+             // txtmessage.setText("");
               //InitSerial(200.00);
              // RESTART();
              // g_serial.clear();
