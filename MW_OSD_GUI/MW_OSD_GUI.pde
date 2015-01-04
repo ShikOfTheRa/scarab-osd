@@ -140,7 +140,7 @@ ControlP5 SmallcontrolP5;
 ControlP5 ScontrolP5;
 ControlP5 FontGroupcontrolP5;
 ControlP5 GroupcontrolP5;
-Textlabel txtlblWhichcom,txtlblWhichbaud,txtdebug; 
+Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage; 
 Textlabel txtlblLayoutTxt,txtlblLayoutEnTxt, txtlblLayoutHudTxt; 
 Textlabel txtlblLayoutTxt2,txtlblLayoutEnTxt2, txtlblLayoutHudTxt2; 
 ListBox commListbox,baudListbox;
@@ -197,6 +197,7 @@ int inByte = -1;    // Incoming serial data
 int[] serialInArray = new int[3];    // Where we'll put what we receive
 int[] debug = new int[4];    
 String xxc="";
+int xcolor=20;  
 
 
 int serialCount = 0;                 // A count of how many bytes we receive
@@ -576,6 +577,7 @@ color yellow_ = color(200, 200, 20),
       grey_ = color(30, 30, 30),
       switches_ = color(30, 140, 30),
       font_ = color(50, 50, 50),
+      donate_ = color(200, 200, 20),
       osdcontr_ = color(50, 50, 50)
       ;
 //Colors--------------------------------------------------------------------------------------------------------------------
@@ -591,7 +593,7 @@ Button buttonIMPORT,buttonSAVE,buttonREAD,buttonRESET,buttonWRITE,buttonRESTART,
 Button buttonLUP, buttonLDOWN, buttonLLEFT, buttonLRIGHT, buttonLPOSUP, buttonLPOSDOWN;
 Button buttonLHUDUP,buttonLPOSHUDDOWN,buttonLPOSEN, buttonLSET, buttonLADD, buttonLSAVE, buttonLCANCEL;
 Button buttonLEW ;
-Button buttonGUIDELINK, buttonFAQLINK, buttonCALIBLINK, buttonSUPPORTLINK;
+Button buttonGUIDELINK, buttonFAQLINK, buttonCALIBLINK, buttonSUPPORTLINK, buttonDONATELINK;
 // Buttons------------------------------------------------------------------------------------------------------------------
 
 // Toggles------------------------------------------------------------------------------------------------------------------
@@ -718,7 +720,7 @@ GUIBackground = loadImage("GUI_def.jpg");
   baudListbox.addItem("57600",1);
   baudListbox.addItem("38400",2);
   baudListbox.addItem("19200",3);
-  baudListbox.setValue(1);
+//  baudListbox.setValue(1);
   baudListbox.close();
   txtlblWhichbaud = controlP5.addTextlabel("txtlblWhichbaud","Baud rate: "+str(BaudRate),5,37).setGroup(G_PortStatus); // textlabel(name,text,x,y)
 
@@ -737,7 +739,7 @@ GUIBackground = loadImage("GUI_def.jpg");
   }
   commListbox.addItem("Close Comm",++commListMax); // addItem(name,value)
   txtlblWhichcom = controlP5.addTextlabel("txtlblWhichcom","No Port Selected",5,22).setGroup(G_PortStatus); // textlabel(name,text,x,y)
-  txtdebug = controlP5.addTextlabel("txtdebug","",3,250); // textdebug
+  txtmessage = controlP5.addTextlabel("txtmessage","",3,250); // textdebug
 
 // BUTTONS SELECTION ---------------------------------------
   
@@ -866,6 +868,8 @@ buttonGPSTIMELINK = controlP5.addButton("GPSTIMELINK",1,200,10,125,16);
 buttonGPSTIMELINK.setCaptionLabel("GPS Requirements").setGroup(G_LINKS);
 buttonSPORTLINK = controlP5.addButton("SPORTLINK",1,200,30,125,16);
 buttonSPORTLINK.setCaptionLabel("FRSKY Requirements").setGroup(G_LINKS);
+buttonDONATELINK = controlP5.addButton("DONATELINK",1,23,70,66,16);
+buttonDONATELINK.setCaptionLabel("DONATE   :)").setColorBackground(osdcontr_).setColorLabel(donate_).setGroup(G_LINKS);
 
 
 
@@ -940,6 +944,8 @@ controlP5.addTextfield("CallSign")
   //toggleMSP_Data = true;
   CloseMode = 0;
   LoadConfig();
+  
+
 }
 
 
@@ -1025,9 +1031,6 @@ void CreateItem(int ItemIndex, int XLoction, int YLocation, Group inGroup){
 
 void BuildToolHelp(){
   controlP5.getTooltip().setDelay(100);
-  //confItem[1].setMultiplier(confItem[1].value);
-  //controlP5.getTooltip().register("txtlblconfItem"+0,"Changes the size of the ellipse.");
-  //controlP5.getTooltip().register("s2","Changes the Background");
 }
 
 
@@ -1054,15 +1057,14 @@ void MakePorts(){
 
 void draw() {
 
+
   time=millis();
   if (readerror==0) 
     WriteConfig=0;
-//  String xxc="";
-  txtdebug.setValue(xxc);
+  txtmessage.setValue(xxc);
   if (WriteConfig>0){
     if (millis()>WriteMillis){
       if (init_com==1){
-//        WRITEinit();
         xxc="Save attempt: "+str(WriteConfig);
         WRITEconfig();
         WriteMillis = 250+millis();
@@ -1076,8 +1078,9 @@ void draw() {
    xxc="";
   }
 //  if (confItem[GetSetting("S_DEBUG")].value() > 0)
-    txtdebug.setValue(xxc);
-
+    txtmessage.setValue(xxc);
+    
+  
   
   if (ReadConfig>0){
     if (millis()>ReadMillis){
@@ -1091,10 +1094,6 @@ void draw() {
   
 if ((ReadConfig==0)&&(WriteConfig==0))
   SimControlToggle.setValue(1);
-
-//  String xxc=str(ReadConfig);
-//  txtdebug.setValue(xxc);
-
 
 // Layout editor.......
   txtlblLayoutTxt.setValue(" : "+ CONFIGHUDTEXT[hudeditposition]);
@@ -1126,6 +1125,8 @@ if ((ReadConfig==0)&&(WriteConfig==0))
   }
 
   //PortWrite = false;
+
+  
   if ((SendSim ==1) && (ClosePort == false)) 
 
 
@@ -1198,38 +1199,12 @@ if ((ReadConfig==0)&&(WriteConfig==0))
   MakePorts();  
   
   background(80);
-  
   // ------------------------------------------------------------------------
   // Draw background control boxes
   // ------------------------------------------------------------------------
 
   image(GUIBackground,0, 0, windowsX, windowsY); 
 
-//if (LE.isOpen());
-
-// Coltrol Box
-/* fill(30,255); strokeWeight(3);stroke(0); rectMode(CORNERS); rect(XControlBox,YControlBox, XControlBox+108, YControlBox+123); //108//130
- textFont(font12); fill(255,255,255); text("OSD Controls",XControlBox + 15,YControlBox + 15);
-  if (activeTab == 1) {
-  }
-*/ 
-/*
-  fill(30,255);
-  strokeWeight(3);stroke(0);
-
-  rectMode(CORNERS);
-
-  rect(5,5,113,40);
-  textFont(font12);
-  // version
-  fill(255, 255, 255);
-  text("MWII OSD NG",10,19);
-  text("GUI v: ",10,35);
-  text(MW_OSD_GUI_Version, 55, 35);
-
-*/
-
-//  fill(255, 0, 0);
   strokeWeight(3);stroke(0);
   rectMode(CORNERS);
     image(OSDBackground,DisplayWindowX+WindowAdjX+10, DisplayWindowY+WindowAdjY, 354-WindowShrinkX, 300-WindowShrinkY); //529-WindowShrinkX, 360-WindowShrinkY);
@@ -1314,6 +1289,8 @@ if ((ReadConfig==0)&&(WriteConfig==0))
   if ((ClosePort ==true)&& (PortWrite == false)){ //&& (init_com==1)
     ClosePort();
   }
+  
+   
 }
 
 
@@ -2034,6 +2011,9 @@ public void GUIDELINK(){
 }
 public void SUPPORTLINK(){
   link("http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI"); 
+}
+public void DONATELINK(){
+  link("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EBS76N8F426G2&lc=GB&item_name=MW%2dOSD&item_number=R1%2e3&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"); 
 }
 public void CALIBLINK(){
  link("https://code.google.com/p/multiwii-osd/wiki/Calibration"); 
