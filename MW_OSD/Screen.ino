@@ -337,13 +337,13 @@ void displayHorizon(int rollAngle, int pitchAngle)
 
   if(Settings[S_DISPLAY_HORIZON_BR]&fieldIsVisible(horizonPosition)){
 #ifdef FULLAHI
-    for(uint8_t X=0; X<=10; X++) {
-      if (X==4) X=7;
+    for(uint8_t X=0; X<=12; X++) {
+      if (X==5) X=8;
       int Y = (rollAngle * (4-X)) / 64;
       Y -= pitchAngle / 8;
       Y += 41;
       if(Y >= 0 && Y <= 81) {
-        uint16_t pos = position -1 + LINE*(Y/9) + 3 - 2*LINE + X;
+        uint16_t pos = position -2 + LINE*(Y/9) + 3 - 2*LINE + X;
         screen[pos] = SYM_AH_BAR9_0+(Y%9);
       }
     }
@@ -440,7 +440,7 @@ void displayVoltage(void)
   }
 
 #ifdef DISP_LOW_VOLTS_WARNING
-  if (voltage<=Settings[S_VOLTAGEMIN])
+  if (voltage<=Settings[S_VOLTAGEMIN]&&!armedtimer)
     MAX7456_WriteString_P(lowvolts_text, getPosition(motorArmedPosition));
 #endif
 
