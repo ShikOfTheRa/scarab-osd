@@ -141,7 +141,7 @@ READ();
   }
   else {
     if(init_com == 1){
-     System.out.println("Begin Port Down " ); 
+//     System.out.println("Begin Port Down " ); 
       txtlblWhichcom.setValue("Comm Closed");
       //g_serial.clear();
       toggleMSP_Data = false;
@@ -149,7 +149,7 @@ READ();
       init_com=0;
     }
   }
-  
+  SimControlToggle.setValue(0);
 }
 
 void ClosePort(){
@@ -331,7 +331,7 @@ public void FONT_UPLOAD(){
   }else
   {
   SimControlToggle.setValue(0);
-  System.out.println("FONT_UPLOAD");
+//  System.out.println("FONT_UPLOAD");
   //toggleMSP_Data = true;
   FontMode = true;
   PortWrite = true;
@@ -360,7 +360,7 @@ public void SendChar(){
     else
       txtmessage.setText("");
     MakePorts();
-    System.out.println("Sent Char "+FontCounter);
+//    System.out.println("Sent Char "+FontCounter);
     buttonSendFile.getCaptionLabel().setText("  " +nf(FontCounter, 3)+"/256");
     headSerialReply(MSP_OSD, 56);
     serialize8(OSD_GET_FONT);
@@ -375,7 +375,7 @@ public void SendChar(){
       g_serial.clear();
       PortWrite = false;
       FontMode = false;      
-      System.out.println("Finished Uploading Font");
+//      System.out.println("Finished Uploading Font");
       buttonSendFile.getCaptionLabel().setText("  Upload");
       txtmessage.setText("");
       READinit();
@@ -729,8 +729,10 @@ public void DelayTimer(int ms){
 }
 
 public void evaluateCommand(byte cmd, int size) {
-  if ((init_com==0)  || (toggleMSP_Data == false)) return;
-  //PortRead = true;
+  if ((init_com==0)  || (toggleMSP_Data == false)){
+    return;
+  }
+  PortRead = true;
   MakePorts(); 
   int icmd = int(cmd&0xFF);
   if (icmd !=MSP_OSD)return;  //System.out.println("Not Valid Command");
@@ -743,8 +745,8 @@ public void evaluateCommand(byte cmd, int size) {
     
       case MSP_OSD:
         int cmd_internal = read8();
-//    PortRead = true;
-//    MakePorts();
+        PortRead = true;
+        MakePorts();
 
         if(cmd_internal == OSD_NULL) {
           //headSerialReply(MSP_OSD, 1);
@@ -766,8 +768,8 @@ public void evaluateCommand(byte cmd, int size) {
               if (i>1){
                 if ((xx!=readcheck[i])){
                   readerror=1;
-                  if (WriteConfig>0)
-                    System.out.println(readcounter+" "+WriteConfig+" "+readerror+" "+i+" "+xx+" "+readcheck[i]);
+//                  if (WriteConfig>0)
+//                    System.out.println(readcounter+" "+WriteConfig+" "+readerror+" "+i+" "+xx+" "+readcheck[i]);
                 }
               }
                 if (confCheck>0)
@@ -778,6 +780,9 @@ public void evaluateCommand(byte cmd, int size) {
 //              else
               if (readerror>0)
                 ReadConfig=1;
+              else
+                SimControlToggle.setValue(1);
+
 //                for(int ii = 0; ii < CONFIGITEMS; ii++){
 //                  SetConfigItem(ii, readcheck[ii]);
 //                }
@@ -883,6 +888,7 @@ void MWData_Com() {
      if (str(c) == null)return;
       
       PortRead = true;
+      MakePorts();
       if (c_state == IDLE) {
         c_state = (c=='$') ? HEADER_START : IDLE;
       }
@@ -930,10 +936,10 @@ void MWData_Com() {
               if ((init_com==1)  && (toggleMSP_Data == true)) {
                   evaluateCommand(cmd, (int)dataSize);
                   //System.out.println("CMD: "+cmd);
-                  //PortRead = false;
+                  PortRead = false;
               }
               else{
-                System.out.println("port is off ");
+//                System.out.println("port is off ");
               }
               
               

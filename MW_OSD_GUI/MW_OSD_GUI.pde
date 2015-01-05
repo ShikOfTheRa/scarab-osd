@@ -154,6 +154,7 @@ ListBox commListbox,baudListbox;
 
 boolean PortRead = false;
 boolean PortWrite = false;
+int PortReadtimer = 0;
 int ReadConfig = 0;
 int ReadMillis = 0;
 int WriteConfig = 0;
@@ -577,7 +578,8 @@ color yellow_ = color(200, 200, 20),
       grey_ = color(30, 30, 30),
       switches_ = color(30, 140, 30),
       font_ = color(50, 50, 50),
-      donate_ = color(200, 200, 20),
+      donateback_ = color(180, 100, 0),
+      donatefront_ = color(50, 50, 255),
       osdcontr_ = color(50, 50, 50)
       ;
 //Colors--------------------------------------------------------------------------------------------------------------------
@@ -868,8 +870,8 @@ buttonGPSTIMELINK = controlP5.addButton("GPSTIMELINK",1,200,10,125,16);
 buttonGPSTIMELINK.setCaptionLabel("GPS Requirements").setGroup(G_LINKS);
 buttonSPORTLINK = controlP5.addButton("SPORTLINK",1,200,30,125,16);
 buttonSPORTLINK.setCaptionLabel("FRSKY Requirements").setGroup(G_LINKS);
-buttonDONATELINK = controlP5.addButton("DONATELINK",1,23,70,66,16);
-buttonDONATELINK.setCaptionLabel("DONATE   :)").setColorBackground(osdcontr_).setColorLabel(donate_).setGroup(G_LINKS);
+buttonDONATELINK = controlP5.addButton("DONATELINK",1,30,70,50,16);
+buttonDONATELINK.setCaptionLabel("DONATE").setColorBackground(donateback_).setColorLabel(donatefront_).setGroup(G_LINKS);
 
 
 
@@ -1038,21 +1040,30 @@ void BuildToolHelp(){
 
 
 void MakePorts(){
+
   if (PortWrite){  
-       TXText.setColorValue(color(255,10,0));
+    TXText.setColorValue(color(255,10,0));
   }
   else
   {
     TXText.setColorValue(color(100,10,0));
   }
-  if (PortRead){  
+
+  if (PortRead){
+    PortReadtimer=50+millis();  
+    PortRead=false;
+  }
+
+  if (PortReadtimer>millis())
+  {  
+    PortRead=false;
     RXText.setColorValue(color(0,240,0));
   }
    else
   {
     RXText.setColorValue(color(0,100,0));
   }
-//  delay(250);
+
 }
 
 void draw() {
@@ -1092,8 +1103,8 @@ void draw() {
     }
   }  
   
-if ((ReadConfig==0)&&(WriteConfig==0))
-  SimControlToggle.setValue(1);
+//if ((ReadConfig==0)&&(WriteConfig==0))
+//  SimControlToggle.setValue(1);
 
 // Layout editor.......
   txtlblLayoutTxt.setValue(" : "+ CONFIGHUDTEXT[hudeditposition]);
@@ -1118,15 +1129,16 @@ if ((ReadConfig==0)&&(WriteConfig==0))
   coloriseswitches();
   if ((init_com==1)  && (toggleMSP_Data == true)) {
     //time2 = time;
-    PortRead = true;
-    MakePorts();
+//    PortRead = true;
+//    MakePorts();
     MWData_Com();
     if (!FontMode) PortRead = false;
+    MakePorts();
   }
-
-  //PortWrite = false;
-
-  
+  else {
+    PortRead = false;
+    MakePorts();
+  }
   if ((SendSim ==1) && (ClosePort == false)) 
 
 
@@ -1164,6 +1176,7 @@ if ((ReadConfig==0)&&(WriteConfig==0))
           break;
         case 5:
           if (init_com==1)SendCommand(MSP_ALTITUDE);
+          //PortWrite = !PortWrite;     
           break;
         case 6: 
           if (init_com==1)SendCommand(MSP_CELLS);
@@ -1859,7 +1872,7 @@ public void LoadConfig(){
    
     in = new FileInputStream(dataPath("GUI.Config"));
   }catch(FileNotFoundException e){
-    System.out.println("Configuration Failed- Creating Default");
+//    System.out.println("Configuration Failed- Creating Default");
     BaudRate = 115200;
     Title = MW_OSD_GUI_Version;
     updateConfig();
@@ -1875,7 +1888,7 @@ public void LoadConfig(){
           BaudRate =int(ConfigClass.getProperty("BaudRate"));
           Title =ConfigClass.getProperty("Title");
           img_Clear = LoadFont(FontFileName);
-          System.out.println("Configuration Successful");
+//          System.out.println("Configuration Successful");
           in.close();
           }catch( IOException ioe){/*failed to close the file*/error = ioe.getCause().toString();}
           }

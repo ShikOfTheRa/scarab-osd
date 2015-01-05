@@ -288,7 +288,7 @@ SimControlToggle.setPosition(5,5);
 SimControlToggle.setSize(35,10);
 SimControlToggle.setMode(ControlP5.SWITCH);
 SimControlToggle.setGroup(SGControlBox);
-SimControlToggle.setValue(1);
+SimControlToggle.setValue(0);
 
 SimControlText = controlP5.addTextlabel("SimControlText","Simulate on OSD",45,3);
 SimControlText.setGroup(SGControlBox);
