@@ -90,7 +90,7 @@ int  MapCenterPosition = 35;
 int  APstatusPosition = 36;
 
 int MSP_sendOrder =0;
-PImage img_Clear,GUIBackground,OSDBackground,RadioPot;
+PImage img_Clear,GUIBackground,OSDBackground,DONATEimage,RadioPot;
 
 int readcounter=0;
 // ScreenType---------- NTSC = 0, PAL = 1 ---------------------------------
@@ -159,7 +159,7 @@ int ReadConfig = 0;
 int ReadMillis = 0;
 int WriteConfig = 0;
 int WriteMillis = 0;
-
+int linktimer = 0;
 ControlGroup messageBox;
 Textlabel MessageText;
 int LEWvisible=0;
@@ -578,6 +578,7 @@ color yellow_ = color(200, 200, 20),
       grey_ = color(30, 30, 30),
       switches_ = color(30, 140, 30),
       font_ = color(50, 50, 50),
+      clear_ = color(0, 0, 0),
       donateback_ = color(180, 100, 0),
       donatefront_ = color(50, 50, 255),
       osdcontr_ = color(50, 50, 50)
@@ -665,6 +666,7 @@ OnTimer = millis();
   frameRate(30); 
 OSDBackground = loadImage("OSD_def.jpg");
 GUIBackground = loadImage("GUI_def.jpg");
+DONATEimage  = loadImage("DON_def.png");
 //RadioPot = loadImage("MWImage.jpg");
 //PGraphics icon = createGraphics(16, 16, P3D);
 //icon.beginDraw();
@@ -870,8 +872,7 @@ buttonGPSTIMELINK = controlP5.addButton("GPSTIMELINK",1,200,10,125,16);
 buttonGPSTIMELINK.setCaptionLabel("GPS Requirements").setGroup(G_LINKS);
 buttonSPORTLINK = controlP5.addButton("SPORTLINK",1,200,30,125,16);
 buttonSPORTLINK.setCaptionLabel("FRSKY Requirements").setGroup(G_LINKS);
-buttonDONATELINK = controlP5.addButton("DONATELINK",1,30,70,50,16);
-buttonDONATELINK.setCaptionLabel("DONATE").setColorBackground(donateback_).setColorLabel(donatefront_).setGroup(G_LINKS);
+buttonDONATELINK = controlP5.addButton("DONATELINK",1,XLINKS+30,YLINKS+225, 80, 30).setVisible(false);
 
 
 
@@ -1217,7 +1218,14 @@ void draw() {
   // ------------------------------------------------------------------------
 
   image(GUIBackground,0, 0, windowsX, windowsY); 
-
+  if (LEWvisible==0){
+   image(DONATEimage,XLINKS+20,YLINKS+220, 100, 40); 
+   if ((mouseX>=XLINKS+20) && (mouseX<=XLINKS+20+100) && (mouseY>=YLINKS+220) && (mouseY<=YLINKS+220+40) && (mousePressed == true))
+     if (linktimer<millis()){
+       DONATELINK();
+       linktimer=2000+millis(); 
+     }    
+  }  
   strokeWeight(3);stroke(0);
   rectMode(CORNERS);
     image(OSDBackground,DisplayWindowX+WindowAdjX+10, DisplayWindowY+WindowAdjY, 354-WindowShrinkX, 300-WindowShrinkY); //529-WindowShrinkX, 360-WindowShrinkY);
