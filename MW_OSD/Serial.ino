@@ -47,10 +47,7 @@ void serialMSPCheck()
         Serial.write(Settings[i]);
 	txCheckSum ^= Settings[i];
       }
-      Serial.write(txCheckSum);
-debug[1]++;
- 
-      
+      Serial.write(txCheckSum);    
     }
 
 /*
@@ -93,8 +90,7 @@ debug[1]++;
       EEPROM.write(0,MWOSDVER);
       readEEPROM();
       setMspRequests();
-      debug[0]++;
-    }
+     }
 
 
     if(cmd == OSD_GET_FONT) {

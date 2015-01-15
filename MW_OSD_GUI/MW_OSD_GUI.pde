@@ -2144,12 +2144,18 @@ confItem[GetSetting("S_MAPMODE")].setValue(1);
 
 
 void addchild(){
+  int hudid=0;
+  if (toggleModeItems[9].getValue()>0)
+    hudid = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  else
+    hudid = int(confItem[GetSetting("S_HUD")].value()); 
+  
   for (int hudindex = 0; hudindex < hudoptions; hudindex++) {
   XML newChild = xml.addChild("LAYOUT");
       newChild.setString("desc",CONFIGHUDTEXT[hudindex]);
-      newChild.setInt("enabled",CONFIGHUDEN[0][hudindex]);
+      newChild.setInt("enabled",CONFIGHUDEN[hudid][hudindex]);
       newChild.setInt("hud",hudsavailable);
-      newChild.setInt("value",CONFIGHUD[0][hudindex]&0x3FF);
+      newChild.setInt("value",CONFIGHUD[hudid][hudindex]&0x3FF);
     }    
   XML[] xmlhudconfig = xml.getChildren("CONFIG");
   xmlhudconfig[0].setInt("value",hudsavailable+1);
