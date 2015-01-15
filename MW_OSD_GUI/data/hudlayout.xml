@@ -66,7 +66,7 @@
   <LAYOUT desc="MwGPSLatPosition" enabled="1" hud="0" hudname="Shiki" value="272"/>
   <LAYOUT desc="MwGPSLonPosition" enabled="1" hud="0" hudname="Shiki" value="285"/>
   <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="0" hudname="Shiki" value="2"/>
-  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="0" hudname="Shiki" value="15"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="0" hudname="Shiki" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="1" hud="0" hudname="Shiki" value="333"/>
   <LAYOUT desc="temperaturePosition" enabled="1" hud="0" hudname="Shiki" value="213"/>
   <LAYOUT desc="voltagePosition" enabled="1" hud="0" hudname="Shiki" value="363"/>
@@ -103,7 +103,7 @@
   <LAYOUT desc="MwGPSLatPosition" enabled="0" hud="1" hudname="Minimal" value="272"/>
   <LAYOUT desc="MwGPSLonPosition" enabled="0" hud="1" hudname="Minimal" value="285"/>
   <LAYOUT desc="MwGPSLatPositionTop" enabled="0" hud="1" hudname="Minimal" value="2"/>
-  <LAYOUT desc="MwGPSLonPositionTop" enabled="0" hud="1" hudname="Minimal" value="15"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="0" hud="1" hudname="Minimal" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="0" hud="1" hudname="Minimal" value="332"/>
   <LAYOUT desc="temperaturePosition" enabled="0" hud="1" hudname="Minimal" value="212"/>
   <LAYOUT desc="voltagePosition" enabled="1" hud="1" hudname="Minimal" value="363"/>
@@ -139,8 +139,8 @@
   <LAYOUT desc="motorArmedPosition" enabled="1" hud="2" hudname="EZ" value="311"/>
   <LAYOUT desc="MwGPSLatPosition" enabled="0" hud="2" hudname="EZ" value="272"/>
   <LAYOUT desc="MwGPSLonPosition" enabled="0" hud="2" hudname="EZ" value="285"/>
-  <LAYOUT desc="MwGPSLatPositionTop" enabled="0" hud="2" hudname="EZ" value="2"/>
-  <LAYOUT desc="MwGPSLonPositionTop" enabled="0" hud="2" hudname="EZ" value="15"/>
+  <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="2" hudname="EZ" value="2"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="2" hudname="EZ" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="0" hud="2" hudname="EZ" value="332"/>
   <LAYOUT desc="temperaturePosition" enabled="0" hud="2" hudname="EZ" value="212"/>
   <LAYOUT desc="voltagePosition" enabled="1" hud="2" hudname="EZ" value="363"/>
@@ -177,7 +177,7 @@
   <LAYOUT desc="MwGPSLatPosition" enabled="0" hud="3" hudname="Blank screen" value="272"/>
   <LAYOUT desc="MwGPSLonPosition" enabled="0" hud="3" hudname="Blank screen" value="285"/>
   <LAYOUT desc="MwGPSLatPositionTop" enabled="0" hud="3" hudname="Blank screen" value="2"/>
-  <LAYOUT desc="MwGPSLonPositionTop" enabled="0" hud="3" hudname="Blank screen" value="15"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="0" hud="3" hudname="Blank screen" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="0" hud="3" hudname="Blank screen" value="332"/>
   <LAYOUT desc="temperaturePosition" enabled="0" hud="3" hudname="Blank screen" value="212"/>
   <LAYOUT desc="voltagePosition" enabled="0" hud="3" hudname="Blank screen" value="363"/>
@@ -213,8 +213,8 @@
   <LAYOUT desc="motorArmedPosition" enabled="1" hud="4" hudname="Map" value="311"/>
   <LAYOUT desc="MwGPSLatPosition" enabled="0" hud="4" hudname="Map" value="272"/>
   <LAYOUT desc="MwGPSLonPosition" enabled="0" hud="4" hudname="Map" value="285"/>
-  <LAYOUT desc="MwGPSLatPositionTop" enabled="0" hud="4" hudname="Map" value="2"/>
-  <LAYOUT desc="MwGPSLonPositionTop" enabled="0" hud="4" hudname="Map" value="15"/>
+  <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="4" hudname="Map" value="2"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="4" hudname="Map" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="0" hud="4" hudname="Map" value="332"/>
   <LAYOUT desc="temperaturePosition" enabled="0" hud="4" hudname="Map" value="212"/>
   <LAYOUT desc="voltagePosition" enabled="1" hud="4" hudname="Map" value="363"/>
@@ -251,7 +251,7 @@
   <LAYOUT desc="MwGPSLatPosition" enabled="1" hud="5" hudname="F14" value="272"/>
   <LAYOUT desc="MwGPSLonPosition" enabled="1" hud="5" hudname="F14" value="285"/>
   <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="5" hudname="F14" value="32"/>
-  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="5" hudname="F14" value="45"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="5" hudname="F14" value="47"/>
   <LAYOUT desc="rssiPosition" enabled="1" hud="5" hudname="F14" value="335"/>
   <LAYOUT desc="temperaturePosition" enabled="0" hud="5" hudname="F14" value="213"/>
   <LAYOUT desc="voltagePosition" enabled="1" hud="5" hudname="F14" value="275"/>
@@ -288,7 +288,7 @@
   <LAYOUT desc="MwGPSLatPosition" enabled="1" hud="6" hudname="Embraer" value="272"/>
   <LAYOUT desc="MwGPSLonPosition" enabled="1" hud="6" hudname="Embraer" value="285"/>
   <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="6" hudname="Embraer" value="2"/>
-  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="6" hudname="Embraer" value="15"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="6" hudname="Embraer" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="1" hud="6" hudname="Embraer" value="85"/>
   <LAYOUT desc="temperaturePosition" enabled="1" hud="6" hudname="Embraer" value="213"/>
   <LAYOUT desc="voltagePosition" enabled="1" hud="6" hudname="Embraer" value="353"/>
@@ -325,7 +325,7 @@
   <LAYOUT desc="MwGPSLatPosition" enabled="1" hud="7" hudname="NAHI" value="272"/>
   <LAYOUT desc="MwGPSLonPosition" enabled="1" hud="7" hudname="NAHI" value="285"/>
   <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="7" hudname="NAHI" value="2"/>
-  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="7" hudname="NAHI" value="15"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="7" hudname="NAHI" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="1" hud="7" hudname="NAHI" value="32"/>
   <LAYOUT desc="temperaturePosition" enabled="1" hud="7" hudname="NAHI" value="213"/>
   <LAYOUT desc="voltagePosition" enabled="1" hud="7" hudname="NAHI" value="383"/>
@@ -360,7 +360,7 @@
   <LAYOUT desc="OnTime" enabled="1" hud="8" hudname="Groundstation" value="382"/>
   <LAYOUT desc="Armed Status" enabled="0" hud="8" hudname="Groundstation" value="311"/>
   <LAYOUT desc="Unused" enabled="0" hud="8" hudname="Groundstation" value="272"/>
-  <LAYOUT desc="Unused" enabled="0" hud="8" hudname="Groundstation" value="285"/>
+  <LAYOUT desc="Unused" enabled="0" hud="8" hudname="Groundstation" value="287"/>
   <LAYOUT desc="Latitude" enabled="0" hud="8" hudname="Groundstation" value="2"/>
   <LAYOUT desc="Longitude" enabled="0" hud="8" hudname="Groundstation" value="15"/>
   <LAYOUT desc="RSSI" enabled="1" hud="8" hudname="Groundstation" value="377"/>
@@ -397,7 +397,7 @@
   <LAYOUT desc="OnTime" enabled="1" hud="9" hudname="Standalone" value="382"/>
   <LAYOUT desc="Armed Status" enabled="0" hud="9" hudname="Standalone" value="311"/>
   <LAYOUT desc="Unused" enabled="0" hud="9" hudname="Standalone" value="272"/>
-  <LAYOUT desc="Unused" enabled="0" hud="9" hudname="Standalone" value="285"/>
+  <LAYOUT desc="Unused" enabled="0" hud="9" hudname="Standalone" value="287"/>
   <LAYOUT desc="Latitude" enabled="0" hud="9" hudname="Standalone" value="2"/>
   <LAYOUT desc="Longitude" enabled="0" hud="9" hudname="Standalone" value="15"/>
   <LAYOUT desc="RSSI" enabled="1" hud="9" hudname="Standalone" value="354"/>

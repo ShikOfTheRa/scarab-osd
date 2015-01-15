@@ -90,7 +90,7 @@
 //#define BLACKBRIGHTNESS 0x00      // Optional change from default 0x00=0%,0x01=10%,0x10=20%0x11=30%  default is 0x00=0%
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
-//#define OSD_SWITCH_3WAY 5         // Enables midpoint on specified channel (range 0-7 def=5 AUX2) to turn off OSD. For 3 way OSD switch
+//#define OSD_SWITCH_3WAY 5         // Enables blank screen when midpoint on specified channel (range 0-7 AUX1=4 AUX4=7)
 //#define SHORTSTATS                // Display only timer on flight summary 
 #define DISP_LOW_VOLTS_WARNING      // Enable prominent low voltage warning text
 #define FORCE_DISP_LOW_VOLTS        // Enable display low voltage warning override for screen layouts where its disabled
@@ -173,5 +173,5 @@
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
 #define DEBUG         // Enable/disable option to display OSD debug values 
-//#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
+#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 

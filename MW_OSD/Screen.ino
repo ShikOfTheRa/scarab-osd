@@ -668,12 +668,12 @@ void displayGPSPosition(void)
   uint16_t position;
   if(!GPS_fix)
     return;
-  if(!fieldIsVisible(MwGPSLatPosition))
+  if(!fieldIsVisible(MwGPSLatPositionTop))
     return;
   if (!MwSensorActive&mode.gpshome)
     return;
   if(Settings[S_COORDINATES]|MwSensorActive&mode.gpshome){
-    if(fieldIsVisible(MwGPSLatPosition)|MwSensorActive&mode.gpshome) {
+//    if(MwSensorActive&mode.gpshome) {
 //      if(!Settings[S_GPSCOORDTOP])
 //        position = getPosition(MwGPSLatPosition);
 //      else
@@ -681,10 +681,11 @@ void displayGPSPosition(void)
       screenBuffer[0] = SYM_LAT;
       FormatGPSCoord(GPS_latitude,screenBuffer+1,4,'N','S');
       MAX7456_WriteString(screenBuffer, position);  
+      position = getPosition(MwGPSLonPositionTop);  
       screenBuffer[0] = SYM_LON;
       FormatGPSCoord(GPS_longitude,screenBuffer+1,4,'E','W');
-      MAX7456_WriteString(screenBuffer, position+13);  
-    }
+      MAX7456_WriteString(screenBuffer, position);  
+//    }
   }
   if(Settings[S_GPSALTITUDE]){
     if(!fieldIsVisible(MwGPSAltPosition))
