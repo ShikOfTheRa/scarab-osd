@@ -18,13 +18,14 @@
 
 
 /********************       CONTROLLER settings      *********************/
-//Choose only one option:
-//#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT / NAZE32 for compatibility with heading and current data
+//Choose only one option - or none for GPS OSD:
+//#define MULTIWII_V24              // Undefine this if you are using MW versions 2.4  
+#define MULTIWII_V23                // Undefine this if you are using MW versions 2.2/2.3  
+//#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
+//#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT with 32bit hardware for compatibility with heading and current data
+//#define CLEANFLIGHT               // Undefine this if you are using CLEANFLIGHT with 32bit hardware for compatibility with heading and current data
 //#define HARIKIRI                  // Undefine this if you are using HARIKIRI (for BOXNAMES compatibility)
 //#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE - to use GPS heading and altitude instead of BARO/MAG
-//#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
-#define MULTIWII_V23                // Undefine this if you are using MW versions 2.2/2.3  
-//#define MULTIWII_V24              // Undefine this if you are using MW versions 2.4  
 
 
 /********************       HARDWARE CURRENT sensor settings      *********************/
@@ -34,15 +35,19 @@
 
 /********************       FILTER settings      *********************/
 //Choose only one option:
-#define STAGE2FILTER              // Enable for smoother readings of voltage / current / RSSI. 
-//#define SMOOTHFILTER              // Enable for smoothest readings of voltage / current / RSSI. Uses more memory. Prototype
+#define STAGE2FILTER               // Enable for smoother readings of voltage / current / RSSI. 
+//#define SMOOTHFILTER             // Enable for smoothest readings of voltage / current / RSSI. Uses more memory. Prototype
 
 
 /********************       RSSI settings      *********************/
-//#define FASTPWMRSSI               // Undefine this if you are using non standard PWM for RSSI ( high frequency ) 
+//#define FASTPWMRSSI              // Undefine this if you are using non standard PWM for RSSI ( high frequency ) 
 
 
 /********************       GPS settings      *********************/
+#define  MINSATFIX 5               // Number of sats required for a fix. 5 minimum. More = better
+
+
+/********************       GPS OSD settings      *********************/
 // **ONLY** FOR STANDALONE GPS MODE WITH NO FLIGHT CONTROLLER
 // Choose one of the following:
 //#define NMEA                     // Enable if using a standard NMEA based GPS
@@ -50,6 +55,14 @@
 //#define MTK                      // Enable if using a standard MTK based GPS
 //#define MTK_BINARY16             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.6
 //#define MTK_BINARY19             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.9
+
+
+/********************       Serial speed settings      *********************/
+#define BAUDRATE 115200
+//#define BAUDRATE 57600
+//#define BAUDRATE 38400
+//#define BAUDRATE 19200
+
 
 /********************       CALLSIGN settings      *********************/
 #define   CALLSIGNINTERVAL 60      // How frequently to display Callsign (in seconds)
@@ -105,10 +118,6 @@
 #define FORCE_DISP_LOW_VOLTS        // Enable display low voltage warning override for screen layouts where its disabled
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 
-/********************       Serial speed settings      *********************/
-#define BAUDRATE 115200             // Serial comms speed               
-
-
 
 
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
@@ -134,7 +143,7 @@
 //#define TEMPSENSOR                // Enable if you have a hardware temperature sensor - DEPRECATED
 
 
-/********************  HARDWARE PINS settings      *********************/
+/********************  HARDWARE PINS definitions  *********************/
 #define AMPERAGEPIN   A1
 #define TEMPPIN       A6           
 #define RSSIPIN       A3              
@@ -143,15 +152,12 @@
 
 
 /********************  CONTROLLER rule definitions  **********************/
-#ifdef BASEFLIGHT                     
+#if defined(BASEFLIGHT) || defined(CLEANFLIGHT)                      
     #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
     #define HEADINGCORRECT          // required to correct for MWheading being 0>360 vs MWII -180>+180
 #endif
-#ifdef HARIKIRI                     
-    #define BOXNAMES                // required to support HARIKIRI
-#endif
-#ifdef MULTIWII_V21                     
-    #define BOXNAMES                // required to support multiwii 2.1 / 2.0
+#if defined(HARIKIRI) || defined(MULTIWII_V21)                     
+    #define BOXNAMES                // required to support legacy protocol
 #endif
 #ifdef MULTIWII_V24                     
     #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
@@ -211,5 +217,5 @@
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
 #define DEBUG         // Enable/disable option to display OSD debug values 
-#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
+//#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 
