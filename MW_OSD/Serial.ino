@@ -413,13 +413,15 @@ void handleRawRC() {
       setMspRequests();
     }
     else if(configMode) {
+      int8_t oldmenudir=constrain(menudir,-10,10);
+      menudir=0;
       if(previousarmedstatus&&(MwRcData[THROTTLESTICK]>MINSTICK))
       {
 	// EXIT from SHOW STATISTICS AFTER DISARM (push throttle up)
 	waitStick = 2;
 	configExit();
       }
-if(configMode&&(MwRcData[ROLLSTICK]>MAXSTICK)) // MOVE RIGHT
+      if(configMode&&(MwRcData[ROLLSTICK]>MAXSTICK)) // MOVE RIGHT
       {
 	waitStick = 1;
 	COL++;
@@ -448,13 +450,13 @@ if(configMode&&(MwRcData[ROLLSTICK]>MAXSTICK)) // MOVE RIGHT
       else if(!previousarmedstatus&&configMode&&(MwRcData[YAWSTICK]<MINSTICK)) // DECREASE
       {
 	waitStick = 1;
-        menudir=-1;
+        menudir=-1+oldmenudir;
         serialMenuCommon();  
       }
       else if(!previousarmedstatus&&configMode&&(MwRcData[YAWSTICK]>MAXSTICK)) // INCREASE
       { 
 	waitStick =1;
-        menudir=1;
+        menudir=1+oldmenudir;
 	if(configPage == 9 && COL == 3) {
 	  if(ROW==5) timer.magCalibrationTimer=0;
         }
@@ -468,7 +470,10 @@ if(configMode&&(MwRcData[ROLLSTICK]>MAXSTICK)) // MOVE RIGHT
 
 void serialMenuCommon()
   {
-    if((ROW==10)&&(COL==3)) configPage=configPage+menudir;
+    if((ROW==10)&&(COL==3)) {
+      constrain(menudir,-1,1);
+      configPage=configPage+menudir;
+    }
     if(configPage<MINPAGE) configPage = MAXPAGE;
     if(configPage>MAXPAGE) configPage = MINPAGE;
 
@@ -541,7 +546,7 @@ void serialMenuCommon()
 	  if(ROW==3) Settings[S_SCROLLING]=!Settings[S_SCROLLING];
 	  if(ROW==4) Settings[S_THROTTLEPOSITION]=!Settings[S_THROTTLEPOSITION];
 	  if(ROW==5) Settings[S_COORDINATES]=!Settings[S_COORDINATES];
-	  if(ROW==6) Settings[S_MODEICON]=!Settings[S_MODEICON];
+	  if(ROW==6) Settings[S_MODESENSOR]=!Settings[S_MODESENSOR];
 	  if(ROW==7) Settings[S_GIMBAL]=!Settings[S_GIMBAL];
 	  if(ROW==8) Settings[S_MAPMODE]=Settings[S_MAPMODE]+menudir;
 	}

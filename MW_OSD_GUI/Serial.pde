@@ -238,7 +238,7 @@ public void READ(){
 }
 
 public void READinit(){
-  ReadConfig=12;  
+  ReadConfig=25;  
   SimControlToggle.setValue(0);
   for(int i = 0; i < CONFIGITEMS; i++){
     SetConfigItem((byte)i, 0);
@@ -258,7 +258,8 @@ public void READconfig(){
 
 
 public void WRITE(){
-  WRITEinit();;
+  if(WriteConfig==0)
+    WRITEinit();;
 }
 
 

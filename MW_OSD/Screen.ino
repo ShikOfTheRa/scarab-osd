@@ -262,7 +262,7 @@ void displayArmed(void)
       if(GPS_active>0){
         MAX7456_WriteString_P(satnogps_text, getPosition(motorArmedPosition));
       }
-      else if(GPS_numSat<5){
+      else if(GPS_numSat<MINSATFIX){
         MAX7456_WriteString_P(satlow_text, getPosition(motorArmedPosition));
       }  
     }
@@ -728,7 +728,7 @@ void displayNumberOfSat(void)
 {
 //  if(!GPS_fix)
 //    return;
-  if((GPS_numSat<5)&&(timer.Blink2hz))
+  if((GPS_numSat<MINSATFIX)&&(timer.Blink2hz))
     return;
   if(!fieldIsVisible(GPS_numSatPosition))
     return;
@@ -1149,43 +1149,45 @@ void displayConfigScreen(void)
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_bat[X])));
       MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
     }
+    MAX7456_WriteString(itoa(Settings[S_VIDVOLTAGE],screenBuffer,10),ALTD);
+//    MAX7456_WriteString_P(configMsg35, VELT);   
 
  //R1:    
- //   MAX7456_WriteString_P(configMsg31, ROLLT);
     if(Settings[S_DISPLAYVOLTAGE]){
       MAX7456_WriteString_P(configMsgON, ROLLD);
     }
     else {
       MAX7456_WriteString_P(configMsgOFF, ROLLD);
     }
+
 //R2:     
-//    MAX7456_WriteString_P(configMsg32, PITCHT);
     MAX7456_WriteString(itoa(Settings[S_DIVIDERRATIO],screenBuffer,10),PITCHD);
+
 //R3:
-//    MAX7456_WriteString_P(configMsg33, YAWT);
     MAX7456_WriteString(itoa(Settings[S_VOLTAGEMIN],screenBuffer,10),YAWD);
+
 //R4:
-//    MAX7456_WriteString_P(configMsg35, VELT);   
-    MAX7456_WriteString(itoa(Settings[S_BATCELLS],screenBuffer,10),ALTD);
-//R5:     
-//    MAX7456_WriteString_P(configMsg34, ALTT);
     if(Settings[S_VIDVOLTAGE]){
-      MAX7456_WriteString_P(configMsgON, VELD);
+      MAX7456_WriteString_P(configMsgON, ALTD);
     }
     else{
-      MAX7456_WriteString_P(configMsgOFF, VELD);
+      MAX7456_WriteString_P(configMsgOFF, ALTD);
     }
+
+//R5:     
+    MAX7456_WriteString(itoa(Settings[S_VIDDIVIDERRATIO],screenBuffer,10),VELD);
+
 //R6:
-//    MAX7456_WriteString_P(configMsgMWII, LEVT);   
+    MAX7456_WriteString(itoa(Settings[S_BATCELLS],screenBuffer,10),LEVD);
+
+
+//R7: 
     if(Settings[S_MAINVOLTAGE_VBAT]){
-      MAX7456_WriteString_P(configMsgON, LEVD);
+      MAX7456_WriteString_P(configMsgON, MAGD);
     }
     else{
-      MAX7456_WriteString_P(configMsgOFF, LEVD);
-  }
-//R7:     
-//    MAX7456_WriteString_P(configMsg32, MAGT);
-    MAX7456_WriteString(itoa(Settings[S_VIDDIVIDERRATIO],screenBuffer,10),MAGD);
+      MAX7456_WriteString_P(configMsgOFF, MAGD);
+    }
   }
 #else
     if(configPage == 3)configPage+=menudir;  

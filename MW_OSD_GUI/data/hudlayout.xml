@@ -233,7 +233,7 @@
   <LAYOUT desc="MapModePosition" enabled="1" hud="4" hudname="Map" value="47"/>
   <LAYOUT desc="MapCenterPosition" enabled="1" hud="4" hudname="Map" value="194"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="4" hudname="Map" value="195"/>
-  <LAYOUT desc="GPS_numSatPosition" enabled="0" hud="5" hudname="F14" value="32"/>
+  <LAYOUT desc="GPS_numSatPosition" enabled="1" hud="5" hudname="F14" value="62"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="5" hudname="F14" value="372"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="5" hudname="F14" value="374"/>
   <LAYOUT desc="speedPosition" enabled="1" hud="5" hudname="F14" value="96"/>

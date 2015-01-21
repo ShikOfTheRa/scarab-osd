@@ -259,7 +259,7 @@ MWOSDVER,   // used for check              0
 0,   // S_AMPERAGE                  12
 0,   // S_MWAMPERAGE                12a :)
 0,   // S_AMPER_HOUR                13
-1,   // S_AMPERAGE_VIRTUAL,
+0,   // S_AMPERAGE_VIRTUAL,
 150, // S_AMPDIVIDERRATIO,
 0,   // S_VIDVOLTAGE                14
 200, // S_VIDDIVIDERRATIO           15
@@ -267,7 +267,7 @@ MWOSDVER,   // used for check              0
 50,  // S_AMPER_HOUR_ALARM          17
 100, // S_AMPERAGE_ALARM            18
 1,   // S_DISPLAYGPS                20
-0,   // S_COORDINATES               21
+1,   // S_COORDINATES               21
 1,   // S_GPSCOORDTOP               22
 0,   // S_GPSALTITUDE               23
 0,   // S_ANGLETOHOME               24 
@@ -289,7 +289,7 @@ MWOSDVER,   // used for check              0
 0,   // GPSTZ +/-                   37b
 0,   // GPSTZ                       37c
 0,   // DEBUG                       37e
-1,   // SCROLOLING LADDERS          37f
+1,   // SCROLLING LADDERS           37f
 1,   // SHOW GIMBAL ICON            37g
 1,   // SHOW VARIO                  37h
 1,   // SHOW BAROALT                38h 50
@@ -300,13 +300,13 @@ MWOSDVER,   // used for check              0
 1,   // S_SIDEBARTOPS               43h
 4,   // S_AMPMIN,
 150,  // S_AMPMAXL,
-0,   // S_AMPMAXH,
+1,   // S_AMPMAXH,
 0,   // S_HUD
 1,   // S_HUDOSDSW
-10,  // S_DISTANCE_ALARM,
-10,  // S_ALTITUDE_ALARM,
+100, // S_DISTANCE_ALARM,
+100, // S_ALTITUDE_ALARM,
 100, // S_SPEED_ALARM,
-15,  // S_FLYTIME_ALARM
+30,  // S_FLYTIME_ALARM
 0,   // S_CS0,
 0,   // S_CS1,
 0,   // S_CS2,
@@ -511,7 +511,6 @@ uint16_t flyingTime=0;
 #if defined GPSOSD
   #define  LAT  0
   #define  LON  1
-  #define  MINSATFIX 5 //Number of sats required for a fix
   #define  GPS_BAUD BAUDRATE
   uint32_t GPS_home_timer=0;
   int32_t  GPS_coord[2];

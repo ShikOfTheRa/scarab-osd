@@ -202,7 +202,7 @@ void GPS_NewData() {
 
 
 void GPS_reset_home_position() {
-  if (GPS_fix && GPS_numSat >= 5) {
+  if (GPS_fix && GPS_numSat >= MINSATFIX) {
       GPS_home[LAT] = GPS_coord[LAT];
       GPS_home[LON] = GPS_coord[LON];
       GPS_altitude_home = GPS_altitude;
