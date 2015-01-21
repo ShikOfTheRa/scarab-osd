@@ -656,8 +656,10 @@ void displayHeadingGraph(void)
 void displayIntro(void)
 {
   MAX7456_WriteString_P(message0, MWOSDVersionPosition);
+#ifndef GPSOSD
   MAX7456_WriteString_P(message5, MWOSDVersionPosition+LINE+LINE);
   MAX7456_WriteString(ItoaPadded(MwVersion, screenBuffer, 4, 2),MWOSDVersionPosition+11+LINE+LINE+1);
+#endif  
 #ifdef INTRO_CALLSIGN
   MAX7456_WriteString_P(message9, MWOSDVersionPosition+LINE+LINE+LINE);
   displayCallsign(MWOSDVersionPosition+LINE+LINE+LINE+4);
