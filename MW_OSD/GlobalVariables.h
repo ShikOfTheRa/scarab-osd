@@ -300,7 +300,7 @@ MWOSDVER,   // used for check              0
 1,   // S_SIDEBARTOPS               43h
 4,   // S_AMPMIN,
 150,  // S_AMPMAXL,
-1,   // S_AMPMAXH,
+0,   // S_AMPMAXH,
 0,   // S_HUD
 1,   // S_HUDOSDSW
 100, // S_DISTANCE_ALARM,
