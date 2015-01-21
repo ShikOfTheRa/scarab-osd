@@ -251,7 +251,27 @@ void displayMode(void)
 
 void displayArmed(void)
 {
-#ifndef HIDEARMEDSTATUS
+  #ifdef GPSOSD
+    if(!fieldIsVisible(motorArmedPosition))
+      return;
+    if(timer.Blink10hz){
+//      if (GPS_SerialInitialised>0){
+//        MAX7456_WriteString_P(satinit_text, getPosition(motorArmedPosition));
+//      }
+//      else if(GPS_active>0){
+      if(GPS_active>0){
+        MAX7456_WriteString_P(satnogps_text, getPosition(motorArmedPosition));
+      }
+      else if(GPS_numSat<5){
+        MAX7456_WriteString_P(satlow_text, getPosition(motorArmedPosition));
+      }  
+    }
+    #ifndef HIDEARMEDSTATUS
+      #define HIDEARMEDSTATUS
+    #endif
+  #endif
+  
+  #ifndef HIDEARMEDSTATUS
   if(!fieldIsVisible(motorArmedPosition))
     return;
   if(!armed){
@@ -262,7 +282,7 @@ void displayArmed(void)
     armedtimer--;
     MAX7456_WriteString_P(armed_text, getPosition(motorArmedPosition));
   }
-#endif  
+#endif //GPSOSD  
 }
 
 void displayCallsign(int cposition)

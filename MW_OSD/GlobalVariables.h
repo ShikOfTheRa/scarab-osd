@@ -507,6 +507,27 @@ int32_t trip=0;
 uint16_t flyingTime=0; 
 
 
+// For GPSOSD
+#if defined GPSOSD
+  #define  LAT  0
+  #define  LON  1
+  #define  MINSATFIX 5 //Number of sats required for a fix
+  #define  GPS_BAUD BAUDRATE
+  uint32_t GPS_home_timer=0;
+  int32_t  GPS_coord[2];
+  int32_t  GPS_home[2];
+  uint16_t GPS_ground_course = 0;                       
+  int16_t  GPS_altitude_home;                            
+  uint8_t  GPS_Present = 0;                             
+  uint8_t  GPS_SerialInitialised=5;
+  uint8_t  GPS_armedangleset = 0;
+  uint8_t  GPS_active=5; 
+  uint8_t  GPS_fix_HOME=0;
+  const char satnogps_text[] PROGMEM = " NO GPS ";
+  const char satlow_text[]   PROGMEM = "LOW SATS";
+#endif
+
+
 // ---------------------------------------------------------------------------------------
 // Defines imported from Multiwii Serial Protocol MultiWii_shared svn r1337
 #define MSP_VERSION              0
@@ -634,8 +655,11 @@ const char configMsg30[] PROGMEM = "VOLTAGE";
 const char configMsg31[] PROGMEM = "DISPLAY MAIN VOLTS";
 const char configMsg32[] PROGMEM = "ADJUST VOLTS";
 const char configMsg33[] PROGMEM = "MAIN VOLTS ALARM";
-const char configMsg34[] PROGMEM = "CELLS";
-const char configMsg35[] PROGMEM = "DISPLAY VID VOLTS";
+const char configMsg34[] PROGMEM = "DISPLAY VID VOLTS";
+const char configMsg35[] PROGMEM = "ADJUST VOLTS";
+const char configMsg36[] PROGMEM = "CELLS";
+const char configMsg37[] PROGMEM = "USE MWII";
+
 //-----------------------------------------------------------Page4
 const char configMsg40[] PROGMEM = "RSSI";
 const char configMsg42[] PROGMEM = "DISPLAY RSSI";
@@ -804,9 +828,9 @@ PROGMEM const char *menu_bat[] =
   configMsg32,
   configMsg33,
   configMsg34,
-  configMsg35,
-  configMsgMWII,
   configMsg32,
+  configMsg36,
+  configMsgMWII,
 };
 
 PROGMEM const char *menu_rssi[] = 

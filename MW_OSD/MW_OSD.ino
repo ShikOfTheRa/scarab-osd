@@ -102,19 +102,26 @@ void setup()
   checkEEPROM();
   readEEPROM();
   
-#ifndef STARTUPDELAY
-  #define STARTUPDELAY 1000
-#endif
+  #ifndef STARTUPDELAY
+    #define STARTUPDELAY 1000
+  #endif
+  delay(STARTUPDELAY);
  
   if (Settings[S_VREFERENCE])
     analogReference(DEFAULT);
   else
     analogReference(INTERNAL);
 
-  delay(STARTUPDELAY);
   MAX7456Setup();
   setMspRequests();
   blankserialRequest(MSP_IDENT);
+  #if defined GPSOSD
+    MwSensorPresent |=GPSSENSOR;
+    MwSensorPresent |=BAROMETER;
+    MwSensorPresent |=MAGNETOMETER;
+    MwSensorPresent |=ACCELEROMETER;
+  #endif
+
 }
 
 

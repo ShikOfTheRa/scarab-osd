@@ -42,6 +42,15 @@
 //#define FASTPWMRSSI               // Undefine this if you are using non standard PWM for RSSI ( high frequency ) 
 
 
+/********************       GPS settings      *********************/
+// **ONLY** FOR STANDALONE GPS MODE WITH NO FLIGHT CONTROLLER
+// Choose one of the following:
+//#define NMEA                     // Enable if using a standard NMEA based GPS
+//#define UBLOX                    // Enable if using a standard UBLOX based GPS
+//#define MTK                      // Enable if using a standard MTK based GPS
+//#define MTK_BINARY16             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.6
+//#define MTK_BINARY19             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.9
+
 /********************       CALLSIGN settings      *********************/
 #define   CALLSIGNINTERVAL 60      // How frequently to display Callsign (in seconds)
 #define   CALLSIGNDURATION 4       // How long to display Callsign (in seconds)
@@ -120,22 +129,6 @@
 #define PAGE9 //ALARMS
 
 
-/********************  CONTROLLER compatibility **********************/
-#ifdef BASEFLIGHT                     
-    #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
-#endif
-#ifdef HARIKIRI                     
-    #define BOXNAMES                // required to support HARIKIRI
-#endif
-#ifdef MULTIWII_V21                     
-    #define BOXNAMES                // required to support multiwii 2.1 / 2.0
-#endif
-#ifdef MULTIWII_V24                     
-    #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
-#endif
-#ifdef FIXEDWING                     
-#endif
-
 
 /********************  ADVANCED HARDWARE settings      *********************/
 //#define TEMPSENSOR                // Enable if you have a hardware temperature sensor - DEPRECATED
@@ -149,8 +142,24 @@
 #define LEDPIN        7
 
 
-/********************  OSD HARDWARE BOARD SPECIFIC settings      *********************/
+/********************  CONTROLLER rule definitions  **********************/
+#ifdef BASEFLIGHT                     
+    #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
+    #define HEADINGCORRECT          // required to correct for MWheading being 0>360 vs MWII -180>+180
+#endif
+#ifdef HARIKIRI                     
+    #define BOXNAMES                // required to support HARIKIRI
+#endif
+#ifdef MULTIWII_V21                     
+    #define BOXNAMES                // required to support multiwii 2.1 / 2.0
+#endif
+#ifdef MULTIWII_V24                     
+    #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
+#endif
+#ifdef FIXEDWING                     
+#endif
 
+/********************  OSD HARDWARE rule definitions  *********************/
 #ifdef RUSHDUINO                     
     # define MAX7456SELECT 10        // ss 
     # define MAX7456RESET  9         // RESET
@@ -168,6 +177,35 @@
     #define VIDVOLTAGEPIN A2
     #define DIVIDER1v1      0.0001      // Voltage divider for 1.1v reference. Use 0.0001 default unless advised otherwise.
     #define DIVIDER5v       0.0005      // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
+#endif
+
+/********************  GPS OSD rule definitions  *********************/
+#if defined MTK_BINARY16
+  #define GPSOSD
+  #define NMEA
+  #define INIT_MTK_GPS
+  #define MTK_BINARY16
+#endif
+
+#if defined MTK_BINARY19
+  #define GPSOSD
+  #define NMEA
+  #define INIT_MTK_GPS
+  #define MTK_BINARY19
+#endif
+
+#if defined MTK
+  #define GPSOSD
+  #define NMEA
+  #define INIT_MTK_GPS
+#endif
+
+#if defined UBLOX
+  #define GPSOSD
+#endif
+
+#if defined NMEA
+  #define GPSOSD
 #endif
 
 

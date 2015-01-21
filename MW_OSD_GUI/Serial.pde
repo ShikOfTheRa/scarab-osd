@@ -128,8 +128,8 @@ void InitSerial(float portValue) {
      
 
       SendCommand(MSP_STATUS);
-READ();
-//      READconfig();
+       READ();
+       ReadConfig=100;  
        } catch (Exception e) { // null pointer or serial port dead
          noLoop();
         JOptionPane.showConfirmDialog(null,"Error Opening Port It may be in Use", "Port Error", JOptionPane.PLAIN_MESSAGE,JOptionPane.WARNING_MESSAGE);
@@ -230,7 +230,7 @@ void RESTART(){
   toggleMSP_Data = false;
   READinit();
 //  delay(2000);
-  ReadConfig=40;
+  ReadConfig=50;
 }  
 
 public void READ(){
@@ -263,21 +263,23 @@ public void WRITE(){
 
 
 public void WRITEinit(){
-  WriteConfig=20;
+  WriteConfig=30;
   SimControlToggle.setValue(0);
   readerror=1;  
   CheckCallSign();
+  S16_AMPMAX = int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value());
+  confItem[GetSetting("S_AMPMAXL")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())&0xFF); // for 8>>16 bit EEPROM
+  confItem[GetSetting("S_AMPMAXH")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())>>8);
   for(int i = 0; i < CONFIGITEMS; i++){
     readcheck[i]=int(confItem[i].value());
   }
+  readcheck[GetSetting("S_AMPDIVIDERRATIO")]=0;
 }
 
 
   public void WRITEconfig(){
   readerror=1;  
   SimControlToggle.setValue(0);
-  confItem[GetSetting("S_AMPMAXL")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())&0xFF); // for 8>>16 bit EEPROM
-  confItem[GetSetting("S_AMPMAXH")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())>>8);
 
   CheckCallSign();
   PortWrite = true;
@@ -286,7 +288,8 @@ public void WRITEinit(){
   p = 0;
   inBuf[0] = OSD_WRITE_CMD;
   for(int ii = 1; ii < CONFIGITEMS; ii++){
-    SetConfigItem(ii,readcheck[ii]);
+    if (ii != GetSetting("S_AMPDIVIDERRATIO"));
+      SetConfigItem(ii,readcheck[ii]);
   }
   for (int txTimes = 0; txTimes<1; txTimes++) {
     headSerialReply(MSP_OSD, CONFIGITEMS + (hudoptions*2*2) +1);
@@ -294,6 +297,10 @@ public void WRITEinit(){
     for(int i = 0; i < CONFIGITEMS; i++){
       if(i == GetSetting("S_GPSTZ")){
         serialize8(int(confItem[i].value()*10));//preserve decimal, maybe can go elsewhere - haydent
+      }
+      else if(i == GetSetting("S_AMPDIVIDERRATIO")){
+        serialize8(0);
+        //System.out.println("Loc: "+i+ " Val: "+ int(confItem[i].value()) );
       }
       else{
         serialize8(int(confItem[i].value()));
@@ -765,7 +772,12 @@ public void evaluateCommand(byte cmd, int size) {
               if (i==0){
                 confCheck=xx;
               }
-              if (i>1){
+              if (i==GetSetting("S_AMPDIVIDERRATIO")){
+                xx=0;
+//                    System.out.println(i);
+              }
+
+              if (i>0){
                 if ((xx!=readcheck[i])){
                   readerror=1;
 //                  if (WriteConfig>0)
