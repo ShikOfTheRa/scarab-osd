@@ -123,6 +123,7 @@ void serialMSPCheck()
                     
   }
 
+#ifndef GPSOSD
   if (cmdMSP==MSP_IDENT)
   {
     MwVersion= read8();                             // MultiWii Firmware version
@@ -380,6 +381,7 @@ void serialMSPCheck()
     modeMSPRequests &=~ REQ_MSP_BOX;
   }
 #endif
+#endif // GPSOSD
 }
 // End of decoded received commands from MultiWii
 // --------------------------------------------------------------------------------------
@@ -505,9 +507,9 @@ void serialMenuCommon()
 	  if(ROW==2) Settings[S_DIVIDERRATIO]=Settings[S_DIVIDERRATIO]+menudir;
 	  if(ROW==3) Settings[S_VOLTAGEMIN]=Settings[S_VOLTAGEMIN]+menudir;
 	  if(ROW==4) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
-	  if(ROW==5) Settings[S_BATCELLS]=Settings[S_BATCELLS]+menudir;
-	  if(ROW==6) Settings[S_MAINVOLTAGE_VBAT]=!Settings[S_MAINVOLTAGE_VBAT];
-	  if(ROW==7) Settings[S_VIDDIVIDERRATIO]=Settings[S_VIDDIVIDERRATIO]+menudir;
+	  if(ROW==5) Settings[S_VIDDIVIDERRATIO]=Settings[S_VIDDIVIDERRATIO]+menudir;
+	  if(ROW==6) Settings[S_BATCELLS]=Settings[S_BATCELLS]+menudir;
+	  if(ROW==7) Settings[S_MAINVOLTAGE_VBAT]=!Settings[S_MAINVOLTAGE_VBAT];
 	}
 #endif
 #ifdef PAGE4
@@ -594,6 +596,11 @@ void serialMSPreceive()
   while(Serial.available())
   {
     c = Serial.read();
+
+    #ifdef GPSOSD    
+      armedtimer = 0;
+      if (GPS_newFrame(c)) GPS_NewData();   
+    #endif //GPSOSD   
 
     if (c_state == IDLE)
     {

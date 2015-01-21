@@ -133,7 +133,7 @@ int currentCol = 0;
 int currentRow = 0;  
 //Boolean SimulateMW = true;
 
-int S16_AMPMAX = 0; //16bit from 8 EEPROM value
+int S16_AMPMAX = 0; //16bit from 8 EEPROM values
 
 ControlP5 controlP5;
 ControlP5 SmallcontrolP5;
@@ -764,7 +764,7 @@ CreateItem(GetSetting("S_CHECK_"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_AMPMAXL"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_AMPMAXH"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_USE_BOXNAMES"),  5,0, G_EEPROM);
-CreateItem(GetSetting("S_GPSCOORDTOP"),  5,0*17, G_EEPROM);
+CreateItem(GetSetting("S_GPSCOORDTOP"),  5,0, G_EEPROM);
 
 
 // RSSI  ---------------------------------------------------------------------------
@@ -1431,6 +1431,8 @@ public void controlEvent(ControlEvent theEvent) {
 
     if (theEvent.name()=="portBaudList"){
 //      BaudRate=200;
+      if (init_com==1)
+        ClosePort();
       if (int(theEvent.group().value()) ==3) BaudRate=19200;
       else if (int(theEvent.group().value()) ==2) BaudRate=38400;
       else if (int(theEvent.group().value()) ==1) BaudRate=57600;
@@ -1438,6 +1440,9 @@ public void controlEvent(ControlEvent theEvent) {
 //      BaudRate=int(theEvent.group().value());
       txtlblWhichbaud.setValue("Baud rate: "+str(BaudRate));
       updateConfig();
+      baudListbox.close();
+      commListbox.open();
+
     }
         
   try{
