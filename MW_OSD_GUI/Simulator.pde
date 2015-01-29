@@ -791,10 +791,8 @@ void ShowAmperage(){
 }}
 
 void ShowTemp(){
-  if(confItem[GetSetting("S_DISPLAYTEMPERATURE")].value() > 0) {
   makeText("30", SimPosn[temperaturePosition]);
   mapchar(0x0e, SimPosn[temperaturePosition]+2);
-}
 }
 
 void ShowAmps(){
