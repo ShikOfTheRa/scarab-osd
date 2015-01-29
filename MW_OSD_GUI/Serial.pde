@@ -121,7 +121,7 @@ void InitSerial(float portValue) {
       commListbox.setColorBackground(green_);
       buttonRESTART.setColorBackground(green_);
       
-      g_serial.buffer(256);
+      g_serial.buffer(512);
             txtmessage.setText("");
 //      delay(1500);
       SendCommand(MSP_IDENT);
@@ -229,16 +229,21 @@ void RESTART(){
   }
   toggleMSP_Data = false;
   READinit();
-//  delay(2000);
-  ReadConfig=50;
+  ReadConfig=100;
 }  
 
 public void READ(){
-  READinit();
+  if(ReadConfig==0){
+    WriteConfig=0; 
+    confCheck=0; 
+    READinit();
+    ReadMillis=millis()-1;
+  }
 }
 
 public void READinit(){
-  ReadConfig=25;  
+  g_serial.clear();
+  ReadConfig=10;  
   SimControlToggle.setValue(0);
   for(int i = 0; i < CONFIGITEMS; i++){
     SetConfigItem((byte)i, 0);
@@ -248,7 +253,7 @@ public void READinit(){
 public void READconfig(){ 
   PortRead = true; 
   MakePorts();
-   for (int txTimes = 0; txTimes<2; txTimes++) {
+   for (int txTimes = 0; txTimes<4; txTimes++) {
      toggleMSP_Data = true;
      headSerialReply(MSP_OSD, 1);
      serialize8(OSD_READ_CMD);
@@ -258,13 +263,18 @@ public void READconfig(){
 
 
 public void WRITE(){
-  if(WriteConfig==0)
-    WRITEinit();;
+  if(WriteConfig==0){
+    WriteMillis = millis();
+    ReadMillis = millis();
+    g_serial.clear();
+    WRITEinit();
+  }
 }
 
 
 public void WRITEinit(){
-  WriteConfig=30;
+  WriteConfig=10;
+  ReadConfig=1;
   SimControlToggle.setValue(0);
   readerror=1;  
   CheckCallSign();
@@ -288,6 +298,7 @@ public void WRITEinit(){
   toggleMSP_Data = true;
   p = 0;
   inBuf[0] = OSD_WRITE_CMD;
+  g_serial.clear();
   for(int ii = 1; ii < CONFIGITEMS; ii++){
     if (ii != GetSetting("S_AMPDIVIDERRATIO"));
       SetConfigItem(ii,readcheck[ii]);
@@ -301,11 +312,9 @@ public void WRITEinit(){
       }
       else if(i == GetSetting("S_AMPDIVIDERRATIO")){
         serialize8(0);
-        //System.out.println("Loc: "+i+ " Val: "+ int(confItem[i].value()) );
       }
       else{
         serialize8(int(confItem[i].value()));
-        //System.out.println("Loc: "+i+ " Val: "+ int(confItem[i].value()) );
       }
     }
 
@@ -325,9 +334,6 @@ public void WRITEinit(){
   toggleMSP_Data = false;
   g_serial.clear();
   PortWrite = false;
-//  SimControlToggle.setValue(0);
-//  delay(2000);
-
 }
 
 
@@ -387,7 +393,7 @@ public void SendChar(){
       buttonSendFile.getCaptionLabel().setText("  Upload");
       txtmessage.setText("");
       READinit();
-      ReadConfig=40;
+      ReadConfig=100;
       RESTART();
     } 
   
@@ -411,7 +417,7 @@ public void DEFAULT(){
         toggleMSP_Data = false;
         READinit();
 //        delay(2000);     
-        ReadConfig=40;
+        ReadConfig=100;
         return;
       case JOptionPane.CANCEL_OPTION:
 //        SimControlToggle.setValue(1);
@@ -542,9 +548,9 @@ void SendCommand(int cmd){
         PortIsWriting = true;
         headSerialReply(MSP_DEBUG, 8);
 
-        for (int i = 0; i < 4; i++) {
-        debug[i]++;
-        }
+        //for (int i = 0; i < 4; i++) {
+        //  debug[i]++;
+        //}
 
         serialize16(debug[0]);
         serialize16(debug[1]);
@@ -757,14 +763,13 @@ public void evaluateCommand(byte cmd, int size) {
         MakePorts();
 
         if(cmd_internal == OSD_NULL) {
-          //headSerialReply(MSP_OSD, 1);
-          //serialize8(OSD_NULL);
         }
 
         if(cmd_internal == OSD_READ_CMD) {
           if(size == 1) {
           }
           else {
+//            debug[1]++;
             confCheck=0;
             readerror=0;
             readcounter++;
@@ -775,32 +780,24 @@ public void evaluateCommand(byte cmd, int size) {
               }
               if (i==GetSetting("S_AMPDIVIDERRATIO")){
                 xx=0;
-//                    System.out.println(i);
               }
 
               if (i>0){
-                if ((xx!=readcheck[i])){
-                  readerror=1;
-//                  if (WriteConfig>0)
-//                    System.out.println(readcounter+" "+WriteConfig+" "+readerror+" "+i+" "+xx+" "+readcheck[i]);
+                if (WriteConfig>0){
+                  if ((xx!=readcheck[i])){
+                    readerror=1;
+                  }
                 }
               }
-                if (confCheck>0)
-                  SetConfigItem(i, xx);
-              ReadConfig=0;
-//              if (readerror==0)
-//                SimControlToggle.setValue(1);
-//              else
-              if (readerror>0)
-                ReadConfig=1;
-              else
-                SimControlToggle.setValue(1);
-
-//                for(int ii = 0; ii < CONFIGITEMS; ii++){
-//                  SetConfigItem(ii, readcheck[ii]);
-//                }
+              if (confCheck>0){
+                SetConfigItem(i, xx);
+              }
             }
-//System.out.println(MW_OSD_EEPROM_Version+" - "+confCheck);            
+
+            if (readerror==0){
+              WriteConfig=0;
+              ReadConfig=0;
+            }
           
  if (MW_OSD_EEPROM_Version!=confCheck){
    noLoop();

@@ -18,7 +18,7 @@
 
 
 /********************       CONTROLLER settings      *********************/
-//Choose only one option - or none for GPS OSD:
+//Choose only one option:-
 //#define MULTIWII_V24              // Undefine this if you are using MW versions 2.4  
 #define MULTIWII_V23                // Undefine this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
@@ -26,6 +26,7 @@
 //#define CLEANFLIGHT               // Undefine this if you are using CLEANFLIGHT with 32bit hardware for compatibility with heading and current data
 //#define HARIKIRI                  // Undefine this if you are using HARIKIRI (for BOXNAMES compatibility)
 //#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE - to use GPS heading and altitude instead of BARO/MAG
+//#define NOCONTROLLER              // Undefine this if you are using GPSOSD
 
 
 /********************       HARDWARE CURRENT sensor settings      *********************/
@@ -57,7 +58,7 @@
 //#define MTK_BINARY19             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.9
 
 
-/********************       Serial speed settings      *********************/
+/******************** Serial speed settings *********************/
 #define BAUDRATE 115200
 //#define BAUDRATE 57600
 //#define BAUDRATE 38400
@@ -119,11 +120,17 @@
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 
 
+/********************  TEMPERATURE  settings      *********************/
+//#define TEMPSENSOR                // Enable if you have a hardware temperature sensor - DEPRECATED
+#define TEMPERATUREMAX 50           // Temperature warning value
+
+
 
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
+
 
 /********************   ENABLE/DISABLE CONFIG PAGES via STICK MENU     *********************/
 //large memory savings if not needed, comment to disable
@@ -136,11 +143,6 @@
 #define PAGE7 //ADVANCED
 #define PAGE8 //GPS TIME
 #define PAGE9 //ALARMS
-
-
-
-/********************  ADVANCED HARDWARE settings      *********************/
-//#define TEMPSENSOR                // Enable if you have a hardware temperature sensor - DEPRECATED
 
 
 /********************  HARDWARE PINS definitions  *********************/
@@ -165,6 +167,7 @@
 #ifdef FIXEDWING                     
 #endif
 
+
 /********************  OSD HARDWARE rule definitions  *********************/
 #ifdef RUSHDUINO                     
     # define MAX7456SELECT 10        // ss 
@@ -184,6 +187,7 @@
     #define DIVIDER1v1      0.0001      // Voltage divider for 1.1v reference. Use 0.0001 default unless advised otherwise.
     #define DIVIDER5v       0.0005      // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
 #endif
+
 
 /********************  GPS OSD rule definitions  *********************/
 #if defined MTK_BINARY16
@@ -217,6 +221,7 @@
 #if defined(GPSOSD)
   #undef INTRO_MENU
 #endif
+
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
 //#define DEBUG         // Enable/disable option to display OSD debug values 

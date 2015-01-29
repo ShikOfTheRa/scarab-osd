@@ -734,7 +734,7 @@ DONATEimage  = loadImage("DON_def.png");
   commListbox = controlP5.addListBox("portComList",5,99,110,260); // make a listbox and populate it with the available comm ports
   commListbox.setItemHeight(15);
   commListbox.setBarHeight(15);
-  commListbox.captionLabel().set("PORT COM");
+  commListbox.captionLabel().set("COM SETTINGS");
   commListbox.setColorBackground(red_);
   for(int i=0;i<Serial.list().length;i++) {
     String pn = shortifyPortName(Serial.list()[i], 13);
@@ -1069,42 +1069,57 @@ void MakePorts(){
 
 void draw() {
 
+  if (commListbox.isOpen())
+    baudListbox.close();
+  else
+    baudListbox.open();
 
+  if (init_com==1){
+    if (confCheck==0){
+      ReadMillis=millis()-1;
+      if (ReadConfig<1)
+        ReadConfig=1;
+    }
+  }
+
+//  debug[0]=init_com;
+//  debug[1]=ReadConfig;
+//  debug[2]=WriteConfig;
+//  debug[3]++;
+  
   time=millis();
-  if (readerror==0) 
-    WriteConfig=0;
   txtmessage.setValue(xxc);
+
   if (WriteConfig>0){
     if (millis()>WriteMillis){
       if (init_com==1){
         xxc="Save attempt: "+str(WriteConfig);
         WRITEconfig();
-        WriteMillis = 250+millis();
-        ReadMillis = 30+millis();
-        ReadConfig=2;
-        WriteConfig--;
+        WriteMillis = 500+millis();
+        ReadMillis = 300+millis();
+        ReadConfig=1;
+        delay(200);
+        if (WriteConfig>0) WriteConfig--;
       }
     }
   }
   else{
    xxc="";
   }
-//  if (confItem[GetSetting("S_DEBUG")].value() > 0)
     txtmessage.setValue(xxc);
-    
-  
   
   if (ReadConfig>0){
     if (millis()>ReadMillis){
       if (init_com==1){
         READconfig();
-        ReadMillis = 100+millis();
-        ReadConfig--;
+        ReadMillis = 300+millis();
+        delay(200);
+        if (ReadConfig>0) ReadConfig--;
       }
     }
   }  
   
-//if ((ReadConfig==0)&&(WriteConfig==0))
+//if ((ReadConfig==0)&&(WriteConfig==0)&&(confCheck==0))
 //  SimControlToggle.setValue(1);
 
 // Layout editor.......
