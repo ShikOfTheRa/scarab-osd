@@ -647,14 +647,12 @@ void ShowLatLon(){
 
 void ShowDebug(){
   if(confItem[GetSetting("S_DEBUG")].value() > 0) {
-  makeText("0:    000", SimPosn[debugPosition]);
-  makeText("1:    001", SimPosn[debugPosition]+LINE);
-  makeText("2:    010", SimPosn[debugPosition]+LINE+LINE);
-//  makeText("3:    011", SimPosn[debugPosition]+LINE+LINE+LINE);
-
-
-
-}}
+    makeText("0: "+debug[0], SimPosn[debugPosition]);
+    makeText("1: "+debug[1], SimPosn[debugPosition]+LINE);
+    makeText("2: "+debug[2], SimPosn[debugPosition]+LINE+LINE);
+    makeText("3: "+debug[3], SimPosn[debugPosition]+LINE+LINE+LINE);
+  }
+}
 
 
 void ShowSats(){
@@ -793,10 +791,10 @@ void ShowAmperage(){
 }}
 
 void ShowTemp(){
-//  if(confItem[GetSetting("S_DISPLAYTEMPERATURE")].value() > 0) {
-//  makeText("30", SimPosn[temperaturePosition]);
-//  mapchar(0x0e, SimPosn[temperaturePosition]+2);
-//}
+  if(confItem[GetSetting("S_DISPLAYTEMPERATURE")].value() > 0) {
+  makeText("30", SimPosn[temperaturePosition]);
+  mapchar(0x0e, SimPosn[temperaturePosition]+2);
+}
 }
 
 void ShowAmps(){

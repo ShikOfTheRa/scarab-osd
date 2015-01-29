@@ -68,7 +68,7 @@
   <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="0" hudname="Shiki" value="2"/>
   <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="0" hudname="Shiki" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="1" hud="0" hudname="Shiki" value="333"/>
-  <LAYOUT desc="temperaturePosition" enabled="1" hud="0" hudname="Shiki" value="213"/>
+  <LAYOUT desc="temperaturePosition" enabled="0" hud="0" hudname="Shiki" value="213"/>
   <LAYOUT desc="voltagePosition" enabled="1" hud="0" hudname="Shiki" value="363"/>
   <LAYOUT desc="vidvoltagePosition" enabled="1" hud="0" hudname="Shiki" value="303"/>
   <LAYOUT desc="amperagePosition" enabled="1" hud="0" hudname="Shiki" value="369"/>
@@ -290,7 +290,7 @@
   <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="6" hudname="Embraer" value="2"/>
   <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="6" hudname="Embraer" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="1" hud="6" hudname="Embraer" value="85"/>
-  <LAYOUT desc="temperaturePosition" enabled="1" hud="6" hudname="Embraer" value="213"/>
+  <LAYOUT desc="temperaturePosition" enabled="0" hud="6" hudname="Embraer" value="213"/>
   <LAYOUT desc="voltagePosition" enabled="1" hud="6" hudname="Embraer" value="353"/>
   <LAYOUT desc="vidvoltagePosition" enabled="1" hud="6" hudname="Embraer" value="263"/>
   <LAYOUT desc="amperagePosition" enabled="1" hud="6" hudname="Embraer" value="292"/>
@@ -327,7 +327,7 @@
   <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="7" hudname="NAHI" value="2"/>
   <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="7" hudname="NAHI" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="1" hud="7" hudname="NAHI" value="32"/>
-  <LAYOUT desc="temperaturePosition" enabled="1" hud="7" hudname="NAHI" value="213"/>
+  <LAYOUT desc="temperaturePosition" enabled="0" hud="7" hudname="NAHI" value="213"/>
   <LAYOUT desc="voltagePosition" enabled="1" hud="7" hudname="NAHI" value="383"/>
   <LAYOUT desc="vidvoltagePosition" enabled="1" hud="7" hudname="NAHI" value="353"/>
   <LAYOUT desc="amperagePosition" enabled="1" hud="7" hudname="NAHI" value="361"/>

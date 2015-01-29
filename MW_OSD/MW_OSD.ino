@@ -278,7 +278,7 @@ void loop()
           displaypMeterSum();
         displayTime();
 #ifdef TEMPSENSOR
-        if(Settings[S_DISPLAYTEMPERATURE]&&((temperature<Settings[S_TEMPERATUREMAX])||(Blink2hz))) displayTemperature();
+        if(((temperature<Settings[TEMPERATUREMAX])||(timer.Blink2hz))) displayTemperature();
 #endif
         displayArmed();
         if (Settings[S_THROTTLEPOSITION])
@@ -702,7 +702,7 @@ void ProcessSensors(void) {
 
 //-------------- Temperature
 #ifdef TEMPSENSOR
-    temperature=((sensorfilter[3][SENSORFILTERSIZE])>>3)-102)/2.048; 
+    temperature=(((sensorfilter[3][SENSORFILTERSIZE])>>3)-102)/2.048; 
 #endif
 
 //-------------- Current
