@@ -439,6 +439,9 @@ void handleRawRC() {
 	ROW--;
 	if(ROW<1)
 	  ROW=1;
+        if(configPage == 0) {
+          ROW=10;
+        }
       }
       else if(configMode&&(MwRcData[PITCHSTICK]<MINSTICK)) // MOVE DOWN
       {
@@ -476,25 +479,13 @@ void serialMenuCommon()
     }
     if(configPage<MINPAGE) configPage = MAXPAGE;
     if(configPage>MAXPAGE) configPage = MINPAGE;
-
-#ifdef PAGE0
-//comment
-#endif
 #ifdef PAGE1
 	if(configPage == 1) {
-	  if(ROW >= 1 && ROW <= 5) {
+	  if(ROW >= 1 && ROW <= 7) {
 	    if(COL==1) P8[ROW-1]=P8[ROW-1]+menudir;
 	    if(COL==2) I8[ROW-1]=I8[ROW-1]+menudir;
 	    if(COL==3) D8[ROW-1]=D8[ROW-1]+menudir;
 	  }
-
-	  if(ROW == 6) {
-	    if(COL==1) P8[7]=P8[7]+menudir;
-	    if(COL==2) I8[7]=I8[7]+menudir;
-	    if(COL==3) D8[7]=D8[7]+menudir;
-	  }
-
-	  if((ROW==7)&&(COL==1)) P8[8]=P8[8]+menudir;
 	}
 #endif
 #ifdef PAGE2
@@ -518,9 +509,6 @@ void serialMenuCommon()
 	}
 #endif
 #ifdef PAGE4
-
-  
-
 	if(configPage == 4 && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
 	  if(ROW==2) timer.rssiTimer=15; // 15 secs to turn off tx anwait to read min RSSI

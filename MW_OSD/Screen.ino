@@ -894,7 +894,6 @@ void displayDirectionToHome(void)
 void displayCursor(void)
 {
   int cursorpos;
-
   if(ROW==10){
     if(COL==3) cursorpos=SAVEP+16-1;    // page
     if(COL==1) cursorpos=SAVEP-1;       // exit
@@ -902,12 +901,6 @@ void displayCursor(void)
   }
   if(ROW<10)
     {
-#ifdef PAGE0      
-    if(configPage==0)
-      {
-      ROW=10;
-      }
-#endif      
 #ifdef PAGE1
     if(configPage==1){
       if (ROW==8) ROW=10;
@@ -915,7 +908,6 @@ void displayCursor(void)
       if(COL==1) cursorpos=(ROW+2)*30+10;
       if(COL==2) cursorpos=(ROW+2)*30+10+6;
       if(COL==3) cursorpos=(ROW+2)*30+10+6+6;
-      if(ROW==7) {cursorpos=(ROW+2)*30+10;COL=1;}
      }
 #endif
 #ifdef PAGE2
@@ -961,7 +953,6 @@ void displayCursor(void)
             ROW=8;
         }
         oldROW=ROW;
-
         COL=3;
       cursorpos=(ROW+2)*30+10+6+6;
       }
