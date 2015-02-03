@@ -268,8 +268,8 @@ digitalWrite(MAX7456SELECT,LOW);
     MAX7456_Send(MAX7456ADD_DMAH, xx>>8);
     MAX7456_Send(MAX7456ADD_DMAL, xx);
 #endif
-#ifdef OSD_SWITCH_3WAY 
-  if ((MwRcData[OSD_SWITCH_3WAY] > 1400) && (MwRcData[OSD_SWITCH_3WAY] < 1600))
+#ifdef OSD_SWITCH_RC 
+  if ((MwRcData[OSD_SWITCH_RC] > 1400) && (MwRcData[OSD_SWITCH_RC] < 1600))
     screen[xx] = ' ';  
 #endif
     MAX7456_Send(MAX7456ADD_DMDI, screen[xx]);

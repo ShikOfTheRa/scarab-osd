@@ -34,6 +34,12 @@
 #define AMPERAGEOFFSET  0           // Optional extra for high offset sensors not supported in GUI (typically bidirectional sensors use a value of 256-512) 
 
 
+/********************       OSD SCREEN SWITCH settings      *********************/
+//Choose only one option:
+#define OSD_SWITCH                  // Enables 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
+//#define OSD_SWITCH_RC 5           // Enables 2 or 3 way screen switch using RC data. Midpoint = blank screen. Specify channel (range 0-7 AUX1=4 AUX4=7)
+
+
 /********************       FILTER settings      *********************/
 //Choose only one option:
 #define STAGE2FILTER               // Enable for smoother readings of voltage / current / RSSI. 
@@ -113,7 +119,6 @@
 //#define BLACKBRIGHTNESS 0x00      // Optional change from default 0x00=0%,0x01=10%,0x10=20%0x11=30%  default is 0x00=0%
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
-//#define OSD_SWITCH_3WAY 5         // Enables blank screen when midpoint on specified channel (range 0-7 AUX1=4 AUX4=7)
 //#define SHORTSTATS                // Display only timer on flight summary 
 #define DISP_LOW_VOLTS_WARNING      // Enable prominent low voltage warning text
 #define FORCE_DISP_LOW_VOLTS        // Enable display low voltage warning override for screen layouts where its disabled
