@@ -133,10 +133,17 @@ void loop()
   debug[MEMCHECK] = UntouchedStack();
 #endif
 
+#ifdef OSD_SWITCH_RC // note MIDRC is specified in Max7456
+  if (MwRcData[OSD_SWITCH_RC] > 1500)
+    screenlayout=1;
+  else  
+    screenlayout=0;    
+#else 
   if (MwSensorActive&mode.osd_switch)
     screenlayout=1;
   else  
     screenlayout=0;
+#endif
     
   if (!screenlayout==oldscreenlayout){
     oldscreenlayout=screenlayout;

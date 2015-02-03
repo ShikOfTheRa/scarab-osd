@@ -413,7 +413,7 @@ void handleRawRC() {
       setMspRequests();
     }
     else if(configMode) {
-      int8_t oldmenudir=constrain(menudir,-10,10);
+      int8_t oldmenudir=constrain(menudir,-5,5);
       menudir=0;
       if(previousarmedstatus&&(MwRcData[THROTTLESTICK]>MINSTICK))
       {
