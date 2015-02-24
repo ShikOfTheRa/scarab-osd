@@ -243,7 +243,7 @@ public void READ(){
 
 public void READinit(){
   g_serial.clear();
-  ReadConfig=10;  
+  ReadConfig=20;  
   SimControlToggle.setValue(0);
   for(int i = 0; i < CONFIGITEMS; i++){
     SetConfigItem((byte)i, 0);
@@ -273,7 +273,7 @@ public void WRITE(){
 
 
 public void WRITEinit(){
-  WriteConfig=10;
+  WriteConfig=20;
   ReadConfig=1;
   SimControlToggle.setValue(0);
   readerror=1;  

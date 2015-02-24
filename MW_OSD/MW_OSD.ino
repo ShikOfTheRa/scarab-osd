@@ -22,7 +22,7 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
-//#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
+#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
 #if 1
 __asm volatile ("nop");
 #endif
@@ -67,6 +67,7 @@ uint16_t UntouchedStack(void)
 #define MWVERS "MULTIWII MWOSD - R1.3"  
 #define MWOSDVER 5      // for eeprom layout verification      
 #include <avr/pgmspace.h>
+#include "def.h"
 #include <EEPROM.h>
 #include "Config.h"
 #include "symbols.h"

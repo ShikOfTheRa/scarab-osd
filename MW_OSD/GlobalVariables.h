@@ -116,6 +116,7 @@ timer;
 uint16_t debug[4];   // int32_t ?...
 int8_t menudir;
 unsigned int allSec=0;
+unsigned int menuSec=0;
 uint8_t armedtimer=255;
 uint16_t debugerror;
 uint16_t debugval=0;
@@ -791,7 +792,8 @@ uint16_t screenPosition[POSITIONS_SETTINGS];
 #define REQ_MSP_NAV_STATUS  32768 //(1 << 15)
 
 // Menu
-PROGMEM const char *menu_stats_item[] = 
+//PROGMEM const char *menu_stats_item[] =
+const PROGMEM char * const menu_stats_item[] =
 {   
   configMsg01,
   configMsg02,
@@ -801,7 +803,7 @@ PROGMEM const char *menu_stats_item[] =
   configMsg06,
 };
 
-PROGMEM const char *menu_pid[] = 
+const PROGMEM char * const menu_pid[] = 
 {   
   configMsg11,
   configMsg12,
@@ -812,7 +814,7 @@ PROGMEM const char *menu_pid[] =
   configMsg17,
 };
 
-PROGMEM const char *menu_rc[] = 
+const PROGMEM char * const menu_rc[] = 
 {   
   configMsg21,
   configMsg22,
@@ -821,7 +823,7 @@ PROGMEM const char *menu_rc[] =
   configMsg25,
 };
 
-PROGMEM const char *menu_bat[] = 
+const PROGMEM char * const menu_bat[] = 
 {   
   configMsg31,
   configMsg32,
@@ -832,7 +834,7 @@ PROGMEM const char *menu_bat[] =
   configMsgMWII,
 };
 
-PROGMEM const char *menu_rssi[] = 
+const PROGMEM char * const menu_rssi[] = 
 {   
   configMsg42,
   configMsg43,
@@ -842,7 +844,7 @@ PROGMEM const char *menu_rssi[] =
   configMsg45,
 };
 
-PROGMEM const char *menu_amps[] = 
+const PROGMEM char * const menu_amps[] = 
 {   
   configMsg51,
   configMsg52,
@@ -851,7 +853,7 @@ PROGMEM const char *menu_amps[] =
   configMsg55,
 };
 
-PROGMEM const char *menu_display[] = 
+const PROGMEM char * const menu_display[] = 
 {   
   configMsg61,
   configMsg62,
@@ -863,7 +865,7 @@ PROGMEM const char *menu_display[] =
   configMsg68,
 };
 
-PROGMEM const char *menu_alarm_item[] = 
+const PROGMEM char * const menu_alarm_item[] = 
 {   
   configMsg91,
   configMsg92,
@@ -873,7 +875,7 @@ PROGMEM const char *menu_alarm_item[] =
   configMsg96,
 };
 
-PROGMEM const char *menutitle_item[] = 
+const PROGMEM char * const menutitle_item[] = 
 {   
   configMsg00,
   configMsg10,
