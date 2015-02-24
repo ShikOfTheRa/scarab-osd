@@ -167,13 +167,14 @@
 
 // Flying Mode
 #define SYM_ACRO 0XAE
+#define SYM_ACROGY 0X98
 #define SYM_ACRO1 0XAF
 #define SYM_STABLE 0XAC
 #define SYM_STABLE1 0XAD
 #define SYM_HORIZON 0XC4
 #define SYM_HORIZON1 0XC5
-#define SYM_TARGET_LOCK 0XAA
-#define SYM_TARGET_LOCK1 0XAB
+#define SYM_PASS 0XAA
+#define SYM_PASS1 0XAB
 
 // Time
 #define SYM_ON_M 0X9B

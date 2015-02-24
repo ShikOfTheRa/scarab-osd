@@ -158,12 +158,6 @@ void displayMode(void)
   else
    screenBuffer[xx++] =SYM_FT;
    screenBuffer[xx++] =0;
-
-    if(MwSensorActive&mode.passthru){ // Remove All mode Icons Create a Manual.
-      screenBuffer[2]=0;
-      screenBuffer[0] = 0;
-      screenBuffer[1] = 0;
-    }
  
     if(MwSensorActive&mode.gpshome){
       screenBuffer[0] = SYM_GHOME;
@@ -201,9 +195,18 @@ void displayMode(void)
       screenBuffer[0]=SYM_HORIZON;
       screenBuffer[1]=SYM_HORIZON1;
     }
+    else if(MwSensorActive&mode.passthru){
+      screenBuffer[2]=0;
+      screenBuffer[0]=SYM_PASS;
+      screenBuffer[1]=SYM_PASS1;
+    }
    else{
       screenBuffer[2]=0;
-      screenBuffer[0]=SYM_ACRO;
+      #if defined FIXEDWING
+        screenBuffer[0]=SYM_ACROGY;
+      #else
+        screenBuffer[0]=SYM_ACRO;
+      #endif
       screenBuffer[1]=SYM_ACRO1;
     }
 #ifdef APINDICATOR
@@ -223,12 +226,6 @@ void displayMode(void)
 
   if(Settings[S_MODESENSOR]){
     xx = 0;
-    if(MwSensorActive&mode.passthru){
-      screenBuffer[xx] = SYM_MAN;  xx++;
-      screenBuffer[xx] = SYM_MAN1;  xx++;
-      screenBuffer[xx] = SYM_MAN2;  xx++;
-    }
-  else {
     if(MwSensorActive&mode.stable||MwSensorActive&mode.horizon){
       screenBuffer[xx] = SYM_ACC;
       xx++;
@@ -241,10 +238,10 @@ void displayMode(void)
       screenBuffer[xx] = SYM_MAG;
       xx++;
     }
-  }
-  screenBuffer[xx] = 0;
-  if(fieldIsVisible(sensorPosition))
-    MAX7456_WriteString(screenBuffer,getPosition(sensorPosition));
+    screenBuffer[xx] = 0;
+    if(fieldIsVisible(sensorPosition)){
+      MAX7456_WriteString(screenBuffer,getPosition(sensorPosition));
+    }
   }
 }
 

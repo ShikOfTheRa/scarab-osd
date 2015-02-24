@@ -32,7 +32,8 @@
 
 #if defined(INIT_MTK_GPS) || defined(UBLOX)
   uint32_t init_speed[5] = {9600,19200,38400,57600,115200};
-  void SerialGpsPrint(prog_char* str) {
+//  void SerialGpsPrint(prog_char* str) {
+  void SerialGpsPrint(char) {
     char b;
     while(str && (b = pgm_read_byte(str++))) {
       Serial.write(b); 

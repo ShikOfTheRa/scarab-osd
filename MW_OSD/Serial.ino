@@ -405,12 +405,16 @@ void handleRawRC() {
 
   if(!waitStick)
   {
-    if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THROTTLESTICK]>MINSTICK)&&!configMode&&(allSec>5)&&!armed)
-    {
-      // Enter config mode using stick comvination
-      waitStick =  2;	// Sticks must return to center before continue!
-      configMode = 1;
-      setMspRequests();
+    if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THROTTLESTICK]>MINSTICK)){
+      if ((allSec-menuSec)>5) {
+        armed=0;
+      }
+      else if (!configMode&&(allSec>5)&&!armed){
+          // Enter config mode using stick combination
+          waitStick =  2;	// Sticks must return to center before continue!
+          configMode = 1;
+          setMspRequests();
+      }
     }
     else if(configMode) {
       int8_t oldmenudir=constrain(menudir,-5,5);
@@ -465,6 +469,9 @@ void handleRawRC() {
         }
         serialMenuCommon();  
       }      
+    }
+    else{
+      menuSec=allSec;
     }
     if(waitStick == 1)
       stickTime = millis();

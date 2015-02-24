@@ -17,7 +17,7 @@
 //#define RUSHDUINO                 // Choose this if using Rushduino, select this
 
 
-/********************       CONTROLLER settings      *********************/
+/********************       CONTROLLER SOFTWARE      *********************/
 //Choose only one option:-
 //#define MULTIWII_V24              // Undefine this if you are using MW versions 2.4  
 #define MULTIWII_V23                // Undefine this if you are using MW versions 2.2/2.3  
@@ -25,8 +25,11 @@
 //#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT with 32bit hardware for compatibility with heading and current data
 //#define CLEANFLIGHT               // Undefine this if you are using CLEANFLIGHT with 32bit hardware for compatibility with heading and current data
 //#define HARIKIRI                  // Undefine this if you are using HARIKIRI (for BOXNAMES compatibility)
-//#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE - to use GPS heading and altitude instead of BARO/MAG
 //#define NOCONTROLLER              // Undefine this if you are using GPSOSD
+
+
+/********************       AIRCRAFT settings      *********************/
+//#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE 
 
 
 /********************       HARDWARE CURRENT sensor settings      *********************/
@@ -36,7 +39,7 @@
 
 /********************       OSD SCREEN SWITCH settings      *********************/
 //Choose only one option:
-#define OSD_SWITCH                  // Enables 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
+#define OSD_SWITCH                  // Uses 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
 //#define OSD_SWITCH_RC 5           // Enables 2 or 3 way screen switch using RC data. Midpoint = blank screen. Specify channel (range 0-7 AUX1=4 AUX4=7)
 
 
@@ -173,6 +176,7 @@
 #endif
 
 
+
 /********************  OSD HARDWARE rule definitions  *********************/
 #ifdef RUSHDUINO                     
     # define MAX7456SELECT 10        // ss 
@@ -229,6 +233,6 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-//#define DEBUG         // Enable/disable option to display OSD debug values 
+#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 
