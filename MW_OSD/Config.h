@@ -11,14 +11,14 @@
 
 
 /********************       HARDWARE OSD settings      *********************/
-//Choose only one option:
+//Choose ONLY ONE option:
 #define MINIMOSD                    // Choose this if using standard MINIMOSD hardware (default for 95% of boards) 
 //#define WITESPYV1.1               // Choose this if using Witespy V1.1 OSD, select this to use alternative resistors / pinouts 
-//#define RUSHDUINO                 // Choose this if using Rushduino, select this
+//#define RUSHDUINO                 // Choose this if using Rushduino
 
 
 /********************       CONTROLLER SOFTWARE      *********************/
-//Choose only one option:-
+//Choose ONLY ONE option:-
 //#define MULTIWII_V24              // Undefine this if you are using MW versions 2.4  
 #define MULTIWII_V23                // Undefine this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
@@ -38,13 +38,13 @@
 
 
 /********************       OSD SCREEN SWITCH settings      *********************/
-//Choose only one option:
+//Choose ONLY ONE option:
 #define OSD_SWITCH                  // Uses 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
 //#define OSD_SWITCH_RC 5           // Enables 2 or 3 way screen switch using RC data. Midpoint = blank screen. Specify channel (range 0-7 AUX1=4 AUX4=7)
 
 
 /********************       FILTER settings      *********************/
-//Choose only one option:
+//Choose ONLY ONE option:
 #define STAGE2FILTER               // Enable for smoother readings of voltage / current / RSSI. 
 //#define SMOOTHFILTER             // Enable for smoothest readings of voltage / current / RSSI. Uses more memory. Prototype
 
@@ -59,7 +59,7 @@
 
 /********************       GPS OSD settings      *********************/
 // **ONLY** FOR STANDALONE GPS MODE WITH NO FLIGHT CONTROLLER
-// Choose one of the following:
+// Choose ONLY ONE option:
 //#define NMEA                     // Enable if using a standard NMEA based GPS
 //#define UBLOX                    // Enable if using a standard UBLOX based GPS
 //#define MTK                      // Enable if using a standard MTK based GPS
@@ -68,6 +68,7 @@
 
 
 /******************** Serial speed settings *********************/
+// Choose ONLY ONE option:
 #define BAUDRATE 115200
 //#define BAUDRATE 57600
 //#define BAUDRATE 38400
@@ -233,6 +234,6 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-#define DEBUG         // Enable/disable option to display OSD debug values 
+//#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 
