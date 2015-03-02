@@ -100,7 +100,7 @@
  #define MSP_BOXIDS               119   //out message         get the permanent IDs associated to BOXes
  #define MSP_SERVO_CONF           120   //out message         Servo settings
  
-+#define MSP_CELLS                121   //out message         Battery Cell Voltages
++#define MSP_CELLS                130   //out message         Battery Cell Voltages
 +
  #define MSP_SET_RAW_RC           200   //in message          8 rc chan
  #define MSP_SET_RAW_GPS          201   //in message          fix, numsat, lat, lon, alt, speed
