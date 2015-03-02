@@ -46,7 +46,7 @@ import java.text.DecimalFormat;
 
 
 
-String MW_OSD_GUI_Version = "MWOSD R1.3 - Next Generation MultiWii OSD";
+String MW_OSD_GUI_Version = "MWOSD R1.3 - NextGeneration";
 int MW_OSD_EEPROM_Version = 5;
 
 
