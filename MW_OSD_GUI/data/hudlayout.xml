@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HUDLAYOUTS>
+  <CONFIG desc="Number of layout choices" value="10"/>
+  <DESCRIPTION desc="Sat indicator"/>
+  <DESCRIPTION desc="Direction to home"/>
+  <DESCRIPTION desc="Distance"/>
+  <DESCRIPTION desc="Speed"/>
+  <DESCRIPTION desc="Angle to home"/>
+  <DESCRIPTION desc="GPS altitude"/>
+  <DESCRIPTION desc="Sensor"/>
+  <DESCRIPTION desc="Heading"/>
+  <DESCRIPTION desc="Compass"/>
+  <DESCRIPTION desc="Altitude"/>
+  <DESCRIPTION desc="ClimbRate"/>
+  <DESCRIPTION desc="Throttle"/>
+  <DESCRIPTION desc="FlyTime"/>
+  <DESCRIPTION desc="OnTime"/>
+  <DESCRIPTION desc="Armed Status"/>
+  <DESCRIPTION desc="Unused"/>
+  <DESCRIPTION desc="Unused"/>
+  <DESCRIPTION desc="Latitude"/>
+  <DESCRIPTION desc="Longitude"/>
+  <DESCRIPTION desc="RSSI"/>
+  <DESCRIPTION desc="Temperature"/>
+  <DESCRIPTION desc="Voltage"/>
+  <DESCRIPTION desc="Vid voltage"/>
+  <DESCRIPTION desc="Amps"/>
+  <DESCRIPTION desc="mAh"/>
+  <DESCRIPTION desc="AHI"/>
+  <DESCRIPTION desc="Sidebar"/>
+  <DESCRIPTION desc="Sidebar arrow"/>
+  <DESCRIPTION desc="CallSign"/>
+  <DESCRIPTION desc="Debug"/>
+  <DESCRIPTION desc="Gimbal"/>
+  <DESCRIPTION desc="GPS time"/>
+  <DESCRIPTION desc="FRSky cells"/>
+  <DESCRIPTION desc="Mode"/>
+  <DESCRIPTION desc="Map mode"/>
+  <DESCRIPTION desc="Map center"/>
+  <DESCRIPTION desc="AP status"/>
+  <HUDNAME hudname="Shiki default"/>
+  <HUDNAME hudname="Shiki minimal"/>
+  <HUDNAME hudname="EZ"/>
+  <HUDNAME hudname="Clear"/>
+  <HUDNAME hudname="MAP"/>
+  <HUDNAME hudname="F15"/>
+  <HUDNAME hudname="Embraer"/>
+  <HUDNAME hudname="NAHI"/>
+  <HUDNAME hudname="Groundstation"/>
+  <HUDNAME hudname="Standalone"/>
+  <LAYOUT desc="GPS_numSatPosition" enabled="1" hud="0" hudname="Shiki" value="32"/>
+  <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="0" hudname="Shiki" value="51"/>
+  <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="0" hudname="Shiki" value="54"/>
+  <LAYOUT desc="speedPosition" enabled="1" hud="0" hudname="Shiki" value="183"/>
+  <LAYOUT desc="GPS_angleToHomePosition" enabled="1" hud="0" hudname="Shiki" value="144"/>
+  <LAYOUT desc="MwGPSAltPosition" enabled="1" hud="0" hudname="Shiki" value="84"/>
+  <LAYOUT desc="sensorPosition" enabled="1" hud="0" hudname="Shiki" value="36"/>
+  <LAYOUT desc="MwHeadingPosition" enabled="1" hud="0" hudname="Shiki" value="114"/>
+  <LAYOUT desc="MwHeadingGraphPosition" enabled="1" hud="0" hudname="Shiki" value="40"/>
+  <LAYOUT desc="MwAltitudePosition" enabled="1" hud="0" hudname="Shiki" value="203"/>
+  <LAYOUT desc="MwClimbRatePosition" enabled="1" hud="0" hudname="Shiki" value="202"/>
+  <LAYOUT desc="CurrentThrottlePosition" enabled="1" hud="0" hudname="Shiki" value="352"/>
+  <LAYOUT desc="flyTimePosition" enabled="1" hud="0" hudname="Shiki" value="382"/>
+  <LAYOUT desc="onTimePosition" enabled="1" hud="0" hudname="Shiki" value="382"/>
+  <LAYOUT desc="Armed Status" enabled="1" hud="0" hudname="Shiki" value="311"/>
+  <LAYOUT desc="MwGPSLatPosition" enabled="1" hud="0" hudname="Shiki" value="272"/>
+  <LAYOUT desc="MwGPSLonPosition" enabled="1" hud="0" hudname="Shiki" value="285"/>
+  <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="0" hudname="Shiki" value="2"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="0" hudname="Shiki" value="17"/>
+  <LAYOUT desc="rssiPosition" enabled="1" hud="0" hudname="Shiki" value="333"/>
+  <LAYOUT desc="temperaturePosition" enabled="0" hud="0" hudname="Shiki" value="213"/>
+  <LAYOUT desc="voltagePosition" enabled="1" hud="0" hudname="Shiki" value="363"/>
+  <LAYOUT desc="vidvoltagePosition" enabled="1" hud="0" hudname="Shiki" value="303"/>
+  <LAYOUT desc="amperagePosition" enabled="1" hud="0" hudname="Shiki" value="369"/>
+  <LAYOUT desc="pMeterSumPosition" enabled="1" hud="0" hudname="Shiki" value="376"/>
+  <LAYOUT desc="horizonPosition" enabled="1" hud="0" hudname="Shiki" value="187"/>
+  <LAYOUT desc="SideBarPosition" enabled="1" hud="0" hudname="Shiki" value="187"/>
+  <LAYOUT desc="SideBarScrollPosition" enabled="1" hud="0" hudname="Shiki" value="187"/>
+  <LAYOUT desc="CallSign Position" enabled="1" hud="0" hudname="Shiki" value="280"/>
+  <LAYOUT desc="Debug Position" enabled="1" hud="0" hudname="Shiki" value="220"/>
+  <LAYOUT desc="Gimbal Position" enabled="1" hud="0" hudname="Shiki" value="122"/>
+  <LAYOUT desc="GPS_time Position" enabled="1" hud="0" hudname="Shiki" value="341"/>
+  <LAYOUT desc="SportPosition" enabled="1" hud="0" hudname="Shiki" value="232"/>
+  <LAYOUT desc="modePosition" enabled="1" hud="0" hudname="Shiki" value="92"/>
+  <LAYOUT desc="MapModePosition" enabled="0" hud="0" hudname="Shiki" value="46"/>
+  <LAYOUT desc="MapCenterPosition" enabled="0" hud="0" hudname="Shiki" value="195"/>
+  <LAYOUT desc="APstatusPosition" enabled="1" hud="0" hudname="Shiki" value="70"/>
+  <LAYOUT desc="GPS_numSatPosition" enabled="0" hud="1" hudname="Minimal" value="32"/>
+  <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="1" hudname="Minimal" value="379"/>
+  <LAYOUT desc="GPS_distanceToHomePosition" enabled="0" hud="1" hudname="Minimal" value="42"/>
+  <LAYOUT desc="speedPosition" enabled="0" hud="1" hudname="Minimal" value="33"/>
+  <LAYOUT desc="GPS_angleToHomePosition" enabled="0" hud="1" hudname="Minimal" value="144"/>
+  <LAYOUT desc="MwGPSAltPosition" enabled="0" hud="1" hudname="Minimal" value="234"/>
+  <LAYOUT desc="sensorPosition" enabled="0" hud="1" hudname="Minimal" value="36"/>
+  <LAYOUT desc="MwHeadingPosition" enabled="0" hud="1" hudname="Minimal" value="234"/>
+  <LAYOUT desc="MwHeadingGraphPosition" enabled="0" hud="1" hudname="Minimal" value="39"/>
+  <LAYOUT desc="MwAltitudePosition" enabled="0" hud="1" hudname="Minimal" value="53"/>
+  <LAYOUT desc="MwClimbRatePosition" enabled="0" hud="1" hudname="Minimal" value="203"/>
+  <LAYOUT desc="CurrentThrottlePosition" enabled="0" hud="1" hudname="Minimal" value="352"/>
+  <LAYOUT desc="flyTimePosition" enabled="1" hud="1" hudname="Minimal" value="382"/>
+  <LAYOUT desc="onTimePosition" enabled="1" hud="1" hudname="Minimal" value="382"/>
+  <LAYOUT desc="motorArmedPosition" enabled="1" hud="1" hudname="Minimal" value="311"/>
+  <LAYOUT desc="MwGPSLatPosition" enabled="0" hud="1" hudname="Minimal" value="272"/>
+  <LAYOUT desc="MwGPSLonPosition" enabled="0" hud="1" hudname="Minimal" value="285"/>
+  <LAYOUT desc="MwGPSLatPositionTop" enabled="0" hud="1" hudname="Minimal" value="2"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="0" hud="1" hudname="Minimal" value="17"/>
+  <LAYOUT desc="rssiPosition" enabled="0" hud="1" hudname="Minimal" value="332"/>
+  <LAYOUT desc="temperaturePosition" enabled="0" hud="1" hudname="Minimal" value="212"/>
+  <LAYOUT desc="voltagePosition" enabled="1" hud="1" hudname="Minimal" value="363"/>
+  <LAYOUT desc="vidvoltagePosition" enabled="0" hud="1" hudname="Minimal" value="303"/>
+  <LAYOUT desc="amperagePosition" enabled="0" hud="1" hudname="Minimal" value="373"/>
+  <LAYOUT desc="pMeterSumPosition" enabled="0" hud="1" hudname="Minimal" value="383"/>
+  <LAYOUT desc="horizonPosition" enabled="0" hud="1" hudname="Minimal" value="127"/>
+  <LAYOUT desc="SideBarPosition" enabled="0" hud="1" hudname="Minimal" value="187"/>
+  <LAYOUT desc="SideBarScrollPosition" enabled="0" hud="1" hudname="Minimal" value="187"/>
+  <LAYOUT desc="CallSign Position" enabled="0" hud="1" hudname="Minimal" value="280"/>
+  <LAYOUT desc="Debug Position" enabled="0" hud="1" hudname="Minimal" value="220"/>
+  <LAYOUT desc="Gimbal Position" enabled="0" hud="1" hudname="Minimal" value="122"/>
+  <LAYOUT desc="GPS_time Position" enabled="0" hud="1" hudname="Minimal" value="341"/>
+  <LAYOUT desc="SportPosition" enabled="0" hud="1" hudname="Minimal" value="232"/>
+  <LAYOUT desc="modePosition" enabled="0" hud="1" hudname="Minimal" value="212"/>
+  <LAYOUT desc="MapModePosition" enabled="0" hud="1" hudname="Minimal" value="46"/>
+  <LAYOUT desc="MapCenterPosition" enabled="0" hud="1" hudname="Minimal" value="195"/>
+  <LAYOUT desc="APstatusPosition" enabled="0" hud="1" hudname="Minimal" value="195"/>
+  <LAYOUT desc="GPS_numSatPosition" enabled="0" hud="2" hudname="EZ" value="49"/>
+  <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="2" hudname="EZ" value="48"/>
+  <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="2" hudname="EZ" value="40"/>
+  <LAYOUT desc="speedPosition" enabled="1" hud="2" hudname="EZ" value="33"/>
+  <LAYOUT desc="GPS_angleToHomePosition" enabled="0" hud="2" hudname="EZ" value="144"/>
+  <LAYOUT desc="MwGPSAltPosition" enabled="0" hud="2" hudname="EZ" value="234"/>
+  <LAYOUT desc="sensorPosition" enabled="0" hud="2" hudname="EZ" value="212"/>
+  <LAYOUT desc="MwHeadingPosition" enabled="0" hud="2" hudname="EZ" value="234"/>
+  <LAYOUT desc="MwHeadingGraphPosition" enabled="0" hud="2" hudname="EZ" value="39"/>
+  <LAYOUT desc="MwAltitudePosition" enabled="1" hud="2" hudname="EZ" value="53"/>
+  <LAYOUT desc="MwClimbRatePosition" enabled="0" hud="2" hudname="EZ" value="233"/>
+  <LAYOUT desc="CurrentThrottlePosition" enabled="0" hud="2" hudname="EZ" value="352"/>
+  <LAYOUT desc="flyTimePosition" enabled="1" hud="2" hudname="EZ" value="382"/>
+  <LAYOUT desc="onTimePosition" enabled="1" hud="2" hudname="EZ" value="382"/>
+  <LAYOUT desc="motorArmedPosition" enabled="1" hud="2" hudname="EZ" value="311"/>
+  <LAYOUT desc="MwGPSLatPosition" enabled="0" hud="2" hudname="EZ" value="272"/>
+  <LAYOUT desc="MwGPSLonPosition" enabled="0" hud="2" hudname="EZ" value="285"/>
+  <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="2" hudname="EZ" value="2"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="2" hudname="EZ" value="17"/>
+  <LAYOUT desc="rssiPosition" enabled="0" hud="2" hudname="EZ" value="332"/>
+  <LAYOUT desc="temperaturePosition" enabled="0" hud="2" hudname="EZ" value="212"/>
+  <LAYOUT desc="voltagePosition" enabled="1" hud="2" hudname="EZ" value="363"/>
+  <LAYOUT desc="vidvoltagePosition" enabled="0" hud="2" hudname="EZ" value="303"/>
+  <LAYOUT desc="amperagePosition" enabled="1" hud="2" hudname="EZ" value="368"/>
+  <LAYOUT desc="pMeterSumPosition" enabled="1" hud="2" hudname="EZ" value="376"/>
+  <LAYOUT desc="horizonPosition" enabled="0" hud="2" hudname="EZ" value="127"/>
+  <LAYOUT desc="SideBarPosition" enabled="0" hud="2" hudname="EZ" value="187"/>
+  <LAYOUT desc="SideBarScrollPosition" enabled="0" hud="2" hudname="EZ" value="187"/>
+  <LAYOUT desc="CallSign Position" enabled="1" hud="2" hudname="EZ" value="280"/>
+  <LAYOUT desc="Debug Position" enabled="1" hud="2" hudname="EZ" value="220"/>
+  <LAYOUT desc="Gimbal Position" enabled="0" hud="2" hudname="EZ" value="122"/>
+  <LAYOUT desc="GPS_time Position" enabled="0" hud="2" hudname="EZ" value="341"/>
+  <LAYOUT desc="SportPosition" enabled="0" hud="2" hudname="EZ" value="232"/>
+  <LAYOUT desc="modePosition" enabled="0" hud="2" hudname="EZ" value="38"/>
+  <LAYOUT desc="MapModePosition" enabled="0" hud="2" hudname="EZ" value="46"/>
+  <LAYOUT desc="MapCenterPosition" enabled="0" hud="2" hudname="EZ" value="195"/>
+  <LAYOUT desc="APstatusPosition" enabled="0" hud="2" hudname="EZ" value="195"/>
+  <LAYOUT desc="GPS_numSatPosition" enabled="0" hud="3" hudname="Blank screen" value="49"/>
+  <LAYOUT desc="GPS_directionToHomePosition" enabled="0" hud="3" hudname="Blank screen" value="48"/>
+  <LAYOUT desc="GPS_distanceToHomePosition" enabled="0" hud="3" hudname="Blank screen" value="40"/>
+  <LAYOUT desc="speedPosition" enabled="0" hud="3" hudname="Blank screen" value="33"/>
+  <LAYOUT desc="GPS_angleToHomePosition" enabled="0" hud="3" hudname="Blank screen" value="144"/>
+  <LAYOUT desc="MwGPSAltPosition" enabled="0" hud="3" hudname="Blank screen" value="234"/>
+  <LAYOUT desc="sensorPosition" enabled="0" hud="3" hudname="Blank screen" value="212"/>
+  <LAYOUT desc="MwHeadingPosition" enabled="0" hud="3" hudname="Blank screen" value="234"/>
+  <LAYOUT desc="MwHeadingGraphPosition" enabled="0" hud="3" hudname="Blank screen" value="39"/>
+  <LAYOUT desc="MwAltitudePosition" enabled="0" hud="3" hudname="Blank screen" value="53"/>
+  <LAYOUT desc="MwClimbRatePosition" enabled="0" hud="3" hudname="Blank screen" value="233"/>
+  <LAYOUT desc="CurrentThrottlePosition" enabled="0" hud="3" hudname="Blank screen" value="352"/>
+  <LAYOUT desc="flyTimePosition" enabled="0" hud="3" hudname="Blank screen" value="382"/>
+  <LAYOUT desc="onTimePosition" enabled="0" hud="3" hudname="Blank screen" value="382"/>
+  <LAYOUT desc="motorArmedPosition" enabled="0" hud="3" hudname="Blank screen" value="311"/>
+  <LAYOUT desc="MwGPSLatPosition" enabled="0" hud="3" hudname="Blank screen" value="272"/>
+  <LAYOUT desc="MwGPSLonPosition" enabled="0" hud="3" hudname="Blank screen" value="285"/>
+  <LAYOUT desc="MwGPSLatPositionTop" enabled="0" hud="3" hudname="Blank screen" value="2"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="0" hud="3" hudname="Blank screen" value="17"/>
+  <LAYOUT desc="rssiPosition" enabled="0" hud="3" hudname="Blank screen" value="332"/>
+  <LAYOUT desc="temperaturePosition" enabled="0" hud="3" hudname="Blank screen" value="212"/>
+  <LAYOUT desc="voltagePosition" enabled="0" hud="3" hudname="Blank screen" value="363"/>
+  <LAYOUT desc="vidvoltagePosition" enabled="0" hud="3" hudname="Blank screen" value="303"/>
+  <LAYOUT desc="amperagePosition" enabled="0" hud="3" hudname="Blank screen" value="368"/>
+  <LAYOUT desc="pMeterSumPosition" enabled="0" hud="3" hudname="Blank screen" value="376"/>
+  <LAYOUT desc="horizonPosition" enabled="0" hud="3" hudname="Blank screen" value="187"/>
+  <LAYOUT desc="SideBarPosition" enabled="0" hud="3" hudname="Blank screen" value="187"/>
+  <LAYOUT desc="SideBarScrollPosition" enabled="0" hud="3" hudname="Blank screen" value="187"/>
+  <LAYOUT desc="CallSign Position" enabled="0" hud="3" hudname="Blank screen" value="280"/>
+  <LAYOUT desc="Debug Position" enabled="0" hud="3" hudname="Blank screen" value="220"/>
+  <LAYOUT desc="Gimbal Position" enabled="0" hud="3" hudname="Blank screen" value="122"/>
+  <LAYOUT desc="GPS_time Position" enabled="0" hud="3" hudname="Blank screen" value="341"/>
+  <LAYOUT desc="SportPosition" enabled="0" hud="3" hudname="Blank screen" value="232"/>
+  <LAYOUT desc="modePosition" enabled="0" hud="3" hudname="Blank screen" value="38"/>
+  <LAYOUT desc="MapModePosition" enabled="0" hud="3" hudname="Blank screen" value="46"/>
+  <LAYOUT desc="MapCenterPosition" enabled="0" hud="3" hudname="Blank screen" value="195"/>
+  <LAYOUT desc="APstatusPosition" enabled="0" hud="3" hudname="Blank screen" value="195"/>
+  <LAYOUT desc="GPS_numSatPosition" enabled="0" hud="4" hudname="Map" value="49"/>
+  <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="4" hudname="Map" value="49"/>
+  <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="4" hudname="Map" value="41"/>
+  <LAYOUT desc="speedPosition" enabled="1" hud="4" hudname="Map" value="33"/>
+  <LAYOUT desc="GPS_angleToHomePosition" enabled="0" hud="4" hudname="Map" value="144"/>
+  <LAYOUT desc="MwGPSAltPosition" enabled="0" hud="4" hudname="Map" value="234"/>
+  <LAYOUT desc="sensorPosition" enabled="0" hud="4" hudname="Map" value="212"/>
+  <LAYOUT desc="MwHeadingPosition" enabled="0" hud="4" hudname="Map" value="234"/>
+  <LAYOUT desc="MwHeadingGraphPosition" enabled="0" hud="4" hudname="Map" value="39"/>
+  <LAYOUT desc="MwAltitudePosition" enabled="1" hud="4" hudname="Map" value="53"/>
+  <LAYOUT desc="MwClimbRatePosition" enabled="0" hud="4" hudname="Map" value="233"/>
+  <LAYOUT desc="CurrentThrottlePosition" enabled="0" hud="4" hudname="Map" value="352"/>
+  <LAYOUT desc="flyTimePosition" enabled="1" hud="4" hudname="Map" value="382"/>
+  <LAYOUT desc="onTimePosition" enabled="1" hud="4" hudname="Map" value="382"/>
+  <LAYOUT desc="motorArmedPosition" enabled="1" hud="4" hudname="Map" value="311"/>
+  <LAYOUT desc="MwGPSLatPosition" enabled="0" hud="4" hudname="Map" value="272"/>
+  <LAYOUT desc="MwGPSLonPosition" enabled="0" hud="4" hudname="Map" value="285"/>
+  <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="4" hudname="Map" value="2"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="4" hudname="Map" value="17"/>
+  <LAYOUT desc="rssiPosition" enabled="0" hud="4" hudname="Map" value="332"/>
+  <LAYOUT desc="temperaturePosition" enabled="0" hud="4" hudname="Map" value="212"/>
+  <LAYOUT desc="voltagePosition" enabled="1" hud="4" hudname="Map" value="363"/>
+  <LAYOUT desc="vidvoltagePosition" enabled="0" hud="4" hudname="Map" value="303"/>
+  <LAYOUT desc="amperagePosition" enabled="1" hud="4" hudname="Map" value="368"/>
+  <LAYOUT desc="pMeterSumPosition" enabled="1" hud="4" hudname="Map" value="376"/>
+  <LAYOUT desc="horizonPosition" enabled="0" hud="4" hudname="Map" value="187"/>
+  <LAYOUT desc="SideBarPosition" enabled="0" hud="4" hudname="Map" value="187"/>
+  <LAYOUT desc="SideBarScrollPosition" enabled="0" hud="4" hudname="Map" value="187"/>
+  <LAYOUT desc="CallSign Position" enabled="1" hud="4" hudname="Map" value="280"/>
+  <LAYOUT desc="Debug Position" enabled="1" hud="4" hudname="Map" value="220"/>
+  <LAYOUT desc="Gimbal Position" enabled="0" hud="4" hudname="Map" value="122"/>
+  <LAYOUT desc="GPS_time Position" enabled="0" hud="4" hudname="Map" value="341"/>
+  <LAYOUT desc="SportPosition" enabled="0" hud="4" hudname="Map" value="232"/>
+  <LAYOUT desc="modePosition" enabled="1" hud="4" hudname="Map" value="37"/>
+  <LAYOUT desc="MapModePosition" enabled="1" hud="4" hudname="Map" value="47"/>
+  <LAYOUT desc="MapCenterPosition" enabled="1" hud="4" hudname="Map" value="194"/>
+  <LAYOUT desc="APstatusPosition" enabled="0" hud="4" hudname="Map" value="195"/>
+  <LAYOUT desc="GPS_numSatPosition" enabled="1" hud="5" hudname="F14" value="62"/>
+  <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="5" hudname="F14" value="372"/>
+  <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="5" hudname="F14" value="374"/>
+  <LAYOUT desc="speedPosition" enabled="1" hud="5" hudname="F14" value="96"/>
+  <LAYOUT desc="GPS_angleToHomePosition" enabled="0" hud="5" hudname="F14" value="144"/>
+  <LAYOUT desc="MwGPSAltPosition" enabled="0" hud="5" hudname="F14" value="234"/>
+  <LAYOUT desc="sensorPosition" enabled="0" hud="5" hudname="F14" value="36"/>
+  <LAYOUT desc="MwHeadingPosition" enabled="0" hud="5" hudname="F14" value="234"/>
+  <LAYOUT desc="MwHeadingGraphPosition" enabled="0" hud="5" hudname="F14" value="40"/>
+  <LAYOUT desc="MwAltitudePosition" enabled="1" hud="5" hudname="F14" value="110"/>
+  <LAYOUT desc="MwClimbRatePosition" enabled="1" hud="5" hudname="F14" value="202"/>
+  <LAYOUT desc="CurrentThrottlePosition" enabled="0" hud="5" hudname="F14" value="352"/>
+  <LAYOUT desc="flyTimePosition" enabled="1" hud="5" hudname="F14" value="289"/>
+  <LAYOUT desc="onTimePosition" enabled="1" hud="5" hudname="F14" value="289"/>
+  <LAYOUT desc="motorArmedPosition" enabled="1" hud="5" hudname="F14" value="71"/>
+  <LAYOUT desc="MwGPSLatPosition" enabled="1" hud="5" hudname="F14" value="272"/>
+  <LAYOUT desc="MwGPSLonPosition" enabled="1" hud="5" hudname="F14" value="285"/>
+  <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="5" hudname="F14" value="32"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="5" hudname="F14" value="47"/>
+  <LAYOUT desc="rssiPosition" enabled="1" hud="5" hudname="F14" value="335"/>
+  <LAYOUT desc="temperaturePosition" enabled="0" hud="5" hudname="F14" value="213"/>
+  <LAYOUT desc="voltagePosition" enabled="1" hud="5" hudname="F14" value="275"/>
+  <LAYOUT desc="vidvoltagePosition" enabled="0" hud="5" hudname="F14" value="303"/>
+  <LAYOUT desc="amperagePosition" enabled="1" hud="5" hudname="F14" value="304"/>
+  <LAYOUT desc="pMeterSumPosition" enabled="1" hud="5" hudname="F14" value="319"/>
+  <LAYOUT desc="horizonPosition" enabled="1" hud="5" hudname="F14" value="187"/>
+  <LAYOUT desc="SideBarPosition" enabled="1" hud="5" hudname="F14" value="187"/>
+  <LAYOUT desc="SideBarScrollPosition" enabled="0" hud="5" hudname="F14" value="187"/>
+  <LAYOUT desc="CallSign Position" enabled="1" hud="5" hudname="F14" value="280"/>
+  <LAYOUT desc="Debug Position" enabled="1" hud="5" hudname="F14" value="220"/>
+  <LAYOUT desc="Gimbal Position" enabled="0" hud="5" hudname="F14" value="122"/>
+  <LAYOUT desc="GPS_time Position" enabled="0" hud="5" hudname="F14" value="341"/>
+  <LAYOUT desc="SportPosition" enabled="0" hud="5" hudname="F14" value="232"/>
+  <LAYOUT desc="modePosition" enabled="0" hud="5" hudname="F14" value="123"/>
+  <LAYOUT desc="MapModePosition" enabled="0" hud="5" hudname="F14" value="46"/>
+  <LAYOUT desc="MapCenterPosition" enabled="0" hud="5" hudname="F14" value="195"/>
+  <LAYOUT desc="APstatusPosition" enabled="0" hud="5" hudname="F14" value="195"/>
+  <LAYOUT desc="GPS_numSatPosition" enabled="1" hud="6" hudname="Embraer" value="53"/>
+  <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="6" hudname="Embraer" value="344"/>
+  <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="6" hudname="Embraer" value="363"/>
+  <LAYOUT desc="speedPosition" enabled="1" hud="6" hudname="Embraer" value="303"/>
+  <LAYOUT desc="GPS_angleToHomePosition" enabled="0" hud="6" hudname="Embraer" value="144"/>
+  <LAYOUT desc="MwGPSAltPosition" enabled="0" hud="6" hudname="Embraer" value="234"/>
+  <LAYOUT desc="sensorPosition" enabled="0" hud="6" hudname="Embraer" value="36"/>
+  <LAYOUT desc="MwHeadingPosition" enabled="0" hud="6" hudname="Embraer" value="234"/>
+  <LAYOUT desc="MwHeadingGraphPosition" enabled="1" hud="6" hudname="Embraer" value="370"/>
+  <LAYOUT desc="MwAltitudePosition" enabled="1" hud="6" hudname="Embraer" value="333"/>
+  <LAYOUT desc="MwClimbRatePosition" enabled="0" hud="6" hudname="Embraer" value="202"/>
+  <LAYOUT desc="CurrentThrottlePosition" enabled="0" hud="6" hudname="Embraer" value="352"/>
+  <LAYOUT desc="flyTimePosition" enabled="1" hud="6" hudname="Embraer" value="382"/>
+  <LAYOUT desc="onTimePosition" enabled="1" hud="6" hudname="Embraer" value="382"/>
+  <LAYOUT desc="motorArmedPosition" enabled="1" hud="6" hudname="Embraer" value="311"/>
+  <LAYOUT desc="MwGPSLatPosition" enabled="1" hud="6" hudname="Embraer" value="272"/>
+  <LAYOUT desc="MwGPSLonPosition" enabled="1" hud="6" hudname="Embraer" value="285"/>
+  <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="6" hudname="Embraer" value="2"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="6" hudname="Embraer" value="17"/>
+  <LAYOUT desc="rssiPosition" enabled="1" hud="6" hudname="Embraer" value="85"/>
+  <LAYOUT desc="temperaturePosition" enabled="0" hud="6" hudname="Embraer" value="213"/>
+  <LAYOUT desc="voltagePosition" enabled="1" hud="6" hudname="Embraer" value="353"/>
+  <LAYOUT desc="vidvoltagePosition" enabled="1" hud="6" hudname="Embraer" value="263"/>
+  <LAYOUT desc="amperagePosition" enabled="1" hud="6" hudname="Embraer" value="292"/>
+  <LAYOUT desc="pMeterSumPosition" enabled="1" hud="6" hudname="Embraer" value="322"/>
+  <LAYOUT desc="horizonPosition" enabled="0" hud="6" hudname="Embraer" value="187"/>
+  <LAYOUT desc="SideBarPosition" enabled="0" hud="6" hudname="Embraer" value="187"/>
+  <LAYOUT desc="SideBarScrollPosition" enabled="0" hud="6" hudname="Embraer" value="187"/>
+  <LAYOUT desc="CallSign Position" enabled="1" hud="6" hudname="Embraer" value="280"/>
+  <LAYOUT desc="Debug Position" enabled="1" hud="6" hudname="Embraer" value="220"/>
+  <LAYOUT desc="Gimbal Position" enabled="0" hud="6" hudname="Embraer" value="122"/>
+  <LAYOUT desc="GPS_time Position" enabled="0" hud="6" hudname="Embraer" value="341"/>
+  <LAYOUT desc="SportPosition" enabled="0" hud="6" hudname="Embraer" value="232"/>
+  <LAYOUT desc="modePosition" enabled="1" hud="6" hudname="Embraer" value="33"/>
+  <LAYOUT desc="MapModePosition" enabled="0" hud="6" hudname="Embraer" value="46"/>
+  <LAYOUT desc="MapCenterPosition" enabled="0" hud="6" hudname="Embraer" value="195"/>
+  <LAYOUT desc="APstatusPosition" enabled="0" hud="6" hudname="Embraer" value="195"/>
+  <LAYOUT desc="GPS_numSatPosition" enabled="1" hud="7" hudname="NAHI" value="54"/>
+  <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="7" hudname="NAHI" value="74"/>
+  <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="7" hudname="NAHI" value="372"/>
+  <LAYOUT desc="speedPosition" enabled="1" hud="7" hudname="NAHI" value="183"/>
+  <LAYOUT desc="GPS_angleToHomePosition" enabled="0" hud="7" hudname="NAHI" value="144"/>
+  <LAYOUT desc="MwGPSAltPosition" enabled="0" hud="7" hudname="NAHI" value="234"/>
+  <LAYOUT desc="sensorPosition" enabled="0" hud="7" hudname="NAHI" value="32"/>
+  <LAYOUT desc="MwHeadingPosition" enabled="0" hud="7" hudname="NAHI" value="114"/>
+  <LAYOUT desc="MwHeadingGraphPosition" enabled="1" hud="7" hudname="NAHI" value="100"/>
+  <LAYOUT desc="MwAltitudePosition" enabled="1" hud="7" hudname="NAHI" value="203"/>
+  <LAYOUT desc="MwClimbRatePosition" enabled="1" hud="7" hudname="NAHI" value="202"/>
+  <LAYOUT desc="CurrentThrottlePosition" enabled="0" hud="7" hudname="NAHI" value="352"/>
+  <LAYOUT desc="flyTimePosition" enabled="1" hud="7" hudname="NAHI" value="41"/>
+  <LAYOUT desc="onTimePosition" enabled="1" hud="7" hudname="NAHI" value="41"/>
+  <LAYOUT desc="Armed Status" enabled="1" hud="7" hudname="NAHI" value="311"/>
+  <LAYOUT desc="MwGPSLatPosition" enabled="1" hud="7" hudname="NAHI" value="272"/>
+  <LAYOUT desc="MwGPSLonPosition" enabled="1" hud="7" hudname="NAHI" value="285"/>
+  <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="7" hudname="NAHI" value="2"/>
+  <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="7" hudname="NAHI" value="17"/>
+  <LAYOUT desc="rssiPosition" enabled="1" hud="7" hudname="NAHI" value="32"/>
+  <LAYOUT desc="temperaturePosition" enabled="0" hud="7" hudname="NAHI" value="213"/>
+  <LAYOUT desc="voltagePosition" enabled="1" hud="7" hudname="NAHI" value="383"/>
+  <LAYOUT desc="vidvoltagePosition" enabled="1" hud="7" hudname="NAHI" value="353"/>
+  <LAYOUT desc="amperagePosition" enabled="1" hud="7" hudname="NAHI" value="361"/>
+  <LAYOUT desc="pMeterSumPosition" enabled="1" hud="7" hudname="NAHI" value="332"/>
+  <LAYOUT desc="horizonPosition" enabled="0" hud="7" hudname="NAHI" value="187"/>
+  <LAYOUT desc="SideBarPosition" enabled="1" hud="7" hudname="NAHI" value="187"/>
+  <LAYOUT desc="SideBarScrollPosition" enabled="1" hud="7" hudname="NAHI" value="187"/>
+  <LAYOUT desc="CallSign Position" enabled="1" hud="7" hudname="NAHI" value="280"/>
+  <LAYOUT desc="Debug Position" enabled="1" hud="7" hudname="NAHI" value="220"/>
+  <LAYOUT desc="Gimbal Position" enabled="0" hud="7" hudname="NAHI" value="122"/>
+  <LAYOUT desc="GPS_time Position" enabled="0" hud="7" hudname="NAHI" value="341"/>
+  <LAYOUT desc="SportPosition" enabled="0" hud="7" hudname="NAHI" value="232"/>
+  <LAYOUT desc="modePosition" enabled="1" hud="7" hudname="NAHI" value="50"/>
+  <LAYOUT desc="MapModePosition" enabled="0" hud="7" hudname="NAHI" value="46"/>
+  <LAYOUT desc="MapCenterPosition" enabled="0" hud="7" hudname="NAHI" value="194"/>
+  <LAYOUT desc="APstatusPosition" enabled="0" hud="7" hudname="NAHI" value="195"/>
+  <LAYOUT desc="Sat indicator" enabled="0" hud="8" hudname="Groundstation" value="32"/>
+  <LAYOUT desc="Direction to home" enabled="0" hud="8" hudname="Groundstation" value="51"/>
+  <LAYOUT desc="Distance" enabled="0" hud="8" hudname="Groundstation" value="54"/>
+  <LAYOUT desc="Speed" enabled="0" hud="8" hudname="Groundstation" value="183"/>
+  <LAYOUT desc="Angle to home" enabled="0" hud="8" hudname="Groundstation" value="144"/>
+  <LAYOUT desc="GPS altitude" enabled="0" hud="8" hudname="Groundstation" value="84"/>
+  <LAYOUT desc="Sensor" enabled="0" hud="8" hudname="Groundstation" value="36"/>
+  <LAYOUT desc="Heading" enabled="0" hud="8" hudname="Groundstation" value="114"/>
+  <LAYOUT desc="Compass" enabled="0" hud="8" hudname="Groundstation" value="40"/>
+  <LAYOUT desc="Altitude" enabled="0" hud="8" hudname="Groundstation" value="203"/>
+  <LAYOUT desc="ClimbRate" enabled="0" hud="8" hudname="Groundstation" value="202"/>
+  <LAYOUT desc="Throttle" enabled="0" hud="8" hudname="Groundstation" value="352"/>
+  <LAYOUT desc="FlyTime" enabled="1" hud="8" hudname="Groundstation" value="382"/>
+  <LAYOUT desc="OnTime" enabled="1" hud="8" hudname="Groundstation" value="382"/>
+  <LAYOUT desc="Armed Status" enabled="0" hud="8" hudname="Groundstation" value="311"/>
+  <LAYOUT desc="Unused" enabled="0" hud="8" hudname="Groundstation" value="272"/>
+  <LAYOUT desc="Unused" enabled="0" hud="8" hudname="Groundstation" value="287"/>
+  <LAYOUT desc="Latitude" enabled="0" hud="8" hudname="Groundstation" value="2"/>
+  <LAYOUT desc="Longitude" enabled="0" hud="8" hudname="Groundstation" value="15"/>
+  <LAYOUT desc="RSSI" enabled="1" hud="8" hudname="Groundstation" value="377"/>
+  <LAYOUT desc="Temperature" enabled="0" hud="8" hudname="Groundstation" value="213"/>
+  <LAYOUT desc="Voltage" enabled="1" hud="8" hudname="Groundstation" value="363"/>
+  <LAYOUT desc="Vid voltage" enabled="0" hud="8" hudname="Groundstation" value="369"/>
+  <LAYOUT desc="Amps" enabled="0" hud="8" hudname="Groundstation" value="369"/>
+  <LAYOUT desc="mAh" enabled="0" hud="8" hudname="Groundstation" value="376"/>
+  <LAYOUT desc="AHI" enabled="0" hud="8" hudname="Groundstation" value="187"/>
+  <LAYOUT desc="Sidebar" enabled="0" hud="8" hudname="Groundstation" value="187"/>
+  <LAYOUT desc="Sidebar arrow" enabled="0" hud="8" hudname="Groundstation" value="187"/>
+  <LAYOUT desc="CallSign" enabled="1" hud="8" hudname="Groundstation" value="280"/>
+  <LAYOUT desc="Debug" enabled="0" hud="8" hudname="Groundstation" value="220"/>
+  <LAYOUT desc="Gimbal" enabled="0" hud="8" hudname="Groundstation" value="122"/>
+  <LAYOUT desc="GPS time" enabled="0" hud="8" hudname="Groundstation" value="341"/>
+  <LAYOUT desc="FRSky cells" enabled="0" hud="8" hudname="Groundstation" value="232"/>
+  <LAYOUT desc="Mode" enabled="0" hud="8" hudname="Groundstation" value="92"/>
+  <LAYOUT desc="Map mode" enabled="0" hud="8" hudname="Groundstation" value="46"/>
+  <LAYOUT desc="Map center" enabled="0" hud="8" hudname="Groundstation" value="195"/>
+  <LAYOUT desc="AP status" enabled="0" hud="8" hudname="Groundstation" value="220"/>
+  <LAYOUT desc="Sat indicator" enabled="0" hud="9" hudname="Standalone" value="32"/>
+  <LAYOUT desc="Direction to home" enabled="0" hud="9" hudname="Standalone" value="51"/>
+  <LAYOUT desc="Distance" enabled="0" hud="9" hudname="Standalone" value="54"/>
+  <LAYOUT desc="Speed" enabled="0" hud="9" hudname="Standalone" value="183"/>
+  <LAYOUT desc="Angle to home" enabled="0" hud="9" hudname="Standalone" value="144"/>
+  <LAYOUT desc="GPS altitude" enabled="0" hud="9" hudname="Standalone" value="84"/>
+  <LAYOUT desc="Sensor" enabled="0" hud="9" hudname="Standalone" value="36"/>
+  <LAYOUT desc="Heading" enabled="0" hud="9" hudname="Standalone" value="114"/>
+  <LAYOUT desc="Compass" enabled="0" hud="9" hudname="Standalone" value="40"/>
+  <LAYOUT desc="Altitude" enabled="0" hud="9" hudname="Standalone" value="203"/>
+  <LAYOUT desc="ClimbRate" enabled="0" hud="9" hudname="Standalone" value="202"/>
+  <LAYOUT desc="Throttle" enabled="0" hud="9" hudname="Standalone" value="352"/>
+  <LAYOUT desc="FlyTime" enabled="1" hud="9" hudname="Standalone" value="382"/>
+  <LAYOUT desc="OnTime" enabled="1" hud="9" hudname="Standalone" value="382"/>
+  <LAYOUT desc="Armed Status" enabled="0" hud="9" hudname="Standalone" value="311"/>
+  <LAYOUT desc="Unused" enabled="0" hud="9" hudname="Standalone" value="272"/>
+  <LAYOUT desc="Unused" enabled="0" hud="9" hudname="Standalone" value="287"/>
+  <LAYOUT desc="Latitude" enabled="0" hud="9" hudname="Standalone" value="2"/>
+  <LAYOUT desc="Longitude" enabled="0" hud="9" hudname="Standalone" value="15"/>
+  <LAYOUT desc="RSSI" enabled="1" hud="9" hudname="Standalone" value="354"/>
+  <LAYOUT desc="Temperature" enabled="0" hud="9" hudname="Standalone" value="213"/>
+  <LAYOUT desc="Voltage" enabled="1" hud="9" hudname="Standalone" value="363"/>
+  <LAYOUT desc="Vid voltage" enabled="1" hud="9" hudname="Standalone" value="333"/>
+  <LAYOUT desc="Amps" enabled="1" hud="9" hudname="Standalone" value="369"/>
+  <LAYOUT desc="mAh" enabled="1" hud="9" hudname="Standalone" value="376"/>
+  <LAYOUT desc="AHI" enabled="0" hud="9" hudname="Standalone" value="187"/>
+  <LAYOUT desc="Sidebar" enabled="0" hud="9" hudname="Standalone" value="187"/>
+  <LAYOUT desc="Sidebar arrow" enabled="0" hud="9" hudname="Standalone" value="187"/>
+  <LAYOUT desc="CallSign" enabled="1" hud="9" hudname="Standalone" value="280"/>
+  <LAYOUT desc="Debug" enabled="0" hud="9" hudname="Standalone" value="220"/>
+  <LAYOUT desc="Gimbal" enabled="0" hud="9" hudname="Standalone" value="122"/>
+  <LAYOUT desc="GPS time" enabled="0" hud="9" hudname="Standalone" value="341"/>
+  <LAYOUT desc="FRSky cells" enabled="0" hud="9" hudname="Standalone" value="232"/>
+  <LAYOUT desc="Mode" enabled="0" hud="9" hudname="Standalone" value="92"/>
+  <LAYOUT desc="Map mode" enabled="0" hud="9" hudname="Standalone" value="46"/>
+  <LAYOUT desc="Map center" enabled="0" hud="9" hudname="Standalone" value="195"/>
+  <LAYOUT desc="AP status" enabled="0" hud="9" hudname="Standalone" value="220"/>
+</HUDLAYOUTS>

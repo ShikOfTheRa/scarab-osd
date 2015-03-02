@@ -1,0 +1,44 @@
+/*
+
+Credits for the many who developed this software for the Multiwii community:
+
+Code contributors:
+Jean Gabriel Maurice - Johhnygab
+Itai Nahshon - Itai
+Carlo Nebuloni - Carlonb
+Ross Power - Power67 for introduction of main GUI
+Gary Moscardini - Shikra
+Hayden Thring - Haydent
+Liam O'Brien - LIMA2317
+Andi Sch
+PatrikE
+Okan Vitaliy
+Bicycle
+Henrique - Katawentos
+
+Other Projects and their contributions
+Ardupilot team - some of the original code is probably from / based upon elements of ardupilot team. e.g. GPS
+Arducam-osd - also probably some code / ideas came from here in past
+MultiWii
+Please check all their excellent projects. 
+Acknowledge and support contributions from these open source teams and developers
+
+Special thanks to other contributors - testing / feedback / User help:
+Deet
+Subaru4WD
+HFman
+
+
+Also special thanks:
+Alex Dubus - AlexinParis - For MultiWii and inspiration!
+www.multiwiicopter.com for providing hardware to test
+www.dtuhf.com for providing hardware to test
+
+Please check the above  
+
+
+
+
+Please report any missing names and aplogies if not already included...
+
+*/
