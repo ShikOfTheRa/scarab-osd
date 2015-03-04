@@ -67,7 +67,6 @@ uint16_t UntouchedStack(void)
 #define MWVERS "MULTIWII MWOSD - R1.3"  
 #define MWOSDVER 5      // for eeprom layout verification      
 #include <avr/pgmspace.h>
-#include "def.h"
 #include <EEPROM.h>
 #include "Config.h"
 #include "symbols.h"
