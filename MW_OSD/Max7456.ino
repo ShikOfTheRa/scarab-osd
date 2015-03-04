@@ -243,11 +243,6 @@ volatile unsigned char vsync_wait = 0;
 
 void MAX7456_DrawScreen()
 {
-#ifdef USE_VSYNC
-  vsync_wait = 1;
-  while (vsync_wait)
-  ;
-#endif
 int xx;
 #ifdef USE_VSYNC
   digitalWrite(MAX7456SELECT,LOW);
@@ -258,15 +253,21 @@ int xx;
   spi_transfer(DMAL_reg);
   spi_transfer(0);
 #else
-digitalWrite(MAX7456SELECT,LOW);
+  digitalWrite(MAX7456SELECT,LOW);
 #endif
 
   digitalWrite(MAX7456SELECT,LOW);
-  for(xx=0;xx<MAX_screen_size;++xx)
-  {
+
+#ifdef USE_VSYNC
+  vsync_wait = 1;
+#endif
+  for(xx=0;xx<MAX_screen_size;++xx){
 #ifndef USE_VSYNC
     MAX7456_Send(MAX7456ADD_DMAH, xx>>8);
     MAX7456_Send(MAX7456ADD_DMAL, xx);
+#else
+  if (xx==200) vsync_wait = 1;
+  while (vsync_wait);
 #endif
 #ifdef OSD_SWITCH_RC 
   if ((MwRcData[OSD_SWITCH_RC] > 1400) && (MwRcData[OSD_SWITCH_RC] < 1600))
