@@ -114,7 +114,7 @@
 /********************       Display Settings         ************************/
 //#define AUTOCAM                   // Enable autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings. Not recommended for > 600TVL cameras
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
-//#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
+#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
@@ -163,8 +163,11 @@
 
 
 /********************  CONTROLLER rule definitions  **********************/
-#if defined(BASEFLIGHT) || defined(CLEANFLIGHT)                      
+#ifdef BASEFLIGHT                    
     #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
+    #define HEADINGCORRECT          // required to correct for MWheading being 0>360 vs MWII -180>+180
+#endif
+#ifdef CLEANFLIGHT                      
     #define HEADINGCORRECT          // required to correct for MWheading being 0>360 vs MWII -180>+180
 #endif
 #if defined(HARIKIRI) || defined(MULTIWII_V21)                     
