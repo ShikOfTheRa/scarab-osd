@@ -202,7 +202,7 @@ void displayMode(void)
     }
    else{
       screenBuffer[2]=0;
-      #if defined FIXEDWING
+      #ifdef FIXEDWING
         screenBuffer[0]=SYM_ACROGY;
       #else
         screenBuffer[0]=SYM_ACRO;

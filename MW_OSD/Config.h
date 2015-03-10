@@ -30,7 +30,7 @@
 
 /********************       AIRCRAFT settings      *********************/
 //#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE 
-
+//#define USEGPSHEADING             // Undefine this to use GPS course for heading instead of MAG (mandatory for Naze  ACRO) 
 
 /********************       HARDWARE CURRENT sensor settings      *********************/
 #define AMPERAGEMAX     500         // Size of current sensor / maximum current draw (* 10) e.g. 50A sensor = 500, 100A sensor = 1000
@@ -84,11 +84,11 @@
 
 
 /********************       STARTUP settings      *********************/
-//#define INTRO_VERSION               "SHIKI OSD - R1.3" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+#define INTRO_VERSION               "SHIKI OSD - R1.3FW" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
-#define INTRO_MENU                  // Enable to display TX stick MENU 
+//#define INTRO_MENU                  // Enable to display TX stick MENU 
 //#define STARTUPDELAY 2000         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
 
@@ -165,19 +165,18 @@
 /********************  CONTROLLER rule definitions  **********************/
 #ifdef BASEFLIGHT                    
     #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
-    #define HEADINGCORRECT          // required to correct for MWheading being 0>360 vs MWII -180>+180
 #endif
 #ifdef CLEANFLIGHT                      
-    #define HEADINGCORRECT          // required to correct for MWheading being 0>360 vs MWII -180>+180
 #endif
 #if defined(HARIKIRI) || defined(MULTIWII_V21)                     
     #define BOXNAMES                // required to support legacy protocol
 #endif
 #ifdef MULTIWII_V24                     
-    #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
 #endif
 #ifdef FIXEDWING                     
 #endif
+
+#define HEADINGCORRECT          // required to correct for MWheading being 0>360 vs MWII -180>+180. Can be permanently enabled
 
 
 
