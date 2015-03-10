@@ -445,6 +445,7 @@ int32_t GPS_latitude;
 int32_t GPS_longitude;
 int16_t GPS_altitude;
 uint16_t GPS_speed;
+int16_t  GPS_ground_course;
 uint16_t old_GPS_speed;
 int16_t GPS_directionToHome=0;
 uint8_t GPS_numSat=0;
@@ -609,7 +610,7 @@ const char message0[] PROGMEM = MWVERS;
 #endif
 //const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
 //const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
-const char message5[]  PROGMEM = "MW VERSION:";
+const char message5[]  PROGMEM = "FW VERSION:";
 const char message6[]  PROGMEM = "OPEN MENU: THRT MIDDLE";
 const char message7[]  PROGMEM = "+YAW RIGHT";
 const char message8[]  PROGMEM = "+PITCH FULL";

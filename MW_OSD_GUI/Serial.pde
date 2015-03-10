@@ -462,6 +462,7 @@ void SendCommand(int cmd){
         if(toggleModeItems[8].getValue()> 0) modebits |=1<<20;
         if(toggleModeItems[9].getValue()> 0) modebits |=1<<19;
 //        if(toggleModeItems[8].getValue()> 0) modebits |=1<<16; //Also send LLIGHTS when OSD enabled - for testing
+//        if(toggleModeItems[5].getValue()> 0) modebits |=1<<12; //Also send PASS when CAMSTAB enabled - for testing
         serialize32(modebits);
         serialize8(0);   // current setting
         tailSerialReply();

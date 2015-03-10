@@ -159,13 +159,13 @@ void serialMSPCheck()
     GPS_latitude = read32();
     GPS_longitude = read32();
     GPS_altitude = read16();
-
 #if defined I2CGPS_SPEED
     GPS_speed = read16()*10;
 //    gpsfix(); untested
 #else
     GPS_speed = read16();
 #endif
+    GPS_ground_course = read16();
   }
 
   if (cmdMSP==MSP_COMP_GPS)
@@ -197,11 +197,15 @@ void serialMSPCheck()
   {
     for(uint8_t i=0;i<2;i++)
       MwAngle[i] = read16();
+#ifdef USEGPSHEADING
+    MwHeading = GPS_ground_course;
+#else    
     MwHeading = read16();
+#endif
 #ifdef HEADINGCORRECT
     if (MwHeading >= + 180) MwHeading -= 360;
 #endif
-    read16();
+//    read16();
   }
 
 #if defined DEBUGMW
