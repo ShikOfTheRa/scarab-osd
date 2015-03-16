@@ -14,7 +14,9 @@ An Multipurpose Open Source OSD software with support for:
 <li>GROUNDSTATION OSD</li>
 </ul>
 <br>
-<li><a href='Downloads.md'>Downloads</a>  <a href='Features.md'>Features</a>  <a href='User_Guide.md'>User Guide</a></li>
+<li><a href='Downloads.md'>Downloads</a></li>
+<li><a href='Features.md'>Features</a></li>
+<li><a href='User_Guide.md'>User Guide</a></li>
 <li><a href='Calibration.md'>Calibration guide</a></li>
 <a href='http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI'>Support</a>  <a href='http://www.multiwii.com/forum/viewtopic.php?f=8&t=4865'>Development</a>
 
