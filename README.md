@@ -13,9 +13,10 @@ An Multipurpose Open Source OSD software with support for:
 <li>STANDALONE BASIC OSD</li>
 <li>GROUNDSTATION OSD</li>
 </ul>
-<br>
 <ul class="task-list">
-<li><a href='Downloads.md'>Downloads</a></li>
+<li><a href='Downloads.md'>Download</a></li>
+</ul>
+<ul class="task-list">
 <li><a href='Features.md'>Features</a></li>
 <li><a href='User_Guide.md'>User Guide</a></li>
 <li><a href='Calibration.md'>Calibration guide</a></li>
