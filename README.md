@@ -3,15 +3,17 @@
 ## MWOSD NextGeneration ##
 
 An Multipurpose Open Source OSD software with support for:
-<li>MULTIWII<br>
-<li>BASEFLIGHT<br>
-<li>CLEANFLIGHT<br>
-<li>HARIKIRI<br>
-<li>FIXEDWING<br>
-<li>STANDALONE GPS OSD<br>
-<li>STANDALONE BASIC OSD<br>
-<li>GROUNDSTATION OSD<br>
-</li>
+<ul class="task-list">
+<li>MULTIWII</li>
+<li>BASEFLIGHT</li>
+<li>CLEANFLIGHT</li>
+<li>HARIKIRI</li>
+<li>FIXEDWING</li>
+<li>STANDALONE GPS OSD</li>
+<li>STANDALONE BASIC OSD</li>
+<li>GROUNDSTATION OSD</li>
+</ul>
+
 <br>
 <br>
 <a href='Downloads.md'>Downloads</a>  <a href='Features.md'>Features</a>  <a href='User_Guide.md'>User Guide</a>  <a href='Calibration.md'>Calibration guide</a>  <a href='http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI'>Support</a>  <a href='http://www.multiwii.com/forum/viewtopic.php?f=8&t=4865'>Development</a>
