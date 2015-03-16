@@ -14,7 +14,7 @@ An Multipurpose Open Source OSD software with support for:
 <li>GROUNDSTATION OSD</li>
 </ul>
 <ul class="task-list">
-<li><a href='Downloads.md'>Download</a></li>
+<li><a href='Downloads.md'>DOWNLOAD</a></li>
 </ul>
 <ul class="task-list">
 <li><a href='Features.md'>Features</a></li>
