@@ -19,7 +19,16 @@ An Multipurpose Open Source OSD software with support for:
 <li><a href='Features.md'>Features</a></li>
 <li><a href='User_Guide.md'>User Guide</a></li>
 <li><a href='Calibration.md'>Calibration guide</a></li>
-<a href='http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI'>Support</a>  <a href='http://www.multiwii.com/forum/viewtopic.php?f=8&t=4865'>Development</a>
+
+<li><a href='Credits.md'>Credits</a></li>
+<li><a href='FAQ.md'>FAQ</a></li>
+<li><a href='Frsky_SPort.md'>FRSKY Smart Port guide</a></li>
+<li><a href='Frsky_SPort_Host.md'>FRSKY without Smart Port guide</a></li>
+<li><a href='GPSTime.md'>GPS Time display guide</a></li>
+
+
+<li><a href='http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI'>Support</a></li>
+<li><a href='http://www.multiwii.com/forum/viewtopic.php?f=8&t=4865'>Development</a></li>
 </ul>
 
 <a href='http://www.youtube.com/watch?feature=player_embedded&v=FCIyhbT1kK0' target='_blank'><img src='http://img.youtube.com/vi/FCIyhbT1kK0/0.jpg' width='425' height=344 /></a><br>
