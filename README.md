@@ -17,7 +17,7 @@ An Multipurpose Open Source OSD software with support for:
 <li><a href='Downloads.md'>DOWNLOAD</a></li>
 </ul>
 <ul class="task-list">
-<li><a href='Features.md'>Features</a></li>
+<li><a href='scarab-osd/blob/wiki/Features.md'>Features</a></li>
 <li><a href='User_Guide.md'>User Guide</a></li>
 <li><a href='Calibration.md'>Calibration guide</a></li>
 
