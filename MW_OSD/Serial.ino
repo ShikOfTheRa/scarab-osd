@@ -92,6 +92,35 @@ void serialMSPCheck()
       setMspRequests();
      }
 
+    if (cmd == OSD_WRITE_EE) {
+      uint8_t eeaddress = read8();
+      uint8_t eedataa = read8();
+      MSP_OSD_timer=1000+millis();
+      settingsMode=1;
+
+      uint8_t txCheckSum, txSize;
+      headSerialRequest();
+      txCheckSum=0;
+      txSize = 3;
+      Serial.write(txSize);
+      txCheckSum ^= txSize;
+      Serial.write(MSP_OSD);
+      txCheckSum ^= MSP_OSD;
+      Serial.write(cmd);
+      txCheckSum ^= cmd;
+      Serial.write(eeaddress);
+      txCheckSum ^= eeaddress;
+      Serial.write(eedataa);
+      txCheckSum ^= eedataa;
+      Serial.write(txCheckSum);    
+
+      EEPROM.write(eeaddress,eedataa);
+      if (eeaddress==EEPROM_SETTINGS){
+        EEPROM.write(0,MWOSDVER);
+        readEEPROM();
+      }
+    }
+
 
     if(cmd == OSD_GET_FONT) {
       if(dataSize == 5) {
