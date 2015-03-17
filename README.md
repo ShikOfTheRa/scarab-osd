@@ -5,12 +5,8 @@
 An Multipurpose Open Source OSD software with support for:
 <ul class="task-list">
 <li>MULTIWII</li>
-<li>BASEFLIGHT</li>
-<li>CLEANFLIGHT</li>
-<li>HARIKIRI</li>
-<li>FIXEDWING</li>
+<li>BASEFLIGHT CLEANFLIGHT HARIKIRI FIXEDWING</li>
 <li>STANDALONE GPS OSD</li>
-<li>STANDALONE BASIC OSD</li>
 <li>GROUNDSTATION OSD</li>
 </ul>
 <ul class="task-list">
