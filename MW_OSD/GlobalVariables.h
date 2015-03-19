@@ -124,6 +124,8 @@ uint16_t cell_data[6]={0,0,0,0,0,0};
 uint16_t cycleTime;
 uint16_t I2CError;
 uint8_t oldROW=0;
+uint8_t eeaddress = read8();
+uint8_t eedata = read8();
 
 // Config status and cursor location
 uint8_t screenlayout=0;
@@ -289,7 +291,7 @@ MWOSDVER,   // used for check              0
 0,   // GPStime                     37a
 0,   // GPSTZ +/-                   37b
 0,   // GPSTZ                       37c
-0,   // DEBUG                       37e
+1,   // DEBUG                       37e
 1,   // SCROLLING LADDERS           37f
 1,   // SHOW GIMBAL ICON            37g
 1,   // SHOW VARIO                  37h
@@ -794,7 +796,7 @@ uint16_t screenPosition[POSITIONS_SETTINGS];
 #define REQ_MSP_DEBUG     (1 << 13)
 #define REQ_MSP_CELLS     (1 << 14)
 #define REQ_MSP_NAV_STATUS  32768 //(1 << 15)
-
+#define REQ_MSP_SETTINGS    65536 //(1 << 16)
 // Menu
 //PROGMEM const char *menu_stats_item[] =
 const PROGMEM char * const menu_stats_item[] =

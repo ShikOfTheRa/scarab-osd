@@ -87,7 +87,7 @@
 #define INTRO_VERSION               "SHIKI OSD - R1.3FW" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
-//#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
+#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
 //#define INTRO_MENU                  // Enable to display TX stick MENU 
 //#define STARTUPDELAY 2000         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
@@ -114,7 +114,7 @@
 /********************       Display Settings         ************************/
 //#define AUTOCAM                   // Enable autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings. Not recommended for > 600TVL cameras
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
-#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
+//#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
@@ -236,6 +236,6 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-//#define DEBUG         // Enable/disable option to display OSD debug values 
+#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 

@@ -98,7 +98,7 @@ void setup()
   pinMode(RSSIPIN, INPUT);
   pinMode(LEDPIN,OUTPUT);
 
-//  EEPROM.write(0,0); //;test
+  EEPROM.write(0,0); //;test
   checkEEPROM();
   readEEPROM();
   
@@ -226,6 +226,9 @@ void loop()
       case REQ_MSP_FONT:
          MSPcmdsend = MSP_OSD;
          break;
+      case REQ_MSP_SETTINGS:
+         MSPcmdsend = MSP_OSD;
+         break;
 #if defined DEBUGMW
       case REQ_MSP_DEBUG:
          MSPcmdsend = MSP_DEBUG;
@@ -244,7 +247,8 @@ void loop()
     if  (MSP_OSD_timer<millis()){
       settingsMode=0;
     }
-    if(!fontMode && (settingsMode==0)){
+//    if(!fontMode && (settingsMode==0)){
+    if(!fontMode){
       blankserialRequest(MSPcmdsend);      
     }
 
@@ -474,6 +478,9 @@ void (* resetFunc)(void)=0;
 void setMspRequests() {
   if(fontMode) {
     modeMSPRequests = REQ_MSP_FONT;
+  }
+  else if(settingsMode) {
+    modeMSPRequests = REQ_MSP_SETTINGS;
   }
   else if(configMode) {
     modeMSPRequests = 
