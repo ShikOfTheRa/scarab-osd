@@ -18,6 +18,8 @@ To navigate the OSD:<br>
 <b>How to - connecting to CLEANFLIGHT FC from Tr3TopFlyer</b>
 <li><a href='https://drive.google.com/file/d/0B2MInRUrbpWxUjdmdXJIWkRZY0k/view?usp=sharing'>https://drive.google.com/file/d/0B2MInRUrbpWxUjdmdXJIWkRZY0k/view?usp=sharing</a>  </li>
 
+<b>How to - [flash the MW OSD firmware to your OSD](https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/FirmwareFlashing.md)</b>
+
 <hr />
 <h1>MW OSD GUI quick reference guide</h1>
 
