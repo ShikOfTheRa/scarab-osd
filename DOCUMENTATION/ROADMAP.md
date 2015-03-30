@@ -1,4 +1,6 @@
-Known BUGS:
+---
+
+## Known issues: ##
 
 BUG! "Use MW" options not saving backup file (single entry key)....
 
@@ -8,9 +10,9 @@ BUG! Compass OK, but home arrow is inconsistent in fixedwing mode
 
 BUG! compile errors for GPS in soem Arduino versions
 
+---
 
-
-Enhancement requests for future releases:
+## Enhancement requests for future releases: ##
 
 GUI support for FC passthrough configuration settings (access OSD config via FC) 
 
@@ -72,7 +74,7 @@ Remove references to MultiWii (as no longer exclusively MultiWii)
 Impelement more desciptive "help" test within confih.h
 
 
-GUI:
+## GUI: ##
 Display anal / PWM sensors on GUI - via MW OSD protocol
 
 RSSI calibration button
@@ -91,9 +93,6 @@ Improved heading / pitch& roll graphics
 Code quality:
 
  - Tidy up float calcs
- - 
  - Generally review and improve code quality
- - 
  - Memory improvements
- - 
  
