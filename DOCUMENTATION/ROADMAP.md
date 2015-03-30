@@ -10,6 +10,8 @@ BUG! Compass OK, but home arrow is inconsistent in fixedwing mode
 
 BUG! compile errors for GPS in soem Arduino versions
 
+BUG! PID menu options after row 5 are incorrect. e.g. level does not show level settings
+
 ---
 
 ## Enhancement requests for future releases: ##
