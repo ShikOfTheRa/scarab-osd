@@ -16,7 +16,7 @@ BUG! PID menu options after row 5 are incorrect. e.g. level does not show level 
 
 ## Enhancement requests for future releases: ##
 
-GUI support for FC passthrough configuration settings (access OSD config via FC) 
+Ability to amend all PID settings from menu
 
 add max distance to summary
 
@@ -77,6 +77,9 @@ Impelement more desciptive "help" test within confih.h
 
 
 ## GUI: ##
+
+GUI support for FC passthrough configuration settings (access OSD config via FC) 
+
 Display anal / PWM sensors on GUI - via MW OSD protocol
 
 RSSI calibration button
