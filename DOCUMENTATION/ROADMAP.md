@@ -68,6 +68,8 @@ Fixedwing - use GPS data for ladders / vario
 
 Support for APM
 
+Show basefligth/cleanflight profile in use
+
 
 Other changes
 
