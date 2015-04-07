@@ -162,9 +162,8 @@ void loop()
   if((currentMillis - previous_millis_low) >= lo_speed_cycle)  // 10 Hz (Executed every 100ms)
   {
     previous_millis_low = previous_millis_low+lo_speed_cycle;    
-    if(!fontMode && (settingsMode==0)){
+    if(!fontMode)
       blankserialRequest(MSP_ATTITUDE);
-    }
 
    }  // End of slow Timed Service Routine (100ms loop)
 
@@ -241,10 +240,7 @@ void loop()
          MSPcmdsend = MSP_NAV_STATUS;
       break;
     }
-    if  (MSP_OSD_timer<millis()){
-      settingsMode=0;
-    }
-    if(!fontMode && (settingsMode==0)){
+    if(!fontMode){
       blankserialRequest(MSPcmdsend);      
     }
 

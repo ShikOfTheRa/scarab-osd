@@ -590,10 +590,7 @@ uint16_t flyingTime=0;
 #define OSD_RESET                5
 #define OSD_DEFAULT              6
 #define OSD_SENSORS              7
-#define OSD_WRITE_EE             8
 // End private MSP for use with the GUI
-uint32_t MSP_OSD_timer=0;
-uint8_t settingsMode=0;
 
 const char disarmed_text[] PROGMEM  = "DISARMED";
 const char armed_text[] PROGMEM     = " ARMED";
