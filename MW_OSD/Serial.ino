@@ -93,16 +93,28 @@ void serialMSPCheck()
      }
 
     if (cmd == OSD_WRITE_EE) {
-      eeaddress = read8();
-      eedata = read8();
-      debug[0]++;
-      debug[1]=eeaddress;
-      debug[2]=eedata;
-      
-      MSP_OSD_timer=250+millis();
+      uint8_t eeaddress = read8();
+      uint8_t eedataa = read8();
+      MSP_OSD_timer=1000+millis();
       settingsMode=1;
 
-      EEPROM.write(eeaddress,eedata);
+      uint8_t txCheckSum, txSize;
+      headSerialRequest();
+      txCheckSum=0;
+      txSize = 3;
+      Serial.write(txSize);
+      txCheckSum ^= txSize;
+      Serial.write(MSP_OSD);
+      txCheckSum ^= MSP_OSD;
+      Serial.write(cmd);
+      txCheckSum ^= cmd;
+      Serial.write(eeaddress);
+      txCheckSum ^= eeaddress;
+      Serial.write(eedataa);
+      txCheckSum ^= eedataa;
+      Serial.write(txCheckSum);    
+
+      EEPROM.write(eeaddress,eedataa);
       if (eeaddress==EEPROM_SETTINGS){
         EEPROM.write(0,MWOSDVER);
         readEEPROM();
@@ -741,13 +753,8 @@ void configSave()
 
 void blankserialRequest(uint8_t requestMSP)
 {
-  if(requestMSP == MSP_OSD) {
-    if (fontMode) {
-      fontSerialRequest();
-    }
-    else{
-      settingsSerialRequest();    
-    }
+  if(requestMSP == MSP_OSD && fontMode) {
+    fontSerialRequest();
     return;
   }
   headSerialRequest();
@@ -775,27 +782,6 @@ void fontSerialRequest() {
   txCheckSum ^= cindex>>8;
   Serial.write(txCheckSum);
 }
-
-
-void settingsSerialRequest() {
-  uint8_t txCheckSum, txSize;
-  headSerialRequest();
-  txCheckSum=0;
-  txSize = 2 + 1;
-  Serial.write(txSize);
-  txCheckSum ^= txSize;
-  Serial.write(MSP_OSD);
-  txCheckSum ^= MSP_OSD;
-  Serial.write(OSD_WRITE_EE);
-  txCheckSum ^= OSD_WRITE_EE;
-  Serial.write(eeaddress);
-  txCheckSum ^= eeaddress;
-  Serial.write(eedata);
-  txCheckSum ^= eedata;
-  Serial.write(txCheckSum);  
-  Serial.flush();
-}
-
 
 void headSerialRequest (void) {
   Serial.write('$');
