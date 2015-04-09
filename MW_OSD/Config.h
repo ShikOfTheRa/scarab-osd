@@ -19,8 +19,8 @@
 
 /********************       CONTROLLER SOFTWARE      *********************/
 //Choose ONLY ONE option:-
-//#define MULTIWII_V24              // Undefine this if you are using MW versions 2.4  
-#define MULTIWII_V23                // Undefine this if you are using MW versions 2.2/2.3  
+#define MULTIWII_V24              // Undefine this if you are using MW versions 2.4  
+//#define MULTIWII_V23                // Undefine this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
 //#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT with 32bit hardware for compatibility with heading and current data
 //#define CLEANFLIGHT               // Undefine this if you are using CLEANFLIGHT with 32bit hardware for compatibility with heading and current data
@@ -236,6 +236,6 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-//#define DEBUG         // Enable/disable option to display OSD debug values 
+#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 

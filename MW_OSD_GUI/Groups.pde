@@ -396,7 +396,29 @@ G_TIME = GroupcontrolP5.addGroup("G_TIME")
                 G_TIME.captionLabel()
                 .toUpperCase(false)
                 .align(controlP5.CENTER,controlP5.CENTER)
+                ;   
+           
+G_INFO = GroupcontrolP5.addGroup("G_INFO")
+                .setPosition(windowsX/2,windowsY/2)
+                .setWidth(Col3Width+10)
+                .setColorForeground(yellow_)
+//                .setColorBackground(blue_)
+                .setColorLabel(color(0, 110, 220))
+                .setBarHeight(0)
+                .setBackgroundColor(blue_)
+                .setColorActive(red_)
+                .setBackgroundHeight((3*17) +5)
+                .setLabel("")
+                .hide()
+
+                //.setGroup(SG)
+                .disableCollapse() 
+                ; 
+                G_TIME.captionLabel()
+                .toUpperCase(false)
+                .align(controlP5.CENTER,controlP5.CENTER)
                 ;        
+     
 /*
 G_SPORT = GroupcontrolP5.addGroup("G_SPORT")
                 .setPosition(XSPORT,YSPORT)

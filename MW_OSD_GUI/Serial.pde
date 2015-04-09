@@ -101,7 +101,9 @@ private static final int
   OSD_GET_FONT             =3,
   OSD_SERIAL_SPEED         =4,
   OSD_RESET                =5,
-  OSD_DEFAULT              =6;
+  OSD_DEFAULT              =6,
+  OSD_WRITE_CMD_EE         =8,
+  OSD_READ_CMD_EE          =9;
 
 
 // initialize the serial port selected in the listBox
@@ -128,8 +130,9 @@ void InitSerial(float portValue) {
      
 
       SendCommand(MSP_STATUS);
-       READ();
-       ReadConfig=100;  
+       eeaddressGUI=0;   
+       ReadConfigMSPMillis=20000+millis();  
+       READconfigMSP_init();
        } catch (Exception e) { // null pointer or serial port dead
          noLoop();
         JOptionPane.showConfirmDialog(null,"Error Opening Port It may be in Use", "Port Error", JOptionPane.PLAIN_MESSAGE,JOptionPane.WARNING_MESSAGE);
@@ -222,14 +225,17 @@ void BounceSerial(){
 
 void RESTART(){
   toggleMSP_Data = true;
-  for (int txTimes = 0; txTimes<2; txTimes++) {
+  for (int txTimes = 0; txTimes<3; txTimes++) {
     headSerialReply(MSP_OSD, 1);
     serialize8(OSD_RESET);
     tailSerialReply();
+    delay(100);
   }
   toggleMSP_Data = false;
-  READinit();
-  ReadConfig=100;
+  READconfigMSP_init();
+//  READinit();
+//  eeaddressGUI=0;   
+//  ReadConfigMSPMillis=20000+millis();  
 }  
 
 public void READ(){
@@ -392,7 +398,8 @@ public void SendChar(){
 //      System.out.println("Finished Uploading Font");
       buttonSendFile.getCaptionLabel().setText("  Upload");
       txtmessage.setText("");
-      READinit();
+      READconfigMSP_init();
+//      READinit();
       ReadConfig=100;
       RESTART();
     } 
@@ -409,13 +416,15 @@ public void DEFAULT(){
     switch (Reset_result) {
       case JOptionPane.YES_OPTION:
         toggleMSP_Data = true;
-        for (int txTimes = 0; txTimes<2; txTimes++) {
+        for (int txTimes = 0; txTimes<3; txTimes++) {
           headSerialReply(MSP_OSD, 1);
           serialize8(OSD_DEFAULT);
           tailSerialReply();
+          delay(100);
         }
         toggleMSP_Data = false;
-        READinit();
+//        READinit();
+        READconfigMSP_init();
 //        delay(2000);     
         ReadConfig=100;
         return;
@@ -766,6 +775,42 @@ public void evaluateCommand(byte cmd, int size) {
         if(cmd_internal == OSD_NULL) {
         }
 
+        if(cmd_internal == OSD_READ_CMD_EE) { // response to a read / write request
+//            System.out.print(" "+size+" ");
+          if(size == 2) { // confirmed write request received
+            eeaddressOSD=read8();
+            eeaddressOSD=eeaddressOSD+read8();
+            if (eeaddressOSD>=eeaddressGUI){ // update base address
+              eeaddressGUI=eeaddressOSD;
+            }
+            if (eeaddressGUI>(CONFIGITEMS + (hudoptions*2*2))){ // hit end address
+//            if (eeaddressGUI>=(CONFIGITEMS)){ // hit end address config only
+              WriteConfigMSPMillis=0;
+            }
+          }
+          else{ // confirmed write request received
+          for(int i=0; i<10; i++) {
+            eeaddressOSD=read8();
+            eeaddressOSD=eeaddressOSD+read8();
+            eedataOSD=read8();
+            if (eeaddressOSD<CONFIGITEMS){
+              SetConfigItem(eeaddressOSD, eedataOSD);
+            }
+            if (eeaddressOSD==GetSetting("S_AMPMAXH")){ // 16 bit value amps manipulation now received all data
+              S16_AMPMAX=(int(confItem[GetSetting("S_AMPMAXH")].value())<<8)+ int(confItem[GetSetting("S_AMPMAXL")].value()); 
+              SetConfigItem(GetSetting("S_AMPDIVIDERRATIO"), (int) S16_AMPMAX);
+            }
+            if (eeaddressOSD==eeaddressGUI){ // update base address
+              eeaddressGUI++;
+            }
+          }
+//            if (eeaddressGUI>(CONFIGITEMS + (hudoptions*2*2))){ // hit end address
+            if (eeaddressGUI>=(CONFIGITEMS)){ // hit end address config only
+              ReadConfigMSPMillis=0;
+            }
+          }
+        }
+
         if(cmd_internal == OSD_READ_CMD) {
           if(size == 1) {
           }
@@ -980,3 +1025,93 @@ void MWData_Com() {
       }
     }
 }
+
+  public void READconfigMSP_init(){
+    SimControlToggle.setValue(0);
+    ReadConfigMSPMillis=1000+millis(); 
+    eeaddressGUI=0;   
+  }
+
+  public void READconfigMSP(){
+  toggleMSP_Data = true;
+  inBuf[0] = OSD_WRITE_CMD;
+  for (int txTimes = 0; txTimes<1; txTimes++) {
+    headSerialReply(MSP_OSD, 4);
+    serialize8(OSD_READ_CMD_EE);
+    int tmpeeadd = eeaddressGUI&0xFF;
+    serialize8(tmpeeadd);
+    tmpeeadd = eeaddressGUI>>8;
+    serialize8(tmpeeadd);
+    serialize8(99);
+    tailSerialReply();
+  }
+//  toggleMSP_Data = false; //???????????????????
+  ReadConfigMSPMillis=1000+millis(); 
+}
+
+  public void WRITEconfigMSP_init(){
+    eeaddressGUI=0;  
+    CheckCallSign(); 
+    EElookuptableReSet();
+    WriteConfigMSPMillis=1000+millis(); 
+  }
+
+  public void WRITEconfigMSP(){
+  SimControlToggle.setValue(0);
+  toggleMSP_Data = true;
+  inBuf[0] = OSD_WRITE_CMD;
+  for (int txTimes = 0; txTimes<1; txTimes++) {
+    headSerialReply(MSP_OSD, 1 + (3*10));
+    serialize8(OSD_WRITE_CMD_EE);
+    for(int i=0; i<10; i++) {
+      int tmpeeadd = (i+eeaddressGUI)&0xFF;
+      serialize8(tmpeeadd);
+      tmpeeadd = (i+eeaddressGUI)>>8;
+      serialize8(tmpeeadd);
+      serialize8(EElookuptable[i+eeaddressGUI]);
+//      System.out.println(eeaddressGUI+i+":"+EElookuptable[i+eeaddressGUI]);
+    }
+    tailSerialReply();
+  }
+
+//  toggleMSP_Data = false; //???????????????????
+  WriteConfigMSPMillis=1000+millis(); 
+}
+
+  public void EElookuptableReSet(){ // preparing for a write
+    confItem[GetSetting("S_AMPMAXL")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())&0xFF); // for 8>>16 bit EEPROM
+    confItem[GetSetting("S_AMPMAXH")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())>>8);
+    for(int i = 0; i < CONFIGITEMS; i++){
+      if(i == GetSetting("S_GPSTZ")){
+        EElookuptable[i]=int(confItem[i].value()*10);
+      }
+      else if(i == GetSetting("S_AMPDIVIDERRATIO")){
+        EElookuptable[i]=0;
+      }
+      else{
+        EElookuptable[i]=int(confItem[i].value());
+      }
+
+    }
+//     for(int i = 0; i < (hudoptions); i++){
+//       ConfigLayout[0][i]=CONFIGHUD[int(confItem[GetSetting("S_HUD")].value())][i];
+//       ConfigLayout[1][i]=CONFIGHUD[int(confItem[GetSetting("S_HUDOSDSW")].value())][i];
+//     }
+
+     int EElookuptableaddress=CONFIGITEMS;
+     for(int i = 0; i < (hudoptions); i++){
+       EElookuptable[EElookuptableaddress]=int(ConfigLayout[0][i]&0xFF);
+       EElookuptableaddress++;
+       EElookuptable[EElookuptableaddress]=int(ConfigLayout[0][i]>>8);
+       EElookuptableaddress++;
+     }
+     for(int i = 0; i < (hudoptions); i++){
+       EElookuptable[EElookuptableaddress]=int(ConfigLayout[1][i]&0xFF);
+       EElookuptableaddress++;
+       EElookuptable[EElookuptableaddress]=int(ConfigLayout[1][i]>>8);
+       EElookuptableaddress++;
+     }
+  }
+  
+  public void EElookuptableSync(){ // Sync settings with EE table
+  }

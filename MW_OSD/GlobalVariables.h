@@ -137,6 +137,10 @@ uint8_t fontData[54];
 uint8_t nextCharToRequest;
 uint8_t lastCharToRequest;
 uint8_t retransmitQueue;
+uint16_t eeaddress = 0;
+uint8_t eedata = 0;
+uint8_t settingsMode=0;
+uint32_t MSP_OSD_timer=0;
 
 // Mode bits
 struct {
@@ -289,7 +293,7 @@ MWOSDVER,   // used for check              0
 0,   // GPStime                     37a
 0,   // GPSTZ +/-                   37b
 0,   // GPSTZ                       37c
-0,   // DEBUG                       37e
+1,   // DEBUG                       37e
 1,   // SCROLLING LADDERS           37f
 1,   // SHOW GIMBAL ICON            37g
 1,   // SHOW VARIO                  37h
@@ -590,6 +594,8 @@ uint16_t flyingTime=0;
 #define OSD_RESET                5
 #define OSD_DEFAULT              6
 #define OSD_SENSORS              7
+#define OSD_WRITE_CMD_EE         8
+#define OSD_READ_CMD_EE          9
 // End private MSP for use with the GUI
 
 const char disarmed_text[] PROGMEM  = "DISARMED";
