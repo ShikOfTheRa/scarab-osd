@@ -16,6 +16,8 @@ BUG! PID menu options after row 5 are incorrect. e.g. level does not show level 
 
 ## Enhancement requests for future releases: ##
 
+Amend 00 font to be default blank character - recommended to reduce sparklies
+
 Decimalise GUI values such as voltage etc.
 
 Ability to amend all PID settings from menu
