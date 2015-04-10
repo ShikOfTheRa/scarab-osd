@@ -32,8 +32,8 @@
 
 #if defined(INIT_MTK_GPS) || defined(UBLOX)
   uint32_t init_speed[5] = {9600,19200,38400,57600,115200};
-//  void SerialGpsPrint(prog_char* str) {
-  void SerialGpsPrint(char) {
+  void SerialGpsPrint(const char* str) {
+//  void SerialGpsPrint(char str) {
     char b;
     while(str && (b = pgm_read_byte(str++))) {
       Serial.write(b); 
@@ -43,9 +43,9 @@
     }
   }
 #endif
-
+//const PROGMEM char * const 
 #if defined(UBLOX)
-   prog_char UBLOX_INIT[] PROGMEM = {                          // PROGMEM array must be outside any function !!!
+   const char UBLOX_INIT[] PROGMEM = {                          // PROGMEM array must be outside any function !!!
      0xB5,0x62,0x06,0x01,0x03,0x00,0xF0,0x05,0x00,0xFF,0x19,                            //disable all default NMEA messages
      0xB5,0x62,0x06,0x01,0x03,0x00,0xF0,0x03,0x00,0xFD,0x15,
      0xB5,0x62,0x06,0x01,0x03,0x00,0xF0,0x01,0x00,0xFB,0x11,
