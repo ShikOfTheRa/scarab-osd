@@ -30,6 +30,7 @@
 #define MAXPAGE 9
 
 #define PIDITEMS 10
+#define RCITEMS 7
 
 // RX CHANEL IN MwRcData table
 #define ROLLSTICK        0
@@ -72,9 +73,8 @@
 #define MAGI 107+(30*6)
 #define MAGD 113+(30*6)
 
-#define SAVEP 93+(30*9)
-
 #define LINE      30
+#define LINE_N(y) (LINE*(y))
 #define LINE01    0
 #define LINE02    30
 #define LINE03    60
@@ -91,6 +91,14 @@
 #define LINE14    390
 #define LINE15    420
 #define LINE16    450
+
+#define COLT      3
+#define COL1      11
+#define COL2      17
+#define COL3      23
+
+#define SAVEP_ROW 12
+#define SAVEP_POS LINE_N(SAVEP_ROW+2)+COLT
 
 /********************       For Sensors presence      *********************/
 #define ACCELEROMETER  1//0b00000001
@@ -130,7 +138,7 @@ uint8_t oldROW=0;
 // Config status and cursor location
 uint8_t screenlayout=0;
 uint8_t oldscreenlayout=0;
-uint8_t ROW=10;
+uint8_t ROW=SAVEP_ROW;
 uint8_t COL=3;
 int8_t configPage=1;
 uint8_t configMode=0;

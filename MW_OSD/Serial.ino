@@ -488,15 +488,15 @@ void handleRawRC() {
 	if(ROW<1)
 	  ROW=1;
         if(configPage == 0) {
-          ROW=10;
+          ROW=SAVEP_ROW;
         }
       }
       else if(configMode&&(MwRcData[PITCHSTICK]<MINSTICK)) // MOVE DOWN
       {
 	waitStick = 1;
 	ROW++;
-	if(ROW>10)
-	  ROW=10;
+	if(ROW>SAVEP_ROW)
+	  ROW=SAVEP_ROW;
       }
       else if(!previousarmedstatus&&configMode&&(MwRcData[YAWSTICK]<MINSTICK)) // DECREASE
       {
@@ -524,7 +524,7 @@ void handleRawRC() {
 
 void serialMenuCommon()
   {
-    if((ROW==10)&&(COL==3)) {
+    if((ROW==SAVEP_ROW)&&(COL==3)) {
       constrain(menudir,-1,1);
       configPage=configPage+menudir;
     }
@@ -623,8 +623,8 @@ void serialMenuCommon()
 	  if(ROW==6) Settings[S_AMPERAGE_ALARM]=Settings[S_AMPERAGE_ALARM]+menudir;
 	}
 #endif
-  	if((ROW==10)&&(COL==1)) configExit();
-	if((ROW==10)&&(COL==2)) configSave();
+  	if((ROW==SAVEP_ROW)&&(COL==1)) configExit();
+	if((ROW==SAVEP_ROW)&&(COL==2)) configSave();
 }
 
 void serialMSPreceive()
@@ -701,7 +701,7 @@ void serialMSPreceive()
 void configExit()
 {
   configPage=1;
-  ROW=10;
+  ROW=SAVEP_ROW;
   COL=3;
   configMode=0;
   //waitStick=3;
