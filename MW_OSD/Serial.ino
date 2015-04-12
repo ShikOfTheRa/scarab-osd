@@ -532,14 +532,10 @@ void serialMenuCommon()
     if(configPage>MAXPAGE) configPage = MINPAGE;
 #ifdef PAGE1
 	if(configPage == 1) {
-	  if(ROW >= 1 && ROW <= 7) {
-            uint8_t MODROW=ROW-1;
-            if (ROW>5){
-              MODROW=ROW+1;
-            }
-  	    if(COL==1) P8[MODROW]=P8[MODROW]+menudir;
-	    if(COL==2) I8[MODROW]=I8[MODROW]+menudir;
-	    if(COL==3) D8[MODROW]=D8[MODROW]+menudir;
+	  if(ROW >= 1 && ROW <= PIDITEMS) {
+	    if(COL==1) P8[ROW-1] += menudir;
+	    if(COL==2) I8[ROW-1] += menudir;
+	    if(COL==3) D8[ROW-1] += menudir;
 	  }
 	}
 #endif
@@ -847,6 +843,4 @@ void headSerialRequest (void) {
   Serial.write('<');
   
 }
-
-
 

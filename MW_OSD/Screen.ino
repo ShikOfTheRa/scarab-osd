@@ -1051,24 +1051,19 @@ void displayConfigScreen(void)
 #ifdef PAGE1
   if(configPage==1)
   {
-    for(uint8_t X=0; X<=6; X++) {
+    for(uint8_t X=0; X<PIDITEMS; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_pid[X])));
-      MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+      MAX7456_WriteString(screenBuffer, LINE_N(3+X)+COLT);
     }
    
 //    MAX7456_WriteString_P(configMsg10, 35);
 //    MAX7456_WriteString_P(configMsg11, ROLLT);
 
-    for(uint8_t Y=0; Y<=8; Y++) {      
-      if (Y==5) Y=7;
-      uint8_t X=Y;
-      if (Y>6){
-        X=X-2;
-      }
+    for(uint8_t X=0; Y<PIDITEMS; X++) {      
 
-      MAX7456_WriteString(itoa(P8[X],screenBuffer,10),LINE_N(X+3)+COL1);
-      MAX7456_WriteString(itoa(I8[X],screenBuffer,10),LINE_N(X+3)+COL2);
-      MAX7456_WriteString(itoa(D8[X],screenBuffer,10),LINE_N(X+3)+COL3);
+      MAX7456_WriteString(itoa(P8[X],screenBuffer,10),LINE_N(3+X)+COL1);
+      MAX7456_WriteString(itoa(I8[X],screenBuffer,10),LINE_N(3+X)+COL2);
+      MAX7456_WriteString(itoa(D8[X],screenBuffer,10),LINE_N(3+X)+COL3);
     }
 
 /*

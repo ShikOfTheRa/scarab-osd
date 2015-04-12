@@ -656,14 +656,17 @@ const char configMsg05[] PROGMEM = "MAX SPEED";
 const char configMsg06[] PROGMEM = "MAH USED";
 const char configMsg07[] PROGMEM = "MAX AMPS";
 //-----------------------------------------------------------Page1
-const char configMsg10[] PROGMEM = "PID CONFIG";
-const char configMsg11[] PROGMEM = "ROLL";
-const char configMsg12[] PROGMEM = "PITCH";
-const char configMsg13[] PROGMEM = "YAW";
-const char configMsg14[] PROGMEM = "ALT";
-const char configMsg15[] PROGMEM = "GPS";
-const char configMsg16[] PROGMEM = "LEVEL";
-const char configMsg17[] PROGMEM = "MAG";
+const char configMsgPage01[] PROGMEM = "PID CONFIG";
+const char configMsgPID01[] PROGMEM  = "ROLL";
+const char configMsgPID02[] PROGMEM  = "PITCH";
+const char configMsgPID03[] PROGMEM  = "YAW";
+const char configMsgPID04[] PROGMEM  = "ALT";
+const char configMsgPID05[] PROGMEM  = "POS";
+const char configMsgPID06[] PROGMEM  = "POSR";
+const char configMsgPID07[] PROGMEM  = "NAVR";
+const char configMsgPID08[] PROGMEM  = "LEVEL";
+const char configMsgPID09[] PROGMEM  = "MAG";
+const char configMsgPID10[] PROGMEM  = "VEL";
 //-----------------------------------------------------------Page2
 const char configMsg20[] PROGMEM = "RC TUNING";
 const char configMsg21[] PROGMEM = "RC RATE";
@@ -827,13 +830,16 @@ const PROGMEM char * const menu_stats_item[] =
 
 const PROGMEM char * const menu_pid[] = 
 {   
-  configMsg11,
-  configMsg12,
-  configMsg13,
-  configMsg14,
-  configMsg15,
-  configMsg16,
-  configMsg17,
+  configMsgPID01,
+  configMsgPID02,
+  configMsgPID03,
+  configMsgPID04,
+  configMsgPID05,
+  configMsgPID06,
+  configMsgPID07,
+  configMsgPID08,
+  configMsgPID09,
+  configMsgPID10,
 };
 
 const PROGMEM char * const menu_rc[] = 
@@ -900,7 +906,7 @@ const PROGMEM char * const menu_alarm_item[] =
 const PROGMEM char * const menutitle_item[] = 
 {   
   configMsg00,
-  configMsg10,
+  configMsgPage01,
   configMsg20,
   configMsg30,
   configMsg40,
