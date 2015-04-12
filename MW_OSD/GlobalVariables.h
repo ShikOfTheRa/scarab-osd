@@ -30,7 +30,11 @@
 #define MAXPAGE 9
 
 #define PIDITEMS 10
+#ifdef CLEANFLIGHT
+#define RCITEMS 9
+#else
 #define RCITEMS 7
+#endif
 
 // RX CHANEL IN MwRcData table
 #define ROLLSTICK        0
@@ -423,12 +427,21 @@ LINE04+10 |DISPLAY_NEVER,   // APstatusPosition
 
 static uint8_t P8[PIDITEMS], I8[PIDITEMS], D8[PIDITEMS];
 
+#ifdef CLEANFLIGHT
+static uint8_t rcRate8,rcExpo8;
+static uint8_t pitchRate,rollRate,yawRate;
+static uint8_t dynThrPID;
+static uint8_t thrMid8;
+static uint8_t thrExpo8;
+static uint16_t tpa_breakpoint16;
+#else
 static uint8_t rcRate8,rcExpo8;
 static uint8_t rollPitchRate;
 static uint8_t yawRate;
 static uint8_t dynThrPID;
 static uint8_t thrMid8;
 static uint8_t thrExpo8;
+#endif
 
 
 static uint16_t  MwAccSmooth[3]={0,0,0};       // Those will hold Accelerator data
@@ -668,12 +681,25 @@ const char configMsgPID08[] PROGMEM  = "LEVEL";
 const char configMsgPID09[] PROGMEM  = "MAG";
 const char configMsgPID10[] PROGMEM  = "VEL";
 //-----------------------------------------------------------Page2
-const char configMsg20[] PROGMEM = "RC TUNING";
-const char configMsg21[] PROGMEM = "RC RATE";
-const char configMsg22[] PROGMEM = "EXPONENTIAL";
-const char configMsg23[] PROGMEM = "ROLL PITCH RATE";
-const char configMsg24[] PROGMEM = "YAW RATE";
-const char configMsg25[] PROGMEM = "THROTTLE PID ATT";
+const char configMsgPage02[] PROGMEM = "RC TUNING";
+const char configMsgRC01[] PROGMEM = "RC RATE";
+const char configMsgRC02[] PROGMEM = "RC EXPO";
+#ifdef CLEANFLIGHT
+const char configMsgRC03[] PROGMEM = "PITCH RATE";
+const char configMsgRC04[] PROGMEM = "ROLL RATE";
+const char configMsgRC05[] PROGMEM = "YAW RATE";
+const char configMsgRC06[] PROGMEM = "THROTTLE MIDPOINT";
+const char configMsgRC07[] PROGMEM = "THROTTLE EXPO";
+const char configMsgRC08[] PROGMEM = "THROTTLE PID ATT";
+const char configMsgRC09[] PROGMEM = "TPA BREAKEPOINT";
+#else
+const char configMsgRC03[] PROGMEM = "ROLL PITCH RATE";
+const char configMsgRC04[] PROGMEM = "YAW RATE";
+const char configMsgRC05[] PROGMEM = "THROTTLE PID ATT";
+const char configMsgRC06[] PROGMEM = "THROTTLE MIDPOINT";
+const char configMsgRC07[] PROGMEM = "THROTTLE EXPO";
+#endif
+
 //-----------------------------------------------------------Page3
 const char configMsg30[] PROGMEM = "VOLTAGE";
 const char configMsg31[] PROGMEM = "DISPLAY MAIN VOLTS";
@@ -844,11 +870,17 @@ const PROGMEM char * const menu_pid[] =
 
 const PROGMEM char * const menu_rc[] = 
 {   
-  configMsg21,
-  configMsg22,
-  configMsg23,
-  configMsg24,
-  configMsg25,
+  configMsgRC01,
+  configMsgRC02,
+  configMsgRC03,
+  configMsgRC04,
+  configMsgRC05,
+  configMsgRC06,
+  configMsgRC07,
+  #ifdef CLEANFLIGHT
+  configMsgRC08,
+  configMsgRC09,
+  #endif
 };
 
 const PROGMEM char * const menu_bat[] = 
@@ -907,7 +939,7 @@ const PROGMEM char * const menutitle_item[] =
 {   
   configMsg00,
   configMsgPage01,
-  configMsg20,
+  configMsgPage02,
   configMsg30,
   configMsg40,
   configMsg50,

@@ -1109,23 +1109,29 @@ void displayConfigScreen(void)
 #ifdef PAGE2
   if(configPage==2)
   {
-    for(uint8_t X=0; X<=4; X++) {
+    for(uint8_t X=0; X<RCITEMS; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rc[X])));
-      MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+      MAX7456_WriteString(screenBuffer, LINE_N(3+X)+COLT);
     }
-
-    //    MAX7456_WriteString_P(configMsg20, 35);
-//    MAX7456_WriteString_P(configMsg21, ROLLT);
-    MAX7456_WriteString(itoa(rcRate8,screenBuffer,10),ROLLD);
-//    MAX7456_WriteString_P(configMsg22, PITCHT);
-    MAX7456_WriteString(itoa(rcExpo8,screenBuffer,10),PITCHD);
-//    MAX7456_WriteString_P(configMsg23, YAWT);
-    MAX7456_WriteString(itoa(rollPitchRate,screenBuffer,10),YAWD);
-//    MAX7456_WriteString_P(configMsg24, ALTT);
-    MAX7456_WriteString(itoa(yawRate,screenBuffer,10),ALTD);
-//    MAX7456_WriteString_P(configMsg25, VELT);
-    MAX7456_WriteString(itoa(dynThrPID,screenBuffer,10),VELD);
-
+    #ifdef CLEANFLIGHT
+    MAX7456_WriteString(itoa(rcRate8,          screenBuffer,10),LINE04+COL3);
+    MAX7456_WriteString(itoa(rcExpo8,          screenBuffer,10),LINE05+COL3);
+    MAX7456_WriteString(itoa(pitchRate,        screenBuffer,10),LINE06+COL3);
+    MAX7456_WriteString(itoa(rollRate,         screenBuffer,10),LINE07+COL3);
+    MAX7456_WriteString(itoa(yawRate,          screenBuffer,10),LINE08+COL3);
+    MAX7456_WriteString(itoa(thrMid8,          screenBuffer,10),LINE09+COL3);
+    MAX7456_WriteString(itoa(thrExpo8,         screenBuffer,10),LINE10+COL3);
+    MAX7456_WriteString(itoa(dynThrPID,        screenBuffer,10),LINE11+COL3);
+    MAX7456_WriteString(itoa(tpa_breakpoint16, screenBuffer,10),LINE12+COL3);
+    #else
+    MAX7456_WriteString(itoa(rcRate8,          screenBuffer,10),LINE04+COL3);
+    MAX7456_WriteString(itoa(rcExpo8,          screenBuffer,10),LINE05+COL3);
+    MAX7456_WriteString(itoa(rollPitchRate,    screenBuffer,10),LINE06+COL3);
+    MAX7456_WriteString(itoa(yawRate,          screenBuffer,10),LINE07+COL3);
+    MAX7456_WriteString(itoa(dynThrPID,        screenBuffer,10),LINE08+COL3);
+    MAX7456_WriteString(itoa(thrMid8,          screenBuffer,10),LINE09+COL3);
+    MAX7456_WriteString(itoa(thrExpo8,         screenBuffer,10),LINE10+COL3);
+    #endif
   }
  #else
     if(configPage == 2)configPage+=menudir; 
