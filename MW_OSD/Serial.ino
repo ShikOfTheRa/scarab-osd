@@ -780,18 +780,6 @@ void configSave()
   configExit();
 }
 
-void blankserialRequest(uint8_t requestMSP)
-{
-  if(requestMSP == MSP_OSD && fontMode) {
-    fontSerialRequest();
-    return;
-  }
-  headSerialRequest();
-  Serial.write((uint8_t)0x00);
-  Serial.write(requestMSP);
-  Serial.write(requestMSP);
-}
-
 void fontSerialRequest() {
   mspWriteRequest(MSP_OSD,3);
   mspWrite8(OSD_GET_FONT);
@@ -817,13 +805,4 @@ void settingswriteSerialRequest() {
   mspWrite16(eeaddress);
   mspWriteChecksum();
 }
-
-void headSerialRequest (void) {
-  Serial.write('$');
-  Serial.write('M');
-  Serial.write('<');
-  
-}
-
-
 
