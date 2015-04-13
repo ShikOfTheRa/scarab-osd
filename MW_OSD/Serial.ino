@@ -6,6 +6,7 @@ static uint8_t dataSize;
 static uint8_t cmdMSP;
 static uint8_t rcvChecksum;
 static uint8_t readIndex;
+uint8_t txChecksum;
 
 uint32_t read32() {
   uint32_t t = read16();
@@ -21,6 +22,31 @@ uint16_t read16() {
 
 uint8_t read8()  {
   return serialBuffer[readIndex++];
+}
+
+void mspWriteRequest(uint8_t mspCommand, uint8_t txDataSize){
+  Serial.write('$');
+  Serial.write('M');
+  Serial.write('<');
+  txChecksum = 0;
+  mspWrite8(txDataSize);
+  mspWrite8(mspCommand);
+  if(txDataSize == 0)
+    mspWriteChecksum();
+}
+
+void mspWrite8(uint8_t t){
+  Serial.write(t);
+  txChecksum ^= t;
+}
+
+void mspWrite16(uint16_t t){
+  mspWrite8(t);
+  mspWrite8(t>>8);
+}
+
+void mspWriteChecksum(){
+  Serial.write(txChecksum);
 }
 
 // --------------------------------------------------------------------------------------
