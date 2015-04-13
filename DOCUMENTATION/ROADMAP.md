@@ -12,7 +12,7 @@ fix available - BUG! compile errors for GPS in soem Arduino versions
 
 fix available - BUG! PID menu options after row 5 are incorrect. e.g. level does not show level settings
 
-"fix available" means code in place but requires testing
+fix available means code in place but requires testing
 ---
 
 ## Enhancement requests for future releases: ##
