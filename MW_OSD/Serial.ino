@@ -743,80 +743,40 @@ void configExit()
 
 void configSave()
 {
-  uint8_t txCheckSum;
-  uint8_t txSize;
-
-  headSerialRequest();
-  txCheckSum=0;
-  txSize=30;
-  Serial.write(txSize);
-  txCheckSum ^= txSize;
-  Serial.write(MSP_SET_PID);
-  txCheckSum ^= MSP_SET_PID;
+  mspWriteRequest(MSP_SET_PID, PIDITEMS*3);
   for(uint8_t i=0; i<PIDITEMS; i++) {
-    Serial.write(P8[i]);
-    txCheckSum ^= P8[i];
-    Serial.write(I8[i]);
-    txCheckSum ^= I8[i];
-    Serial.write(D8[i]);
-    txCheckSum ^= D8[i];
+    mspWrite8(P8[i]);
+    mspWrite8(I8[i]);
+    mspWrite8(D8[i]);
   }
-  Serial.write(txCheckSum);
-
-  headSerialRequest();
-  txCheckSum=0;
+  mspWriteChecksum();
+  
 #ifdef CLEANFLIGHT
-  txSize=10;
-  Serial.write(txSize);
-  txCheckSum ^= txSize;
-  Serial.write(MSP_SET_RC_TUNING);
-  txCheckSum ^= MSP_SET_RC_TUNING;
-  Serial.write(rcRate8);
-  txCheckSum ^= rcRate8;
-  Serial.write(rcExpo8);
-  txCheckSum ^= rcExpo8;
-  Serial.write(PitchRate);
-  txCheckSum ^= PitchRate;
-  Serial.write(rollRate);
-  txCheckSum ^= rollRate;
-  Serial.write(yawRate);
-  txCheckSum ^= yawRate;
-  Serial.write(dynThrPID);
-  txCheckSum ^= dynThrPID;
-  Serial.write(thrMid8);
-  txCheckSum ^= thrMid8;
-  Serial.write(thrExpo8);
-  txCheckSum ^= thrExpo8;
-  Serial.write(tpa_breakpoint16);
-  txCheckSum ^= tpa_breakpoint16;
-  Serial.write(tpa_breakpoint16>>8);
-  txCheckSum ^= tpa_breakpoint16>>8;
-  Serial.write(txCheckSum);  
+  mspWriteRequest(MSP_SET_RC_TUNING,10);
+  mspWrite8(rcRate8);
+  mspWrite8(rcExpo8);
+  mspWrite8(PitchRate);
+  mspWrite8(rollRate);
+  mspWrite8(yawRate);
+  mspWrite8(dynThrPID);
+  mspWrite8(thrMid8);
+  mspWrite8(thrExpo8);
+  mspWrite16(tpa_breakpoint16);
+  mspWriteChecksum();
 #else
-  txSize=7;
-  Serial.write(txSize);
-  txCheckSum ^= txSize;
-  Serial.write(MSP_SET_RC_TUNING);
-  txCheckSum ^= MSP_SET_RC_TUNING;
-  Serial.write(rcRate8);
-  txCheckSum ^= rcRate8;
-  Serial.write(rcExpo8);
-  txCheckSum ^= rcExpo8;
-  Serial.write(rollPitchRate);
-  txCheckSum ^= rollPitchRate;
-  Serial.write(yawRate);
-  txCheckSum ^= yawRate;
-  Serial.write(dynThrPID);
-  txCheckSum ^= dynThrPID;
-  Serial.write(thrMid8);
-  txCheckSum ^= thrMid8;
-  Serial.write(thrExpo8);
-  txCheckSum ^= thrExpo8;
-  Serial.write(txCheckSum);
-#endif
+  mspWriteRequest(MSP_SET_RC_TUNING,7);
+  mspWrite8(rcRate8);
+  mspWrite8(rcExpo8);
+  mspWrite8(rollPitchRate);
+  mspWrite8(yawRate);
+  mspWrite8(dynThrPID);
+  mspWrite8(thrMid8);
+  mspWrite8(thrExpo8);
+  mspWriteChecksum();
+ #endif
 
   writeEEPROM();
-  blankserialRequest(MSP_EEPROM_WRITE);
+  mspWriteRequest(MSP_EEPROM_WRITE,0);
   configExit();
 }
 
@@ -833,67 +793,29 @@ void blankserialRequest(uint8_t requestMSP)
 }
 
 void fontSerialRequest() {
-  int16_t cindex = getNextCharToRequest();
-  uint8_t txCheckSum;
-  uint8_t txSize;
-  headSerialRequest();
-  txCheckSum=0;
-  txSize=3;
-  Serial.write(txSize);
-  txCheckSum ^= txSize;
-  Serial.write(MSP_OSD);
-  txCheckSum ^= MSP_OSD;
-  Serial.write(OSD_GET_FONT);
-  txCheckSum ^= OSD_GET_FONT;
-  Serial.write(cindex);
-  txCheckSum ^= cindex;
-  Serial.write(cindex>>8);
-  txCheckSum ^= cindex>>8;
-  Serial.write(txCheckSum);
+  mspWriteRequest(MSP_OSD,3);
+  mspWrite8(OSD_GET_FONT);
+  mspWrite16(getNextCharToRequest());
+  mspWriteChecksum();
 }
 
 void settingsSerialRequest() {
-  uint8_t txCheckSum;
-  uint8_t txSize;
-  headSerialRequest();
-  txCheckSum=0;
-  txSize=1+30;
-  Serial.write(txSize);
-  txCheckSum ^= txSize;
-  Serial.write(MSP_OSD);
-  txCheckSum ^= MSP_OSD;
-  Serial.write(OSD_READ_CMD_EE);
-  txCheckSum ^= OSD_READ_CMD_EE;
+  mspWriteRequest(MSP_OSD,1+30);
+  mspWrite8(OSD_READ_CMD_EE);
   for(uint8_t i=0; i<10; i++) {
-    Serial.write(eeaddress);
-    txCheckSum ^= eeaddress;
-    Serial.write(eeaddress>>8);
-    txCheckSum ^= eeaddress>>8;
-    eedata=EEPROM.read(eeaddress);
-    Serial.write(eedata);
-    txCheckSum ^= eedata;
+    eedata = EEPROM.read(eeaddress);
+    mspWrite16(eeaddress);
+    mspWrite8(eedata);
     eeaddress++;
-  }  
-  Serial.write(txCheckSum);
+  }
+  mspWriteChecksum();
 }
 
 void settingswriteSerialRequest() {
-  uint8_t txCheckSum;
-  uint8_t txSize;
-  headSerialRequest();
-  txCheckSum=0;
-  txSize=3;
-  Serial.write(txSize);
-  txCheckSum ^= txSize;
-  Serial.write(MSP_OSD);
-  txCheckSum ^= MSP_OSD;
-  Serial.write(OSD_READ_CMD_EE);
-  txCheckSum ^= OSD_READ_CMD_EE;
-  Serial.write(eeaddress);
-  txCheckSum ^= eeaddress;
-  Serial.write(eeaddress>>8);
-  txCheckSum ^= eeaddress>>8;
-  Serial.write(txCheckSum);
+  mspWriteRequest(MSP_OSD,3);
+  mspWrite8(OSD_READ_CMD_EE);
+  mspWrite16(eeaddress);
+  mspWriteChecksum();
 }
 
 void headSerialRequest (void) {
