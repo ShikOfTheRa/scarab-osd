@@ -2,16 +2,17 @@
 
 ## Known issues: ##
 
-BUG! "Use MW" options not saving backup file (single entry key)....
+fix available - BUG! "Use MW" options not saving backup file (single entry key)....
 
-BUG! When set the "Time Zone Offset" to say 2.0 and then do a "WRITE" the value will change (display) to 0.2
+fix available - BUG! When set the "Time Zone Offset" to say 2.0 and then do a "WRITE" the value will change (display) to 0.2
 
-BUG! Compass OK, but home arrow is inconsistent in fixedwing mode
+fix available - BUG! Compass OK, but home arrow is inconsistent in fixedwing mode
 
-BUG! compile errors for GPS in soem Arduino versions
+fix available - BUG! compile errors for GPS in soem Arduino versions
 
-BUG! PID menu options after row 5 are incorrect. e.g. level does not show level settings
+fix available - BUG! PID menu options after row 5 are incorrect. e.g. level does not show level settings
 
+"fix available" means code in place but requires testing
 ---
 
 ## Enhancement requests for future releases: ##
