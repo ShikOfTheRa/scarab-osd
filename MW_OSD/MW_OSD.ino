@@ -115,7 +115,7 @@ void setup()
   MAX7456Setup();
   setMspRequests();
   blankserialRequest(MSP_IDENT);
-  #if defined GPSOSD
+  #if defined FORCESENSORS
     MwSensorPresent |=GPSSENSOR;
     MwSensorPresent |=BAROMETER;
     MwSensorPresent |=MAGNETOMETER;
@@ -327,12 +327,6 @@ void loop()
 #endif
 #ifdef MAPMODE
           mapmode();
-#endif
-#ifdef FIXEDWING // required because FW can fly without BARO / MAG
-          displayAltitude();
-          displayClimbRate();
-          displayHeadingGraph();
-          displayHeading();
 #endif
         }
         displayMode();       

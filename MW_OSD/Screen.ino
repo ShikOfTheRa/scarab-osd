@@ -1048,10 +1048,14 @@ void displayConfigScreen(void)
 //    MAX7456_WriteString_P(configMsg10, 35);
 //    MAX7456_WriteString_P(configMsg11, ROLLT);
 
-    for(uint8_t X=0; X<=6; X++) {
-      MAX7456_WriteString(itoa(P8[X],screenBuffer,10),ROLLP+(X*30));
-      MAX7456_WriteString(itoa(I8[X],screenBuffer,10),ROLLI+(X*30));
-      MAX7456_WriteString(itoa(D8[X],screenBuffer,10),ROLLD+(X*30));
+    for(uint8_t Y=0; Y<=8; Y++) {      
+      uint8_t X=Y;
+      if (Y>6){
+        X=X-2;
+      }
+      MAX7456_WriteString(itoa(P8[Y],screenBuffer,10),ROLLP+(X*30));
+      MAX7456_WriteString(itoa(I8[Y],screenBuffer,10),ROLLI+(X*30));
+      MAX7456_WriteString(itoa(D8[Y],screenBuffer,10),ROLLD+(X*30));
     }
 
 /*

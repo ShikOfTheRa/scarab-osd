@@ -571,6 +571,21 @@ void SendCommand(int cmd){
       break;
      
      
+      case MSP_PID:
+        int PIDITEMS = 10;
+        PortIsWriting = true;
+        headSerialReply(MSP_PID, 10*3);
+        for(int i=0; i<PIDITEMS; i++) {
+          for(int ii=0; ii<3; ii++) {
+           int pidval=int(i*10)+ii;
+            serialize8(pidval);
+          }
+        }
+
+        tailSerialReply();
+        PortIsWriting = false;
+      break;
+
       case MSP_ANALOG:
         PortIsWriting = true;
         headSerialReply(MSP_ANALOG, 5);
@@ -611,7 +626,7 @@ void SendCommand(int cmd){
         serialize32(-718897060);
         serialize16(int(SGPS_altitude.value()/100));
         serialize16(int(SGPS_speed.value()));
-        serialize16(355);     
+        serialize16(MwHeading);     
     break;
     
   

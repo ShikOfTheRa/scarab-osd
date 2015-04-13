@@ -165,7 +165,14 @@ void serialMSPCheck()
     I2CError=read16();
     MwSensorPresent = read16();
     MwSensorActive = read32();
+    #if defined FORCESENSORS
+      MwSensorPresent |=GPSSENSOR;
+      MwSensorPresent |=BAROMETER;
+      MwSensorPresent |=MAGNETOMETER;
+      MwSensorPresent |=ACCELEROMETER;
+    #endif  
     armed = (MwSensorActive & mode.armed) != 0;
+
   }
 
   if (cmdMSP==MSP_RAW_IMU)
@@ -224,17 +231,17 @@ void serialMSPCheck()
 
   if (cmdMSP==MSP_ATTITUDE)
   {
-    for(uint8_t i=0;i<2;i++)
+    for(uint8_t i=0;i<2;i++){
       MwAngle[i] = read16();
-#ifdef USEGPSHEADING
-    MwHeading = GPS_ground_course;
-#else    
-    MwHeading = read16();
-#endif
-#ifdef HEADINGCORRECT
-    if (MwHeading >= + 180) MwHeading -= 360;
-#endif
-//    read16();
+    }
+    #if defined(USEGPSHEADING)
+      MwHeading = GPS_ground_course;
+    #else    
+      MwHeading = read16();
+    #endif
+    #ifdef HEADINGCORRECT
+      if (MwHeading >= + 180) MwHeading -= 360;
+    #endif
   }
 
 #if defined DEBUGMW
@@ -251,8 +258,13 @@ void serialMSPCheck()
   }
   if (cmdMSP==MSP_ALTITUDE)
   {
-    MwAltitude =read32();
-    MwVario = read16();
+    #if defined(USEGPSALTITUDE)
+      MwAltitude =GPS_altitude*10;
+      MwVario = 0;
+    #else    
+      MwAltitude =read32();
+      MwVario = read16();
+    #endif
   }
 
   if (cmdMSP==MSP_ANALOG)
@@ -261,7 +273,7 @@ void serialMSPCheck()
     pMeterSum=read16();
     MwRssi = read16();
     MWAmperage = read16();
- #ifdef AMPERAGECORRECT
+#ifdef AMPERAGECORRECT
     MWAmperage = MWAmperage * 10;
 #endif
  }
@@ -522,7 +534,7 @@ void serialMenuCommon()
 #ifdef PAGE1
 	if(configPage == 1) {
 	  if(ROW >= 1 && ROW <= 7) {
-	    if(COL==1) P8[ROW-1]=P8[ROW-1]+menudir;
+  	    if(COL==1) P8[ROW-1]=P8[ROW-1]+menudir;
 	    if(COL==2) I8[ROW-1]=I8[ROW-1]+menudir;
 	    if(COL==3) D8[ROW-1]=D8[ROW-1]+menudir;
 	  }

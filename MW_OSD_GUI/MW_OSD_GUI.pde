@@ -303,21 +303,21 @@ String[] ConfigNames = {
   "RSSI Max",
   "RSSI Alarm",
   "Display RSSI",
-  "Use MWii",
+  "Use FC RSSI",
   "Use PWM",
   "Display Voltage",
   "Voltage Alarm",
   "Battery Cells",
   "Voltage Adjust",
-  "Use MWii",
+  "Use FC main voltage",
   "Display Amps",
-  "Use MWii",
+  "Use FC amperage",
   "Display mAh",
   "Use Virtual Sensor",
   "Amps Adjust",
   "Display Video Voltage",
   "Voltage Adjust",
-  "Use MWii",
+  "Use FC video voltage",
   "x100 mAh Alarm",
   "Amp Alarm",
   "Display GPS",
@@ -1251,6 +1251,9 @@ if ((millis()&0x100)>0)
           break;
         case 10:
           if (init_com==1)SendCommand(MSP_DEBUG);
+          break;
+        case 11:
+          if (init_com==1)SendCommand(MSP_PID);
           MSP_sendOrder=0;
           break;
         }
