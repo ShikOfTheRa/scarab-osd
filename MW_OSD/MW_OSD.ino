@@ -22,7 +22,7 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
-//#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
+#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
 #if 1
 __asm volatile ("nop");
 #endif
@@ -65,7 +65,7 @@ uint16_t UntouchedStack(void)
 
 //------------------------------------------------------------------------
 #define MWVERS "MULTIWII MWOSD - R1.3"  
-#define MWOSDVER 5      // for eeprom layout verification      
+#define MWOSDVER 6      // for eeprom layout verification      
 #include <avr/pgmspace.h>
 #include <EEPROM.h>
 #include "Config.h"
@@ -115,7 +115,7 @@ void setup()
   MAX7456Setup();
   setMspRequests();
   blankserialRequest(MSP_IDENT);
-  #if defined GPSOSD
+  #if defined FORCESENSORS
     MwSensorPresent |=GPSSENSOR;
     MwSensorPresent |=BAROMETER;
     MwSensorPresent |=MAGNETOMETER;
@@ -162,9 +162,8 @@ void loop()
   if((currentMillis - previous_millis_low) >= lo_speed_cycle)  // 10 Hz (Executed every 100ms)
   {
     previous_millis_low = previous_millis_low+lo_speed_cycle;    
-    if(!fontMode && (settingsMode==0)){
+    if(!fontMode)
       blankserialRequest(MSP_ATTITUDE);
-    }
 
    }  // End of slow Timed Service Routine (100ms loop)
 
@@ -241,10 +240,7 @@ void loop()
          MSPcmdsend = MSP_NAV_STATUS;
       break;
     }
-    if  (MSP_OSD_timer<millis()){
-      settingsMode=0;
-    }
-    if(!fontMode && (settingsMode==0)){
+    if(!fontMode){
       blankserialRequest(MSPcmdsend);      
     }
 
@@ -331,12 +327,6 @@ void loop()
 #endif
 #ifdef MAPMODE
           mapmode();
-#endif
-#ifdef FIXEDWING // required because FW can fly without BARO / MAG
-          displayAltitude();
-          displayClimbRate();
-          displayHeadingGraph();
-          displayHeading();
 #endif
         }
         displayMode();       

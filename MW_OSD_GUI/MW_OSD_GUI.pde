@@ -47,7 +47,7 @@ import java.text.DecimalFormat;
 
 
 String MW_OSD_GUI_Version = "MWOSD R1.3 - NextGeneration";
-int MW_OSD_EEPROM_Version = 5;
+int MW_OSD_EEPROM_Version = 6;
 
 
 int  GPS_numSatPosition = 0;
@@ -175,6 +175,13 @@ int[][] CONFIGHUD;
 int[][] CONFIGHUDEN;
 String[] CONFIGHUDTEXT;
 String[] CONFIGHUDNAME;
+int eeaddressGUI=0;
+int eedataGUI=0;
+int eeaddressOSD=0;
+int eedataOSD=0;
+int ReadConfigMSPMillis=0;
+int WriteConfigMSPMillis=0;
+
 
 // XML config editorvariables
 int hudeditposition=0;
@@ -182,6 +189,8 @@ int hudeditposition=0;
 
 int[] SimPosn;
 int[][] ConfigLayout;
+int[] EElookuptable= new int[512];
+
 //int[] readcheck;
 int readerror=0;
 // Int variables
@@ -205,6 +214,7 @@ int ConfigEEPROM = -1;
 int ConfigVALUE = -1;
 
 int windowsX    = 1041;       int windowsY    =578;        //995; //573;
+//int windowsX    = 1200;       int windowsY    =800;        //995; //573;
 int xGraph      = 10;         int yGraph      = 35;
 int xObj        = 520;        int yObj        = 293; //900,450
 int xCompass    = 920;        int yCompass    = 341; //760,336
@@ -293,21 +303,21 @@ String[] ConfigNames = {
   "RSSI Max",
   "RSSI Alarm",
   "Display RSSI",
-  "Use MWii",
+  "Use FC RSSI",
   "Use PWM",
   "Display Voltage",
   "Voltage Alarm",
   "Battery Cells",
   "Voltage Adjust",
-  "Use MWii",
+  "Use FC main voltage",
   "Display Amps",
-  "Use MWii",
+  "Use FC amperage",
   "Display mAh",
   "Use Virtual Sensor",
   "Amps Adjust",
   "Display Video Voltage",
   "Voltage Adjust",
-  "Use MWii",
+  "Use FC video voltage",
   "x100 mAh Alarm",
   "Amp Alarm",
   "Display GPS",
@@ -594,7 +604,8 @@ Textlabel FileUploadText, TXText, RXText;
 Button buttonIMPORT,buttonSAVE,buttonREAD,buttonRESET,buttonWRITE,buttonRESTART, buttonGPSTIMELINK, buttonSPORTLINK;
 Button buttonLUP, buttonLDOWN, buttonLLEFT, buttonLRIGHT, buttonLPOSUP, buttonLPOSDOWN;
 Button buttonLHUDUP,buttonLPOSHUDDOWN,buttonLPOSEN, buttonLSET, buttonLADD, buttonLSAVE, buttonLCANCEL;
-Button buttonLEW ;
+Button buttonLEW;
+Button buttonREADEEMSP ; Button buttonWRITEEEMSP ;
 Button buttonGUIDELINK, buttonFAQLINK, buttonCALIBLINK, buttonSUPPORTLINK, buttonDONATELINK;
 // Buttons------------------------------------------------------------------------------------------------------------------
 
@@ -639,7 +650,8 @@ Group MGUploadF,
   G_HUD,
   G_COMPASS,
   G_DISPLAY,
-  G_SPORT
+  G_SPORT,
+  G_INFO
   ;
 
 // Timers --------------------------------------------------------------------------------------------------------------------
@@ -743,16 +755,21 @@ DONATEimage  = loadImage("DON_def.png");
   commListbox.addItem("Close Comm",++commListMax); // addItem(name,value)
   txtlblWhichcom = controlP5.addTextlabel("txtlblWhichcom","No Port Selected",5,22).setGroup(G_PortStatus); // textlabel(name,text,x,y)
   txtmessage = controlP5.addTextlabel("txtmessage","",3,250); // textdebug
+//  txtmessage = controlP5.addTextlabel("txtmessage","",windowsX/2,windowsY/2); // textdebug
 
 // BUTTONS SELECTION ---------------------------------------
   
   buttonSAVE = controlP5.addButton("bSAVE",1,20,5,60,16); buttonSAVE.setLabel("    SAVE").setGroup(SAVE_LOAD).setColorBackground(osdcontr_); 
   buttonIMPORT = controlP5.addButton("bIMPORT",1,20,25,60,16); buttonIMPORT.setLabel("    LOAD").setGroup(SAVE_LOAD).setColorBackground(osdcontr_);   
 
-  buttonREAD = controlP5.addButton("READ",1,20,5,60,16);buttonREAD.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel("    READ");
-  buttonWRITE = controlP5.addButton("WRITE",1,20,25,60,16);buttonWRITE.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel("   WRITE");
+  buttonREAD = controlP5.addButton("READEEMSP",1,20,5,60,16);buttonREAD.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel("    READ");
+  buttonWRITE = controlP5.addButton("WRITEEEMSP",1,20,25,60,16);buttonWRITE.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel("   WRITE");
   buttonRESET = controlP5.addButton("DEFAULT",1,20,45,60,16);buttonRESET.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel(" DEFAULT");
   buttonRESTART = controlP5.addButton("RESTART",1,20,65,60,16);buttonRESTART.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel(" RESTART");
+
+  buttonREADEEMSP = controlP5.addButton("READ",1,10,30,92,16);buttonREADEEMSP.setColorBackground(osdcontr_).setGroup(G_LINKS).setLabel("OLD READ");
+  buttonWRITEEEMSP = controlP5.addButton("WRITE",1,10,50,92,16);buttonWRITEEEMSP.setColorBackground(osdcontr_).setGroup(G_LINKS).setLabel("OLD WRITE");
+
 
   buttonLEW = controlP5.addButton("LEW",1,10,10,92,16);buttonLEW.setColorBackground(osdcontr_).setGroup(G_LINKS).setLabel("Layout Editor");
     
@@ -1087,6 +1104,9 @@ void draw() {
 //  debug[3]++;
   
   time=millis();
+  if((millis()>ReadConfigMSPMillis)&(millis()>WriteConfigMSPMillis)&(init_com==1))
+    SimControlToggle.setValue(1);
+
   txtmessage.setValue(xxc);
 
   if (WriteConfig>0){
@@ -1105,6 +1125,7 @@ void draw() {
   else{
    xxc="";
   }
+
     txtmessage.setValue(xxc);
   
   if (ReadConfig>0){
@@ -1117,6 +1138,29 @@ void draw() {
       }
     }
   }  
+
+    if (millis()<ReadConfigMSPMillis){
+      if (init_com==1){
+        READconfigMSP();
+        toggleMSP_Data = true;
+        int progress=100*eeaddressGUI/CONFIGITEMS;
+        xxc="Read: "+progress+"%";
+      }
+    }
+
+    if (millis()<WriteConfigMSPMillis){
+      if (init_com==1){
+        WRITEconfigMSP();
+        toggleMSP_Data = true;
+        int progress=100*eeaddressGUI/(CONFIGITEMS + (hudoptions*2*2));
+        xxc="Write: "+progress+"%";
+      }
+    }
+
+if ((millis()&0x100)>0)
+    txtmessage.setValue(xxc);
+//    makeText("DISARMED", windowsX/2+10,windowsY/2+10);
+
   
 //if ((ReadConfig==0)&&(WriteConfig==0)&&(confCheck==0))
 //  SimControlToggle.setValue(1);
@@ -1207,6 +1251,9 @@ void draw() {
           break;
         case 10:
           if (init_com==1)SendCommand(MSP_DEBUG);
+          break;
+        case 11:
+          if (init_com==1)SendCommand(MSP_PID);
           MSP_sendOrder=0;
           break;
         }
@@ -2212,4 +2259,11 @@ void LEW(){
 //  Lock_All_Controls(true);
 }
 
+void READEEMSP(){
+  READconfigMSP_init();
+}
+
+void WRITEEEMSP(){
+  WRITEconfigMSP_init();
+}
 

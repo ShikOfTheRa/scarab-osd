@@ -1,5 +1,5 @@
 
-#define SERIALBUFFERSIZE 250
+#define SERIALBUFFERSIZE 150
 static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string
 static uint8_t receiverIndex;
 static uint8_t dataSize;
@@ -31,6 +31,35 @@ void serialMSPCheck()
 
   if (cmdMSP == MSP_OSD) {
     uint8_t cmd = read8();
+
+    if (cmd == OSD_READ_CMD_EE) {
+      eeaddress = read8();
+      eeaddress = eeaddress+read8();
+//      eedata = read8();
+      eedata = read8();
+      settingsMode=1;
+      MSP_OSD_timer=3000+millis();
+      settingsSerialRequest();
+    }
+
+    if (cmd == OSD_WRITE_CMD_EE) {
+      for(uint8_t i=0; i<10; i++) {
+        eeaddress = read8();
+        eeaddress = eeaddress+read8();
+        eedata = read8();
+        settingsMode=1;
+        MSP_OSD_timer=3000+millis();
+        EEPROM.write(eeaddress,eedata);
+//        uint16_t EEPROMscreenoffset=EEPROM_SETTINGS+(3*POSITIONS_SETTINGS*2);
+//        if (eeaddress==EEPROM_SETTINGS-1){
+        if (eeaddress>=EEPROM_SETTINGS+(2*2*POSITIONS_SETTINGS)){
+          EEPROM.write(0,MWOSDVER);
+          readEEPROM();
+        }
+      }
+      eeaddress++;
+    settingswriteSerialRequest();
+    }
 
     if(cmd == OSD_READ_CMD) {
       uint8_t txCheckSum, txSize;
@@ -92,35 +121,6 @@ void serialMSPCheck()
       setMspRequests();
      }
 
-    if (cmd == OSD_WRITE_EE) {
-      uint8_t eeaddress = read8();
-      uint8_t eedataa = read8();
-      MSP_OSD_timer=1000+millis();
-      settingsMode=1;
-
-      uint8_t txCheckSum, txSize;
-      headSerialRequest();
-      txCheckSum=0;
-      txSize = 3;
-      Serial.write(txSize);
-      txCheckSum ^= txSize;
-      Serial.write(MSP_OSD);
-      txCheckSum ^= MSP_OSD;
-      Serial.write(cmd);
-      txCheckSum ^= cmd;
-      Serial.write(eeaddress);
-      txCheckSum ^= eeaddress;
-      Serial.write(eedataa);
-      txCheckSum ^= eedataa;
-      Serial.write(txCheckSum);    
-
-      EEPROM.write(eeaddress,eedataa);
-      if (eeaddress==EEPROM_SETTINGS){
-        EEPROM.write(0,MWOSDVER);
-        readEEPROM();
-      }
-    }
-
 
     if(cmd == OSD_GET_FONT) {
       if(dataSize == 5) {
@@ -165,7 +165,14 @@ void serialMSPCheck()
     I2CError=read16();
     MwSensorPresent = read16();
     MwSensorActive = read32();
+    #if defined FORCESENSORS
+      MwSensorPresent |=GPSSENSOR;
+      MwSensorPresent |=BAROMETER;
+      MwSensorPresent |=MAGNETOMETER;
+      MwSensorPresent |=ACCELEROMETER;
+    #endif  
     armed = (MwSensorActive & mode.armed) != 0;
+
   }
 
   if (cmdMSP==MSP_RAW_IMU)
@@ -224,17 +231,17 @@ void serialMSPCheck()
 
   if (cmdMSP==MSP_ATTITUDE)
   {
-    for(uint8_t i=0;i<2;i++)
+    for(uint8_t i=0;i<2;i++){
       MwAngle[i] = read16();
-#ifdef USEGPSHEADING
-    MwHeading = GPS_ground_course;
-#else    
-    MwHeading = read16();
-#endif
-#ifdef HEADINGCORRECT
-    if (MwHeading >= + 180) MwHeading -= 360;
-#endif
-//    read16();
+    }
+    #if defined(USEGPSHEADING)
+      MwHeading = GPS_ground_course;
+    #else    
+      MwHeading = read16();
+    #endif
+    #ifdef HEADINGCORRECT
+      if (MwHeading >= + 180) MwHeading -= 360;
+    #endif
   }
 
 #if defined DEBUGMW
@@ -251,8 +258,13 @@ void serialMSPCheck()
   }
   if (cmdMSP==MSP_ALTITUDE)
   {
-    MwAltitude =read32();
-    MwVario = read16();
+    #if defined(USEGPSALTITUDE)
+      MwAltitude =GPS_altitude*10;
+      MwVario = 0;
+    #else    
+      MwAltitude =read32();
+      MwVario = read16();
+    #endif
   }
 
   if (cmdMSP==MSP_ANALOG)
@@ -261,7 +273,7 @@ void serialMSPCheck()
     pMeterSum=read16();
     MwRssi = read16();
     MWAmperage = read16();
- #ifdef AMPERAGECORRECT
+#ifdef AMPERAGECORRECT
     MWAmperage = MWAmperage * 10;
 #endif
  }
@@ -522,7 +534,7 @@ void serialMenuCommon()
 #ifdef PAGE1
 	if(configPage == 1) {
 	  if(ROW >= 1 && ROW <= 7) {
-	    if(COL==1) P8[ROW-1]=P8[ROW-1]+menudir;
+  	    if(COL==1) P8[ROW-1]=P8[ROW-1]+menudir;
 	    if(COL==2) I8[ROW-1]=I8[ROW-1]+menudir;
 	    if(COL==3) D8[ROW-1]=D8[ROW-1]+menudir;
 	  }
@@ -783,9 +795,54 @@ void fontSerialRequest() {
   Serial.write(txCheckSum);
 }
 
+void settingsSerialRequest() {
+  uint8_t txCheckSum;
+  uint8_t txSize;
+  headSerialRequest();
+  txCheckSum=0;
+  txSize=1+30;
+  Serial.write(txSize);
+  txCheckSum ^= txSize;
+  Serial.write(MSP_OSD);
+  txCheckSum ^= MSP_OSD;
+  Serial.write(OSD_READ_CMD_EE);
+  txCheckSum ^= OSD_READ_CMD_EE;
+  for(uint8_t i=0; i<10; i++) {
+    Serial.write(eeaddress);
+    txCheckSum ^= eeaddress;
+    Serial.write(eeaddress>>8);
+    txCheckSum ^= eeaddress>>8;
+    eedata=EEPROM.read(eeaddress);
+    Serial.write(eedata);
+    txCheckSum ^= eedata;
+    eeaddress++;
+  }  
+  Serial.write(txCheckSum);
+}
+
+void settingswriteSerialRequest() {
+  uint8_t txCheckSum;
+  uint8_t txSize;
+  headSerialRequest();
+  txCheckSum=0;
+  txSize=2;
+  Serial.write(txSize);
+  txCheckSum ^= txSize;
+  Serial.write(MSP_OSD);
+  txCheckSum ^= MSP_OSD;
+  Serial.write(OSD_READ_CMD_EE);
+  txCheckSum ^= OSD_READ_CMD_EE;
+  Serial.write(eeaddress);
+  txCheckSum ^= eeaddress;
+  Serial.write(txCheckSum);
+}
+
 void headSerialRequest (void) {
   Serial.write('$');
   Serial.write('M');
   Serial.write('<');
   
 }
+
+
+

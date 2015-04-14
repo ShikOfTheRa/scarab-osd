@@ -19,8 +19,8 @@
 
 /********************       CONTROLLER SOFTWARE      *********************/
 //Choose ONLY ONE option:-
-//#define MULTIWII_V24              // Undefine this if you are using MW versions 2.4  
-#define MULTIWII_V23                // Undefine this if you are using MW versions 2.2/2.3  
+#define MULTIWII_V24              // Undefine this if you are using MW versions 2.4  
+//#define MULTIWII_V23                // Undefine this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
 //#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT with 32bit hardware for compatibility with heading and current data
 //#define CLEANFLIGHT               // Undefine this if you are using CLEANFLIGHT with 32bit hardware for compatibility with heading and current data
@@ -30,7 +30,9 @@
 
 /********************       AIRCRAFT settings      *********************/
 //#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE 
-//#define USEGPSHEADING             // Undefine this to use GPS course for heading instead of MAG (mandatory for Naze  ACRO) 
+//#define USEMAGHEADING             // Not recommended - only undefine this to use MAG for FW heading instead of GPS (and only if using full NAZE32) 
+//#define USEBAROALTITUDE           // Not recommended - only undefine this to use BARO for FW altitude instead of GPS (and only if using full NAZE32) 
+
 
 /********************       HARDWARE CURRENT sensor settings      *********************/
 #define AMPERAGEMAX     500         // Size of current sensor / maximum current draw (* 10) e.g. 50A sensor = 500, 100A sensor = 1000
@@ -84,7 +86,7 @@
 
 
 /********************       STARTUP settings      *********************/
-#define INTRO_VERSION               "SHIKI OSD - R1.3FW" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+#define INTRO_VERSION               "SHIKI OSD - R1.3SP0" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
@@ -169,14 +171,23 @@
 #ifdef CLEANFLIGHT                      
 #endif
 #if defined(HARIKIRI) || defined(MULTIWII_V21)                     
-    #define BOXNAMES                // required to support legacy protocol
+  #define BOXNAMES                  // required to support legacy protocol
 #endif
 #ifdef MULTIWII_V24                     
 #endif
 #ifdef FIXEDWING                     
+  #define USEGPSHEADING
+  #define USEGPSALTITUDE
+  #if defined USEMAGHEADING 
+    #undef USEGPSHEADING
+  #endif  
+  #if defined USEBAROALTITUDE
+    #undef USEGPSALTITUDE
+  #endif
+  #define FORCESENSORS
 #endif
 
-#define HEADINGCORRECT          // required to correct for MWheading being 0>360 vs MWII -180>+180. Can be permanently enabled
+#define HEADINGCORRECT              // required to correct for MWheading being 0>360 vs MWII -180>+180. Leave permanently enabled
 
 
 
@@ -230,12 +241,13 @@
   #define GPSOSD
 #endif
 
-#if defined(GPSOSD)
+#if defined GPSOSD
   #undef INTRO_MENU
+  #define FORCESENSORS
 #endif
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-//#define DEBUG         // Enable/disable option to display OSD debug values 
+#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 
