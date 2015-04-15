@@ -1048,7 +1048,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
   if(confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() > 0) {
     //Draw center screen
     mapchar(0x7e, 224-30);
-    mapchar(0x00, 224-30-1);
+    mapchar(0x26, 224-30-1);
     mapchar(0xbc, 224-30+1);
   }
   }
