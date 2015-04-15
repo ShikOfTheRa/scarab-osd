@@ -275,6 +275,8 @@ void loop()
       }
       else
       {
+        if(MwSensorPresent&ACCELEROMETER)
+           displayHorizon(MwAngle[0],MwAngle[1]);
         if(Settings[S_DISPLAYVOLTAGE]&&((voltage>Settings[S_VOLTAGEMIN])||(timer.Blink2hz))) 
           displayVoltage();
         if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz))) 
@@ -304,8 +306,6 @@ void loop()
         if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition));      
        }
 #endif
-        if(MwSensorPresent&ACCELEROMETER)
-           displayHorizon(MwAngle[0],MwAngle[1]);
         if(MwSensorPresent&MAGNETOMETER) {
           displayHeadingGraph();
           displayHeading();

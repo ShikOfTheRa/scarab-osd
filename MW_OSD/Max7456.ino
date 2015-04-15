@@ -138,6 +138,7 @@ void MAX7456Setup(void)
   //sample on leading edge of clk,system clock/4 rate (4 meg)
 
   SPCR = (1<<SPE)|(1<<MSTR);
+  SPSR = (1<<SPI2X);
   uint8_t spi_junk;
   spi_junk=SPSR;
   spi_junk=SPDR;
@@ -243,47 +244,49 @@ volatile unsigned char vsync_wait = 0;
 
 void MAX7456_DrawScreen()
 {
-int xx;
-#ifdef USE_VSYNC
-  digitalWrite(MAX7456SELECT,LOW);
-  spi_transfer(DMM_reg);
-  spi_transfer(1);
-  spi_transfer(DMAH_reg);
-  spi_transfer(0);
-  spi_transfer(DMAL_reg);
-  spi_transfer(0);
-#else
-  digitalWrite(MAX7456SELECT,LOW);
-#endif
+  int xx;
+  #ifdef USE_VSYNC
+    digitalWrite(MAX7456SELECT,LOW);
+    spi_transfer(DMM_reg);
+    spi_transfer(1);
+    spi_transfer(DMAH_reg);
+    spi_transfer(0);
+    spi_transfer(DMAL_reg);
+    spi_transfer(0);
+    vsync_wait = 1;
+  #endif
 
   digitalWrite(MAX7456SELECT,LOW);
 
-#ifdef USE_VSYNC
-  vsync_wait = 1;
-#endif
   for(xx=0;xx<MAX_screen_size;++xx){
-#ifndef USE_VSYNC
-    MAX7456_Send(MAX7456ADD_DMAH, xx>>8);
-    MAX7456_Send(MAX7456ADD_DMAL, xx);
-#else
-  if (xx==200) vsync_wait = 1;
-  while (vsync_wait);
-#endif
-#ifdef OSD_SWITCH_RC 
-  if ((MwRcData[OSD_SWITCH_RC] > 1400) && (MwRcData[OSD_SWITCH_RC] < 1600))
-    screen[xx] = ' ';  
-#endif
-    MAX7456_Send(MAX7456ADD_DMDI, screen[xx]);
-    screen[xx] = ' ';
+    #ifdef OSD_SWITCH_RC 
+      if ((MwRcData[OSD_SWITCH_RC] > 1400) && (MwRcData[OSD_SWITCH_RC] < 1600))
+      screen[xx] = ' ';  
+    #endif
+    #ifdef USE_VSYNC
+     SPDR = MAX7456ADD_DMDI;
+     if (xx==240) vsync_wait = 1;      // Not enough time to load all characters within VBI period. This splits and waits until next field
+      while (!(SPSR & (1<<SPIF)));     // Wait the end of the last SPI transmission is clear
+      while (vsync_wait);
+      SPDR = screen[xx];
+      screen[xx] = ' ';
+      while (!(SPSR & (1<<SPIF)));     // Wait the end of the last SPI transmission is clear
+    #else   
+      MAX7456_Send(MAX7456ADD_DMAH, xx>>8);
+      MAX7456_Send(MAX7456ADD_DMAL, xx);
+      MAX7456_Send(MAX7456ADD_DMDI, screen[xx]);
+      screen[xx] = ' ';
+    #endif
   }
-#ifdef USE_VSYNC
-  spi_transfer(DMDI_reg);
-  spi_transfer(END_string);
-  spi_transfer(DMM_reg);
-  spi_transfer(B00000000);
-#endif
+  #ifdef USE_VSYNC
+    spi_transfer(DMDI_reg);
+    spi_transfer(END_string);
+    spi_transfer(DMM_reg);
+    spi_transfer(B00000000);
+  #endif
   digitalWrite(MAX7456SELECT,HIGH);
 }
+
 
 void MAX7456_Send(uint8_t add, uint8_t data)
 {

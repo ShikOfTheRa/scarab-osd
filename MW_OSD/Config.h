@@ -114,9 +114,9 @@
 
 
 /********************       Display Settings         ************************/
-//#define AUTOCAM                   // Enable autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings. Not recommended for > 600TVL cameras
+#define AUTOCAM                     // Enable autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings. Not recommended for > 600TVL cameras
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
-#define USE_VSYNC                 // Remove "sparklies" on boards that support VSYNC 
+#define USE_VSYNC                   // Remove "sparklies" on boards that support VSYNC 
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
