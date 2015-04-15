@@ -630,7 +630,7 @@ const char configMsgOFF[]  PROGMEM = "OFF";
 const char configMsgEXT[]  PROGMEM = "EXIT";
 const char configMsgSAVE[] PROGMEM = "SAVE+EXIT";
 const char configMsgPGS[]  PROGMEM = "<PAGE>";
-const char configMsgMWII[] PROGMEM = "USE MWII";
+const char configMsgMWII[] PROGMEM = "USE FC";
 
 // For Config pages
 //-----------------------------------------------------------Page0
