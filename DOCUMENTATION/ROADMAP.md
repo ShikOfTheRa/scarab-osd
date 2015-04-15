@@ -1,18 +1,7 @@
 ---
 
-## Known issues: ##
 
-fix available - BUG! "Use MW" options not saving backup file (single entry key)....
 
-fix available - BUG! When set the "Time Zone Offset" to say 2.0 and then do a "WRITE" the value will change (display) to 0.2
-
-fix available - BUG! Compass OK, but home arrow is inconsistent in fixedwing mode
-
-fix available - BUG! compile errors for GPS in soem Arduino versions
-
-fix available - BUG! PID menu options after row 5 are incorrect. e.g. level does not show level settings
-
-fix available means code in place but requires testing
 ---
 
 ## Enhancement requests for future releases: ##
@@ -67,8 +56,6 @@ Climb rate alarm
 
 Descriptive chracter font for for heading / angle to home
 
-Fixedwing - support for naze32 no mag fixedwing - use GPS heading for compass
-
 Fixedwing - use GPS data for ladders / vario
 
 Support for APM
@@ -80,7 +67,7 @@ Other changes
 
 Remove references to MultiWii (as no longer exclusively MultiWii)
 
-Impelement more desciptive "help" test within confih.h
+Impelement more descriptive "help" test within confih.h
 
 
 ## GUI: ##
@@ -108,3 +95,27 @@ Code quality:
  - Generally review and improve code quality
  - Memory improvements
  
+---
+ 
+## Fixed issues since last full release R1.3: ##
+
+BUG! "Use MW" options not saving backup file (single entry key)....
+
+BUG! When set the "Time Zone Offset" to say 2.0 and then do a "WRITE" the value will change (display) to 0.2
+
+BUG! Compass OK, but home arrow is inconsistent in fixedwing mode
+
+BUG! compile errors for GPS in soem Arduino versions
+
+BUG! PID menu options after row 5 are incorrect. e.g. level does not show level settings
+
+## Improvements since last full release R1.3: ##
+
+Fixedwing support for controllers with/without MAG/BARO. Default assumes no MAG/BARO.
+
+Horizon bar set behind other screen items as they have higher priority.
+
+AUTOCAM now default option (Auto sense PAL / NTSC cam at startup) to help with incorrectly marked cams / user error. 
+
+VSYNC now default option as most boards now support this. Clearer display.
+
