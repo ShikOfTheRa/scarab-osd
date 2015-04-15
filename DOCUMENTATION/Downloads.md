@@ -36,6 +36,8 @@ Historic releases of MW OSD are here:-
 
 Beta test files are here here:-
 
-**Release 1.3 - 09/04/2015 :**
+**Release 1.3 SP0 - 15/04/2015 :**
 
-[MW OSD R1.3 with revised serial for testers only](https://drive.google.com/uc?export=download&id=0B2MInRUrbpWxekVUWWdTczNlRTg)
+[MW OSD R1.3 with revised serial for testers only](https://drive.google.com/uc?export=download&id=0B2MInRUrbpWxY1dUa0Z3VWd3VkU)
+
+
