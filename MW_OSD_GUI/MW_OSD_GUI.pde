@@ -799,7 +799,9 @@ CreateItem(GetSetting("S_MAINVOLTAGE_VBAT"), 5,1*17, G_Voltage);
 CreateItem(GetSetting("S_DIVIDERRATIO"), 5,2*17, G_Voltage);
 CreateItem(GetSetting("S_BATCELLS"), 5,3*17, G_Voltage);
 CreateItem(GetSetting("S_VOLTAGEMIN"), 5,4*17, G_Voltage);
-
+  confItem[GetSetting("S_VOLTAGEMIN")].setDecimalPrecision(1);
+  confItem[GetSetting("S_VOLTAGEMIN")].setMultiplier(0.1);
+  
 // Amperage  ------------------------------------------------------------------------
 CreateItem(GetSetting("S_AMPERAGE"),  5,0, G_Amperage);
 CreateItem(GetSetting("S_AMPER_HOUR"),  5,1*17, G_Amperage);

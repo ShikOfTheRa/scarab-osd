@@ -182,7 +182,8 @@ void SetConfigItem(int index, int value) {
   if(index >= CONFIGITEMS)
     return;
 
-  if(index == GetSetting("S_GPSTZ"))confItem[index].setValue(float(value)/10);//preserve decimal, maybe can go elsewhere - haydent
+  if(index == GetSetting("S_VOLTAGEMIN"))confItem[index].setValue(float(value)/10);//preserve decimal
+  else if(index == GetSetting("S_GPSTZ"))confItem[index].setValue(float(value)/10);//preserve decimal, maybe can go elsewhere - haydent
   else confItem[index].setValue(value);
   if (index == CONFIGITEMS-1)
     buttonWRITE.setColorBackground(green_);
@@ -313,7 +314,10 @@ public void WRITEinit(){
     headSerialReply(MSP_OSD, CONFIGITEMS + (hudoptions*2*2) +1);
     serialize8(OSD_WRITE_CMD);
     for(int i = 0; i < CONFIGITEMS; i++){
-      if(i == GetSetting("S_GPSTZ")){
+      if(i == GetSetting("S_VOLTAGEMIN")){
+        serialize8(int(confItem[i].value()*10));//preserve decimal
+      }
+      else if(i == GetSetting("S_GPSTZ")){
         serialize8(int(confItem[i].value()*10));//preserve decimal, maybe can go elsewhere - haydent
       }
       else if(i == GetSetting("S_AMPDIVIDERRATIO")){
@@ -1097,7 +1101,10 @@ void MWData_Com() {
     confItem[GetSetting("S_AMPMAXL")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())&0xFF); // for 8>>16 bit EEPROM
     confItem[GetSetting("S_AMPMAXH")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())>>8);
     for(int i = 0; i < CONFIGITEMS; i++){
-      if(i == GetSetting("S_GPSTZ")){
+      if(i == GetSetting("S_VOLTAGEMIN")){
+        EElookuptable[i]=int(confItem[i].value()*10);
+      }
+      else if(i == GetSetting("S_GPSTZ")){
         EElookuptable[i]=int(confItem[i].value()*10);
       }
       else if(i == GetSetting("S_AMPDIVIDERRATIO")){
