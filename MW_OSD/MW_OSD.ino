@@ -1,7 +1,7 @@
 
 
 /*
-MultiWii NG OSD ... 
+Scarab NG OSD ... 
 
  This program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ uint16_t UntouchedStack(void)
 #endif
 
 //------------------------------------------------------------------------
-#define MWVERS "MULTIWII MWOSD - R1.3"  
+#define MWVERS "MW-OSD - R1.4"  
 #define MWOSDVER 6      // for eeprom layout verification      
 #include <avr/pgmspace.h>
 #include <EEPROM.h>

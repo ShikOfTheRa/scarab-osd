@@ -235,7 +235,7 @@ void serialMSPCheck()
       MwAngle[i] = read16();
     }
     #if defined(USEGPSHEADING)
-      MwHeading = GPS_ground_course;
+      MwHeading = GPS_ground_course/10;
     #else    
       MwHeading = read16();
     #endif
@@ -259,7 +259,7 @@ void serialMSPCheck()
   if (cmdMSP==MSP_ALTITUDE)
   {
     #if defined(USEGPSALTITUDE)
-      MwAltitude =GPS_altitude*10;
+      MwAltitude =GPS_altitude*100;
       MwVario = 0;
     #else    
       MwAltitude =read32();
@@ -534,9 +534,13 @@ void serialMenuCommon()
 #ifdef PAGE1
 	if(configPage == 1) {
 	  if(ROW >= 1 && ROW <= 7) {
-  	    if(COL==1) P8[ROW-1]=P8[ROW-1]+menudir;
-	    if(COL==2) I8[ROW-1]=I8[ROW-1]+menudir;
-	    if(COL==3) D8[ROW-1]=D8[ROW-1]+menudir;
+            uint8_t MODROW=ROW-1;
+            if (ROW>5){
+              MODROW=ROW+1;
+            }
+  	    if(COL==1) P8[MODROW]=P8[MODROW]+menudir;
+	    if(COL==2) I8[MODROW]=I8[MODROW]+menudir;
+	    if(COL==3) D8[MODROW]=D8[MODROW]+menudir;
 	  }
 	}
 #endif

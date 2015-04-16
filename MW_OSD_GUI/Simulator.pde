@@ -229,7 +229,7 @@ LinksSetup() ;
                 .setGroup(SG)
                 //.close() 
                ; 
-
+             
 SGSensors1 = ScontrolP5.addGroup("SGSensors1")
                 .setPosition(0,18)
                 .setWidth(175)
@@ -267,6 +267,23 @@ SGFRSKY = ScontrolP5.addGroup("SGFRSKY")
                 .setGroup(SG)
                 //.close() 
                ;   
+
+ G_Debug = GroupcontrolP5.addGroup("G_Debug")
+                .setPosition(388,145)
+                .setWidth(130)
+                .setBarHeight(15)
+//                .activateEvent(true)
+                .disableCollapse() 
+                .setBackgroundColor(color(30,255))
+                .setColorActive(red_)
+                .setBackgroundHeight(33)
+                .setLabel("Debug")
+                .setGroup(SG)
+                ; 
+                G_Debug.captionLabel()
+                .toUpperCase(false)
+                .align(controlP5.CENTER,controlP5.CENTER)
+                ; 
 
 SGControlBox = ScontrolP5.addGroup("SGControlBox")
                 .setPosition(0,145)
@@ -1048,7 +1065,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
   if(confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() > 0) {
     //Draw center screen
     mapchar(0x7e, 224-30);
-    mapchar(0x00, 224-30-1);
+    mapchar(0x26, 224-30-1);
     mapchar(0xbc, 224-30+1);
   }
   }
