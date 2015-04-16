@@ -8,15 +8,8 @@
 
 Amend 00 font to be default blank character - recommended to reduce sparklies
 
-Decimalise GUI values such as voltage etc.
 
 Ability to amend all PID settings from menu
-
-add max distance to summary
-
-add max altitude to summary
-
-support for altitude reset at arm
 
 support for cleanflight / baseflight loop time change
 
@@ -60,12 +53,8 @@ Fixedwing - use GPS data for ladders / vario
 
 Support for APM
 
-Show basefligth/cleanflight profile in use
-
 
 Other changes
-
-Remove references to MultiWii (as no longer exclusively MultiWii)
 
 Impelement more descriptive "help" test within confih.h
 
@@ -117,6 +106,10 @@ AUTOCAM now default option (Auto sense PAL / NTSC cam at startup) to help with i
 
 VSYNC now default option as most boards now support this. Clearer display.
 
-GUI support for FC passthrough configuration settings (access OSD config via FC) 
+Added max Amps to flight summary
+
+Decimalise GUI value for min battery voltage etc.
+
+GUI support for FC passthrough configuration settings (access OSD config via FC). 
 
 
