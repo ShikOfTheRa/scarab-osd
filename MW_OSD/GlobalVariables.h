@@ -509,6 +509,7 @@ int16_t temperature=0;                  // temperature in degrees Centigrade
 uint16_t speedMAX=0;
 int16_t altitudeMAX=0;
 uint16_t distanceMAX=0;
+uint16_t ampMAX=0;
 int32_t trip=0;
 uint16_t flyingTime=0; 
 
@@ -641,6 +642,7 @@ const char configMsg03[] PROGMEM = "MAX DISTANCE";
 const char configMsg04[] PROGMEM = "MAX ALTITUDE";
 const char configMsg05[] PROGMEM = "MAX SPEED";
 const char configMsg06[] PROGMEM = "MAH USED";
+const char configMsg07[] PROGMEM = "MAX AMPS";
 //-----------------------------------------------------------Page1
 const char configMsg10[] PROGMEM = "PID CONFIG";
 const char configMsg11[] PROGMEM = "ROLL";
@@ -808,6 +810,7 @@ const PROGMEM char * const menu_stats_item[] =
   configMsg04,
   configMsg05,
   configMsg06,
+  configMsg07,
 };
 
 const PROGMEM char * const menu_pid[] = 
