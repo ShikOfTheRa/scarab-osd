@@ -1049,6 +1049,7 @@ void displayConfigScreen(void)
 //    MAX7456_WriteString_P(configMsg11, ROLLT);
 
     for(uint8_t Y=0; Y<=8; Y++) {      
+      if (Y==5) Y=7;
       uint8_t X=Y;
       if (Y>6){
         X=X-2;

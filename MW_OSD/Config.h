@@ -1,19 +1,10 @@
 /*--------------------------       configurable parameters      ----------------------------------------------------*/
 
-/********************       FEATURES      *********************/
-// Disable features if you require memory for other features
-// Further configuration may be require elsewhere in config.h + option enabled on GUI
-#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
-#define HORIZON         // Enable/disable HORIZON indicator
-#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
-//#define GPSTIME         // Enable/disable GPS Time functions
-//#define SPORT           // Enable/disable FRSKY S.PORT cell code
 
-
-/********************       HARDWARE OSD settings      *********************/
+/********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
 #define MINIMOSD                    // Choose this if using standard MINIMOSD hardware (default for 95% of boards) 
-//#define WITESPYV1.1               // Choose this if using Witespy V1.1 OSD, select this to use alternative resistors / pinouts 
+//#define WITESPYV1.1               // Choose this if using Witespy V1.1 OSD, select this to correct for mislabelled bat1 and bat 2. Alsoe uses alternative resistors / pinouts. 
 //#define RUSHDUINO                 // Choose this if using Rushduino
 
 
@@ -28,10 +19,20 @@
 //#define NOCONTROLLER              // Undefine this if you are using GPSOSD
 
 
-/********************       AIRCRAFT settings      *********************/
-//#define FIXEDWING                 // Undefine this if you are using MW fixed wing from PatrikE 
-//#define USEMAGHEADING             // Not recommended - only undefine this to use MAG for FW heading instead of GPS (and only if using full NAZE32) 
-//#define USEBAROALTITUDE           // Not recommended - only undefine this to use BARO for FW altitude instead of GPS (and only if using full NAZE32) 
+/********************       AIRCRAFT TYPE settings      *********************/
+//Choose ONLY ONE option:
+//#define ROTORCRAFT                  // Default for multirotors etc. 
+#define FIXEDWING                 // Undefine this if you are using fixed wing MultiWii or Baseflight 
+
+
+/********************       FEATURES      *********************/
+// Disable features if you require memory for other features
+// Further configuration may be require elsewhere in config.h + option enabled on GUI
+#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
+#define HORIZON         // Enable/disable HORIZON indicator
+#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
+//#define GPSTIME         // Enable/disable GPS Time functions
+//#define SPORT           // Enable/disable FRSKY S.PORT cell code
 
 
 /********************       HARDWARE CURRENT sensor settings      *********************/
@@ -57,6 +58,12 @@
 
 /********************       GPS settings      *********************/
 #define  MINSATFIX 5               // Number of sats required for a fix. 5 minimum. More = better
+
+
+/********************       AIRCRAFT type=FIXEDWING settings      *********************/
+// **ONLY** valid when using fixed wing
+//#define USEMAGHEADING             // Only undefine this to use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
+//#define USEBAROALTITUDE           // Only undefine this to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) 
 
 
 /********************       GPS OSD settings      *********************/
