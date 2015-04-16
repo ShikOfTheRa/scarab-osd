@@ -753,8 +753,9 @@ DONATEimage  = loadImage("DON_def.png");
     commListMax = i;
   }
   commListbox.addItem("Close Comm",++commListMax); // addItem(name,value)
+  commListbox.addItem("Pass Thru Comm",commListMax+1); // addItem(name,value)
   txtlblWhichcom = controlP5.addTextlabel("txtlblWhichcom","No Port Selected",5,22).setGroup(G_PortStatus); // textlabel(name,text,x,y)
-  txtmessage = controlP5.addTextlabel("txtmessage","",3,250); // textdebug
+  txtmessage = controlP5.addTextlabel("txtmessage","",3,295); // textdebug
 //  txtmessage = controlP5.addTextlabel("txtmessage","",windowsX/2,windowsY/2); // textdebug
 
 // BUTTONS SELECTION ---------------------------------------
@@ -890,7 +891,8 @@ buttonGPSTIMELINK = controlP5.addButton("GPSTIMELINK",1,200,10,125,16);
 buttonGPSTIMELINK.setCaptionLabel("GPS Requirements").setGroup(G_LINKS);
 buttonSPORTLINK = controlP5.addButton("SPORTLINK",1,200,30,125,16);
 buttonSPORTLINK.setCaptionLabel("FRSKY Requirements").setGroup(G_LINKS);
-buttonDONATELINK = controlP5.addButton("DONATELINK",1,XLINKS+30,YLINKS+225, 80, 30).setVisible(false);
+buttonDONATELINK = controlP5.addButton("DONATELINK",1,XLINKS+30,YLINKS+217, 80, 20).setVisible(false);
+//   image(DONATEimage,XLINKS+20,YLINKS+207, 100, 40); 
 
 
 
@@ -1282,12 +1284,8 @@ if ((millis()&0x100)>0)
 
   image(GUIBackground,0, 0, windowsX, windowsY); 
   if (LEWvisible==0){
-   image(DONATEimage,XLINKS+20,YLINKS+220, 100, 40); 
-   if ((mouseX>=XLINKS+20) && (mouseX<=XLINKS+20+100) && (mouseY>=YLINKS+220) && (mouseY<=YLINKS+220+40) && (mousePressed == true))
-     if (linktimer<millis()){
-       DONATELINK();
-       linktimer=2000+millis(); 
-     }    
+   image(DONATEimage,XLINKS+20,YLINKS+207, 100, 40); 
+   
   }  
   strokeWeight(3);stroke(0);
   rectMode(CORNERS);
@@ -2269,3 +2267,7 @@ void WRITEEEMSP(){
   WRITEconfigMSP_init();
 }
 
+void mouseClicked(){
+  if ((mouseX>=(XLINKS+20)) && (mouseX<=(XLINKS+20+100)) && (mouseY>=(YLINKS+207)) && (mouseY<=(YLINKS+207+30)))
+    DONATELINK();
+}
