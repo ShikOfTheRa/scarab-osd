@@ -548,6 +548,8 @@ void displayTime(void)
 
 void displayAmperage(void)
 {
+  if(amperage > ampMAX)
+    ampMAX = amperage;
   if(!fieldIsVisible(amperagePosition))
     return;
   ItoaPadded(amperage, screenBuffer, 5, 4);     // 999.9 ampere max!
@@ -1009,7 +1011,7 @@ void displayConfigScreen(void)
     MAX7456_WriteString(screenBuffer,ROLLD-4);
 
 #else
-    for(uint8_t X=0; X<=5; X++) {
+    for(uint8_t X=0; X<=6; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_stats_item[X])));
       MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
     }
@@ -1032,6 +1034,7 @@ void displayConfigScreen(void)
     MAX7456_WriteString(itoa(xx,screenBuffer,10),LEVD-3);
 
 //    MAX7456_WriteString_P(configMsg05, LEVT);
+    MAX7456_WriteString(itoa(ampMAX/10,screenBuffer,10),MAGD-3);
 
     formatTime(flyingTime, screenBuffer, 1);
     MAX7456_WriteString(screenBuffer,ROLLD-4);
