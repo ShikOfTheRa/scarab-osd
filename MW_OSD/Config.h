@@ -21,8 +21,8 @@
 
 /********************       AIRCRAFT TYPE settings      *********************/
 //Choose ONLY ONE option:
-//#define ROTORCRAFT                  // Default for multirotors etc. 
-#define FIXEDWING                 // Undefine this if you are using fixed wing MultiWii or Baseflight 
+#define ROTORCRAFT                  // Default for multirotors etc. 
+//#define FIXEDWING                 // Undefine this if you are using fixed wing MultiWii or Baseflight 
 
 
 /********************       FEATURES      *********************/
