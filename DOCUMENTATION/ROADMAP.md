@@ -72,8 +72,6 @@ Impelement more descriptive "help" test within confih.h
 
 ## GUI: ##
 
-GUI support for FC passthrough configuration settings (access OSD config via FC) 
-
 Display anal / PWM sensors on GUI - via MW OSD protocol
 
 RSSI calibration button
@@ -118,4 +116,7 @@ Horizon bar set behind other screen items as they have higher priority.
 AUTOCAM now default option (Auto sense PAL / NTSC cam at startup) to help with incorrectly marked cams / user error. 
 
 VSYNC now default option as most boards now support this. Clearer display.
+
+GUI support for FC passthrough configuration settings (access OSD config via FC) 
+
 
