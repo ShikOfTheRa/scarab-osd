@@ -422,4 +422,23 @@ G_SPORT = GroupcontrolP5.addGroup("G_SPORT")
                 ;        
 */  
 
+ G_Debug = GroupcontrolP5.addGroup("G_Debug")
+//                .setPosition(5,250)
+                .setPosition(693,541)
+                .setWidth(130)
+                .setBarHeight(15)
+                .activateEvent(true)
+                .disableCollapse() 
+                .setBackgroundColor(color(30,255))
+                .setColorActive(red_)
+                .setBackgroundHeight(33)
+                .setLabel("Debug")
+         //       .setGroup(SG)
+                ; 
+                G_Debug.captionLabel()
+                .toUpperCase(false)
+                .align(controlP5.CENTER,controlP5.CENTER)
+                ; 
+
+
 }
