@@ -198,6 +198,7 @@ String OSname = System.getProperty("os.name");
 String LoadPercent = "";
 String CallSign = "";
 String Title;
+int Passthroughcomm;
 
 int init_com = 0;
 int commListMax = 0;
@@ -205,7 +206,7 @@ int whichKey = -1;  // Variable to hold keystoke values
 int inByte = -1;    // Incoming serial data
 int[] serialInArray = new int[3];    // Where we'll put what we receive
 int[] debug = new int[4];    
-String xxc="";
+String progresstxt="";
 int xcolor=20;  
 
 
@@ -594,6 +595,10 @@ color yellow_ = color(200, 200, 20),
       ;
 //Colors--------------------------------------------------------------------------------------------------------------------
 
+// textarea -------------------------------------------------------------------------------------------------------------
+Textarea myTextarea;
+Println console;
+
 // textlabels -------------------------------------------------------------------------------------------------------------
 Textlabel txtlblconfItem[] = new Textlabel[CONFIGITEMS] ;
 Textlabel txtlblSimItem[] = new Textlabel[SIMITEMS] ;
@@ -605,7 +610,6 @@ Button buttonIMPORT,buttonSAVE,buttonREAD,buttonRESET,buttonWRITE,buttonRESTART,
 Button buttonLUP, buttonLDOWN, buttonLLEFT, buttonLRIGHT, buttonLPOSUP, buttonLPOSDOWN;
 Button buttonLHUDUP,buttonLPOSHUDDOWN,buttonLPOSEN, buttonLSET, buttonLADD, buttonLSAVE, buttonLCANCEL;
 Button buttonLEW;
-Button buttonREADEEMSP ; Button buttonWRITEEEMSP ;
 Button buttonGUIDELINK, buttonFAQLINK, buttonCALIBLINK, buttonSUPPORTLINK, buttonDONATELINK;
 // Buttons------------------------------------------------------------------------------------------------------------------
 
@@ -627,7 +631,8 @@ int readcheck[] = new int[CONFIGITEMS] ;
 //Numberbox SimItem[] = new Numberbox[SIMITEMS] ;
 //  number boxes--------------------------------------------------------------------------------------------------------------
 
-Group MGUploadF,
+Group 
+  MGUploadF,
   LEW,
   G_LINKS,
   G_MESSAGE,
@@ -667,6 +672,11 @@ controlP5.Controller hideLabel(controlP5.Controller c) {
 
 void setup() {
   size(windowsX,windowsY);
+
+
+
+
+//  LoadConfig();
 //  xml = loadXML("HUDLAYOUT.xml");
   xml = loadXML("hudlayout.xml");
 //  xml = loadXML(dataPath("hudlayout.xml"));
@@ -720,9 +730,19 @@ DONATEimage  = loadImage("DON_def.png");
   //GroupcontrolP5.setColorActive(color(30,255));
   //GroupcontrolP5.setAutoDraw(false);
   FontGroupcontrolP5 = new ControlP5(this); // initialize the GUI controls
- FontGroupcontrolP5.setControlFont(font10);
+  FontGroupcontrolP5.setControlFont(font10);
 
   SetupGroups();
+
+  myTextarea = controlP5.addTextarea("txt")
+    .setPosition(DisplayWindowX+WindowAdjX+10+10, DisplayWindowY+WindowAdjY+10)
+    .setSize(500, 400)
+    .setFont(createFont("", 12))
+    .setLineHeight(14)
+    .setColor(color(255))
+  ;
+
+  console = controlP5.addConsole(myTextarea);//
 
 
 // BAUD RATE / COM PORT SELECTION ---------------------------------------
@@ -753,25 +773,18 @@ DONATEimage  = loadImage("DON_def.png");
     commListMax = i;
   }
   commListbox.addItem("Close Comm",++commListMax); // addItem(name,value)
-  commListbox.addItem("Pass Thru Comm",commListMax+1); // addItem(name,value)
+  //commListbox.addItem("Pass Thru Comm",commListMax+1); // addItem(name,value)
   txtlblWhichcom = controlP5.addTextlabel("txtlblWhichcom","No Port Selected",5,22).setGroup(G_PortStatus); // textlabel(name,text,x,y)
   txtmessage = controlP5.addTextlabel("txtmessage","",3,295); // textdebug
-//  txtmessage = controlP5.addTextlabel("txtmessage","",windowsX/2,windowsY/2); // textdebug
 
 // BUTTONS SELECTION ---------------------------------------
   
   buttonSAVE = controlP5.addButton("bSAVE",1,20,5,60,16); buttonSAVE.setLabel("    SAVE").setGroup(SAVE_LOAD).setColorBackground(osdcontr_); 
   buttonIMPORT = controlP5.addButton("bIMPORT",1,20,25,60,16); buttonIMPORT.setLabel("    LOAD").setGroup(SAVE_LOAD).setColorBackground(osdcontr_);   
-
   buttonREAD = controlP5.addButton("READEEMSP",1,20,5,60,16);buttonREAD.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel("    READ");
   buttonWRITE = controlP5.addButton("WRITEEEMSP",1,20,25,60,16);buttonWRITE.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel("   WRITE");
   buttonRESET = controlP5.addButton("DEFAULT",1,20,45,60,16);buttonRESET.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel(" DEFAULT");
   buttonRESTART = controlP5.addButton("RESTART",1,20,65,60,16);buttonRESTART.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel(" RESTART");
-
-  buttonREADEEMSP = controlP5.addButton("READ",1,10,30,92,16);buttonREADEEMSP.setColorBackground(osdcontr_).setGroup(G_LINKS).setLabel("OLD READ");
-  buttonWRITEEEMSP = controlP5.addButton("WRITE",1,10,50,92,16);buttonWRITEEEMSP.setColorBackground(osdcontr_).setGroup(G_LINKS).setLabel("OLD WRITE");
-
-
   buttonLEW = controlP5.addButton("LEW",1,10,10,92,16);buttonLEW.setColorBackground(osdcontr_).setGroup(G_LINKS).setLabel("Layout Editor");
     
 
@@ -1023,9 +1036,6 @@ void CreateCS(int ItemIndex, int XLoction, int YLocation, Group inGroup){
   confItem[ItemIndex].hide();
   toggleConfItem[ItemIndex] = (controlP5.Toggle) hideLabel(controlP5.addToggle("toggleValue"+ItemIndex));
   toggleConfItem[ItemIndex].hide();
-  
-  
-
 }
 
 void CreateItem(int ItemIndex, int XLoction, int YLocation, Group inGroup){
@@ -1089,66 +1099,25 @@ void MakePorts(){
 
 void draw() {
 
+// Initial setup
+  time=millis();
+   progresstxt="";
+
   if (commListbox.isOpen())
     baudListbox.close();
   else
     baudListbox.open();
-
-  if (init_com==1){
-    if (confCheck==0){
-      ReadMillis=millis()-1;
-      if (ReadConfig<1)
-        ReadConfig=1;
-    }
-  }
-
-//  debug[0]=init_com;
-//  debug[1]=ReadConfig;
-//  debug[2]=WriteConfig;
-//  debug[3]++;
   
-  time=millis();
+
+// Process and outstanding Read or Write EEPROM requests
   if((millis()>ReadConfigMSPMillis)&(millis()>WriteConfigMSPMillis)&(init_com==1))
     SimControlToggle.setValue(1);
-
-  txtmessage.setValue(xxc);
-
-  if (WriteConfig>0){
-    if (millis()>WriteMillis){
-      if (init_com==1){
-        xxc="Save attempt: "+str(WriteConfig);
-        WRITEconfig();
-        WriteMillis = 500+millis();
-        ReadMillis = 300+millis();
-        ReadConfig=1;
-        delay(200);
-        if (WriteConfig>0) WriteConfig--;
-      }
-    }
-  }
-  else{
-   xxc="";
-  }
-
-    txtmessage.setValue(xxc);
-  
-  if (ReadConfig>0){
-    if (millis()>ReadMillis){
-      if (init_com==1){
-        READconfig();
-        ReadMillis = 300+millis();
-        delay(200);
-        if (ReadConfig>0) ReadConfig--;
-      }
-    }
-  }  
-
     if (millis()<ReadConfigMSPMillis){
       if (init_com==1){
         READconfigMSP();
         toggleMSP_Data = true;
         int progress=100*eeaddressGUI/CONFIGITEMS;
-        xxc="Read: "+progress+"%";
+        progresstxt="Read: "+progress+"%";
       }
     }
 
@@ -1157,19 +1126,13 @@ void draw() {
         WRITEconfigMSP();
         toggleMSP_Data = true;
         int progress=100*eeaddressGUI/(CONFIGITEMS + (hudoptions*2*2));
-        xxc="Write: "+progress+"%";
+        progresstxt="Write: "+progress+"%";
       }
     }
 
-if ((millis()&0x100)>0)
-    txtmessage.setValue(xxc);
-//    makeText("DISARMED", windowsX/2+10,windowsY/2+10);
+    txtmessage.setValue(progresstxt);
 
-  
-//if ((ReadConfig==0)&&(WriteConfig==0)&&(confCheck==0))
-//  SimControlToggle.setValue(1);
-
-// Layout editor.......
+// Layout editor
   txtlblLayoutTxt.setValue(" : "+ CONFIGHUDTEXT[hudeditposition]);
 
   int hudid=0;
@@ -1177,11 +1140,8 @@ if ((millis()&0x100)>0)
     hudid = int(confItem[GetSetting("S_HUDOSDSW")].value());
   else
     hudid = int(confItem[GetSetting("S_HUD")].value()); 
-
   txtlblLayoutHudTxt.setValue(" : "+hudid);
-
   LEW.setLabel("Layout Editor for profile: "+hudid+" - "+CONFIGHUDNAME[hudid]);
-
   if (CONFIGHUDEN[hudid][hudeditposition]>0)
     txtlblLayoutEnTxt.setValue(" : Enabled");
   else
@@ -1191,9 +1151,6 @@ if ((millis()&0x100)>0)
 // Colour switches when enabled......
   coloriseswitches();
   if ((init_com==1)  && (toggleMSP_Data == true)) {
-    //time2 = time;
-//    PortRead = true;
-//    MakePorts();
     MWData_Com();
     if (!FontMode) PortRead = false;
     MakePorts();
@@ -1202,19 +1159,14 @@ if ((millis()&0x100)>0)
     PortRead = false;
     MakePorts();
   }
+
   if ((SendSim ==1) && (ClosePort == false)) 
-
-
   {
-//    PortWrite = true;
-//    MakePorts();
-
-
     if (!FontMode&&(ReadConfig==0)&&(WriteConfig==0)) {
       if (init_com==1) {
        
         if (ClosePort) return;
- //       if (SimControlToggle.getValue()==0) return;
+        if (SimControlToggle.getValue()==0) return;
 
           if (init_com==1)SendCommand(MSP_ATTITUDE);
           if (init_com==1)SendCommand(MSP_RC);
@@ -1372,6 +1324,7 @@ if ((millis()&0x100)>0)
     ClosePort();
   }
   
+//println("Display in text area");
    
 }
 
@@ -1660,7 +1613,7 @@ public void bLCANCEL() {
   G_LINKS.show(); 
   initxml();
   if (init_com==1)
-    READinit();
+    READconfigMSP_init();
 }
 
 public void bLSET() {
@@ -1912,9 +1865,10 @@ public void updateConfig(){
 //  ConfigClass.setProperty("StartFontFile",FontFileName);
   ConfigClass.setProperty("BaudRate",str(BaudRate));
   ConfigClass.setProperty("Title",Title);
+  ConfigClass.setProperty("Passthroughcomm",str(Passthroughcomm));
   
   
-  File file = new File(dataPath("GUI.Config"));
+  File file = new File(dataPath("gui.cfg"));
   try{
     out = new FileOutputStream(file) ;
     ConfigClass.conf.storeToXML(out, "MW_OSD GUI Configuration File  " + new  Date().toString());
@@ -1941,39 +1895,41 @@ public void LoadConfig(){
   String error = null;
   FileInputStream in =null;  
   BaudRate=0;
-
   try{
-   
-    in = new FileInputStream(dataPath("GUI.Config"));
-  }catch(FileNotFoundException e){
-//    System.out.println("Configuration Failed- Creating Default");
+    in = new FileInputStream(dataPath("gui.cfg"));
+  }
+  catch(FileNotFoundException e){
+    //System.out.println("Configuration Failed- Creating Default");
     BaudRate = 115200;
     Title = MW_OSD_GUI_Version;
+    Passthroughcomm = 0;
     updateConfig();
-    }catch( IOException ioe){
+  }
+  catch( IOException ioe){
       /*failed to write the file*/
       ioe.printStackTrace();
       error = ioe.getCause().toString();
-    }//finally{
-      if (in!=null){
-        try{
-          ConfigClass.conf.loadFromXML(in); 
-//          FontFileName = ConfigClass.getProperty("StartFontFile");
-          BaudRate =int(ConfigClass.getProperty("BaudRate"));
-          Title =ConfigClass.getProperty("Title");
-          img_Clear = LoadFont(FontFileName);
-//          System.out.println("Configuration Successful");
-          in.close();
-          }catch( IOException ioe){/*failed to close the file*/error = ioe.getCause().toString();}
-          }
-          if (error !=null){
-            JOptionPane.showMessageDialog(null, new StringBuffer().append("error : ").append(error) );
-          }
-    //}
-      txtlblWhichbaud.setValue("Baud rate: "+str(BaudRate));
-      frame.setTitle(Title);
-
-//     System.out.println(BaudRate);   
+  }//finally{
+  if (in!=null){
+    try{
+      ConfigClass.conf.loadFromXML(in); 
+      BaudRate =int(ConfigClass.getProperty("BaudRate"));
+      Title =ConfigClass.getProperty("Title");
+      Passthroughcomm = int(ConfigClass.getProperty("Passthroughcomm"));
+      img_Clear = LoadFont(FontFileName);
+      in.close();
+    }
+    catch( IOException ioe){
+      /*failed to close the file*/error = ioe.getCause().toString();}
+  }
+  if (error !=null){
+    JOptionPane.showMessageDialog(null, new StringBuffer().append("error : ").append(error) );
+  }
+  txtlblWhichbaud.setValue("Baud rate: "+str(BaudRate));
+  frame.setTitle(Title);
+  if (Passthroughcomm !=0){
+    commListbox.addItem("Pass Thru Comm",commListMax+1); 
+  }
 }
 
 //  our configuration 
@@ -1990,26 +1946,6 @@ static class ConfigClass {
     conf = new Properties();
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        
-        
-        
 
 
 void mouseReleased() {
@@ -2173,7 +2109,7 @@ void xmlsavelayout(){
   confItem[GetSetting("S_HUD")].setMax(ConfigRanges[GetSetting("S_HUD")]);
   confItem[GetSetting("S_HUDOSDSW")].setMax(ConfigRanges[GetSetting("S_HUDOSDSW")]);
   if (init_com==1)
-    READinit();
+    READconfigMSP_init();
 }
 
 

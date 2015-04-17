@@ -268,23 +268,6 @@ SGFRSKY = ScontrolP5.addGroup("SGFRSKY")
                 //.close() 
                ;   
 
- G_Debug = GroupcontrolP5.addGroup("G_Debug")
-                .setPosition(388,145)
-                .setWidth(130)
-                .setBarHeight(15)
-//                .activateEvent(true)
-                .disableCollapse() 
-                .setBackgroundColor(color(30,255))
-                .setColorActive(red_)
-                .setBackgroundHeight(33)
-                .setLabel("Debug")
-                .setGroup(SG)
-                ; 
-                G_Debug.captionLabel()
-                .toUpperCase(false)
-                .align(controlP5.CENTER,controlP5.CENTER)
-                ; 
-
 SGControlBox = ScontrolP5.addGroup("SGControlBox")
                 .setPosition(0,145)
                 .setWidth(175)

@@ -145,12 +145,14 @@ void InitSerial(float portValue) {
     }
   }
   else if(portValue > commListMax && init_com == 1){
-    System.out.println("Serial Port Pass Through Starting" );
-    SendCommand(MSP_PASSTHRU_SERIAL);
-    delay(1000);
-    SendCommand(MSP_IDENT);
-    SendCommand(MSP_STATUS);
-    READ();
+    if (Passthroughcomm==1) {
+      System.out.println("Serial Port Pass Through Starting" );
+      SendCommand(MSP_PASSTHRU_SERIAL);
+      delay(1000);
+      SendCommand(MSP_IDENT);
+      SendCommand(MSP_STATUS);
+      READconfigMSP_init();
+    }
   }
   else {
     if(init_com == 1){
@@ -249,44 +251,6 @@ void RESTART(){
 //  ReadConfigMSPMillis=20000+millis();  
 }  
 
-public void READ(){
-  if(ReadConfig==0){
-    WriteConfig=0; 
-    confCheck=0; 
-    READinit();
-    ReadMillis=millis()-1;
-  }
-}
-
-public void READinit(){
-  g_serial.clear();
-  ReadConfig=20;  
-  SimControlToggle.setValue(0);
-  for(int i = 0; i < CONFIGITEMS; i++){
-    SetConfigItem((byte)i, 0);
-  }
-}
-
-public void READconfig(){ 
-  PortRead = true; 
-  MakePorts();
-   for (int txTimes = 0; txTimes<4; txTimes++) {
-     toggleMSP_Data = true;
-     headSerialReply(MSP_OSD, 1);
-     serialize8(OSD_READ_CMD);
-     tailSerialReply();
-   }
-}
-
-
-public void WRITE(){
-  if(WriteConfig==0){
-    WriteMillis = millis();
-    ReadMillis = millis();
-    g_serial.clear();
-    WRITEinit();
-  }
-}
 
 
 public void WRITEinit(){
@@ -1069,6 +1033,7 @@ void MWData_Com() {
 }
 
   public void READconfigMSP_init(){
+//    println("Display in text area");
     SimControlToggle.setValue(0);
     ReadConfigMSPMillis=1000+millis(); 
     eeaddressGUI=0;   
