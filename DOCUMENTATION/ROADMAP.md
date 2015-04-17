@@ -6,8 +6,6 @@
 
 ## Enhancement requests for future releases: ##
 
-Amend 00 font to be default blank character - recommended to reduce sparklies
-
 
 Ability to amend all PID settings from menu
 
@@ -111,5 +109,8 @@ Added max Amps to flight summary
 Decimalise GUI value for min battery voltage etc.
 
 GUI support for FC passthrough configuration settings (access OSD config via FC). 
+
+Amended 00 font to be blank character - recommended to reduce sparklies
+
 
 
