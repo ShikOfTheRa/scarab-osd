@@ -83,8 +83,8 @@ To navigate the OSD:<br>
 <li>!! NOTE !! See guide for how to calibrate<br>
 <br>
 <b>RSSI</b>
-<li>Display RSSI - select this if you wish to display RSSI on the OSD<br>
-<li>Use MWII - select this if you wish to to use the RSSI value from the RX connected to the Multiwii controller instead of the OSD<br>
+<li>Display RSSI - select this if you wish to display RSSI on the OSD. By default this enables Analog RSSI direct to teh controller<br>
+<li>Use MWII - select this if you wish to to use the RSSI value from the Flight Controller instead of the OSD. This can be analogue or PWM - but only when its connected to the Flight controller<br>
 <li>Use PWM - select this if you wish to use the RSSI value from a RX providing PWM RSSI connected to the OSD<br>
 <li>If neither MWII or PWM are selected, the OSD will use analogue RSSI from a RX directly connected to the OSD<br>
 <li>RSSI alarm - set this to the value at which you require the RSSI value to start to flash<br>
