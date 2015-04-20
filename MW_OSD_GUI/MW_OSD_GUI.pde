@@ -597,7 +597,7 @@ color yellow_ = color(200, 200, 20),
 
 // textarea -------------------------------------------------------------------------------------------------------------
 Textarea myTextarea;
-Println console;
+//Println console;
 
 // textlabels -------------------------------------------------------------------------------------------------------------
 Textlabel txtlblconfItem[] = new Textlabel[CONFIGITEMS] ;
@@ -736,13 +736,14 @@ DONATEimage  = loadImage("DON_def.png");
 
   myTextarea = controlP5.addTextarea("txt")
     .setPosition(DisplayWindowX+WindowAdjX+10+10, DisplayWindowY+WindowAdjY+10)
-    .setSize(500, 400)
+    .setSize(325, 228)
     .setFont(createFont("", 12))
     .setLineHeight(14)
     .setColor(color(255))
+//    .setColorBackground(red_)
   ;
 
-  console = controlP5.addConsole(myTextarea);//
+//  console = controlP5.addConsole(myTextarea);//
 
 
 // BAUD RATE / COM PORT SELECTION ---------------------------------------

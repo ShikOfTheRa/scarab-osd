@@ -1033,7 +1033,7 @@ void MWData_Com() {
 }
 
   public void READconfigMSP_init(){
-//    println("Display in text area");
+//    println("Console test print");
     SimControlToggle.setValue(0);
     ReadConfigMSPMillis=1000+millis(); 
     eeaddressGUI=0;   
