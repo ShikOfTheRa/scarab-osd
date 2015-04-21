@@ -6,6 +6,8 @@
 
 ## Enhancement requests for future releases: ##
 
+Support for newer Cleanflight releases
+
 Display option for climb rate value instead of vario slider
 
 Ability to amend all PID settings from menu
