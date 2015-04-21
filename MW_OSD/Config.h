@@ -13,8 +13,8 @@
 #define MULTIWII_V24              // Undefine this if you are using MW versions 2.4  
 //#define MULTIWII_V23                // Undefine this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
-//#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT with 32bit hardware for compatibility with heading and current data
-//#define CLEANFLIGHT               // Undefine this if you are using CLEANFLIGHT with 32bit hardware for compatibility with heading and current data
+//#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT
+//#define CLEANFLIGHT               // Undefine this if you are using CLEANFLIGHT versions prior to 7/3/2015
 //#define HARIKIRI                  // Undefine this if you are using HARIKIRI (for BOXNAMES compatibility)
 //#define NOCONTROLLER              // Undefine this if you are using GPSOSD
 
