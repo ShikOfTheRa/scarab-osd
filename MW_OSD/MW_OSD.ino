@@ -113,15 +113,18 @@ void setup()
     analogReference(INTERNAL);
 
   MAX7456Setup();
-  setMspRequests();
-  blankserialRequest(MSP_IDENT);
   #if defined FORCESENSORS
     MwSensorPresent |=GPSSENSOR;
     MwSensorPresent |=BAROMETER;
     MwSensorPresent |=MAGNETOMETER;
     MwSensorPresent |=ACCELEROMETER;
   #endif
-
+  #if defined GPSOSD
+    GPS_SerialInit();
+  #else
+    setMspRequests();
+    blankserialRequest(MSP_IDENT);
+  #endif
 }
 
 
@@ -162,9 +165,10 @@ void loop()
   if((currentMillis - previous_millis_low) >= lo_speed_cycle)  // 10 Hz (Executed every 100ms)
   {
     previous_millis_low = previous_millis_low+lo_speed_cycle;    
+    #ifndef GPSOSD
     if(!fontMode)
       blankserialRequest(MSP_ATTITUDE);
-
+    #endif //GPSOSD
    }  // End of slow Timed Service Routine (100ms loop)
 
   if((currentMillis - previous_millis_high) >= hi_speed_cycle)  // 20 Hz (Executed every 50ms)
@@ -241,7 +245,9 @@ void loop()
       break;
     }
     if(!fontMode){
+      #ifndef GPSOSD
       blankserialRequest(MSPcmdsend);      
+      #endif //GPSOSD
     }
 
     ProcessSensors();       // using analogue sensors
