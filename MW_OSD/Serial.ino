@@ -260,7 +260,6 @@ void serialMSPCheck()
   {
     #if defined(USEGPSALTITUDE)
       MwAltitude =GPS_altitude*100;
-      MwVario = 0;
     #else    
       MwAltitude =read32();
       MwVario = read16();
