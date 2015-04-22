@@ -6,6 +6,8 @@
 
 ## Enhancement requests for future releases: ##
 
+Fresnel warning indicator
+
 Provide optimisation of serial data requests fro slower baud rates
 
 Support for newer Cleanflight releases
