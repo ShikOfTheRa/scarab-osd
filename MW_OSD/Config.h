@@ -14,7 +14,8 @@
 //#define MULTIWII_V23                // Undefine this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
 //#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT
-//#define CLEANFLIGHT               // Undefine this if you are using CLEANFLIGHT versions prior to 7/3/2015
+//#define CLEANFLIGHT180            // Undefine this if you are using CLEANFLIGHT versions up to and including 1.8.0
+//#define CLEANFLIGHT               // Undefine this if you are using CLEANFLIGHT versions 1.8.1 onwards (No RC adjustments menu)
 //#define HARIKIRI                  // Undefine this if you are using HARIKIRI (for BOXNAMES compatibility)
 //#define NOCONTROLLER              // Undefine this if you are using GPSOSD
 
@@ -175,13 +176,23 @@
 #ifdef BASEFLIGHT                    
     #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
 #endif
-#ifdef CLEANFLIGHT                      
+
+#ifdef CLEANFLIGHT180                      
 #endif
+
+#ifdef CLEANFLIGHT                      
+  #if defined PAGE2
+    #undef PAGE2
+  #endif  
+#endif
+
 #if defined(HARIKIRI) || defined(MULTIWII_V21)                     
   #define BOXNAMES                  // required to support legacy protocol
 #endif
+
 #ifdef MULTIWII_V24                     
 #endif
+
 #ifdef FIXEDWING                     
   #define USEGPSHEADING
   #define USEGPSALTITUDE
