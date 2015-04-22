@@ -6,6 +6,8 @@
 
 ## Enhancement requests for future releases: ##
 
+Provide optimisation of serial data requests fro slower baud rates
+
 Support for newer Cleanflight releases
 
 Display option for climb rate value instead of vario slider
@@ -99,7 +101,11 @@ BUG! PID menu options after row 5 are incorrect. e.g. level does not show level 
 
 ## Improvements since last full release R1.3: ##
 
-Fixedwing support for controllers with/without MAG/BARO. Default assumes no MAG/BARO.
+Fixedwing - Heading / compass support for controllers without MAG. Default assumes no MAG.
+
+Fixedwing - Altitude support for controllers without BARO. Default assumes no BARO.
+
+Fixedwing - Vario support for controllers without BARO. Default assumes no BARO.
 
 Horizon bar set behind other screen items as they have higher priority.
 
