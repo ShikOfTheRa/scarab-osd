@@ -54,8 +54,6 @@ Climb rate alarm
 
 Descriptive chracter font for for heading / angle to home
 
-Fixedwing - use GPS data for ladders / vario
-
 Support for APM
 
 
