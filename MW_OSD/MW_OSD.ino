@@ -136,6 +136,10 @@ void loop()
   debug[MEMCHECK] = UntouchedStack();
 #endif
 
+  #ifdef FIXEDWING
+    fwaltitude();
+  #endif
+
 #ifdef OSD_SWITCH_RC // note MIDRC is specified in Max7456
   if (MwRcData[OSD_SWITCH_RC] > 1500)
     screenlayout=1;
@@ -785,5 +789,14 @@ unsigned long FastpulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
     width++;
   }
   return width; 
+}
+
+void fwaltitude(void){
+  if (millis()>timer.fwAltitudeTimer){
+    timer.fwAltitudeTimer +=1000;
+    previousfwaltitude=interimfwaltitude;
+    interimfwaltitude=GPS_altitude;
+    MwVario=(GPS_altitude-previousfwaltitude)*20;
+  }
 }
 

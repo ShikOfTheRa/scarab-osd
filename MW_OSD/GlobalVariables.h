@@ -110,6 +110,7 @@ struct {
   uint8_t rssiTimer;
   uint8_t accCalibrationTimer;
   uint8_t magCalibrationTimer;
+  uint32_t fwAltitudeTimer;
 }
 timer;
 
@@ -448,6 +449,8 @@ uint8_t GPS_fix=0;
 int32_t GPS_latitude;
 int32_t GPS_longitude;
 int16_t GPS_altitude;
+int16_t previousfwaltitude=0;
+int16_t interimfwaltitude=0;
 uint16_t GPS_speed;
 int16_t  GPS_ground_course;
 uint16_t old_GPS_speed;
