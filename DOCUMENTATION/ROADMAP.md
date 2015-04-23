@@ -25,8 +25,6 @@ video volts alarm
 
 pitch / roll angles with alarm
 
-glidescope for fixedwing 
-
 autodetect cell count
 
 autoset warning voltage
@@ -109,6 +107,8 @@ Fixedwing - Heading / compass support for controllers without MAG. Default assum
 Fixedwing - Altitude support for controllers without BARO. Default assumes no BARO.
 
 Fixedwing - Vario support for controllers without BARO. Default assumes no BARO.
+
+Fixedwing - glidescope ILS 
 
 Horizon bar set behind other screen items as they have higher priority.
 
