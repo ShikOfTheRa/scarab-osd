@@ -1051,6 +1051,10 @@ void MWData_Com() {
     serialize8(tmpeeadd);
     serialize8(99);
     tailSerialReply();
+    SimControlToggle.setValue(1);    
+    SendSim=1;
+    ClosePort = false; 
+
   }
 //  toggleMSP_Data = false; //???????????????????
   ReadConfigMSPMillis=1000+millis(); 

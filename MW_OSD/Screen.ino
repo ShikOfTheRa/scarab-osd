@@ -1714,3 +1714,28 @@ for(uint8_t maptype=mapstart; maptype<mapend; maptype++) {
 #endif
 }
 
+
+void displayfwglidescope(void){
+  #define DESCENT 500 // target cm descent ratio alt at 100m (500 = 3 deg final approach angle)
+                      // low angle approximation 1m variance at 100m = 0.57 deg
+  uint32_t GS_target_alt    = (uint32_t)GPS_distanceToHome*DESCENT/100;
+  int32_t GS_target_delta   = (int32_t)MwAltitude-GS_target_alt ;
+  GS_target_delta           = GS_target_delta/100; //to m
+  int16_t GS_target_var3    = 0;
+
+  if (GPS_distanceToHome>0){ //watch div 0!!
+    GS_target_var3          = (100 * GS_target_delta) / (int16_t) GPS_distanceToHome;
+  }
+  int8_t GS_deviation_scale = constrain(GS_target_var3,-4,4);
+  GS_deviation_scale        = map(GS_deviation_scale,4,-4,0,8);
+  int8_t varline            = (GS_deviation_scale/3)-1;
+  int8_t varsymbol          = GS_deviation_scale%3;
+    
+  uint16_t position = getPosition(horizonPosition)-1;
+    for(int8_t X=-1; X<=1; X++) {
+      screen[position+(X*LINE)] =  SYM_GLIDESCOPE;
+    }
+   screen[position+(varline*LINE)] = SYM_GLIDESCOPE+3-varsymbol;
+}
+
+

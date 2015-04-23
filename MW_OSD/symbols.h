@@ -142,6 +142,9 @@
 // Vario
 #define SYM_VARIO 0x7F
 
+// Glidescope
+#define SYM_GLIDESCOPE 0xE0
+
 // Batt Icon´s
 #define SYM_MAIN_BATT 0X97
 #define SYM_VID_BAT 0XBF
