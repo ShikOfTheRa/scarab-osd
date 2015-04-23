@@ -328,8 +328,9 @@ SGPS_altitude = ScontrolP5.addNumberbox("SGPS_altitude",0,5,40,40,14);
     SGPS_altitude.setDirection(Controller.HORIZONTAL);
     SGPS_altitude.setMax(100000);
     SGPS_altitude.setDecimalPrecision(0);
+    SGPS_altitude.setMultiplier(100);
     SGPS_altitude.setGroup(SGGPS); 
-    SGPS_altitude.setValue(10000);
+    SGPS_altitude.setValue(500);
 
  ScontrolP5.getController("SGPS_altitude").getCaptionLabel()
    .align(ControlP5.LEFT, ControlP5.RIGHT_OUTSIDE).setPaddingX(45);     
@@ -338,6 +339,7 @@ SGPS_altitude = ScontrolP5.addNumberbox("SGPS_altitude",0,5,40,40,14);
     SGPS_speed.setLabel("Speed-cm/s");
     //SGPS_numSat.setColorBackground(red_);
     SGPS_speed.setMin(0);
+    SGPS_speed.setMultiplier(10);
     SGPS_speed.setDirection(Controller.HORIZONTAL);
     SGPS_speed.setMax(10000);
     SGPS_speed.setDecimalPrecision(0);

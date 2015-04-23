@@ -113,18 +113,19 @@ void setup()
     analogReference(INTERNAL);
 
   MAX7456Setup();
-  #if defined FORCESENSORS
-    MwSensorPresent |=GPSSENSOR;
-    MwSensorPresent |=BAROMETER;
-    MwSensorPresent |=MAGNETOMETER;
-    MwSensorPresent |=ACCELEROMETER;
-  #endif
   #if defined GPSOSD
     GPS_SerialInit();
   #else
     setMspRequests();
     blankserialRequest(MSP_IDENT);
   #endif
+  #if defined FORCESENSORS
+    MwSensorPresent |=GPSSENSOR;
+    MwSensorPresent |=BAROMETER;
+    MwSensorPresent |=MAGNETOMETER;
+    MwSensorPresent |=ACCELEROMETER;
+  #endif
+  
 }
 
 
@@ -132,7 +133,8 @@ void setup()
 //------------------------------------------------------------------------
 void loop()
 {
-#ifdef MEMCHECK
+
+  #ifdef MEMCHECK
   debug[MEMCHECK] = UntouchedStack();
 #endif
 
@@ -330,8 +332,12 @@ void loop()
           displayDirectionToHome();
           displayDistanceToHome();
           displayAngleToHome();
+          #ifdef USEGLIDESCOPE
+            displayfwglidescope();
+          #endif //USEGLIDESCOPE  
           displayGPS_speed();
-          displayGPSPosition();        
+          displayGPSPosition();  
+      
 #ifdef GPSTIME
           displayGPS_time();
 #endif
@@ -797,6 +803,6 @@ void fwaltitude(void){
     previousfwaltitude=interimfwaltitude;
     interimfwaltitude=GPS_altitude;
     MwVario=(GPS_altitude-previousfwaltitude)*20;
-  }
+  }  
 }
 
