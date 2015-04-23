@@ -1,5 +1,8 @@
 ---
 
+## Known bugs: ##
+
+All versions - timer clock drifts over time
 
 
 ---
