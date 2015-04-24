@@ -236,10 +236,10 @@ void MAX7456_WriteString_P(const char *string, int Adresse)
 }
 
 #ifdef USE_VSYNC
-volatile unsigned char vsync_wait = 0;
+  volatile unsigned char vsync_wait = 0;
   ISR(INT0_vect) {
-  vsync_wait = 0;
-}
+    vsync_wait = 0;
+  }
 #endif
 
 void MAX7456_DrawScreen()
@@ -254,6 +254,8 @@ void MAX7456_DrawScreen()
     spi_transfer(DMAL_reg);
     spi_transfer(0);
     vsync_wait = 1;
+    uint32_t vsynctimer=50+millis();
+
   #endif
 
   digitalWrite(MAX7456SELECT,LOW);
@@ -265,9 +267,15 @@ void MAX7456_DrawScreen()
     #endif
     #ifdef USE_VSYNC
       SPDR = MAX7456ADD_DMDI;
-      if (xx==240) vsync_wait = 1;      // Not enough time to load all characters within VBI period. This splits and waits until next field
+      if (xx==240) {
+        vsynctimer=50+millis();
+        vsync_wait = 1;      // Not enough time to load all characters within VBI period. This splits and waits until next field
+      }
       while (!(SPSR & (1<<SPIF)));     // Wait the end of the last SPI transmission is clear
-      while (vsync_wait);
+      while (vsync_wait){
+        if (millis()>vsynctimer)
+        vsync_wait=0;
+      }
       SPDR = screen[xx];
       screen[xx] = ' ';
       while (!(SPSR & (1<<SPIF)));     // Wait the end of the last SPI transmission is clear

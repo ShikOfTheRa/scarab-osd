@@ -63,8 +63,8 @@
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
 // **ONLY** valid when using fixed wing
-//#define USEMAGHEADING             // Only undefine this to use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
-//#define USEBAROALTITUDE           // Only undefine this to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) 
+//#define USEMAGHEADING             // Only undefine this use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
+//#define USEBAROALTITUDE           // ***Recommend*** to undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) 
 //#define USEGLIDESCOPE 30          // Enables ILS glidescope where 30 = 3.0° glidescope with 0.5 deg gradiented scope scale
 
 
