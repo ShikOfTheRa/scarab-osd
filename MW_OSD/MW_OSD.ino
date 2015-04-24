@@ -71,6 +71,7 @@ uint16_t UntouchedStack(void)
 #include "Config.h"
 #include "symbols.h"
 #include "GlobalVariables.h"
+#include "math.h"
 
 
 char screen[480];      // Main screen ram for MAX7456
