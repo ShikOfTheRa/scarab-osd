@@ -264,8 +264,8 @@ void MAX7456_DrawScreen()
       screen[xx] = ' ';  
     #endif
     #ifdef USE_VSYNC
-     SPDR = MAX7456ADD_DMDI;
-     if (xx==240) vsync_wait = 1;      // Not enough time to load all characters within VBI period. This splits and waits until next field
+      SPDR = MAX7456ADD_DMDI;
+      if (xx==240) vsync_wait = 1;      // Not enough time to load all characters within VBI period. This splits and waits until next field
       while (!(SPSR & (1<<SPIF)));     // Wait the end of the last SPI transmission is clear
       while (vsync_wait);
       SPDR = screen[xx];

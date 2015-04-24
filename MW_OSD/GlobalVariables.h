@@ -111,6 +111,7 @@ struct {
   uint8_t accCalibrationTimer;
   uint8_t magCalibrationTimer;
   uint32_t fwAltitudeTimer;
+  uint32_t seconds;
 }
 timer;
 

@@ -364,8 +364,9 @@ void loop()
     timer.Blink2hz =! timer.Blink2hz;
   }
 
-  if(timer.tenthSec >= 20)     // this execute 1 time a second
+  if(millis() > timer.seconds+1000)     // this execute 1 time a second
   {
+    timer.seconds+=1000;
     timer.tenthSec=0;
     onTime++;
     if (Settings[S_AMPER_HOUR]) 
