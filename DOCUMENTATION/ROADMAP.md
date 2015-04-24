@@ -2,8 +2,7 @@
 
 ## Known bugs: ##
 
-All versions - timer clock drifts over time
-
+None!
 
 ---
 
@@ -99,6 +98,9 @@ BUG! Compass OK, but home arrow is inconsistent in fixedwing mode
 BUG! compile errors for GPS in soem Arduino versions
 
 BUG! PID menu options after row 5 are incorrect. e.g. level does not show level settings
+
+BUG! All versions - timer clock drifts over time
+
 
 ## Improvements since last full release R1.3: ##
 
