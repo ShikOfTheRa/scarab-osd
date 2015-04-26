@@ -23,6 +23,16 @@ uint8_t read8()  {
   return serialBuffer[readIndex++];
 }
 
+void write16(uint16_t t, uint8_t *checkSum){
+  static uint8_t a;
+  a = t & 0xff;
+  *checkSum ^= a; 
+  Serial.write(a);
+  a = (t >> 8) & 0xff;
+  *checkSum ^= a;
+  Serial.write(a);
+}
+
 // --------------------------------------------------------------------------------------
 // Here are decoded received commands from MultiWii
 void serialMSPCheck()
@@ -279,6 +289,17 @@ void serialMSPCheck()
 
   if (cmdMSP==MSP_RC_TUNING)
   {
+    #ifdef CLEANFLIGHT
+    rcRate8 = read8();
+    rcExpo8 = read8();
+    pitchRate = read8();
+    rollRate = read8();
+    yawRate = read8();
+    dynThrPID = read8();
+    thrMid8 = read8();
+    thrExpo8 = read8();
+    tpa_breakpoint16 = read16();
+    #else
     rcRate8 = read8();
     rcExpo8 = read8();
     rollPitchRate = read8();
@@ -286,6 +307,7 @@ void serialMSPCheck()
     dynThrPID = read8();
     thrMid8 = read8();
     thrExpo8 = read8();
+    #endif
     modeMSPRequests &=~ REQ_MSP_RC_TUNING;
   }
 
@@ -488,15 +510,15 @@ void handleRawRC() {
 	if(ROW<1)
 	  ROW=1;
         if(configPage == 0) {
-          ROW=10;
+          ROW=SAVEP_ROW;
         }
       }
       else if(configMode&&(MwRcData[PITCHSTICK]<MINSTICK)) // MOVE DOWN
       {
 	waitStick = 1;
 	ROW++;
-	if(ROW>10)
-	  ROW=10;
+	if(ROW>SAVEP_ROW)
+	  ROW=SAVEP_ROW;
       }
       else if(!previousarmedstatus&&configMode&&(MwRcData[YAWSTICK]<MINSTICK)) // DECREASE
       {
@@ -524,7 +546,7 @@ void handleRawRC() {
 
 void serialMenuCommon()
   {
-    if((ROW==10)&&(COL==3)) {
+    if((ROW==SAVEP_ROW)&&(COL==3)) {
       constrain(menudir,-1,1);
       configPage=configPage+menudir;
     }
@@ -532,24 +554,34 @@ void serialMenuCommon()
     if(configPage>MAXPAGE) configPage = MINPAGE;
 #ifdef PAGE1
 	if(configPage == 1) {
-	  if(ROW >= 1 && ROW <= 7) {
-            uint8_t MODROW=ROW-1;
-            if (ROW>5){
-              MODROW=ROW+1;
-            }
-  	    if(COL==1) P8[MODROW]=P8[MODROW]+menudir;
-	    if(COL==2) I8[MODROW]=I8[MODROW]+menudir;
-	    if(COL==3) D8[MODROW]=D8[MODROW]+menudir;
+	  if(ROW >= 1 && ROW <= PIDITEMS) {
+	    if(COL==1) P8[ROW-1] += menudir;
+	    if(COL==2) I8[ROW-1] += menudir;
+	    if(COL==3) D8[ROW-1] += menudir;
 	  }
 	}
 #endif
 #ifdef PAGE2
 	if(configPage == 2 && COL == 3) {
-	  if(ROW==1) rcRate8=rcRate8+menudir;
-	  if(ROW==2) rcExpo8=rcExpo8+menudir;
-	  if(ROW==3) rollPitchRate=rollPitchRate+menudir;
-	  if(ROW==4) yawRate=yawRate+menudir;
-	  if(ROW==5) dynThrPID=dynThrPID+menudir;
+	  #ifdef CLEANFLIGHT
+	  if(ROW==1) rcRate8          += menudir;
+	  if(ROW==2) rcExpo8          += menudir;
+	  if(ROW==3) pitchRate        += menudir;
+	  if(ROW==4) rollRate         += menudir;
+	  if(ROW==5) yawRate          += menudir;
+	  if(ROW==6) thrMid8          += menudir;
+	  if(ROW==7) thrExpo8         += menudir;
+	  if(ROW==8) dynThrPID        += menudir;
+	  if(ROW==9) tpa_breakpoint16 += menudir;
+	  #else
+	  if(ROW==1) rcRate8       += menudir;
+	  if(ROW==2) rcExpo8       += menudir;
+	  if(ROW==3) rollPitchRate += menudir;
+	  if(ROW==4) yawRate       += menudir;
+	  if(ROW==5) dynThrPID     += menudir;
+	  if(ROW==6) thrMid8       += menudir;
+	  if(ROW==7) thrExpo8      += menudir;
+	  #endif
 	}
 #endif
 #ifdef PAGE3
@@ -623,8 +655,8 @@ void serialMenuCommon()
 	  if(ROW==6) Settings[S_AMPERAGE_ALARM]=Settings[S_AMPERAGE_ALARM]+menudir;
 	}
 #endif
-  	if((ROW==10)&&(COL==1)) configExit();
-	if((ROW==10)&&(COL==2)) configSave();
+  	if((ROW==SAVEP_ROW)&&(COL==1)) configExit();
+	if((ROW==SAVEP_ROW)&&(COL==2)) configSave();
 }
 
 void serialMSPreceive()
@@ -701,7 +733,7 @@ void serialMSPreceive()
 void configExit()
 {
   configPage=1;
-  ROW=10;
+  ROW=SAVEP_ROW;
   COL=3;
   configMode=0;
   //waitStick=3;
@@ -741,6 +773,30 @@ void configSave()
 
   headSerialRequest();
   txCheckSum=0;
+  #ifdef CLEANFLIGHT
+  txSize = 10;
+  Serial.write(txSize);
+  txCheckSum ^= txSize;
+  Serial.write(MSP_SET_RC_TUNING);
+  txCheckSum ^= MSP_SET_RC_TUNING;
+  Serial.write(rcRate8);
+  txCheckSum ^= rcRate8;
+  Serial.write(rcExpo8);
+  txCheckSum ^= rcExpo8;
+  Serial.write(pitchRate);
+  txCheckSum ^= pitchRate;
+  Serial.write(rollRate);
+  txCheckSum ^= rollRate;
+  Serial.write(yawRate);
+  txCheckSum ^= yawRate;
+  Serial.write(dynThrPID);
+  txCheckSum ^= dynThrPID;
+  Serial.write(thrMid8);
+  txCheckSum ^= thrMid8;
+  Serial.write(thrExpo8);
+  txCheckSum ^= thrExpo8;
+  write16(tpa_breakpoint16,&txCheckSum);
+  #else
   txSize=7;
   Serial.write(txSize);
   txCheckSum ^= txSize;
@@ -760,6 +816,7 @@ void configSave()
   txCheckSum ^= thrMid8;
   Serial.write(thrExpo8);
   txCheckSum ^= thrExpo8;
+  #endif
   Serial.write(txCheckSum);
 
   writeEEPROM();
@@ -847,6 +904,4 @@ void headSerialRequest (void) {
   Serial.write('<');
   
 }
-
-
 
