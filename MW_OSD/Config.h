@@ -182,9 +182,6 @@
 #endif
 
 #ifdef CLEANFLIGHT                      
-  #if defined PAGE2
-    #undef PAGE2
-  #endif  
 #endif
 
 #if defined(HARIKIRI) || defined(MULTIWII_V21)                     

@@ -78,7 +78,7 @@
 #define MAGD 113+(30*6)
 
 #define LINE      30
-#define LINE_N(y) (LINE*(y))
+#define LINE_N(y) (LINE*(y-1))
 #define LINE01    0
 #define LINE02    30
 #define LINE03    60
