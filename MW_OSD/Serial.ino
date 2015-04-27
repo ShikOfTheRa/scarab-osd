@@ -61,6 +61,7 @@ void serialMSPCheck()
     settingswriteSerialRequest();
     }
 
+/*
     if(cmd == OSD_READ_CMD) {
       uint8_t txCheckSum, txSize;
       headSerialRequest();
@@ -78,7 +79,7 @@ void serialMSPCheck()
       }
       Serial.write(txCheckSum);    
     }
-
+*/
 /*
     if (cmd == OSD_SENSORS) {
       uint8_t txCheckSum, txSize;
@@ -105,7 +106,7 @@ void serialMSPCheck()
       Serial.write(txCheckSum);
     }
 */
-
+/*
     if (cmd == OSD_WRITE_CMD) {
       for(uint8_t en=0;en<EEPROM_SETTINGS; en++){
 	uint8_t inSetting = read8();
@@ -120,7 +121,7 @@ void serialMSPCheck()
       readEEPROM();
       setMspRequests();
      }
-
+*/
 
     if(cmd == OSD_GET_FONT) {
       if(dataSize == 5) {
@@ -145,9 +146,6 @@ void serialMSPCheck()
     }
     if(cmd == OSD_RESET) {
         resetFunc();
-    }
-    if(cmd == OSD_SERIAL_SPEED) {
-    
     }
                     
   }
@@ -212,8 +210,8 @@ void serialMSPCheck()
 #endif
     
     GPS_directionToHome=read16();
-    read8(); //missing
 #ifdef GPSTIME
+    read8(); //missing
     GPS_time = read32();        //local time of coord calc - haydent
 #endif
   }
@@ -224,9 +222,9 @@ void serialMSPCheck()
      read8();
      read8();
      GPS_waypoint_step=read8();
-     read8();
-     read8();
-     read8();
+//     read8();
+//     read8();
+//     read8();
   }
 
   if (cmdMSP==MSP_ATTITUDE)
@@ -251,11 +249,13 @@ void serialMSPCheck()
       debug[i] = read16();
  }
 #endif
+#ifdef SPORT
   if (cmdMSP==MSP_CELLS)
   {
     for(uint8_t i=0;i<6;i++)
       cell_data[i] = read16();
   }
+#endif //SPORT
   if (cmdMSP==MSP_ALTITUDE)
   {
     #if defined(USEGPSALTITUDE)

@@ -184,7 +184,7 @@ void loop()
 
     timer.tenthSec++;
     timer.halfSec++;
-    timer.Blink10hz=!timer.Blink10hz;
+    timer.Blink10hz=!timer.Blink2hz;
     calculateTrip();
     
       uint8_t MSPcmdsend;
