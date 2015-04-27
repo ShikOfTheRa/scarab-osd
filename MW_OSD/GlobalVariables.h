@@ -879,6 +879,22 @@ const PROGMEM char * const menu_display[] =
   configMsg68,
 };
 
+const PROGMEM char * const menu_advanced[] = 
+{   
+  configMsg71,
+  configMsg72,
+  configMsg73,
+  configMsg74,
+  configMsg75,
+};
+
+const PROGMEM char * const menu_gps_time[] = 
+{   
+  configMsg81,
+  configMsg82,
+  configMsg83,
+};
+
 const PROGMEM char * const menu_alarm_item[] = 
 {   
   configMsg91,

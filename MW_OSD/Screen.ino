@@ -266,7 +266,7 @@ void displayArmed(void)
     #ifndef HIDEARMEDSTATUS
       #define HIDEARMEDSTATUS
     #endif
-  #endif
+  #endif  //GPSOSD
   
   #ifndef HIDEARMEDSTATUS
   if(!fieldIsVisible(motorArmedPosition))
@@ -279,7 +279,7 @@ void displayArmed(void)
     armedtimer--;
     MAX7456_WriteString_P(armed_text, getPosition(motorArmedPosition));
   }
-#endif //GPSOSD  
+  #endif  
 }
 
 void displayCallsign(int cposition)
@@ -606,12 +606,10 @@ void displayAPstatus()
     MAX7456_WriteString_P(APRTHtext,getPosition(APstatusPosition));
    else if (MwSensorActive&mode.gpshold)
     MAX7456_WriteString_P(APHOLDtext,getPosition(APstatusPosition));
-  else if (MwSensorActive&mode.gpsmission)
+   else if (MwSensorActive&mode.gpsmission)
     MAX7456_WriteString_P(APWAYPOINTtext,getPosition(APstatusPosition));
 //  else if (MwSensorActive&mode.gpsland)
 //    MAX7456_WriteString_P(APLANDtext,getPosition(APstatusPosition));
- 
-
 }
 
 void displayHeading(void)
@@ -1048,9 +1046,6 @@ void displayConfigScreen(void)
       MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
     }
    
-//    MAX7456_WriteString_P(configMsg10, 35);
-//    MAX7456_WriteString_P(configMsg11, ROLLT);
-
     for(uint8_t Y=0; Y<=8; Y++) {      
       if (Y==5) Y=7;
       uint8_t X=Y;
@@ -1062,39 +1057,6 @@ void displayConfigScreen(void)
       MAX7456_WriteString(itoa(D8[Y],screenBuffer,10),ROLLD+(X*30));
     }
 
-/*
-    MAX7456_WriteString(itoa(P8[0],screenBuffer,10),ROLLP);
-    MAX7456_WriteString(itoa(I8[0],screenBuffer,10),ROLLI);
-    MAX7456_WriteString(itoa(D8[0],screenBuffer,10),ROLLD);
-
-//    MAX7456_WriteString_P(configMsg12, PITCHT);
-    MAX7456_WriteString(itoa(P8[1],screenBuffer,10), PITCHP);
-    MAX7456_WriteString(itoa(I8[1],screenBuffer,10), PITCHI);
-    MAX7456_WriteString(itoa(D8[1],screenBuffer,10), PITCHD);
-
-//    MAX7456_WriteString_P(configMsg13, YAWT);
-    MAX7456_WriteString(itoa(P8[2],screenBuffer,10),YAWP);
-    MAX7456_WriteString(itoa(I8[2],screenBuffer,10),YAWI);
-    MAX7456_WriteString(itoa(D8[2],screenBuffer,10),YAWD);
-
-//    MAX7456_WriteString_P(configMsg14, ALTT);
-    MAX7456_WriteString(itoa(P8[3],screenBuffer,10),ALTP);
-    MAX7456_WriteString(itoa(I8[3],screenBuffer,10),ALTI);
-    MAX7456_WriteString(itoa(D8[3],screenBuffer,10),ALTD);
-
-//    MAX7456_WriteString_P(configMsg15, VELT);
-    MAX7456_WriteString(itoa(P8[4],screenBuffer,10),VELP);
-    MAX7456_WriteString(itoa(I8[4],screenBuffer,10),VELI);
-    MAX7456_WriteString(itoa(D8[4],screenBuffer,10),VELD);
-
-//    MAX7456_WriteString_P(configMsg16, LEVT);
-    MAX7456_WriteString(itoa(P8[7],screenBuffer,10),LEVP);
-    MAX7456_WriteString(itoa(I8[7],screenBuffer,10),LEVI);
-    MAX7456_WriteString(itoa(D8[7],screenBuffer,10),LEVD);
-
-//    MAX7456_WriteString_P(configMsg17, MAGT);
-    MAX7456_WriteString(itoa(P8[8],screenBuffer,10),MAGP);
-*/
     MAX7456_WriteString("P",71);
     MAX7456_WriteString("I",77);
     MAX7456_WriteString("D",83);
@@ -1110,16 +1072,10 @@ void displayConfigScreen(void)
       MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
     }
 
-    //    MAX7456_WriteString_P(configMsg20, 35);
-//    MAX7456_WriteString_P(configMsg21, ROLLT);
     MAX7456_WriteString(itoa(rcRate8,screenBuffer,10),ROLLD);
-//    MAX7456_WriteString_P(configMsg22, PITCHT);
     MAX7456_WriteString(itoa(rcExpo8,screenBuffer,10),PITCHD);
-//    MAX7456_WriteString_P(configMsg23, YAWT);
     MAX7456_WriteString(itoa(rollPitchRate,screenBuffer,10),YAWD);
-//    MAX7456_WriteString_P(configMsg24, ALTT);
     MAX7456_WriteString(itoa(yawRate,screenBuffer,10),ALTD);
-//    MAX7456_WriteString_P(configMsg25, VELT);
     MAX7456_WriteString(itoa(dynThrPID,screenBuffer,10),VELD);
 
   }
@@ -1130,7 +1086,6 @@ void displayConfigScreen(void)
   if(configPage==3)
   {
     ProcessSensors();
-  //  MAX7456_WriteString_P(configMsg30, 35);
     screenBuffer[0]=SYM_MAIN_BATT;
     ItoaPadded(voltage, screenBuffer+1, 4, 3);
     screenBuffer[5] = SYM_VOLT;
@@ -1148,9 +1103,6 @@ void displayConfigScreen(void)
       MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
     }
     MAX7456_WriteString(itoa(Settings[S_VIDVOLTAGE],screenBuffer,10),ALTD);
-//    MAX7456_WriteString_P(configMsg35, VELT);   
-
- //R1:    
     if(Settings[S_DISPLAYVOLTAGE]){
       MAX7456_WriteString_P(configMsgON, ROLLD);
     }
@@ -1158,28 +1110,16 @@ void displayConfigScreen(void)
       MAX7456_WriteString_P(configMsgOFF, ROLLD);
     }
 
-//R2:     
     MAX7456_WriteString(itoa(Settings[S_DIVIDERRATIO],screenBuffer,10),PITCHD);
-
-//R3:
     MAX7456_WriteString(itoa(Settings[S_VOLTAGEMIN],screenBuffer,10),YAWD);
-
-//R4:
     if(Settings[S_VIDVOLTAGE]){
       MAX7456_WriteString_P(configMsgON, ALTD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, ALTD);
     }
-
-//R5:     
     MAX7456_WriteString(itoa(Settings[S_VIDDIVIDERRATIO],screenBuffer,10),VELD);
-
-//R6:
     MAX7456_WriteString(itoa(Settings[S_BATCELLS],screenBuffer,10),LEVD);
-
-
-//R7: 
     if(Settings[S_MAINVOLTAGE_VBAT]){
       MAX7456_WriteString_P(configMsgON, MAGD);
     }
@@ -1193,58 +1133,41 @@ void displayConfigScreen(void)
 #ifdef PAGE4
   if(configPage==4)
   {
-//    MAX7456_WriteString_P(configMsg40, 35);
     itoa(rssi,screenBuffer,10);
     uint8_t xx = FindNull();
     screenBuffer[xx++] = '%';
     screenBuffer[xx] = 0;
     MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE);
-//    MAX7456_WriteString(itoa(rssi,screenBuffer,10),ROLLD-LINE-LINE);
-
     for(uint8_t X=0; X<=5; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rssi[X])));
       MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
     }
-
-//R1:
-//    MAX7456_WriteString_P(configMsg42, ROLLT);
     if(Settings[S_DISPLAYRSSI]){
       MAX7456_WriteString_P(configMsgON, ROLLD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, ROLLD);
     }
-//R2:
-//    MAX7456_WriteString_P(configMsg43, PITCHT);
     if(timer.rssiTimer>0) {
       MAX7456_WriteString(itoa(timer.rssiTimer,screenBuffer,10),PITCHD);
     }
     else {
     MAX7456_WriteString("-", PITCHD);
     }
-//R3:
-//    MAX7456_WriteString_P(configMsgMWII, YAWT);
     if(Settings[S_MWRSSI]){
       MAX7456_WriteString_P(configMsgON, YAWD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, YAWD);
   }
-//R4:
-//    MAX7456_WriteString_P(configMsg46, ALTT);
     if(Settings[S_PWMRSSI]){
       MAX7456_WriteString_P(configMsgON, ALTD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, ALTD);
   }
-//R5:
-//    MAX7456_WriteString_P(configMsg44, VELT);   
     MAX7456_WriteString(itoa(Settings[S_RSSIMAX],screenBuffer,10),VELD);
-//R6:
-//    MAX7456_WriteString_P(configMsg45, LEVT);   
     MAX7456_WriteString(itoa(Settings[S_RSSIMIN],screenBuffer,10),LEVD);
-
   }
 #else
     if(configPage == 4)configPage+=menudir;  
@@ -1252,56 +1175,35 @@ void displayConfigScreen(void)
 #ifdef PAGE5
   if(configPage==5)
   {
-//    MAX7456_WriteString_P(configMsg50, 35);
     ItoaPadded(amperage, screenBuffer, 4, 3);     // 99.9 ampere max!
     screenBuffer[4] = SYM_AMP;
     screenBuffer[5] = 0;
     MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE-1);
-//    MAX7456_WriteString(itoa(amperage,screenBuffer,10),ROLLD-LINE-LINE);
-
 
     for(uint8_t X=0; X<=4; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_amps[X])));
       MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
     }
-
-
-//R1:
-//    MAX7456_WriteString_P(configMsg51, ROLLT);
     if(Settings[S_AMPERAGE]){
       MAX7456_WriteString_P(configMsgON, ROLLD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, ROLLD);
     }
-    
-
-//R2:
-//    MAX7456_WriteString_P(configMsg52, PITCHT);
     if(Settings[S_AMPER_HOUR]){
       MAX7456_WriteString_P(configMsgON, PITCHD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, PITCHD);
     }
-//R3:
-//    MAX7456_WriteString_P(configMsg53, YAWT);
     if(Settings[S_AMPERAGE_VIRTUAL]){
       MAX7456_WriteString_P(configMsgON, YAWD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, YAWD);
     }
-//R4:
-//    MAX7456_WriteString_P(configMsg54, ALTT);   
     MAX7456_WriteString(itoa(S16_AMPMAX,screenBuffer,10),ALTD);
-//    MAX7456_WriteString(itoa(amperage,screenBuffer,10),ROLLD-LINE-LINE);
-//R5:
-//    MAX7456_WriteString_P(configMsg55, VELT);   
     MAX7456_WriteString(itoa(Settings[S_AMPMIN],screenBuffer,10),VELD);
-//    MAX7456_WriteString(itoa(amperage,screenBuffer,10),ROLLD-LINE-LINE);
-
-
   }
 #else
     if(configPage == 5)configPage+=menudir;  
@@ -1309,78 +1211,53 @@ void displayConfigScreen(void)
 #ifdef PAGE6
   if(configPage==6)
   {
-//    MAX7456_WriteString_P(configMsg60, 35);
-
     for(uint8_t X=0; X<=7; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_display[X])));
       MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
     }    
-//R1:     
-//    MAX7456_WriteString_P(configMsg61, ROLLT);
     if(Settings[S_DISPLAY_HORIZON_BR]){
       MAX7456_WriteString_P(configMsgON, ROLLD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, ROLLD);
     }
-//R2:     
-//    MAX7456_WriteString_P(configMsg62, PITCHT);
     if(Settings[S_WITHDECORATION]){
       MAX7456_WriteString_P(configMsgON, PITCHD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, PITCHD);
     }
-//R3:
-//    MAX7456_WriteString_P(configMsg63, YAWT);
     if(Settings[S_SCROLLING]){
       MAX7456_WriteString_P(configMsgON, YAWD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, YAWD);
     }
-//R4:     
-//    MAX7456_WriteString_P(configMsg64, ALTT);
     if(Settings[S_THROTTLEPOSITION]){
       MAX7456_WriteString_P(configMsgON, ALTD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, ALTD);
     }
-//R5:     
-//    MAX7456_WriteString_P(configMsg65, VELT);
     if(Settings[S_COORDINATES]){
       MAX7456_WriteString_P(configMsgON, VELD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, VELD);
     }
-//R6:     
-//    MAX7456_WriteString_P(configMsg66, LEVT);
     if(Settings[S_MODESENSOR]){
       MAX7456_WriteString_P(configMsgON, LEVD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, LEVD);
     }
-//R7:     
-//    MAX7456_WriteString_P(configMsg67, MAGT);
-//    MAX7456_WriteString(itoa(Settings[S_GIMBAL],screenBuffer,10),MAGD);
     if(Settings[S_GIMBAL]){
       MAX7456_WriteString_P(configMsgON, MAGD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, MAGD);
     }
-//R8:     
-//    MAX7456_WriteString_P(configMsg68, MAGT+LINE);
     MAX7456_WriteString(itoa(Settings[S_MAPMODE],screenBuffer,10),MAGD+LINE);
-//    if(Settings[S_MAPMODE]){
-//      MAX7456_WriteString_P(configMsgON, MAGD+LINE);
-//    }
-//    else{
-//      MAX7456_WriteString_P(configMsgOFF, MAGD+LINE);
-//    }   
   }
 #else
     if(configPage == 6)configPage+=menudir;  
@@ -1388,41 +1265,34 @@ void displayConfigScreen(void)
 #ifdef PAGE7
   if(configPage==7)
   {
-//    MAX7456_WriteString_P(configMsg70, 35);
-//R1:
-    MAX7456_WriteString_P(configMsg71, ROLLT);
+    for(uint8_t X=0; X<=4; X++) {
+      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_advanced[X])));
+      MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+    }
     if(!Settings[S_UNITSYSTEM]){
       MAX7456_WriteString_P(configMsg710, ROLLD);
     }
     else {
       MAX7456_WriteString_P(configMsg711, ROLLD);
       }
-//R2:
-    MAX7456_WriteString_P(configMsg72, PITCHT);
     if(!Settings[S_VIDEOSIGNALTYPE]){
       MAX7456_WriteString_P(configMsg720, PITCHD);
     }
     else {
       MAX7456_WriteString_P(configMsg721, PITCHD);
       }
-//R3:
-    MAX7456_WriteString_P(configMsg73, YAWT);
     if(Settings[S_VREFERENCE]){
       MAX7456_WriteString_P(configMsg730, YAWD);
     }
     else {
       MAX7456_WriteString_P(configMsg731, YAWD);
       }
-//R5:
-    MAX7456_WriteString_P(configMsg74, ALTT);
     if(Settings[S_DEBUG]){
       MAX7456_WriteString_P(configMsgON, ALTD);
     }
     else {
       MAX7456_WriteString_P(configMsgOFF, ALTD);
       }
-//R6:
-    MAX7456_WriteString_P(configMsg75, VELT);
     if(timer.magCalibrationTimer>0)
       MAX7456_WriteString(itoa(timer.magCalibrationTimer,screenBuffer,10),VELD);
     else
@@ -1434,26 +1304,25 @@ void displayConfigScreen(void)
 #ifdef PAGE8
   if(configPage==8)
   {
-//    MAX7456_WriteString_P(configMsg80, 35);
-    
-//R1:     
-    MAX7456_WriteString_P(configMsg81, ROLLT);
+    for(uint8_t X=0; X<=2; X++) {
+      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_gps_time[X])));
+      MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+    }
+//    MAX7456_WriteString_P(configMsg81, ROLLT);
     if(Settings[S_GPSTIME]){
       MAX7456_WriteString_P(configMsgON, ROLLD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, ROLLD);
     }
-//R2:     
-    MAX7456_WriteString_P(configMsg82, PITCHT);
+//    MAX7456_WriteString_P(configMsg82, PITCHT);
     if(Settings[S_GPSTZAHEAD]){
       MAX7456_WriteString_P(configMsgON, PITCHD);
     }
     else{
       MAX7456_WriteString_P(configMsgOFF, PITCHD);
     }
-//R3:
-    MAX7456_WriteString_P(configMsg83, YAWT);
+//    MAX7456_WriteString_P(configMsg83, YAWT);
     MAX7456_WriteString(itoa(Settings[S_GPSTZ],screenBuffer,10),YAWD);
   }    
 #else
