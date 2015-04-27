@@ -287,7 +287,7 @@ MWOSDVER,   // used for check              0
 1,   // S_WITHDECORATION            31
 0,   // S_SHOWBATLEVELEVOLUTION     32
 0,   // S_RESETSTATISTICS           33
-0,   // S_MAPMODE                 34
+1,   // S_MAPMODE                 34
 0,   // S_VREFERENCE,
 0,   // S_USE_BOXNAMES              35
 1,   // S_MODEICON                  36
@@ -919,5 +919,10 @@ const PROGMEM char * const menutitle_item[] =
   configMsg90,
 };
 
+const PROGMEM char * const menu_on_off[] = 
+{   
+  configMsgOFF,
+  configMsgON,
+};
 
 
