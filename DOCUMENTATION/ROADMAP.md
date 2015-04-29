@@ -8,9 +8,17 @@ None!
 
 ## Enhancement requests for future releases: ##
 
-Fresnel warning indicator
-
 Support for newer Cleanflight releases
+
+Fixedwing - reset altitude at arm 
+
+video volts alarm
+
+autodetect cell count
+
+autoset warning voltage
+
+Fresnel warning indicator
 
 Display option for climb rate value instead of vario slider
 
@@ -18,13 +26,7 @@ Ability to amend all PID settings from menu
 
 support for cleanflight / baseflight loop time change
 
-video volts alarm
-
 pitch / roll angles with alarm
-
-autodetect cell count
-
-autoset warning voltage
 
 Support for 8 GUI layouts selectable from OSD menu at field
 
@@ -95,6 +97,8 @@ BUG! PID menu options after row 5 are incorrect. e.g. level does not show level 
 
 BUG! All versions - timer clock drifts over time
 
+BUG! GPS OSD mode MTK - missing option to set 5hz update
+
 
 ## Improvements since last full release R1.3: ##
 
@@ -120,7 +124,7 @@ GUI support for FC passthrough configuration settings (access OSD config via FC)
 
 Amended 00 font to be blank character - recommended to reduce sparklies
 
-Provide optimisation of serial data requests fro slower baud rates
+Provide optimisation and option for serial data requests for slower baud rates
 
 3 OSD layouts for use with 3 way tx switch
 
