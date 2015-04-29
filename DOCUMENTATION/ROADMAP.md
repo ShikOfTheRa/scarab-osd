@@ -10,8 +10,6 @@ None!
 
 Fresnel warning indicator
 
-Provide optimisation of serial data requests fro slower baud rates
-
 Support for newer Cleanflight releases
 
 Display option for climb rate value instead of vario slider
@@ -28,15 +26,11 @@ autodetect cell count
 
 autoset warning voltage
 
-3 OSD layouts for use with 3 way tx switch
-
 Support for 8 GUI layouts selectable from OSD menu at field
 
 MAX chip hardware stall / recovery detect
 
 Fast start - Autodetect MAX ready or timeout
-
-Autodetect PAL/NTSC or timeout to last known settings (fix blank screen for incorrect labelled cams)
 
 Improve Standalone / Groundstation startup. Remove multiwii
 
@@ -125,6 +119,18 @@ Decimalise GUI value for min battery voltage etc.
 GUI support for FC passthrough configuration settings (access OSD config via FC). 
 
 Amended 00 font to be blank character - recommended to reduce sparklies
+
+Provide optimisation of serial data requests fro slower baud rates
+
+3 OSD layouts for use with 3 way tx switch
+
+Autodetect PAL/NTSC or timeout to last known settings (fix blank screen for incorrect labelled cams)
+
+
+
+
+
+
 
 
 
