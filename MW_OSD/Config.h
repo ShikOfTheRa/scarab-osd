@@ -135,6 +135,7 @@
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
 //#define SHORTSTATS                // Display only timer on flight summary 
+//#define FASTMSP                   // Enable for soft serial / slow baud rates if don't need GPS/BARO/HORIZON data. Speed up remainder
 #define DISP_LOW_VOLTS_WARNING      // Enable prominent low voltage warning text
 #define FORCE_DISP_LOW_VOLTS        // Enable display low voltage warning override for screen layouts where its disabled
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 

@@ -65,7 +65,7 @@ uint16_t UntouchedStack(void)
 
 //------------------------------------------------------------------------
 #define MWVERS "MW-OSD - R1.4"  
-#define MWOSDVER 6      // for eeprom layout verification      
+#define MWOSDVER 9      // for eeprom layout verification      
 #include <avr/pgmspace.h>
 #include <EEPROM.h>
 #include "Config.h"
@@ -134,35 +134,33 @@ void setup()
 //------------------------------------------------------------------------
 void loop()
 {
-
   #ifdef MEMCHECK
-  debug[MEMCHECK] = UntouchedStack();
-#endif
+    debug[MEMCHECK] = UntouchedStack();
+  #endif
 
   #ifdef FIXEDWING
     fwaltitude();
   #endif
 
-#ifdef OSD_SWITCH_RC // note MIDRC is specified in Max7456
-
-  uint8_t rcswitch_ch = Settings[S_RCWSWITCH_CH];
-  screenlayout=0;
-  if (Settings[S_RCWSWITCH]){
-    if (MwRcData[rcswitch_ch] > 1600)
-      screenlayout=1;
-    else if (MwRcData[rcswitch_ch] > 1400)
-      screenlayout=2;
-   } 
-   else{
+  #ifdef OSD_SWITCH_RC // note MIDRC is specified in Max7456
+    uint8_t rcswitch_ch = Settings[S_RCWSWITCH_CH];
+    screenlayout=0;
+    if (Settings[S_RCWSWITCH]){
+      if (MwRcData[rcswitch_ch] > 1600)
+        screenlayout=1;
+      else if (MwRcData[rcswitch_ch] > 1400)
+        screenlayout=2;
+     } 
+     else{
+      if (MwSensorActive&mode.osd_switch)
+        screenlayout=1;
+    }
+  #else 
     if (MwSensorActive&mode.osd_switch)
       screenlayout=1;
-  }
-#else 
-  if (MwSensorActive&mode.osd_switch)
-    screenlayout=1;
-  else  
-    screenlayout=0;
-#endif
+    else  
+      screenlayout=0;
+  #endif
     
   if (screenlayout!=oldscreenlayout){
     oldscreenlayout=screenlayout;
@@ -181,8 +179,10 @@ void loop()
   if((currentMillis - previous_millis_low) >= lo_speed_cycle)  // 10 Hz (Executed every 100ms)
   {
     previous_millis_low = previous_millis_low+lo_speed_cycle;    
-    #ifndef GPSOSD
-    if(!fontMode)
+    #ifndef GPSOSD 
+      #ifndef FASTMSP
+        if(!fontMode)
+      #endif //FASTMSP  
       blankserialRequest(MSP_ATTITUDE);
     #endif //GPSOSD
    }  // End of slow Timed Service Routine (100ms loop)
@@ -514,22 +514,24 @@ void setMspRequests() {
     modeMSPRequests = 
       REQ_MSP_IDENT|
       REQ_MSP_STATUS|
-      REQ_MSP_RAW_GPS|
-      REQ_MSP_COMP_GPS|
-      REQ_MSP_ATTITUDE|
-#ifdef DEBUGMW
-      REQ_MSP_DEBUG|
-#endif
-#ifdef SPORT      
-      REQ_MSP_CELLS|
-#endif
-      REQ_MSP_ALTITUDE;
-    if(!armed || Settings[S_THROTTLEPOSITION] || fieldIsVisible(pMeterSumPosition) || fieldIsVisible(amperagePosition) )
-      modeMSPRequests |= REQ_MSP_RC;
-    if(mode.armed == 0)
-      modeMSPRequests |= REQ_MSP_BOX;
-    if(MwSensorActive&mode.gpsmission)
-      modeMSPRequests |= REQ_MSP_NAV_STATUS;
+      #ifndef FASTMSP
+        REQ_MSP_RAW_GPS|
+        REQ_MSP_COMP_GPS|
+        REQ_MSP_ATTITUDE|
+        REQ_MSP_ALTITUDE;
+      #endif //FASTMSP 
+      #ifdef DEBUGMW
+        REQ_MSP_DEBUG|
+      #endif
+      #ifdef SPORT      
+        REQ_MSP_CELLS|
+      #endif
+      if(!armed || Settings[S_THROTTLEPOSITION] || fieldIsVisible(pMeterSumPosition) || fieldIsVisible(amperagePosition) )
+        modeMSPRequests |= REQ_MSP_RC;
+      if(mode.armed == 0)
+        modeMSPRequests |= REQ_MSP_BOX;
+      if(MwSensorActive&mode.gpsmission)
+        modeMSPRequests |= REQ_MSP_NAV_STATUS;
   }
  
   if(Settings[S_MAINVOLTAGE_VBAT] ||
