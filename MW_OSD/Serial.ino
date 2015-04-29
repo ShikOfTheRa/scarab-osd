@@ -35,7 +35,6 @@ void serialMSPCheck()
     if (cmd == OSD_READ_CMD_EE) {
       eeaddress = read8();
       eeaddress = eeaddress+read8();
-//      eedata = read8();
       eedata = read8();
       settingsMode=1;
       MSP_OSD_timer=3000+millis();
@@ -45,14 +44,12 @@ void serialMSPCheck()
     if (cmd == OSD_WRITE_CMD_EE) {
       for(uint8_t i=0; i<10; i++) {
         eeaddress = read8();
-        eeaddress = eeaddress+read8();
+        eeaddress = eeaddress+(read8()<<8);
         eedata = read8();
         settingsMode=1;
         MSP_OSD_timer=3000+millis();
         EEPROM.write(eeaddress,eedata);
-//        uint16_t EEPROMscreenoffset=EEPROM_SETTINGS+(3*POSITIONS_SETTINGS*2);
-//        if (eeaddress==EEPROM_SETTINGS-1){
-        if (eeaddress>=EEPROM_SETTINGS+(2*2*POSITIONS_SETTINGS)){
+        if ((eeaddress==EEPROM_SETTINGS)||(eeaddress==EEPROM_SETTINGS+(3*2*POSITIONS_SETTINGS))){
           EEPROM.write(0,MWOSDVER);
           readEEPROM();
         }
@@ -61,25 +58,6 @@ void serialMSPCheck()
     settingswriteSerialRequest();
     }
 
-/*
-    if(cmd == OSD_READ_CMD) {
-      uint8_t txCheckSum, txSize;
-      headSerialRequest();
-      txCheckSum=0;
-      txSize = EEPROM_SETTINGS + 1;
-      Serial.write(txSize);
-      txCheckSum ^= txSize;
-      Serial.write(MSP_OSD);
-      txCheckSum ^= MSP_OSD;
-      Serial.write(cmd);
-      txCheckSum ^= cmd;
-      for(uint8_t i=0; i<EEPROM_SETTINGS; i++) {
-        Serial.write(Settings[i]);
-	txCheckSum ^= Settings[i];
-      }
-      Serial.write(txCheckSum);    
-    }
-*/
 /*
     if (cmd == OSD_SENSORS) {
       uint8_t txCheckSum, txSize;
@@ -105,22 +83,6 @@ void serialMSPCheck()
 
       Serial.write(txCheckSum);
     }
-*/
-/*
-    if (cmd == OSD_WRITE_CMD) {
-      for(uint8_t en=0;en<EEPROM_SETTINGS; en++){
-	uint8_t inSetting = read8();
-        EEPROM.write(en,inSetting);
-      }
-
-      for(uint8_t en=0;en<(POSITIONS_SETTINGS*2*2); en++){ // 2 Huds, 2 * 8 bit settings
-	uint8_t inSetting = read8();
-	EEPROM.write(EEPROM_SETTINGS+en,inSetting);
-      }
-      EEPROM.write(0,MWOSDVER);
-      readEEPROM();
-      setMspRequests();
-     }
 */
 
     if(cmd == OSD_GET_FONT) {
@@ -829,7 +791,7 @@ void settingswriteSerialRequest() {
   uint8_t txSize;
   headSerialRequest();
   txCheckSum=0;
-  txSize=2;
+  txSize=3;
   Serial.write(txSize);
   txCheckSum ^= txSize;
   Serial.write(MSP_OSD);
@@ -838,6 +800,8 @@ void settingswriteSerialRequest() {
   txCheckSum ^= OSD_READ_CMD_EE;
   Serial.write(eeaddress);
   txCheckSum ^= eeaddress;
+  Serial.write(eeaddress>>8);
+  txCheckSum ^= eeaddress>>8;
   Serial.write(txCheckSum);
 }
 

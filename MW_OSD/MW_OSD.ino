@@ -22,7 +22,7 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
-#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
+//#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
 #if 1
 __asm volatile ("nop");
 #endif
@@ -144,10 +144,19 @@ void loop()
   #endif
 
 #ifdef OSD_SWITCH_RC // note MIDRC is specified in Max7456
-  if (MwRcData[OSD_SWITCH_RC] > 1500)
-    screenlayout=1;
-  else  
-    screenlayout=0;    
+
+  uint8_t rcswitch_ch = Settings[S_RCWSWITCH_CH];
+  screenlayout=0;
+  if (Settings[S_RCWSWITCH]){
+    if (MwRcData[rcswitch_ch] > 1600)
+      screenlayout=1;
+    else if (MwRcData[rcswitch_ch] > 1400)
+      screenlayout=2;
+   } 
+   else{
+    if (MwSensorActive&mode.osd_switch)
+      screenlayout=1;
+  }
 #else 
   if (MwSensorActive&mode.osd_switch)
     screenlayout=1;
@@ -155,7 +164,7 @@ void loop()
     screenlayout=0;
 #endif
     
-  if (!screenlayout==oldscreenlayout){
+  if (screenlayout!=oldscreenlayout){
     oldscreenlayout=screenlayout;
     readEEPROM_screenlayout();
   }
@@ -572,8 +581,14 @@ void readEEPROM_screenlayout(void)
   for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
     uint16_t pos=(en*2)+EEPROMscreenoffset;
     screenPosition[en] = EEPROM.read(pos);
-    uint16_t xx=EEPROM.read(pos+1)<<8;
+    uint16_t xx=(uint16_t)EEPROM.read(pos+1)<<8;
     screenPosition[en] = screenPosition[en] + xx;
+/*
+  debug[0]=screenlayout;
+  debug[1]=EEPROMscreenoffset;
+  debug[2]=pos;
+  debug[3]=POSITIONS_SETTINGS;
+*/
     if(Settings[S_VIDEOSIGNALTYPE]){
       uint16_t x = screenPosition[en]&0x1FF; 
       if (x>LINE06) screenPosition[en] = screenPosition[en] + LINE;
@@ -598,7 +613,18 @@ void checkEEPROM(void)
       EEPROM.write(EEPROM_SETTINGS+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
       EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*2)+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]&0xFF);
       EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*2)+1+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]>>8);
+      EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*4)+(en*2),SCREENLAYOUT_DEFAULT[en]&0xFF);
+      EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*4)+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
     }
+
+/*
+    for(uint8_t osd_switch_pos=0;osd_switch_pos<3;osd_switch_pos++){
+      for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
+        EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*osd_switch_pos)+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]&0xFF);
+        EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*osd_switch_pos)+1+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]>>8);
+      }
+    }    
+*/
   }
 }
 

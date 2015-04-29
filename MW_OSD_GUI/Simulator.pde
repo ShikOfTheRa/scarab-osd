@@ -652,7 +652,7 @@ void ShowDebug(){
     makeText("0: "+debug[0], SimPosn[debugPosition]);
     makeText("1: "+debug[1], SimPosn[debugPosition]+LINE);
     makeText("2: "+debug[2], SimPosn[debugPosition]+LINE+LINE);
-    makeText("3: "+debug[3], SimPosn[debugPosition]+LINE+LINE+LINE);
+    makeText("3: "+debug[3], SimPosn[debugPosition]+LINE+LINE+LINE+LINE);
   }
 }
 
@@ -1189,10 +1189,14 @@ void ShowSPort(){
 
 void ShowMapMode(){
   int mi;
-  if (toggleModeItems[9].getValue()>0)
-    mi = int(confItem[GetSetting("S_HUDOSDSW")].value());
+
+  if (toggleModeItems[9].getValue()==2)
+    mi = int(confItem[GetSetting("S_HUDSW2")].value());
+  else if (toggleModeItems[9].getValue()==1)
+    mi = int(confItem[GetSetting("S_HUDSW1")].value());
   else
-    mi = int(confItem[GetSetting("S_HUD")].value()); 
+    mi = int(confItem[GetSetting("S_HUDSW0")].value()); 
+
   if (CONFIGHUDEN[mi][MapModePosition]==0)
     return;
 int SYM_HOME      = 0x04;

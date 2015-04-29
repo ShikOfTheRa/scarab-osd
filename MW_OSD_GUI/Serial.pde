@@ -246,79 +246,11 @@ void RESTART(){
   }
   toggleMSP_Data = false;
   READconfigMSP_init();
-//  READinit();
-//  eeaddressGUI=0;   
-//  ReadConfigMSPMillis=20000+millis();  
 }  
 
 
 
-public void WRITEinit(){
-  WriteConfig=20;
-  ReadConfig=1;
-  SimControlToggle.setValue(0);
-  readerror=1;  
-  CheckCallSign();
-  S16_AMPMAX = int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value());
-  confItem[GetSetting("S_AMPMAXL")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())&0xFF); // for 8>>16 bit EEPROM
-  confItem[GetSetting("S_AMPMAXH")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())>>8);
-  for(int i = 0; i < CONFIGITEMS; i++){
-    readcheck[i]=int(confItem[i].value());
-  }
-  readcheck[GetSetting("S_AMPDIVIDERRATIO")]=0;
-}
 
-
-  public void WRITEconfig(){
-  readerror=1;  
-  SimControlToggle.setValue(0);
-
-  CheckCallSign();
-  PortWrite = true;
-  MakePorts();
-  toggleMSP_Data = true;
-  p = 0;
-  inBuf[0] = OSD_WRITE_CMD;
-  g_serial.clear();
-  for(int ii = 1; ii < CONFIGITEMS; ii++){
-    if (ii != GetSetting("S_AMPDIVIDERRATIO"));
-      SetConfigItem(ii,readcheck[ii]);
-  }
-  for (int txTimes = 0; txTimes<1; txTimes++) {
-    headSerialReply(MSP_OSD, CONFIGITEMS + (hudoptions*2*2) +1);
-    serialize8(OSD_WRITE_CMD);
-    for(int i = 0; i < CONFIGITEMS; i++){
-      if(i == GetSetting("S_VOLTAGEMIN")){
-        serialize8(int(confItem[i].value()*10));//preserve decimal
-      }
-      else if(i == GetSetting("S_GPSTZ")){
-        serialize8(int(confItem[i].value()*10));//preserve decimal, maybe can go elsewhere - haydent
-      }
-      else if(i == GetSetting("S_AMPDIVIDERRATIO")){
-        serialize8(0);
-      }
-      else{
-        serialize8(int(confItem[i].value()));
-      }
-    }
-
-     int clayout=int(confItem[GetSetting("S_HUD")].value()); 
-     for(int i = 0; i < (hudoptions); i++){
-       serialize8(int(ConfigLayout[0][i]&0xFF));
-       serialize8(int(ConfigLayout[0][i]>>8));
-     }
-     for(int i = 0; i < (hudoptions); i++){
-       serialize8(int(ConfigLayout[1][i]&0xFF));
-       serialize8(int(ConfigLayout[1][i]>>8));
-     }
-
-    tailSerialReply();
-  }
-  
-  toggleMSP_Data = false;
-  g_serial.clear();
-  PortWrite = false;
-}
 
 
 public void FONT_UPLOAD(){
@@ -404,7 +336,7 @@ public void DEFAULT(){
 //        READinit();
         READconfigMSP_init();
 //        delay(2000);     
-        ReadConfig=100;
+//        ReadConfig=100;
         return;
       case JOptionPane.CANCEL_OPTION:
 //        SimControlToggle.setValue(1);
@@ -766,39 +698,54 @@ public void evaluateCommand(byte cmd, int size) {
   MakePorts(); 
   int icmd = int(cmd&0xFF);
   if (icmd !=MSP_OSD)return;  //System.out.println("Not Valid Command");
- 
-  //System.out.println("evaluateCommand");
+  time2=time;
 
-    time2=time;
-    //int[] requests = {MSP_STATUS, MSP_RAW_IMU, MSP_SERVO, MSP_MOTOR, MSP_RC, MSP_RAW_GPS, MSP_COMP_GPS, MSP_ALTITUDE, MSP_BAT, MSP_DEBUGMSG, MSP_DEBUG};
-    switch(icmd) {
+  switch(icmd) {
     
-      case MSP_OSD:
-        int cmd_internal = read8();
-        PortRead = true;
-        MakePorts();
+    case MSP_OSD:
+      int cmd_internal = read8();
+      PortRead = true;
+      MakePorts();
 
-        if(cmd_internal == OSD_NULL) {
-        }
+      if(cmd_internal == OSD_NULL) {
+      }
 
-        if(cmd_internal == OSD_READ_CMD_EE) { // response to a read / write request
-//            System.out.print(" "+size+" ");
-          if(size == 2) { // confirmed write request received
-            eeaddressOSD=read8();
-            eeaddressOSD=eeaddressOSD+read8();
-            if (eeaddressOSD>=eeaddressGUI){ // update base address
-              eeaddressGUI=eeaddressOSD;
+      if(cmd_internal == OSD_READ_CMD_EE) { // response to a read / write request
+        if(size == 3) { // confirmed write request received
+          int eeaddressOSDL=read8();
+          int eeaddressOSDH=read8();
+          eeaddressOSD=eeaddressOSDL+(eeaddressOSDH<<8);
+          if (eeaddressOSD>=eeaddressGUI){ // update base address
+            eeaddressGUI=eeaddressOSD;
+          }
+          if (WriteLayouts==1){
+            if (eeaddressGUI>=(CONFIGITEMS + (hudoptions*2*3))){ // hit end address
+              WriteConfigMSPMillis=0;
             }
-            if (eeaddressGUI>(CONFIGITEMS + (hudoptions*2*2))){ // hit end address
-//            if (eeaddressGUI>=(CONFIGITEMS)){ // hit end address config only
+          }              
+          else{
+            if (eeaddressGUI>=(CONFIGITEMS)){ // hit end address
               WriteConfigMSPMillis=0;
             }
           }
-          else{ // confirmed write request received
+        }
+        else{ // confirmed read request received
           for(int i=0; i<10; i++) {
             eeaddressOSD=read8();
             eeaddressOSD=eeaddressOSD+read8();
             eedataOSD=read8();
+            if (eeaddressOSD==0){
+              confCheck=eedataOSD;
+            }
+            if (eeaddressOSD==GetSetting("S_HUDSW0")){
+              OSD_S_HUDSW0=eedataOSD;
+            }
+            if (eeaddressOSD==GetSetting("S_HUDSW1")){
+              OSD_S_HUDSW1=eedataOSD;
+            }
+            if (eeaddressOSD==GetSetting("S_HUDSW2")){
+              OSD_S_HUDSW2=eedataOSD;
+            }
             if (eeaddressOSD<CONFIGITEMS){
               SetConfigItem(eeaddressOSD, eedataOSD);
             }
@@ -810,67 +757,17 @@ public void evaluateCommand(byte cmd, int size) {
               eeaddressGUI++;
             }
           }
-//            if (eeaddressGUI>(CONFIGITEMS + (hudoptions*2*2))){ // hit end address
-            if (eeaddressGUI>=(CONFIGITEMS)){ // hit end address config only
-              ReadConfigMSPMillis=0;
-            }
+          if (eeaddressGUI>=(CONFIGITEMS)){ // hit end address config only
+            ReadConfigMSPMillis=0;
           }
         }
+        if (MW_OSD_EEPROM_Version!=confCheck){
+          noLoop();
+          JOptionPane.showConfirmDialog(null,"GUI version does not match OSD version - a different version is required.", "Version Mismatch Warning", JOptionPane.PLAIN_MESSAGE,JOptionPane.WARNING_MESSAGE);
+          loop();      
+        }        
+      }
 
-        if(cmd_internal == OSD_READ_CMD) {
-          if(size == 1) {
-          }
-          else {
-//            debug[1]++;
-            confCheck=0;
-            readerror=0;
-            readcounter++;
-            for(int i = 0; i < CONFIGITEMS; i++){
-              int xx = read8();
-              if (i==0){
-                confCheck=xx;
-              }
-              if (i==GetSetting("S_AMPDIVIDERRATIO")){
-                xx=0;
-              }
-
-              if (i>0){
-                if (WriteConfig>0){
-                  if ((xx!=readcheck[i])){
-                    readerror=1;
-                  }
-                }
-              }
-              if (confCheck>0){
-                SetConfigItem(i, xx);
-              }
-            }
-
-            if (readerror==0){
-              WriteConfig=0;
-              ReadConfig=0;
-            }
-          
- if (MW_OSD_EEPROM_Version!=confCheck){
-   noLoop();
-   JOptionPane.showConfirmDialog(null,"GUI version does not match OSD version - a different version is required.", "Version Mismatch Warning", JOptionPane.PLAIN_MESSAGE,JOptionPane.WARNING_MESSAGE);
-   loop();      
- }
- 
-              S16_AMPMAX=(int(confItem[GetSetting("S_AMPMAXH")].value())<<8)+ int(confItem[GetSetting("S_AMPMAXL")].value()); // for 8>>16 bit EEPROM
-              SetConfigItem(GetSetting("S_AMPDIVIDERRATIO"), (int) S16_AMPMAX);
-
-            // Send a NULL reply
-            //headSerialReply(MSP_OSD, 1);
-            //serialize8(OSD_NULL);
-            if (FontMode == false){
-              toggleMSP_Data = false;
-              g_serial.clear();
-             }
-          }
-        }
-
-        
 
         if(cmd_internal == OSD_GET_FONT) {
           if( size == 1) {
@@ -1036,6 +933,7 @@ void MWData_Com() {
 //    println("Console test print");
     SimControlToggle.setValue(0);
     ReadConfigMSPMillis=1000+millis(); 
+    WriteConfigMSPMillis=millis(); 
     eeaddressGUI=0;   
   }
 
@@ -1064,6 +962,26 @@ void MWData_Com() {
     eeaddressGUI=0;  
     CheckCallSign(); 
     EElookuptableReSet();
+
+    WriteLayouts=0;
+    if (OSD_S_HUDSW0!=int(confItem[GetSetting("S_HUDSW0")].value())){
+      OSD_S_HUDSW0=int(confItem[GetSetting("S_HUDSW0")].value());
+      WriteLayouts=1;
+    }
+    if (OSD_S_HUDSW1!=int(confItem[GetSetting("S_HUDSW1")].value())){
+      OSD_S_HUDSW1=int(confItem[GetSetting("S_HUDSW1")].value());
+      WriteLayouts=1;
+    }
+    if (OSD_S_HUDSW2!=int(confItem[GetSetting("S_HUDSW2")].value())){
+      OSD_S_HUDSW2=int(confItem[GetSetting("S_HUDSW2")].value());
+      WriteLayouts=1;
+    }
+
+    EepromWriteSize = CONFIGITEMS +1;
+    if (WriteLayouts==1){
+      EepromWriteSize = CONFIGITEMS + (hudoptions*2*3) +1;
+    }
+
     WriteConfigMSPMillis=1000+millis(); 
   }
 
@@ -1080,13 +998,14 @@ void MWData_Com() {
       tmpeeadd = (i+eeaddressGUI)>>8;
       serialize8(tmpeeadd);
       serialize8(EElookuptable[i+eeaddressGUI]);
-//      System.out.println(eeaddressGUI+i+":"+EElookuptable[i+eeaddressGUI]);
+//System.out.println(eeaddressGUI+i+":"+EElookuptable[i+eeaddressGUI]);
     }
     tailSerialReply();
   }
-
+  debug[1]=eeaddressGUI;
+  debug[2]++;
 //  toggleMSP_Data = false; //???????????????????
-  WriteConfigMSPMillis=1000+millis(); 
+  WriteConfigMSPMillis=3000+millis(); 
 }
 
   public void EElookuptableReSet(){ // preparing for a write
@@ -1125,7 +1044,15 @@ void MWData_Com() {
        EElookuptable[EElookuptableaddress]=int(ConfigLayout[1][i]>>8);
        EElookuptableaddress++;
      }
+     for(int i = 0; i < (hudoptions); i++){
+       EElookuptable[EElookuptableaddress]=int(ConfigLayout[2][i]&0xFF);
+       EElookuptableaddress++;
+       EElookuptable[EElookuptableaddress]=int(ConfigLayout[2][i]>>8);
+       EElookuptableaddress++;
+     }
   }
   
   public void EElookuptableSync(){ // Sync settings with EE table
   }
+  
+
