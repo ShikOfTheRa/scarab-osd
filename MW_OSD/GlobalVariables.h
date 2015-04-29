@@ -499,6 +499,7 @@ uint8_t GPS_fix=0;
 int32_t GPS_latitude;
 int32_t GPS_longitude;
 int16_t GPS_altitude;
+int16_t GPS_home_altitude;
 int16_t previousfwaltitude=0;
 int16_t interimfwaltitude=0;
 uint16_t GPS_speed;

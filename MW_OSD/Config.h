@@ -66,7 +66,7 @@
 //#define USEMAGHEADING             // Only undefine this use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
 //#define USEBAROALTITUDE           // ***Recommend*** to undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) 
 //#define USEGLIDESCOPE 30          // Enables ILS glidescope where 30 = 3.0° glidescope with 0.5 deg gradiented scope scale
-
+//#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that do not provide this functionality. 
 
 /********************       GPS OSD settings      *********************/
 // **ONLY** FOR STANDALONE GPS MODE WITH NO FLIGHT CONTROLLER
@@ -124,6 +124,7 @@
 
 /********************       Display Settings         ************************/
 #define AUTOCAM                     // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
+//#define AUTOCAMWAIT               // Use with AUTOCAM - waits until camera is ready - i.e. if power up cameras after FC. 
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
 #define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
@@ -198,11 +199,15 @@
 #ifdef FIXEDWING                     
   #define USEGPSHEADING
   #define USEGPSALTITUDE
+  #define RESETGPSALTITUDEATARM
   #if defined USEMAGHEADING 
     #undef USEGPSHEADING
   #endif  
   #if defined USEBAROALTITUDE
     #undef USEGPSALTITUDE
+  #endif
+  #if defined DISABLEGPSALTITUDERESET
+    #undef RESETGPSALTITUDEATARM
   #endif
   #define FORCESENSORS
 #endif
