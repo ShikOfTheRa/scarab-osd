@@ -10,8 +10,6 @@ None!
 
 Support for newer Cleanflight releases
 
-Fixedwing - reset altitude at arm 
-
 video volts alarm
 
 autodetect cell count
