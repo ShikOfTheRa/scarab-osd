@@ -125,6 +125,10 @@
       SerialGpsPrint(SBAS_TEST_MODE);
       Serial.flush();
       delay(100);
+      SerialGpsPrint(MTK_OUTPUT_5HZ);           // 5 Hz update rate
+      Serial.flush();
+      delay(100);
+
       #if defined(NMEA)
         SerialGpsPrint(MTK_SET_NMEA_SENTENCES); // only GGA and RMC sentence
       Serial.flush();
