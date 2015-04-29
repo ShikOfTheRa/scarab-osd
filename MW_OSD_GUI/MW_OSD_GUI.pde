@@ -46,7 +46,7 @@ import java.text.DecimalFormat;
 
 
 
-String MW_OSD_GUI_Version = "MWOSD R1.3 - NextGeneration";
+String MW_OSD_GUI_Version = "MWOSD R1.4 - NextGeneration";
 int MW_OSD_EEPROM_Version = 6;
 
 
@@ -190,6 +190,11 @@ int hudeditposition=0;
 int[] SimPosn;
 int[][] ConfigLayout;
 int[] EElookuptable= new int[512];
+int WriteLayouts=0;
+int OSD_S_HUDSW0=0;
+int OSD_S_HUDSW1=0;
+int OSD_S_HUDSW2=0;
+int EepromWriteSize = 0;
 
 //int[] readcheck;
 int readerror=0;
@@ -214,7 +219,11 @@ int serialCount = 0;                 // A count of how many bytes we receive
 int ConfigEEPROM = -1;
 int ConfigVALUE = -1;
 
-int windowsX    = 1041;       int windowsY    =578;        //995; //573;
+// Box locations -------------------------------------------------------------------------
+int Col1Width = 180;        int Col2Width = 200;    int Col3Width = 165;
+
+int windowsX    = 1041+Col3Width+5;       int windowsY    =578;        //995; //573;
+//int windowsX    = 1041;       int windowsY    =578;        //995; //573;
 //int windowsX    = 1200;       int windowsY    =800;        //995; //573;
 int xGraph      = 10;         int yGraph      = 35;
 int xObj        = 520;        int yObj        = 293; //900,450
@@ -229,8 +238,6 @@ int xBox        = 415;        int yBox        = 10;
 int XSim        = DisplayWindowX+WindowAdjX+10;        int YSim        = 305-WindowShrinkY + 95;
 
 //DisplayWindowX+WindowAdjX, DisplayWindowY+WindowAdjY, 360-WindowShrinkX, 288-WindowShrinkY);
-// Box locations -------------------------------------------------------------------------
-int Col1Width = 180;        int Col2Width = 200;    int Col3Width = 165;
 
 int XEEPROM    = 120;        int YEEPROM    = 5;  //hidden do not remove
 int XBoard     = 120;        int YBoard   = 5;
@@ -356,8 +363,11 @@ String[] ConfigNames = {
   "Zero Adjust",
   "Amperage 16L",  
   "Amperage 16H",  
-  "HUD layout",  
-  "HUD layout - OSD SW",  
+  "RC Switch",  
+  "RC Switch ch",  
+  "HUD layout Low",  
+  "HUD layout High",  
+  "HUD layout Mid",  
   "x100 Distance alarm",  
   "x10   Altitude alarm",  
   "Speed alarm",  
@@ -432,8 +442,11 @@ String[] ConfigHelp = {
   "Zero Adjust",
   "Amperage 16L",  
   "Amperage 16H",  
-  "HUD layout",  
-  "HUD layout - OSD SW",  
+  "RC Switch",  
+  "RC Switch ch",  
+  "HUD layout Low",  
+  "HUD layout High",  
+  "HUD layout Mid",  
   "Distance alarm",  
   "Altitude alarm",  
   "Speed alarm",  
@@ -529,8 +542,11 @@ int[] ConfigRanges = {
 1023,  // S_AMPMIN,
 255,   // S_AMPMAXL,
 3,     // S_AMPMAXH,
-7,     // S_HUD,  
-7,     // S_HUDOSDSW,  
+1,     // S_RCWSWITCH,
+7,     // S_RCWSWITCH_CH,
+7,     // S_HUDSW0,
+7,     // S_HUDSW1,
+7,     // S_HUDSW2,
 255,   //S_DISTANCE_ALARM,
 255,   //S_ALTITUDE_ALARM,
 255,   //S_SPEED_ALARM,
@@ -653,6 +669,7 @@ Group
   G_TIME,
   G_VREF,
   G_HUD,
+  G_RCSWITCH,
   G_COMPASS,
   G_DISPLAY,
   G_SPORT,
@@ -786,7 +803,7 @@ DONATEimage  = loadImage("DON_def.png");
   buttonWRITE = controlP5.addButton("WRITEEEMSP",1,20,25,60,16);buttonWRITE.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel("   WRITE");
   buttonRESET = controlP5.addButton("DEFAULT",1,20,45,60,16);buttonRESET.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel(" DEFAULT");
   buttonRESTART = controlP5.addButton("RESTART",1,20,65,60,16);buttonRESTART.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel(" RESTART");
-  buttonLEW = controlP5.addButton("LEW",1,10,10,92,16);buttonLEW.setColorBackground(osdcontr_).setGroup(G_LINKS).setLabel("Layout Editor");
+  buttonLEW = controlP5.addButton("LEW",1,30,(6*17),92,16);buttonLEW.setColorBackground(osdcontr_).setGroup(G_RCSWITCH).setLabel("Layout Editor");
     
 
 // EEPROM----------------------------------------------------------------
@@ -850,14 +867,19 @@ CreateItem(GetSetting("S_COORDINATES"),  5,1*17, G_GPS);
 CreateItem(GetSetting("S_GPSALTITUDE"),  5,2*17, G_GPS);
 CreateItem(GetSetting("S_MAPMODE"),      5,3*17, G_GPS);
 //  HUD  ----------------------------------------------------------------------------
-CreateItem(GetSetting("S_HUD"),  5,0*17, G_HUD);
-CreateItem(GetSetting("S_HUDOSDSW"),  5,1*17, G_HUD);
-CreateItem(GetSetting("S_DISPLAY_HORIZON_BR"),  5,2*17, G_HUD);
-CreateItem(GetSetting("S_HORIZON_ELEVATION"),  5,3*17, G_HUD);
-CreateItem(GetSetting("S_WITHDECORATION"),  5,4*17, G_HUD);
-CreateItem(GetSetting("S_SCROLLING"),  5,5*17, G_HUD);
-CreateItem(GetSetting("S_SIDEBARTOPS"),  5,6*17, G_HUD);
-
+//CreateItem(GetSetting("S_HUD"),  5,0*17, G_HUD);
+//CreateItem(GetSetting("S_HUDOSDSW"),  5,1*17, G_HUD);
+CreateItem(GetSetting("S_DISPLAY_HORIZON_BR"),  5,0*17, G_HUD);
+CreateItem(GetSetting("S_HORIZON_ELEVATION"),  5,1*17, G_HUD);
+CreateItem(GetSetting("S_WITHDECORATION"),  5,2*17, G_HUD);
+CreateItem(GetSetting("S_SCROLLING"),  5,3*17, G_HUD);
+CreateItem(GetSetting("S_SIDEBARTOPS"),  5,4*17, G_HUD);
+//  RCSWITCH  ----------------------------------------------------------------------------
+CreateItem(GetSetting("S_RCWSWITCH"),  5,0*17, G_RCSWITCH);
+CreateItem(GetSetting("S_RCWSWITCH_CH"),  5,1*17, G_RCSWITCH);
+CreateItem(GetSetting("S_HUDSW0"),  5,2*17, G_RCSWITCH);
+CreateItem(GetSetting("S_HUDSW1"),  5,3*17, G_RCSWITCH);
+CreateItem(GetSetting("S_HUDSW2"),  5,4*17, G_RCSWITCH);
 //  VREF  ----------------------------------------------------------------------------
 CreateItem(GetSetting("S_VREFERENCE"),  5,0*17, G_VREF);
 
@@ -1100,9 +1122,14 @@ void MakePorts(){
 
 void draw() {
 
+  
+  debug[0]=WriteLayouts;
+//  debug[1]=OSD_S_HUDSW0;
+//  debug[2]=OSD_S_HUDSW1;
+//  debug[3]=OSD_S_HUDSW2;
 // Initial setup
   time=millis();
-   progresstxt="";
+  progresstxt="";
 
   if (commListbox.isOpen())
     baudListbox.close();
@@ -1118,7 +1145,12 @@ void draw() {
         READconfigMSP();
         toggleMSP_Data = true;
         int progress=100*eeaddressGUI/CONFIGITEMS;
-        progresstxt="Read: "+progress+"%";
+        if (progress==0){
+          progresstxt="Waiting FC...";   
+        }
+        else{
+          progresstxt="Read: "+progress+"%";   
+        }    
       }
     }
 
@@ -1126,21 +1158,39 @@ void draw() {
       if (init_com==1){
         WRITEconfigMSP();
         toggleMSP_Data = true;
-        int progress=100*eeaddressGUI/(CONFIGITEMS + (hudoptions*2*2));
-        progresstxt="Write: "+progress+"%";
+        int progress=100*eeaddressGUI/(CONFIGITEMS);
+        if (WriteLayouts==1){
+          progress=100*eeaddressGUI/(CONFIGITEMS + (hudoptions*3*2));
+        }
+        if (progress==0){
+          progresstxt="Waiting FC...";   
+        }
+        else{
+          if(eeaddressGUI>CONFIGITEMS){
+            progresstxt="Layouts: "+progress+"%";          }
+          else{
+            progresstxt="Write: "+progress+"%";
+          }
+        }    
       }
     }
-
+    int progressflash=millis()>>8;
+    if((progressflash&0x01)==0x01){
+      progresstxt="";
+    }
+    
     txtmessage.setValue(progresstxt);
 
 // Layout editor
   txtlblLayoutTxt.setValue(" : "+ CONFIGHUDTEXT[hudeditposition]);
 
   int hudid=0;
-  if (toggleModeItems[9].getValue()>0)
-    hudid = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  if (toggleModeItems[9].getValue()==2)
+    hudid = int(confItem[GetSetting("S_HUDSW2")].value());
+  else if (toggleModeItems[9].getValue()==1)
+    hudid = int(confItem[GetSetting("S_HUDSW1")].value());
   else
-    hudid = int(confItem[GetSetting("S_HUD")].value()); 
+    hudid = int(confItem[GetSetting("S_HUDSW0")].value()); 
   txtlblLayoutHudTxt.setValue(" : "+hudid);
   LEW.setLabel("Layout Editor for profile: "+hudid+" - "+CONFIGHUDNAME[hudid]);
   if (CONFIGHUDEN[hudid][hudeditposition]>0)
@@ -1253,18 +1303,18 @@ void draw() {
 
  for(int i = 0; i < (hudoptions); i++){
  
-   ConfigLayout[0][i]=CONFIGHUD[int(confItem[GetSetting("S_HUD")].value())][i];
-   ConfigLayout[1][i]=CONFIGHUD[int(confItem[GetSetting("S_HUDOSDSW")].value())][i];
+   ConfigLayout[0][i]=CONFIGHUD[int(confItem[GetSetting("S_HUDSW0")].value())][i];
+   ConfigLayout[1][i]=CONFIGHUD[int(confItem[GetSetting("S_HUDSW1")].value())][i];
+   ConfigLayout[2][i]=CONFIGHUD[int(confItem[GetSetting("S_HUDSW2")].value())][i];
 
-   int minimalscreen=0;
-   if (toggleModeItems[9].getValue()>0) minimalscreen=1 ;
 
-   if (minimalscreen==1){
+   if (toggleModeItems[9].getValue()==2)
+      SimPosn[i]=ConfigLayout[2][i];
+   else if (toggleModeItems[9].getValue()==1)
       SimPosn[i]=ConfigLayout[1][i];
-   }
-   else {
+   else
       SimPosn[i]=ConfigLayout[0][i];
-   }
+
 
    if (SimPosn[i]<0x4000){
      SimPosn[i]=0x3FF; 
@@ -1525,10 +1575,13 @@ void displaySensors()
 
 public void bLUP() {
   int i = 0;
-  if (toggleModeItems[9].getValue()>0)
-    i = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  if (toggleModeItems[9].getValue()==2)
+    i = int(confItem[GetSetting("S_HUDSW2")].value());
+  else if (toggleModeItems[9].getValue()==1)
+    i = int(confItem[GetSetting("S_HUDSW1")].value());
   else
-    i = int(confItem[GetSetting("S_HUD")].value()); 
+    i = int(confItem[GetSetting("S_HUDSW0")].value());
+    
   int ii = CONFIGHUD[i][hudeditposition]&0x1FF;
   ii-=30;
   ii=constrain(ii,0,419);
@@ -1539,10 +1592,12 @@ public void bLUP() {
 
 public void bLDOWN() {
   int i = 0;
-  if (toggleModeItems[9].getValue()>0)
-    i = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  if (toggleModeItems[9].getValue()==2)
+    i = int(confItem[GetSetting("S_HUDSW2")].value());
+  else if (toggleModeItems[9].getValue()==1)
+    i = int(confItem[GetSetting("S_HUDSW1")].value());
   else
-    i = int(confItem[GetSetting("S_HUD")].value()); 
+    i = int(confItem[GetSetting("S_HUDSW0")].value());
   int ii = CONFIGHUD[i][hudeditposition]&0x1FF;
   ii+=30;
   ii=constrain(ii,0,419);
@@ -1554,10 +1609,12 @@ public void bLDOWN() {
 
 public void bLLEFT() {
   int i = 0;
-  if (toggleModeItems[9].getValue()>0)
-    i = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  if (toggleModeItems[9].getValue()==2)
+    i = int(confItem[GetSetting("S_HUDSW2")].value());
+  else if (toggleModeItems[9].getValue()==1)
+    i = int(confItem[GetSetting("S_HUDSW1")].value());
   else
-    i = int(confItem[GetSetting("S_HUD")].value()); 
+    i = int(confItem[GetSetting("S_HUDSW0")].value());
   int ii = CONFIGHUD[i][hudeditposition]&0x1FF;
   ii-=1;
   ii=constrain(ii,0,419);
@@ -1568,10 +1625,12 @@ public void bLLEFT() {
 
 public void bLRIGHT() {
   int i = 0;
-  if (toggleModeItems[9].getValue()>0)
-    i = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  if (toggleModeItems[9].getValue()==2)
+    i = int(confItem[GetSetting("S_HUDSW2")].value());
+  else if (toggleModeItems[9].getValue()==1)
+    i = int(confItem[GetSetting("S_HUDSW1")].value());
   else
-    i = int(confItem[GetSetting("S_HUD")].value()); 
+    i = int(confItem[GetSetting("S_HUDSW0")].value());
   int ii = CONFIGHUD[i][hudeditposition]&0x1FF;
   ii+=1;
   ii=constrain(ii,0,419);
@@ -1590,10 +1649,12 @@ public void bPOSLDOWN() {
 }
 public void bPOSLEN() {
   int i = 0;
-  if (toggleModeItems[9].getValue()>0)
-    i = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  if (toggleModeItems[9].getValue()==2)
+    i = int(confItem[GetSetting("S_HUDSW2")].value());
+  else if (toggleModeItems[9].getValue()==1)
+    i = int(confItem[GetSetting("S_HUDSW1")].value());
   else
-    i = int(confItem[GetSetting("S_HUD")].value()); 
+    i = int(confItem[GetSetting("S_HUDSW0")].value());
   if (CONFIGHUDEN[i][hudeditposition]>0){
     CONFIGHUDEN[i][hudeditposition]=0;
     CONFIGHUD[i][hudeditposition]&=0x3FF;
@@ -1627,25 +1688,31 @@ public void bLADD() {
 
 public void bHUDLUP() {
   int hudid=0;
-  if (toggleModeItems[9].getValue()>0)
-    hudid = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  if (toggleModeItems[9].getValue()==2)
+    hudid = int(confItem[GetSetting("S_HUDSW2")].value());
+  else if (toggleModeItems[9].getValue()==1)
+    hudid = int(confItem[GetSetting("S_HUDSW1")].value());
   else
-    hudid = int(confItem[GetSetting("S_HUD")].value()); 
+    hudid = int(confItem[GetSetting("S_HUDSW0")].value());
   hudid--;
   hudid= constrain(hudid,0,hudsavailable-1);
-  confItem[GetSetting("S_HUD")].setValue(hudid);
-  confItem[GetSetting("S_HUDOSDSW")].setValue(hudid);
+  confItem[GetSetting("S_HUDSW2")].setValue(hudid);
+  confItem[GetSetting("S_HUDSW1")].setValue(hudid);
+  confItem[GetSetting("S_HUDSW0")].setValue(hudid);
 }
 public void bHUDLDOWN() {
   int hudid=0;
-  if (toggleModeItems[9].getValue()>0)
-    hudid = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  if (toggleModeItems[9].getValue()==2)
+    hudid = int(confItem[GetSetting("S_HUDSW2")].value());
+  else if (toggleModeItems[9].getValue()==1)
+    hudid = int(confItem[GetSetting("S_HUDSW1")].value());
   else
-    hudid = int(confItem[GetSetting("S_HUD")].value()); 
+    hudid = int(confItem[GetSetting("S_HUDSW0")].value());
   hudid++;
   hudid= constrain(hudid,0,hudsavailable-1);
-  confItem[GetSetting("S_HUD")].setValue(hudid);
-  confItem[GetSetting("S_HUDOSDSW")].setValue(hudid);
+  confItem[GetSetting("S_HUDSW2")].setValue(hudid);
+  confItem[GetSetting("S_HUDSW1")].setValue(hudid);
+  confItem[GetSetting("S_HUDSW0")].setValue(hudid);
 }
 
 
@@ -2088,8 +2155,9 @@ void initxml(){
   }
   SimPosn = new int[hudoptions];
   ConfigLayout= new int[4][hudoptions];
-  ConfigRanges[GetSetting("S_HUD")] = hudsavailable-1;
-  ConfigRanges[GetSetting("S_HUDOSDSW")] = hudsavailable-1;
+  ConfigRanges[GetSetting("S_HUDSW0")] = hudsavailable-1;
+  ConfigRanges[GetSetting("S_HUDSW1")] = hudsavailable-1;
+  ConfigRanges[GetSetting("S_HUDSW2")] = hudsavailable-1;
 
 }
 
@@ -2107,8 +2175,9 @@ void xmlsavelayout(){
   }
   saveXML(xml, dataPath("hudlayout.xml"));
   initxml();
-  confItem[GetSetting("S_HUD")].setMax(ConfigRanges[GetSetting("S_HUD")]);
-  confItem[GetSetting("S_HUDOSDSW")].setMax(ConfigRanges[GetSetting("S_HUDOSDSW")]);
+  confItem[GetSetting("S_HUDSW0")].setMax(ConfigRanges[GetSetting("S_HUDSW0")]);
+  confItem[GetSetting("S_HUDSW1")].setMax(ConfigRanges[GetSetting("S_HUDSW1")]);
+  confItem[GetSetting("S_HUDSW2")].setMax(ConfigRanges[GetSetting("S_HUDSW2")]);
   if (init_com==1)
     READconfigMSP_init();
 }
@@ -2147,11 +2216,14 @@ confItem[GetSetting("S_MAPMODE")].setValue(1);
 
 
 void addchild(){
+
   int hudid=0;
-  if (toggleModeItems[9].getValue()>0)
-    hudid = int(confItem[GetSetting("S_HUDOSDSW")].value());
+  if (toggleModeItems[9].getValue()==2)
+    hudid = int(confItem[GetSetting("S_HUDSW2")].value());
+  else if (toggleModeItems[9].getValue()==1)
+    hudid = int(confItem[GetSetting("S_HUDSW1")].value());
   else
-    hudid = int(confItem[GetSetting("S_HUD")].value()); 
+    hudid = int(confItem[GetSetting("S_HUDSW0")].value());
   
   for (int hudindex = 0; hudindex < hudoptions; hudindex++) {
   XML newChild = xml.addChild("LAYOUT");
@@ -2168,10 +2240,13 @@ void addchild(){
 
   saveXML(xml, dataPath("hudlayout.xml"));
   initxml();
-  confItem[GetSetting("S_HUD")].setMax(ConfigRanges[GetSetting("S_HUD")]);
-  confItem[GetSetting("S_HUDOSDSW")].setMax(ConfigRanges[GetSetting("S_HUDOSDSW")]);
-  confItem[GetSetting("S_HUD")].setValue(hudsavailable-1);
-  confItem[GetSetting("S_HUDOSDSW")].setValue(hudsavailable-1);
+
+  confItem[GetSetting("S_HUDSW2")].setMax(ConfigRanges[GetSetting("S_HUDSW2")]);
+  confItem[GetSetting("S_HUDSW1")].setMax(ConfigRanges[GetSetting("S_HUDSW1")]);
+  confItem[GetSetting("S_HUDSW0")].setMax(ConfigRanges[GetSetting("S_HUDSW0")]);
+  confItem[GetSetting("S_HUDSW2")].setValue(hudsavailable-1);
+  confItem[GetSetting("S_HUDSW1")].setValue(hudsavailable-1);
+  confItem[GetSetting("S_HUDSW0")].setValue(hudsavailable-1);
 }
 
 

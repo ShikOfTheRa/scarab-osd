@@ -261,10 +261,6 @@ void MAX7456_DrawScreen()
   digitalWrite(MAX7456SELECT,LOW);
 
   for(xx=0;xx<MAX_screen_size;++xx){
-    #ifdef OSD_SWITCH_RC 
-      if ((MwRcData[OSD_SWITCH_RC] > 1400) && (MwRcData[OSD_SWITCH_RC] < 1600))
-      screen[xx] = ' ';  
-    #endif
     #ifdef USE_VSYNC
       SPDR = MAX7456ADD_DMDI;
       if (xx==240) {
