@@ -153,15 +153,23 @@ void MAX7456Setup(void)
 #ifdef AUTOCAM 
   pinMode(MAX7456SELECT,OUTPUT);
   digitalWrite(MAX7456SELECT,LOW);
-  spi_transfer(0xa0);
-  uint8_t srdata = spi_transfer(0xFF); 
+  uint8_t srdata = 0;
+  #if defined AUTOCAMWAIT 
+    while ((B00000011 & srdata) ==0){
+      spi_transfer(0xa0);
+      srdata = spi_transfer(0xFF); 
+    }
+  #else  
+    spi_transfer(0xa0);
+    srdata = spi_transfer(0xFF); 
+  #endif //AUTOCAMWAIT  
   if ((B00000001 & srdata) == 1){     //PAL
       Settings[S_VIDEOSIGNALTYPE]=1; 
   }
   else if((B00000010 & srdata) == 1){ //NTSC
       Settings[S_VIDEOSIGNALTYPE]=0;
   }
-#endif
+#endif //AUTOCAM
  
   if(Settings[S_VIDEOSIGNALTYPE]) {   // PAL
     //ENABLE_display = 0x48;
