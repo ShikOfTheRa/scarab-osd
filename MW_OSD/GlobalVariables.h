@@ -315,7 +315,7 @@ MWOSDVER,   // used for check              0
 4,   // S_RCWSWITCH_CH,
 0,   // S_HUDSW0, LOW / NORMAL
 1,   // S_HUDSW1, HIGH / OSDSW
-4,   // S_HUDSW2, MID
+0,   // S_HUDSW2, MID
 100, // S_DISTANCE_ALARM,
 100, // S_ALTITUDE_ALARM,
 100, // S_SPEED_ALARM,

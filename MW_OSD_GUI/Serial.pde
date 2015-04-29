@@ -121,6 +121,7 @@ void InitSerial(float portValue) {
       toggleMSP_Data = true;
       ClosePort = false;
       buttonREAD.setColorBackground(green_);
+      buttonWRITE.setColorBackground(green_);
       buttonRESET.setColorBackground(green_);
       commListbox.setColorBackground(green_);
       buttonRESTART.setColorBackground(green_);
@@ -197,8 +198,8 @@ void SetConfigItem(int index, int value) {
   if(index == GetSetting("S_VOLTAGEMIN"))confItem[index].setValue(float(value)/10);//preserve decimal
   else if(index == GetSetting("S_GPSTZ"))confItem[index].setValue(float(value)/10);//preserve decimal, maybe can go elsewhere - haydent
   else confItem[index].setValue(value);
-  if (index == CONFIGITEMS-1)
-    buttonWRITE.setColorBackground(green_);
+//  if (index == CONFIGITEMS-1)
+//    buttonWRITE.setColorBackground(green_);
     
   if (value >0){
     toggleConfItem[index].setValue(1);
@@ -763,8 +764,10 @@ public void evaluateCommand(byte cmd, int size) {
         }
         if (MW_OSD_EEPROM_Version!=confCheck){
           noLoop();
-          JOptionPane.showConfirmDialog(null,"GUI version does not match OSD version - a different version is required.", "Version Mismatch Warning", JOptionPane.PLAIN_MESSAGE,JOptionPane.WARNING_MESSAGE);
-          loop();      
+          JOptionPane.showConfirmDialog(null,"GUI version does not match OSD version - use correct GUI version or update OSD.", "Version Mismatch Warning", JOptionPane.PLAIN_MESSAGE,JOptionPane.WARNING_MESSAGE);
+          loop();   
+          ReadConfigMSPMillis=0;
+          WriteConfigMSPMillis=0;   
         }        
       }
 
