@@ -155,12 +155,18 @@ void serialMSPCheck()
     GPS_latitude = read32();
     GPS_longitude = read32();
     GPS_altitude = read16();
-#if defined I2CGPS_SPEED
-    GPS_speed = read16()*10;
-//    gpsfix(); untested
-#else
-    GPS_speed = read16();
-#endif
+    #if defined RESETGPSALTITUDEATARM
+      if (!armed){
+        GPS_home_altitude=GPS_altitude;
+      } 
+      GPS_altitude=GPS_altitude-GPS_home_altitude;
+    #endif // RESETGPSALTITUDEATARM  
+    #if defined I2CGPS_SPEED
+      GPS_speed = read16()*10;
+      //gpsfix(); untested
+    #else
+      GPS_speed = read16();
+    #endif // I2CGPS_SPEED
     GPS_ground_course = read16();
   }
 

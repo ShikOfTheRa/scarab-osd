@@ -66,7 +66,7 @@
 //#define USEMAGHEADING             // Only undefine this use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
 //#define USEBAROALTITUDE           // ***Recommend*** to undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) 
 //#define USEGLIDESCOPE 30          // Enables ILS glidescope where 30 = 3.0° glidescope with 0.5 deg gradiented scope scale
-
+//#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that do not provide this functionality. 
 
 /********************       GPS OSD settings      *********************/
 // **ONLY** FOR STANDALONE GPS MODE WITH NO FLIGHT CONTROLLER
@@ -199,11 +199,15 @@
 #ifdef FIXEDWING                     
   #define USEGPSHEADING
   #define USEGPSALTITUDE
+  #define RESETGPSALTITUDEATARM
   #if defined USEMAGHEADING 
     #undef USEGPSHEADING
   #endif  
   #if defined USEBAROALTITUDE
     #undef USEGPSALTITUDE
+  #endif
+  #if defined DISABLEGPSALTITUDERESET
+    #undef RESETGPSALTITUDEATARM
   #endif
   #define FORCESENSORS
 #endif
