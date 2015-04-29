@@ -108,7 +108,9 @@ Fixedwing - Altitude support for controllers without BARO. Default assumes no BA
 
 Fixedwing - Vario support for controllers without BARO. Default assumes no BARO.
 
-Fixedwing - glidescope ILS 
+Fixedwing - glidescope ILS
+
+Fixedwing - reset altitude at arm option for height above ground level vs sea level
 
 Horizon bar set behind other screen items as they have higher priority.
 
