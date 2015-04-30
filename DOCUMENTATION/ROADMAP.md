@@ -8,8 +8,6 @@ None!
 
 ## Enhancement requests for future releases: ##
 
-Support for newer Cleanflight releases
-
 video volts alarm
 
 autodetect cell count
@@ -109,6 +107,8 @@ Fixedwing - Vario support for controllers without BARO. Default assumes no BARO.
 Fixedwing - glidescope ILS
 
 Fixedwing - reset altitude at arm option for height above ground level vs sea level
+
+Support for newer Cleanflight releases
 
 Horizon bar set behind other screen items as they have higher priority.
 
