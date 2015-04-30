@@ -59,7 +59,7 @@
 
 /********************       GPS settings      *********************/
 #define MINSATFIX 5                // Number of sats required for a fix. 5 minimum. More = better
-#define GPSACTIVECHECK 4           // Alert if no GPS data for more than x secs. Sets GPS fix to zero
+#define GPSACTIVECHECK 4           // Sets GPS fix to zero if no GPS data for more than x secs. Sets GPS fix to zero
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
 // **ONLY** valid when using fixed wing
@@ -184,9 +184,6 @@
 #endif
 
 #ifdef CLEANFLIGHT                      
-  #if defined PAGE2
-    #undef PAGE2
-  #endif  
 #endif
 
 #if defined(HARIKIRI) || defined(MULTIWII_V21)                     

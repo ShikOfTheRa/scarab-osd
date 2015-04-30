@@ -248,14 +248,26 @@ void serialMSPCheck()
 
   if (cmdMSP==MSP_RC_TUNING)
   {
-    rcRate8 = read8();
-    rcExpo8 = read8();
-    rollPitchRate = read8();
-    yawRate = read8();
-    dynThrPID = read8();
-    thrMid8 = read8();
-    thrExpo8 = read8();
-    modeMSPRequests &=~ REQ_MSP_RC_TUNING;
+    #ifdef CLEANFLIGHT
+      rcRate8 = read8();
+      rcExpo8 = read8();
+      PitchRate = read8();
+      rollRate = read8();
+      yawRate = read8();
+      dynThrPID = read8();
+      thrMid8 = read8();
+      thrExpo8 = read8();
+      modeMSPRequests &=~ REQ_MSP_RC_TUNING;
+    #else
+      rcRate8 = read8();
+      rcExpo8 = read8();
+      rollPitchRate = read8();
+      yawRate = read8();
+      dynThrPID = read8();
+      thrMid8 = read8();
+      thrExpo8 = read8();
+      modeMSPRequests &=~ REQ_MSP_RC_TUNING;
+    #endif
   }
 
   if (cmdMSP==MSP_PID)
@@ -513,13 +525,28 @@ void serialMenuCommon()
 	}
 #endif
 #ifdef PAGE2
-	if(configPage == 2 && COL == 3) {
-	  if(ROW==1) rcRate8=rcRate8+menudir;
-	  if(ROW==2) rcExpo8=rcExpo8+menudir;
-	  if(ROW==3) rollPitchRate=rollPitchRate+menudir;
-	  if(ROW==4) yawRate=yawRate+menudir;
-	  if(ROW==5) dynThrPID=dynThrPID+menudir;
-	}
+        #ifdef CLEANFLIGHT
+          if(configPage == 2 && COL == 3) {
+	    if(ROW==1) rcRate8=rcRate8+menudir;
+	    if(ROW==2) rcExpo8=rcExpo8+menudir;
+	    if(ROW==3) rollRate=rollRate+menudir;
+	    if(ROW==4) PitchRate=PitchRate+menudir;
+	    if(ROW==5) yawRate=yawRate+menudir;
+	    if(ROW==6) dynThrPID=dynThrPID+menudir;
+	    if(ROW==7) thrMid8=dynThrPID+menudir;
+	    if(ROW==8) thrExpo8=dynThrPID+menudir;
+          }
+        #else
+          if(configPage == 2 && COL == 3) {
+	    if(ROW==1) rcRate8=rcRate8+menudir;
+	    if(ROW==2) rcExpo8=rcExpo8+menudir;
+	    if(ROW==3) rollPitchRate=rollPitchRate+menudir;
+	    if(ROW==4) yawRate=yawRate+menudir;
+	    if(ROW==5) dynThrPID=dynThrPID+menudir;
+	    if(ROW==6) thrMid8=dynThrPID+menudir;
+	    if(ROW==7) thrExpo8=dynThrPID+menudir;
+	  }
+        #endif
 #endif
 #ifdef PAGE3
 	if(configPage == 3 && COL == 3) {

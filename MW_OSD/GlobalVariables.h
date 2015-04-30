@@ -466,6 +466,8 @@ static uint8_t P8[PIDITEMS], I8[PIDITEMS], D8[PIDITEMS];
 
 static uint8_t rcRate8,rcExpo8;
 static uint8_t rollPitchRate;
+static uint8_t rollRate;
+static uint8_t PitchRate;
 static uint8_t yawRate;
 static uint8_t dynThrPID;
 static uint8_t thrMid8;
@@ -710,10 +712,16 @@ const char configMsg17[] PROGMEM = "MAG";
 //-----------------------------------------------------------Page2
 const char configMsg20[] PROGMEM = "RC TUNING";
 const char configMsg21[] PROGMEM = "RC RATE";
-const char configMsg22[] PROGMEM = "EXPONENTIAL";
+const char configMsg22[] PROGMEM = "RC EXPO";
 const char configMsg23[] PROGMEM = "ROLL PITCH RATE";
 const char configMsg24[] PROGMEM = "YAW RATE";
 const char configMsg25[] PROGMEM = "THROTTLE PID ATT";
+const char configMsg26[] PROGMEM = "THROTTLE MID";
+const char configMsg27[] PROGMEM = "THROTTLE EXPO";
+#ifdef CLEANFLIGHT
+  const char configMsg23a[] PROGMEM = "ROLL RATE";
+  const char configMsg23b[] PROGMEM = "PITCH RATE";
+#endif
 //-----------------------------------------------------------Page3
 const char configMsg30[] PROGMEM = "VOLTAGE";
 const char configMsg31[] PROGMEM = "DISPLAY MAIN VOLTS";
@@ -722,7 +730,7 @@ const char configMsg33[] PROGMEM = "MAIN VOLTS ALARM";
 const char configMsg34[] PROGMEM = "DISPLAY VID VOLTS";
 const char configMsg35[] PROGMEM = "ADJUST VOLTS";
 const char configMsg36[] PROGMEM = "CELLS";
-const char configMsg37[] PROGMEM = "USE MWII";
+const char configMsg37[] PROGMEM = "USE FC";
 
 //-----------------------------------------------------------Page4
 const char configMsg40[] PROGMEM = "RSSI";
@@ -757,7 +765,7 @@ const char configMsg711[] PROGMEM = "IMP";
 const char configMsg72[]  PROGMEM = "SIGNAL";
 const char configMsg720[] PROGMEM = "NTSC";
 const char configMsg721[] PROGMEM = "PAL";
-const char configMsg73[]  PROGMEM = "VOLT REF";
+const char configMsg73[]  PROGMEM = "V REF";
 const char configMsg730[] PROGMEM = "5V";
 const char configMsg731[] PROGMEM = "1.1V";
 const char configMsg74[]  PROGMEM = "DEBUG";
@@ -881,11 +889,25 @@ const PROGMEM char * const menu_pid[] =
 
 const PROGMEM char * const menu_rc[] = 
 {   
-  configMsg21,
-  configMsg22,
-  configMsg23,
-  configMsg24,
-  configMsg25,
+  #ifdef CLEANFLIGHT
+    configMsg21,
+    configMsg22,
+    configMsg23a,
+    configMsg23b,
+    configMsg24,
+    configMsg25,
+    configMsg26,
+    configMsg27,
+  #else
+    configMsg21,
+    configMsg22,
+    configMsg23,
+    configMsg24,
+    configMsg25,
+    configMsg26,
+    configMsg27,
+  #endif
+
 };
 
 const PROGMEM char * const menu_bat[] = 

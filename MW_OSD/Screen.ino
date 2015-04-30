@@ -908,12 +908,28 @@ void displayCursor(void)
      }
 #endif
 #ifdef PAGE2
-    if(configPage==2){
-      COL=3;
-      if (ROW==6) ROW=10;
-      if (ROW==9) ROW=5;
+  #ifdef CLEANFLIGHT     
+    if(configPage==2)
+      {  
+        if (ROW==9){
+          if (oldROW==8)
+            ROW=10;
+          else
+            ROW=8;
+        }
+        oldROW=ROW;
+        COL=3;
       cursorpos=(ROW+2)*30+10+6+6;
       }
+  #else
+    if(configPage==2){
+      COL=3;
+      if (ROW==8) ROW=10;
+      if (ROW==9) ROW=7;
+      cursorpos=(ROW+2)*30+10+6+6;
+      }
+  #endif
+      
 #endif
 #ifdef PAGE3      
     if(configPage==3){
@@ -1067,17 +1083,33 @@ void displayConfigScreen(void)
 #ifdef PAGE2
   if(configPage==2)
   {
-    for(uint8_t X=0; X<=4; X++) {
-      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rc[X])));
-      MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
-    }
+    #ifdef CLEANFLIGHT
+      for(uint8_t X=0; X<=7; X++) {
+        strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rc[X])));
+        MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+      }
+      MAX7456_WriteString(itoa(rcRate8,screenBuffer,10),ROLLD);
+      MAX7456_WriteString(itoa(rcExpo8,screenBuffer,10),PITCHD);
+      MAX7456_WriteString(itoa(rollRate,screenBuffer,10),YAWD);
+      MAX7456_WriteString(itoa(PitchRate,screenBuffer,10),ALTD);
+      MAX7456_WriteString(itoa(yawRate,screenBuffer,10),VELD);
+      MAX7456_WriteString(itoa(dynThrPID,screenBuffer,10),LEVD);
+      MAX7456_WriteString(itoa(thrMid8,screenBuffer,10),MAGD);
+      MAX7456_WriteString(itoa(thrExpo8,screenBuffer,10),MAGD+LINE);
+    #else
+      for(uint8_t X=0; X<=6; X++) {
+        strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rc[X])));
+        MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+      }
 
-    MAX7456_WriteString(itoa(rcRate8,screenBuffer,10),ROLLD);
-    MAX7456_WriteString(itoa(rcExpo8,screenBuffer,10),PITCHD);
-    MAX7456_WriteString(itoa(rollPitchRate,screenBuffer,10),YAWD);
-    MAX7456_WriteString(itoa(yawRate,screenBuffer,10),ALTD);
-    MAX7456_WriteString(itoa(dynThrPID,screenBuffer,10),VELD);
-
+      MAX7456_WriteString(itoa(rcRate8,screenBuffer,10),ROLLD);
+      MAX7456_WriteString(itoa(rcExpo8,screenBuffer,10),PITCHD);
+      MAX7456_WriteString(itoa(rollPitchRate,screenBuffer,10),YAWD);
+      MAX7456_WriteString(itoa(yawRate,screenBuffer,10),ALTD);
+      MAX7456_WriteString(itoa(dynThrPID,screenBuffer,10),VELD);
+      MAX7456_WriteString(itoa(thrMid8,screenBuffer,10),LEVD);
+      MAX7456_WriteString(itoa(thrExpo8,screenBuffer,10),MAGD);
+    #endif
   }
  #else
     if(configPage == 2)configPage+=menudir; 
