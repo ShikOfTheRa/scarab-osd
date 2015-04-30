@@ -496,6 +496,7 @@ uint8_t previousarmedstatus=0;  // for statistics after disarming
 uint16_t armedangle=0;           // for capturing direction at arming
 uint16_t GPS_distanceToHome=0;
 uint8_t GPS_fix=0;
+uint8_t GPS_frame_timer=0;
 int32_t GPS_latitude;
 int32_t GPS_longitude;
 int16_t GPS_altitude;

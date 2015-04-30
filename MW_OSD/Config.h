@@ -43,8 +43,8 @@
 
 /********************       OSD SCREEN SWITCH settings      *********************/
 //Choose ONLY ONE option:
-//#define OSD_SWITCH                  // Uses 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
-#define OSD_SWITCH_RC             // Enables 2 or 3 way screen switch using RC data. Specify channel on GUI (range 0-7 AUX1=4 AUX4=7)
+#define OSD_SWITCH                  // Uses 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
+//#define OSD_SWITCH_RC             // Enables 2 or 3 way screen switch using RC data. Specify channel on GUI (range 0-7 AUX1=4 AUX4=7)
 
 
 /********************       FILTER settings      *********************/
@@ -58,15 +58,15 @@
 
 
 /********************       GPS settings      *********************/
-#define  MINSATFIX 5               // Number of sats required for a fix. 5 minimum. More = better
-
+#define MINSATFIX 5                // Number of sats required for a fix. 5 minimum. More = better
+#define GPSACTIVECHECK 4           // Alert if no GPS data for more than x secs. Sets GPS fix to zero
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
 // **ONLY** valid when using fixed wing
 //#define USEMAGHEADING             // Only undefine this use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
 //#define USEBAROALTITUDE           // ***Recommend*** to undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) 
 //#define USEGLIDESCOPE 30          // Enables ILS glidescope where 30 = 3.0° glidescope with 0.5 deg gradiented scope scale
-//#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that do not provide this functionality. 
+//#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
 
 /********************       GPS OSD settings      *********************/
 // **ONLY** FOR STANDALONE GPS MODE WITH NO FLIGHT CONTROLLER
@@ -95,7 +95,7 @@
 
 
 /********************       STARTUP settings      *********************/
-#define INTRO_VERSION               "MW-OSD DEV - R1.3SP2" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+#define INTRO_VERSION               "MW-OSD - R1.4PRE" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
@@ -124,7 +124,7 @@
 
 /********************       Display Settings         ************************/
 #define AUTOCAM                     // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
-//#define AUTOCAMWAIT               // Use with AUTOCAM - waits until camera is ready - i.e. if power up cameras after FC. 
+//#define AUTOCAMWAIT               // **UNTESTED** - Use with AUTOCAM - waits until camera is ready - i.e. if power up cameras after FC. 
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
 #define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
@@ -136,7 +136,7 @@
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
 //#define SHORTSTATS                // Display only timer on flight summary 
-//#define FASTMSP                   // Enable for soft serial / slow baud rates if don't need GPS/BARO/HORIZON data. Speed up remainder
+//#define FASTMSP                   // Enable for soft serial / slow baud rates if don't need GPS/BARO/HORIZON data. Speeds up remainder
 #define DISP_LOW_VOLTS_WARNING      // Enable prominent low voltage warning text
 #define FORCE_DISP_LOW_VOLTS        // Enable display low voltage warning override for screen layouts where its disabled
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
@@ -273,6 +273,6 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-#define DEBUG         // Enable/disable option to display OSD debug values 
+//#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 

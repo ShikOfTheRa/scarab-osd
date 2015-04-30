@@ -1,4 +1,4 @@
-
+ 
 #define SERIALBUFFERSIZE 150
 static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string
 static uint8_t receiverIndex;
@@ -150,6 +150,7 @@ void serialMSPCheck()
 
   if (cmdMSP==MSP_RAW_GPS)
   {
+    GPS_frame_timer=0;
     GPS_fix=read8();
     GPS_numSat=read8();
     GPS_latitude = read32();

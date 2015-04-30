@@ -22,7 +22,7 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
-//#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
+#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
 #if 1
 __asm volatile ("nop");
 #endif
@@ -378,6 +378,13 @@ void loop()
     timer.seconds+=1000;
     timer.tenthSec=0;
     onTime++;
+    #ifdef GPSACTIVECHECK
+      GPS_frame_timer++;
+      if (GPS_frame_timer>GPSACTIVECHECK){
+        GPS_frame_timer=GPSACTIVECHECK+1;
+        GPS_fix=0;
+      }
+    #endif // GPSACTIVECHECK 
     if (Settings[S_AMPER_HOUR]) 
       amperagesum += amperage;
 
@@ -513,12 +520,11 @@ void setMspRequests() {
   else {
     modeMSPRequests = 
       REQ_MSP_IDENT|
-      REQ_MSP_STATUS|
       #ifndef FASTMSP
         REQ_MSP_RAW_GPS|
         REQ_MSP_COMP_GPS|
         REQ_MSP_ATTITUDE|
-        REQ_MSP_ALTITUDE;
+        REQ_MSP_ALTITUDE|
       #endif //FASTMSP 
       #ifdef DEBUGMW
         REQ_MSP_DEBUG|
@@ -526,6 +532,7 @@ void setMspRequests() {
       #ifdef SPORT      
         REQ_MSP_CELLS|
       #endif
+      REQ_MSP_STATUS;
       if(!armed || Settings[S_THROTTLEPOSITION] || fieldIsVisible(pMeterSumPosition) || fieldIsVisible(amperagePosition) )
         modeMSPRequests |= REQ_MSP_RC;
       if(mode.armed == 0)
