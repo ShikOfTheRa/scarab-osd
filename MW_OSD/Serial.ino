@@ -533,8 +533,8 @@ void serialMenuCommon()
 	    if(ROW==4) PitchRate=PitchRate+menudir;
 	    if(ROW==5) yawRate=yawRate+menudir;
 	    if(ROW==6) dynThrPID=dynThrPID+menudir;
-	    if(ROW==7) thrMid8=dynThrPID+menudir;
-	    if(ROW==8) thrExpo8=dynThrPID+menudir;
+	    if(ROW==7) thrMid8=thrMid8+menudir;
+	    if(ROW==8) thrExpo8=thrExpo8+menudir;
           }
         #else
           if(configPage == 2 && COL == 3) {
@@ -543,8 +543,8 @@ void serialMenuCommon()
 	    if(ROW==3) rollPitchRate=rollPitchRate+menudir;
 	    if(ROW==4) yawRate=yawRate+menudir;
 	    if(ROW==5) dynThrPID=dynThrPID+menudir;
-	    if(ROW==6) thrMid8=dynThrPID+menudir;
-	    if(ROW==7) thrExpo8=dynThrPID+menudir;
+	    if(ROW==6) thrMid8=thrMid8+menudir;
+	    if(ROW==7) thrExpo8=thrExpo8+menudir;
 	  }
         #endif
 #endif
@@ -737,6 +737,30 @@ void configSave()
 
   headSerialRequest();
   txCheckSum=0;
+#ifdef CLEANFLIGHT
+  txSize=8;
+  Serial.write(txSize);
+  txCheckSum ^= txSize;
+  Serial.write(MSP_SET_RC_TUNING);
+  txCheckSum ^= MSP_SET_RC_TUNING;
+  Serial.write(rcRate8);
+  txCheckSum ^= rcRate8;
+  Serial.write(rcExpo8);
+  txCheckSum ^= rcExpo8;
+  Serial.write(PitchRate);
+  txCheckSum ^= PitchRate;
+  Serial.write(rollRate);
+  txCheckSum ^= rollRate;
+  Serial.write(yawRate);
+  txCheckSum ^= yawRate;
+  Serial.write(dynThrPID);
+  txCheckSum ^= dynThrPID;
+  Serial.write(thrMid8);
+  txCheckSum ^= thrMid8;
+  Serial.write(thrExpo8);
+  txCheckSum ^= thrExpo8;
+  Serial.write(txCheckSum);
+#else
   txSize=7;
   Serial.write(txSize);
   txCheckSum ^= txSize;
@@ -757,6 +781,7 @@ void configSave()
   Serial.write(thrExpo8);
   txCheckSum ^= thrExpo8;
   Serial.write(txCheckSum);
+#endif
 
   writeEEPROM();
   blankserialRequest(MSP_EEPROM_WRITE);
