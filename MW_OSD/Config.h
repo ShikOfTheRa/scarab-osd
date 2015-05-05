@@ -3,27 +3,27 @@
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
-#define MINIMOSD                    // Choose this if using standard MINIMOSD hardware (default for 95% of boards) 
-//#define WITESPYV1.1               // Choose this if using Witespy V1.1 OSD, select this to correct for mislabelled bat1 and bat 2. Alsoe uses alternative resistors / pinouts. 
-//#define RUSHDUINO                 // Choose this if using Rushduino
+#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware (default for 95% of boards) 
+//#define WITESPYV1.1               // Uncomment this if using Witespy V1.1 OSD, select this to correct for mislabelled bat1 and bat 2. Alsoe uses alternative resistors / pinouts. 
+//#define RUSHDUINO                 // Uncomment this if using Rushduino
 
 
 /********************       CONTROLLER SOFTWARE      *********************/
 //Choose ONLY ONE option:-
-#define MULTIWII_V24              // Undefine this if you are using MW versions 2.4  
-//#define MULTIWII_V23                // Undefine this if you are using MW versions 2.2/2.3  
-//#define MULTIWII_V21              // Undefine this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
-//#define BASEFLIGHT                // Undefine this if you are using BASEFLIGHT
-//#define CLEANFLIGHT180            // Undefine this if you are using CLEANFLIGHT versions up to and including 1.8.0
-//#define CLEANFLIGHT               // Undefine this if you are using CLEANFLIGHT versions 1.8.1 onwards (No RC adjustments menu)
-//#define HARIKIRI                  // Undefine this if you are using HARIKIRI (for BOXNAMES compatibility)
-//#define NOCONTROLLER              // Undefine this if you are using GPSOSD
+#define MULTIWII_V24              // Uncomment this if you are using MW versions 2.4  
+//#define MULTIWII_V23                // Uncomment this if you are using MW versions 2.2/2.3  
+//#define MULTIWII_V21              // Uncomment this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
+//#define BASEFLIGHT                // Uncomment this if you are using BASEFLIGHT
+//#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.8.0
+//#define CLEANFLIGHT               // Uncomment this if you are using CLEANFLIGHT versions 1.8.1 onwards (No RC adjustments menu)
+//#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
+//#define NOCONTROLLER              // Uncomment this if you are using GPSOSD
 
 
 /********************       AIRCRAFT TYPE settings      *********************/
 //Choose ONLY ONE option:
 #define ROTORCRAFT                  // Default for multirotors etc. 
-//#define FIXEDWING                 // Undefine this if you are using fixed wing MultiWii or Baseflight 
+//#define FIXEDWING                 // Uncomment this if you are using fixed wing MultiWii or Baseflight 
 
 
 /********************       FEATURES      *********************/
@@ -59,7 +59,7 @@
 
 /********************       GPS settings      *********************/
 #define MINSATFIX 5                // Number of sats required for a fix. 5 minimum. More = better
-#define GPSACTIVECHECK 4           // Sets GPS fix to zero if no GPS data for more than x secs. Sets GPS fix to zero
+//#define GPSACTIVECHECK 4           // Sets GPS fix to zero if no GPS data for more than x secs. Sets GPS fix to zero
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
 // **ONLY** valid when using fixed wing
@@ -104,8 +104,8 @@
 
 
 /********************       GPS type settings      *********************/
-//#define I2CGPS_SPEED              // Undefine this if you are using older I2CGPS - and need to correct for speed error (10x too slow)               
-//#define I2CGPS_DISTANCE           // Undefine this if you are using older I2CGPS - and need to correct for distance error (650m max) UNTESTED               
+//#define I2CGPS_SPEED              // Uncomment this if you are using older I2CGPS - and need to correct for speed error (10x too slow)               
+//#define I2CGPS_DISTANCE           // Uncomment this if you are using older I2CGPS - and need to correct for distance error (650m max) UNTESTED               
 
 
 /********************       MAP MODE Settings       *********************/
