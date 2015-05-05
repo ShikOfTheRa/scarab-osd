@@ -536,6 +536,7 @@ void serialMenuCommon()
 	    if(ROW==6) dynThrPID=dynThrPID+menudir;
 	    if(ROW==7) thrMid8=thrMid8+menudir;
 	    if(ROW==8) thrExpo8=thrExpo8+menudir;
+	    if(ROW==9) tpa_breakpoint16=tpa_breakpoint16+menudir;
           }
         #else
           if(configPage == 2 && COL == 3) {

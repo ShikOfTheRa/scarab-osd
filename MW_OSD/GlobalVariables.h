@@ -716,12 +716,13 @@ const char configMsg21[] PROGMEM = "RC RATE";
 const char configMsg22[] PROGMEM = "RC EXPO";
 const char configMsg23[] PROGMEM = "ROLL PITCH RATE";
 const char configMsg24[] PROGMEM = "YAW RATE";
-const char configMsg25[] PROGMEM = "THROTTLE PID ATT";
+const char configMsg25[] PROGMEM = "TPA";
 const char configMsg26[] PROGMEM = "THROTTLE MID";
 const char configMsg27[] PROGMEM = "THROTTLE EXPO";
 #ifdef CLEANFLIGHT
   const char configMsg23a[] PROGMEM = "ROLL RATE";
   const char configMsg23b[] PROGMEM = "PITCH RATE";
+  const char configMSg28[] PROGMEM = "TPA BREAKPOINT";
 #endif
 //-----------------------------------------------------------Page3
 const char configMsg30[] PROGMEM = "VOLTAGE";
@@ -899,6 +900,7 @@ const PROGMEM char * const menu_rc[] =
     configMsg25,
     configMsg26,
     configMsg27,
+    configMSg28,
   #else
     configMsg21,
     configMsg22,
