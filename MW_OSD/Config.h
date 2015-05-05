@@ -43,8 +43,8 @@
 
 /********************       OSD SCREEN SWITCH settings      *********************/
 //Choose ONLY ONE option:
-#define OSD_SWITCH                  // Uses 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
-//#define OSD_SWITCH_RC             // Enables 2 or 3 way screen switch using RC data. Specify channel on GUI (range 0-7 AUX1=4 AUX4=7)
+//#define OSD_SWITCH                // Uses original 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
+#define OSD_SWITCH_RC               // Enables GUI to use 2 way OSD_SWITCh or 3 way screen switch using RC data. Specify channel on GUI (range 0-7 AUX1=4 AUX4=7)
 
 
 /********************       FILTER settings      *********************/

@@ -159,7 +159,7 @@ void LayoutEditorSetup(){
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);
   buttonLSAVE = controlP5.addButton("bLSAVE",1,270,47,65,16)
-  .setLabel("     SAVE")
+  .setLabel("    WRITE")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);
