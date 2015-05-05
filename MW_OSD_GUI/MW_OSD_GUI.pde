@@ -1139,8 +1139,12 @@ void draw() {
   
 
 // Process and outstanding Read or Write EEPROM requests
-  if((millis()>ReadConfigMSPMillis)&&(millis()>WriteConfigMSPMillis)&&(init_com==1))
-    SimControlToggle.setValue(1);
+  if((millis()>ReadConfigMSPMillis)&&(millis()>WriteConfigMSPMillis)&&(init_com==1)){
+    if (AutoSimulator !=0){
+      SimControlToggle.setValue(1);
+    }
+  }
+    
     if (millis()<ReadConfigMSPMillis){
       if (init_com==1){
         READconfigMSP();
@@ -1239,7 +1243,7 @@ void draw() {
       if (init_com==1) {
        
         if (ClosePort) return;
-        if (SimControlToggle.getValue()==0) return;
+        if (SimControlToggle.getValue()!=0) {
 
           if (init_com==1)SendCommand(MSP_ATTITUDE);
           if (init_com==1)SendCommand(MSP_RC);
@@ -1286,7 +1290,8 @@ void draw() {
           MSP_sendOrder=0;
           break;
         }
-        PortWrite = !PortWrite; // toggle TX LED every other     
+        PortWrite = !PortWrite; // toggle TX LED every other    
+      } 
       }
     } // End !FontMode
   }
@@ -1963,6 +1968,7 @@ public void updateConfig(){
   ConfigClass.setProperty("BaudRate",str(BaudRate));
   ConfigClass.setProperty("Title",Title);
   ConfigClass.setProperty("Passthroughcomm",str(Passthroughcomm));
+  ConfigClass.setProperty("AutoSimulator",str(AutoSimulator));
   
   
   File file = new File(dataPath("gui.cfg"));
@@ -2000,6 +2006,7 @@ public void LoadConfig(){
     BaudRate = 115200;
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
+    AutoSimulator = 0;
     updateConfig();
   }
   catch( IOException ioe){
@@ -2013,6 +2020,7 @@ public void LoadConfig(){
       BaudRate =int(ConfigClass.getProperty("BaudRate"));
       Title =ConfigClass.getProperty("Title");
       Passthroughcomm = int(ConfigClass.getProperty("Passthroughcomm"));
+      AutoSimulator = int(ConfigClass.getProperty("AutoSimulator"));
       img_Clear = LoadFont(FontFileName);
       in.close();
     }
@@ -2027,6 +2035,10 @@ public void LoadConfig(){
   if (Passthroughcomm !=0){
     commListbox.addItem("Pass Thru Comm",commListMax+1); 
   }
+  if (AutoSimulator !=0){
+    SimControlToggle.setValue(1);
+  }
+
 }
 
 //  our configuration 
