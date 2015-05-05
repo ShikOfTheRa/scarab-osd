@@ -257,6 +257,7 @@ void serialMSPCheck()
       dynThrPID = read8();
       thrMid8 = read8();
       thrExpo8 = read8();
+      tpa_breakpoint16 = read16();
       modeMSPRequests &=~ REQ_MSP_RC_TUNING;
     #else
       rcRate8 = read8();
@@ -738,7 +739,7 @@ void configSave()
   headSerialRequest();
   txCheckSum=0;
 #ifdef CLEANFLIGHT
-  txSize=8;
+  txSize=10;
   Serial.write(txSize);
   txCheckSum ^= txSize;
   Serial.write(MSP_SET_RC_TUNING);
@@ -759,7 +760,11 @@ void configSave()
   txCheckSum ^= thrMid8;
   Serial.write(thrExpo8);
   txCheckSum ^= thrExpo8;
-  Serial.write(txCheckSum);
+  Serial.write(txCheckSum);  
+  Serial.write(tpa_breakpoint16);
+  txCheckSum ^= tpa_breakpoint16;
+  Serial.write(tpa_breakpoint16>>8);
+  txCheckSum ^= tpa_breakpoint16>>8;
 #else
   txSize=7;
   Serial.write(txSize);

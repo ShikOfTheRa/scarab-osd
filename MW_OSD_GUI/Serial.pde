@@ -952,7 +952,7 @@ void MWData_Com() {
     serialize8(tmpeeadd);
     serialize8(99);
     tailSerialReply();
-    SimControlToggle.setValue(1);    
+//    SimControlToggle.setValue(1);    
     SendSim=1;
     ClosePort = false; 
 

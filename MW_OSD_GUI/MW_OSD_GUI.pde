@@ -204,6 +204,7 @@ String LoadPercent = "";
 String CallSign = "";
 String Title;
 int Passthroughcomm;
+int AutoSimulator=0;
 
 int init_com = 0;
 int commListMax = 0;
@@ -1138,8 +1139,12 @@ void draw() {
   
 
 // Process and outstanding Read or Write EEPROM requests
-  if((millis()>ReadConfigMSPMillis)&(millis()>WriteConfigMSPMillis)&(init_com==1))
-    SimControlToggle.setValue(1);
+  if((millis()>ReadConfigMSPMillis)&&(millis()>WriteConfigMSPMillis)&&(init_com==1)){
+    if (AutoSimulator !=0){
+      SimControlToggle.setValue(1);
+    }
+  }
+    
     if (millis()<ReadConfigMSPMillis){
       if (init_com==1){
         READconfigMSP();
@@ -1198,6 +1203,27 @@ void draw() {
   else
     txtlblLayoutEnTxt.setValue(" : Disabled");
 
+// Layout amenedmends based upon choices
+  if (int(confItem[GetSetting("S_RCWSWITCH")].value())==0){
+    txtlblconfItem[GetSetting("S_RCWSWITCH")].setText("Using OSD_SW");
+    txtlblconfItem[GetSetting("S_RCWSWITCH_CH")].setText("Not used");
+
+    toggleConfItem[GetSetting("S_HUDSW2")].hide();
+
+    txtlblconfItem[GetSetting("S_HUDSW0")].setText("HUD - Default");
+    txtlblconfItem[GetSetting("S_HUDSW1")].setText("HUD - OSD SW");
+    txtlblconfItem[GetSetting("S_HUDSW2")].setText("Not used");
+  }
+  else {
+//    toggleConfItem[GetSetting("S_RCWSWITCH_CH")].show();
+    txtlblconfItem[GetSetting("S_RCWSWITCH")].setText("Using RC Channel");
+    txtlblconfItem[GetSetting("S_RCWSWITCH_CH")].setText("OSD ch (0-7)");
+    txtlblconfItem[GetSetting("S_HUDSW0")].setText("HUD - LOW");
+    txtlblconfItem[GetSetting("S_HUDSW1")].setText("HUD - HIGH");
+    txtlblconfItem[GetSetting("S_HUDSW2")].setText("HUD - MID");
+  }
+//    confItem[GetSetting("S_RCWSWITCH")].setValue(" : Enabled");
+    
 
 // Colour switches when enabled......
   coloriseswitches();
@@ -1217,7 +1243,7 @@ void draw() {
       if (init_com==1) {
        
         if (ClosePort) return;
-        if (SimControlToggle.getValue()==0) return;
+        if (SimControlToggle.getValue()!=0) {
 
           if (init_com==1)SendCommand(MSP_ATTITUDE);
           if (init_com==1)SendCommand(MSP_RC);
@@ -1264,7 +1290,8 @@ void draw() {
           MSP_sendOrder=0;
           break;
         }
-        PortWrite = !PortWrite; // toggle TX LED every other     
+        PortWrite = !PortWrite; // toggle TX LED every other    
+      } 
       }
     } // End !FontMode
   }
@@ -1665,6 +1692,13 @@ public void bPOSLEN() {
   }
 }
 public void bLSAVE() {
+  OSD_S_HUDSW0=99;
+  OSD_S_HUDSW1=99;
+  OSD_S_HUDSW2=99;
+  if (init_com==1){
+    WriteLayouts=1;
+    WRITEconfigMSP_init();
+  }
   xmlsavelayout();
 }
 
@@ -1800,7 +1834,14 @@ public void updateView(){
     if(j >= CONFIGITEMS)
     return;
   int value = int(MWI.getProperty(ConfigNames[j]));
-  confItem[j].setValue(value);
+  float f = new Float(MWI.getProperty(ConfigNames[j]));
+  if (j==GetSetting("S_VOLTAGEMIN")){
+    confItem[j].setValue(f);
+  }
+  else{
+    confItem[j].setValue(value);
+  }
+
   if (j == CONFIGITEMS-1){
     //buttonWRITE.setColorBackground(green_);
   }  
@@ -1934,6 +1975,7 @@ public void updateConfig(){
   ConfigClass.setProperty("BaudRate",str(BaudRate));
   ConfigClass.setProperty("Title",Title);
   ConfigClass.setProperty("Passthroughcomm",str(Passthroughcomm));
+  ConfigClass.setProperty("AutoSimulator",str(AutoSimulator));
   
   
   File file = new File(dataPath("gui.cfg"));
@@ -1971,6 +2013,7 @@ public void LoadConfig(){
     BaudRate = 115200;
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
+    AutoSimulator = 0;
     updateConfig();
   }
   catch( IOException ioe){
@@ -1984,6 +2027,7 @@ public void LoadConfig(){
       BaudRate =int(ConfigClass.getProperty("BaudRate"));
       Title =ConfigClass.getProperty("Title");
       Passthroughcomm = int(ConfigClass.getProperty("Passthroughcomm"));
+      AutoSimulator = int(ConfigClass.getProperty("AutoSimulator"));
       img_Clear = LoadFont(FontFileName);
       in.close();
     }
@@ -1998,6 +2042,10 @@ public void LoadConfig(){
   if (Passthroughcomm !=0){
     commListbox.addItem("Pass Thru Comm",commListMax+1); 
   }
+  if (AutoSimulator !=0){
+    SimControlToggle.setValue(1);
+  }
+
 }
 
 //  our configuration 
@@ -2178,8 +2226,9 @@ void xmlsavelayout(){
   confItem[GetSetting("S_HUDSW0")].setMax(ConfigRanges[GetSetting("S_HUDSW0")]);
   confItem[GetSetting("S_HUDSW1")].setMax(ConfigRanges[GetSetting("S_HUDSW1")]);
   confItem[GetSetting("S_HUDSW2")].setMax(ConfigRanges[GetSetting("S_HUDSW2")]);
-  if (init_com==1)
-    READconfigMSP_init();
+  if (init_com==1){
+   // READconfigMSP_init();
+  }
 }
 
 
