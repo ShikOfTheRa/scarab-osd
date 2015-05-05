@@ -1834,7 +1834,14 @@ public void updateView(){
     if(j >= CONFIGITEMS)
     return;
   int value = int(MWI.getProperty(ConfigNames[j]));
-  confItem[j].setValue(value);
+  float f = new Float(MWI.getProperty(ConfigNames[j]));
+  if (j==GetSetting("S_VOLTAGEMIN")){
+    confItem[j].setValue(f);
+  }
+  else{
+    confItem[j].setValue(value);
+  }
+
   if (j == CONFIGITEMS-1){
     //buttonWRITE.setColorBackground(green_);
   }  
