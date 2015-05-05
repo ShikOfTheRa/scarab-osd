@@ -760,11 +760,11 @@ void configSave()
   txCheckSum ^= thrMid8;
   Serial.write(thrExpo8);
   txCheckSum ^= thrExpo8;
-  Serial.write(txCheckSum);  
   Serial.write(tpa_breakpoint16);
   txCheckSum ^= tpa_breakpoint16;
   Serial.write(tpa_breakpoint16>>8);
   txCheckSum ^= tpa_breakpoint16>>8;
+  Serial.write(txCheckSum);  
 #else
   txSize=7;
   Serial.write(txSize);
