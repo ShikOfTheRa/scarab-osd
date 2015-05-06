@@ -512,10 +512,11 @@ void SendCommand(int cmd){
 
       case MSP_ANALOG:
         PortIsWriting = true;
-        headSerialReply(MSP_ANALOG, 5);
+        headSerialReply(MSP_ANALOG, 7);
         serialize8(int(sVBat * 10));
         serialize16(0);
         serialize16(int(sMRSSI));
+        serialize16(int(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,50000)));
         tailSerialReply();
         PortIsWriting = false;
       break;
