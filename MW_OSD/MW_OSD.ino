@@ -118,7 +118,7 @@ void setup()
     GPS_SerialInit();
   #else
     setMspRequests();
-    blankserialRequest(MSP_IDENT);
+    mspWriteRequest(MSP_IDENT,0);
   #endif
   #if defined FORCESENSORS
     MwSensorPresent |=GPSSENSOR;
@@ -183,7 +183,7 @@ void loop()
       #ifndef FASTMSP
         if(!fontMode)
       #endif //FASTMSP  
-      blankserialRequest(MSP_ATTITUDE);
+      mspWriteRequest(MSP_ATTITUDE,0);
     #endif //GPSOSD
    }  // End of slow Timed Service Routine (100ms loop)
 
@@ -260,9 +260,10 @@ void loop()
          MSPcmdsend = MSP_NAV_STATUS;
       break;
     }
+    
     if(!fontMode){
       #ifndef GPSOSD
-      blankserialRequest(MSPcmdsend);      
+      mspWriteRequest(MSPcmdsend, 0);      
       #endif //GPSOSD
     }
 
@@ -402,11 +403,11 @@ void loop()
     allSec++;
 
     if((timer.accCalibrationTimer==1)&&(configMode)) {
-      blankserialRequest(MSP_ACC_CALIBRATION);
+      mspWriteRequest(MSP_ACC_CALIBRATION,0);
       timer.accCalibrationTimer=0;
     }
     if((timer.magCalibrationTimer==1)&&(configMode)) {
-      blankserialRequest(MSP_MAG_CALIBRATION);
+      mspWriteRequest(MSP_MAG_CALIBRATION,0);
       timer.magCalibrationTimer=0;
     }
     if(timer.magCalibrationTimer>0) timer.magCalibrationTimer--;
