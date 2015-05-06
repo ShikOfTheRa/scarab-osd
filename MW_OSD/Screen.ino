@@ -909,18 +909,10 @@ void displayCursor(void)
 #endif
 #ifdef PAGE2
   #ifdef CLEANFLIGHT     
-    if(configPage==2)
-      {  
-        if (ROW==9){
-          if (oldROW==8)
-            ROW=10;
-          else
-            ROW=8;
-        }
-        oldROW=ROW;
-        COL=3;
+    if(configPage==2){  
+      COL=3;
       cursorpos=(ROW+2)*30+10+6+6;
-      }
+    }
   #else
     if(configPage==2){
       COL=3;
@@ -1084,7 +1076,7 @@ void displayConfigScreen(void)
   if(configPage==2)
   {
     #ifdef CLEANFLIGHT
-      for(uint8_t X=0; X<=7; X++) {
+      for(uint8_t X=0; X<=8; X++) {
         strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rc[X])));
         MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
       }
@@ -1096,6 +1088,7 @@ void displayConfigScreen(void)
       MAX7456_WriteString(itoa(dynThrPID,screenBuffer,10),LEVD);
       MAX7456_WriteString(itoa(thrMid8,screenBuffer,10),MAGD);
       MAX7456_WriteString(itoa(thrExpo8,screenBuffer,10),MAGD+LINE);
+      MAX7456_WriteString(itoa(tpa_breakpoint16,screenBuffer,10),MAGD+2*LINE);
     #else
       for(uint8_t X=0; X<=6; X++) {
         strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rc[X])));
