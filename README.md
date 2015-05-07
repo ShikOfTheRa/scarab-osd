@@ -16,13 +16,9 @@ MWOSD also provides support a number of other configurations:
 <li>Traditional standalone basic OSD - basic Volts / Amps / RSSI / Timer</li>
 <li>Groundstation OSD for GS voltage / RSSI and Timer</li>
 </ul>
-<ul class="task-list">
-<li><a href='DOCUMENTATION/Features.md'>Features</a></li>
-<li><a href='DOCUMENTATION/Downloads.md'>SOFTWARE DOWNLOADS</a></li>
-</ul>
-<ul class="task-list">
   Support for MWOSD comes from the growing community of users and supporters. Their feedback and assistance is recognised and essential to the success of MWOSD.<br>
   Before calling on their support, please help yourself and check the documentation first:<br>
+<ul class="task-list">
   <a href="http://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/User_Guide.md" target="_blank">User Guide</a><br>  
   <a href="http://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/Calibration.md" target="_blank">Calibration</a><br>  
   <a href="http://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/FAQ.md" target="_blank">FAQ</a><br>  
