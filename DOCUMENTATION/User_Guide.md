@@ -243,7 +243,8 @@ HARDWARE<br>
 <br>
 CONTROLLER<br>
 <li>BASEFLIGHT      - Enable to BASEFLIGHT - uses alternative heading / current divider<br>
-<li>CLEANFLIGHT     - Enable to CLEANFLIGHT - uses alternative heading / current divider<br>
+<li>CLEANFLIGHT180  - Enable to CLEANFLIGHT 1.8 and prior - uses alternative heading / current divider<br>
+<li>CLEANFLIGHT     - Enable to CLEANFLIGHT - uses alternative heading / current divider and full RC options<br>
 <li>HARIKIRI        - Enable to HARIKIRI - uses BOXNAMES identifier<br>
 <li>FIXEDWING       - Enable to use MW fixed wing branch from PatrikE<br>
 <li>MULTIWII_V21    - Enable to MULTIWII_versions up to 2.1<br>
@@ -251,8 +252,9 @@ CONTROLLER<br>
 <li>MULTIWII_V24    - Enable to MULTIWII_versions 2.4 (SUBJECT TO CHANGE)<br>
 <li>NOCONTROLLER    - Enable if no flight controller - e.g. GPS OSD or groundstation<br>
 <br>
-FIXEDWING<br>
-<li>FIXEDWING       - Enable if you are using MW fixed wing from PatrikE<br>
+AIRCRAFT<br>
+<li>ROTORCRAFT     - Enable if you are using normal multirotor<br>
+<li>FIXEDWING       - Enable if you are using fixed wing from PatrikE<br>
 <br>
 FILTER<br>
 <li>STAGE2FILTER    - Enable to use a simple filter for analog and RSSI sensors<br>
@@ -286,10 +288,14 @@ MAP MODE<br>
 <li>AMPERAGEOFFSET  - Enable Optional extra for bidirectional sensors<br>
 <br>
 OSD SWITCH<br>
-<li>OSD_SWITCH      - Uses 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii<br>
-<li>OSD_SWITCH_RC 5 - Enables 2 or 3 way screen switch using RC data. Midpoint = blank screen. Specify channel (range 0-7 AUX1=4 AUX4=7)<br>
+<li>OSD_SWITCH_RC   - Uses GUI to select using FC OSD Switch or 3 position TX channel<br>
+<li>OSD_SWITCH      - Forces to use FC OSD Switch or 3 position TX channel<br>
 <br>
 <br>
+GPS settings<br>
+<li>MINSATFIX       - Determines min sat fix for GPS use (OSD only)<br>
+<li>GPSACTIVECHECK  - Optional timeout ins seconds for lost sats<br>
+<br><br>
 DISPLAY<br>
 <li>AUTOCAM         - Enable autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings. Not recommended for > 600TVL cameras<br>
 <li>DECIMAL         - Choose decimal point character<br>
