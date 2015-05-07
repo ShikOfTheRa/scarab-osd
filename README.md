@@ -5,24 +5,29 @@
 An Multipurpose Open Source OSD software with support for:
 <ul class="task-list">
 <li>MULTIWII</li>
-<li>BASEFLIGHT CLEANFLIGHT HARIKIRI FIXEDWING</li>
-<li>STANDALONE GPS OSD</li>
-<li>GROUNDSTATION OSD</li>
+<li>BASEFLIGHT</li>
+<li>CLEANFLIGHT</li>
+<li>HARIKIRI</li>
+<li>FIXEDWING</li>
+</ul>
+MWOSD also provides support a number of other configurations: 
+<ul class="task-list">
+<li>Traditional GPS based OSD with full GPS info - Altitude , Direction, Distance, Speed etc.</li>
+<li>Traditional standalone basic OSD - basic Volts / Amps / RSSI / Timer</li>
+<li>Groundstation OSD for GS voltage / RSSI and Timer</li>
 </ul>
 <ul class="task-list">
 <li><a href='DOCUMENTATION/Features.md'>Features</a></li>
 <li><a href='DOCUMENTATION/Downloads.md'>SOFTWARE DOWNLOADS</a></li>
 </ul>
 <ul class="task-list">
-<li><a href='DOCUMENTATION/User_Guide.md'>User Guide</a></li>
-<li><a href='DOCUMENTATION/Calibration.md'>Calibration guide</a></li>
-<li><a href='DOCUMENTATION/FAQ.md'>FAQ</a></li>
-<li><a href='http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI'>Support</a></li>
-<li><a href='http://www.multiwii.com/forum/viewtopic.php?f=8&t=4865'>Development</a></li>
-<li><a href='DOCUMENTATION/Credits.md'>Credits</a></li>
-<li><a href='DOCUMENTATION/Frsky_SPort.md'>FRSKY Smart Port guide</a></li>
-<li><a href='DOCUMENTATION/Frsky_SPort_Host.md'>FRSKY without Smart Port guide</a></li>
-<li><a href='DOCUMENTATION/GPSTime.md'>GPS Time display guide</a></li>
+  Support for MWOSD comes from the growing community of users and supporters. Their feedback and assistance is recognised and essential to the success of MWOSD.<br>
+  Before calling on their support, please help yourself and check the documentation first:<br>
+  <a href="http://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/User_Guide.md" target="_blank">User Guide</a><br>  
+  <a href="http://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/Calibration.md" target="_blank">Calibration</a><br>  
+  <a href="http://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/FAQ.md" target="_blank">FAQ</a><br>  
+  <a href="http://github.com/ShikOfTheRa/scarab-osd/tree/master/DOCUMENTATION" target="_blank">Full documentation list</a><br>  
+
 </ul>
 
 <a href='http://www.youtube.com/watch?feature=player_embedded&v=FCIyhbT1kK0' target='_blank'><img src='http://img.youtube.com/vi/FCIyhbT1kK0/0.jpg' width='425' height=344 /></a><br>
