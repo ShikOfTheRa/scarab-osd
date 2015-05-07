@@ -150,10 +150,9 @@ To navigate the OSD:<br>
 <br>
 <b>LAYOUT</b>
 <li>Using OSD - choose to use FC OSD switch - or RC channel to switch screens<br>
-<li>OSD ch - in RC channel mode species channel used to switch screen<br>
+<li>OSD ch - in RC channel mode specifies channel used to switch screen<br>
 <li>HUD - LOW/MID/HIGH - layouts selected for RC switch option<br>
 <li>HUD - Default / OSD SW - layouts selected for FC OSD_SWITCH option<br>
-<br>
 <br>
 <b>Debug</b>
 <li>Displays Debug - for Multiwii developers<br>
