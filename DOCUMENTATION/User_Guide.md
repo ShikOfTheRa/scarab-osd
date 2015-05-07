@@ -115,8 +115,6 @@ To navigate the OSD:<br>
 <li>Display Timer - displays flight / on timer<br>
 <br>
 <b>HUD</b>
-<li>HUD layout - choose the default HUD layout you prefer<br>
-<li>HUD layout OSDSW - choose the alternative HUD layout that displays when selecting OSD SW<br>
 <li>Display Horizon Bar - shows horizon indicator<br>
 <li> - HB - shows additional horizon elevation indicators<br>
 <li>Display Sidebars - shows vertical HUD sidebars<br>
@@ -149,6 +147,12 @@ To navigate the OSD:<br>
 <b>Alarms</b>
 <li>Distance Alarm - use this to set alarm warning for max altitude. Value is <b>100<br></b><li>Altitude Alarm - use this to set alarm warning for max altitude. Value is <b>10<br></b><li>Speed Alarm    - use this to set alarm warning for max speed<br>
 <li>Timer  Alarm   - use this to set alarm warning for timer (in minutes)<br>
+<br>
+<b>LAYOUT</b>
+<li>Using OSD - choose to use FC OSD switch - or RC channel to switch screens<br>
+<li>OSD ch - in RC channel mode species channel used to switch screen<br>
+<li>HUD - LOW/MID/HIGH - layouts selected for RC switch option<br>
+<li>HUD - Default / OSD SW - layouts selected for FC OSD_SWITCH option<br>
 <br>
 <br>
 <b>Debug</b>
