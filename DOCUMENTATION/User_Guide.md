@@ -79,7 +79,7 @@ To navigate the OSD:<br>
 <li>Zero adjust - use this to adjust the Amps drawn when the copter is idle<br>
 <li>Amps adjust - use this to adjust the Amps drawn value. It is recommended to adjust for accuracy against an Ampmeter around 50% throttle with a Multicopter<br>
 <li>x100 mAh Alarm - use this to set alarm warning for bat capacity. 10 = 1000mah<br>
-<li>x100 Amp Alarm - use this to set alarm warning for Current draw<br>
+<li>Amp Alarm - use this to set alarm warning for Current draw<br>
 <li>!! NOTE !! See guide for how to calibrate<br>
 <br>
 <b>RSSI</b>
