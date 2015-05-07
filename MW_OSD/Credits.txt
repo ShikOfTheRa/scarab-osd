@@ -15,6 +15,7 @@ PatrikE
 Okan Vitaliy
 Bicycle
 Henrique - Katawentos
+Per Magnus Auby - Supersopp
 
 Other Projects and their contributions
 Ardupilot team - some of the original code is probably from / based upon elements of ardupilot team. e.g. GPS
@@ -27,12 +28,14 @@ Special thanks to other contributors - testing / feedback / User help:
 Deet
 Subaru4WD
 HFman
+ezikiel12
 
 
 Also special thanks:
 Alex Dubus - AlexinParis - For MultiWii and inspiration!
 www.multiwiicopter.com for providing hardware to test
 www.dtuhf.com for providing hardware to test
+www.readytoflyquads.com for providing hardawre to test
 
 Please check the above  
 
