@@ -5,7 +5,7 @@
 
 ---
 
-Key Improvements for `R1.4`:- OSD
+Key Improvements for `R1.4`:-
 
  * BUGFIX - "Use MW" options not saving backup file (single entry key)
  * BUGFIX - When set the "Time Zone Offset" to say 2.0 and then do a "WRITE" the value will change (display) to 0.2
@@ -35,7 +35,7 @@ Key Improvements for `R1.4`:- OSD
 
 ---
 
-Key Improvements for `R1.3`:- OSD
+Key Improvements for `R1.3`:-
 
  * OSD - introduction of GPS based (no FC) standalone OSD support
  * OSD - alarms for distance, altitude, speed, mAh, amps and flytime
@@ -98,7 +98,7 @@ Key Improvements for `R1.3`:- OSD
 
 ---
 
-Key Improvements for `R1.2`:- OSD
+Key Improvements for `R1.2`:-
 
  * OSD - Support for HUD layouts set by GUI
  * GUI - 8 Preset OSD layouts can be selected from GUI
@@ -142,7 +142,7 @@ Key Improvements for `R1.2`:- OSD
 
 ---
 
-Key Improvements for `R1.1`:- OSD
+Key Improvements for `R1.1`:-
 
  * All OSD sensors now have 8 point filter - Battery / Video / Current / RSSI / PWM RSSI
  * optional 2nd stage simple filter added
@@ -175,7 +175,7 @@ Key Improvements:- GUI
 
 ---
 
-Key Improvements for `R1`:- OSD
+Key Improvements for `R1`:-
 
  * Re layout of OSD - more Pro feel than `r370`
  * Introduction of RADAR and MAP modes
