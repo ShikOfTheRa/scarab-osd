@@ -18,6 +18,7 @@ NOTE: if use Multiwii FC voltage, then ALL adjustments are made on the FC. The f
 
 NOTE: if use MultiWii FC current, then ALL adjustments are made on the FC. The following does not apply.
 
+
 The easiest way to set up a current sensor is probably to use this link. It contains a number of sensors already entered or you can add a new one, or use custom settings. It will provide the theoretical values you need. From this you can optimise further if required.
 
 > [LINK: Hardware Sensors calibration settings](https://docs.google.com/spreadsheets/d/1-NRiG__0Ym1Sw__0UR1on3XKo4--my3V4uDAUEjcMrk/edit#gid=0)
