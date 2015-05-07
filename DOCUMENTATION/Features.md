@@ -3,8 +3,38 @@
 
 ## Summary of features and changes between versions ##
 
-Key Improvements for `R1.3`:- OSD
 
+Key Improvements for `R1.4`:- OSD
+
+ * BUGFIX - "Use MW" options not saving backup file (single entry key)....
+ * BUGFIX - When set the "Time Zone Offset" to say 2.0 and then do a "WRITE" the value will change (display) to 0.2
+ * BUGFIX - Compass OK, but home arrow is inconsistent in fixedwing mode
+ * BUGFIX - compile errors for GPS in soem Arduino versions
+ * BUGFIX - PID menu options after row 5 are incorrect. e.g. level does not show level settings
+ * BUGFIX - All versions - timer clock drifts over time
+ * BUGFIX - GPS OSD mode MTK - missing option to set 5hz update
+ * BUGFIX - Many issues reported with errors saving config
+
+ * OSD - Fixedwing - Heading / compass support for controllers without MAG. Default assumes no MAG.
+ * OSD - Fixedwing - Altitude support for controllers without BARO. Default assumes no BARO.
+ * OSD - Fixedwing - Vario support for controllers without BARO. Default assumes no BARO.
+ * OSD - Fixedwing - glidescope ILS
+ * OSD - Fixedwing - reset altitude at arm option for height above ground level vs sea level
+ * OSD - Support for newer Cleanflight releases
+ * OSD - Horizon bar set behind other screen items as they have higher priority.
+ * OSD - AUTOCAM now default option (Auto sense PAL / NTSC cam at startup) to help with incorrectly marked cams / user error.  * OSD - VSYNC now default option as most boards now support this. Clearer display.
+ * OSD - Added max Amps to flight summary
+ * OSD - Amended 00 font to be blank character - recommended to reduce sparklies
+ * OSD - 3 OSD layouts for use with 3 way tx switch
+ * OSD - Autodetect PAL/NTSC or timeout to last known settings (fix blank screen for incorrect labelled cams)
+ * GUI - GUI support for FC passthrough configuration settings (access OSD config via FC). 
+ * GUI - GUI support for OSD or 3 way RC switch layout changing
+ * GUI - Introduction message 
+ * GUI - Decimalise GUI value for min battery voltage etc.
+ * CONFIG - Provide optimisation and option for serial data requests for slower baud rates
+
+
+Key Improvements for `R1.3`:- OSD
 
   * OSD - introduction of GPS based (no FC) standalone OSD support
   * OSD - alarms for distance, altitude, speed, mAh, amps and flytime
@@ -53,7 +83,7 @@ Key Improvements for `R1.3`:- OSD
   * CONFIG - improved OSD SWITCH operation. New section
   * CONFIG - optional Auto PAL/NTSC detect
 
-  * BUGFIX - LOW VOLTS displayed only when ARMED/DISARMED is clear.
+ * BUGFIX -  LOW VOLTS displayed only when ARMED/DISARMED is clear.
   * BUGFIX - OSD menu for cells/vid volts incorrect
   * BUGFIX - Unable to save AMP changes on GUI
   * BUGFIX - OSD menu for sensors display incorrect
