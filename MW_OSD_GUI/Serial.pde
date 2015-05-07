@@ -113,6 +113,10 @@ void InitSerial(float portValue) {
   if (portValue < commListMax) {
     if(init_com == 0){ 
       try{
+      if (StartupMessage ==0){
+        StartupMessage=1;
+        updateConfig();
+      }
       String portPos = Serial.list()[int(portValue)];
       txtlblWhichcom.setValue("COM = " + shortifyPortName(portPos, 8));
       g_serial = new Serial(this, portPos, BaudRate);

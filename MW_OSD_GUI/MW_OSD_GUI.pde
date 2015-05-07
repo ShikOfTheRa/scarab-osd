@@ -205,6 +205,7 @@ String CallSign = "";
 String Title;
 int Passthroughcomm;
 int AutoSimulator=0;
+int StartupMessage=0;
 
 int init_com = 0;
 int commListMax = 0;
@@ -1402,13 +1403,36 @@ void draw() {
     ClosePort();
   }
 
-  //Textarea
-//  if(confItem[GetSetting("S_DEBUG")].value() > 0) {
-  if(0==1) { //disabled 
-    myTextarea.setText("First connect notice.This window will close upon first"
-                      +"                                                      "
-                      +"connection - Click connect "
-                      );
+  //Textarea used for introduction
+//  if(confItem[GetSetting("S_DEBUG")].value() > 0) StartupMessage=0; // for testing
+  
+  if (StartupMessage ==0){
+    myTextarea.setText("Welcome to ");
+    String s = myTextarea.getText();
+    s = s+ MW_OSD_GUI_Version;
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "Check out our new website - MWOSD.com";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "New features in this release:";
+    s = s+ "\n";
+    s = s+ "FIXEDWING support";
+    s = s+ "\n";
+    s = s+ "Enhanced CLEANFLIGHT support";
+    s = s+ "\n";
+    s = s+ "3 way switchable OSD layouts";
+    s = s+ "\n";
+    s = s+ "Clearer display - less artifacts";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "Help support continued development - donate just a couple of dollars.";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "Select a COM port to start using MWOSD! \n";
+    s = s+ "\n";
+    
+    myTextarea.setText(s);
     myTextarea.show();
   }
   else{
@@ -1986,7 +2010,7 @@ public void updateConfig(){
   ConfigClass.setProperty("Title",Title);
   ConfigClass.setProperty("Passthroughcomm",str(Passthroughcomm));
   ConfigClass.setProperty("AutoSimulator",str(AutoSimulator));
-  
+  ConfigClass.setProperty("StartupMessage",str(StartupMessage));
   
   File file = new File(dataPath("gui.cfg"));
   try{
@@ -2024,6 +2048,7 @@ public void LoadConfig(){
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
     AutoSimulator = 0;
+    StartupMessage = 0;
     updateConfig();
   }
   catch( IOException ioe){
@@ -2038,6 +2063,8 @@ public void LoadConfig(){
       Title =ConfigClass.getProperty("Title");
       Passthroughcomm = int(ConfigClass.getProperty("Passthroughcomm"));
       AutoSimulator = int(ConfigClass.getProperty("AutoSimulator"));
+      StartupMessage = int(ConfigClass.getProperty("StartupMessage"));
+
       img_Clear = LoadFont(FontFileName);
       in.close();
     }
