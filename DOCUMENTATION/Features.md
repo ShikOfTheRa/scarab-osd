@@ -3,7 +3,7 @@
 
 ## Summary of features and changes between versions ##
 
-
+---
 Key Improvements for `R1.4`:- OSD
 
  * BUGFIX - "Use MW" options not saving backup file (single entry key)
@@ -31,8 +31,7 @@ Key Improvements for `R1.4`:- OSD
  * GUI - Introduction message 
  * GUI - Decimalise GUI value for min battery voltage etc
  * CONFIG - Provide optimisation and option for serial data requests for slower baud rates
-
-
+---
 Key Improvements for `R1.3`:- OSD
 
  * OSD - introduction of GPS based (no FC) standalone OSD support
@@ -93,12 +92,7 @@ Key Improvements for `R1.3`:- OSD
  * BUGFIX - OSD menu for sensors display incorrect
  * BUGFIX - Improved write / check stability
  * INFO   - Amended to support newer Arduino compiler
-
-
 ---
-
-
-
 Key Improvements for `R1.2`:- OSD
 
  * OSD - Support for HUD layouts set by GUI
@@ -140,10 +134,7 @@ Key Improvements for `R1.2`:- OSD
  * bugfix - min\_cell volt correction
  * bugfix - Fix for RSSI when tx switched off (negative value)
  * bugfix - Bugfix for any menus with 8 options
-
-
 ---
-
 Key Improvements for `R1.1`:- OSD
 
  * All OSD sensors now have 8 point filter - Battery / Video / Current / RSSI / PWM RSSI
@@ -174,9 +165,7 @@ Key Improvements:- GUI
  * GUI - renamed reset to defaults for extra clarity
  * GUI - task switcher for faster serial - PatrikE
  * GUI - support for changes - FRSKY / MW current sensor. Tip links added
-
 ---
-
 Key Improvements for `R1`:- OSD
 
  * Re layout of OSD - more Pro feel than `r370`
