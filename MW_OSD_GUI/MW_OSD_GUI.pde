@@ -205,6 +205,7 @@ String CallSign = "";
 String Title;
 int Passthroughcomm;
 int AutoSimulator=0;
+int StartupMessage=0;
 
 int init_com = 0;
 int commListMax = 0;
@@ -603,6 +604,7 @@ color yellow_ = color(200, 200, 20),
       red_ = color(120, 30, 30), 
       blue_ = color(50, 50, 100),
       grey_ = color(30, 30, 30),
+      black_ = color(0, 0, 0),
       switches_ = color(30, 140, 30),
       font_ = color(50, 50, 50),
       clear_ = color(0, 0, 0),
@@ -613,8 +615,8 @@ color yellow_ = color(200, 200, 20),
 //Colors--------------------------------------------------------------------------------------------------------------------
 
 // textarea -------------------------------------------------------------------------------------------------------------
+//Textarea
 Textarea myTextarea;
-//Println console;
 
 // textlabels -------------------------------------------------------------------------------------------------------------
 Textlabel txtlblconfItem[] = new Textlabel[CONFIGITEMS] ;
@@ -751,17 +753,16 @@ DONATEimage  = loadImage("DON_def.png");
   FontGroupcontrolP5.setControlFont(font10);
 
   SetupGroups();
-
+  
+  //Textarea
   myTextarea = controlP5.addTextarea("txt")
     .setPosition(DisplayWindowX+WindowAdjX+10+10, DisplayWindowY+WindowAdjY+10)
     .setSize(325, 228)
     .setFont(createFont("", 12))
     .setLineHeight(14)
     .setColor(color(255))
-//    .setColorBackground(red_)
+    .setColorBackground(black_)
   ;
-
-//  console = controlP5.addConsole(myTextarea);//
 
 
 // BAUD RATE / COM PORT SELECTION ---------------------------------------
@@ -1401,9 +1402,42 @@ void draw() {
   if ((ClosePort ==true)&& (PortWrite == false)){ //&& (init_com==1)
     ClosePort();
   }
+
+  //Textarea used for introduction
+//  if(confItem[GetSetting("S_DEBUG")].value() > 0) StartupMessage=0; // for testing
   
-//println("Display in text area");
-   
+  if (StartupMessage ==0){
+    myTextarea.setText("Welcome to ");
+    String s = myTextarea.getText();
+    s = s+ MW_OSD_GUI_Version;
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "Check out our new website - MWOSD.com";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "New features in this release:";
+    s = s+ "\n";
+    s = s+ "FIXEDWING support";
+    s = s+ "\n";
+    s = s+ "Enhanced CLEANFLIGHT support";
+    s = s+ "\n";
+    s = s+ "3 way switchable OSD layouts";
+    s = s+ "\n";
+    s = s+ "Clearer display - less artifacts";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "Help support continued development - donate just a couple of dollars.";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "Select a COM port to start using MWOSD! \n";
+    s = s+ "\n";
+    
+    myTextarea.setText(s);
+    myTextarea.show();
+  }
+  else{
+    myTextarea.hide();
+  }
 }
 
 
@@ -1976,7 +2010,7 @@ public void updateConfig(){
   ConfigClass.setProperty("Title",Title);
   ConfigClass.setProperty("Passthroughcomm",str(Passthroughcomm));
   ConfigClass.setProperty("AutoSimulator",str(AutoSimulator));
-  
+  ConfigClass.setProperty("StartupMessage",str(StartupMessage));
   
   File file = new File(dataPath("gui.cfg"));
   try{
@@ -2014,6 +2048,7 @@ public void LoadConfig(){
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
     AutoSimulator = 0;
+    StartupMessage = 0;
     updateConfig();
   }
   catch( IOException ioe){
@@ -2028,6 +2063,8 @@ public void LoadConfig(){
       Title =ConfigClass.getProperty("Title");
       Passthroughcomm = int(ConfigClass.getProperty("Passthroughcomm"));
       AutoSimulator = int(ConfigClass.getProperty("AutoSimulator"));
+      StartupMessage = int(ConfigClass.getProperty("StartupMessage"));
+
       img_Clear = LoadFont(FontFileName);
       in.close();
     }
@@ -2152,7 +2189,7 @@ public void SUPPORTLINK(){
   link("http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI"); 
 }
 public void DONATELINK(){
-  link("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EBS76N8F426G2&lc=GB&item_name=MW%2dOSD&item_number=R1%2e3&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"); 
+  link("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EBS76N8F426G2&lc=GB&item_name=MW%2dOSD&item_number=R1%2e4&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"); 
 }
 public void CALIBLINK(){
  link("https://code.google.com/p/multiwii-osd/wiki/Calibration"); 
