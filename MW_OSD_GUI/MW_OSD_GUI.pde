@@ -603,6 +603,7 @@ color yellow_ = color(200, 200, 20),
       red_ = color(120, 30, 30), 
       blue_ = color(50, 50, 100),
       grey_ = color(30, 30, 30),
+      black_ = color(0, 0, 0),
       switches_ = color(30, 140, 30),
       font_ = color(50, 50, 50),
       clear_ = color(0, 0, 0),
@@ -613,8 +614,8 @@ color yellow_ = color(200, 200, 20),
 //Colors--------------------------------------------------------------------------------------------------------------------
 
 // textarea -------------------------------------------------------------------------------------------------------------
+//Textarea
 Textarea myTextarea;
-//Println console;
 
 // textlabels -------------------------------------------------------------------------------------------------------------
 Textlabel txtlblconfItem[] = new Textlabel[CONFIGITEMS] ;
@@ -751,17 +752,16 @@ DONATEimage  = loadImage("DON_def.png");
   FontGroupcontrolP5.setControlFont(font10);
 
   SetupGroups();
-
+  
+  //Textarea
   myTextarea = controlP5.addTextarea("txt")
     .setPosition(DisplayWindowX+WindowAdjX+10+10, DisplayWindowY+WindowAdjY+10)
     .setSize(325, 228)
     .setFont(createFont("", 12))
     .setLineHeight(14)
     .setColor(color(255))
-//    .setColorBackground(red_)
+    .setColorBackground(black_)
   ;
-
-//  console = controlP5.addConsole(myTextarea);//
 
 
 // BAUD RATE / COM PORT SELECTION ---------------------------------------
@@ -1401,9 +1401,19 @@ void draw() {
   if ((ClosePort ==true)&& (PortWrite == false)){ //&& (init_com==1)
     ClosePort();
   }
-  
-//println("Display in text area");
-   
+
+  //Textarea
+//  if(confItem[GetSetting("S_DEBUG")].value() > 0) {
+  if(0==1) { //disabled 
+    myTextarea.setText("First connect notice.This window will close upon first"
+                      +"                                                      "
+                      +"connection - Click connect "
+                      );
+    myTextarea.show();
+  }
+  else{
+    myTextarea.hide();
+  }
 }
 
 
