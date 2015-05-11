@@ -22,7 +22,10 @@ Key Improvements for `R1.4`:-
  * OSD - Fixedwing - reset altitude at arm option for height above ground level vs sea level
  * OSD - Support for newer Cleanflight releases
  * OSD - Horizon bar set behind other screen items as they have higher priority
- * OSD - AUTOCAM now default option (Auto sense PAL / NTSC cam at startup) to help with incorrectly marked cams / user error  * OSD - VSYNC now default option as most boards now support this. Clearer display
+ * OSD - Sat warning - option for prominent text warning if sats are low (i.e. potential of incorrect alt / direction home)
+ * OSD - Sat warning - option to recognise loss of GPS data from FC and warn via low sats. 
+ * OSD - AUTOCAM option (Auto sense PAL / NTSC cam at startup) to help with incorrectly marked cams / user error  
+ * OSD - VSYNC now default option as most boards now support this. Clearer display
  * OSD - Added max Amps to flight summary
  * OSD - Amended 00 font to be blank character - recommended to reduce sparklies
  * OSD - 3 OSD layouts for use with 3 way tx switch
