@@ -402,11 +402,12 @@ void loop()
       setMspRequests();
     }
     allSec++;
-
+/*
     if((timer.accCalibrationTimer==1)&&(configMode)) {
       mspWriteRequest(MSP_ACC_CALIBRATION,0);
       timer.accCalibrationTimer=0;
     }
+*/    
     if((timer.magCalibrationTimer==1)&&(configMode)) {
       mspWriteRequest(MSP_MAG_CALIBRATION,0);
       timer.magCalibrationTimer=0;
