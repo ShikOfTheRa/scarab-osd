@@ -67,7 +67,7 @@
 
 /********************       GPS settings      *********************/
 #define MINSATFIX 5                // Number of sats required for a fix. 5 minimum. More = better
-#define GPSACTIVECHECK 4           // Sets GPS fix to zero if no GPS data for more than x secs. Sets GPS fix to zero
+#define GPSACTIVECHECK 6           // Sets GPS fix to zero if no GPS data for more than x secs. Sets GPS fix to zero
 #define DISP_LOW_SATS_WARNING      // Displays low sat warning in addition to flashing sat indicator
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
@@ -147,6 +147,7 @@
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
 //#define SHORTSTATS                // Display only timer on flight summary 
 //#define FASTMSP                   // Enable for soft serial / slow baud rates if don't need GPS/BARO/HORIZON data. Speeds up remainder
+#define NOTHROTTLESPACE           // Enable to remove space between throttle symbol and the data
 #define DISP_LOW_VOLTS_WARNING      // Enable prominent low voltage warning text
 #define FORCE_DISP_LOW_VOLTS        // Enable display low voltage warning override for screen layouts where its disabled
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 

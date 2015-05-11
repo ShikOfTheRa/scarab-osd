@@ -493,23 +493,30 @@ void displayCurrentThrottle(void)
   if(!fieldIsVisible(CurrentThrottlePosition))
     return;
 
+  #ifndef NOTHROTTLESPACE
+    #define THROTTLESPACE 1
+  #else
+    #define THROTTLESPACE 0
+    screenBuffer[1]=' ';
+  #endif  
   if (MwRcData[THROTTLESTICK] > HighT) HighT = MwRcData[THROTTLESTICK] -5;
   if (MwRcData[THROTTLESTICK] < LowT) LowT = MwRcData[THROTTLESTICK];      // Calibrate high and low throttle settings  --defaults set in GlobalVariables.h 1100-1900
   if(!armed) {
-    screenBuffer[2]=' ';
-    screenBuffer[3]=' ';
-    screenBuffer[4]='-';
-    screenBuffer[5]='-';
+    screenBuffer[0+THROTTLESPACE]=' ';
+    screenBuffer[1+THROTTLESPACE]=' ';
+    screenBuffer[2+THROTTLESPACE]='-';
+    screenBuffer[3+THROTTLESPACE]='-';
+    screenBuffer[4+THROTTLESPACE]=' ';
+
   }
   else
   {
     int CurThrottle = map(MwRcData[THROTTLESTICK],LowT,HighT,0,100);
-    ItoaPadded(CurThrottle,screenBuffer+2,3,0);
-    screenBuffer[5]='%';
+    ItoaPadded(CurThrottle,screenBuffer+1+THROTTLESPACE,3,0);
+    screenBuffer[4+THROTTLESPACE]='%';
   }
     screenBuffer[0]=SYM_THR;
-    screenBuffer[1]=' ';
-    screenBuffer[6]=0;
+    screenBuffer[5+THROTTLESPACE]=0;
     MAX7456_WriteString(screenBuffer,getPosition(CurrentThrottlePosition));
 }
 
