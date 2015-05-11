@@ -588,7 +588,6 @@ uint16_t flyingTime=0;
   uint8_t  GPS_active=5; 
   uint8_t  GPS_fix_HOME=0;
   const char satnogps_text[] PROGMEM = " NO GPS ";
-  const char satlow_text[]   PROGMEM = "LOW SATS";
 #endif
 
 
@@ -662,10 +661,12 @@ const char armed_text[] PROGMEM     = " ARMED";
 const char APRTHtext[] PROGMEM      = "AUTO RTH";
 const char APHOLDtext[] PROGMEM     = "AUTO HOLD";
 const char APWAYPOINTtext[] PROGMEM = " MISSION";
+const char satlow_text[] PROGMEM    = "LOW SATS";
 //const char APLANDtext[] PROGMEM = "LANDING";
 #ifdef DISP_LOW_VOLTS_WARNING
 const char lowvolts_text[] PROGMEM  = "LOW VOLTS";
 #endif
+
 
 // For Intro
 #ifdef INTRO_VERSION

@@ -4,8 +4,13 @@
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
 #define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware (default for 95% of boards) 
-//#define WITESPYV1.1               // Uncomment this if using Witespy V1.1 OSD, select this to correct for mislabelled bat1 and bat 2. Alsoe uses alternative resistors / pinouts. 
+//#define WITESPYV1.1               // Uncomment this if using Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
 //#define RUSHDUINO                 // Uncomment this if using Rushduino
+
+// NOTE-some of the popular RTFQ boards have alternative bat1/bat2 pins and voltage measuring resistors
+// If having difficulties, first select default MINIMOSD as above, then use the following to correct: 
+// #define SWAPVOLTAGEPINS          // For RTFQ boards with batt voltage appearing on vid voltage
+// #define ALTERNATEDIVIDERS        // For RFTQ boards with voltage unable to be adjusted high enough
 
 
 /********************       CONTROLLER SOFTWARE      *********************/
@@ -17,7 +22,7 @@
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.8.0
 //#define CLEANFLIGHT               // Uncomment this if you are using CLEANFLIGHT versions 1.8.1 onwards (No RC adjustments menu)
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
-//#define NOCONTROLLER              // Uncomment this if you are using GPSOSD
+//#define NOCONTROLLER              // Uncomment this if you are using GPSOSD or not using a flight controller
 
 
 /********************       AIRCRAFT TYPE settings      *********************/
@@ -42,6 +47,9 @@
 
 
 /********************       OSD SCREEN SWITCH settings      *********************/
+// This functionality enables :
+// a, 2 different screen layouts to be selected using the Flight controller "OSD_SWITCH" feature or
+// b, 2 or 3 different screen layouts to be selected using a specificed RC channel assigned to a TX switch
 //Choose ONLY ONE option:
 //#define OSD_SWITCH                // Uses original 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
 #define OSD_SWITCH_RC               // Enables GUI to use 2 way OSD_SWITCh or 3 way screen switch using RC data. Specify channel on GUI (range 0-7 AUX1=4 AUX4=7)
@@ -59,14 +67,16 @@
 
 /********************       GPS settings      *********************/
 #define MINSATFIX 5                // Number of sats required for a fix. 5 minimum. More = better
-//#define GPSACTIVECHECK 4           // Sets GPS fix to zero if no GPS data for more than x secs. Sets GPS fix to zero
+#define GPSACTIVECHECK 6           // Sets GPS fix to zero if no GPS data for more than x secs. Sets GPS fix to zero
+#define DISP_LOW_SATS_WARNING      // Displays low sat warning in addition to flashing sat indicator
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
 // **ONLY** valid when using fixed wing
 //#define USEMAGHEADING             // Only undefine this use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
 //#define USEBAROALTITUDE           // ***Recommend*** to undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) 
-//#define USEGLIDESCOPE 30          // Enables ILS glidescope where 30 = 3.0° glidescope with 0.5 deg gradiented scope scale
+//#define USEGLIDESCOPE 40          // Enables ILS glidescope where 40 = 4.0° glidescope. 1.0 deg gradiented scope scale
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
+
 
 /********************       GPS OSD settings      *********************/
 // **ONLY** FOR STANDALONE GPS MODE WITH NO FLIGHT CONTROLLER
@@ -95,11 +105,11 @@
 
 
 /********************       STARTUP settings      *********************/
-#define INTRO_VERSION               "MW-OSD - R1.4PRE" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+//#define INTRO_VERSION               "SHIKI-OSD - NAZA DEV01" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
-//#define INTRO_MENU                  // Enable to display TX stick MENU 
+#define INTRO_MENU                  // Enable to display TX stick MENU 
 //#define STARTUPDELAY 2000         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
 
@@ -137,6 +147,7 @@
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
 //#define SHORTSTATS                // Display only timer on flight summary 
 //#define FASTMSP                   // Enable for soft serial / slow baud rates if don't need GPS/BARO/HORIZON data. Speeds up remainder
+#define NOTHROTTLESPACE           // Enable to remove space between throttle symbol and the data
 #define DISP_LOW_VOLTS_WARNING      // Enable prominent low voltage warning text
 #define FORCE_DISP_LOW_VOLTS        // Enable display low voltage warning override for screen layouts where its disabled
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
@@ -221,18 +232,27 @@
     # define MAX7456SELECT 6         // ss
     # define MAX7456RESET  10        // RESET
 #endif
+
 #ifdef WITESPYV1.1                     
+    #define SWAPVOLTAGEPINS
+    #define ALTERNATEDIVIDERS
+#endif
+
+#ifdef SWAPVOLTAGEPINS                     
     #define VOLTAGEPIN    A2
     #define VIDVOLTAGEPIN A0
-    #define DIVIDER1v1      0.0002      // Voltage divider for 1.1v reference. 
-    #define DIVIDER5v       0.0008      // Voltage divider for 5v reference. 
 #else                                  
     #define VOLTAGEPIN    A0
     #define VIDVOLTAGEPIN A2
+#endif
+
+#ifdef ALTERNATEDIVIDERS                     
+    #define DIVIDER1v1      0.0002      // Voltage divider for 1.1v reference. 
+    #define DIVIDER5v       0.0008      // Voltage divider for 5v reference. 
+#else                                  
     #define DIVIDER1v1      0.0001      // Voltage divider for 1.1v reference. Use 0.0001 default unless advised otherwise.
     #define DIVIDER5v       0.0005      // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
 #endif
-
 
 /********************  GPS OSD rule definitions  *********************/
 #if defined MTK_BINARY16
@@ -260,6 +280,10 @@
 #endif
 
 #if defined NMEA
+  #define GPSOSD
+#endif
+
+#if defined NAZA
   #define GPSOSD
 #endif
 
