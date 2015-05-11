@@ -433,8 +433,12 @@ void displayHorizon(int rollAngle, int pitchAngle)
       }
     }
 #endif
+    #ifdef USEGLIDESCOPE
+      if(Settings[S_DISPLAYGPS]){
+        displayfwglidescope();
+      }
+    #endif //USEGLIDESCOPE  
   }
-
 }
 
 
@@ -727,8 +731,17 @@ void displayNumberOfSat(void)
 {
 //  if(!GPS_fix)
 //    return;
-  if((GPS_numSat<MINSATFIX)&&(timer.Blink2hz))
+
+
+
+  if((GPS_numSat<MINSATFIX)&&(timer.Blink2hz)){
     return;
+  }
+  #ifdef DISP_LOW_SATS_WARNING
+    if (GPS_numSat<MINSATFIX){
+      MAX7456_WriteString_P(satlow_text, getPosition(motorArmedPosition));
+    }
+  #endif //DISP_LOW_SATS_WARNING
   if(!fieldIsVisible(GPS_numSatPosition))
     return;
   screenBuffer[0] = SYM_SAT_L;
@@ -1513,10 +1526,10 @@ for(uint8_t maptype=mapstart; maptype<mapend; maptype++) {
 void displayfwglidescope(void){
   int8_t GS_deviation_scale   = 0;
   if (GPS_distanceToHome>0){ //watch div 0!!
-    int16_t gs_angle          =(573*atan((float)MwAltitude/100/GPS_distanceToHome));
+    int16_t gs_angle          =(573*atan((float)MwAltitude/10/GPS_distanceToHome));
     int16_t GS_target_delta   = gs_angle-USEGLIDESCOPE;
-    GS_target_delta           = constrain(GS_target_delta,-40,40); 
-    GS_deviation_scale        = map(GS_target_delta,40,-40,0,8);
+    GS_target_delta           = constrain(GS_target_delta,-400,400); 
+    GS_deviation_scale        = map(GS_target_delta,400,-400,0,8);
   }
 
   int8_t varline              = (GS_deviation_scale/3)-1;

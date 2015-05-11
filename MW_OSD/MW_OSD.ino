@@ -22,7 +22,7 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
-#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
+//#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
 #if 1
 __asm volatile ("nop");
 #endif
@@ -344,7 +344,7 @@ void loop()
           displayDistanceToHome();
           displayAngleToHome();
           #ifdef USEGLIDESCOPE
-            displayfwglidescope();
+            // displayfwglidescope(); //note hook for this is in display horizon function
           #endif //USEGLIDESCOPE  
           displayGPS_speed();
           displayGPSPosition();  
@@ -384,6 +384,7 @@ void loop()
       if (GPS_frame_timer>GPSACTIVECHECK){
         GPS_frame_timer=GPSACTIVECHECK+1;
         GPS_fix=0;
+        GPS_numSat=0;
       }
     #endif // GPSACTIVECHECK 
     if (Settings[S_AMPER_HOUR]) 
