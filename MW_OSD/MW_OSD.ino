@@ -138,11 +138,8 @@ void loop()
     debug[MEMCHECK] = UntouchedStack();
   #endif
 
-  #ifdef FIXEDWING
-    fwaltitude();
-  #endif
 
-  #ifdef OSD_SWITCH_RC // note MIDRC is specified in Max7456
+  #ifdef OSD_SWITCH_RC
     uint8_t rcswitch_ch = Settings[S_RCWSWITCH_CH];
     screenlayout=0;
     if (Settings[S_RCWSWITCH]){
@@ -150,8 +147,8 @@ void loop()
         screenlayout=1;
       else if (MwRcData[rcswitch_ch] > 1400)
         screenlayout=2;
-     } 
-     else{
+    } 
+    else{
       if (MwSensorActive&mode.osd_switch)
         screenlayout=1;
     }
@@ -163,9 +160,9 @@ void loop()
   #endif
     
   if (screenlayout!=oldscreenlayout){
-    oldscreenlayout=screenlayout;
     readEEPROM_screenlayout();
   }
+  oldscreenlayout=screenlayout;
     
   // Blink Basic Sanity Test Led at 1hz
   if(timer.tenthSec>10)
@@ -193,7 +190,7 @@ void loop()
 
     timer.tenthSec++;
     timer.halfSec++;
-    timer.Blink10hz=!timer.Blink2hz;
+    timer.Blink10hz=!timer.Blink10hz;
     calculateTrip();
     
       uint8_t MSPcmdsend;
@@ -380,13 +377,21 @@ void loop()
     timer.tenthSec=0;
     onTime++;
     #ifdef GPSACTIVECHECK
-      GPS_frame_timer++;
-      if (GPS_frame_timer>GPSACTIVECHECK){
-        GPS_frame_timer=GPSACTIVECHECK+1;
-        GPS_fix=0;
+      if (timer.GPS_active==0){
+//        GPS_fix=0;
         GPS_numSat=0;
       }
+      else {
+        timer.GPS_active--;
+      }      
     #endif // GPSACTIVECHECK 
+    #ifdef MSPACTIVECHECK
+      if (timer.MSP_active==0){
+      }
+      else {
+        timer.MSP_active--;
+      }      
+    #endif // MSPACTIVECHECK 
     if (Settings[S_AMPER_HOUR]) 
       amperagesum += amperage;
 
@@ -837,12 +842,4 @@ unsigned long FastpulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
   return width; 
 }
 
-void fwaltitude(void){
-  if (millis()>timer.fwAltitudeTimer){
-    timer.fwAltitudeTimer +=1000;
-    previousfwaltitude=interimfwaltitude;
-    interimfwaltitude=GPS_altitude;
-    MwVario=(GPS_altitude-previousfwaltitude)*20;
-  }  
-}
 

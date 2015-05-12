@@ -54,6 +54,7 @@ void mspWriteChecksum(){
 void serialMSPCheck()
 {
   readIndex = 0;
+  timer.MSP_active=MSPACTIVECHECK;
 
   if (cmdMSP == MSP_OSD) {
     uint8_t cmd = read8();
@@ -176,8 +177,10 @@ void serialMSPCheck()
 
   if (cmdMSP==MSP_RAW_GPS)
   {
-    GPS_frame_timer=0;
-    GPS_fix=read8();
+    timer.GPS_active=GPSACTIVECHECK;
+    uint8_t GPS_fix_temp=read8();
+    if (GPS_fix_temp);
+      GPS_fix=1;
     GPS_numSat=read8();
     GPS_latitude = read32();
     GPS_longitude = read32();
@@ -227,13 +230,12 @@ void serialMSPCheck()
     for(uint8_t i=0;i<2;i++){
       MwAngle[i] = read16();
     }
+      MwHeading = read16();
     #if defined(USEGPSHEADING)
       MwHeading = GPS_ground_course/10;
-    #else    
-      MwHeading = read16();
     #endif
     #ifdef HEADINGCORRECT
-      if (MwHeading >= + 180) MwHeading -= 360;
+      if (MwHeading >= 180) MwHeading -= 360;
     #endif
   }
 
@@ -254,7 +256,13 @@ void serialMSPCheck()
   if (cmdMSP==MSP_ALTITUDE)
   {
     #if defined(USEGPSALTITUDE)
-      MwAltitude =GPS_altitude*100;
+      MwAltitude = (int32_t)GPS_altitude*100;
+      if (millis()>timer.fwAltitudeTimer){
+        timer.fwAltitudeTimer +=1000;
+        previousfwaltitude=interimfwaltitude;
+        interimfwaltitude=GPS_altitude;
+        MwVario=(GPS_altitude-previousfwaltitude)*20;
+      }  
     #else    
       MwAltitude =read32();
       MwVario = read16();
