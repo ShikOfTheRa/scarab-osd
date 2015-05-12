@@ -108,10 +108,12 @@ struct {
   uint8_t Blink10hz;                         // This is turing on and off at 10hz
   int lastCallSign;                          // Callsign_timer
   uint8_t rssiTimer;
-  uint8_t accCalibrationTimer;
+//  uint8_t accCalibrationTimer;
   uint8_t magCalibrationTimer;
   uint32_t fwAltitudeTimer;
   uint32_t seconds;
+  uint8_t MSP_active;
+  uint8_t GPS_active;
 }
 timer;
 
@@ -656,16 +658,32 @@ uint16_t flyingTime=0;
 #define OSD_READ_CMD_EE          9
 // End private MSP for use with the GUI
 
+
+const char blank_text[] PROGMEM    = "";
+const char nodata_text[] PROGMEM    = "NO DATA";
+const char nogps_text[] PROGMEM     = "NO GPS";
+const char satlow_text[] PROGMEM    = "LOW SATS";
 const char disarmed_text[] PROGMEM  = "DISARMED";
 const char armed_text[] PROGMEM     = " ARMED";
 const char APRTHtext[] PROGMEM      = "AUTO RTH";
 const char APHOLDtext[] PROGMEM     = "AUTO HOLD";
 const char APWAYPOINTtext[] PROGMEM = " MISSION";
-const char satlow_text[] PROGMEM    = "LOW SATS";
-//const char APLANDtext[] PROGMEM = "LANDING";
-#ifdef DISP_LOW_VOLTS_WARNING
 const char lowvolts_text[] PROGMEM  = "LOW VOLTS";
-#endif
+
+// For Status / warning messages
+const PROGMEM char * const message_item[] =
+{   
+  blank_text,  //0
+  disarmed_text,  //1
+  armed_text,     //2
+  nodata_text,
+  nogps_text,
+  satlow_text,
+  APRTHtext,
+  APHOLDtext,
+  APWAYPOINTtext,
+  lowvolts_text,
+};
 
 
 // For Intro

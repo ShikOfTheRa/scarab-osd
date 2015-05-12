@@ -246,42 +246,6 @@ void displayMode(void)
 }
 
 
-void displayArmed(void)
-{
-  #ifdef GPSOSD
-    if(!fieldIsVisible(motorArmedPosition))
-      return;
-    if(timer.Blink10hz){
-//      if (GPS_SerialInitialised>0){
-//        MAX7456_WriteString_P(satinit_text, getPosition(motorArmedPosition));
-//      }
-//      else if(GPS_active>0){
-      if(GPS_active>0){
-        MAX7456_WriteString_P(satnogps_text, getPosition(motorArmedPosition));
-      }
-      else if(GPS_numSat<MINSATFIX){
-        MAX7456_WriteString_P(satlow_text, getPosition(motorArmedPosition));
-      }  
-    }
-    #ifndef HIDEARMEDSTATUS
-      #define HIDEARMEDSTATUS
-    #endif
-  #endif  //GPSOSD
-  
-  #ifndef HIDEARMEDSTATUS
-  if(!fieldIsVisible(motorArmedPosition))
-    return;
-  if(!armed){
-    MAX7456_WriteString_P(disarmed_text, getPosition(motorArmedPosition));
-    armedtimer=20;
-  }
-  else if(timer.Blink10hz&&armedtimer){
-    armedtimer--;
-    MAX7456_WriteString_P(armed_text, getPosition(motorArmedPosition));
-  }
-  #endif  
-}
-
 void displayCallsign(int cposition)
 {
       for(uint8_t X=0; X<10; X++) {
@@ -497,8 +461,8 @@ void displayCurrentThrottle(void)
     #define THROTTLESPACE 1
   #else
     #define THROTTLESPACE 0
-    screenBuffer[1]=' ';
   #endif  
+  screenBuffer[1]=' ';
   if (MwRcData[THROTTLESTICK] > HighT) HighT = MwRcData[THROTTLESTICK] -5;
   if (MwRcData[THROTTLESTICK] < LowT) LowT = MwRcData[THROTTLESTICK];      // Calibrate high and low throttle settings  --defaults set in GlobalVariables.h 1100-1900
   if(!armed) {
@@ -744,11 +708,11 @@ void displayNumberOfSat(void)
   if((GPS_numSat<MINSATFIX)&&(timer.Blink2hz)){
     return;
   }
-  #ifdef DISP_LOW_SATS_WARNING
-    if (GPS_numSat<MINSATFIX){
-      MAX7456_WriteString_P(satlow_text, getPosition(motorArmedPosition));
-    }
-  #endif //DISP_LOW_SATS_WARNING
+  #ifdef SATACTIVECHECK
+//    if (GPS_numSat<MINSATFIX){
+//      MAX7456_WriteString_P(satlow_text, getPosition(motorArmedPosition));
+//    }
+  #endif //SATACTIVECHECK
   if(!fieldIsVisible(GPS_numSatPosition))
     return;
   screenBuffer[0] = SYM_SAT_L;
@@ -1554,3 +1518,62 @@ void Menuconfig_onoff(uint16_t pos, uint8_t setting){
     strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_on_off[(Settings[setting])])));
     MAX7456_WriteString(screenBuffer, pos);
 }
+
+void displayArmed(void)
+{
+  if(!fieldIsVisible(motorArmedPosition))
+    return;  
+  uint8_t message_no = 0;
+
+  if(!armed){
+    message_no=1;
+    armedtimer=30;
+  } 
+  #ifdef SATACTIVECHECK
+  if (GPS_numSat<MINSATFIX){
+    message_no=5;
+  }
+  #endif //SATACTIVECHECK
+  #ifdef GPSACTIVECHECK
+  if (timer.GPS_active==0){
+    message_no=4;
+  }
+  #endif //GPSACTIVECHECK
+  #ifdef MSPACTIVECHECK
+  if(timer.MSP_active==0){
+    message_no=3;
+  }
+  #endif //MSPACTIVECHECK
+  if(armedtimer&&armed){
+    if (timer.Blink10hz){
+      armedtimer--;
+      message_no=2;
+    }
+    else{
+      message_no=0;
+    }
+  }
+
+   if(message_no>2){
+      if(!armed&&timer.Blink2hz){
+        message_no=1;
+      }
+      else if(!armed){
+      }
+      else if(timer.Blink2hz){
+        return;
+      }
+    }
+
+  #ifdef HIDEARMEDSTATUS
+  if(message_no<3){
+    return;
+  }
+  #endif //HIDEARMEDSTATUS
+
+  strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[message_no])));
+  if (message_no>0){
+    MAX7456_WriteString(screenBuffer, getPosition(motorArmedPosition));
+  }
+}
+
