@@ -8,6 +8,8 @@ None!
 
 ## Enhancement requests for future releases: ##
 
+height adjust for horizon bar
+
 video volts alarm
 
 autodetect cell count
