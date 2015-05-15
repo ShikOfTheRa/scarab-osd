@@ -1016,7 +1016,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
     Y += pitchAngle / 8;
     Y += 41;
     if(Y >= 0 && Y <= 81) {
-      int pos = 30*(2+Y/9) + 10 + X;
+      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) + 3 - 2*LINE + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
       	mapchar(0x80+(Y%9), pos);
       if(Y>=9 && (Y%9) == 0)
@@ -1030,7 +1030,8 @@ void displayHorizon(int rollAngle, int pitchAngle)
     Y += pitchAngle / 8;
     Y += 31;
     if(Y >= 0 && Y <= 81) {
-      int pos = 30*(2+Y/9) + 10 + X;
+      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) + 3 - 2*LINE + X;
+//      int pos = 30*(2+Y/9) + 10 + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
         mapchar(0x80+(Y%9), pos);
       if(Y>=9 && (Y%9) == 0)
@@ -1038,7 +1039,8 @@ void displayHorizon(int rollAngle, int pitchAngle)
     }
     Y += 20;
     if(Y >= 0 && Y <= 81) {
-      int pos = 30*(2+Y/9) + 10 + X;
+      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) + 3 - 2*LINE + X;
+//      int pos = 30*(2+Y/9) + 10 + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
         mapchar(0x80+(Y%9), pos);
       if(Y>=9 && (Y%9) == 0)
