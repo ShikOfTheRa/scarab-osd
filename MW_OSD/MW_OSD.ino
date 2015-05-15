@@ -143,14 +143,17 @@ void loop()
     uint8_t rcswitch_ch = Settings[S_RCWSWITCH_CH];
     screenlayout=0;
     if (Settings[S_RCWSWITCH]){
-      if (MwRcData[rcswitch_ch] > 1600)
+      if (MwRcData[rcswitch_ch] > 1600){
         screenlayout=1;
-      else if (MwRcData[rcswitch_ch] > 1400)
+      }
+      else if (MwRcData[rcswitch_ch] > 1400){
         screenlayout=2;
+      }
     } 
     else{
-      if (MwSensorActive&mode.osd_switch)
+      if (MwSensorActive&mode.osd_switch){
         screenlayout=1;
+      }
     }
   #else 
     if (MwSensorActive&mode.osd_switch)
@@ -378,7 +381,7 @@ void loop()
     onTime++;
     #ifdef GPSACTIVECHECK
       if (timer.GPS_active==0){
-//        GPS_fix=0;
+//      if (GPS_numSat<4){ // below minimum required for 3D fix. Effectively no satfix
         GPS_numSat=0;
       }
       else {
@@ -534,6 +537,9 @@ void setMspRequests() {
         REQ_MSP_ATTITUDE|
         REQ_MSP_ALTITUDE|
       #endif //FASTMSP 
+      #ifdef OSD_SWITCH_RC
+        REQ_MSP_RC|
+      #endif //OSD_SWITCH_RC
       #ifdef DEBUGMW
         REQ_MSP_DEBUG|
       #endif

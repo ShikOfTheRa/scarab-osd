@@ -25,10 +25,10 @@
 //#define NOCONTROLLER              // Uncomment this if you are using GPSOSD or not using a flight controller
 
 
-/********************       AIRCRAFT TYPE settings      *********************/
+/********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
-//#define ROTORCRAFT                  // Default for multirotors etc. 
-#define FIXEDWING                 // Uncomment this if you are using fixed wing MultiWii or Baseflight 
+#define ROTORCRAFT                  // Default for multirotors etc. 
+//#define FIXEDWING                 // Uncomment this if you are using fixed wing MultiWii or Baseflight 
 
 
 /********************       FEATURES      *********************/
@@ -37,8 +37,8 @@
 #define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
 #define HORIZON         // Enable/disable HORIZON indicator
 #define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
-//#define GPSTIME         // Enable/disable GPS Time functions
-//#define SPORT           // Enable/disable FRSKY S.PORT cell code
+//#define GPSTIME       // Enable/disable GPS Time functions
+//#define SPORT         // Enable/disable FRSKY S.PORT cell code
 
 
 /********************       HARDWARE CURRENT sensor settings      *********************/
@@ -67,15 +67,21 @@
 
 /********************       GPS settings      *********************/
 #define MINSATFIX 5               // Number of sats required for a fix. 5 minimum. More = better
-#define SATACTIVECHECK            // Displays low sat warning in addition to flashing sat indicator
-#define GPSACTIVECHECK 6          // Alerts if no GPS data for more than x secs. Sets GPS fix and stats to zero
+
+
+/********************       WARNING/STATUS settings      *********************/
+#define SATACTIVECHECK            // Alerts if sats below MINSATFIX - in addition to flashing sat indicator
+//#define GPSACTIVECHECK 5          // Alerts if no GPS data for more than x secs. Sets GPS sats to zero
+#define MSPACTIVECHECK 3          // Alerts if no Flight controller data for more than x secs. 
+#define DISP_LOW_VOLTS_WARNING    // Alerts if low voltage
+#define FORCE_DISP_LOW_VOLTS      // Enable display low voltage warning override for screen layouts where its disabled
 
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
 // **ONLY** valid when using fixed wing
-#define USEMAGHEADING             // Only undefine this use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
-#define USEBAROALTITUDE           // ***Recommend*** to undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) 
-#define USEGLIDESCOPE 40          // Enables ILS glidescope where 40 = 4.0° glidescope. 1.0 deg gradiented scope scale
+//#define USEMAGHEADING             // Undefine this to use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
+//#define USEBAROALTITUDE           // Undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) ** Recommended **
+//#define USEGLIDESCOPE 40          // Enables ILS glidescope where 40 = 4.0° glidescope. 1.0 deg gradiented scope scale
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
 
 
@@ -149,11 +155,7 @@
 //#define SHORTSTATS                // Display only timer on flight summary 
 //#define FASTMSP                   // Enable for soft serial / slow baud rates if don't need GPS/BARO/HORIZON data. Speeds up remainder
 //#define NOTHROTTLESPACE           // Enable to remove space between throttle symbol and the data
-#define MSPACTIVECHECK 6            // Alerts if no Flight controller data for more than x secs. 
-#define DISP_LOW_VOLTS_WARNING      // Enable prominent low voltage warning text
-#define FORCE_DISP_LOW_VOLTS        // Enable display low voltage warning override for screen layouts where its disabled
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
-#define MSPACTIVECHECK 6            // Alerts if no comms from flight controller for more than x secs.
 
 
 
@@ -302,6 +304,6 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-//#define DEBUG         // Enable/disable option to display OSD debug values 
+#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 

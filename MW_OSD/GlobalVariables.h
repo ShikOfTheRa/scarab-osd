@@ -661,7 +661,7 @@ uint16_t flyingTime=0;
 
 const char blank_text[] PROGMEM    = "";
 const char nodata_text[] PROGMEM    = "NO DATA";
-const char nogps_text[] PROGMEM     = "NO GPS";
+const char nogps_text[] PROGMEM     = " NO GPS";
 const char satlow_text[] PROGMEM    = "LOW SATS";
 const char disarmed_text[] PROGMEM  = "DISARMED";
 const char armed_text[] PROGMEM     = " ARMED";
