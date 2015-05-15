@@ -397,7 +397,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
       }
     }
 #endif
-    #ifdef USEGLIDESCOPE
+    #if defined(USEGLIDESCOPE) && defined(FIXEDWING)                     
       if(Settings[S_DISPLAYGPS]){
         displayfwglidescope();
       }
@@ -708,11 +708,6 @@ void displayNumberOfSat(void)
   if((GPS_numSat<MINSATFIX)&&(timer.Blink2hz)){
     return;
   }
-  #ifdef SATACTIVECHECK
-//    if (GPS_numSat<MINSATFIX){
-//      MAX7456_WriteString_P(satlow_text, getPosition(motorArmedPosition));
-//    }
-  #endif //SATACTIVECHECK
   if(!fieldIsVisible(GPS_numSatPosition))
     return;
   screenBuffer[0] = SYM_SAT_L;
@@ -1530,12 +1525,13 @@ void displayArmed(void)
     armedtimer=30;
   } 
   #ifdef SATACTIVECHECK
-  if (GPS_numSat<MINSATFIX){
+  if (GPS_numSat<MINSATFIX){ // below minimum preferred value
     message_no=5;
   }
   #endif //SATACTIVECHECK
   #ifdef GPSACTIVECHECK
-  if (timer.GPS_active==0){
+//  if (GPS_numSat<4){ // below minimum required for 3D fix. Effectively no satfix
+  if(timer.GPS_active==0){
     message_no=4;
   }
   #endif //GPSACTIVECHECK
