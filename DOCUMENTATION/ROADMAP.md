@@ -8,7 +8,7 @@ None!
 
 ## Enhancement requests for future releases: ##
 
-height adjust for horizon bar
+height adjust for horizon bar + gui
 
 video volts alarm
 
