@@ -71,7 +71,7 @@
 
 /********************       WARNING/STATUS settings      *********************/
 #define SATACTIVECHECK            // Alerts if sats below MINSATFIX - in addition to flashing sat indicator
-//#define GPSACTIVECHECK 5          // Alerts if no GPS data for more than x secs. Sets GPS sats to zero
+#define GPSACTIVECHECK 5          // Alerts if no GPS data for more than x secs. Sets GPS sats to zero
 #define MSPACTIVECHECK 3          // Alerts if no Flight controller data for more than x secs. 
 #define DISP_LOW_VOLTS_WARNING    // Alerts if low voltage
 #define FORCE_DISP_LOW_VOLTS      // Enable display low voltage warning override for screen layouts where its disabled
@@ -112,11 +112,11 @@
 
 
 /********************       STARTUP settings      *********************/
-//#define INTRO_VERSION               "SHIKI-OSD - NAZA DEV01" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+#define INTRO_VERSION               "SHIKI-OSD - R1.4" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
-#define INTRO_MENU                  // Enable to display TX stick MENU 
+//#define INTRO_MENU                  // Enable to display TX stick MENU 
 //#define STARTUPDELAY 2000         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
 
