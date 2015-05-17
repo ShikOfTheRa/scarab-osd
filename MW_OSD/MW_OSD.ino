@@ -134,6 +134,9 @@ void setup()
 //------------------------------------------------------------------------
 void loop()
 {
+
+debug[2]=timer.GPS_active;
+debug[3]=timer.MSP_active;
   #ifdef MEMCHECK
     debug[MEMCHECK] = UntouchedStack();
   #endif
@@ -381,7 +384,6 @@ void loop()
     onTime++;
     #ifdef GPSACTIVECHECK
       if (timer.GPS_active==0){
-//      if (GPS_numSat<4){ // below minimum required for 3D fix. Effectively no satfix
         GPS_numSat=0;
       }
       else {

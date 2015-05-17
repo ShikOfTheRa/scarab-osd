@@ -183,9 +183,12 @@ void serialMSPCheck()
      timer.GPS_active=GPSACTIVECHECK;
     #endif //GPSACTIVECHECK
     uint8_t GPS_fix_temp=read8();
-    if (GPS_fix_temp);
+    if (GPS_fix_temp){
       GPS_fix=1;
+    }
+    debug[0]=GPS_fix;
     GPS_numSat=read8();
+    debug[1]=GPS_numSat;
     GPS_latitude = read32();
     GPS_longitude = read32();
     GPS_altitude = read16();
@@ -202,8 +205,8 @@ void serialMSPCheck()
       GPS_speed = read16();
     #endif // I2CGPS_SPEED
     GPS_ground_course = read16();
-    debug[0]=GPS_home_altitude;
-    debug[1]=GPS_altitude;
+//    debug[0]=GPS_home_altitude;
+//    debug[1]=GPS_altitude;
   }
 
   if (cmdMSP==MSP_COMP_GPS)
@@ -273,8 +276,8 @@ void serialMSPCheck()
       MwAltitude =read32();
       MwVario = read16();
     #endif
-    debug[2]=MwAltitude;
-    debug[3]=MwVario;
+//    debug[2]=MwAltitude;
+//    debug[3]=MwVario;
   }
 
   if (cmdMSP==MSP_ANALOG)

@@ -837,7 +837,7 @@ void displayAngleToHome(void)
  if(!fieldIsVisible(GPS_angleToHomePosition))
     return;
   if(Settings[S_ANGLETOHOME]){
-    if(GPS_distanceToHome <= 2 && timer.Blink2hz)
+    if((GPS_numSat < MINSATFIX) && timer.Blink2hz)
       return;
     ItoaPadded(GPS_directionToHome,screenBuffer,3,0);
     screenBuffer[3] = SYM_DEGREES;
