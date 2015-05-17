@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <HUDLAYOUTS>
-  <CONFIG desc="Number of layout choices" value="10"/>
+  <CONFIG desc="Number of layout choices" value="11"/>
   <DESCRIPTION desc="Sat indicator"/>
   <DESCRIPTION desc="Direction to home"/>
   <DESCRIPTION desc="Distance"/>
@@ -48,6 +48,7 @@
   <HUDNAME hudname="NAHI"/>
   <HUDNAME hudname="Groundstation"/>
   <HUDNAME hudname="Standalone"/>
+  <HUDNAME hudname="250 class"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="1" hud="0" hudname="Shiki" value="32"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="0" hudname="Shiki" value="51"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="0" hudname="Shiki" value="54"/>
@@ -418,4 +419,41 @@
   <LAYOUT desc="Map mode" enabled="0" hud="9" hudname="Standalone" value="46"/>
   <LAYOUT desc="Map center" enabled="0" hud="9" hudname="Standalone" value="195"/>
   <LAYOUT desc="AP status" enabled="0" hud="9" hudname="Standalone" value="220"/>
+  <LAYOUT desc="Sat indicator" enabled="0" hud="10" hudname="250 class" value="32"/>
+  <LAYOUT desc="Direction to home" enabled="0" hud="10" hudname="250 class" value="51"/>
+  <LAYOUT desc="Distance" enabled="0" hud="10" hudname="250 class" value="54"/>
+  <LAYOUT desc="Speed" enabled="0" hud="10" hudname="250 class" value="183"/>
+  <LAYOUT desc="Angle to home" enabled="0" hud="10" hudname="250 class" value="144"/>
+  <LAYOUT desc="GPS altitude" enabled="0" hud="10" hudname="250 class" value="84"/>
+  <LAYOUT desc="Sensor" enabled="1" hud="10" hudname="250 class" value="374"/>
+  <LAYOUT desc="Heading" enabled="0" hud="10" hudname="250 class" value="114"/>
+  <LAYOUT desc="Compass" enabled="0" hud="10" hudname="250 class" value="40"/>
+  <LAYOUT desc="Altitude" enabled="0" hud="10" hudname="250 class" value="203"/>
+  <LAYOUT desc="ClimbRate" enabled="0" hud="10" hudname="250 class" value="202"/>
+  <LAYOUT desc="Throttle" enabled="1" hud="10" hudname="250 class" value="376"/>
+  <LAYOUT desc="FlyTime" enabled="1" hud="10" hudname="250 class" value="382"/>
+  <LAYOUT desc="OnTime" enabled="1" hud="10" hudname="250 class" value="382"/>
+  <LAYOUT desc="Armed Status" enabled="1" hud="10" hudname="250 class" value="311"/>
+  <LAYOUT desc="Unused" enabled="0" hud="10" hudname="250 class" value="272"/>
+  <LAYOUT desc="Unused" enabled="0" hud="10" hudname="250 class" value="285"/>
+  <LAYOUT desc="Latitude" enabled="0" hud="10" hudname="250 class" value="2"/>
+  <LAYOUT desc="Longitude" enabled="0" hud="10" hudname="250 class" value="17"/>
+  <LAYOUT desc="RSSI" enabled="1" hud="10" hudname="250 class" value="369"/>
+  <LAYOUT desc="Temperature" enabled="0" hud="10" hudname="250 class" value="213"/>
+  <LAYOUT desc="Voltage" enabled="1" hud="10" hudname="250 class" value="363"/>
+  <LAYOUT desc="Vid voltage" enabled="0" hud="10" hudname="250 class" value="303"/>
+  <LAYOUT desc="Amps" enabled="1" hud="10" hudname="250 class" value="333"/>
+  <LAYOUT desc="mAh" enabled="1" hud="10" hudname="250 class" value="352"/>
+  <LAYOUT desc="AHI" enabled="0" hud="10" hudname="250 class" value="187"/>
+  <LAYOUT desc="Sidebar" enabled="0" hud="10" hudname="250 class" value="187"/>
+  <LAYOUT desc="Sidebar arrow" enabled="0" hud="10" hudname="250 class" value="187"/>
+  <LAYOUT desc="CallSign" enabled="1" hud="10" hudname="250 class" value="280"/>
+  <LAYOUT desc="Debug" enabled="1" hud="10" hudname="250 class" value="220"/>
+  <LAYOUT desc="Gimbal" enabled="0" hud="10" hudname="250 class" value="122"/>
+  <LAYOUT desc="GPS time" enabled="0" hud="10" hudname="250 class" value="341"/>
+  <LAYOUT desc="FRSky cells" enabled="0" hud="10" hudname="250 class" value="232"/>
+  <LAYOUT desc="Mode" enabled="0" hud="10" hudname="250 class" value="369"/>
+  <LAYOUT desc="Map mode" enabled="0" hud="10" hudname="250 class" value="46"/>
+  <LAYOUT desc="Map center" enabled="0" hud="10" hudname="250 class" value="195"/>
+  <LAYOUT desc="AP status" enabled="0" hud="10" hudname="250 class" value="70"/>
 </HUDLAYOUTS>

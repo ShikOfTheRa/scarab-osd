@@ -2171,19 +2171,19 @@ void SketchUploader(){
 
 
 public void GPSTIMELINK(){
- link("https://code.google.com/p/multiwii-osd/wiki/GPSTime"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/GPSTime.md"); 
 }
 public void SPORTLINK(){
- link("https://code.google.com/p/multiwii-osd/wiki/Frsky_SPort"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/Frsky_SPort.md"); 
 }
 public void CODELINK(){
- link("https://code.google.com/p/multiwii-osd/"); 
+ link("https://www.mwosd.com/"); 
 }
 public void FAQLINK(){
- link("https://code.google.com/p/multiwii-osd/wiki/FAQ"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/FAQ.md"); 
 }
 public void GUIDELINK(){
- link("https://code.google.com/p/multiwii-osd/wiki/User_Guide"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/User_Guide.md"); 
 }
 public void SUPPORTLINK(){
   link("http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI"); 
@@ -2192,7 +2192,7 @@ public void DONATELINK(){
   link("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EBS76N8F426G2&lc=GB&item_name=MW%2dOSD&item_number=R1%2e4&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"); 
 }
 public void CALIBLINK(){
- link("https://code.google.com/p/multiwii-osd/wiki/Calibration"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/Calibration.md"); 
 }
 
 
