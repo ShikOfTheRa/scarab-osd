@@ -2,7 +2,7 @@
 
 
 ## NEW FEATURE: SPORT HOST MODE, No receiver needed ! ##
-> https://code.google.com/p/multiwii-osd/wiki/Frsky_SPort_Host
+> https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/Frsky_SPort_Host.md
 
 ## First things first (you will need) ##
 
