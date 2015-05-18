@@ -2,11 +2,13 @@
 
 ## Known bugs: ##
 
-None!
+Errors with GPS data in GPSOSD mode
 
 ---
 
 ## Enhancement requests for future releases: ##
+
+Improved fastpwm and rssi calibration
 
 height adjust for horizon bar + gui
 
