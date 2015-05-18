@@ -15,6 +15,7 @@ Key Improvements for `R1.4`:-
  * BUGFIX - All versions - timer clock drifts over time
  * BUGFIX - GPS OSD mode MTK - missing option to set 5hz update
  * BUGFIX - Many issues reported with errors saving config
+ * BUGFIX - GUI simulator sidebars and voltages match OSD display
  * OSD - Fixedwing - Heading / compass support for controllers without MAG. Default assumes no MAG
  * OSD - Fixedwing - Altitude support for controllers without BARO. Default assumes no BARO
  * OSD - Fixedwing - Vario support for controllers without BARO. Default assumes no BARO
@@ -24,6 +25,7 @@ Key Improvements for `R1.4`:-
  * OSD - Horizon bar set behind other screen items as they have higher priority
  * OSD - Sat warning - option for prominent text warning if sats are low (i.e. potential of incorrect alt / direction home)
  * OSD - Sat warning - option to recognise loss of GPS data from FC and warn via low sats. 
+ * OSD - Data warning - option to recognise loss of data from FC and warn via "No data" message. 
  * OSD - AUTOCAM option (Auto sense PAL / NTSC cam at startup) to help with incorrectly marked cams / user error  
  * OSD - VSYNC now default option as most boards now support this. Clearer display
  * OSD - Added max Amps to flight summary
