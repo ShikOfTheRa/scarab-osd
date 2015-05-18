@@ -1057,36 +1057,31 @@ void displayHorizon(int rollAngle, int pitchAngle)
   }
   }
   
-if (SimPosn[SideBarPosition]<0x3FF){
-  if(confItem[GetSetting("S_WITHDECORATION")].value() > 0) {
-    mapchar(0xC7,128);
-    mapchar(0xC7,128+30);
-    mapchar(0xC7,128+60);
-    mapchar(0xC7,128+90);
-    mapchar(0xC7,128+120);
-    mapchar(0xC6,128+12);
-    mapchar(0xC6,128+12+30);
-    mapchar(0xC6,128+12+60);
-    mapchar(0xC6,128+12+90);
-    mapchar(0xC6,128+12+120);
-    mapchar(0x02, 229-30);
-    mapchar(0x03, 219-30);
+  if (SimPosn[SideBarPosition]<0x3FF){
+    if(confItem[GetSetting("S_WITHDECORATION")].value() > 0) {
+      int centerpos = SimPosn[horizonPosition]+7;
+      for(int X=-2; X<=2; X++) {
+        mapchar(0x12,centerpos+7+(X*LINE));
+        mapchar(0x12,centerpos-7+(X*LINE));
+      }
+      mapchar(0x02, centerpos+6);
+      mapchar(0x03, centerpos-6);
+    }
   }
-}
+  
 }
 
 void ShowSideBarArrows(){
-   if (SimPosn[horizonPosition]==0x3FF)
-      return;
-   if (SimPosn[SideBarScrollPosition]==0x3FF)
-      return;
-   
-
-
+  int centerpos = SimPosn[horizonPosition]+7;
+  if (SimPosn[horizonPosition]==0x3FF)
+    return;
+  if (SimPosn[SideBarScrollPosition]==0x3FF)
+    return;
   if(confItem[GetSetting("S_SIDEBARTOPS")].value() > 0) {
-    mapchar(0xCf,128+120+30);
-    mapchar(0xCf,128+12+120+30);
-  }}
+    mapchar(0xCf,centerpos+7+(3*LINE));
+    mapchar(0xCf,centerpos-7+(3*LINE));
+  }
+}
 
 
 void displayHeadingGraph()
