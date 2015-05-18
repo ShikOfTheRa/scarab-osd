@@ -583,17 +583,23 @@ String RightPadd(int inInt,int Places){
 
 void ShowVolts(float voltage){  
   if(confItem[GetSetting("S_DISPLAYVOLTAGE")].value() > 0) {
-String output = OnePlaceDecimal.format(voltage);
-  mapchar(0x97, SimPosn[voltagePosition]);
-  makeText(output, SimPosn[voltagePosition]+1);
-  }}
+    String output = OnePlaceDecimal.format(voltage);
+    int SYM_VOLT = 0XA9;
+    output =output+char(0XA9);
+    mapchar(0x97, SimPosn[voltagePosition]-1);
+    makeText(output, SimPosn[voltagePosition]);
+  }
+}
 
 void ShowVideoVolts(float voltage){  
   if(confItem[GetSetting("S_VIDVOLTAGE")].value() > 0) {
-String output = OnePlaceDecimal.format(voltage);
-  mapchar(0xBF, SimPosn[vidvoltagePosition]);
-  makeText(output, SimPosn[vidvoltagePosition]+1);
-  }}
+    String output = OnePlaceDecimal.format(voltage);
+    int SYM_VOLT = 0XA9;
+    output =output+char(0XA9);
+    mapchar(0xBF, SimPosn[vidvoltagePosition]-1);
+    makeText(output, SimPosn[vidvoltagePosition]);
+  }
+}
 
 
 void ShowFlyTime(String FMinutes_Seconds){
@@ -665,7 +671,16 @@ void ShowSats(){
 }
 
 void ShowSpeed(){
-  String output = str(int(SGPS_speed.getValue()/27.7778));
+  int SimModebits = 0;
+  int SimBitCounter = 1;
+  for (int i=0; i<boxnames.length; i++) {
+      if(toggleModeItems[i].getValue() > 0) SimModebits |= SimBitCounter;
+      SimBitCounter += SimBitCounter;
+  }
+  String output = str(0);
+  if((SimModebits&mode_armed) >0){
+    output = str(int(SGPS_speed.getValue()/27.7778));
+  }
   if(confItem[GetSetting("S_UNITSYSTEM")].value() > 0) {mapchar(0xa6, SimPosn[speedPosition]);}
   else {mapchar(0xa5, SimPosn[speedPosition]);}
   makeText(output, SimPosn[speedPosition]+1);
