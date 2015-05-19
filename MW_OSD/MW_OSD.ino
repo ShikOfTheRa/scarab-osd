@@ -22,7 +22,7 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
-//#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
+#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
 #if 1
 __asm volatile ("nop");
 #endif
@@ -134,9 +134,7 @@ void setup()
 //------------------------------------------------------------------------
 void loop()
 {
-
-debug[2]=timer.GPS_active;
-debug[3]=timer.MSP_active;
+debug[0]++;
   #ifdef MEMCHECK
     debug[MEMCHECK] = UntouchedStack();
   #endif

@@ -301,8 +301,6 @@ void displayHorizon(int rollAngle, int pitchAngle)
       }
   }
 
-#endif
-
   if (!Settings[S_SCROLLING]){
      SYM_AH_DECORATION_LEFT=0x13;
      SYM_AH_DECORATION_RIGHT=0x13;
@@ -317,7 +315,8 @@ void displayHorizon(int rollAngle, int pitchAngle)
   pitchAngle=pitchAngle+10;
 
   if(Settings[S_DISPLAY_HORIZON_BR]&fieldIsVisible(horizonPosition)){
-#ifdef FULLAHI
+
+  #ifdef FULLAHI
     for(uint8_t X=0; X<=12; X++) {
       if (X==5) X=8;
       int Y = (rollAngle * (4-X)) / 64;
@@ -328,7 +327,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
         screen[pos] = SYM_AH_BAR9_0+(Y%9);
       }
     }
-#else
+  #else //FULLAHI
     for(uint8_t X=0; X<=8; X++) {
       if (X==3) X=6;
       int Y = (rollAngle * (4-X)) / 64;
@@ -339,7 +338,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
         screen[pos] = SYM_AH_BAR9_0+(Y%9);
       }
     }
-#endif
+  #endif //FULLAHI
 
     if (Settings[S_HORIZON_ELEVATION]){                   
       for(int X=2; X<=6; X++) { 
@@ -376,7 +375,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
       screen[position+X*LINE+14] =  SYM_AH_DECORATION_RIGHT;
     }
 
-#ifdef SBDIRECTION
+  #ifdef SBDIRECTION
 
     if (Settings[S_SIDEBARTOPS]&fieldIsVisible(SideBarScrollPosition)) {
       if (millis()<(sidebarsMillis + 1000)) {
@@ -396,13 +395,21 @@ void displayHorizon(int rollAngle, int pitchAngle)
         }
       }
     }
-#endif
-    #if defined(USEGLIDESCOPE) && defined(FIXEDWING)                     
+  #endif //SBDIRECTION
+  }
+#endif //HORIZON
+
+  #if defined(USEGLIDESCOPE) && defined(FIXEDWING)                     
       if(Settings[S_DISPLAYGPS]){
         displayfwglidescope();
       }
-    #endif //USEGLIDESCOPE  
-  }
+  #endif //USEGLIDESCOPE  
+
+  #ifdef FORCECROSSHAIR  
+    screen[position+2*LINE+7-1] = SYM_AH_CENTER_LINE;
+    screen[position+2*LINE+7+1] = SYM_AH_CENTER_LINE_RIGHT;
+    screen[position+2*LINE+7] =   SYM_AH_CENTER;
+  #endif //FORCECROSSHAIR    
 }
 
 
@@ -1262,11 +1269,6 @@ void displayDebug(void)
   if(!Settings[S_DEBUG])
     return;
  
-//  debug[0]=I2CError;
-//  debug[1]=MWOSDVER;
-//  debug[2]=MwVersion;
-//  debug[3]=MWOSDVER;
-
   for(uint8_t X=0; X<4; X++) {
     ItoaPadded(debug[X], screenBuffer+2,7,0);     
     screenBuffer[0] = 0x30+X;

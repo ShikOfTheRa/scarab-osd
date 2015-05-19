@@ -147,9 +147,9 @@
   }
 
 void GPS_NewData() {
-  GPS_SerialInitialised=0;
-  if (GPS_active>0)
-    GPS_active--;
+//  GPS_SerialInitialised=0;
+//  if (GPS_active>0)
+//    GPS_active--;
   if (GPS_fix && (GPS_numSat >= MINSATFIX)) {
     if (GPS_fix_HOME == 0){
       GPS_reset_home_position();
