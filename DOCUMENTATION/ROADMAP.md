@@ -8,6 +8,8 @@ Errors with GPS data in GPSOSD mode
 
 ## Enhancement requests for future releases: ##
 
+STandalone crosshair option (without AHI)
+
 Improved fastpwm and rssi calibration
 
 height adjust for horizon bar + gui
