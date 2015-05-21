@@ -475,7 +475,7 @@ static uint8_t dynThrPID;
 static uint8_t thrMid8;
 static uint8_t thrExpo8;
 static uint16_t tpa_breakpoint16;
-
+static uint8_t rcYawExpo8;
 
 static uint16_t  MwAccSmooth[3]={0,0,0};       // Those will hold Accelerator data
 int32_t  MwAltitude=0;                         // This hold barometric value
