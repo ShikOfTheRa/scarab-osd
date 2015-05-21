@@ -29,6 +29,18 @@
   static int32_t GPS_filtered[2];
   static int32_t GPS_degree[2];    //the lat lon degree without any decimals (lat/10 000 000)
   static uint16_t fraction3[2];
+  
+  struct {
+    uint8_t  GPS_fix;
+    uint8_t  GPS_numSat;
+    int16_t  GPS_altitude;
+    uint16_t GPS_speed;
+    int16_t  GPS_ground_course;
+    int32_t  GPS_coord[2];
+    uint8_t  GPS_Present;
+  }
+  GPS_parse;
+
 
 #if defined(INIT_MTK_GPS) || defined(UBLOX)
   uint32_t init_speed[5] = {9600,19200,38400,57600,115200};
@@ -145,6 +157,22 @@
       Serial.begin(GPS_BAUD);  
     #endif  // init gps type 
   }
+
+
+void GPS_update(){
+  uint8_t GPS_fix_temp=GPS_parse.GPS_fix;
+  if (GPS_fix_temp){
+    GPS_fix=1;
+  }
+  GPS_numSat=GPS_parse.GPS_numSat;
+  GPS_altitude=GPS_parse.GPS_altitude;
+  GPS_speed=GPS_parse.GPS_speed;
+  GPS_ground_course=GPS_parse.GPS_ground_course;
+  GPS_coord[LAT]=GPS_parse.GPS_coord[LAT];
+  GPS_coord[LON]=GPS_parse.GPS_coord[LON];
+  GPS_Present=GPS_parse.GPS_Present;
+}
+
 
 void GPS_NewData() {
 //  GPS_SerialInitialised=0;
@@ -334,16 +362,16 @@ bool GPS_newFrame(char c) {
         if (string[0] == 'G' && string[1] == 'P' && string[2] == 'G' && string[3] == 'G' && string[4] == 'A') frame = FRAME_GGA;
         if (string[0] == 'G' && string[1] == 'P' && string[2] == 'R' && string[3] == 'M' && string[4] == 'C') frame = FRAME_RMC;
       } else if (frame == FRAME_GGA) {
-        if      (param == 2)                     {GPS_coord[LAT] = GPS_coord_to_degrees(string);}
-        else if (param == 3 && string[0] == 'S') GPS_coord[LAT] = -GPS_coord[LAT];
-        else if (param == 4)                     {GPS_coord[LON] = GPS_coord_to_degrees(string);}
-        else if (param == 5 && string[0] == 'W') GPS_coord[LON] = -GPS_coord[LON];
-        else if (param == 6)                     {GPS_fix = (string[0]  > '0');}
-        else if (param == 7)                     {GPS_numSat = grab_fields(string,0);}
-        else if (param == 9)                     {GPS_altitude = grab_fields(string,0);}  // altitude in meters added by Mis
+        if      (param == 2)                     {GPS_parse.GPS_coord[LAT] = GPS_coord_to_degrees(string);}
+        else if (param == 3 && string[0] == 'S') GPS_parse.GPS_coord[LAT] = -GPS_parse.GPS_coord[LAT];
+        else if (param == 4)                     {GPS_parse.GPS_coord[LON] = GPS_coord_to_degrees(string);}
+        else if (param == 5 && string[0] == 'W') GPS_parse.GPS_coord[LON] = -GPS_parse.GPS_coord[LON];
+        else if (param == 6)                     {GPS_parse.GPS_fix = (string[0]  > '0');}
+        else if (param == 7)                     {GPS_parse.GPS_numSat = grab_fields(string,0);}
+        else if (param == 9)                     {GPS_parse.GPS_altitude = grab_fields(string,0);}  // altitude in meters added by Mis
       } else if (frame == FRAME_RMC) {
-        if      (param == 7)                     {GPS_speed = ((uint32_t)grab_fields(string,1)*5144L)/1000L;}  //gps speed in cm/s will be used for navigation
-        else if (param == 8)                     {GPS_ground_course = grab_fields(string,1); }                 //ground course deg*10 
+        if      (param == 7)                     {GPS_parse.GPS_speed = ((uint32_t)grab_fields(string,1)*5144L)/1000L;}  //gps speed in cm/s will be used for navigation
+        else if (param == 8)                     {GPS_parse.GPS_ground_course = grab_fields(string,1); }                 //ground course deg*10 
       }
       param++; offset = 0;
       if (c == '*') checksum_param=1;
@@ -353,7 +381,10 @@ bool GPS_newFrame(char c) {
         uint8_t checksum = hex_c(string[0]);
         checksum <<= 4;
         checksum += hex_c(string[1]);
-        if (checksum == parity) frameOK = 1;
+        if (checksum == parity) {
+          frameOK = 1;
+          GPS_update();
+        }
       }
       checksum_param=0;
     } else {

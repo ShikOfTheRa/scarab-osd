@@ -135,6 +135,8 @@ void setup()
 void loop()
 {
 debug[0]++;
+if (GPS_fix==0) debug[1]++;
+if (GPS_numSat!=9) debug[2]++;
   #ifdef MEMCHECK
     debug[MEMCHECK] = UntouchedStack();
   #endif

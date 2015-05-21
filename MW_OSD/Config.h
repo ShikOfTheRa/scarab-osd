@@ -15,14 +15,14 @@
 
 /********************       CONTROLLER SOFTWARE      *********************/
 //Choose ONLY ONE option:-
-//#define MULTIWII_V24                // Uncomment this if you are using MW versions 2.4  
+#define MULTIWII_V24                // Uncomment this if you are using MW versions 2.4  
 //#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V21              // Uncomment this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
 //#define BASEFLIGHT                // Uncomment this if you are using BASEFLIGHT
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.8.0
 //#define CLEANFLIGHT               // Uncomment this if you are using CLEANFLIGHT versions 1.8.1 onwards (No RC adjustments menu)
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
-#define NOCONTROLLER              // Uncomment this if you are using GPSOSD or not using a flight controller
+//#define NOCONTROLLER              // Uncomment this if you are using GPSOSD or not using a flight controller
 
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
@@ -78,8 +78,8 @@
 /********************       GPS OSD settings      *********************/
 // **ONLY** FOR STANDALONE GPS MODE WITH NO FLIGHT CONTROLLER
 // Choose ONLY ONE option:
-#define NMEA                     // Enable if using a standard NMEA based GPS
-//#define UBLOX                    // Enable if using a standard UBLOX based GPS
+//#define NMEA                     // Enable if using a standard NMEA based GPS
+//#define UBLOX                    // currently not working // Enable if using a standard UBLOX based GPS
 //#define MTK                      // Enable if using a standard MTK based GPS
 //#define MTK_BINARY16             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.6
 //#define MTK_BINARY19             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.9
@@ -87,9 +87,9 @@
 
 /******************** Serial speed settings *********************/
 // Choose ONLY ONE option:
-//#define BAUDRATE 115200
+#define BAUDRATE 115200
 //#define BAUDRATE 57600
-#define BAUDRATE 38400
+//#define BAUDRATE 38400
 //#define BAUDRATE 19200
 
 
@@ -133,10 +133,10 @@
 //#define AUTOCAM                     // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
 //#define AUTOCAMWAIT               // **UNTESTED** - Use with AUTOCAM - waits until camera is ready - i.e. if power up cameras after FC. 
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
-#define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 
+//#define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
 //#define ALT_CENTER                // Enable alternative center crosshair
-//#define FORCECROSSHAIR            // Forces acriosshair even if no AHI / horizon used
+//#define FORCECROSSHAIR            // Forces a crosshair even if no AHI / horizon used
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x01=100%,0x10=90%,0x11=80%  default is 0x01=100%

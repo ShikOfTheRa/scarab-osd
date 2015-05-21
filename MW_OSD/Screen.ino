@@ -375,6 +375,12 @@ void displayHorizon(int rollAngle, int pitchAngle)
       screen[position+X*LINE+14] =  SYM_AH_DECORATION_RIGHT;
     }
 
+  #if defined(USEGLIDESCOPE) && defined(FIXEDWING)                     
+    if(Settings[S_DISPLAYGPS]){
+      displayfwglidescope();
+    }
+  #endif //USEGLIDESCOPE  
+
   #ifdef SBDIRECTION
 
     if (Settings[S_SIDEBARTOPS]&fieldIsVisible(SideBarScrollPosition)) {
@@ -399,11 +405,6 @@ void displayHorizon(int rollAngle, int pitchAngle)
   }
 #endif //HORIZON
 
-  #if defined(USEGLIDESCOPE) && defined(FIXEDWING)                     
-      if(Settings[S_DISPLAYGPS]){
-        displayfwglidescope();
-      }
-  #endif //USEGLIDESCOPE  
 
   #ifdef FORCECROSSHAIR  
     screen[position+2*LINE+7-1] = SYM_AH_CENTER_LINE;
