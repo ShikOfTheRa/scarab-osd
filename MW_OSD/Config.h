@@ -31,16 +31,6 @@
 //#define FIXEDWING                 // Uncomment this if you are using fixed wing MultiWii or Baseflight 
 
 
-/********************       FEATURES      *********************/
-// Disable features if you require memory for other features
-// Further configuration may be require elsewhere in config.h + option enabled on GUI
-#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
-#define HORIZON         // Enable/disable HORIZON indicator
-#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
-//#define GPSTIME       // Enable/disable GPS Time functions
-//#define SPORT         // Enable/disable FRSKY S.PORT cell code
-
-
 /********************       HARDWARE CURRENT sensor settings      *********************/
 #define AMPERAGEMAX     500         // Size of current sensor / maximum current draw (* 10) e.g. 50A sensor = 500, 100A sensor = 1000
 #define AMPERAGEOFFSET  0           // Optional extra for high offset sensors not supported in GUI (typically bidirectional sensors use a value of 256-512) 
@@ -89,7 +79,7 @@
 // **ONLY** FOR STANDALONE GPS MODE WITH NO FLIGHT CONTROLLER
 // Choose ONLY ONE option:
 //#define NMEA                     // Enable if using a standard NMEA based GPS
-//#define UBLOX                    // Enable if using a standard UBLOX based GPS
+//#define UBLOX                    // currently not working // Enable if using a standard UBLOX based GPS
 //#define MTK                      // Enable if using a standard MTK based GPS
 //#define MTK_BINARY16             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.6
 //#define MTK_BINARY19             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.9
@@ -129,23 +119,24 @@
 //#define MAPMODENORTH              // Enable to use North as MAP reference in MODE 1 instead of take off direction (Default = disable) 
 
 
-/********************       FrSky S.Port settings      *********************/
-//enables data transfer from frsky reciever s.port to osd via multiwii
-//requires serial inverter cable & multiwii with s.port code
-//Auto detected cell graph from s.port, 16 steps @ 0.05v 
-//To show battery voltage from s.port, enable "Use MWii" under "Main Voltage" in GUI
-//To show amperage from s.port, enable "Use MWii" under Amperage in GUI
-//more details: http://code.google.com/p/scarab-osd/wiki/Frsky_SPort
-#define MIN_CELL 320 //Cell Low Flash - No decimal, 3 Digits ie 320 = 3.20v
+/********************       FEATURES      *********************/
+// Disable features if you require memory for other features
+// Further configuration may be require elsewhere in config.h + option enabled on GUI
+#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
+#define HORIZON         // Enable/disable HORIZON indicator
+#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
+//#define GPSTIME       // Enable/disable GPS Time functions
+//#define SPORT         // Enable/disable FRSKY S.PORT cell code
 
 
 /********************       Display Settings         ************************/
-#define AUTOCAM                     // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
+//#define AUTOCAM                     // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
 //#define AUTOCAMWAIT               // **UNTESTED** - Use with AUTOCAM - waits until camera is ready - i.e. if power up cameras after FC. 
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
-#define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 
+//#define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
 //#define ALT_CENTER                // Enable alternative center crosshair
+//#define FORCECROSSHAIR            // Forces a crosshair even if no AHI / horizon used
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x01=100%,0x10=90%,0x11=80%  default is 0x01=100%
@@ -155,8 +146,18 @@
 //#define SHORTSTATS                // Display only timer on flight summary 
 //#define FASTMSP                   // Enable for soft serial / slow baud rates if don't need GPS/BARO/HORIZON data. Speeds up remainder
 //#define NOTHROTTLESPACE           // Enable to remove space between throttle symbol and the data
+//#define REVERSEAHI                // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 
+
+/********************       FrSky S.Port settings      *********************/
+//enables data transfer from frsky reciever s.port to osd via multiwii
+//requires serial inverter cable & multiwii with s.port code
+//Auto detected cell graph from s.port, 16 steps @ 0.05v 
+//To show battery voltage from s.port, enable "Use MWii" under "Main Voltage" in GUI
+//To show amperage from s.port, enable "Use MWii" under Amperage in GUI
+//more details: http://code.google.com/p/scarab-osd/wiki/Frsky_SPort
+#define MIN_CELL 320 //Cell Low Flash - No decimal, 3 Digits ie 320 = 3.20v
 
 
 /********************  TEMPERATURE  settings      *********************/
@@ -298,6 +299,7 @@
   #undef  MSPACTIVECHECK
   #undef  SATACTIVECHECK
   #undef  GPSACTIVECHECK
+  #undef  OSD_SWITCH_RC
   #define FORCESENSORS
   #define HIDEARMEDSTATUS
 #endif

@@ -585,7 +585,7 @@ uint16_t flyingTime=0;
 //  uint16_t GPS_ground_course = 0;                       
   int16_t  GPS_altitude_home;                            
   uint8_t  GPS_Present = 0;                             
-  uint8_t  GPS_SerialInitialised=5;
+//  uint8_t  GPS_SerialInitialised=5;
   uint8_t  GPS_armedangleset = 0;
   uint8_t  GPS_active=5; 
   uint8_t  GPS_fix_HOME=0;

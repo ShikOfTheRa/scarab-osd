@@ -278,8 +278,12 @@ void MAX7456_DrawScreen()
       }
       while (!(SPSR & (1<<SPIF)));     // Wait the end of the last SPI transmission is clear
       while (vsync_wait){
-        if (millis()>vsynctimer)
-        vsync_wait=0;
+        if (millis()>vsynctimer){
+          vsync_wait=0;
+        }
+        else{
+          serialMSPreceive(); // Might as well do something whilst waiting :)
+        }
       }
       SPDR = screen[xx];
       screen[xx] = ' ';
