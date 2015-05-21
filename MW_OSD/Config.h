@@ -146,6 +146,7 @@
 //#define SHORTSTATS                // Display only timer on flight summary 
 //#define FASTMSP                   // Enable for soft serial / slow baud rates if don't need GPS/BARO/HORIZON data. Speeds up remainder
 //#define NOTHROTTLESPACE           // Enable to remove space between throttle symbol and the data
+//#define REVERSEAHI                // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 
 
