@@ -73,7 +73,7 @@ uint16_t UntouchedStack(void)
 #include "GlobalVariables.h"
 #include "math.h"
 
-
+int16_t gbug[4];
 char screen[480];      // Main screen ram for MAX7456
 char screenBuffer[20]; 
 uint32_t modeMSPRequests;
