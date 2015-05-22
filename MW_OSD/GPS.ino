@@ -174,6 +174,7 @@ void GPS_updateGGA(){
   GPS_coord[LAT]=GPS_parse.GPS_coord[LAT];
   GPS_coord[LON]=GPS_parse.GPS_coord[LON];
   GPS_Present=GPS_parse.GPS_Present;
+  gpsvario();
 }
 
 
@@ -375,6 +376,10 @@ bool GPS_newFrame(char c) {
       } else if (frame == FRAME_RMC) {
         if      (param == 7)                     {GPS_parse.GPS_speed = ((uint32_t)grab_fields(string,1)*5144L)/1000L;}  //gps speed in cm/s will be used for navigation
         else if (param == 8)                     {GPS_parse.GPS_ground_course = grab_fields(string,1); }                 //ground course deg*10 
+        #ifdef GPSACTIVECHECK
+           timer.GPS_active=GPSACTIVECHECK;
+        #endif //GPSACTIVECHECK
+
       }
       param++; offset = 0;
       if (c == '*') checksum_param=1;
@@ -386,7 +391,7 @@ bool GPS_newFrame(char c) {
         checksum += hex_c(string[1]);
         if (checksum == parity) {
           frameOK = 1;
-           if (frame == FRAME_GGA){
+            if (frame == FRAME_GGA){
             GPS_updateGGA();
           }
           if (frame == FRAME_RMC){
@@ -581,8 +586,12 @@ bool GPS_newFrame(char c) {
         GPS_coord[LON] = _buffer.posllh.longitude;
         GPS_coord[LAT] = _buffer.posllh.latitude;
         GPS_altitude   = _buffer.posllh.altitude_msl / 1000;      //alt in m
+        gpsvario();
       }
       GPS_fix = _fix_ok;
+      #ifdef GPSACTIVECHECK
+         timer.GPS_active=GPSACTIVECHECK;
+      #endif //GPSACTIVECHECK
       return true;        // POSLLH message received, allow blink GUI icon and LED
       break;
     case MSG_SOL:
@@ -734,6 +743,9 @@ restart:
             }
 
             GPS_fix                   = ((_buffer.msg.fix_type == FIX_3D) || (_buffer.msg.fix_type == FIX_3D_SBAS));
+            #ifdef GPSACTIVECHECK
+              timer.GPS_active=GPSACTIVECHECK;
+            #endif //GPSACTIVECHECK
 
     #if defined(MTK_BINARY16)
             GPS_coord[LAT]              = _buffer.msg.latitude * 10;    // XXX doc says *10e7 but device says otherwise
@@ -744,6 +756,7 @@ restart:
             GPS_coord[LON]              = _buffer.msg.longitude;
     #endif
             GPS_altitude                = _buffer.msg.altitude /100;    // altitude in meter
+            gpsvario();
             GPS_speed                   = _buffer.msg.ground_speed;     // in m/s * 100 == in cm/s
             GPS_ground_course           = _buffer.msg.ground_course/100;  //in degrees
             GPS_numSat                  = _buffer.msg.satellites;
@@ -756,3 +769,12 @@ restart:
   #endif //MTK
 
 #endif // GPS
+
+void gpsvario(){
+  if (millis()>timer.fwAltitudeTimer){ // To make vario from GPS altitude
+    timer.fwAltitudeTimer +=1000;
+    previousfwaltitude=interimfwaltitude;
+    interimfwaltitude=GPS_altitude;
+    MwVario=(GPS_altitude-previousfwaltitude)*20;
+  }  
+}

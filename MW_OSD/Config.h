@@ -23,7 +23,8 @@
 //#define CLEANFLIGHT181            // Uncomment this if you are using CLEANFLIGHT versions 1.8.1 
 //#define CLEANFLIGHT190            // Uncomment this if you are using CLEANFLIGHT versions 1.9.0 onwards
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
-#define NOCONTROLLER              // Uncomment this if you are using GPSOSD or not using a flight controller
+#define GPSOSD                   // Uncomment this if you are using a GPS module for a GPS based OSD
+//#define NOCONTROLLER              // Uncomment this if you ahave nothing connected to the serial port - no controller or GPS module
 
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
@@ -79,9 +80,9 @@
 /********************       GPS OSD settings      *********************/
 // **ONLY** FOR STANDALONE GPS MODE WITH NO FLIGHT CONTROLLER
 // Choose ONLY ONE option:
-#define NMEA                     // Enable if using a standard NMEA based GPS
+//#define NMEA                     // Enable if using a standard NMEA based GPS
 //#define UBLOX                    // currently not working // Enable if using a standard UBLOX based GPS
-//#define MTK                      // Enable if using a standard MTK based GPS
+#define MTK                      // Enable if using a standard MTK based GPS
 //#define MTK_BINARY16             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.6
 //#define MTK_BINARY19             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.9
 
@@ -203,6 +204,14 @@
   #define BOXNAMES                  // required to support legacy protocol
 #endif
 
+#ifdef NOCONTROLLER
+  #undef  INTRO_MENU
+  #undef  MSPACTIVECHECK
+  #undef  SATACTIVECHECK
+  #undef  GPSACTIVECHECK
+  #undef  OSD_SWITCH_RC
+#endif
+
 #ifdef MULTIWII_V24                     
 #endif
 
@@ -292,8 +301,8 @@
 #if defined GPSOSD
   #undef  INTRO_MENU
   #undef  MSPACTIVECHECK
-  #undef  SATACTIVECHECK
-  #undef  GPSACTIVECHECK
+//  #undef  SATACTIVECHECK
+//  #undef  GPSACTIVECHECK
   #undef  OSD_SWITCH_RC
   #define FORCESENSORS
   #define HIDEARMEDSTATUS

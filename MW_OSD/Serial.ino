@@ -262,12 +262,7 @@ void serialMSPCheck()
   {
     #if defined(USEGPSALTITUDE)
       MwAltitude = (int32_t)GPS_altitude*100;
-      if (millis()>timer.fwAltitudeTimer){
-        timer.fwAltitudeTimer +=1000;
-        previousfwaltitude=interimfwaltitude;
-        interimfwaltitude=GPS_altitude;
-        MwVario=(GPS_altitude-previousfwaltitude)*20;
-      }  
+      gpsvario();
     #else    
       MwAltitude =read32();
       MwVario = read16();
