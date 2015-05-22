@@ -12,7 +12,7 @@
 // #define SWAPVOLTAGEPINS          // For RTFQ boards with batt voltage appearing on vid voltage
 // #define ALTERNATEDIVIDERS        // For RFTQ boards with voltage unable to be adjusted high enough
 
-
+ 
 /********************       CONTROLLER SOFTWARE      *********************/
 //Choose ONLY ONE option:-
 #define MULTIWII_V24                // Uncomment this if you are using MW versions 2.4  

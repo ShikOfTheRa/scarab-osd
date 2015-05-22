@@ -294,7 +294,7 @@ void serialMSPCheck()
       tpa_breakpoint16 = read16();
       rcYawExpo8 = read8();
       modeMSPRequests &=~ REQ_MSP_RC_TUNING;
-    #elif CLEANFLIGHT181
+    #elif defined CLEANFLIGHT181
       rcRate8 = read8();
       rcExpo8 = read8();
       PitchRate = read8();
