@@ -312,13 +312,13 @@ void displayHorizon(int rollAngle, int pitchAngle)
   if(pitchAngle<-250) pitchAngle=-250;
   if(rollAngle>400) rollAngle=400;
   if(rollAngle<-400) rollAngle=-400;
-  
+  #ifndef AHICORRECT
+    #define AHICORRECT 10
+  #endif
+  pitchAngle=pitchAngle+AHICORRECT;
   #if defined REVERSEAHI
-    pitchAngle=pitchAngle-10;
     pitchAngle=-pitchAngle;
     rollAngle=-rollAngle;
-  #else
-    pitchAngle=pitchAngle+10;
   #endif //REVERSEAHI
 
   if(Settings[S_DISPLAY_HORIZON_BR]&fieldIsVisible(horizonPosition)){
