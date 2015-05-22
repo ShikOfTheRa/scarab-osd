@@ -34,6 +34,7 @@ Key Improvements for `R1.4`:-
  * OSD - 3 OSD layouts for use with 3 way tx switch
  * OSD - Autodetect PAL/NTSC or timeout to last known settings (fix blank screen for incorrect labelled cams)
  * OSD - support for reverse AHI (DJI/Eastern bloc OSD users)
+ * OSD - support for adjusting AHI horizon to match fixed camera angle
  * OSD - support for forcing crosshair to be always on in all modes
  * GUI - GUI support for FC passthrough configuration settings (access OSD config via FC)
  * GUI - GUI support for OSD or 3 way RC switch layout changing
