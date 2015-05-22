@@ -902,8 +902,8 @@ void displayCursor(void)
      }
 #endif
 #ifdef PAGE2
-  #ifdef CLEANFLIGHT     
-    if(configPage==2){  
+  #if defined(CLEANFLIGHT181) || defined(CLEANFLIGHT190)
+     if(configPage==2){  
       COL=3;
       cursorpos=(ROW+2)*30+10+6+6;
     }
@@ -1069,8 +1069,8 @@ void displayConfigScreen(void)
 #ifdef PAGE2
   if(configPage==2)
   {
-    #ifdef CLEANFLIGHT
-      for(uint8_t X=0; X<=8; X++) {
+    #if defined(CLEANFLIGHT181) || defined(CLEANFLIGHT190)
+       for(uint8_t X=0; X<=8; X++) {
         strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rc[X])));
         MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
       }

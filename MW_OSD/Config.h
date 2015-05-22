@@ -15,7 +15,7 @@
 
 /********************       CONTROLLER SOFTWARE      *********************/
 //Choose ONLY ONE option:-
-//#define MULTIWII_V24                // Uncomment this if you are using MW versions 2.4  
+#define MULTIWII_V24                // Uncomment this if you are using MW versions 2.4  
 //#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V21              // Uncomment this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
 //#define BASEFLIGHT                // Uncomment this if you are using BASEFLIGHT
@@ -23,7 +23,7 @@
 //#define CLEANFLIGHT181            // Uncomment this if you are using CLEANFLIGHT versions 1.8.1 
 //#define CLEANFLIGHT190            // Uncomment this if you are using CLEANFLIGHT versions 1.9.0 onwards
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
-#define GPSOSD                   // Uncomment this if you are using a GPS module for a GPS based OSD
+//#define GPSOSD                    // Uncomment this if you are using a GPS module for a GPS based OSD
 //#define NOCONTROLLER              // Uncomment this if you ahave nothing connected to the serial port - no controller or GPS module
 
 
@@ -82,16 +82,16 @@
 // Choose ONLY ONE option:
 //#define NMEA                     // Enable if using a standard NMEA based GPS
 //#define UBLOX                    // currently not working // Enable if using a standard UBLOX based GPS
-#define MTK                      // Enable if using a standard MTK based GPS
+//#define MTK                      // Enable if using a standard MTK based GPS
 //#define MTK_BINARY16             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.6
 //#define MTK_BINARY19             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.9
 
 
 /******************** Serial speed settings *********************/
 // Choose ONLY ONE option:
-//#define BAUDRATE 115200
+#define BAUDRATE 115200
 //#define BAUDRATE 57600
-#define BAUDRATE 38400
+//#define BAUDRATE 38400
 //#define BAUDRATE 19200
 
 
@@ -104,7 +104,7 @@
 
 
 /********************       STARTUP settings      *********************/
-#define INTRO_VERSION               "SHIKI-OSD - R1.4" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+//#define INTRO_VERSION               "SHIKI-OSD - R1.4" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
@@ -149,6 +149,7 @@
 //#define FASTMSP                   // Enable for soft serial / slow baud rates if don't need GPS/BARO/HORIZON data. Speeds up remainder
 //#define NOTHROTTLESPACE           // Enable to remove space between throttle symbol and the data
 //#define REVERSEAHI                // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
+//#define AHICORRECT 10             // Enable to adjust AHI on display to match horizon. -10 = -1 degree
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 
 
