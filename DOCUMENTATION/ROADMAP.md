@@ -10,8 +10,6 @@ Errors with GPS data in GPSOSD mode
 
 Improved fastpwm and rssi calibration
 
-AHI height adjust for horizon bar
-
 video volts alarm
 
 autodetect cell count
