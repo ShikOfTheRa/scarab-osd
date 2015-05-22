@@ -262,12 +262,7 @@ void serialMSPCheck()
   {
     #if defined(USEGPSALTITUDE)
       MwAltitude = (int32_t)GPS_altitude*100;
-      if (millis()>timer.fwAltitudeTimer){
-        timer.fwAltitudeTimer +=1000;
-        previousfwaltitude=interimfwaltitude;
-        interimfwaltitude=GPS_altitude;
-        MwVario=(GPS_altitude-previousfwaltitude)*20;
-      }  
+      gpsvario();
     #else    
       MwAltitude =read32();
       MwVario = read16();
@@ -299,7 +294,7 @@ void serialMSPCheck()
       tpa_breakpoint16 = read16();
       rcYawExpo8 = read8();
       modeMSPRequests &=~ REQ_MSP_RC_TUNING;
-    #elif CLEANFLIGHT181
+    #elif defined CLEANFLIGHT181
       rcRate8 = read8();
       rcExpo8 = read8();
       PitchRate = read8();
