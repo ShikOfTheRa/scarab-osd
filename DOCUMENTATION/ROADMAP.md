@@ -10,7 +10,7 @@ Errors with GPS data in GPSOSD mode
 
 Improved fastpwm and rssi calibration
 
-height adjust for horizon bar + gui
+AHI height adjust for horizon bar
 
 video volts alarm
 
