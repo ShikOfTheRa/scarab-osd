@@ -1,4 +1,3 @@
-
 // GPS protocol GGA and RMC  sentences are needed
 // Ublox config con be set using u-blox-config.ublox.txt 
 
@@ -159,15 +158,19 @@
   }
 
 
-void GPS_update(){
+void GPS_updateRMC(){
+  GPS_speed=GPS_parse.GPS_speed;
+  GPS_ground_course=GPS_parse.GPS_ground_course;
+ }
+
+
+void GPS_updateGGA(){
   uint8_t GPS_fix_temp=GPS_parse.GPS_fix;
   if (GPS_fix_temp){
     GPS_fix=1;
   }
   GPS_numSat=GPS_parse.GPS_numSat;
   GPS_altitude=GPS_parse.GPS_altitude;
-  GPS_speed=GPS_parse.GPS_speed;
-  GPS_ground_course=GPS_parse.GPS_ground_course;
   GPS_coord[LAT]=GPS_parse.GPS_coord[LAT];
   GPS_coord[LON]=GPS_parse.GPS_coord[LON];
   GPS_Present=GPS_parse.GPS_Present;
@@ -197,7 +200,7 @@ void GPS_NewData() {
     GPS_distanceToHome = dist/100;
     GPS_directionToHome = dir/100;
     GPS_altitude =  GPS_altitude- GPS_altitude_home;
-    MwAltitude = (int32_t) GPS_altitude *100;
+    MwAltitude = (int32_t)GPS_altitude *100;
     GPS_latitude = GPS_coord[LAT];
     GPS_longitude = GPS_coord[LON];
     int16_t MwHeading360=GPS_ground_course/10;
@@ -353,57 +356,48 @@ bool GPS_newFrame(char c) {
     static char string[15];
     static uint8_t checksum_param, frame = 0;
   
-    if ((c == '$') ||(param>15) ) {
+    if (c == '$') {
       param = 0; offset = 0; parity = 0;
-    } 
-    else if (c == ',' || c == '*') {
+    } else if (c == ',' || c == '*') {
       string[offset] = 0;
       if (param == 0) { //frame identification
         frame = 0;
         if (string[0] == 'G' && string[1] == 'P' && string[2] == 'G' && string[3] == 'G' && string[4] == 'A') frame = FRAME_GGA;
         if (string[0] == 'G' && string[1] == 'P' && string[2] == 'R' && string[3] == 'M' && string[4] == 'C') frame = FRAME_RMC;
-      } 
-      else if (frame == FRAME_GGA) {
+      } else if (frame == FRAME_GGA) {
         if      (param == 2)                     {GPS_parse.GPS_coord[LAT] = GPS_coord_to_degrees(string);}
-        else if (param == 3 && string[0] == 'S') {GPS_parse.GPS_coord[LAT] = -GPS_parse.GPS_coord[LAT];}
+        else if (param == 3 && string[0] == 'S') GPS_parse.GPS_coord[LAT] = -GPS_parse.GPS_coord[LAT];
         else if (param == 4)                     {GPS_parse.GPS_coord[LON] = GPS_coord_to_degrees(string);}
-        else if (param == 5 && string[0] == 'W') {GPS_parse.GPS_coord[LON] = -GPS_parse.GPS_coord[LON];}
+        else if (param == 5 && string[0] == 'W') GPS_parse.GPS_coord[LON] = -GPS_parse.GPS_coord[LON];
         else if (param == 6)                     {GPS_parse.GPS_fix = (string[0]  > '0');}
         else if (param == 7)                     {GPS_parse.GPS_numSat = grab_fields(string,0);}
-        else if (param == 9)                     {GPS_parse.GPS_altitude = grab_fields(string,0);}
-      } 
-      else if (frame == FRAME_RMC) {
-        if      (param == 7)                     {GPS_parse.GPS_speed = ((uint32_t)grab_fields(string,1)*5144L)/1000L;}  //gps speed in cm/s
+        else if (param == 9)                     {GPS_parse.GPS_altitude = grab_fields(string,0);}  // altitude in meters added by Mis
+      } else if (frame == FRAME_RMC) {
+        if      (param == 7)                     {GPS_parse.GPS_speed = ((uint32_t)grab_fields(string,1)*5144L)/1000L;}  //gps speed in cm/s will be used for navigation
         else if (param == 8)                     {GPS_parse.GPS_ground_course = grab_fields(string,1); }                 //ground course deg*10 
       }
       param++; offset = 0;
-      if (c == '*') {
-        checksum_param=1;
-      }
-      else {
-        parity ^= c;
-      }
-    } 
-    else if (c == '\r' || c == '\n') {
+      if (c == '*') checksum_param=1;
+      else parity ^= c;
+    } else if (c == '\r' || c == '\n') {
       if (checksum_param) { //parity checksum
         uint8_t checksum = hex_c(string[0]);
         checksum <<= 4;
         checksum += hex_c(string[1]);
         if (checksum == parity) {
           frameOK = 1;
-          GPS_update();
+           if (frame == FRAME_GGA){
+            GPS_updateGGA();
+          }
+          if (frame == FRAME_RMC){
+            GPS_updateRMC();
+          }
         }
       }
       checksum_param=0;
-    } 
-    else {
-      if (offset < 15) {
-        string[offset++] = c;
-      }
-      else{
- //        param = 0, offset = 0, parity = 0;
-      }
-      if (!checksum_param) parity ^= c;
+    } else {
+       if (offset < 15) string[offset++] = c;
+       if (!checksum_param) parity ^= c;
     }
     if (frame) GPS_Present = 1;
     return frameOK && (frame==FRAME_GGA);
