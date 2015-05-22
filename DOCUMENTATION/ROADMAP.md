@@ -2,7 +2,7 @@
 
 ## Known bugs: ##
 
-Errors with GPS data in GPSOSD mode
+None in latest repository
 
 ---
 
