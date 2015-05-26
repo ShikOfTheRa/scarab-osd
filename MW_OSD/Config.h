@@ -301,9 +301,9 @@
 
 #if defined GPSOSD
   #undef  INTRO_MENU
-  #undef  MSPACTIVECHECK
-//  #undef  SATACTIVECHECK
-//  #undef  GPSACTIVECHECK
+//  #undef  MSPACTIVECHECK
+  #undef  SATACTIVECHECK
+  #undef  GPSACTIVECHECK
   #undef  OSD_SWITCH_RC
   #define FORCESENSORS
   #define HIDEARMEDSTATUS
