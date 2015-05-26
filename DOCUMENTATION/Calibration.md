@@ -27,7 +27,7 @@ The easiest way to set up a current sensor is probably to use this link. It cont
 **Hardware current sensor - with a current meter**
   1. Select "Enable ADC 5v ref"
   1. If "Enable ADC 5v ref" is changed, save and restart the OSD
-  Either use calibration dat from spreadsheet linked above (probably easier) or: 
+  1. Either use calibration dat from spreadsheet linked above (probably easier) or: 
   1. Starting at zero, increase "Zero adjust" to display correct Amps at motors off
   1. Starting at max, decrease "Amps adjust" to display correct Amps at mid - high throttle setting
 
