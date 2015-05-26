@@ -738,7 +738,7 @@ const char configMsg24[] PROGMEM = "YAW RATE";
 const char configMsg25[] PROGMEM = "TPA";
 const char configMsg26[] PROGMEM = "THROTTLE MID";
 const char configMsg27[] PROGMEM = "THROTTLE EXPO";
-#ifdef CLEANFLIGHT
+#if defined(CLEANFLIGHT181) || defined(CLEANFLIGHT190)
   const char configMsg23a[] PROGMEM = "ROLL RATE";
   const char configMsg23b[] PROGMEM = "PITCH RATE";
   const char configMSg28[] PROGMEM = "TPA BREAKPOINT";
@@ -910,7 +910,7 @@ const PROGMEM char * const menu_pid[] =
 
 const PROGMEM char * const menu_rc[] = 
 {   
-  #ifdef CLEANFLIGHT
+  #if defined(CLEANFLIGHT181) || defined(CLEANFLIGHT190)
     configMsg21,
     configMsg22,
     configMsg23a,
