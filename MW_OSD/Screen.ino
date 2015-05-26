@@ -8,7 +8,7 @@ char *ItoaPadded(int val, char *str, uint8_t bytes, uint8_t decimalpos)  {
   if(val < 0) {
     neg = 1;
     val = -val;
-  }
+  } 
 
   str[bytes] = 0;
   for(;;) {
@@ -1534,17 +1534,20 @@ void displayArmed(void)
     message_no=1;
     armedtimer=30;
   } 
-  #ifdef SATACTIVECHECK
-  if (GPS_numSat<MINSATFIX){ // below minimum preferred value
-    message_no=5;
+
+  if(MwSensorPresent&GPSSENSOR){
+    #ifdef SATACTIVECHECK
+    if (GPS_numSat<MINSATFIX){ // below minimum preferred value
+    }
+    #endif //SATACTIVECHECK
+
+    #ifdef GPSACTIVECHECK
+    if(timer.GPS_active==0){
+      message_no=4;
+    }
+    #endif //GPSACTIVECHECK
   }
-  #endif //SATACTIVECHECK
-  #ifdef GPSACTIVECHECK
-//  if (GPS_numSat<4){ // below minimum required for 3D fix. Effectively no satfix
-  if(timer.GPS_active==0){
-    message_no=4;
-  }
-  #endif //GPSACTIVECHECK
+
   #ifdef MSPACTIVECHECK
   if(timer.MSP_active==0){
     message_no=3;
