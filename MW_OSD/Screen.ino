@@ -1538,6 +1538,7 @@ void displayArmed(void)
   if(MwSensorPresent&GPSSENSOR){
     #ifdef SATACTIVECHECK
     if (GPS_numSat<MINSATFIX){ // below minimum preferred value
+      message_no=5;
     }
     #endif //SATACTIVECHECK
 
