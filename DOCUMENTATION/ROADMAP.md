@@ -8,6 +8,10 @@ None in latest repository
 
 ## Enhancement requests for future releases: ##
 
+Migrate Current Sensor to GUI / potentially migrate to offset / mv/A calc 
+
+Config.h option to enable / disable dist/al/volt alarms etc.
+
 Improved fastpwm and rssi calibration
 
 video volts alarm
