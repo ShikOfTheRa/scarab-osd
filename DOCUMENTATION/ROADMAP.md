@@ -2,11 +2,17 @@
 
 ## Known bugs: ##
 
-None!
+None in latest repository
 
 ---
 
 ## Enhancement requests for future releases: ##
+
+Migrate Current Sensor to GUI / potentially migrate to offset / mv/A calc 
+
+Config.h option to enable / disable dist/al/volt alarms etc.
+
+Improved fastpwm and rssi calibration
 
 video volts alarm
 
@@ -79,57 +85,6 @@ Code quality:
  
 ---
  
-## Fixed issues since last full release R1.3: ##
-
-BUG! "Use MW" options not saving backup file (single entry key)....
-
-BUG! When set the "Time Zone Offset" to say 2.0 and then do a "WRITE" the value will change (display) to 0.2
-
-BUG! Compass OK, but home arrow is inconsistent in fixedwing mode
-
-BUG! compile errors for GPS in soem Arduino versions
-
-BUG! PID menu options after row 5 are incorrect. e.g. level does not show level settings
-
-BUG! All versions - timer clock drifts over time
-
-BUG! GPS OSD mode MTK - missing option to set 5hz update
-
-
-## Improvements since last full release R1.3: ##
-
-Fixedwing - Heading / compass support for controllers without MAG. Default assumes no MAG.
-
-Fixedwing - Altitude support for controllers without BARO. Default assumes no BARO.
-
-Fixedwing - Vario support for controllers without BARO. Default assumes no BARO.
-
-Fixedwing - glidescope ILS
-
-Fixedwing - reset altitude at arm option for height above ground level vs sea level
-
-Support for newer Cleanflight releases
-
-Horizon bar set behind other screen items as they have higher priority.
-
-AUTOCAM now default option (Auto sense PAL / NTSC cam at startup) to help with incorrectly marked cams / user error. 
-
-VSYNC now default option as most boards now support this. Clearer display.
-
-Added max Amps to flight summary
-
-Decimalise GUI value for min battery voltage etc.
-
-GUI support for FC passthrough configuration settings (access OSD config via FC). 
-
-Amended 00 font to be blank character - recommended to reduce sparklies
-
-Provide optimisation and option for serial data requests for slower baud rates
-
-3 OSD layouts for use with 3 way tx switch
-
-Autodetect PAL/NTSC or timeout to last known settings (fix blank screen for incorrect labelled cams)
-
 
 
 

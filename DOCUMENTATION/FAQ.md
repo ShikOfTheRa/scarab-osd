@@ -123,3 +123,15 @@ HARAKIRI USERS - ensure protocol set as follows:
 
 18 I can't enter OSD menu
   * FULL RATES are required for the stick menus to be selected currently
+
+---
+
+19 How do I use MAP mode? It doesn't seem to work
+  * Quick answer: Select HUD layout 4 and set MAP mode to 1
+  * Long answer:
+  * Firstly items to be displayed need to be enabled in the hud layout being used.
+  * Secondly - on the GUI or OSD menu, map mode buts be set from 1-4.
+  *  - mode 1 is where aircraft is center and H displays home location
+  *  - mode 2 is where Home is center of the map and X displays relative aircraft position
+  *  - mode 3 is a combination of mode 2 and 3
+  *  - mode 4 is low resolution, but with ^ indicating location of aircraft and heading
