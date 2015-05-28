@@ -19,9 +19,10 @@
 //#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V21              // Uncomment this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
 //#define BASEFLIGHT                // Uncomment this if you are using BASEFLIGHT
+//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.8.0
 //#define CLEANFLIGHT181            // Uncomment this if you are using CLEANFLIGHT versions 1.8.1 
-//#define CLEANFLIGHT190            // Uncomment this if you are using CLEANFLIGHT versions 1.9.0 onwards
+//#define CLEANFLIGHT190            // Uncomment this if you are using CLEANFLIGHT versions 1.9
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
 //#define GPSOSD                    // Uncomment this if you are using a GPS module for a GPS based OSD
 //#define NOCONTROLLER              // Uncomment this if you ahave nothing connected to the serial port - no controller or GPS module
@@ -81,7 +82,7 @@
 // **ONLY** FOR STANDALONE GPS MODE WITH NO FLIGHT CONTROLLER
 // Choose ONLY ONE option:
 //#define NMEA                     // Enable if using a standard NMEA based GPS
-//#define UBLOX                    // currently not working // Enable if using a standard UBLOX based GPS
+//#define UBLOX                    // Enable if using a standard UBLOX based GPS
 //#define MTK                      // Enable if using a standard MTK based GPS
 //#define MTK_BINARY16             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.6
 //#define MTK_BINARY19             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.9
@@ -214,6 +215,10 @@
 #endif
 
 #ifdef MULTIWII_V24                     
+#endif
+
+#ifdef CLEANFLIGHT
+  #define CLEANFLIGHT190
 #endif
 
 #ifdef FIXEDWING                     
