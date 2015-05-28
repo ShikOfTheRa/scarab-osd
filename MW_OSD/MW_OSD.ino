@@ -64,7 +64,7 @@ uint16_t UntouchedStack(void)
 #endif
 
 //------------------------------------------------------------------------
-#define MWVERS "MW-OSD - R1.4"  
+#define MWVERS "MW-OSD - R1.5 DEV"  
 #define MWOSDVER 9      // for eeprom layout verification      
 #include <avr/pgmspace.h>
 #include <EEPROM.h>
@@ -72,6 +72,12 @@ uint16_t UntouchedStack(void)
 #include "symbols.h"
 #include "GlobalVariables.h"
 #include "math.h"
+#ifdef NAZA
+  #include "NazaDecoderLib.h"
+  #ifndef ATTITUDE_SENSING_DISABLED
+    uint32_t currTime, attiTime;
+  #endif  
+#endif
 
 char screen[480];      // Main screen ram for MAX7456
 char screenBuffer[20]; 
