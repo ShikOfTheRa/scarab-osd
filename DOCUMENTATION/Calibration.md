@@ -6,7 +6,9 @@
 NOTE: if use Multiwii FC voltage, then ALL adjustments are made on the FC. The following does not apply.
 
 **Main or video voltage connected directly to OSD**
-  1. If > 4s select "Enable ADC 5v ref"
+  1. If > 4s select "Enable, ADC 5v ref"
+  1. If using analog RSSI direct to OSD, "Enable ADC 5v ref"
+  1. If using current sensor direct to OSD, "Enable ADC 5v ref"
   1. If "Enable ADC 5v ref" is changed, save and restart the OSD
   1. With a voltage meter, change "Voltage adjust" and save until the voltage on the OSD matches the meter
   1. Repeat for video if appropriate
