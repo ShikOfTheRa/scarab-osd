@@ -706,6 +706,7 @@ void serialMSPreceive()
             if (GPS_fix_temp>0){
               GPS_fix=1;
             }
+            GPS_NewData();
             break;
           case NAZA_MESSAGE_COMPASS:
             GPS_ground_course=NazaDecoder.getHeadingNc();
