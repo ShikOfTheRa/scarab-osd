@@ -105,7 +105,7 @@ HARAKIRI USERS - ensure protocol set as follows:
 ---
 
 15 I don't know if I should enable 5v ADC. When should I?
-  * If using RSSI connected directly to OSD you must enable 5v ADC
+  * If using analog RSSI connected directly to OSD you must enable 5v ADC
   * If using a hardware Current sensor connected directly to OSD you must enable 5v ADC
   * If using more than 4 cells you must enable 5v ADC
 
