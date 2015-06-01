@@ -2,9 +2,7 @@
 
 ## Known bugs: ##
 
-Maximum distance of 32000 ft or meters
 Data updates are slow in RSSI mode
-GPSOSD - Home only displaysif within 20m. 40m is preferred
 
 
 ---
