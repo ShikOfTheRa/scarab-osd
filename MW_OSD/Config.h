@@ -24,7 +24,9 @@
 //#define CLEANFLIGHT181            // Uncomment this if you are using CLEANFLIGHT versions 1.8.1 
 //#define CLEANFLIGHT190            // Uncomment this if you are using CLEANFLIGHT versions 1.9
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
-//#define GPSOSD                    // Uncomment this if you are using a GPS module for a GPS based OSD
+//#define GPSOSD-UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+//#define GPSOSD-NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
+//#define GPSOSD-MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
 //#define NOCONTROLLER              // Uncomment this if you ahave nothing connected to the serial port - no controller or GPS module
 
 
@@ -76,16 +78,6 @@
 //#define USEBAROALTITUDE           // Undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) ** Recommended **
 //#define USEGLIDESCOPE 40          // Enables ILS glidescope where 40 = 4.0° glidescope. 1.0 deg gradiented scope scale
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
-
-
-/********************       GPS OSD settings      *********************/
-// **ONLY** FOR STANDALONE GPS MODE WITH NO FLIGHT CONTROLLER
-// Choose ONLY ONE option:
-//#define NMEA                     // Enable if using a standard NMEA based GPS
-//#define UBLOX                    // Enable if using a standard UBLOX based GPS
-//#define MTK                      // Enable if using a standard MTK based GPS
-//#define MTK_BINARY16             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.6
-//#define MTK_BINARY19             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.9
 
 
 /******************** Serial speed settings *********************/
@@ -272,6 +264,18 @@
 #endif
 
 /********************  GPS OSD rule definitions  *********************/
+
+#if defined GPSOSD-UBLOX
+  #define UBLOX
+#endif
+#if defined GPSOSD-NMEA
+  #define NMEA
+#endif
+#if defined GPSOSD-MTK
+  #define MTK
+#endif
+
+
 #if defined MTK_BINARY16
   #define GPSOSD
   #define NMEA
