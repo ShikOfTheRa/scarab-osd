@@ -217,10 +217,10 @@ void GPS_NewData() {
     }
   
     if (GPS_armedangleset==1){
-      if ((GPS_distanceToHome<20)&&(GPS_speed<75)){
-        if ((GPS_home_timer+5000)>millis()){
+      if ((GPS_distanceToHome<40)&&(GPS_speed<75)){
+        if ((GPS_home_timer+7000)>millis()){
         }
-        else if((GPS_home_timer+15000)>millis()){
+        else if((GPS_home_timer+22000)>millis()){
           configPage=0;
           armed=0;
         }      
