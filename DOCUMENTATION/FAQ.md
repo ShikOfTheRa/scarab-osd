@@ -135,3 +135,9 @@ HARAKIRI USERS - ensure protocol set as follows:
   *  - mode 2 is where Home is center of the map and X displays relative aircraft position
   *  - mode 3 is a combination of mode 2 and 3
   *  - mode 4 is low resolution, but with ^ indicating location of aircraft and heading
+
+---
+
+20 I get unspecified Java or Java patrch error. How do I fix it.
+  * There are many type of Java error. One of the more common ones has a solution in teh video below:
+  * https://www.youtube.com/watch?v=66crhKstr70
