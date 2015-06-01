@@ -142,7 +142,7 @@ void displayTemperature(void)        // DEPRECATED RUSHDUINO SUPPORT
 void displayMode(void)
 {
   
-  int16_t dist;
+  int32_t dist;
   if(Settings[S_UNITSYSTEM])
     dist = GPS_distanceToHome * 3.2808;           // mt to feet
   else
@@ -1372,7 +1372,7 @@ void mapmode(void) {
   int16_t angle;
   int16_t targetpos;
   int16_t centerpos;
-  uint16_t maxdistance;
+  uint32_t maxdistance;
   uint8_t mapsymbolcenter;
   uint8_t mapsymboltarget;
   uint8_t mapsymbolrange;
