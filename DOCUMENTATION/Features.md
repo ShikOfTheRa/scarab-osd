@@ -22,6 +22,8 @@ Key Improvements for `R1.4`:-
  * OSD - Fixedwing - Vario support for controllers without BARO. Default assumes no BARO
  * OSD - Fixedwing - glidescope ILS
  * OSD - Fixedwing - reset altitude at arm option for height above ground level vs sea level
+ * OSD - Maximum total trip distance travelled now > 12.5 miles previous limit
+ * OSD - GPSOSD mode now supports a maximum distance from home of > 12.5 miles
  * OSD - Support for newer Cleanflight releases
  * OSD - Horizon bar set behind other screen items as they have higher priority
  * OSD - Sat warning - option for prominent text warning if sats are low (i.e. potential of incorrect alt / direction home)
