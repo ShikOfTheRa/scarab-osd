@@ -11,6 +11,8 @@ GPSOSD - Home only displaysif within 20m. 40m is preferred
 
 ## Enhancement requests for future releases: ##
 
+Additional AHI layouts - multiple pitch angles
+
 Migrate Current Sensor to GUI / potentially migrate to offset / mv/A calc 
 
 Config.h option to enable / disable dist/al/volt alarms etc.
