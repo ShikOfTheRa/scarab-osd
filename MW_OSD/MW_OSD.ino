@@ -572,7 +572,7 @@ void calculateTrip(void)
     else
       tripSum += GPS_speed *0.0005;        //  50/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)      
   }
-  trip = (int) tripSum;
+  trip = (uint32_t) tripSum;
 }
 
 

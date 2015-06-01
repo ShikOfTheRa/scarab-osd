@@ -499,7 +499,7 @@ int16_t MwVario=0;
 uint8_t armed=0;
 uint8_t previousarmedstatus=0;  // for statistics after disarming
 uint16_t armedangle=0;           // for capturing direction at arming
-uint16_t GPS_distanceToHome=0;
+uint32_t GPS_distanceToHome=0;
 uint8_t GPS_fix=0;
 uint8_t GPS_frame_timer=0;
 int32_t GPS_latitude;
@@ -568,9 +568,9 @@ int16_t temperature=0;                  // temperature in degrees Centigrade
 // For Statistics
 uint16_t speedMAX=0;
 int16_t altitudeMAX=0;
-uint16_t distanceMAX=0;
+uint32_t distanceMAX=0;
 uint16_t ampMAX=0;
-int32_t trip=0;
+uint32_t trip=0;
 uint16_t flyingTime=0; 
 
 
