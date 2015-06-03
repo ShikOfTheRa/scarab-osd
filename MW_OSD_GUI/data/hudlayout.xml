@@ -51,7 +51,7 @@
   <HUDNAME hudname="250 class"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="1" hud="0" hudname="Shiki" value="32"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="0" hudname="Shiki" value="51"/>
-  <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="0" hudname="Shiki" value="54"/>
+  <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="0" hudname="Shiki" value="101"/>
   <LAYOUT desc="speedPosition" enabled="1" hud="0" hudname="Shiki" value="183"/>
   <LAYOUT desc="GPS_angleToHomePosition" enabled="1" hud="0" hudname="Shiki" value="144"/>
   <LAYOUT desc="MwGPSAltPosition" enabled="1" hud="0" hudname="Shiki" value="84"/>

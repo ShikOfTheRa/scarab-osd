@@ -692,7 +692,9 @@ void serialMSPreceive()
     #ifdef GPSOSD    
       armedtimer = 0;
       #ifdef NAZA
+      debug[0]++;
         uint8_t decodedMessage = NazaDecoder.decode(Serial.read());
+      debug[1]=decodedMessage;
         switch (decodedMessage){
           uint8_t GPS_fix_temp;
           case NAZA_MESSAGE_GPS:

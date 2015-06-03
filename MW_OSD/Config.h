@@ -15,7 +15,7 @@
  
 /********************       CONTROLLER SOFTWARE      *********************/
 //Choose ONLY ONE option:-
-//#define MULTIWII_V24                // Uncomment this if you are using MW versions 2.4  
+#define MULTIWII_V24                // Uncomment this if you are using MW versions 2.4  
 //#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V21              // Uncomment this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
 //#define BASEFLIGHT                // Uncomment this if you are using BASEFLIGHT
@@ -26,7 +26,7 @@
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
 //#define GPSOSD                    // Uncomment this if you are using a GPS module for a GPS based OSD
 //#define NOCONTROLLER              // Uncomment this if you ahave nothing connected to the serial port - no controller or GPS module
-#define NAZA                        // Uncomment this if you are using a NAZA
+//#define NAZA                        // Uncomment this if you are using a NAZA
 
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
@@ -106,7 +106,7 @@
 
 
 /********************       STARTUP settings      *********************/
-//#define INTRO_VERSION               "SHIKI-OSD - R1.4" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+#define INTRO_VERSION               "NAZA-OSD - R1.4" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
