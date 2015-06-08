@@ -99,7 +99,7 @@ HARAKIRI USERS - ensure protocol set as follows:
 
 14 I get garbage characters and / or font upload doesn't work.
   * Sounds like fonts need to be re-uploaded - but note:
-  * The output stage (max chip) MUST be powered when uploading font.
+  * The output stage (max chip) MUST be powered when uploading font. How depends upon your board / configuration
   * A programming voltage of 4.8v or higher is required.
   * Note some programmers have 3.3v/5v selection text swapped. Verify with a meter
 
