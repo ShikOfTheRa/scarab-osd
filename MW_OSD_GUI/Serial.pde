@@ -122,7 +122,7 @@ void InitSerial(float portValue) {
       g_serial = new Serial(this, portPos, BaudRate);
       LastPort = portValue;
       init_com=1;
-      toggleMSP_Data = true;
+      //_Data = true;
       ClosePort = false;
       buttonREAD.setColorBackground(green_);
       buttonWRITE.setColorBackground(green_);
@@ -133,10 +133,10 @@ void InitSerial(float portValue) {
       g_serial.buffer(512);
             txtmessage.setText("");
 //      delay(1500);
-      SendCommand(MSP_IDENT);
+//      SendCommand(MSP_IDENT);
      
 
-      SendCommand(MSP_STATUS);
+//      SendCommand(MSP_STATUS);
        eeaddressGUI=0;   
        ReadConfigMSPMillis=20000+millis();  
        READconfigMSP_init();
@@ -154,8 +154,8 @@ void InitSerial(float portValue) {
       System.out.println("Serial Port Pass Through Starting" );
       SendCommand(MSP_PASSTHRU_SERIAL);
       delay(1000);
-      SendCommand(MSP_IDENT);
-      SendCommand(MSP_STATUS);
+//      SendCommand(MSP_IDENT);
+//      SendCommand(MSP_STATUS);
       READconfigMSP_init();
     }
   }
@@ -164,7 +164,7 @@ void InitSerial(float portValue) {
 //     System.out.println("Begin Port Down " ); 
       txtlblWhichcom.setValue("Comm Closed");
       //g_serial.clear();
-      toggleMSP_Data = false;
+//      toggleMSP_Data = false;
       ClosePort = true;
       init_com=0;
     }
@@ -229,27 +229,27 @@ BuildCallSign();
 }
 
 void PORTCLOSE(){
-  toggleMSP_Data = false;
+//  toggleMSP_Data = false;
   CloseMode = 0;
   InitSerial(200.00);
 }
 
 void BounceSerial(){
-  toggleMSP_Data = false;
+//  toggleMSP_Data = false;
   CloseMode = 1;
   InitSerial(200.00);
   
 }  
 
 void RESTART(){
-  toggleMSP_Data = true;
+//  toggleMSP_Data = true;
   for (int txTimes = 0; txTimes<3; txTimes++) {
     headSerialReply(MSP_OSD, 1);
     serialize8(OSD_RESET);
     tailSerialReply();
     delay(100);
   }
-  toggleMSP_Data = false;
+//  toggleMSP_Data = false;
   READconfigMSP_init();
 }  
 
@@ -330,14 +330,14 @@ public void DEFAULT(){
     loop();
     switch (Reset_result) {
       case JOptionPane.YES_OPTION:
-        toggleMSP_Data = true;
+//        toggleMSP_Data = true;
         for (int txTimes = 0; txTimes<3; txTimes++) {
           headSerialReply(MSP_OSD, 1);
           serialize8(OSD_DEFAULT);
           tailSerialReply();
           delay(100);
         }
-        toggleMSP_Data = false;
+//        toggleMSP_Data = false;
 //        READinit();
         READconfigMSP_init();
 //        delay(2000);     
@@ -551,8 +551,10 @@ void SendCommand(int cmd){
         headSerialReply(MSP_RAW_GPS,16);
         serialize8(int(SGPS_FIX.arrayValue()[0]));
         serialize8(int(SGPS_numSat.value()));
-        serialize32(430948610);
-        serialize32(-718897060);
+        GPSstartlat=GPSstartlat+100;
+        GPSstartlon=GPSstartlon-100;
+        serialize32(GPSstartlat);
+        serialize32(GPSstartlon);
         serialize16(int(SGPS_altitude.value()/100));
         serialize16(int(SGPS_speed.value()));
         serialize16(MwHeading*10);     
@@ -697,17 +699,61 @@ public void DelayTimer(int ms){
 }
 
 public void evaluateCommand(byte cmd, int size) {
-  if ((init_com==0)  || (toggleMSP_Data == false)){
+  if ((init_com==0)){
     return;
   }
+
   PortRead = true;
   MakePorts(); 
   int icmd = int(cmd&0xFF);
-  if (icmd !=MSP_OSD)return;  //System.out.println("Not Valid Command");
+//  if (icmd !=MSP_OSD)return;  //System.out.println("Not Valid Command");
   time2=time;
 
   switch(icmd) {
-    
+
+    case MSP_RC:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_RC);
+      break;
+    case MSP_STATUS:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_STATUS);
+      break;
+    case MSP_BOXNAMES:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_BOXNAMES);
+      break;
+    case MSP_BOXIDS:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_BOXIDS);
+      break;
+    case MSP_IDENT:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_IDENT);
+      break;
+    case MSP_ANALOG:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_ANALOG);
+      break;
+    case MSP_COMP_GPS:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_COMP_GPS);
+      break;
+    case MSP_RAW_GPS:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_RAW_GPS);
+      break;
+    case MSP_ATTITUDE:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_ATTITUDE);
+      break;
+    case MSP_ALTITUDE:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_ALTITUDE);
+      break;
+    case MSP_CELLS:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_CELLS);
+      break;
+    case MSP_NAV_STATUS:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_NAV_STATUS);
+      break;
+    case MSP_DEBUG:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_DEBUG);
+      break;
+    case MSP_PID:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_PID);
+      break; 
+   
     case MSP_OSD:
       int cmd_internal = read8();
       PortRead = true;
@@ -841,14 +887,16 @@ public void evaluateCommand(byte cmd, int size) {
 }
 
 void MWData_Com() {
-  if ((toggleMSP_Data == false) ||(init_com==0)) return;
+  if ((init_com==0)) return;
+//  if ((toggleMSP_Data == false) ||(init_com==0)) return;
   int i,aa;
   float val,inter,a,b,h;
   int c = 0;
   
   //System.out.println("MWData_Com");  
     
-    while (g_serial.available()>0 && (toggleMSP_Data == true)) {
+    while (g_serial.available()>0) {
+//    while (g_serial.available()>0 && (toggleMSP_Data == true)) {
     try{
       c = (g_serial.read());
       
@@ -900,9 +948,9 @@ void MWData_Com() {
           } else {
             /* we got a valid response packet, evaluate it */
             try{
-              if ((init_com==1)  && (toggleMSP_Data == true)) {
+              if ((init_com==1)) {
                   evaluateCommand(cmd, (int)dataSize);
-                  //System.out.println("CMD: "+cmd);
+//                  System.out.println("CMD: "+cmd);
                   PortRead = false;
               }
               else{
@@ -946,7 +994,7 @@ void MWData_Com() {
   }
 
   public void READconfigMSP(){
-  toggleMSP_Data = true;
+//  toggleMSP_Data = true;
   inBuf[0] = OSD_WRITE_CMD;
   for (int txTimes = 0; txTimes<1; txTimes++) {
     headSerialReply(MSP_OSD, 4);
@@ -995,7 +1043,7 @@ void MWData_Com() {
 
   public void WRITEconfigMSP(){
   SimControlToggle.setValue(0);
-  toggleMSP_Data = true;
+//  toggleMSP_Data = true;
   inBuf[0] = OSD_WRITE_CMD;
   for (int txTimes = 0; txTimes<1; txTimes++) {
     headSerialReply(MSP_OSD, 1 + (3*10));
@@ -1010,8 +1058,6 @@ void MWData_Com() {
     }
     tailSerialReply();
   }
-  debug[1]=eeaddressGUI;
-  debug[2]++;
 //  toggleMSP_Data = false; //???????????????????
   WriteConfigMSPMillis=3000+millis(); 
 }
