@@ -691,7 +691,32 @@ void serialMSPreceive()
 
     #ifdef GPSOSD    
       armedtimer = 0;
-      if (GPS_newFrame(c)) GPS_NewData();   
+      #ifdef NAZA
+      debug[0]++;
+        uint8_t decodedMessage = NazaDecoder.decode(Serial.read());
+      debug[1]=decodedMessage;
+        switch (decodedMessage){
+          uint8_t GPS_fix_temp;
+          case NAZA_MESSAGE_GPS:
+            GPS_coord[LAT]=NazaDecoder.getLat();
+            GPS_coord[LON]=NazaDecoder.getLon();
+            GPS_altitude=NazaDecoder.getGpsAlt();
+            GPS_fix_temp=NazaDecoder.getFixType();
+            GPS_numSat=NazaDecoder.getNumSat();
+            GPS_speed=NazaDecoder.getSpeed();
+            gpsvario();            
+            if (GPS_fix_temp>0){
+              GPS_fix=1;
+            }
+            GPS_NewData();
+            break;
+          case NAZA_MESSAGE_COMPASS:
+            GPS_ground_course=NazaDecoder.getHeadingNc();
+        break;
+        }
+      #else
+        if (GPS_newFrame(c)) GPS_NewData();   
+      #endif
     #endif //GPSOSD   
 
     if (c_state == IDLE)
