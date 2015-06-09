@@ -7,7 +7,7 @@
 //#define WITESPYV1.1               // Uncomment this if using Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
 //#define RUSHDUINO                 // Uncomment this if using Rushduino
 
-// NOTE-some of the popular RTFQ boards have alternative bat1/bat2 pins and voltage measuring resistors
+// NOTE-some of the popular RTFQ/Witespy boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct: 
 // #define SWAPVOLTAGEPINS          // For RTFQ boards with batt voltage appearing on vid voltage
 // #define ALTERNATEDIVIDERS        // For RFTQ boards with voltage unable to be adjusted high enough
@@ -18,13 +18,15 @@
 #define MULTIWII_V24                // Uncomment this if you are using MW versions 2.4  
 //#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V21              // Uncomment this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
-//#define BASEFLIGHT                // Uncomment this if you are using BASEFLIGHT
-//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository
+//#define BASEFLIGHT                // Uncomment this if you are using BASEFLIGHT (Stable 2015.05.13 at time of release)
+//#define BASEFLIGHT_PR             // UNTESTED - use this if you are using BASEFLIGHT with separate Pitch / Roll. 
+//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9.0 at time or release)
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.8.0
 //#define CLEANFLIGHT181            // Uncomment this if you are using CLEANFLIGHT versions 1.8.1 
-//#define CLEANFLIGHT190            // Uncomment this if you are using CLEANFLIGHT versions 1.9
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
-//#define GPSOSD                    // Uncomment this if you are using a GPS module for a GPS based OSD
+//#define GPSOSD-UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+//#define GPSOSD-NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
+//#define GPSOSD-MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
 //#define NOCONTROLLER              // Uncomment this if you ahave nothing connected to the serial port - no controller or GPS module
 
 
@@ -63,8 +65,8 @@
 
 
 /********************       WARNING/STATUS settings      *********************/
-#define SATACTIVECHECK            // Alerts if sats below MINSATFIX - in addition to flashing sat indicator
-#define GPSACTIVECHECK 5          // Alerts if no GPS data for more than x secs. Sets GPS sats to zero
+//#define SATACTIVECHECK            // Alerts if sats below MINSATFIX - in addition to flashing sat indicator
+//#define GPSACTIVECHECK 5          // Alerts if no GPS data for more than x secs. Sets GPS sats to zero
 #define MSPACTIVECHECK 3          // Alerts if no Flight controller data for more than x secs. 
 #define DISP_LOW_VOLTS_WARNING    // Alerts if low voltage
 #define FORCE_DISP_LOW_VOLTS      // Enable display low voltage warning override for screen layouts where its disabled
@@ -76,16 +78,6 @@
 //#define USEBAROALTITUDE           // Undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) ** Recommended **
 //#define USEGLIDESCOPE 40          // Enables ILS glidescope where 40 = 4.0° glidescope. 1.0 deg gradiented scope scale
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
-
-
-/********************       GPS OSD settings      *********************/
-// **ONLY** FOR STANDALONE GPS MODE WITH NO FLIGHT CONTROLLER
-// Choose ONLY ONE option:
-//#define NMEA                     // Enable if using a standard NMEA based GPS
-//#define UBLOX                    // Enable if using a standard UBLOX based GPS
-//#define MTK                      // Enable if using a standard MTK based GPS
-//#define MTK_BINARY16             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.6
-//#define MTK_BINARY19             // Enable if using MTK3329 chipset based GPS with DIYDrones binary firmware v1.9
 
 
 /******************** Serial speed settings *********************/
@@ -136,7 +128,7 @@
 //#define AUTOCAM                     // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
 //#define AUTOCAMWAIT               // **UNTESTED** - Use with AUTOCAM - waits until camera is ready - i.e. if power up cameras after FC. 
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
-#define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 
+//#define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define FORCECROSSHAIR            // Forces a crosshair even if no AHI / horizon used
@@ -272,6 +264,18 @@
 #endif
 
 /********************  GPS OSD rule definitions  *********************/
+
+#if defined GPSOSD-UBLOX
+  #define UBLOX
+#endif
+#if defined GPSOSD-NMEA
+  #define NMEA
+#endif
+#if defined GPSOSD-MTK
+  #define MTK
+#endif
+
+
 #if defined MTK_BINARY16
   #define GPSOSD
   #define NMEA
@@ -307,8 +311,6 @@
 #if defined GPSOSD
   #undef  INTRO_MENU
   #undef  MSPACTIVECHECK
-//  #undef  SATACTIVECHECK
-//  #undef  GPSACTIVECHECK
   #undef  OSD_SWITCH_RC
   #define FORCESENSORS
   #define HIDEARMEDSTATUS
@@ -316,6 +318,6 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-#define DEBUG         // Enable/disable option to display OSD debug values 
+//#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 

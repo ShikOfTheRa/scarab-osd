@@ -305,6 +305,16 @@ void serialMSPCheck()
       thrExpo8 = read8();
       tpa_breakpoint16 = read16();
       modeMSPRequests &=~ REQ_MSP_RC_TUNING;
+    #elif defined BASEFLIGHT_PR
+      rcRate8 = read8();
+      rcExpo8 = read8();
+      rollRate = read8();
+      PitchRate = read8();
+      yawRate = read8();
+      dynThrPID = read8();
+      thrMid8 = read8();
+      thrExpo8 = read8();
+      modeMSPRequests &=~ REQ_MSP_RC_TUNING;
     #else
       rcRate8 = read8();
       rcExpo8 = read8();
@@ -584,6 +594,17 @@ void serialMenuCommon()
 	    if(ROW==8) thrExpo8=thrExpo8+menudir;
 	    if(ROW==9) tpa_breakpoint16=tpa_breakpoint16+menudir;
           }
+        #elif defined(BASEFLIGHT_PR)
+          if(configPage == 2 && COL == 3) {
+	    if(ROW==1) rcRate8=rcRate8+menudir;
+	    if(ROW==2) rcExpo8=rcExpo8+menudir;
+	    if(ROW==3) rollRate=rollRate+menudir;
+	    if(ROW==4) PitchRate=PitchRate+menudir;
+	    if(ROW==5) yawRate=yawRate+menudir;
+	    if(ROW==6) dynThrPID=dynThrPID+menudir;
+	    if(ROW==7) thrMid8=thrMid8+menudir;
+	    if(ROW==8) thrExpo8=thrExpo8+menudir;
+         }
         #else
           if(configPage == 2 && COL == 3) {
 	    if(ROW==1) rcRate8=rcRate8+menudir;
@@ -795,6 +816,17 @@ void configSave()
   mspWrite8(thrMid8);
   mspWrite8(thrExpo8);
   mspWrite16(tpa_breakpoint16);
+  mspWriteChecksum();
+#elif defined BASEFLIGHT_PR
+  mspWriteRequest(MSP_SET_RC_TUNING,8);
+  mspWrite8(rcRate8);
+  mspWrite8(rcExpo8);
+  mspWrite8(rollRate);
+  mspWrite8(PitchRate);
+  mspWrite8(yawRate);
+  mspWrite8(dynThrPID);
+  mspWrite8(thrMid8);
+  mspWrite8(thrExpo8);
   mspWriteChecksum();
 #else
   mspWriteRequest(MSP_SET_RC_TUNING,7);
