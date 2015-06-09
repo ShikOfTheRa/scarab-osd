@@ -3,20 +3,20 @@
 
 Download the latest release of MW OSD here:-
 
-**Release 1.3SP2 - 20/03/2015 :**
+**Release 1.4 - 09/06/2015 :**
 
-[MW OSD R1.3SP2](https://drive.google.com/uc?export=download&id=0B2MInRUrbpWxNXV3SVVYNzlmMEE)
+[MW OSD R1.4](https://drive.google.com/uc?export=download&id=0B2MInRUrbpWxa0hTcmpOZW5LYmM)
 
 ---
-
-The latest Beta test files are here here:-
-
-[LATEST COMPILED BETA TEST RELEASE](https://drive.google.com/folderview?id=0B2MInRUrbpWxSk9hZ3JIRXNRUU0&usp=sharing)
-
+None available.
 ---
 ---
 
 Historic releases of MW OSD are here:-
+
+**Release 1.3SP2 - 20/03/2015 :**
+
+[MW OSD R1.3SP2](https://drive.google.com/uc?export=download&id=0B2MInRUrbpWxNXV3SVVYNzlmMEE)
 
 **Release 1.3 - 02/03/2015 :**
 
