@@ -18,8 +18,8 @@ MWOSD also provides support a number of other configurations:
 <li>NAZA - test only</li>
 </ul>
 
-<a href='http://www.youtube.com/watch?feature=player_embedded&v=FCIyhbT1kK0' target='_blank'>Click here to DOWNLOAD or find out more</a><br>
+<a href='http://www.mwosd.com' target='_blank'>Click here to DOWNLOAD or find out more</a><br>
 
-<a href='http://www.mwosd.com' target='_blank'><img src='http://img.youtube.com/vi/FCIyhbT1kK0/0.jpg' width='425' height=344 /></a><br>
+<a href='http://www.youtube.com/watch?feature=player_embedded&v=FCIyhbT1kK0' target='_blank'><img src='http://img.youtube.com/vi/FCIyhbT1kK0/0.jpg' width='425' height=344 /></a><br>
 <br>
 <hr />
