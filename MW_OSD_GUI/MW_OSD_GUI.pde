@@ -208,6 +208,7 @@ String Title;
 int Passthroughcomm;
 int AutoSimulator=0;
 int StartupMessage=0;
+int FrameRate=30;
 
 int init_com = 0;
 int commListMax = 0;
@@ -706,7 +707,7 @@ void setup() {
  
 //Map<Settings, String> table = new EnumMap<Settings>(Settings.class);
 OnTimer = millis();
-  frameRate(30); 
+  frameRate(FrameRate); 
 OSDBackground = loadImage("OSD_def.jpg");
 GUIBackground = loadImage("GUI_def.jpg");
 DONATEimage  = loadImage("DON_def.png");
@@ -2016,6 +2017,7 @@ public void updateConfig(){
   ConfigClass.setProperty("Passthroughcomm",str(Passthroughcomm));
   ConfigClass.setProperty("AutoSimulator",str(AutoSimulator));
   ConfigClass.setProperty("StartupMessage",str(StartupMessage));
+  ConfigClass.setProperty("FrameRate",str(FrameRate));
   
   File file = new File(dataPath("gui.cfg"));
   try{
@@ -2053,6 +2055,7 @@ public void LoadConfig(){
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
     AutoSimulator = 1;
+    FrameRate = 30;
     StartupMessage = 0;
     updateConfig();
   }
@@ -2068,6 +2071,9 @@ public void LoadConfig(){
       Title =ConfigClass.getProperty("Title");
       Passthroughcomm = int(ConfigClass.getProperty("Passthroughcomm"));
       AutoSimulator = int(ConfigClass.getProperty("AutoSimulator"));
+      FrameRate = int(ConfigClass.getProperty("FrameRate"));
+      frameRate(FrameRate); 
+
       StartupMessage = int(ConfigClass.getProperty("StartupMessage"));
 
       img_Clear = LoadFont(FontFileName);
