@@ -242,3 +242,11 @@ Key Improvements:- GUI
   * Preset defaults to save time and demonstrate GUI/OSD better
   * Support for Map modes
   * Many bugfixes
+
+---
+
+Key Improvements in development repository:-
+
+ * GUI - Support for different refresh rates via \data\gui.cfg for slower pcs
+ * GUI - more realisitc simulation of operation. Responds like FC - no more active push of data
+
