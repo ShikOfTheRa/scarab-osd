@@ -9,6 +9,8 @@ Data updates are slow in RSSI mode
 
 ## Enhancement requests for future releases: ##
 
+TX switch ch in OSD menu
+
 Additional AHI layouts - multiple pitch angles
 
 Migrate Current Sensor to GUI / potentially migrate to offset / mv/A calc 
