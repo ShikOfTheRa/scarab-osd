@@ -130,7 +130,7 @@ HARAKIRI USERS - ensure protocol set as follows:
 19 How do I use MAP mode? It doesn't seem to work
   * Quick answer: Select HUD layout 4 and set MAP mode to 1
   * Long answer:
-  * Firstly items to be displayed need to be enabled in the hud layout being used.
+  * Firstly items to be displayed need to be enabled in the hud layout being used. (Map Mode & Map Center)
   * Secondly - on the GUI or OSD menu, map mode buts be set from 1-4.
   *  - mode 1 is where aircraft is center and H displays home location
   *  - mode 2 is where Home is center of the map and X displays relative aircraft position
@@ -139,6 +139,6 @@ HARAKIRI USERS - ensure protocol set as follows:
 
 ---
 
-20 I get unspecified Java or Java patrch error. How do I fix it.
+20 I get unspecified Java or Java path error. How do I fix it.
   * There are many type of Java error. One of the more common ones has a solution in the video below:
   * https://www.youtube.com/watch?v=66crhKstr70
