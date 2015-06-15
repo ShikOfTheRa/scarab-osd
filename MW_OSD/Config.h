@@ -216,21 +216,22 @@
 #ifdef FIXEDWING                     
   #define USEGPSHEADING
   #define USEGPSALTITUDE
-  #define RESETGPSALTITUDEATARM
   #if defined USEMAGHEADING 
     #undef USEGPSHEADING
   #endif  
   #if defined USEBAROALTITUDE
     #undef USEGPSALTITUDE
   #endif
-  #if defined DISABLEGPSALTITUDERESET
-    #undef RESETGPSALTITUDEATARM
-  #endif
   #define FORCESENSORS
 #endif
 
+// All aircraft / FC types...
+#define RESETGPSALTITUDEATARM
 #define HEADINGCORRECT              // required to correct for MWheading being 0>360 vs MWII -180>+180. Leave permanently enabled
 
+#if defined DISABLEGPSALTITUDERESET
+  #undef RESETGPSALTITUDEATARM
+#endif
 
 
 /********************  OSD HARDWARE rule definitions  *********************/
