@@ -24,9 +24,9 @@
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.8.0
 //#define CLEANFLIGHT181            // Uncomment this if you are using CLEANFLIGHT versions 1.8.1 
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
-//#define GPSOSD-UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
-//#define GPSOSD-NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
-//#define GPSOSD-MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
+//#define GPSOSD_GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+//#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
+//#define GPSOSD_MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
 //#define NOCONTROLLER              // Uncomment this if you ahave nothing connected to the serial port - no controller or GPS module
 
 
@@ -265,13 +265,13 @@
 
 /********************  GPS OSD rule definitions  *********************/
 
-#if defined GPSOSD-UBLOX
+#if defined GPSOSD_UBLOX
   #define UBLOX
 #endif
-#if defined GPSOSD-NMEA
+#if defined GPSOSD_NMEA
   #define NMEA
 #endif
-#if defined GPSOSD-MTK
+#if defined GPSOSD_MTK
   #define MTK
 #endif
 
