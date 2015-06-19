@@ -1,5 +1,5 @@
 1 How do I use OSD / smart switch
-  * Enable #define OSD\_SWITCH on multiwii FC
+  * Enable #define OSD\_SWITCH on multiwii FC or via CLI / GUI for other FC
   * Assign a switch on the MultiWii GUI to the OSD Switch which will now be visible
 
 ---
