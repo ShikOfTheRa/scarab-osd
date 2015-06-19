@@ -8,7 +8,7 @@
 Key Improvements for `current Master trunk`:-
 
  * BUGFIX - BAseflight PR - missing amperage define added. Amperage out by factor of 10
-  * GUI    - More realistic serial simulation method 
+ * GUI    - More realistic serial simulation method 
 
 ---
 Key Improvements for `R1.4.1`:-
