@@ -5,6 +5,19 @@
 
 ---
 
+Key Improvements for `current Master trunk`:-
+
+ * BUGFIX - BAseflight PR - missing amperage define added. Amperage out by factor of 10
+ * 
+
+---
+Key Improvements for `R1.4.1`:-
+
+ * BUGFIX - UBLOX/MTK support for GPSOSD users
+ * GUI    - More realistic serial simulation method 
+
+---
+
 Key Improvements for `R1.4`:-
 
  * BUGFIX - "Use MW" options not saving backup file (single entry key)
