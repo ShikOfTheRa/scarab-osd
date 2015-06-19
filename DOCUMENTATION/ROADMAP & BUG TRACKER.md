@@ -3,6 +3,7 @@
 ## Known bugs: ##
 
 Data updates are slow in RSSI mode
+
 GUI requires a restart after font upload
 
 
