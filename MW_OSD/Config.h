@@ -190,7 +190,7 @@
 
 
 /********************  CONTROLLER rule definitions  **********************/
-#ifdef BASEFLIGHT                    
+#if defined (BASEFLIGHT) || defined(BASEFLIGHT_PR)                   
     #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
 #endif
 
