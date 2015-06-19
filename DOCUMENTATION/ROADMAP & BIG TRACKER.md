@@ -3,13 +3,14 @@
 ## Known bugs: ##
 
 Data updates are slow in RSSI mode
+GUI requires a restart after font upload
 
 
 ---
 
 ## Enhancement requests for future releases: ##
 
-TX switch ch in OSD menu
+PRIORITY TX switch ch in OSD menu
 
 Additional AHI layouts - multiple pitch angles
 
