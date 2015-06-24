@@ -69,6 +69,7 @@ uint16_t UntouchedStack(void)
 #include <avr/pgmspace.h>
 #include <EEPROM.h>
 #include "Config.h"
+#include "Def.h"
 #include "symbols.h"
 #include "GlobalVariables.h"
 #include "math.h"
