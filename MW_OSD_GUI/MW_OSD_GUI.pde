@@ -778,6 +778,7 @@ DONATEimage  = loadImage("DON_def.png");
   baudListbox.addItem("57600",1);
   baudListbox.addItem("38400",2);
   baudListbox.addItem("19200",3);
+  baudListbox.addItem("9600",4);
 //  baudListbox.setValue(1);
   baudListbox.close();
   txtlblWhichbaud = controlP5.addTextlabel("txtlblWhichbaud","Baud rate: "+str(BaudRate),5,37).setGroup(G_PortStatus); // textlabel(name,text,x,y)
@@ -1565,7 +1566,8 @@ public void controlEvent(ControlEvent theEvent) {
 //      BaudRate=200;
       if (init_com==1)
         ClosePort();
-      if (int(theEvent.group().value()) ==3) BaudRate=19200;
+      if (int(theEvent.group().value()) ==4) BaudRate=9600;
+      else if (int(theEvent.group().value()) ==3) BaudRate=19200;
       else if (int(theEvent.group().value()) ==2) BaudRate=38400;
       else if (int(theEvent.group().value()) ==1) BaudRate=57600;
       else BaudRate=115200;
