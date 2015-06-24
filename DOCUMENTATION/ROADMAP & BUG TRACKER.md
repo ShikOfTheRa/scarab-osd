@@ -9,9 +9,22 @@ GUI requires a restart after font upload
 
 ---
 
+## Enhancements planned for next  release: ##
+
+Support for either NAZA or APM
+
+TX switch ch in OSD menu
+
+Improved PWM RSSI handling
+
+Improved hardware current sensor handling
+
+Improved speed performance for serial and PWM based data (AHI etc.)
+
+
 ## Enhancement requests for future releases: ##
 
-PRIORITY TX switch ch in OSD menu
+Support for either NAZA or APM
 
 Additional AHI layouts - multiple pitch angles
 
@@ -59,12 +72,10 @@ Climb rate alarm
 
 Descriptive chracter font for for heading / angle to home
 
-Support for APM
-
 
 Other changes
 
-Impelement more descriptive "help" test within confih.h
+Impelement more descriptive "help" text within confih.h
 
 
 ## GUI: ##
