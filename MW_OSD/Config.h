@@ -47,7 +47,7 @@
 // b, 2 or 3 different screen layouts to be selected using a specificed RC channel assigned to a TX switch
 //Choose ONLY ONE option:
 //#define OSD_SWITCH                // Uses original 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
-#define OSD_SWITCH_RC               // Enables GUI to use 2 way OSD_SWITCh or 3 way screen switch using RC data. Specify channel on GUI (range 0-7 AUX1=4 AUX4=7)
+#define OSD_SWITCH_RC               // Enables GUI to use 2 way OSD_SWITCH or 3 way screen switch using RC data. Specify channel on GUI (range 0-7 AUX1=4 AUX4=7)
 
 
 /********************       FILTER settings      *********************/
@@ -57,7 +57,10 @@
 
 
 /********************       RSSI settings      *********************/
-//#define FASTPWMRSSI              // Undefine this if you are using non standard PWM for RSSI ( high frequency ) 
+//Choose ONLY ONE option:
+#define INTPWMRSSI                // Undefine this to use new interrup PWM RSSI method (standard PWM 750-2250ms pulse width)
+//#define PULSEINPWMRSSI          // Undefine this to use legacy non interrupt PWM RSSI method (pulse width 0 - 2250ms pulse width)
+//#define FASTPWMRSSI             // Undefine this to use high PWM refresh frequency RSSI 
 
 
 /********************       GPS settings      *********************/
@@ -106,7 +109,7 @@
 //#define STARTUPDELAY 2000         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
 
-/********************       GPS type settings      *********************/
+/********************       I2CGPS type settings      *********************/
 //#define I2CGPS_SPEED              // Uncomment this if you are using older I2CGPS - and need to correct for speed error (10x too slow)               
 //#define I2CGPS_DISTANCE           // Uncomment this if you are using older I2CGPS - and need to correct for distance error (650m max) UNTESTED               
 
@@ -129,7 +132,7 @@
 //#define AUTOCAM                     // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
 //#define AUTOCAMWAIT               // **UNTESTED** - Use with AUTOCAM - waits until camera is ready - i.e. if power up cameras after FC. 
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
-//#define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 
+#define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 
 //#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define FORCECROSSHAIR            // Forces a crosshair even if no AHI / horizon used
@@ -163,7 +166,7 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-//#define DEBUG         // Enable/disable option to display OSD debug values 
+#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 
 

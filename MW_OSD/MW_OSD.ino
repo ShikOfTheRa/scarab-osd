@@ -94,9 +94,13 @@ void setup()
   UCSR0A  |= (1<<U2X0); UBRR0H = h; UBRR0L = l; 
 //---
   Serial.flush();
-  
+
+#if defined INTPWMRSSI
+  initRSSIint();
+#else 
   pinMode(PWMRSSIPIN, INPUT);
   pinMode(RSSIPIN, INPUT);
+#endif
   pinMode(LEDPIN,OUTPUT);
 
 //  EEPROM.write(0,0); //;test
@@ -134,7 +138,6 @@ void setup()
 //------------------------------------------------------------------------
 void loop()
 {
-if (GPS_numSat!=9) debug[0]++;
   #ifdef MEMCHECK
     debug[MEMCHECK] = UntouchedStack();
   #endif
@@ -685,10 +688,16 @@ void ProcessSensors(void) {
     if (sensor ==4) { 
       if (Settings[S_PWMRSSI]){
 #if defined FASTPWMRSSI
-        sensortemp = FastpulseIn(PWMRSSIPIN, HIGH,250);
+        sensortemp = FastpulseIn(PWMRSSIPIN, HIGH,1024);
+        sensortemp>>2;
+#elif defined INTPWMRSSI
+        sensortemp = pwmRSSI>>1;
 #else
-        sensortemp = pulseIn(PWMRSSIPIN, HIGH,21000)>>1;
+        sensortemp = pulseIn(PWMRSSIPIN, HIGH,18000)>>1;
 #endif
+        if (sensortemp==0) { // timed out - use previous
+          sensortemp=sensorfilter[sensor][sensorindex];
+        }
       }
     }
 #if defined STAGE2FILTER // Use averaged change    
@@ -848,4 +857,34 @@ unsigned long FastpulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
   return width; 
 }
 
+#if defined INTPWMRSSI
+void initRSSIint() { // enable ONLY RSSI pin A3 for interrupt (bit 3 on port C)
+  DDRC &= ~(1 << DDC3);
+  PORTC |= (1 << PORTC3);
+  cli();
+  PCICR =  (1 << PCIE1);
+  PCMSK1 = (1 << PCINT11);
+  sei();
+}
+
+
+ISR(PCINT1_vect) { //
+  static uint16_t PulseStart;  
+  uint8_t pinstatus;
+  pinstatus = PINC;
+  sei();
+  uint16_t CurrentTime;
+  uint16_t PulseDuration;
+  CurrentTime = micros();
+  if (!(pinstatus & (1<<DDC3))) { // RSSI pin A3 - ! measures low duration
+    PulseDuration = CurrentTime-PulseStart; 
+    if ((750<PulseDuration) && (PulseDuration<2250)) {
+      pwmRSSI = PulseDuration; // Val returned
+    }
+  } 
+  else {
+    PulseStart = CurrentTime;
+  }
+}
+#endif
 
