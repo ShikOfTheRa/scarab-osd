@@ -7,7 +7,8 @@
 
 Key Improvements for `current Master trunk`:-
 
- * BUGFIX - BAseflight PR - missing amperage define added. Amperage out by factor of 10
+ * OSD    - faster PWM RSSI implementation for standard 50hz PWM
+ * BUGFIX - Baseflight PR - missing amperage define added. Amperage out by factor of 10
  * GUI    - More realistic serial simulation method 
 
 ---
