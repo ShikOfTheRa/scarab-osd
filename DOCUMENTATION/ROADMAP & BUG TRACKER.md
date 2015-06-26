@@ -2,7 +2,9 @@
 
 ## Known bugs: ##
 
-Data updates are slow in RSSI mode
+Screen updates are slow when in PWM RSSI mode - resolved in master / for next release
+
+Screen updates are slow for GPS data - work in progress
 
 GUI requires a restart after font upload
 
