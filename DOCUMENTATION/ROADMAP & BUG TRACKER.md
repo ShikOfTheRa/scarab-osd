@@ -23,6 +23,8 @@ Improved hardware current sensor handling
 
 Improved speed performance for serial and PWM based data (AHI etc.)
 
+Adjustable Horizon pitch/ roll limits
+
 
 ## Enhancement requests for future releases: ##
 
