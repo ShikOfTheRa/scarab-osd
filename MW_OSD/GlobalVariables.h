@@ -19,7 +19,6 @@
 #define METRIC 0
 #define IMPERIAL 1
 
-#define hi_speed_cycle  50
 #define lo_speed_cycle  100
 
 #define CALIBRATION_DELAY 10       // Calibration timeouts   
@@ -116,6 +115,12 @@ struct {
   uint8_t GPS_active;
 }
 timer;
+
+struct {
+  uint8_t ident;
+  uint8_t box;
+}
+flags;
 
 uint16_t debug[4];   // int32_t ?...
 int8_t menudir;
@@ -872,10 +877,10 @@ uint16_t screenPosition[POSITIONS_SETTINGS];
 #define REQ_MSP_STATUS    (1 <<  1)
 #define REQ_MSP_RAW_IMU   (1 <<  2)
 #define REQ_MSP_RC        (1 <<  3)
-#define REQ_MSP_RAW_GPS   (1 <<  4)
+#define REQ_MSP_ALTITUDE  (1 <<  4)
 #define REQ_MSP_COMP_GPS  (1 <<  5)
 #define REQ_MSP_ATTITUDE  (1 <<  6)
-#define REQ_MSP_ALTITUDE  (1 <<  7)
+#define REQ_MSP_RAW_GPS   (1 <<  7)
 #define REQ_MSP_ANALOG    (1 <<  8)
 #define REQ_MSP_RC_TUNING (1 <<  9)
 #define REQ_MSP_PID       (1 << 10)

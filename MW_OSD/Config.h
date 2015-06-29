@@ -92,6 +92,13 @@
 //#define BAUDRATE 9600
 
 
+/******************** Serial MSP speed settings *********************/
+// Choose ONLY ONE option: increases speeds of serial update - but with impact to fligth controller 
+//#define MSP_SPEED_LOW
+#define MSP_SPEED_MED
+//#define MSP_SPEED_HIGH
+
+
 /********************       CALLSIGN settings      *********************/
 #define   CALLSIGNINTERVAL 60      // How frequently to display Callsign (in seconds)
 #define   CALLSIGNDURATION 4       // How long to display Callsign (in seconds)

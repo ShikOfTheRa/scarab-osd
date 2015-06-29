@@ -144,8 +144,8 @@ void serialMSPCheck()
 #ifndef GPSOSD
   if (cmdMSP==MSP_IDENT)
   {
+    flags.ident=1;
     MwVersion= read8();                             // MultiWii Firmware version
-    modeMSPRequests &=~ REQ_MSP_IDENT;
   }
 
   if (cmdMSP==MSP_STATUS)
@@ -155,10 +155,7 @@ void serialMSPCheck()
     MwSensorPresent = read16();
     MwSensorActive = read32();
     #if defined FORCESENSORS
-      MwSensorPresent |=GPSSENSOR;
-      MwSensorPresent |=BAROMETER;
-      MwSensorPresent |=MAGNETOMETER;
-      MwSensorPresent |=ACCELEROMETER;
+      MwSensorPresent=GPSSENSOR|BAROMETER|MAGNETOMETER|ACCELEROMETER;
     #endif  
     armed = (MwSensorActive & mode.armed) != 0;
 
@@ -334,11 +331,11 @@ void serialMSPCheck()
       I8[i] = read8();
       D8[i] = read8();
     }
-    modeMSPRequests &=~ REQ_MSP_PID;
   }
 
 #ifdef BOXNAMES
   if(cmdMSP==MSP_BOXNAMES) {
+    flags.box=1;
     uint32_t bit = 1;
     uint8_t remaining = dataSize;
     uint8_t len = 0;
@@ -393,10 +390,10 @@ void serialMSPCheck()
       lastc = c;
       --remaining;
     }
-    modeMSPRequests &=~ REQ_MSP_BOX;
   }
 #else  
   if(cmdMSP==MSP_BOXIDS) {
+    flags.box=1;
     uint32_t bit = 1;
     uint8_t remaining = dataSize;
 
@@ -460,7 +457,6 @@ void serialMSPCheck()
       bit <<= 1;
       --remaining;
     }
-    modeMSPRequests &=~ REQ_MSP_BOX;
   }
 #endif
 #endif // GPSOSD
@@ -692,9 +688,10 @@ void serialMenuCommon()
 	if((ROW==10)&&(COL==2)) configSave();
 }
 
-void serialMSPreceive()
+void serialMSPreceive(uint8_t loops)
 {
   uint8_t c;
+  uint8_t loopserial=0;
 
   static enum _serial_state {
     IDLE,
@@ -706,7 +703,8 @@ void serialMSPreceive()
   }
   c_state = IDLE;
 
-  while(Serial.available())
+  if (Serial.available()) loopserial=1;
+  while(loopserial==1)
   {
     c = Serial.read();
 
@@ -760,6 +758,7 @@ void serialMSPreceive()
       else
         serialBuffer[receiverIndex++]=c;
     }
+    if (loops==0) loopserial=0;
   }
 }
 

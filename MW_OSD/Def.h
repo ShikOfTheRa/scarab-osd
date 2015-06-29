@@ -152,5 +152,15 @@
   #define HIDEARMEDSTATUS
 #endif
 
+#if defined MSP_SPEED_HIGH
+  #define hi_speed_cycle  5
+#elif defined MSP_SPEED_MED
+  #define hi_speed_cycle  15
+#elif defined MSP_SPEED_MED
+  #define hi_speed_cycle  50
+#else
+  #define hi_speed_cycle  50
+#endif
+
 
 
