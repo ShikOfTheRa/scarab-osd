@@ -308,10 +308,10 @@ void displayHorizon(int rollAngle, int pitchAngle)
   
   uint16_t position = getPosition(horizonPosition)-(2*LINE);
 
-  if(pitchAngle>200) pitchAngle=200;
-  if(pitchAngle<-250) pitchAngle=-250;
-  if(rollAngle>400) rollAngle=400;
-  if(rollAngle<-400) rollAngle=-400;
+  if(pitchAngle>AHIPITCHMAX) pitchAngle=AHIPITCHMAX;
+  if(pitchAngle<-AHIPITCHMAX) pitchAngle=-AHIPITCHMAX;
+  if(rollAngle>AHIROLLMAX) rollAngle=AHIROLLMAX;
+  if(rollAngle<-AHIROLLMAX) rollAngle=-AHIROLLMAX;
   #ifndef AHICORRECT
     #define AHICORRECT 10
   #endif

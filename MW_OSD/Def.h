@@ -3,6 +3,15 @@
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 
+/*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
+//#define DEBUG         // Enable/disable option to display OSD debug values 
+//#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
+
+/********************  GPSOSD definitions  *********************/
+#define GPSOSDARMDISTANCE   20 // distance from home in meters when GPSOSD arms. Starts flight timer etc.
+#define GPSOSDHOMEDISTANCE  40 // distance from home in meters when GPSOSD is home. When speed is low it disarms and displays summary screen.
+
+
 /********************   ENABLE/DISABLE CONFIG PAGES via STICK MENU     *********************/
 //large memory savings if not needed, comment to disable
 #define PAGE1 //PID CONFIG
