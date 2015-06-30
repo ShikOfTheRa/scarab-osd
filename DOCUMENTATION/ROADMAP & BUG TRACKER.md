@@ -4,7 +4,7 @@
 
 Screen updates are slow when in PWM RSSI mode - resolved in master / for next release
 
-Screen updates are slow for GPS data - work in progress
+Screen updates are slow for GPS data - resolved in master / for next release
 
 GUI requires a restart after font upload
 
@@ -21,9 +21,9 @@ Improved PWM RSSI handling
 
 Improved hardware current sensor handling
 
-Improved speed performance for serial and PWM based data (AHI etc.)
+Improved speed performance for serial and PWM based data (AHI etc.) - resolved in master / for next release
 
-Adjustable Horizon pitch/ roll limits
+Adjustable Horizon pitch/ roll limits - resolved in master / for next release
 
 
 ## Enhancement requests for future releases: ##
