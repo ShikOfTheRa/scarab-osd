@@ -5,6 +5,7 @@
 //Choose ONLY ONE option:
 #define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware (default for 95% of boards) 
 //#define WITESPYV1.1               // Uncomment this if using Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
+//#define WITESPYMICRO              // Uncomment this if using Witespy Micro Minim OSD, select this to correct for swapped bat1/bat 2.  
 //#define RUSHDUINO                 // Uncomment this if using Rushduino
 
 // NOTE-some of the popular RTFQ/Witespy boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
@@ -24,7 +25,7 @@
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.8.0
 //#define CLEANFLIGHT181            // Uncomment this if you are using CLEANFLIGHT versions 1.8.1 
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
-//#define GPSOSD_GPSOSD_UBLOX       // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+//#define GPSOSD_UBLOX       // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
 //#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
 //#define GPSOSD_MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
 //#define NOCONTROLLER              // Uncomment this if you ahave nothing connected to the serial port - no controller or GPS module
@@ -93,7 +94,7 @@
 
 
 /******************** Serial MSP speed settings *********************/
-// Choose ONLY ONE option: increases speeds of serial update - but with impact to fligth controller 
+// Choose ONLY ONE option: increases speeds of serial update - but with impact to flight controller 
 //#define MSP_SPEED_LOW
 #define MSP_SPEED_MED
 //#define MSP_SPEED_HIGH
@@ -108,7 +109,7 @@
 
 
 /********************       STARTUP settings      *********************/
-//#define INTRO_VERSION               "SHIKI-OSD - R1.4" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+#define INTRO_VERSION               "MWOSD - DEV 1.4.2" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
@@ -173,7 +174,7 @@
 
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-#define DEBUG         // Enable/disable option to display OSD debug values 
+//#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 
 

@@ -83,6 +83,10 @@
     #define ALTERNATEDIVIDERS
 #endif
 
+#ifdef WITESPYMICRO                     
+    #define SWAPVOLTAGEPINS
+#endif
+
 #ifdef SWAPVOLTAGEPINS                     
     #define VOLTAGEPIN    A2
     #define VIDVOLTAGEPIN A0
@@ -150,6 +154,7 @@
   #undef  OSD_SWITCH_RC
   #define FORCESENSORS
   #define HIDEARMEDSTATUS
+  #define GPSACTIVECHECK 5  
 #endif
 
 #if defined MSP_SPEED_HIGH

@@ -554,7 +554,7 @@ void displaypMeterSum(void)
   if(!fieldIsVisible(pMeterSumPosition))
     return;
   screenBuffer[0]=SYM_MAH;
-  int xx=amperagesum/36;
+  int xx=amperagesum/360;
   itoa(xx,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(pMeterSumPosition));
 }
@@ -1041,7 +1041,7 @@ void displayConfigScreen(void)
  //   MAX7456_WriteString_P(configMsg04, ALTT);
     MAX7456_WriteString(itoa(speedMAX,screenBuffer,10),VELD-3);
 
-    xx=amperagesum/36;
+    xx=amperagesum/360;
     itoa(xx,screenBuffer,10);
 //    MAX7456_WriteString_P(configMsg06, VELT);
     MAX7456_WriteString(itoa(xx,screenBuffer,10),LEVD-3);

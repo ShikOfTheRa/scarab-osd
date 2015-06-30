@@ -759,6 +759,7 @@ void serialMSPreceive(uint8_t loops)
         serialBuffer[receiverIndex++]=c;
     }
     if (loops==0) loopserial=0;
+    if (!Serial.available()) loopserial=0;
   }
 }
 

@@ -22,7 +22,7 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
-//#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
+#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
 #if 1
 __asm volatile ("nop");
 #endif
@@ -186,6 +186,8 @@ void loop()
     timer.halfSec++;
     timer.Blink10hz=!timer.Blink10hz;
     calculateTrip();
+    if (Settings[S_AMPER_HOUR]) 
+      amperagesum += amperage;
     #ifndef GPSOSD 
       #ifndef FASTMSP
         if(!fontMode)
@@ -307,7 +309,7 @@ void loop()
           displayRSSI();
         if(Settings[S_AMPERAGE]&&(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz))) 
           displayAmperage();
-        if(Settings[S_AMPER_HOUR]&&((((amperagesum)/3600)<Settings[S_AMPER_HOUR_ALARM])||(timer.Blink2hz)))
+        if(Settings[S_AMPER_HOUR]&&((((amperagesum)/36000)<Settings[S_AMPER_HOUR_ALARM])||(timer.Blink2hz)))
           displaypMeterSum();
         displayTime();
 #ifdef TEMPSENSOR
@@ -395,8 +397,6 @@ void loop()
         timer.MSP_active--;
       }      
     #endif // MSPACTIVECHECK 
-    if (Settings[S_AMPER_HOUR]) 
-      amperagesum += amperage;
 
     if(!armed) {
       setMspRequests();
@@ -582,9 +582,9 @@ void calculateTrip(void)
   static float tripSum = 0; 
   if(GPS_fix && armed && (GPS_speed>0)) {
     if(Settings[S_UNITSYSTEM])
-      tripSum += GPS_speed *0.0016404;     //  50/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
+      tripSum += GPS_speed *0.0032808;     //  100/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
     else
-      tripSum += GPS_speed *0.0005;        //  50/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)      
+      tripSum += GPS_speed *0.0010;        //  100/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)      
   }
   trip = (uint32_t) tripSum;
 }
