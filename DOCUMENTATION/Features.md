@@ -8,8 +8,17 @@
 Key Improvements for `current Master trunk`:-
 
  * OSD    - faster PWM RSSI implementation for standard 50hz PWM
- * BUGFIX - Baseflight PR - missing amperage define added. Amperage out by factor of 10
- * GUI    - More realistic serial simulation method 
+ * OSD    - user adjustable AHI maximum limits
+ * OSD    - more accurate mah used / faster display updates. 10 times vs 1 time per second
+ * OSD    - choice of MSP speed options for faster display updates
+ * OSD    - support for 9600 baud
+ * OSD    - support for newer baseflight relears - separate pitch/roll config
+ * FONT   - improved new large font from Schnupperm
+ * BUGFIX - baseflight PR - missing amperage define added. Amperage out by factor of 10
+ * GUI    - more realistic serial simulation method 
+ * GPSOSD - configurable parameters for GPSOSD arming and flight summary setting
+ 
+
 
 ---
 Key Improvements for `R1.4.1`:-
