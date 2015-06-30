@@ -22,7 +22,7 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
-//#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
+#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
 #if 1
 __asm volatile ("nop");
 #endif
@@ -121,8 +121,7 @@ void setup()
   #if defined GPSOSD
     GPS_SerialInit();
   #else
-    setMspRequests();
-    mspWriteRequest(MSP_IDENT,0);
+ //   setMspRequests();
   #endif
   #if defined FORCESENSORS
     MwSensorPresent |=GPSSENSOR;
@@ -171,8 +170,8 @@ void loop()
   }
   oldscreenlayout=screenlayout;
     
-  // Blink Basic Sanity Test Led at 1hz
-  if(timer.tenthSec>10)
+  // Blink Basic Sanity Test Led at 0.5hz
+  if(timer.tenthSec>5)
     digitalWrite(LEDPIN,HIGH);
   else
     digitalWrite(LEDPIN,LOW);
@@ -183,6 +182,12 @@ void loop()
   if((currentMillis - previous_millis_low) >= lo_speed_cycle)  // 10 Hz (Executed every 100ms)
   {
     previous_millis_low = previous_millis_low+lo_speed_cycle;    
+    timer.tenthSec++;
+    timer.halfSec++;
+    timer.Blink10hz=!timer.Blink10hz;
+    calculateTrip();
+    if (Settings[S_AMPER_HOUR]) 
+      amperagesum += amperage;
     #ifndef GPSOSD 
       #ifndef FASTMSP
         if(!fontMode)
@@ -193,13 +198,7 @@ void loop()
 
   if((currentMillis - previous_millis_high) >= hi_speed_cycle)  // 20 Hz (Executed every 50ms)
   {
-    previous_millis_high = previous_millis_high+hi_speed_cycle;   
-
-    timer.tenthSec++;
-    timer.halfSec++;
-    timer.Blink10hz=!timer.Blink10hz;
-    calculateTrip();
-    
+    previous_millis_high = previous_millis_high+hi_speed_cycle;       
       uint8_t MSPcmdsend;
       if(queuedMSPRequests == 0)
         queuedMSPRequests = modeMSPRequests;
@@ -310,7 +309,7 @@ void loop()
           displayRSSI();
         if(Settings[S_AMPERAGE]&&(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz))) 
           displayAmperage();
-        if(Settings[S_AMPER_HOUR]&&((((amperagesum)/3600)<Settings[S_AMPER_HOUR_ALARM])||(timer.Blink2hz)))
+        if(Settings[S_AMPER_HOUR]&&((((amperagesum)/36000)<Settings[S_AMPER_HOUR_ALARM])||(timer.Blink2hz)))
           displaypMeterSum();
         displayTime();
 #ifdef TEMPSENSOR
@@ -373,7 +372,7 @@ void loop()
     }
   }  // End of fast Timed Service Routine (50ms loop)
 
-  if(timer.halfSec >= 10) {
+  if(timer.halfSec >= 5) {
     timer.halfSec = 0;
     timer.Blink2hz =! timer.Blink2hz;
   }
@@ -398,10 +397,9 @@ void loop()
         timer.MSP_active--;
       }      
     #endif // MSPACTIVECHECK 
-    if (Settings[S_AMPER_HOUR]) 
-      amperagesum += amperage;
 
     if(!armed) {
+      setMspRequests();
 #ifndef MAPMODENORTH
       armedangle=MwHeading;
 #endif
@@ -410,7 +408,7 @@ void loop()
       flyTime++;
       flyingTime++;
       configMode=0;
-      setMspRequests();
+ //     setMspRequests();
     }
     allSec++;
 /*
@@ -427,7 +425,7 @@ void loop()
     if(timer.rssiTimer>0) timer.rssiTimer--;
   }
 
-  serialMSPreceive();
+  serialMSPreceive(1);
 }  // End of main loop
 
 
@@ -532,30 +530,42 @@ void setMspRequests() {
       REQ_MSP_RC;
   }
   else {
+//wtf:?? try deleting next 4 lines and what happens to memory. is it local vs global in some way?
+//    MwSensorPresent |=GPSSENSOR;
+//    MwSensorPresent |=BAROMETER;
+//    MwSensorPresent |=MAGNETOMETER;
+//    MwSensorPresent |=ACCELEROMETER;
+
     modeMSPRequests = 
-      REQ_MSP_IDENT|
-      #ifndef FASTMSP
-        REQ_MSP_RAW_GPS|
-        REQ_MSP_COMP_GPS|
-        REQ_MSP_ATTITUDE|
-        REQ_MSP_ALTITUDE|
-      #endif //FASTMSP 
-      #ifdef OSD_SWITCH_RC
-        REQ_MSP_RC|
-      #endif //OSD_SWITCH_RC
-      #ifdef DEBUGMW
-        REQ_MSP_DEBUG|
-      #endif
-      #ifdef SPORT      
-        REQ_MSP_CELLS|
-      #endif
-      REQ_MSP_STATUS;
-      if(!armed || Settings[S_THROTTLEPOSITION] || fieldIsVisible(pMeterSumPosition) || fieldIsVisible(amperagePosition) )
-        modeMSPRequests |= REQ_MSP_RC;
-      if(mode.armed == 0)
-        modeMSPRequests |= REQ_MSP_BOX;
-      if(MwSensorActive&mode.gpsmission)
-        modeMSPRequests |= REQ_MSP_NAV_STATUS;
+      REQ_MSP_STATUS|
+     #ifdef OSD_SWITCH_RC
+      REQ_MSP_RC|
+     #endif
+     #ifdef DEBUGMW
+      REQ_MSP_DEBUG|
+     #endif
+     #ifdef SPORT      
+      REQ_MSP_CELLS|
+     #endif
+      REQ_MSP_ATTITUDE;
+    if(MwSensorPresent&MAGNETOMETER){ 
+      modeMSPRequests |= REQ_MSP_RAW_IMU;
+    }
+    if(MwSensorPresent&BAROMETER){ 
+      modeMSPRequests |= REQ_MSP_ALTITUDE;
+    }
+    if(flags.ident!=1){
+      modeMSPRequests |= REQ_MSP_IDENT;
+    }
+    if(MwSensorPresent&GPSSENSOR){ 
+      modeMSPRequests |= REQ_MSP_RAW_GPS| REQ_MSP_COMP_GPS;
+    }
+    if(Settings[S_THROTTLEPOSITION] || fieldIsVisible(pMeterSumPosition) || fieldIsVisible(amperagePosition) )
+      modeMSPRequests |= REQ_MSP_RC;
+    if(mode.armed == 0)
+      modeMSPRequests |=REQ_MSP_BOX|REQ_MSP_RC;
+    if(MwSensorActive&mode.gpsmission)
+    modeMSPRequests |= REQ_MSP_NAV_STATUS;
   }
  
   if(Settings[S_MAINVOLTAGE_VBAT] ||
@@ -572,9 +582,9 @@ void calculateTrip(void)
   static float tripSum = 0; 
   if(GPS_fix && armed && (GPS_speed>0)) {
     if(Settings[S_UNITSYSTEM])
-      tripSum += GPS_speed *0.0016404;     //  50/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
+      tripSum += GPS_speed *0.0032808;     //  100/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
     else
-      tripSum += GPS_speed *0.0005;        //  50/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)      
+      tripSum += GPS_speed *0.0010;        //  100/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)      
   }
   trip = (uint32_t) tripSum;
 }

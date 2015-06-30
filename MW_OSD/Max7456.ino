@@ -1,7 +1,6 @@
 #define DATAOUT 11              // MOSI
 #define DATAIN  12              // MISO
 #define SPICLOCK  13            // sck
-
 #define VSYNC 2                 // INT0
 
 #ifndef WHITEBRIGHTNESS
@@ -263,7 +262,7 @@ void MAX7456_DrawScreen()
     spi_transfer(DMAL_reg);
     spi_transfer(0);
     vsync_wait = 1;
-    uint32_t vsynctimer=50+millis();
+    uint32_t vsynctimer=40+millis();
 
   #endif
 
@@ -273,7 +272,7 @@ void MAX7456_DrawScreen()
     #ifdef USE_VSYNC
       SPDR = MAX7456ADD_DMDI;
       if (xx==240) {
-        vsynctimer=50+millis();
+        vsynctimer=40+millis();
         vsync_wait = 1;      // Not enough time to load all characters within VBI period. This splits and waits until next field
       }
       while (!(SPSR & (1<<SPIF)));     // Wait the end of the last SPI transmission is clear
@@ -282,7 +281,7 @@ void MAX7456_DrawScreen()
           vsync_wait=0;
         }
         else{
-          serialMSPreceive(); // Might as well do something whilst waiting :)
+          serialMSPreceive(0); // Might as well do something whilst waiting :)
         }
       }
       SPDR = screen[xx];
