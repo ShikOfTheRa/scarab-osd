@@ -665,7 +665,7 @@ void serialMenuCommon()
 	  if(ROW==3) Settings[S_VREFERENCE]=!Settings[S_VREFERENCE];
 	  if(ROW==4) Settings[S_DEBUG]=!Settings[S_DEBUG];
 	  if(ROW==5) timer.magCalibrationTimer=CALIBRATION_DELAY;
-	}
+	  if(ROW==6) Settings[S_RCWSWITCH_CH]=Settings[S_RCWSWITCH_CH]+menudir;	}
 #endif
 #ifdef PAGE8
 	if(configPage == 8 && COL == 3) {

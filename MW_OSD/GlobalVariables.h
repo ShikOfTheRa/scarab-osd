@@ -797,7 +797,7 @@ const char configMsg730[] PROGMEM = "5V";
 const char configMsg731[] PROGMEM = "1.1V";
 const char configMsg74[]  PROGMEM = "DEBUG";
 const char configMsg75[]  PROGMEM = "MAG CAL";
-//const char configMsg76[] PROGMEM = "TOP SHIFT";
+const char configMsg76[]  PROGMEM = "OSD TX CH";
 //-----------------------------------------------------------Page8
 const char configMsg80[] PROGMEM = "GPS TIME";
 const char configMsg81[] PROGMEM = "DISPLAY";
@@ -996,7 +996,7 @@ const PROGMEM char * const menu_advanced[] =
   configMsg73,
   configMsg74,
   configMsg75,
-};
+  configMsg76,};
 
 const PROGMEM char * const menu_gps_time[] = 
 {   
