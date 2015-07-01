@@ -889,7 +889,7 @@ ISR(PCINT1_vect) { //
   if (!(pinstatus & (1<<DDC3))) { // RSSI pin A3 - ! measures low duration
     PulseDuration = CurrentTime-PulseStart; 
     if ((750<PulseDuration) && (PulseDuration<2250)) {
-      pwmRSSI = PulseDuration; // Val returned
+      pwmRSSI = PulseDuration; // Val updated
     }
   } 
   else {

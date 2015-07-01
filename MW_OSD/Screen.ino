@@ -973,8 +973,8 @@ void displayCursor(void)
     if(configPage==7)
       {  
       COL=3;
-      if (ROW==9) ROW=5;
-      if (ROW==6) ROW=10;
+      if (ROW==9) ROW=6;
+      if (ROW==7) ROW=10;
        cursorpos=(ROW+2)*30+10+6+6;
       }
 #endif
@@ -1229,7 +1229,7 @@ void displayConfigScreen(void)
 #ifdef PAGE7
   if(configPage==7)
   {
-    for(uint8_t X=0; X<=4; X++) {
+    for(uint8_t X=0; X<=5; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_advanced[X])));
       MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
     }
@@ -1256,6 +1256,7 @@ void displayConfigScreen(void)
       MAX7456_WriteString(itoa(timer.magCalibrationTimer,screenBuffer,10),VELD);
     else
       MAX7456_WriteString("-",VELD);
+    MAX7456_WriteString(itoa(Settings[S_RCWSWITCH_CH],screenBuffer,10),LEVD);
    }
 #else
     if(configPage == 7)configPage+=menudir;
