@@ -15,9 +15,9 @@ GUI requires a restart after font upload
 
 Support for either NAZA or APM
 
-TX switch ch in OSD menu
+TX switch ch in OSD menu - resolved in master / for next release
 
-Improved PWM RSSI handling
+Improved PWM RSSI handling - resolved in master / for next release
 
 Improved hardware current sensor handling
 
