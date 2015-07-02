@@ -147,11 +147,13 @@ void loop()
     debug[MEMCHECK] = UntouchedStack();
   #endif
 
-
-  #ifdef OSD_SWITCH_RC
+  #if defined (OSD_SWITCH_RC) || defined(OSD_SWITCH_RSSI)                   
     uint8_t rcswitch_ch = Settings[S_RCWSWITCH_CH];
     screenlayout=0;
     if (Settings[S_RCWSWITCH]){
+      #ifdef OSD_SWITCH_RSSI
+        MwRcData[rcswitch_ch]=pwmRSSI;      
+      #endif
       if (MwRcData[rcswitch_ch] > 1600){
         screenlayout=1;
       }
