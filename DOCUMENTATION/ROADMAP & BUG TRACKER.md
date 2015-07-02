@@ -27,6 +27,8 @@ Adjustable Horizon pitch/ roll limits - resolved in master / for next release
 
 MAX chip hardware stall / recovery detect - resolved in master / for next release
 
+Support for GPSOSD screen layout switching
+
 
 ## Enhancement requests for future releases: ##
 
