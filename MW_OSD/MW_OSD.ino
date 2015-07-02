@@ -268,11 +268,11 @@ void loop()
       #ifndef GPSOSD
       mspWriteRequest(MSPcmdsend, 0);      
       #endif //GPSOSD
+      MAX7456_DrawScreen();
+
     }
 
     ProcessSensors();       // using analogue sensors
-
-    MAX7456_DrawScreen();
 
 
 #ifndef INTRO_DELAY 
