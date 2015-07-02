@@ -6,7 +6,7 @@ Screen updates are slow when in PWM RSSI mode - resolved in master / for next re
 
 Screen updates are slow for GPS data - resolved in master / for next release
 
-GUI requires a restart after font upload
+GUI requires a restart after font upload - resolved in master / for next release
 
 
 ---
@@ -24,6 +24,8 @@ Improved hardware current sensor handling
 Improved speed performance for serial and PWM based data (AHI etc.) - resolved in master / for next release
 
 Adjustable Horizon pitch/ roll limits - resolved in master / for next release
+
+MAX chip hardware stall / recovery detect
 
 
 ## Enhancement requests for future releases: ##
@@ -55,8 +57,6 @@ support for cleanflight / baseflight loop time change
 pitch / roll angles with alarm
 
 Support for 8 GUI layouts selectable from OSD menu at field
-
-MAX chip hardware stall / recovery detect
 
 Fast start - Autodetect MAX ready or timeout
 
