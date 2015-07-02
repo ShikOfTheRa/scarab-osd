@@ -166,6 +166,13 @@
   #define GPSACTIVECHECK 5  
 #endif
 
+#if defined (OSD_SWITCH_RSSI)  
+  #define OSD_SWITCH_RC
+#endif
+
+
+/********************  MSP enhancements rule definitions  *********************/
+
 #if defined MSP_SPEED_HIGH
   #define hi_speed_cycle  5
 #elif defined MSP_SPEED_MED
