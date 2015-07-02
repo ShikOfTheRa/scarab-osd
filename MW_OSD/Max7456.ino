@@ -122,7 +122,7 @@ void MAX7456Setup(void)
   pinMode(MAX7456RESET,OUTPUT);
   digitalWrite(MAX7456RESET,HIGH); //hard enable
 
-  delay(250);
+  delay(100);
 
   pinMode(MAX7456SELECT,OUTPUT);
   digitalWrite(MAX7456SELECT,HIGH); //disable device
@@ -141,12 +141,12 @@ void MAX7456Setup(void)
   uint8_t spi_junk;
   spi_junk=SPSR;
   spi_junk=SPDR;
-  delay(250);
+  delay(100);
 
   // force soft reset on Max7456
   digitalWrite(MAX7456SELECT,LOW);
   MAX7456_Send(VM0_reg, MAX7456_reset);
-  delay(500);
+  delay(100);
 
 
 #ifdef AUTOCAM 
@@ -157,7 +157,7 @@ void MAX7456Setup(void)
     while ((B00000011 & srdata) == 0){
       spi_transfer(0xa0);
       srdata = spi_transfer(0xFF); 
-      delay(50);
+      delay(100);
     }
   #else  
     spi_transfer(0xa0);
@@ -195,7 +195,7 @@ void MAX7456Setup(void)
   // uint8_t srdata = spi_transfer(0xFF); //get data byte
   // srdata = srdata & 0xEF;
   // MAX7456_Send(0x6c, srdata);
-  delay(500);
+  delay(100);
 #endif
 
   // set all rows to same charactor black/white level
@@ -366,4 +366,15 @@ void write_NVM(uint8_t char_address)
 #else
   delay(12);
 #endif
+}
+
+void MAX7456Stalldetect(void){
+  uint8_t srdata;
+  pinMode(MAX7456SELECT,OUTPUT);
+  digitalWrite(MAX7456SELECT,LOW);  
+  spi_transfer(0x80);
+  srdata = spi_transfer(0xFF); 
+  digitalWrite(MAX7456SELECT,HIGH);
+  if ((B00001000 & srdata) == 0)
+    MAX7456Setup(); 
 }
