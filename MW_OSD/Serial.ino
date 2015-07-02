@@ -129,6 +129,8 @@ void serialMSPCheck()
 	uint8_t c = read8();
         write_NVM(c);
 	//fontCharacterReceived(c);
+        if (c==255)
+          MAX7456Setup();
       }
     }
     if(cmd == OSD_DEFAULT) {
