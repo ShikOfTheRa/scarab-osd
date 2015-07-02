@@ -25,7 +25,7 @@ Improved speed performance for serial and PWM based data (AHI etc.) - resolved i
 
 Adjustable Horizon pitch/ roll limits - resolved in master / for next release
 
-MAX chip hardware stall / recovery detect
+MAX chip hardware stall / recovery detect - resolved in master / for next release
 
 
 ## Enhancement requests for future releases: ##
