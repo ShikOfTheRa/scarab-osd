@@ -147,7 +147,7 @@ void loop()
     debug[MEMCHECK] = UntouchedStack();
   #endif
 
-  #if defined (OSD_SWITCH_RC) || defined(OSD_SWITCH_RSSI)                   
+  #if defined (OSD_SWITCH_RC)                   
     uint8_t rcswitch_ch = Settings[S_RCWSWITCH_CH];
     screenlayout=0;
     if (Settings[S_RCWSWITCH]){
