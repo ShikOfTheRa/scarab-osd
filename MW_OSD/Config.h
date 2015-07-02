@@ -137,7 +137,8 @@
 
 
 /********************       Display Settings         ************************/
-//#define AUTOCAM                     // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
+#define MAXSTALLDETECT              // Enable to attempt to detect MAX chip stall from bad power. Attempts to restart.
+//#define AUTOCAM                   // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
 //#define AUTOCAMWAIT               // **UNTESTED** - Use with AUTOCAM - waits until camera is ready - i.e. if power up cameras after FC. 
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
 #define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 

@@ -137,6 +137,12 @@ void setup()
 //------------------------------------------------------------------------
 void loop()
 {
+// stall detect test
+//  if (onTime%10==0){
+//  digitalWrite(MAX7456SELECT,LOW);  
+//  MAX7456_Send(0x00, 0x00);
+//  digitalWrite(MAX7456SELECT,HIGH);
+//}
   #ifdef MEMCHECK
     debug[MEMCHECK] = UntouchedStack();
   #endif
@@ -382,6 +388,9 @@ void loop()
     timer.seconds+=1000;
     timer.tenthSec=0;
     onTime++;
+    #ifdef MAXSTALLDETECT
+     MAX7456Stalldetect();
+    #endif 
     #ifdef GPSACTIVECHECK
       if (timer.GPS_active==0){
         GPS_numSat=0;
