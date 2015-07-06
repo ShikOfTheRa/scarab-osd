@@ -1,0 +1,164 @@
+--- config.h	Fri Nov 08 00:00:00 2013
++++ config.h	Fri Apr 25 19:27:55 2014
+@@ -832,10 +832,33 @@
+                                    gives 1/2 Vss; that is approx 2.49Volt; */
+     #define PINT2mA 132     /* (*) hard: one integer step on arduino analog translates to mA (example 4.9 / 37 * 1000) ;
+                                    soft: use fictional value, start with 100.
+                                    for hard and soft: larger PINT2mA will get you larger value for power (mAh equivalent) */
+ 
++
++  /********************************************************************/
++  /****              frsky s.port telemetry link                   ****/
++  /********************************************************************/
++
++    /* 
++       when enabled, allows reading of module data from s.port line via inverter and any serial port.      
++              
++       * serial port will revert back to MSP use (ie GUI) if a s.port device is not detected at bootup
++       * custom bootloader for mega available to allow startup with active s.port connected to serial 0 prior to boot
++       * custom osd code also available to display up to 6 individual cell voltage/s w/ graph 16 steps @ 0.05v 
++       * more info: http://code.google.com/p/scarab-osd/wiki/Frsky_SPort
++    */
++
++     //#define SPORT_SERIAL 1 //make sure is not being used elsewhere to avoid conflict, ie gps or lcd.     
++     
++     //#define SPORT_FLVSS   // cell & battery voltage module: battery voltage replaces VBAT if not used, cells > MSP
++     //#define SPORT_FCS     // current & battery voltage module: replaces POWERMETER_HARD, POWERMETER_SOFT & VBAT if not used
++     //#define SPORT_VARIO   // alt & vario module: only replaces alt.EstAlt & alt.vario in MSP, for now not used in flight model
++
++    //#define SPORT_HOST //  operate without s.port compatible reciever, see SPort.h to choose sensor, currently set to FLVSS
++
++
+   /********************************************************************/
+   /****           altitude hold                                    ****/
+   /********************************************************************/
+ 
+     /* defines the neutral zone of throttle stick during altitude hold, default setting is
+--- MultiWii.cpp	Thu Nov 07 23:56:18 2013
++++ MultiWii.cpp	Fri Apr 25 19:22:51 2014
+@@ -24,10 +24,12 @@
+ #include "Sensors.h"
+ #include "Serial.h"
+ #include "GPS.h"
+ #include "Protocol.h"
+ 
++#include "SPort.h"
++
+ #include <avr/pgmspace.h>
+ 
+ /*********** RC alias *****************/
+ 
+ const char pidnames[] PROGMEM =
+@@ -548,10 +550,15 @@
+       #if GPS
+         if ( (GPS_speed > GPS_speedMax) ) GPS_speedMax = GPS_speed;
+       #endif
+     #endif
+   }
++  
++   #if defined(SPORT_SERIAL) 
++    if(SPORT_PRESENT)checkSPort();
++   #endif
++  
+ }
+ 
+ void setup() {
+   #if !defined(GPS_PROMINI)
+     SerialOpen(0,SERIAL0_COM_SPEED);
+@@ -687,10 +694,14 @@
+     plog.armed_time = 0;   // lifetime in seconds
+     //plog.running = 0;       // toggle on arm & disarm to monitor for clean shutdown vs. powercut
+   #endif
+   
+   debugmsg_append_str("initialization completed\n");
++  
++  #if defined(SPORT_SERIAL)
++   initSPort();
++  #endif
+ }
+ 
+ void go_arm() {
+   if(calibratingG == 0
+   #if defined(ONLYARMWHENFLAT)
+--- Protocol.cpp	Thu Nov 07 23:56:18 2013
++++ Protocol.cpp	Fri Apr 25 19:24:31 2014
+@@ -8,10 +8,11 @@
+ #include "GPS.h"
+ #include "MultiWii.h"
+ #include "Serial.h"
+ #include "Protocol.h"
+ #include "RX.h"
++#include "SPort.h"
+ 
+ /************************************** MultiWii Serial Protocol *******************************************************/
+ // Multiwii Serial Protocol 0 
+ #define MSP_VERSION              0
+ 
+@@ -36,10 +37,12 @@
+ #define MSP_PIDNAMES             117   //out message         the PID names
+ #define MSP_WP                   118   //out message         get a WP, WP# is in the payload, returns (WP#, lat, lon, alt, flags) WP#0-home, WP#16-poshold
+ #define MSP_BOXIDS               119   //out message         get the permanent IDs associated to BOXes
+ #define MSP_SERVO_CONF           120   //out message         Servo settings
+ 
++#define MSP_CELLS                130   //out message         Battery Cell Voltages
++
+ #define MSP_SET_RAW_RC           200   //in message          8 rc chan
+ #define MSP_SET_RAW_GPS          201   //in message          fix, numsat, lat, lon, alt, speed
+ #define MSP_SET_PID              202   //in message          P I D coeff (9 are used currently)
+ #define MSP_SET_BOX              203   //in message          BOX setup (number is dependant of your setup)
+ #define MSP_SET_RC_TUNING        204   //in message          rc rate, rc expo, rollpitch rate, yaw rate, dyn throttle PID
+@@ -179,12 +182,16 @@
+     #endif
+     #define SBUS_COND
+     #if defined(SBUS) && (UART_NUMBER > 1)
+       #define SBUS_COND && (SBUS_SERIAL_PORT != CURRENTPORT)
+     #endif
++   #define SPORT_COND
++    #if defined(SPORT_SERIAL)
++      #define SPORT_COND && ((SPORT_SERIAL != CURRENTPORT) || !SPORT_PRESENT)
++    #endif
+     uint8_t cc = SerialAvailable(CURRENTPORT);
+-    while (cc-- GPS_COND SPEK_COND SBUS_COND) {
++    while (cc-- GPS_COND SPEK_COND SBUS_COND SPORT_COND) {
+       uint8_t bytesTXBuff = SerialUsedTXBuff(CURRENTPORT); // indicates the number of occupied bytes in TX buffer
+       if (bytesTXBuff > TX_BUFFER_SIZE - 50 ) return; // ensure there is enough free TX buffer to go further (50 bytes margin)
+       c = SerialRead(CURRENTPORT);
+       #ifdef SUPPRESS_ALL_SERIAL_MSP
+         // no MSP handling, so go directly
+@@ -465,13 +472,19 @@
+      break;
+    #endif
+    case MSP_ATTITUDE:
+      s_struct((uint8_t*)&att,6);
+      break;
+-   case MSP_ALTITUDE:
++   #if defined(SPORT_VARIO) && SPORT_PRESENT //bring in sport vario data instead
++   case MSP_ALTITUDE:  
++     s_struct((uint8_t*)&sport_alt,6);
++     break;
++   #else
++   case MSP_ALTITUDE:  
+      s_struct((uint8_t*)&alt,6);
+      break;
++   #endif
+    case MSP_ANALOG:
+      s_struct((uint8_t*)&analog,7);
+      break;
+    case MSP_RC_TUNING:
+      s_struct((uint8_t*)&conf.rcRate8,7);
+@@ -581,10 +594,15 @@
+        headSerialReply(size);
+        debugmsg_serialize(size);
+      }
+      break;
+    #endif
++  #ifdef SPORT_SERIAL
++  case MSP_CELLS:
++      s_struct((uint8_t*)&cells,12);
++     break;
++  #endif
+    default:  // we do not know how to handle the (valid) message, indicate error MSP $M!
+      headSerialError(0);
+      break;
+   }
+   tailSerialReply();
