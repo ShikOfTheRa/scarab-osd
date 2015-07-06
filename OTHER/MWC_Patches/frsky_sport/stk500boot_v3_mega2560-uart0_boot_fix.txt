@@ -1,0 +1,19 @@
+stk500boot_v3_mega2560-uart0_boot_fix.hex
+
+This file is the standard mega 2560 (and other boards) boot loader,
+which has been modified slightly to allow an actively transmitting 
+serial device to be connected to Serial 0 during bootup.
+
+Normally your device would hang, thinking its getting a new sketch,
+but it never comes, but this screens the incoming data during boot and decides 
+if it is a new sketch or not and continues loading the existing sketch as needed.
+
+In summary it lets you leave a frsky sport connection connected to Serial 0.
+
+To 'burn' a bootloader you need a programmer that connects to your ICSP (not ftdi)
+http://arduino.cc/en/Hacking/Bootloader?from=Main.Bootloader
+
+If you prefer i have all the equipment to do it for you at a small fee.
+
+Please contact me here:
+http://www.httech.com.au/index.php/contact.html
