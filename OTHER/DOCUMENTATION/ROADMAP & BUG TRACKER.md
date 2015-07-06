@@ -13,6 +13,8 @@ GUI requires a restart after font upload - resolved in master / for next release
 
 ## Enhancements planned for next  release: ##
 
+GPSOSD - PPM support
+
 Support for either NAZA or APM
 
 TX switch ch in OSD menu - resolved in master / for next release
