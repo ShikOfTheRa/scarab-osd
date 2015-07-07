@@ -391,7 +391,8 @@ void loop()
     timer.tenthSec=0;
     onTime++;
     #ifdef MAXSTALLDETECT
-     MAX7456Stalldetect();
+      if (!fontMode)
+        MAX7456Stalldetect();
     #endif 
     #ifdef GPSACTIVECHECK
       if (timer.GPS_active==0){

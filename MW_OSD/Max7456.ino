@@ -120,8 +120,9 @@ void MAX7456Setup(void)
 
 
   pinMode(MAX7456RESET,OUTPUT);
+  digitalWrite(MAX7456RESET,LOW); //force reset
+  delay(100);
   digitalWrite(MAX7456RESET,HIGH); //hard enable
-
   delay(100);
 
   pinMode(MAX7456SELECT,OUTPUT);
