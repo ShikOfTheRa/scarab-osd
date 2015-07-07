@@ -9,9 +9,7 @@ Download the latest release of MW OSD here:-
 
 ---
 
-Beta releases of MW OSD are here:-
-
-None available.
+[Go here for Beta releases of MWOSD](https://github.com/ShikOfTheRa/scarab-osd/releases)
 
 ---
 ---
