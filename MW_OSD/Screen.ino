@@ -902,12 +902,12 @@ void displayCursor(void)
      }
 #endif
 #ifdef PAGE2
-  #if defined(CLEANFLIGHT181) || defined(CLEANFLIGHT190)
+  #if defined(CLEANFLIGHT190)
      if(configPage==2){  
       COL=3;
       cursorpos=(ROW+2)*30+10+6+6;
     }
-  #elif defined(BASEFLIGHT_PR)
+  #elif defined(CLEANFLIGHT180)
     if(configPage==2)
     {  
       if (ROW==9){
@@ -1082,7 +1082,7 @@ void displayConfigScreen(void)
 #ifdef PAGE2
   if(configPage==2)
   {
-    #if defined(CLEANFLIGHT181) || defined(CLEANFLIGHT190)
+    #if defined(CLEANFLIGHT190)
        for(uint8_t X=0; X<=8; X++) {
         strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rc[X])));
         MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
@@ -1096,7 +1096,7 @@ void displayConfigScreen(void)
       MAX7456_WriteString(itoa(thrMid8,screenBuffer,10),MAGD);
       MAX7456_WriteString(itoa(thrExpo8,screenBuffer,10),MAGD+LINE);
       MAX7456_WriteString(itoa(tpa_breakpoint16,screenBuffer,10),MAGD+2*LINE);
-    #elif defined(BASEFLIGHT_PR)
+    #elif defined(CLEANFLIGHT180)
        for(uint8_t X=0; X<=7; X++) {
         strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rc[X])));
         MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));

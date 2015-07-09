@@ -34,7 +34,7 @@
 
 
 /********************  CONTROLLER rule definitions  **********************/
-#if defined (BASEFLIGHT) || defined (CLEANFLIGHT) ||defined (CLEANFLIGHT180) ||defined (CLEANFLIGHT181) ||defined(BASEFLIGHT_PR)                   
+#if defined (BASEFLIGHT) || defined (CLEANFLIGHT) ||defined (CLEANFLIGHT180) ||defined (CLEANFLIGHT172)                 
     #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
 #endif
 
@@ -53,8 +53,14 @@
 #ifdef MULTIWII_V24                     
 #endif
 
-#ifdef CLEANFLIGHT
+#ifdef CLEANFLIGHT //set up latest at time of release
   #define CLEANFLIGHT190
+//  #define CLEANFLIGHT180
+//  #define CLEANFLIGHT172
+#endif
+
+#ifdef BASEFLIGHT //set up latest at time of release
+
 #endif
 
 #ifdef FIXEDWING                     

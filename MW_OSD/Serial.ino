@@ -293,7 +293,7 @@ void serialMSPCheck()
       tpa_breakpoint16 = read16();
       rcYawExpo8 = read8();
       modeMSPRequests &=~ REQ_MSP_RC_TUNING;
-    #elif defined CLEANFLIGHT181
+    #elif defined CLEANFLIGHT180
       rcRate8 = read8();
       rcExpo8 = read8();
       PitchRate = read8();
@@ -303,16 +303,6 @@ void serialMSPCheck()
       thrMid8 = read8();
       thrExpo8 = read8();
       tpa_breakpoint16 = read16();
-      modeMSPRequests &=~ REQ_MSP_RC_TUNING;
-    #elif defined BASEFLIGHT_PR
-      rcRate8 = read8();
-      rcExpo8 = read8();
-      rollRate = read8();
-      PitchRate = read8();
-      yawRate = read8();
-      dynThrPID = read8();
-      thrMid8 = read8();
-      thrExpo8 = read8();
       modeMSPRequests &=~ REQ_MSP_RC_TUNING;
     #else
       rcRate8 = read8();
@@ -580,7 +570,7 @@ void serialMenuCommon()
 	}
 #endif
 #ifdef PAGE2
-        #if defined(CLEANFLIGHT181) || defined(CLEANFLIGHT190)
+        #if defined(CLEANFLIGHT190)
           if(configPage == 2 && COL == 3) {
 	    if(ROW==1) rcRate8=rcRate8+menudir;
 	    if(ROW==2) rcExpo8=rcExpo8+menudir;
@@ -592,7 +582,7 @@ void serialMenuCommon()
 	    if(ROW==8) thrExpo8=thrExpo8+menudir;
 	    if(ROW==9) tpa_breakpoint16=tpa_breakpoint16+menudir;
           }
-        #elif defined(BASEFLIGHT_PR)
+        #elif defined(CLEANFLIGHT180)
           if(configPage == 2 && COL == 3) {
 	    if(ROW==1) rcRate8=rcRate8+menudir;
 	    if(ROW==2) rcExpo8=rcExpo8+menudir;
@@ -807,7 +797,7 @@ void configSave()
   mspWrite16(tpa_breakpoint16);
   mspWrite8(rcYawExpo8);
   mspWriteChecksum();
-#elif defined CLEANFLIGHT181
+#elif defined CLEANFLIGHT180
   mspWriteRequest(MSP_SET_RC_TUNING,10);
   mspWrite8(rcRate8);
   mspWrite8(rcExpo8);
@@ -818,17 +808,6 @@ void configSave()
   mspWrite8(thrMid8);
   mspWrite8(thrExpo8);
   mspWrite16(tpa_breakpoint16);
-  mspWriteChecksum();
-#elif defined BASEFLIGHT_PR
-  mspWriteRequest(MSP_SET_RC_TUNING,8);
-  mspWrite8(rcRate8);
-  mspWrite8(rcExpo8);
-  mspWrite8(rollRate);
-  mspWrite8(PitchRate);
-  mspWrite8(yawRate);
-  mspWrite8(dynThrPID);
-  mspWrite8(thrMid8);
-  mspWrite8(thrExpo8);
   mspWriteChecksum();
 #else
   mspWriteRequest(MSP_SET_RC_TUNING,7);

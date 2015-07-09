@@ -19,11 +19,10 @@
 #define MULTIWII_V24                // Uncomment this if you are using MW versions 2.4  
 //#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V21              // Uncomment this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
-//#define BASEFLIGHT                // Uncomment this if you are using BASEFLIGHT (Stable 2015.05.13 at time of release)
-//#define BASEFLIGHT_PR             // UNTESTED - use this if you are using BASEFLIGHT with separate Pitch / Roll. 
+//#define BASEFLIGHT                // Uncomment this if you are using BASEFLIGHT (ONLY up to and inluding Stable 2015.05.13)
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9.0 at time or release)
-//#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.8.0
-//#define CLEANFLIGHT181            // Uncomment this if you are using CLEANFLIGHT versions 1.8.1 
+//#define CLEANFLIGHT172            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.7.2
+//#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1 
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
 //#define GPSOSD_UBLOX       // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
 //#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
