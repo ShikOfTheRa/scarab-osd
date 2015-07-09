@@ -120,6 +120,8 @@ int  ModePosition = 33;
 int  MapModePosition = 34;
 int  MapCenterPosition = 35;
 int  APstatusPosition = 36;
+int GPSstartlat = 430948610;
+int GPSstartlon = -718897060;
 
 int MSP_sendOrder =0;
 PImage img_Clear,GUIBackground,OSDBackground,DONATEimage,RadioPot;
@@ -239,6 +241,7 @@ String Title;
 int Passthroughcomm;
 int AutoSimulator=0;
 int StartupMessage=0;
+int FrameRate=30;
 
 int init_com = 0;
 int commListMax = 0;
@@ -737,7 +740,7 @@ public void setup() {
  
 //Map<Settings, String> table = new EnumMap<Settings>(Settings.class);
 OnTimer = millis();
-  frameRate(30); 
+  frameRate(FrameRate); 
 OSDBackground = loadImage("OSD_def.jpg");
 GUIBackground = loadImage("GUI_def.jpg");
 DONATEimage  = loadImage("DON_def.png");
@@ -808,6 +811,7 @@ DONATEimage  = loadImage("DON_def.png");
   baudListbox.addItem("57600",1);
   baudListbox.addItem("38400",2);
   baudListbox.addItem("19200",3);
+  baudListbox.addItem("9600",4);
 //  baudListbox.setValue(1);
   baudListbox.close();
   txtlblWhichbaud = controlP5.addTextlabel("txtlblWhichbaud","Baud rate: "+str(BaudRate),5,37).setGroup(G_PortStatus); // textlabel(name,text,x,y)
@@ -1157,8 +1161,8 @@ public void MakePorts(){
 
 public void draw() {
 
-  
-  debug[0]=WriteLayouts;
+     MWData_Com(); 
+//  debug[0]=WriteLayouts;
 //  debug[1]=OSD_S_HUDSW0;
 //  debug[2]=OSD_S_HUDSW1;
 //  debug[3]=OSD_S_HUDSW2;
@@ -1182,7 +1186,7 @@ public void draw() {
     if (millis()<ReadConfigMSPMillis){
       if (init_com==1){
         READconfigMSP();
-        toggleMSP_Data = true;
+//        toggleMSP_Data = true;
         int progress=100*eeaddressGUI/CONFIGITEMS;
         if (progress==0){
           progresstxt="Waiting FC...";   
@@ -1196,7 +1200,7 @@ public void draw() {
     if (millis()<WriteConfigMSPMillis){
       if (init_com==1){
         WRITEconfigMSP();
-        toggleMSP_Data = true;
+//        toggleMSP_Data = true;
         int progress=100*eeaddressGUI/(CONFIGITEMS);
         if (WriteLayouts==1){
           progress=100*eeaddressGUI/(CONFIGITEMS + (hudoptions*3*2));
@@ -1261,7 +1265,7 @@ public void draw() {
 
 // Colour switches when enabled......
   coloriseswitches();
-  if ((init_com==1)  && (toggleMSP_Data == true)) {
+  if ((init_com==1)) {
     MWData_Com();
     if (!FontMode) PortRead = false;
     MakePorts();
@@ -1277,6 +1281,8 @@ public void draw() {
       if (init_com==1) {
        
         if (ClosePort) return;
+
+/*
         if (SimControlToggle.getValue()!=0) {
 
           if (init_com==1)SendCommand(MSP_ATTITUDE);
@@ -1308,10 +1314,10 @@ public void draw() {
           if (init_com==1)SendCommand(MSP_CELLS);
           break;
         case 7: 
-          if ((init_com==1)&&(toggleMSP_Data == false)) SendCommand(MSP_BOXNAMES);
+          if ((init_com==1)) SendCommand(MSP_BOXNAMES);
           break;
         case 8:
-          if ((init_com==1)&&(toggleMSP_Data == false)) SendCommand(MSP_BOXIDS);
+          if ((init_com==1)) SendCommand(MSP_BOXIDS);
           break;
         case 9:
           if (init_com==1)SendCommand(MSP_NAV_STATUS);
@@ -1326,6 +1332,7 @@ public void draw() {
         }
         PortWrite = !PortWrite; // toggle TX LED every other    
       } 
+*/
       }
     } // End !FontMode
   }
@@ -1592,7 +1599,8 @@ public void controlEvent(ControlEvent theEvent) {
 //      BaudRate=200;
       if (init_com==1)
         ClosePort();
-      if (PApplet.parseInt(theEvent.group().value()) ==3) BaudRate=19200;
+      if (PApplet.parseInt(theEvent.group().value()) ==4) BaudRate=9600;
+      else if (PApplet.parseInt(theEvent.group().value()) ==3) BaudRate=19200;
       else if (PApplet.parseInt(theEvent.group().value()) ==2) BaudRate=38400;
       else if (PApplet.parseInt(theEvent.group().value()) ==1) BaudRate=57600;
       else BaudRate=115200;
@@ -2044,6 +2052,7 @@ public void updateConfig(){
   ConfigClass.setProperty("Passthroughcomm",str(Passthroughcomm));
   ConfigClass.setProperty("AutoSimulator",str(AutoSimulator));
   ConfigClass.setProperty("StartupMessage",str(StartupMessage));
+  ConfigClass.setProperty("FrameRate",str(FrameRate));
   
   File file = new File(dataPath("gui.cfg"));
   try{
@@ -2080,7 +2089,8 @@ public void LoadConfig(){
     BaudRate = 115200;
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
-    AutoSimulator = 0;
+    AutoSimulator = 1;
+    FrameRate = 30;
     StartupMessage = 0;
     updateConfig();
   }
@@ -2096,6 +2106,9 @@ public void LoadConfig(){
       Title =ConfigClass.getProperty("Title");
       Passthroughcomm = PApplet.parseInt(ConfigClass.getProperty("Passthroughcomm"));
       AutoSimulator = PApplet.parseInt(ConfigClass.getProperty("AutoSimulator"));
+      FrameRate = PApplet.parseInt(ConfigClass.getProperty("FrameRate"));
+      frameRate(FrameRate); 
+
       StartupMessage = PApplet.parseInt(ConfigClass.getProperty("StartupMessage"));
 
       img_Clear = LoadFont(FontFileName);
@@ -2188,7 +2201,7 @@ public void SketchUploader(){
   } catch (Exception e) { }
   }
 
-  toggleMSP_Data = false;
+//  toggleMSP_Data = false;
   //delay(1000);
   InitSerial(200.00f);
   updateConfig(); 
@@ -2204,19 +2217,19 @@ public void SketchUploader(){
 
 
 public void GPSTIMELINK(){
- link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/GPSTime.md"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/GPSTime.md"); 
 }
 public void SPORTLINK(){
- link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/Frsky_SPort.md"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Frsky_SPort.md"); 
 }
 public void CODELINK(){
  link("https://www.mwosd.com/"); 
 }
 public void FAQLINK(){
- link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/FAQ.md"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/FAQ.md"); 
 }
 public void GUIDELINK(){
- link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/User_Guide.md"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/User_Guide.md"); 
 }
 public void SUPPORTLINK(){
   link("http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI"); 
@@ -2225,7 +2238,7 @@ public void DONATELINK(){
   link("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EBS76N8F426G2&lc=GB&item_name=MW%2dOSD&item_number=R1%2e4&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"); 
 }
 public void CALIBLINK(){
- link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/Calibration.md"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Calibration.md"); 
 }
 
 
@@ -3445,7 +3458,7 @@ public void InitSerial(float portValue) {
       g_serial = new Serial(this, portPos, BaudRate);
       LastPort = portValue;
       init_com=1;
-      toggleMSP_Data = true;
+      //_Data = true;
       ClosePort = false;
       buttonREAD.setColorBackground(green_);
       buttonWRITE.setColorBackground(green_);
@@ -3456,10 +3469,10 @@ public void InitSerial(float portValue) {
       g_serial.buffer(512);
             txtmessage.setText("");
 //      delay(1500);
-      SendCommand(MSP_IDENT);
+//      SendCommand(MSP_IDENT);
      
 
-      SendCommand(MSP_STATUS);
+//      SendCommand(MSP_STATUS);
        eeaddressGUI=0;   
        ReadConfigMSPMillis=20000+millis();  
        READconfigMSP_init();
@@ -3477,8 +3490,8 @@ public void InitSerial(float portValue) {
       System.out.println("Serial Port Pass Through Starting" );
       SendCommand(MSP_PASSTHRU_SERIAL);
       delay(1000);
-      SendCommand(MSP_IDENT);
-      SendCommand(MSP_STATUS);
+//      SendCommand(MSP_IDENT);
+//      SendCommand(MSP_STATUS);
       READconfigMSP_init();
     }
   }
@@ -3487,7 +3500,7 @@ public void InitSerial(float portValue) {
 //     System.out.println("Begin Port Down " ); 
       txtlblWhichcom.setValue("Comm Closed");
       //g_serial.clear();
-      toggleMSP_Data = false;
+//      toggleMSP_Data = false;
       ClosePort = true;
       init_com=0;
     }
@@ -3552,27 +3565,27 @@ BuildCallSign();
 }
 
 public void PORTCLOSE(){
-  toggleMSP_Data = false;
+//  toggleMSP_Data = false;
   CloseMode = 0;
   InitSerial(200.00f);
 }
 
 public void BounceSerial(){
-  toggleMSP_Data = false;
+//  toggleMSP_Data = false;
   CloseMode = 1;
   InitSerial(200.00f);
   
 }  
 
 public void RESTART(){
-  toggleMSP_Data = true;
+//  toggleMSP_Data = true;
   for (int txTimes = 0; txTimes<3; txTimes++) {
     headSerialReply(MSP_OSD, 1);
     serialize8(OSD_RESET);
     tailSerialReply();
     delay(100);
   }
-  toggleMSP_Data = false;
+//  toggleMSP_Data = false;
   READconfigMSP_init();
 }  
 
@@ -3614,7 +3627,7 @@ public void SendChar(){
     time2=time;
     PortWrite = !PortWrite;  // toggle PortWrite to flash TX
     if (PortWrite) 
-      txtmessage.setText("Please wait....");
+      txtmessage.setText("Upload: "+nf(FontCounter, 3)+"/256");
     else
       txtmessage.setText("");
     MakePorts();
@@ -3653,14 +3666,14 @@ public void DEFAULT(){
     loop();
     switch (Reset_result) {
       case JOptionPane.YES_OPTION:
-        toggleMSP_Data = true;
+//        toggleMSP_Data = true;
         for (int txTimes = 0; txTimes<3; txTimes++) {
           headSerialReply(MSP_OSD, 1);
           serialize8(OSD_DEFAULT);
           tailSerialReply();
           delay(100);
         }
-        toggleMSP_Data = false;
+//        toggleMSP_Data = false;
 //        READinit();
         READconfigMSP_init();
 //        delay(2000);     
@@ -3874,8 +3887,10 @@ public void SendCommand(int cmd){
         headSerialReply(MSP_RAW_GPS,16);
         serialize8(PApplet.parseInt(SGPS_FIX.arrayValue()[0]));
         serialize8(PApplet.parseInt(SGPS_numSat.value()));
-        serialize32(430948610);
-        serialize32(-718897060);
+        GPSstartlat=GPSstartlat+100;
+        GPSstartlon=GPSstartlon-100;
+        serialize32(GPSstartlat);
+        serialize32(GPSstartlon);
         serialize16(PApplet.parseInt(SGPS_altitude.value()/100));
         serialize16(PApplet.parseInt(SGPS_speed.value()));
         serialize16(MwHeading*10);     
@@ -4020,17 +4035,61 @@ public void DelayTimer(int ms){
 }
 
 public void evaluateCommand(byte cmd, int size) {
-  if ((init_com==0)  || (toggleMSP_Data == false)){
+  if ((init_com==0)){
     return;
   }
+
   PortRead = true;
   MakePorts(); 
   int icmd = PApplet.parseInt(cmd&0xFF);
-  if (icmd !=MSP_OSD)return;  //System.out.println("Not Valid Command");
+//  if (icmd !=MSP_OSD)return;  //System.out.println("Not Valid Command");
   time2=time;
 
   switch(icmd) {
-    
+
+    case MSP_RC:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_RC);
+      break;
+    case MSP_STATUS:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_STATUS);
+      break;
+    case MSP_BOXNAMES:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_BOXNAMES);
+      break;
+    case MSP_BOXIDS:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_BOXIDS);
+      break;
+    case MSP_IDENT:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_IDENT);
+      break;
+    case MSP_ANALOG:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_ANALOG);
+      break;
+    case MSP_COMP_GPS:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_COMP_GPS);
+      break;
+    case MSP_RAW_GPS:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_RAW_GPS);
+      break;
+    case MSP_ATTITUDE:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_ATTITUDE);
+      break;
+    case MSP_ALTITUDE:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_ALTITUDE);
+      break;
+    case MSP_CELLS:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_CELLS);
+      break;
+    case MSP_NAV_STATUS:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_NAV_STATUS);
+      break;
+    case MSP_DEBUG:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_DEBUG);
+      break;
+    case MSP_PID:
+      if (SimControlToggle.getValue()!=0) SendCommand(MSP_PID);
+      break; 
+   
     case MSP_OSD:
       int cmd_internal = read8();
       PortRead = true;
@@ -4164,14 +4223,16 @@ public void evaluateCommand(byte cmd, int size) {
 }
 
 public void MWData_Com() {
-  if ((toggleMSP_Data == false) ||(init_com==0)) return;
+  if ((init_com==0)) return;
+//  if ((toggleMSP_Data == false) ||(init_com==0)) return;
   int i,aa;
   float val,inter,a,b,h;
   int c = 0;
   
   //System.out.println("MWData_Com");  
     
-    while (g_serial.available()>0 && (toggleMSP_Data == true)) {
+    while (g_serial.available()>0) {
+//    while (g_serial.available()>0 && (toggleMSP_Data == true)) {
     try{
       c = (g_serial.read());
       
@@ -4223,9 +4284,9 @@ public void MWData_Com() {
           } else {
             /* we got a valid response packet, evaluate it */
             try{
-              if ((init_com==1)  && (toggleMSP_Data == true)) {
+              if ((init_com==1)) {
                   evaluateCommand(cmd, (int)dataSize);
-                  //System.out.println("CMD: "+cmd);
+//                  System.out.println("CMD: "+cmd);
                   PortRead = false;
               }
               else{
@@ -4269,7 +4330,7 @@ public void MWData_Com() {
   }
 
   public void READconfigMSP(){
-  toggleMSP_Data = true;
+//  toggleMSP_Data = true;
   inBuf[0] = OSD_WRITE_CMD;
   for (int txTimes = 0; txTimes<1; txTimes++) {
     headSerialReply(MSP_OSD, 4);
@@ -4318,7 +4379,7 @@ public void MWData_Com() {
 
   public void WRITEconfigMSP(){
   SimControlToggle.setValue(0);
-  toggleMSP_Data = true;
+//  toggleMSP_Data = true;
   inBuf[0] = OSD_WRITE_CMD;
   for (int txTimes = 0; txTimes<1; txTimes++) {
     headSerialReply(MSP_OSD, 1 + (3*10));
@@ -4333,8 +4394,6 @@ public void MWData_Com() {
     }
     tailSerialReply();
   }
-  debug[1]=eeaddressGUI;
-  debug[2]++;
 //  toggleMSP_Data = false; //???????????????????
   WriteConfigMSPMillis=3000+millis(); 
 }

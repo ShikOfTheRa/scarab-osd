@@ -2184,19 +2184,19 @@ void SketchUploader(){
 
 
 public void GPSTIMELINK(){
- link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/GPSTime.md"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/GPSTime.md"); 
 }
 public void SPORTLINK(){
- link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/Frsky_SPort.md"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Frsky_SPort.md"); 
 }
 public void CODELINK(){
  link("https://www.mwosd.com/"); 
 }
 public void FAQLINK(){
- link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/FAQ.md"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/FAQ.md"); 
 }
 public void GUIDELINK(){
- link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/User_Guide.md"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/User_Guide.md"); 
 }
 public void SUPPORTLINK(){
   link("http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI"); 
@@ -2205,7 +2205,7 @@ public void DONATELINK(){
   link("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EBS76N8F426G2&lc=GB&item_name=MW%2dOSD&item_number=R1%2e4&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"); 
 }
 public void CALIBLINK(){
- link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/Calibration.md"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Calibration.md"); 
 }
 
 

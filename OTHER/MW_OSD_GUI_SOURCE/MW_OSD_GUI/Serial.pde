@@ -291,7 +291,7 @@ public void SendChar(){
     time2=time;
     PortWrite = !PortWrite;  // toggle PortWrite to flash TX
     if (PortWrite) 
-      txtmessage.setText("Please wait....");
+      txtmessage.setText("Upload: "+nf(FontCounter, 3)+"/256");
     else
       txtmessage.setText("");
     MakePorts();

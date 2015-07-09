@@ -87,6 +87,8 @@ int  ModePosition = 33;
 int  MapModePosition = 34;
 int  MapCenterPosition = 35;
 int  APstatusPosition = 36;
+int GPSstartlat = 430948610;
+int GPSstartlon = -718897060;
 
 int MSP_sendOrder =0;
 PImage img_Clear,GUIBackground,OSDBackground,DONATEimage,RadioPot;
@@ -206,6 +208,7 @@ String Title;
 int Passthroughcomm;
 int AutoSimulator=0;
 int StartupMessage=0;
+int FrameRate=30;
 
 int init_com = 0;
 int commListMax = 0;
@@ -704,7 +707,7 @@ void setup() {
  
 //Map<Settings, String> table = new EnumMap<Settings>(Settings.class);
 OnTimer = millis();
-  frameRate(30); 
+  frameRate(FrameRate); 
 OSDBackground = loadImage("OSD_def.jpg");
 GUIBackground = loadImage("GUI_def.jpg");
 DONATEimage  = loadImage("DON_def.png");
@@ -775,6 +778,7 @@ DONATEimage  = loadImage("DON_def.png");
   baudListbox.addItem("57600",1);
   baudListbox.addItem("38400",2);
   baudListbox.addItem("19200",3);
+  baudListbox.addItem("9600",4);
 //  baudListbox.setValue(1);
   baudListbox.close();
   txtlblWhichbaud = controlP5.addTextlabel("txtlblWhichbaud","Baud rate: "+str(BaudRate),5,37).setGroup(G_PortStatus); // textlabel(name,text,x,y)
@@ -1124,8 +1128,8 @@ void MakePorts(){
 
 void draw() {
 
-  
-  debug[0]=WriteLayouts;
+     MWData_Com(); 
+//  debug[0]=WriteLayouts;
 //  debug[1]=OSD_S_HUDSW0;
 //  debug[2]=OSD_S_HUDSW1;
 //  debug[3]=OSD_S_HUDSW2;
@@ -1149,7 +1153,7 @@ void draw() {
     if (millis()<ReadConfigMSPMillis){
       if (init_com==1){
         READconfigMSP();
-        toggleMSP_Data = true;
+//        toggleMSP_Data = true;
         int progress=100*eeaddressGUI/CONFIGITEMS;
         if (progress==0){
           progresstxt="Waiting FC...";   
@@ -1163,7 +1167,7 @@ void draw() {
     if (millis()<WriteConfigMSPMillis){
       if (init_com==1){
         WRITEconfigMSP();
-        toggleMSP_Data = true;
+//        toggleMSP_Data = true;
         int progress=100*eeaddressGUI/(CONFIGITEMS);
         if (WriteLayouts==1){
           progress=100*eeaddressGUI/(CONFIGITEMS + (hudoptions*3*2));
@@ -1228,7 +1232,7 @@ void draw() {
 
 // Colour switches when enabled......
   coloriseswitches();
-  if ((init_com==1)  && (toggleMSP_Data == true)) {
+  if ((init_com==1)) {
     MWData_Com();
     if (!FontMode) PortRead = false;
     MakePorts();
@@ -1244,6 +1248,8 @@ void draw() {
       if (init_com==1) {
        
         if (ClosePort) return;
+
+/*
         if (SimControlToggle.getValue()!=0) {
 
           if (init_com==1)SendCommand(MSP_ATTITUDE);
@@ -1275,10 +1281,10 @@ void draw() {
           if (init_com==1)SendCommand(MSP_CELLS);
           break;
         case 7: 
-          if ((init_com==1)&&(toggleMSP_Data == false)) SendCommand(MSP_BOXNAMES);
+          if ((init_com==1)) SendCommand(MSP_BOXNAMES);
           break;
         case 8:
-          if ((init_com==1)&&(toggleMSP_Data == false)) SendCommand(MSP_BOXIDS);
+          if ((init_com==1)) SendCommand(MSP_BOXIDS);
           break;
         case 9:
           if (init_com==1)SendCommand(MSP_NAV_STATUS);
@@ -1293,6 +1299,7 @@ void draw() {
         }
         PortWrite = !PortWrite; // toggle TX LED every other    
       } 
+*/
       }
     } // End !FontMode
   }
@@ -1559,7 +1566,8 @@ public void controlEvent(ControlEvent theEvent) {
 //      BaudRate=200;
       if (init_com==1)
         ClosePort();
-      if (int(theEvent.group().value()) ==3) BaudRate=19200;
+      if (int(theEvent.group().value()) ==4) BaudRate=9600;
+      else if (int(theEvent.group().value()) ==3) BaudRate=19200;
       else if (int(theEvent.group().value()) ==2) BaudRate=38400;
       else if (int(theEvent.group().value()) ==1) BaudRate=57600;
       else BaudRate=115200;
@@ -2011,6 +2019,7 @@ public void updateConfig(){
   ConfigClass.setProperty("Passthroughcomm",str(Passthroughcomm));
   ConfigClass.setProperty("AutoSimulator",str(AutoSimulator));
   ConfigClass.setProperty("StartupMessage",str(StartupMessage));
+  ConfigClass.setProperty("FrameRate",str(FrameRate));
   
   File file = new File(dataPath("gui.cfg"));
   try{
@@ -2047,7 +2056,8 @@ public void LoadConfig(){
     BaudRate = 115200;
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
-    AutoSimulator = 0;
+    AutoSimulator = 1;
+    FrameRate = 30;
     StartupMessage = 0;
     updateConfig();
   }
@@ -2063,6 +2073,9 @@ public void LoadConfig(){
       Title =ConfigClass.getProperty("Title");
       Passthroughcomm = int(ConfigClass.getProperty("Passthroughcomm"));
       AutoSimulator = int(ConfigClass.getProperty("AutoSimulator"));
+      FrameRate = int(ConfigClass.getProperty("FrameRate"));
+      frameRate(FrameRate); 
+
       StartupMessage = int(ConfigClass.getProperty("StartupMessage"));
 
       img_Clear = LoadFont(FontFileName);
@@ -2155,7 +2168,7 @@ void SketchUploader(){
   } catch (Exception e) { }
   }
 
-  toggleMSP_Data = false;
+//  toggleMSP_Data = false;
   //delay(1000);
   InitSerial(200.00);
   updateConfig(); 
@@ -2171,19 +2184,19 @@ void SketchUploader(){
 
 
 public void GPSTIMELINK(){
- link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/GPSTime.md"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/GPSTime.md"); 
 }
 public void SPORTLINK(){
- link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/Frsky_SPort.md"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Frsky_SPort.md"); 
 }
 public void CODELINK(){
  link("https://www.mwosd.com/"); 
 }
 public void FAQLINK(){
- link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/FAQ.md"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/FAQ.md"); 
 }
 public void GUIDELINK(){
- link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/User_Guide.md"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/User_Guide.md"); 
 }
 public void SUPPORTLINK(){
   link("http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI"); 
@@ -2192,7 +2205,7 @@ public void DONATELINK(){
   link("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EBS76N8F426G2&lc=GB&item_name=MW%2dOSD&item_number=R1%2e4&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"); 
 }
 public void CALIBLINK(){
- link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/Calibration.md"); 
+ link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Calibration.md"); 
 }
 
 
