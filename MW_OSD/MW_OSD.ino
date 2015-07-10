@@ -416,7 +416,7 @@ void loop()
     #endif // MSPACTIVECHECK 
 
     if(!armed) {
-      setMspRequests();
+//      setMspRequests();
 #ifndef MAPMODENORTH
       armedangle=MwHeading;
 #endif
