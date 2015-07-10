@@ -22,7 +22,7 @@ To navigate the OSD:<br>
 <b>How to - [flash the MW OSD firmware to your OSD]
 (https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/FirmwareFlashing.md)</b>
 
-<b>How to - [alternative way to access frsky via telemtry from Jindalee10368 
+<b>How to - [alternative way to access frsky via telemtry from Jindalee10368] 
 (http://vk4ghz.com/mwosd-display-rssi-via-spare-radio-channel/)</b>
 
 
