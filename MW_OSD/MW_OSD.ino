@@ -297,6 +297,8 @@ void loop()
     {
       if(armed){
         previousarmedstatus=1;
+        if (configMode==1)
+          configExit();
       }
       if(previousarmedstatus && !armed){
         armedtimer=20;
