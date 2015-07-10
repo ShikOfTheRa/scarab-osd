@@ -135,10 +135,10 @@ void serialMSPCheck()
     }
     if(cmd == OSD_DEFAULT) {
         EEPROM.write(0,0);
-        resetFunc();
+        flags.reset=1;
     }
     if(cmd == OSD_RESET) {
-        resetFunc();
+        flags.reset=1;
     }
                     
   }

@@ -143,6 +143,9 @@ void loop()
 //  MAX7456_Send(0x00, 0x00);
 //  digitalWrite(MAX7456SELECT,HIGH);
 //}
+  if (flags.reset){
+    resetFunc();
+  }
   #ifdef MEMCHECK
     debug[MEMCHECK] = UntouchedStack();
   #endif
@@ -516,8 +519,10 @@ int16_t getNextCharToRequest() {
 //------------------------------------------------------------------------
 // MISC
 
-void (* resetFunc)(void)=0;
-
+void resetFunc(void)
+{
+  asm volatile ("  jmp 0"); 
+} 
 
 void setMspRequests() {
   if(fontMode) {

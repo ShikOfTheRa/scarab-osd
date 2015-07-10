@@ -119,6 +119,7 @@ timer;
 struct {
   uint8_t ident;
   uint8_t box;
+  uint8_t reset;
 }
 flags;
 
