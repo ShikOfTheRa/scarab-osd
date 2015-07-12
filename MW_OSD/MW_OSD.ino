@@ -121,7 +121,7 @@ void setup()
   #if defined GPSOSD
     GPS_SerialInit();
   #else
- //   setMspRequests();
+  setMspRequests();
   #endif
   #if defined FORCESENSORS
     MwSensorPresent |=GPSSENSOR;
@@ -425,7 +425,7 @@ void loop()
       flyTime++;
       flyingTime++;
       configMode=0;
- //     setMspRequests();
+      setMspRequests();
     }
     allSec++;
 /*

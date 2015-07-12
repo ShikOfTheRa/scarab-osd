@@ -323,6 +323,8 @@ void serialMSPCheck()
       I8[i] = read8();
       D8[i] = read8();
     }
+    modeMSPRequests &=~ REQ_MSP_PID;
+
   }
 
 #ifdef BOXNAMES
@@ -784,7 +786,7 @@ void configSave()
   }
   mspWriteChecksum();
   
-#ifdef CLEANFLIGHT190
+#if defined CLEANFLIGHT190
   mspWriteRequest(MSP_SET_RC_TUNING,11);
   mspWrite8(rcRate8);
   mspWrite8(rcExpo8);
