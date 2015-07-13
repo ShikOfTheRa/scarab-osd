@@ -540,6 +540,9 @@ void setMspRequests() {
       REQ_MSP_ALTITUDE|
       REQ_MSP_RC_TUNING|
       REQ_MSP_PID|
+#ifdef defined BASEFLIGHT20150627
+      REQ_MSP_SET_CONFIG|
+#endif      
 #ifdef DEBUGMW
       REQ_MSP_DEBUG|
 #endif
@@ -583,8 +586,10 @@ void setMspRequests() {
       modeMSPRequests |= REQ_MSP_RC;
     if(mode.armed == 0)
       modeMSPRequests |=REQ_MSP_BOX|REQ_MSP_RC;
+#if defined MULTIWII_V24
     if(MwSensorActive&mode.gpsmission)
     modeMSPRequests |= REQ_MSP_NAV_STATUS;
+#endif
   }
  
   if(Settings[S_MAINVOLTAGE_VBAT] ||

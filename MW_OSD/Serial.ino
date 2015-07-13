@@ -279,6 +279,18 @@ void serialMSPCheck()
 #endif
  }
 
+#if defined (BASEFLIGHT20150627)  
+  if (cmdMSP==MSP_SET_CONFIG)
+  {
+    for(uint8_t i=0; i<SETCONGFIG; i++) {
+      bfconfig[i]=read8();
+    }
+    PitchRate = bfconfig[18];
+    rollRate = bfconfig[19];
+    modeMSPRequests &=~ MSP_SET_CONFIG;    
+  }
+#endif  
+  
   if (cmdMSP==MSP_RC_TUNING)
   {
     #ifdef CLEANFLIGHT190
@@ -584,7 +596,7 @@ void serialMenuCommon()
 	    if(ROW==8) thrExpo8=thrExpo8+menudir;
 	    if(ROW==9) tpa_breakpoint16=tpa_breakpoint16+menudir;
           }
-        #elif defined(CLEANFLIGHT180)
+        #elif defined(CLEANFLIGHT180) || defined (BASEFLIGHT20150627)
           if(configPage == 2 && COL == 3) {
 	    if(ROW==1) rcRate8=rcRate8+menudir;
 	    if(ROW==2) rcExpo8=rcExpo8+menudir;
@@ -822,6 +834,16 @@ void configSave()
   mspWrite8(thrExpo8);
   mspWriteChecksum();
  #endif
+
+#if defined BASEFLIGHT20150627
+  mspWriteRequest(MSP_SET_CONFIG,25);
+  bfconfig[18] =PitchRate;
+  bfconfig[19] =rollRate;
+  for(uint8_t i=0; i<SETCONGFIG; i++) {
+    mspWrite8(bfconfig[i]);
+  }
+  mspWriteChecksum();
+#endif
 
   writeEEPROM();
   mspWriteRequest(MSP_EEPROM_WRITE,0);

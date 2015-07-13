@@ -7,10 +7,56 @@
 //#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 
-/********************  GPSOSD definitions  *********************/
-#define GPSOSDARMDISTANCE   20 // distance from home in meters when GPSOSD arms. Starts flight timer etc.
-#define GPSOSDHOMEDISTANCE  40 // distance from home in meters when GPSOSD is home. When speed is low it disarms and displays summary screen.
+/********************  CONTROLLER rule definitions  **********************/
 
+#ifdef NOCONTROLLER
+  #undef  INTRO_MENU
+  #undef  MSPACTIVECHECK
+  #undef  SATACTIVECHECK
+  #undef  GPSACTIVECHECK
+  #undef  OSD_SWITCH_RC
+#endif
+
+#ifdef MULTIWII
+  #define MULTIWII_V24                // Using amperage corrections  
+//  #define MULTIWII_V23              // Using boxid  
+//  #define MULTIWII_V21              // Using boxnames
+#endif
+
+#ifdef CLEANFLIGHT //set up latest at time of release
+  #define CLEANFLIGHT190   //MSP added P+R+DTHR
+  //#define CLEANFLIGHT180           //MSP added P+R
+  //#define CLEANFLIGHT172           //default original MSP request
+#endif
+
+#ifdef BASEFLIGHT //set up latest at time of release
+  #define BASEFLIGHT20150627         //MSP added P+R
+  //#define BASEFLIGHT20150327       //default original MSP request
+#endif
+
+#if defined(HARIKIRI) || defined(MULTIWII_V21)                     
+  #define BOXNAMES                  // required to support legacy protocol
+#endif
+
+#ifdef FIXEDWING                     
+  #define USEGPSHEADING
+  #define USEGPSALTITUDE
+  #if defined USEMAGHEADING 
+    #undef USEGPSHEADING
+  #endif  
+  #if defined USEBAROALTITUDE
+    #undef USEGPSALTITUDE
+  #endif
+  #define FORCESENSORS
+#endif
+
+#if defined (BASEFLIGHT20150327) || defined (BASEFLIGHT20150627)|| defined (CLEANFLIGHT190) ||defined (CLEANFLIGHT180) ||defined (CLEANFLIGHT172) ||defined (MULTIWII_V24)                
+    #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
+#endif
+
+#if defined (BASEFLIGHT20150627)
+  #define SETCONFIG 25                  //for BASEFLIGHT20150627 to use MSP_SET_CONFIG
+#endif
 
 /********************   ENABLE/DISABLE CONFIG PAGES via STICK MENU     *********************/
 //large memory savings if not needed, comment to disable
@@ -31,49 +77,6 @@
 #define RSSIPIN       A3              
 #define PWMRSSIPIN    A3              
 #define LEDPIN        7
-
-
-/********************  CONTROLLER rule definitions  **********************/
-#if defined (BASEFLIGHT) || defined (CLEANFLIGHT) ||defined (CLEANFLIGHT180) ||defined (CLEANFLIGHT172)                 
-    #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
-#endif
-
-#if defined(HARIKIRI) || defined(MULTIWII_V21)                     
-  #define BOXNAMES                  // required to support legacy protocol
-#endif
-
-#ifdef NOCONTROLLER
-  #undef  INTRO_MENU
-  #undef  MSPACTIVECHECK
-  #undef  SATACTIVECHECK
-  #undef  GPSACTIVECHECK
-  #undef  OSD_SWITCH_RC
-#endif
-
-#ifdef MULTIWII_V24                     
-#endif
-
-#ifdef CLEANFLIGHT //set up latest at time of release
-  #define CLEANFLIGHT190
-//  #define CLEANFLIGHT180
-//  #define CLEANFLIGHT172
-#endif
-
-#ifdef BASEFLIGHT //set up latest at time of release
-
-#endif
-
-#ifdef FIXEDWING                     
-  #define USEGPSHEADING
-  #define USEGPSALTITUDE
-  #if defined USEMAGHEADING 
-    #undef USEGPSHEADING
-  #endif  
-  #if defined USEBAROALTITUDE
-    #undef USEGPSALTITUDE
-  #endif
-  #define FORCESENSORS
-#endif
 
 // All aircraft / FC types defaults...
 #define RESETGPSALTITUDEATARM
@@ -118,7 +121,11 @@
     #define DIVIDER5v       0.0005      // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
 #endif
 
+
 /********************  GPS OSD rule definitions  *********************/
+
+#define GPSOSDARMDISTANCE   20 // distance from home in meters when GPSOSD arms. Starts flight timer etc.
+#define GPSOSDHOMEDISTANCE  40 // distance from home in meters when GPSOSD is home. When speed is low it disarms and displays summary screen.
 
 #if defined GPSOSD_UBLOX
   #define UBLOX
