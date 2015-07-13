@@ -15,19 +15,31 @@
 
  
 /********************       CONTROLLER SOFTWARE      *********************/
-//Choose ONLY ONE option:-
-#define MULTIWII_V24                // Uncomment this if you are using MW versions 2.4  
+// Choose ONLY ONE option:-
+// Note - choose carefully to ensure correct settings are written to flight controller.
+// The first three are for convenience - they set the OSD for the latest FC version. 
+// Remember to update MWOSD when updating FC software
+
+// Choose ONLY ONE option from the following long list :-
+
+#define MULTIWII                  // Uncomment this if you are using latest MULTIWII version from repository (2.4 at time of this MWOSD release)
+//#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.06.27 at time of this MWOSD release)
+//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9.0 at time or this MWOSD release)
+
+//#define MULTIWII_V24              // Uncomment this if you are using MW versions 2.4  
 //#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V21              // Uncomment this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
-//#define BASEFLIGHT                // Uncomment this if you are using BASEFLIGHT (Full support ONLY up to and inluding Stable 2015.03.27). Later release unable to set PR rates
-//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9.0 at time or release)
+//#define BASEFLIGHT20150327        // Uncomment this if you are using BASEFLIGHT up to and including version Stable 2015.03.27
+//#define BASEFLIGHT20150627        // Uncomment this if you are using BASEFLIGHT version Stable 2015.06.27 onwards
 //#define CLEANFLIGHT172            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.7.2
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1 
+//#define CLEANFLIGHT190            // Uncomment this if you are using CLEANFLIGHT versions 1.9.0 onwards
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
-//#define GPSOSD_UBLOX       // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+//#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
 //#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
 //#define GPSOSD_MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
 //#define NOCONTROLLER              // Uncomment this if you ahave nothing connected to the serial port - no controller or GPS module
+
 
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/

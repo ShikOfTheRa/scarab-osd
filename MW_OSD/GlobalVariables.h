@@ -134,6 +134,9 @@ uint16_t cell_data[6]={0,0,0,0,0,0};
 uint16_t cycleTime;
 uint16_t I2CError;
 uint8_t oldROW=0;
+#if defined SETCONFIG
+  uint8_t bfconfig[SETCONFIG];
+#endif
 
 // Config status and cursor location
 uint8_t screenlayout=0;
@@ -647,6 +650,12 @@ uint16_t flyingTime=0;
 
 #define MSP_DEBUGMSG             253   //out message         debug string buffer
 #define MSP_DEBUG                254   //out message         debug1,debug2,debug3,debug4
+
+// Baseflight specific
+#define MSP_SET_CONFIG           67    //in message          baseflight-specific settings save
+#define MSP_CONFIG               66    //out message         baseflight-specific settings that aren't covered elsewhere
+#define SETCONGFIG 25                  //for BASEFLIGHT20150627
+
 // End of imported defines from Multiwii Serial Protocol MultiWii_shared svn r1333
 // ---------------------------------------------------------------------------------------
 
@@ -745,7 +754,7 @@ const char configMsg24[] PROGMEM = "YAW RATE";
 const char configMsg25[] PROGMEM = "TPA";
 const char configMsg26[] PROGMEM = "THROTTLE MID";
 const char configMsg27[] PROGMEM = "THROTTLE EXPO";
-#if defined(CLEANFLIGHT180)
+#if defined(CLEANFLIGHT180)|| defined (BASEFLIGHT20150627)
   const char configMsg23a[] PROGMEM = "ROLL RATE";
   const char configMsg23b[] PROGMEM = "PITCH RATE";
 #endif
@@ -894,6 +903,7 @@ uint16_t screenPosition[POSITIONS_SETTINGS];
 #define REQ_MSP_DEBUG     (1 << 13)
 #define REQ_MSP_CELLS     (1 << 14)
 #define REQ_MSP_NAV_STATUS  32768 //(1 << 15)
+#define REQ_MSP_CONFIG  32768 //(1 << 15)
 
 // Menu
 //PROGMEM const char *menu_stats_item[] =
@@ -931,7 +941,7 @@ const PROGMEM char * const menu_rc[] =
     configMsg26,
     configMsg27,
     configMSg28,
-  #elif defined(CLEANFLIGHT180)
+  #elif defined(CLEANFLIGHT180) || defined (BASEFLIGHT20150627) 
     configMsg21,
     configMsg22,
     configMsg23a,
