@@ -280,14 +280,14 @@ void serialMSPCheck()
  }
 
 #if defined (BASEFLIGHT20150627)  
-  if (cmdMSP==MSP_SET_CONFIG)
+  if (cmdMSP==MSP_CONFIG)
   {
     for(uint8_t i=0; i<SETCONGFIG; i++) {
       bfconfig[i]=read8();
     }
-    PitchRate = bfconfig[18];
-    rollRate = bfconfig[19];
-    modeMSPRequests &=~ MSP_SET_CONFIG;    
+    rollRate = bfconfig[18];
+    PitchRate = bfconfig[19];
+    modeMSPRequests &=~ REQ_MSP_CONFIG;    
   }
 #endif  
   
@@ -837,8 +837,8 @@ void configSave()
 
 #if defined BASEFLIGHT20150627
   mspWriteRequest(MSP_SET_CONFIG,25);
-  bfconfig[18] =PitchRate;
-  bfconfig[19] =rollRate;
+  bfconfig[18] =rollRate;
+  bfconfig[19] =PitchRate;
   for(uint8_t i=0; i<SETCONGFIG; i++) {
     mspWrite8(bfconfig[i]);
   }

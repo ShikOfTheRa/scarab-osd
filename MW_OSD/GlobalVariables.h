@@ -653,6 +653,7 @@ uint16_t flyingTime=0;
 
 // Baseflight specific
 #define MSP_SET_CONFIG           67    //in message          baseflight-specific settings save
+#define MSP_CONFIG               66    //out message         baseflight-specific settings that aren't covered elsewhere
 #define SETCONGFIG 25                  //for BASEFLIGHT20150627
 
 // End of imported defines from Multiwii Serial Protocol MultiWii_shared svn r1333
@@ -902,7 +903,7 @@ uint16_t screenPosition[POSITIONS_SETTINGS];
 #define REQ_MSP_DEBUG     (1 << 13)
 #define REQ_MSP_CELLS     (1 << 14)
 #define REQ_MSP_NAV_STATUS  32768 //(1 << 15)
-#define REQ_MSP_SET_CONFIG  32768 //(1 << 15)
+#define REQ_MSP_CONFIG  32768 //(1 << 15)
 
 // Menu
 //PROGMEM const char *menu_stats_item[] =

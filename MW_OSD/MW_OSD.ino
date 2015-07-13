@@ -269,10 +269,17 @@ void loop()
          MSPcmdsend = MSP_CELLS;
          break;
 #endif
+#ifdef MULTIWII_V24
       case REQ_MSP_NAV_STATUS:
            if(MwSensorActive&mode.gpsmission)
          MSPcmdsend = MSP_NAV_STATUS;
       break;
+#endif
+#ifdef BASEFLIGHT20150627
+      case REQ_MSP_CONFIG:
+         MSPcmdsend = MSP_CONFIG;
+      break;
+#endif
     }
     
     if(!fontMode){
@@ -540,8 +547,8 @@ void setMspRequests() {
       REQ_MSP_ALTITUDE|
       REQ_MSP_RC_TUNING|
       REQ_MSP_PID|
-#ifdef defined BASEFLIGHT20150627
-      REQ_MSP_SET_CONFIG|
+#ifdef BASEFLIGHT20150627
+      REQ_MSP_CONFIG|
 #endif      
 #ifdef DEBUGMW
       REQ_MSP_DEBUG|
