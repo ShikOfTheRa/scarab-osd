@@ -127,6 +127,13 @@
 #define GPSOSDARMDISTANCE   20 // distance from home in meters when GPSOSD arms. Starts flight timer etc.
 #define GPSOSDHOMEDISTANCE  40 // distance from home in meters when GPSOSD is home. When speed is low it disarms and displays summary screen.
 
+#if defined PPMOSDCONTROL
+  #undef OSD_SWITCH
+  #undef OSD_SWITCH_RSSI
+  #undef INTPWMRSSI
+  #define OSD_SWITCH_RC               // Enables 3 way screen switch using a TX channel via FC. Specify channel on GUI (range 0-7 AUX1=4 AUX4=7)
+#endif
+
 #if defined GPSOSD_UBLOX
   #define UBLOX
 #endif
@@ -197,4 +204,33 @@
 #endif
 
 
+/********************  RX channel rule definitions  *********************/
+
+#if defined SERIAL_SUM_PPM_GS            //PITCH,YAW,THROTTLE,ROLL,AUX1,AUX2,AUX3,AUX4,8,9,10,11 //For Graupner/Spektrum    
+  #define ROLLSTICK        3
+  #define PITCHSTICK       0
+  #define YAWSTICK         1
+  #define THROTTLESTICK    2
+#elif defined SERIAL_SUM_PPM_RHF         //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4,8,9,10,11 //For Robe/Hitec/Futaba
+  #define ROLLSTICK        0
+  #define PITCHSTICK       1
+  #define YAWSTICK         3
+  #define THROTTLESTICK    2
+#elif defined SERIAL_SUM_PPM_M           //ROLL,PITCH,YAW,THROTTLE,AUX1,AUX2,AUX3,AUX4,8,9,10,11 //For Multiplex
+  #define ROLLSTICK        0
+  #define PITCHSTICK       1
+  #define YAWSTICK         2
+  #define THROTTLESTICK    3
+#elif defined SERIAL_SUM_PPM_HS          //PITCH,ROLL,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4,8,9,10,11 //For some Hitec/Sanwa/Others
+  #define ROLLSTICK        1
+  #define PITCHSTICK       0
+  #define YAWSTICK         3
+  #define THROTTLESTICK    2
+#else
+  // RX CHANEL IN MwRcData table
+  #define ROLLSTICK        0
+  #define PITCHSTICK       1
+  #define YAWSTICK         2
+  #define THROTTLESTICK    3
+#endif
 
