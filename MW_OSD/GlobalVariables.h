@@ -30,12 +30,6 @@
 
 #define PIDITEMS 10
 
-// RX CHANEL IN MwRcData table
-#define ROLLSTICK        0
-#define PITCHSTICK       1
-#define YAWSTICK         2
-#define THROTTLESTICK    3
-
 // STICK POSITION
 #define MAXSTICK         1900
 #define MINSTICK         1100

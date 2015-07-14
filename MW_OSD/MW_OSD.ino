@@ -929,3 +929,40 @@ ISR(PCINT1_vect) { //
 }
 #endif
 
+
+#if defined PPMOSDCONTROL
+void initRSSIint() { // enable ONLY RSSI pin A3 for interrupt (bit 3 on port C)
+  DDRC &= ~(1 << DDC3);
+  PORTC |= (1 << PORTC3);
+  cli();
+  PCICR =  (1 << PCIE1);
+  PCMSK1 = (1 << PCINT11);
+  sei();
+}
+
+
+ISR(PCINT1_vect) { //
+  static uint16_t PulseStart;
+  static uint8_t RCchan = 0; 
+  static uint16_t LastTime = 0; 
+  uint8_t pinstatus;
+  pinstatus = PINC;
+  sei();
+  uint16_t CurrentTime;
+  uint16_t PulseDuration;
+  CurrentTime = micros();
+  if((CurrentTime-LastTime)>3000) RCchan = 0; // assume this is PPM gap
+  LastTime = CurrentTime;
+  if (!(pinstatus & (1<<DDC3))) { // RSSI pin A3 - ! measures low duration
+    PulseDuration = CurrentTime-PulseStart; 
+    if ((750<PulseDuration) && (PulseDuration<2250)) {
+      MwRcData[RCchan] = PulseDuration; // Val updated
+    }
+    RCchan++;
+  } 
+  else {
+    PulseStart = CurrentTime;
+  }
+}
+#endif
+

@@ -63,6 +63,14 @@
 //#define OSD_SWITCH_RSSI           // Enables 3 way screen switch using a TX channel via a RX channel connected to the OSD RSSI pin. Typically used for GPSOSD.
 
 
+/********************       GPS OSD settings      *********************/
+//#define PPMOSDCONTROL               // Enables full OSD menu and screen switching using a PPM signal into OSD RSSI pin 
+//#define SERIAL_SUM_PPM_RHF          // Enable for Robe/Hitec/Futaba
+//#define SERIAL_SUM_PPM_GS           // Enable for Graupner/Spektrum    
+//#define SERIAL_SUM_PPM_M            // Enable for Multiplex
+//#define SERIAL_SUM_PPM_HS           // Enable for Hitec/Sanwa
+
+
 /********************       FILTER settings      *********************/
 //Choose ONLY ONE option:
 #define STAGE2FILTER               // Enable for smoother readings of voltage / current / RSSI. 
