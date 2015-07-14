@@ -34,7 +34,11 @@ Support for GPSOSD screen layout switching - resolved in master / for next relea
 
 ## Enhancement requests for future releases: ##
 
-Support for either NAZA or APM
+Support for NAZA
+
+Support for APM
+
+Support for OP
 
 Additional AHI layouts - multiple pitch angles
 
