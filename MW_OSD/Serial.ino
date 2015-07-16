@@ -296,8 +296,8 @@ void serialMSPCheck()
     #ifdef CLEANFLIGHT190
       rcRate8 = read8();
       rcExpo8 = read8();
-      PitchRate = read8();
       rollRate = read8();
+      PitchRate = read8();
       yawRate = read8();
       dynThrPID = read8();
       thrMid8 = read8();
@@ -308,8 +308,8 @@ void serialMSPCheck()
     #elif defined CLEANFLIGHT180
       rcRate8 = read8();
       rcExpo8 = read8();
-      PitchRate = read8();
       rollRate = read8();
+      PitchRate = read8();
       yawRate = read8();
       dynThrPID = read8();
       thrMid8 = read8();
@@ -802,8 +802,8 @@ void configSave()
   mspWriteRequest(MSP_SET_RC_TUNING,11);
   mspWrite8(rcRate8);
   mspWrite8(rcExpo8);
-  mspWrite8(PitchRate);
   mspWrite8(rollRate);
+  mspWrite8(PitchRate);
   mspWrite8(yawRate);
   mspWrite8(dynThrPID);
   mspWrite8(thrMid8);
@@ -815,8 +815,8 @@ void configSave()
   mspWriteRequest(MSP_SET_RC_TUNING,10);
   mspWrite8(rcRate8);
   mspWrite8(rcExpo8);
-  mspWrite8(PitchRate);
   mspWrite8(rollRate);
+  mspWrite8(PitchRate);
   mspWrite8(yawRate);
   mspWrite8(dynThrPID);
   mspWrite8(thrMid8);
