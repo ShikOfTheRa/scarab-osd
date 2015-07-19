@@ -6043,7 +6043,7 @@ public void CreateFontFile(){
  //Output.println("done");
  Output.flush(); // Writes the remaining data to the file
   Output.close();  
-  img_Clear = LoadFont("/data/default.mcm");  
+  img_Clear = LoadFont("data/custom.mcm");  
 }
 
 
