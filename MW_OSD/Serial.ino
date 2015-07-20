@@ -277,6 +277,11 @@ void serialMSPCheck()
 #ifdef AMPERAGECORRECT
     MWAmperage = MWAmperage * 10;
 #endif
+#ifdef AMPERAGE100MA
+    //MW_OSD.ino will 'amperage = MWAmperage / 100;' so premultiply values by 100
+    MWAmperage = MWAmperage * 100;
+#endif
+
  }
 
 #if defined (BASEFLIGHT20150627)  
