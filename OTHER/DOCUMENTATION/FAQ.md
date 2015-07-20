@@ -38,6 +38,7 @@
 7 My OSD turns off in flight / after powering up motors?
   * Ensure you have a good ground
   * Use a big cap (e.g. 3300uf) on the 5v supply to the OSD
+  * Enable #define MAXSTALLDETECT in config or upgrade if not listed as an option
 
 ---
 
@@ -142,6 +143,20 @@ HARAKIRI USERS - ensure protocol set as follows:
 20 I get unspecified Java or Java path error. How do I fix it.
   * There are many type of Java error. One of the more common ones has a solution in the video below:
   * https://www.youtube.com/watch?v=66crhKstr70
+
+---
+
+21 I get "Waiting FC” or "Waiting OSD". How do I fix it.
+  * Ensure you are connected to the correct com port. 
+  * Ensure baud rate in GUI matches baud rate on the OSD
+  * Ensure only the OSD is connected to programmer
+  * If using OSDOGE ensure switch is in correct position for programming
+  * If using cheap OSDOGE/BROSD clone, disconnect board from the Naze32
+  * Restart PC – especially if hibernated
+  * Ensure physical connections are correct. Test by re-uploading MWOSD if necessary to verify
+  * Upload EEPROM_Clear example sketch then re-upload MWOSD sketch. 
+  * Set serial port default value on PC to be same as OSD (e.g. device manager>ports>comx>port settings)
+
 
 ---
 
