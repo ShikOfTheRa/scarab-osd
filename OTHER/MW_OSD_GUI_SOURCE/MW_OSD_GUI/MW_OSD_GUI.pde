@@ -1149,6 +1149,9 @@ void draw() {
       SimControlToggle.setValue(1);
     }
   }
+  if (SimControlToggle.getValue()==0){
+    toggleModeItems[0].setValue(0);
+  }
     
     if (millis()<ReadConfigMSPMillis){
       if (init_com==1){
