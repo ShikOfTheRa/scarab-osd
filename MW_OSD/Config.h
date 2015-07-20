@@ -194,4 +194,8 @@
 //#define TEMPSENSOR                // Enable if you have a hardware temperature sensor - DEPRECATED
 #define TEMPERATUREMAX 50           // Temperature warning value
 
+/********************  FC CURRENT sensor units    *********************/
+#ifdef MULTIWII_V24                     
+//  #define AMPERAGE100MA         // unccoment if your FC sends current in "1unit = 100mA" units
+#endif
 
