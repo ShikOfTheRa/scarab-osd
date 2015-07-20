@@ -142,3 +142,9 @@ HARAKIRI USERS - ensure protocol set as follows:
 20 I get unspecified Java or Java path error. How do I fix it.
   * There are many type of Java error. One of the more common ones has a solution in the video below:
   * https://www.youtube.com/watch?v=66crhKstr70
+
+---
+
+Cameras with known compatibility issues with MAX7456 chip
+  * Runcam sky - http://shop.runcam.com/runcam-sky/
+
