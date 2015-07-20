@@ -1149,6 +1149,9 @@ void draw() {
       SimControlToggle.setValue(1);
     }
   }
+  if (SimControlToggle.getValue()==0){
+    toggleModeItems[0].setValue(0);
+  }
     
     if (millis()<ReadConfigMSPMillis){
       if (init_com==1){
@@ -1156,7 +1159,7 @@ void draw() {
 //        toggleMSP_Data = true;
         int progress=100*eeaddressGUI/CONFIGITEMS;
         if (progress==0){
-          progresstxt="Waiting FC...";   
+          progresstxt="Waiting OSD...";   
         }
         else{
           progresstxt="Read: "+progress+"%";   
@@ -1173,7 +1176,7 @@ void draw() {
           progress=100*eeaddressGUI/(CONFIGITEMS + (hudoptions*3*2));
         }
         if (progress==0){
-          progresstxt="Waiting FC...";   
+          progresstxt="Waiting OSD...";   
         }
         else{
           if(eeaddressGUI>CONFIGITEMS){
