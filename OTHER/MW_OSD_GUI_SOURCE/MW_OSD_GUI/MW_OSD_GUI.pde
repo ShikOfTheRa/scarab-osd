@@ -1156,7 +1156,7 @@ void draw() {
 //        toggleMSP_Data = true;
         int progress=100*eeaddressGUI/CONFIGITEMS;
         if (progress==0){
-          progresstxt="Waiting FC...";   
+          progresstxt="Waiting OSD...";   
         }
         else{
           progresstxt="Read: "+progress+"%";   
@@ -1173,7 +1173,7 @@ void draw() {
           progress=100*eeaddressGUI/(CONFIGITEMS + (hudoptions*3*2));
         }
         if (progress==0){
-          progresstxt="Waiting FC...";   
+          progresstxt="Waiting OSD...";   
         }
         else{
           if(eeaddressGUI>CONFIGITEMS){
