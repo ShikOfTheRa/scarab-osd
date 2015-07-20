@@ -89,8 +89,8 @@
 
 
 /********************       WARNING/STATUS settings      *********************/
-//#define SATACTIVECHECK            // Alerts if sats below MINSATFIX - in addition to flashing sat indicator
-//#define GPSACTIVECHECK 5          // Alerts if no GPS data for more than x secs. Sets GPS sats to zero
+#define SATACTIVECHECK            // Alerts if sats below MINSATFIX - in addition to flashing sat indicator
+#define GPSACTIVECHECK 5          // Alerts if no GPS data for more than x secs. Sets GPS sats to zero
 #define MSPACTIVECHECK 3          // Alerts if no Flight controller data for more than x secs. 
 #define DISP_LOW_VOLTS_WARNING    // Alerts if low voltage
 #define FORCE_DISP_LOW_VOLTS      // Enable display low voltage warning override for screen layouts where its disabled

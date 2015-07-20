@@ -121,7 +121,7 @@ void setup()
   #if defined GPSOSD
     GPS_SerialInit();
   #else
-  setMspRequests();
+//  setMspRequests();
   #endif
   #if defined FORCESENSORS
     MwSensorPresent |=GPSSENSOR;
@@ -313,7 +313,7 @@ void loop()
         ROW=10;
         COL=1;
         configMode=1;
-        setMspRequests();
+//        setMspRequests();
       }
       if(configMode)
       {
@@ -432,7 +432,7 @@ void loop()
       flyTime++;
       flyingTime++;
       configMode=0;
-      setMspRequests();
+//      setMspRequests();
     }
     allSec++;
 /*
@@ -448,7 +448,7 @@ void loop()
     if(timer.magCalibrationTimer>0) timer.magCalibrationTimer--;
     if(timer.rssiTimer>0) timer.rssiTimer--;
   }
-
+  setMspRequests();
   serialMSPreceive(1);
 }  // End of main loop
 
@@ -473,7 +473,7 @@ void initFontMode() {
   // queue first char for transmition.
   retransmitQueue = 0x80;
   fontMode = 1;
-  setMspRequests();
+//  setMspRequests();
 }
 
 
@@ -511,7 +511,7 @@ int16_t getNextCharToRequest() {
 
   if(temp1 == 0) {
     fontMode = 0;                            // Exit font mode
-  setMspRequests();
+//  setMspRequests();
     return -1;
   }
 
