@@ -842,6 +842,9 @@ void ProcessSensors(void) {
     }  
   }
   else{
+#ifdef AMPERAGECORRECT
+      amperage = MWAmperage / 10;
+#endif
       amperage = MWAmperage / 100;
   }
 

@@ -274,9 +274,6 @@ void serialMSPCheck()
     pMeterSum=read16();
     MwRssi = read16();
     MWAmperage = read16();
-#ifdef AMPERAGECORRECT
-    MWAmperage = MWAmperage * 10;
-#endif
  }
 
 #if defined (BASEFLIGHT20150627)  
