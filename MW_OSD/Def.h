@@ -17,25 +17,21 @@
   #undef  OSD_SWITCH_RC
 #endif
 
-#ifdef MULTIWII
+#ifdef MULTIWII       //set up latest at time of release
   #define MULTIWII_V24                // Using amperage corrections  
 //  #define MULTIWII_V23              // Using boxid  
 //  #define MULTIWII_V21              // Using boxnames
 #endif
 
-#ifdef CLEANFLIGHT //set up latest at time of release
+#ifdef CLEANFLIGHT    //set up latest at time of release
   #define CLEANFLIGHT190   //MSP added P+R+DTHR
   //#define CLEANFLIGHT180           //MSP added P+R
   //#define CLEANFLIGHT172           //default original MSP request
 #endif
 
-#ifdef BASEFLIGHT //set up latest at time of release
+#ifdef BASEFLIGHT     //set up latest at time of release
   #define BASEFLIGHT20150627         //MSP added P+R
   //#define BASEFLIGHT20150327       //default original MSP request
-#endif
-
-#if defined(HARIKIRI) || defined(MULTIWII_V21)                     
-  #define BOXNAMES                  // required to support legacy protocol
 #endif
 
 #ifdef FIXEDWING                     
@@ -50,12 +46,42 @@
   #define FORCESENSORS
 #endif
 
-#if defined (BASEFLIGHT20150327) || defined (BASEFLIGHT20150627)|| defined (CLEANFLIGHT190) ||defined (CLEANFLIGHT180) ||defined (CLEANFLIGHT172) ||defined (MULTIWII_V24)                
-    #define AMPERAGECORRECT         // required to use Higher MW amperage but with less resolution
+#if defined(HARIKIRI)
+  #define BOXNAMES                  // required to support legacy protocol
+#endif
+
+#if defined (BASEFLIGHT20150327)            
+  #define AMPERAGE_10ma
 #endif
 
 #if defined (BASEFLIGHT20150627)
+  #define AMPERAGE_10ma
   #define SETCONFIG 25                  //for BASEFLIGHT20150627 to use MSP_SET_CONFIG
+#endif
+
+#if defined (CLEANFLIGHT190)         
+  #define AMPERAGE_10ma
+#endif
+
+#if defined (CLEANFLIGHT180)
+  #define AMPERAGE_10ma
+#endif
+
+#if defined (CLEANFLIGHT172)
+  #define AMPERAGE_10ma
+#endif
+
+#if defined (MULTIWII_V24)                
+  #define AMPERAGE_100ma
+#endif
+
+#if defined (MULTIWII_V23)                
+  #define AMPERAGE_1ma
+#endif
+
+#if defined (MULTIWII_V21)                
+  #define AMPERAGE_1ma         
+  #define BOXNAMES                  // required to support legacy protocol
 #endif
 
 /********************   ENABLE/DISABLE CONFIG PAGES via STICK MENU     *********************/

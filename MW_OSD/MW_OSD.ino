@@ -842,10 +842,16 @@ void ProcessSensors(void) {
     }  
   }
   else{
-#ifdef AMPERAGECORRECT
+#ifdef AMPERAGE_100ma
+      amperage = MWAmperage ;
+#elif AMPERAGE_10ma
       amperage = MWAmperage / 10;
-#endif
+#elif AMPERAGE_1ma
       amperage = MWAmperage / 100;
+#else
+      amperage = MWAmperage / 100;
+#endif
+
   }
 
 //-------------- RSSI
