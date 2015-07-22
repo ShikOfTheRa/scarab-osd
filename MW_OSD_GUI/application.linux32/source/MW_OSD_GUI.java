@@ -174,7 +174,7 @@ ControlP5 SmallcontrolP5;
 ControlP5 ScontrolP5;
 ControlP5 FontGroupcontrolP5;
 ControlP5 GroupcontrolP5;
-Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage; 
+Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage; 
 Textlabel txtlblLayoutTxt,txtlblLayoutEnTxt, txtlblLayoutHudTxt; 
 Textlabel txtlblLayoutTxt2,txtlblLayoutEnTxt2, txtlblLayoutHudTxt2; 
 ListBox commListbox,baudListbox;
@@ -250,6 +250,7 @@ int inByte = -1;    // Incoming serial data
 int[] serialInArray = new int[3];    // Where we'll put what we receive
 int[] debug = new int[4];    
 String progresstxt="";
+String msptxt="";
 int xcolor=20;  
 
 
@@ -833,6 +834,8 @@ DONATEimage  = loadImage("DON_def.png");
   //commListbox.addItem("Pass Thru Comm",commListMax+1); // addItem(name,value)
   txtlblWhichcom = controlP5.addTextlabel("txtlblWhichcom","No Port Selected",5,22).setGroup(G_PortStatus); // textlabel(name,text,x,y)
   txtmessage = controlP5.addTextlabel("txtmessage","",3,295); // textdebug
+  mspmessage = controlP5.addTextlabel("mspmessage","",XHUD+735,155); // textdebug
+//  XHUD+735,22
 
 // BUTTONS SELECTION ---------------------------------------
   
@@ -1226,6 +1229,7 @@ public void draw() {
     }
     
     txtmessage.setValue(progresstxt);
+    mspmessage.setValue(msptxt);
 
 // Layout editor
   txtlblLayoutTxt.setValue(" : "+ CONFIGHUDTEXT[hudeditposition]);
@@ -1276,6 +1280,7 @@ public void draw() {
   else {
     PortRead = false;
     MakePorts();
+    msptxt="";
   }
 
   if ((SendSim ==1) && (ClosePort == false)) 
@@ -4045,6 +4050,9 @@ public void evaluateCommand(byte cmd, int size) {
   PortRead = true;
   MakePorts(); 
   int icmd = PApplet.parseInt(cmd&0xFF);
+  msptxt="MSP: "+icmd;   
+  mspmessage.setValue(msptxt);
+
 //  if (icmd !=MSP_OSD)return;  //System.out.println("Not Valid Command");
   time2=time;
 
@@ -4097,6 +4105,8 @@ public void evaluateCommand(byte cmd, int size) {
       int cmd_internal = read8();
       PortRead = true;
       MakePorts();
+//      msptxt="MSP: "+cmd_internal;   
+
 
       if(cmd_internal == OSD_NULL) {
       }

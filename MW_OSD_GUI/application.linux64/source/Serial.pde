@@ -706,6 +706,9 @@ public void evaluateCommand(byte cmd, int size) {
   PortRead = true;
   MakePorts(); 
   int icmd = int(cmd&0xFF);
+  msptxt="MSP: "+icmd;   
+  mspmessage.setValue(msptxt);
+
 //  if (icmd !=MSP_OSD)return;  //System.out.println("Not Valid Command");
   time2=time;
 
@@ -758,6 +761,8 @@ public void evaluateCommand(byte cmd, int size) {
       int cmd_internal = read8();
       PortRead = true;
       MakePorts();
+//      msptxt="MSP: "+cmd_internal;   
+
 
       if(cmd_internal == OSD_NULL) {
       }
