@@ -140,8 +140,8 @@ HARAKIRI USERS - ensure protocol set as follows:
 
 ---
 
-20 I get unspecified Java or Java path error. How do I fix it.
-  * There are many type of Java error. One of the more common ones has a solution in the video below:
+20 I get c:\..... \java\javapath\javaw.exe unspecified error or javapath error. How do I fix it.
+  * There are many type of Java error. It us usually related to Java not setting up paths correctly. The most common ones have a solution in the video below:
   * https://www.youtube.com/watch?v=66crhKstr70
 
 ---
@@ -157,6 +157,11 @@ HARAKIRI USERS - ensure protocol set as follows:
   * Upload EEPROM_Clear example sketch then re-upload MWOSD sketch. 
   * Set serial port default value on PC to be same as OSD (e.g. device manager>ports>comx>port settings)
 
+---
+
+22 I get A screen full of error messages trying to load the GUI - inside the text is "Can't load AMD 64-bit .dll on a IA 32-bit platform" 
+  * You are probably trying to run 64 bit MWOSD GUI on a PC running 32 bit java
+  * Try running 32 bit MWOSD GUI instead or change java to 64 bit version instead. 
 
 ---
 
