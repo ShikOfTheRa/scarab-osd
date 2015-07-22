@@ -842,11 +842,11 @@ void ProcessSensors(void) {
     }  
   }
   else{
-#ifdef AMPERAGE_100ma
+#if defined AMPERAGE_100ma
       amperage = MWAmperage ;
-#elif AMPERAGE_10ma
+#elif defined AMPERAGE_10ma
       amperage = MWAmperage / 10;
-#elif AMPERAGE_1ma
+#elif defined AMPERAGE_1ma
       amperage = MWAmperage / 100;
 #else
       amperage = MWAmperage / 100;
