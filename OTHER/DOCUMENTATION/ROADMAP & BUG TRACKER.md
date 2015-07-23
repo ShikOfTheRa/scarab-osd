@@ -62,7 +62,7 @@ Ability to amend all PID settings from menu
 
 support for cleanflight / baseflight loop time change
 
-pitch / roll angles with alarm
+pitch / roll angles alarm
 
 Support for 8 GUI layouts selectable from OSD menu at field
 
