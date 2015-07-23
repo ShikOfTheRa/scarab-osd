@@ -562,7 +562,13 @@ void handleRawRC() {
 void serialMenuCommon()
   {
     if((ROW==10)&&(COL==3)) {
-      constrain(menudir,-1,1);
+      if (menudir>1){
+        menudir=1;
+      }
+      if (menudir<-1){
+        menudir=-1;
+      }
+//      constrain(menudir,-1,1);
       configPage=configPage+menudir;
     }
     if(configPage<MINPAGE) configPage = MAXPAGE;

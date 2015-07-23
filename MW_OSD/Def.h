@@ -122,7 +122,7 @@
     # define MAX7456RESET  10        // RESET
 #endif
 
-#ifdef WITESPYV1.1                     
+#ifdef WITESPYV1                     
     #define SWAPVOLTAGEPINS
     #define ALTERNATEDIVIDERS
 #endif

@@ -142,7 +142,7 @@ void displayTemperature(void)        // DEPRECATED RUSHDUINO SUPPORT
 void displayMode(void)
 {
   
-  int32_t dist;
+  uint32_t dist;
   if(Settings[S_UNITSYSTEM])
     dist = GPS_distanceToHome * 3.2808;           // mt to feet
   else
@@ -704,7 +704,7 @@ void displayGPSPosition(void)
     return;
   if (!MwSensorActive&mode.gpshome)
     return;
-  if(Settings[S_COORDINATES]|MwSensorActive&mode.gpshome){
+  if(Settings[S_COORDINATES]|(MwSensorActive&mode.gpshome)){
 //    if(MwSensorActive&mode.gpshome) {
 //      if(!Settings[S_GPSCOORDTOP])
 //        position = getPosition(MwGPSLatPosition);
@@ -759,7 +759,7 @@ void displayGPS_speed(void)
 {
   if(!GPS_fix) return;
   if(!armed) GPS_speed=0;
-  int xx;
+  uint16_t xx;
   if(!Settings[S_UNITSYSTEM])
     xx = GPS_speed * 0.036;           // From MWii cm/sec to Km/h
   else
@@ -789,7 +789,7 @@ void displayGPS_time(void)       //local time of coord calc - haydent
 //convert to local
 
 //format and display
-  uint16_t milli = local % 1000;//get milli for later
+//  uint16_t milli = local % 1000;//get milli for later
   uint32_t seconds = (local / 1000) % 86400;//remove millisonds and whole days
   
   formatTime(seconds, screenBuffer, 1);
@@ -851,7 +851,7 @@ void displayDistanceToHome(void)
   if(!GPS_fix)
     return;
 
-  int16_t dist;
+  uint16_t dist;
   if(Settings[S_UNITSYSTEM])
     dist = GPS_distanceToHome * 3.2808;           // mt to feet
   else
@@ -1414,8 +1414,8 @@ void mapmode(void) {
   if(!fieldIsVisible(MapModePosition))
     return;
     
-  int8_t xdir;
-  int8_t ydir;
+  int8_t xdir=0;
+  int8_t ydir=0;
   int16_t targetx;
   int16_t targety;
   int16_t range=200;

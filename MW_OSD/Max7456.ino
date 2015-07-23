@@ -115,9 +115,8 @@ uint8_t spi_transfer(uint8_t data)
 
 void MAX7456Setup(void)
 {
-  uint8_t MAX7456_reset;
+  uint8_t MAX7456_reset=0x02;
   uint8_t MAX_screen_rows;
-
 
   pinMode(MAX7456RESET,OUTPUT);
   digitalWrite(MAX7456RESET,LOW); //force reset
@@ -171,24 +170,7 @@ void MAX7456Setup(void)
       Settings[S_VIDEOSIGNALTYPE]=0;
   }
 #endif //AUTOCAM
- 
-  if(Settings[S_VIDEOSIGNALTYPE]) {   // PAL
-    //ENABLE_display = 0x48;
-    //ENABLE_display_vert = 0x4c;
-    MAX7456_reset = 0x42;
-    //DISABLE_display = 0x40;
-    MAX_screen_size = 480;
-    MAX_screen_rows = 16;
-  }
-  else {                              // NTSC
-    //ENABLE_display = 0x08;
-    //ENABLE_display_vert = 0x0c;
-    MAX7456_reset = 0x02;
-    //DISABLE_display = 0x00;
-    MAX_screen_size = 390;
-    MAX_screen_rows = 13;
-  }
-  
+   
 #ifdef FASTPIXEL 
   // force fast pixel timing
   MAX7456_Send(MAX7456ADD_OSDM, 0x00);
@@ -198,6 +180,17 @@ void MAX7456Setup(void)
   // MAX7456_Send(0x6c, srdata);
   delay(100);
 #endif
+
+  if(Settings[S_VIDEOSIGNALTYPE]) {   // PAL
+    MAX7456_reset = 0x42;
+    MAX_screen_size = 480;
+    MAX_screen_rows = 16;
+  }
+  else {                              // NTSC
+    MAX7456_reset = 0x02;
+    MAX_screen_size = 390;
+    MAX_screen_rows = 13;
+  }
 
   // set all rows to same charactor black/white level
   uint8_t x;
@@ -253,7 +246,7 @@ void MAX7456_WriteString_P(const char *string, int Adresse)
 
 void MAX7456_DrawScreen()
 {
-  int xx;
+  uint16_t xx;
   #ifdef USE_VSYNC
     digitalWrite(MAX7456SELECT,LOW);
     spi_transfer(DMM_reg);

@@ -63,6 +63,12 @@ uint16_t UntouchedStack(void)
 } 
 #endif
 
+// Workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34734
+//#ifdef PROGMEM
+//  #undef PROGMEM
+//  #define PROGMEM __attribute__((section(".progmem.data")))
+//#endif
+
 //------------------------------------------------------------------------
 #define MWVERS "MW-OSD - R1.4"  
 #define MWOSDVER 9      // for eeprom layout verification      
@@ -210,7 +216,7 @@ void loop()
   if((currentMillis - previous_millis_high) >= hi_speed_cycle)  // 20 Hz (Executed every 50ms)
   {
     previous_millis_high = previous_millis_high+hi_speed_cycle;       
-      uint8_t MSPcmdsend;
+      uint8_t MSPcmdsend=0;
       if(queuedMSPRequests == 0)
         queuedMSPRequests = modeMSPRequests;
       uint32_t req = queuedMSPRequests & -queuedMSPRequests;
