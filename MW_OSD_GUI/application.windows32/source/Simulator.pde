@@ -378,10 +378,10 @@ SGPS_altitude = ScontrolP5.addNumberbox("SGPS_altitude",0,5,40,40,14);
     .setPosition(25,5)
     .setSize(50,50)
     .setArrayValue(new float[] {50, 50})
-    .setMaxX(45) 
-    .setMaxY(-25) 
-    .setMinX(-45) 
-    .setMinY(25)
+    .setMaxX(90) 
+    .setMaxY(-90) 
+    .setMinX(-90) 
+    .setMinY(90)
     .setValueLabel("") 
     .setLabel("Roll/Pitch")
     .setGroup(SGAtitude)
@@ -1018,9 +1018,19 @@ void displayHorizon(int rollAngle, int pitchAngle)
   int minimalscreen=0 ; 
   if (toggleModeItems[9].getValue()>0) minimalscreen=1 ;
 
-   if (SimPosn[horizonPosition]<0x3FF){
+  int SYM_COLON = 0xB3;
+  String xx=str(pitchAngle/10);
+  if (SimPosn[pitchAnglePosition]<0x3FF){
+    mapchar(0x50, SimPosn[pitchAnglePosition]);
+    makeText(xx, SimPosn[pitchAnglePosition]+1);
+  }
+  if (SimPosn[rollAnglePosition]<0x3FF){
+    xx=str(rollAngle/10);
+    mapchar(0x52, SimPosn[rollAnglePosition]);
+    makeText(xx, SimPosn[rollAnglePosition]+1);
+  }
 
-  
+if (SimPosn[horizonPosition]<0x3FF){ 
   if(pitchAngle>250) pitchAngle=250;                //250
   if(pitchAngle<-200) pitchAngle=-200;
   if(rollAngle>400) rollAngle=400;

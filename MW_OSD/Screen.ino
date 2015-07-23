@@ -259,6 +259,29 @@ void displayCallsign(int cposition)
 void displayHorizon(int rollAngle, int pitchAngle)
 {
 
+#ifdef DISPLAY_PR
+  screenBuffer[0]=0x50;
+  int16_t xx=abs(pitchAngle/10);
+  uint8_t offset=1;
+  if(pitchAngle<0) {
+    screenBuffer[1]='-';
+    offset++;
+  }
+  itoa(xx, screenBuffer+offset,5);     
+  if(fieldIsVisible(pitchAnglePosition))
+    MAX7456_WriteString(screenBuffer,getPosition(pitchAnglePosition));
+  screenBuffer[0]=0x52;
+  offset=1;
+  xx=abs(rollAngle/10);
+  if(rollAngle<0) {
+    screenBuffer[1]='-';
+    offset++;
+  }
+  itoa(xx, screenBuffer+offset,5);     
+  if(fieldIsVisible(rollAnglePosition))
+    MAX7456_WriteString(screenBuffer,getPosition(rollAnglePosition));
+#endif
+
 #ifdef HORIZON
 
   if (Settings[S_SCROLLING]||Settings[S_SIDEBARTOPS]){

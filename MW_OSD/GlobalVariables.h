@@ -355,8 +355,8 @@ LINE12+22 |DISPLAY_ALWAYS,   // CurrentThrottlePosition
 LINE13+22 |DISPLAY_ALWAYS,   // flyTimePosition
 LINE13+22 |DISPLAY_ALWAYS,   // onTimePosition
 LINE11+11 |DISPLAY_ALWAYS,   // motorArmedPosition
-LINE10+2 |DISPLAY_ALWAYS,   // MwGPSLatPosition  SPARE
-LINE10+15 |DISPLAY_ALWAYS,   // MwGPSLonPosition SPARE
+LINE10+2 |DISPLAY_NEVER,   // pitchAnglePosition
+LINE10+15 |DISPLAY_NEVER,   // rollAnglePosition
 LINE01+2 |DISPLAY_ALWAYS,   // MwGPSLatPositionTop      // On top of screen
 LINE01+15 |DISPLAY_ALWAYS,   // MwGPSLonPositionTop      // On top of screen
 LINE12+3 |DISPLAY_ALWAYS,   // rssiPosition
@@ -398,8 +398,8 @@ LINE12+22 |DISPLAY_NEVER,   // CurrentThrottlePosition
 LINE13+22 |DISPLAY_ALWAYS,   // flyTimePosition
 LINE13+22 |DISPLAY_ALWAYS,   // onTimePosition
 LINE11+11 |DISPLAY_ALWAYS,   // motorArmedPosition
-LINE10+2 |DISPLAY_NEVER,   // MwGPSLatPosition  SPARE
-LINE10+15 |DISPLAY_NEVER,   // MwGPSLonPosition SPARE
+LINE10+2 |DISPLAY_NEVER,   // pitchAnglePosition
+LINE10+15 |DISPLAY_NEVER,   // rollAnglePosition
 LINE01+2 |DISPLAY_NEVER,   // MwGPSLatPositionTop      // On top of screen
 LINE01+15 |DISPLAY_NEVER,   // MwGPSLonPositionTop      // On top of screen
 LINE12+2 |DISPLAY_NEVER,   // rssiPosition
@@ -854,8 +854,8 @@ enum Positions {
   flyTimePosition,
   onTimePosition,
   motorArmedPosition,
-  MwGPSLatPositionunused,
-  MwGPSLonPositionunused,
+  pitchAnglePosition,
+  rollAnglePosition,
   MwGPSLatPositionTop,
   MwGPSLonPositionTop,
   rssiPosition,

@@ -16,8 +16,8 @@
   <DESCRIPTION desc="FlyTime"/>
   <DESCRIPTION desc="OnTime"/>
   <DESCRIPTION desc="Armed Status"/>
-  <DESCRIPTION desc="Unused"/>
-  <DESCRIPTION desc="Unused"/>
+  <DESCRIPTION desc="Pitch Angle"/>
+  <DESCRIPTION desc="Roll Angle"/>
   <DESCRIPTION desc="Latitude"/>
   <DESCRIPTION desc="Longitude"/>
   <DESCRIPTION desc="RSSI"/>
@@ -64,8 +64,8 @@
   <LAYOUT desc="flyTimePosition" enabled="1" hud="0" hudname="Shiki" value="382"/>
   <LAYOUT desc="onTimePosition" enabled="1" hud="0" hudname="Shiki" value="382"/>
   <LAYOUT desc="Armed Status" enabled="1" hud="0" hudname="Shiki" value="311"/>
-  <LAYOUT desc="MwGPSLatPosition" enabled="1" hud="0" hudname="Shiki" value="272"/>
-  <LAYOUT desc="MwGPSLonPosition" enabled="1" hud="0" hudname="Shiki" value="285"/>
+  <LAYOUT desc="PitchAnglePosition" enabled="0" hud="0" hudname="Shiki" value="233"/>
+  <LAYOUT desc="RollAnglePosition" enabled="0" hud="0" hudname="Shiki" value="263"/>
   <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="0" hudname="Shiki" value="2"/>
   <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="0" hudname="Shiki" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="1" hud="0" hudname="Shiki" value="333"/>
@@ -101,8 +101,8 @@
   <LAYOUT desc="flyTimePosition" enabled="1" hud="1" hudname="Minimal" value="382"/>
   <LAYOUT desc="onTimePosition" enabled="1" hud="1" hudname="Minimal" value="382"/>
   <LAYOUT desc="motorArmedPosition" enabled="1" hud="1" hudname="Minimal" value="311"/>
-  <LAYOUT desc="MwGPSLatPosition" enabled="0" hud="1" hudname="Minimal" value="272"/>
-  <LAYOUT desc="MwGPSLonPosition" enabled="0" hud="1" hudname="Minimal" value="285"/>
+  <LAYOUT desc="PitchAnglePosition" enabled="0" hud="1" hudname="Minimal" value="272"/>
+  <LAYOUT desc="RollAnglePosition" enabled="0" hud="1" hudname="Minimal" value="285"/>
   <LAYOUT desc="MwGPSLatPositionTop" enabled="0" hud="1" hudname="Minimal" value="2"/>
   <LAYOUT desc="MwGPSLonPositionTop" enabled="0" hud="1" hudname="Minimal" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="0" hud="1" hudname="Minimal" value="332"/>
@@ -138,8 +138,8 @@
   <LAYOUT desc="flyTimePosition" enabled="1" hud="2" hudname="EZ" value="382"/>
   <LAYOUT desc="onTimePosition" enabled="1" hud="2" hudname="EZ" value="382"/>
   <LAYOUT desc="motorArmedPosition" enabled="1" hud="2" hudname="EZ" value="311"/>
-  <LAYOUT desc="MwGPSLatPosition" enabled="0" hud="2" hudname="EZ" value="272"/>
-  <LAYOUT desc="MwGPSLonPosition" enabled="0" hud="2" hudname="EZ" value="285"/>
+  <LAYOUT desc="PitchAnglePosition" enabled="0" hud="2" hudname="EZ" value="272"/>
+  <LAYOUT desc="RollAnglePosition" enabled="0" hud="2" hudname="EZ" value="285"/>
   <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="2" hudname="EZ" value="2"/>
   <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="2" hudname="EZ" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="0" hud="2" hudname="EZ" value="332"/>
@@ -175,8 +175,8 @@
   <LAYOUT desc="flyTimePosition" enabled="0" hud="3" hudname="Blank screen" value="382"/>
   <LAYOUT desc="onTimePosition" enabled="0" hud="3" hudname="Blank screen" value="382"/>
   <LAYOUT desc="motorArmedPosition" enabled="0" hud="3" hudname="Blank screen" value="311"/>
-  <LAYOUT desc="MwGPSLatPosition" enabled="0" hud="3" hudname="Blank screen" value="272"/>
-  <LAYOUT desc="MwGPSLonPosition" enabled="0" hud="3" hudname="Blank screen" value="285"/>
+  <LAYOUT desc="PitchAnglePosition" enabled="0" hud="3" hudname="Blank screen" value="272"/>
+  <LAYOUT desc="RollAnglePosition" enabled="0" hud="3" hudname="Blank screen" value="285"/>
   <LAYOUT desc="MwGPSLatPositionTop" enabled="0" hud="3" hudname="Blank screen" value="2"/>
   <LAYOUT desc="MwGPSLonPositionTop" enabled="0" hud="3" hudname="Blank screen" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="0" hud="3" hudname="Blank screen" value="332"/>
@@ -212,8 +212,8 @@
   <LAYOUT desc="flyTimePosition" enabled="1" hud="4" hudname="Map" value="382"/>
   <LAYOUT desc="onTimePosition" enabled="1" hud="4" hudname="Map" value="382"/>
   <LAYOUT desc="motorArmedPosition" enabled="1" hud="4" hudname="Map" value="311"/>
-  <LAYOUT desc="MwGPSLatPosition" enabled="0" hud="4" hudname="Map" value="272"/>
-  <LAYOUT desc="MwGPSLonPosition" enabled="0" hud="4" hudname="Map" value="285"/>
+  <LAYOUT desc="PitchAnglePosition" enabled="0" hud="4" hudname="Map" value="272"/>
+  <LAYOUT desc="RollAnglePosition" enabled="0" hud="4" hudname="Map" value="285"/>
   <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="4" hudname="Map" value="2"/>
   <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="4" hudname="Map" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="0" hud="4" hudname="Map" value="332"/>
@@ -249,8 +249,8 @@
   <LAYOUT desc="flyTimePosition" enabled="1" hud="5" hudname="F14" value="289"/>
   <LAYOUT desc="onTimePosition" enabled="1" hud="5" hudname="F14" value="289"/>
   <LAYOUT desc="motorArmedPosition" enabled="1" hud="5" hudname="F14" value="71"/>
-  <LAYOUT desc="MwGPSLatPosition" enabled="1" hud="5" hudname="F14" value="272"/>
-  <LAYOUT desc="MwGPSLonPosition" enabled="1" hud="5" hudname="F14" value="285"/>
+  <LAYOUT desc="PitchAnglePosition" enabled="1" hud="5" hudname="F14" value="272"/>
+  <LAYOUT desc="RollAnglePosition" enabled="1" hud="5" hudname="F14" value="285"/>
   <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="5" hudname="F14" value="32"/>
   <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="5" hudname="F14" value="47"/>
   <LAYOUT desc="rssiPosition" enabled="1" hud="5" hudname="F14" value="335"/>
@@ -286,8 +286,8 @@
   <LAYOUT desc="flyTimePosition" enabled="1" hud="6" hudname="Embraer" value="382"/>
   <LAYOUT desc="onTimePosition" enabled="1" hud="6" hudname="Embraer" value="382"/>
   <LAYOUT desc="motorArmedPosition" enabled="1" hud="6" hudname="Embraer" value="311"/>
-  <LAYOUT desc="MwGPSLatPosition" enabled="1" hud="6" hudname="Embraer" value="272"/>
-  <LAYOUT desc="MwGPSLonPosition" enabled="1" hud="6" hudname="Embraer" value="285"/>
+  <LAYOUT desc="PitchAnglePosition" enabled="1" hud="6" hudname="Embraer" value="272"/>
+  <LAYOUT desc="RollAnglePosition" enabled="1" hud="6" hudname="Embraer" value="285"/>
   <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="6" hudname="Embraer" value="2"/>
   <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="6" hudname="Embraer" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="1" hud="6" hudname="Embraer" value="85"/>
@@ -323,8 +323,8 @@
   <LAYOUT desc="flyTimePosition" enabled="1" hud="7" hudname="NAHI" value="41"/>
   <LAYOUT desc="onTimePosition" enabled="1" hud="7" hudname="NAHI" value="41"/>
   <LAYOUT desc="Armed Status" enabled="1" hud="7" hudname="NAHI" value="311"/>
-  <LAYOUT desc="MwGPSLatPosition" enabled="1" hud="7" hudname="NAHI" value="272"/>
-  <LAYOUT desc="MwGPSLonPosition" enabled="1" hud="7" hudname="NAHI" value="285"/>
+  <LAYOUT desc="PitchAnglePosition" enabled="1" hud="7" hudname="NAHI" value="272"/>
+  <LAYOUT desc="RollAnglePosition" enabled="1" hud="7" hudname="NAHI" value="285"/>
   <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="7" hudname="NAHI" value="2"/>
   <LAYOUT desc="MwGPSLonPositionTop" enabled="1" hud="7" hudname="NAHI" value="17"/>
   <LAYOUT desc="rssiPosition" enabled="1" hud="7" hudname="NAHI" value="32"/>
@@ -360,8 +360,8 @@
   <LAYOUT desc="FlyTime" enabled="1" hud="8" hudname="Groundstation" value="382"/>
   <LAYOUT desc="OnTime" enabled="1" hud="8" hudname="Groundstation" value="382"/>
   <LAYOUT desc="Armed Status" enabled="0" hud="8" hudname="Groundstation" value="311"/>
-  <LAYOUT desc="Unused" enabled="0" hud="8" hudname="Groundstation" value="272"/>
-  <LAYOUT desc="Unused" enabled="0" hud="8" hudname="Groundstation" value="287"/>
+  <LAYOUT desc="PitchAnglePosition" enabled="0" hud="8" hudname="Groundstation" value="272"/>
+  <LAYOUT desc="RollAnglePosition" enabled="0" hud="8" hudname="Groundstation" value="287"/>
   <LAYOUT desc="Latitude" enabled="0" hud="8" hudname="Groundstation" value="2"/>
   <LAYOUT desc="Longitude" enabled="0" hud="8" hudname="Groundstation" value="15"/>
   <LAYOUT desc="RSSI" enabled="1" hud="8" hudname="Groundstation" value="377"/>
@@ -397,8 +397,8 @@
   <LAYOUT desc="FlyTime" enabled="1" hud="9" hudname="Standalone" value="382"/>
   <LAYOUT desc="OnTime" enabled="1" hud="9" hudname="Standalone" value="382"/>
   <LAYOUT desc="Armed Status" enabled="0" hud="9" hudname="Standalone" value="311"/>
-  <LAYOUT desc="Unused" enabled="0" hud="9" hudname="Standalone" value="272"/>
-  <LAYOUT desc="Unused" enabled="0" hud="9" hudname="Standalone" value="287"/>
+  <LAYOUT desc="PitchAnglePosition" enabled="0" hud="9" hudname="Standalone" value="272"/>
+  <LAYOUT desc="RollAnglePosition" enabled="0" hud="9" hudname="Standalone" value="287"/>
   <LAYOUT desc="Latitude" enabled="0" hud="9" hudname="Standalone" value="2"/>
   <LAYOUT desc="Longitude" enabled="0" hud="9" hudname="Standalone" value="15"/>
   <LAYOUT desc="RSSI" enabled="1" hud="9" hudname="Standalone" value="354"/>
@@ -434,8 +434,8 @@
   <LAYOUT desc="FlyTime" enabled="1" hud="10" hudname="250 class" value="382"/>
   <LAYOUT desc="OnTime" enabled="1" hud="10" hudname="250 class" value="382"/>
   <LAYOUT desc="Armed Status" enabled="1" hud="10" hudname="250 class" value="311"/>
-  <LAYOUT desc="Unused" enabled="0" hud="10" hudname="250 class" value="272"/>
-  <LAYOUT desc="Unused" enabled="0" hud="10" hudname="250 class" value="285"/>
+  <LAYOUT desc="PitchAnglePosition" enabled="0" hud="10" hudname="250 class" value="272"/>
+  <LAYOUT desc="RollAnglePosition" enabled="0" hud="10" hudname="250 class" value="285"/>
   <LAYOUT desc="Latitude" enabled="0" hud="10" hudname="250 class" value="2"/>
   <LAYOUT desc="Longitude" enabled="0" hud="10" hudname="250 class" value="17"/>
   <LAYOUT desc="RSSI" enabled="1" hud="10" hudname="250 class" value="369"/>
