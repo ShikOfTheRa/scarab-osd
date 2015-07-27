@@ -593,9 +593,8 @@ void setMspRequests() {
     if(flags.ident!=1){
       modeMSPRequests |= REQ_MSP_IDENT;
     }
-    if(MwSensorPresent&GPSSENSOR){ 
+    if(MwSensorPresent&GPSSENSOR) 
       modeMSPRequests |= REQ_MSP_RAW_GPS| REQ_MSP_COMP_GPS;
-      debug[0]++;    }
     if(Settings[S_THROTTLEPOSITION] || fieldIsVisible(pMeterSumPosition) || fieldIsVisible(amperagePosition) )
       modeMSPRequests |= REQ_MSP_RC;
     if(mode.armed == 0)
