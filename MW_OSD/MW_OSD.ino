@@ -127,7 +127,6 @@ void setup()
   #if defined GPSOSD
     GPS_SerialInit();
   #else
-//  setMspRequests();
   #endif
   #if defined FORCESENSORS
     MwSensorPresent |=GPSSENSOR;
@@ -135,6 +134,7 @@ void setup()
     MwSensorPresent |=MAGNETOMETER;
     MwSensorPresent |=ACCELEROMETER;
   #endif
+  setMspRequests();
   
 }
 
@@ -319,7 +319,7 @@ void loop()
         ROW=10;
         COL=1;
         configMode=1;
-//        setMspRequests();
+        setMspRequests();
       }
       if(configMode)
       {
@@ -327,6 +327,7 @@ void loop()
       }
       else
       {
+        setMspRequests();
         if(MwSensorPresent&ACCELEROMETER)
            displayHorizon(MwAngle[0],MwAngle[1]);
         if(Settings[S_DISPLAYVOLTAGE]&&((voltage>Settings[S_VOLTAGEMIN])||(timer.Blink2hz))) 
@@ -438,7 +439,7 @@ void loop()
       flyTime++;
       flyingTime++;
       configMode=0;
-//      setMspRequests();
+      setMspRequests();
     }
     allSec++;
 /*
@@ -454,7 +455,7 @@ void loop()
     if(timer.magCalibrationTimer>0) timer.magCalibrationTimer--;
     if(timer.rssiTimer>0) timer.rssiTimer--;
   }
-  setMspRequests();
+//  setMspRequests();
   serialMSPreceive(1);
 }  // End of main loop
 
@@ -594,7 +595,7 @@ void setMspRequests() {
     }
     if(MwSensorPresent&GPSSENSOR){ 
       modeMSPRequests |= REQ_MSP_RAW_GPS| REQ_MSP_COMP_GPS;
-    }
+      debug[0]++;    }
     if(Settings[S_THROTTLEPOSITION] || fieldIsVisible(pMeterSumPosition) || fieldIsVisible(amperagePosition) )
       modeMSPRequests |= REQ_MSP_RC;
     if(mode.armed == 0)
