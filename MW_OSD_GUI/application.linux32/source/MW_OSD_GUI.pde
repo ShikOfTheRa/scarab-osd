@@ -156,7 +156,7 @@ ListBox commListbox,baudListbox;
 boolean PortRead = false;
 boolean PortWrite = false;
 int PortReadtimer = 0;
-int ReadConfig = 0;
+//int ReadConfig = 0;
 int ReadMillis = 0;
 int WriteConfig = 0;
 int WriteMillis = 0;
@@ -183,6 +183,7 @@ int eeaddressOSD=0;
 int eedataOSD=0;
 int ReadConfigMSPMillis=0;
 int WriteConfigMSPMillis=0;
+int FontMSPMillis=0;
 
 
 // XML config editorvariables
@@ -207,6 +208,7 @@ String CallSign = "";
 String Title;
 int Passthroughcomm;
 int AutoSimulator=0;
+int Simtype=0;
 int StartupMessage=0;
 int FrameRate=30;
 
@@ -1144,7 +1146,14 @@ void draw() {
     baudListbox.close();
   else
     baudListbox.open();
-  
+
+// Check fontmode has finished
+   if (millis() > FontMSPMillis){
+     FontMode=false;
+   }
+
+//    debug[3]=int(SimControlToggle.getValue());
+
 
 // Process and outstanding Read or Write EEPROM requests
   if((millis()>ReadConfigMSPMillis)&&(millis()>WriteConfigMSPMillis)&&(init_com==1)){
@@ -1152,7 +1161,7 @@ void draw() {
       SimControlToggle.setValue(1);
     }
   }
-  if (SimControlToggle.getValue()==0){
+  if (int(SimControlToggle.getValue())==0){
     toggleModeItems[0].setValue(0);
   }
     
@@ -1215,7 +1224,7 @@ void draw() {
   else
     txtlblLayoutEnTxt.setValue(" : Disabled");
 
-// Layout amenedmends based upon choices
+// Layout amendments based upon choices
   if (int(confItem[GetSetting("S_RCWSWITCH")].value())==0){
     txtlblconfItem[GetSetting("S_RCWSWITCH")].setText("Using OSD_SW");
     txtlblconfItem[GetSetting("S_RCWSWITCH_CH")].setText("Not used");
@@ -1252,13 +1261,11 @@ void draw() {
 
   if ((SendSim ==1) && (ClosePort == false)) 
   {
-    if (!FontMode&&(ReadConfig==0)&&(WriteConfig==0)) {
+    if (!FontMode&&(WriteConfig==0)) {
       if (init_com==1) {
-       
         if (ClosePort) return;
-
-/*
-        if (SimControlToggle.getValue()!=0) {
+ ///*
+        if ((int(SimControlToggle.getValue())!=0)&&(Simtype==0)) {
 
           if (init_com==1)SendCommand(MSP_ATTITUDE);
           if (init_com==1)SendCommand(MSP_RC);
@@ -1302,12 +1309,14 @@ void draw() {
           break;
         case 11:
           if (init_com==1)SendCommand(MSP_PID);
-          MSP_sendOrder=0;
+          MSP_sendOrder=1;
           break;
+        default:  
+          MSP_sendOrder=1;
         }
         PortWrite = !PortWrite; // toggle TX LED every other    
       } 
-*/
+//*/
       }
     } // End !FontMode
   }
@@ -2026,6 +2035,7 @@ public void updateConfig(){
   ConfigClass.setProperty("Title",Title);
   ConfigClass.setProperty("Passthroughcomm",str(Passthroughcomm));
   ConfigClass.setProperty("AutoSimulator",str(AutoSimulator));
+  ConfigClass.setProperty("Simtype",str(Simtype));
   ConfigClass.setProperty("StartupMessage",str(StartupMessage));
   ConfigClass.setProperty("FrameRate",str(FrameRate));
   
@@ -2065,6 +2075,7 @@ public void LoadConfig(){
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
     AutoSimulator = 0;
+    Simtype=1;
     FrameRate = 15;
     StartupMessage = 0;
     updateConfig();
@@ -2081,6 +2092,7 @@ public void LoadConfig(){
       Title =ConfigClass.getProperty("Title");
       Passthroughcomm = int(ConfigClass.getProperty("Passthroughcomm"));
       AutoSimulator = int(ConfigClass.getProperty("AutoSimulator"));
+      Simtype = int(ConfigClass.getProperty("Simtype"));
       FrameRate = int(ConfigClass.getProperty("FrameRate"));
       frameRate(FrameRate); 
 
@@ -2364,7 +2376,7 @@ void coloriseswitches(){
     else
       toggleConfItem[i].setColorActive(red_);
   }
-  if (SimControlToggle.getValue()==1)
+  if (int(SimControlToggle.getValue())==1)
     SimControlToggle.setColorActive(switches_);
   else
     SimControlToggle.setColorActive(red_);

@@ -189,7 +189,7 @@ ListBox commListbox,baudListbox;
 boolean PortRead = false;
 boolean PortWrite = false;
 int PortReadtimer = 0;
-int ReadConfig = 0;
+//int ReadConfig = 0;
 int ReadMillis = 0;
 int WriteConfig = 0;
 int WriteMillis = 0;
@@ -216,6 +216,7 @@ int eeaddressOSD=0;
 int eedataOSD=0;
 int ReadConfigMSPMillis=0;
 int WriteConfigMSPMillis=0;
+int FontMSPMillis=0;
 
 
 // XML config editorvariables
@@ -240,6 +241,7 @@ String CallSign = "";
 String Title;
 int Passthroughcomm;
 int AutoSimulator=0;
+int Simtype=0;
 int StartupMessage=0;
 int FrameRate=30;
 
@@ -1177,7 +1179,14 @@ public void draw() {
     baudListbox.close();
   else
     baudListbox.open();
-  
+
+// Check fontmode has finished
+   if (millis() > FontMSPMillis){
+     FontMode=false;
+   }
+
+//    debug[3]=int(SimControlToggle.getValue());
+
 
 // Process and outstanding Read or Write EEPROM requests
   if((millis()>ReadConfigMSPMillis)&&(millis()>WriteConfigMSPMillis)&&(init_com==1)){
@@ -1185,7 +1194,7 @@ public void draw() {
       SimControlToggle.setValue(1);
     }
   }
-  if (SimControlToggle.getValue()==0){
+  if (PApplet.parseInt(SimControlToggle.getValue())==0){
     toggleModeItems[0].setValue(0);
   }
     
@@ -1248,7 +1257,7 @@ public void draw() {
   else
     txtlblLayoutEnTxt.setValue(" : Disabled");
 
-// Layout amenedmends based upon choices
+// Layout amendments based upon choices
   if (PApplet.parseInt(confItem[GetSetting("S_RCWSWITCH")].value())==0){
     txtlblconfItem[GetSetting("S_RCWSWITCH")].setText("Using OSD_SW");
     txtlblconfItem[GetSetting("S_RCWSWITCH_CH")].setText("Not used");
@@ -1285,13 +1294,11 @@ public void draw() {
 
   if ((SendSim ==1) && (ClosePort == false)) 
   {
-    if (!FontMode&&(ReadConfig==0)&&(WriteConfig==0)) {
+    if (!FontMode&&(WriteConfig==0)) {
       if (init_com==1) {
-       
         if (ClosePort) return;
-
-/*
-        if (SimControlToggle.getValue()!=0) {
+ ///*
+        if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==0)) {
 
           if (init_com==1)SendCommand(MSP_ATTITUDE);
           if (init_com==1)SendCommand(MSP_RC);
@@ -1335,12 +1342,14 @@ public void draw() {
           break;
         case 11:
           if (init_com==1)SendCommand(MSP_PID);
-          MSP_sendOrder=0;
+          MSP_sendOrder=1;
           break;
+        default:  
+          MSP_sendOrder=1;
         }
         PortWrite = !PortWrite; // toggle TX LED every other    
       } 
-*/
+//*/
       }
     } // End !FontMode
   }
@@ -2059,6 +2068,7 @@ public void updateConfig(){
   ConfigClass.setProperty("Title",Title);
   ConfigClass.setProperty("Passthroughcomm",str(Passthroughcomm));
   ConfigClass.setProperty("AutoSimulator",str(AutoSimulator));
+  ConfigClass.setProperty("Simtype",str(Simtype));
   ConfigClass.setProperty("StartupMessage",str(StartupMessage));
   ConfigClass.setProperty("FrameRate",str(FrameRate));
   
@@ -2098,6 +2108,7 @@ public void LoadConfig(){
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
     AutoSimulator = 0;
+    Simtype=1;
     FrameRate = 15;
     StartupMessage = 0;
     updateConfig();
@@ -2114,6 +2125,7 @@ public void LoadConfig(){
       Title =ConfigClass.getProperty("Title");
       Passthroughcomm = PApplet.parseInt(ConfigClass.getProperty("Passthroughcomm"));
       AutoSimulator = PApplet.parseInt(ConfigClass.getProperty("AutoSimulator"));
+      Simtype = PApplet.parseInt(ConfigClass.getProperty("Simtype"));
       FrameRate = PApplet.parseInt(ConfigClass.getProperty("FrameRate"));
       frameRate(FrameRate); 
 
@@ -2397,7 +2409,7 @@ public void coloriseswitches(){
     else
       toggleConfItem[i].setColorActive(red_);
   }
-  if (SimControlToggle.getValue()==1)
+  if (PApplet.parseInt(SimControlToggle.getValue())==1)
     SimControlToggle.setColorActive(switches_);
   else
     SimControlToggle.setColorActive(red_);
@@ -3474,7 +3486,7 @@ public void InitSerial(float portValue) {
       commListbox.setColorBackground(green_);
       buttonRESTART.setColorBackground(green_);
       
-      g_serial.buffer(512);
+      g_serial.buffer(100);
             txtmessage.setText("");
 //      delay(1500);
 //      SendCommand(MSP_IDENT);
@@ -3493,7 +3505,7 @@ public void InitSerial(float portValue) {
       //+((int)(cmd&0xFF))+": "+(checksum&0xFF)+" expected, got "+(int)(c&0xFF));
     }
   }
-  else if(portValue > commListMax && init_com == 1){
+  else if((portValue > commListMax) && (init_com == 1)){
     if (Passthroughcomm==1) {
       System.out.println("Serial Port Pass Through Starting" );
       SendCommand(MSP_PASSTHRU_SERIAL);
@@ -3609,6 +3621,7 @@ public void FONT_UPLOAD(){
     loop();
   }else
   {
+  FontMSPMillis=3000 + millis();
   SimControlToggle.setValue(0);
 //  System.out.println("FONT_UPLOAD");
   //toggleMSP_Data = true;
@@ -3632,6 +3645,7 @@ public void FONT_UPLOAD(){
 }
 
 public void SendChar(){
+    FontMSPMillis=3000 + millis();
     time2=time;
     PortWrite = !PortWrite;  // toggle PortWrite to flash TX
     if (PortWrite) 
@@ -3659,7 +3673,6 @@ public void SendChar(){
       txtmessage.setText("");
       READconfigMSP_init();
 //      READinit();
-      ReadConfig=100;
       RESTART();
     } 
   
@@ -4059,46 +4072,46 @@ public void evaluateCommand(byte cmd, int size) {
   switch(icmd) {
 
     case MSP_RC:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_RC);
+      if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_RC);
       break;
     case MSP_STATUS:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_STATUS);
+      if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_STATUS);
       break;
     case MSP_BOXNAMES:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_BOXNAMES);
+      if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_BOXNAMES);
       break;
     case MSP_BOXIDS:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_BOXIDS);
+      if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_BOXIDS);
       break;
     case MSP_IDENT:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_IDENT);
+      if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_IDENT);
       break;
     case MSP_ANALOG:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_ANALOG);
+      if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_ANALOG);
       break;
     case MSP_COMP_GPS:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_COMP_GPS);
+      if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_COMP_GPS);
       break;
     case MSP_RAW_GPS:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_RAW_GPS);
+      if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_RAW_GPS);
       break;
     case MSP_ATTITUDE:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_ATTITUDE);
+      if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_ATTITUDE);
       break;
     case MSP_ALTITUDE:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_ALTITUDE);
+      if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_ALTITUDE);
       break;
     case MSP_CELLS:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_CELLS);
+      if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_CELLS);
       break;
     case MSP_NAV_STATUS:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_NAV_STATUS);
+      if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_NAV_STATUS);
       break;
     case MSP_DEBUG:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_DEBUG);
+      if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_DEBUG);
       break;
     case MSP_PID:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_PID);
+      if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_PID);
       break; 
    
     case MSP_OSD:

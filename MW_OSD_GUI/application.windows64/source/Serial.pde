@@ -130,7 +130,7 @@ void InitSerial(float portValue) {
       commListbox.setColorBackground(green_);
       buttonRESTART.setColorBackground(green_);
       
-      g_serial.buffer(512);
+      g_serial.buffer(100);
             txtmessage.setText("");
 //      delay(1500);
 //      SendCommand(MSP_IDENT);
@@ -149,7 +149,7 @@ void InitSerial(float portValue) {
       //+((int)(cmd&0xFF))+": "+(checksum&0xFF)+" expected, got "+(int)(c&0xFF));
     }
   }
-  else if(portValue > commListMax && init_com == 1){
+  else if((portValue > commListMax) && (init_com == 1)){
     if (Passthroughcomm==1) {
       System.out.println("Serial Port Pass Through Starting" );
       SendCommand(MSP_PASSTHRU_SERIAL);
@@ -265,6 +265,7 @@ public void FONT_UPLOAD(){
     loop();
   }else
   {
+  FontMSPMillis=3000 + millis();
   SimControlToggle.setValue(0);
 //  System.out.println("FONT_UPLOAD");
   //toggleMSP_Data = true;
@@ -288,6 +289,7 @@ public void FONT_UPLOAD(){
 }
 
 public void SendChar(){
+    FontMSPMillis=3000 + millis();
     time2=time;
     PortWrite = !PortWrite;  // toggle PortWrite to flash TX
     if (PortWrite) 
@@ -315,7 +317,6 @@ public void SendChar(){
       txtmessage.setText("");
       READconfigMSP_init();
 //      READinit();
-      ReadConfig=100;
       RESTART();
     } 
   
@@ -715,46 +716,46 @@ public void evaluateCommand(byte cmd, int size) {
   switch(icmd) {
 
     case MSP_RC:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_RC);
+      if ((int(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_RC);
       break;
     case MSP_STATUS:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_STATUS);
+      if ((int(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_STATUS);
       break;
     case MSP_BOXNAMES:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_BOXNAMES);
+      if ((int(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_BOXNAMES);
       break;
     case MSP_BOXIDS:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_BOXIDS);
+      if ((int(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_BOXIDS);
       break;
     case MSP_IDENT:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_IDENT);
+      if ((int(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_IDENT);
       break;
     case MSP_ANALOG:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_ANALOG);
+      if ((int(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_ANALOG);
       break;
     case MSP_COMP_GPS:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_COMP_GPS);
+      if ((int(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_COMP_GPS);
       break;
     case MSP_RAW_GPS:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_RAW_GPS);
+      if ((int(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_RAW_GPS);
       break;
     case MSP_ATTITUDE:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_ATTITUDE);
+      if ((int(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_ATTITUDE);
       break;
     case MSP_ALTITUDE:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_ALTITUDE);
+      if ((int(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_ALTITUDE);
       break;
     case MSP_CELLS:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_CELLS);
+      if ((int(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_CELLS);
       break;
     case MSP_NAV_STATUS:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_NAV_STATUS);
+      if ((int(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_NAV_STATUS);
       break;
     case MSP_DEBUG:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_DEBUG);
+      if ((int(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_DEBUG);
       break;
     case MSP_PID:
-      if (SimControlToggle.getValue()!=0) SendCommand(MSP_PID);
+      if ((int(SimControlToggle.getValue())!=0)&&(Simtype==1)) SendCommand(MSP_PID);
       break; 
    
     case MSP_OSD:
