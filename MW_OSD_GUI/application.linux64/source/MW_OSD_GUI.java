@@ -731,8 +731,7 @@ public controlP5.Controller hideLabel(controlP5.Controller c) {
 
 public void setup() {
   size(windowsX,windowsY);
-
-
+  Locale.setDefault(Locale.US);
 
 
 //  LoadConfig();
