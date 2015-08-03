@@ -736,7 +736,6 @@ void ProcessSensors(void) {
       if (Settings[S_PWMRSSI]){
 #if defined FASTPWMRSSI
         sensortemp = FastpulseIn(PWMRSSIPIN, HIGH,1024);
-        sensortemp>>2;
 #elif defined INTPWMRSSI
         sensortemp = pwmRSSI>>1;
 #else
