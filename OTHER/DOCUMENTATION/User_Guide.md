@@ -29,13 +29,15 @@ To navigate the OSD:<br>
 <hr />
 <h1>MW OSD GUI quick reference guide</h1>
 
-<h2>Controls and communication</h2>
+<h3>Controls and communication</h3>
 
 <b>Comm settings</b>
 <li>Toggle between com ports and baud rates</li>
 
 <b>Baud Rate</b>
 <li>Hidden option. Minimise "Comm settings" to access and change </li>
+
+<h3>DISK</h3>
 
 <b>Load</b>
 <li>Loads previously saved configuration file from disk </li>
