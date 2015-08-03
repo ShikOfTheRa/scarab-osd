@@ -70,7 +70,7 @@ uint16_t UntouchedStack(void)
 //#endif
 
 //------------------------------------------------------------------------
-#define MWVERS "MW-OSD - R1.4"  
+#define MWVERS "MW-OSD - R1.5"  
 #define MWOSDVER 9      // for eeprom layout verification      
 #include <avr/pgmspace.h>
 #include <EEPROM.h>

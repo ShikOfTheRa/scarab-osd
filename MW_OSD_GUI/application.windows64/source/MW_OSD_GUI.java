@@ -79,7 +79,7 @@ And to a lesser extent code from the following :-
 
 
 
-String MW_OSD_GUI_Version = "MWOSD R1.4 - NextGeneration";
+String MW_OSD_GUI_Version = "MWOSD R1.5 - NextGeneration";
 int MW_OSD_EEPROM_Version = 9;
 
 
@@ -2948,7 +2948,7 @@ public void SetupGroups(){
                 .activateEvent(true)
                 .setBackgroundColor(color(30,255))
                 .setBackgroundHeight(47)
-                .setLabel("     SETTINGS")
+                .setLabel("            DISK")
                 .disableCollapse();
                 //.close() 
                ; 

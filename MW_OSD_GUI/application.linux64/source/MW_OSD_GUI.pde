@@ -46,7 +46,7 @@ import java.text.DecimalFormat;
 
 
 
-String MW_OSD_GUI_Version = "MWOSD R1.4 - NextGeneration";
+String MW_OSD_GUI_Version = "MWOSD R1.5 - NextGeneration";
 int MW_OSD_EEPROM_Version = 9;
 
 

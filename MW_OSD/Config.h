@@ -10,36 +10,34 @@
 
 // NOTE-some of the popular RTFQ/Witespy boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct: 
-// #define SWAPVOLTAGEPINS          // For RTFQ boards with batt voltage appearing on vid voltage
-// #define ALTERNATEDIVIDERS        // For RFTQ boards with voltage unable to be adjusted high enough
+// #define SWAPVOLTAGEPINS          // For boards with batt voltage appearing on vid voltage
+// #define ALTERNATEDIVIDERS        // For boards with voltage unable to be adjusted high enough
 
  
 /********************       CONTROLLER SOFTWARE      *********************/
 // Choose ONLY ONE option:-
 // Note - choose carefully to ensure correct settings are written to flight controller.
 // The first three are for convenience - they set the OSD for the latest FC version. 
-// Remember to update MWOSD when updating FC software
+// IMPORTANT - remember to update MWOSD when updating FC software!!
 
 // Choose ONLY ONE option from the following long list :-
 
-//#define MULTIWII                  // Uncomment this if you are using latest MULTIWII version from repository (2.4 at time of this MWOSD release)
+// latest release...
+#define MULTIWII                  // Uncomment this if you are using latest MULTIWII version from repository (2.4 at time of this MWOSD release)
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.06.27 at time of this MWOSD release)
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9.0 at time or this MWOSD release)
-
-//#define MULTIWII_V24              // Uncomment this if you are using MW versions 2.4  
-//#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3  
-//#define MULTIWII_V21              // Uncomment this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
-//#define BASEFLIGHT20150327        // Uncomment this if you are using BASEFLIGHT up to and including version Stable 2015.03.27
-//#define BASEFLIGHT20150627        // Uncomment this if you are using BASEFLIGHT version Stable 2015.06.27 onwards
-//#define CLEANFLIGHT172            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.7.2
-//#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1 
-//#define CLEANFLIGHT190            // Uncomment this if you are using CLEANFLIGHT versions 1.9.0 onwards
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
-#define NAZA                      // Uncomment this if you are using NAZA flight controller
+//#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
 //#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
 //#define GPSOSD_MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
 //#define NOCONTROLLER              // Uncomment this if you ahave nothing connected to the serial port - no controller or GPS module
+// old releases supported...
+//#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3  
+//#define MULTIWII_V21              // Uncomment this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
+//#define BASEFLIGHT20150327        // Uncomment this if you are using BASEFLIGHT up to and including version Stable 2015.03.27
+//#define CLEANFLIGHT172            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.7.2
+//#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1 
 
 
 
@@ -65,36 +63,36 @@
 
 
 /********************       GPS OSD settings      *********************/
-//#define PPMOSDCONTROL               // Enables full OSD menu, screen switching, RSSI, Throttle fature, virtual current sensor, etc using a PPM signal into OSD RSSI pin 
-//#define SERIAL_SUM_PPM_RHF          // Enable for Robe/Hitec/Futaba
-//#define SERIAL_SUM_PPM_GS           // Enable for Graupner/Spektrum    
-//#define SERIAL_SUM_PPM_M            // Enable for Multiplex
-//#define SERIAL_SUM_PPM_HS           // Enable for Hitec/Sanwa
+//#define PPMOSDCONTROL             // Enables full OSD menu, screen switching, RSSI, Throttle fature, virtual current sensor, etc using a PPM signal into OSD RSSI pin 
+//#define SERIAL_SUM_PPM_RHF        // Enable for Robe/Hitec/Futaba
+//#define SERIAL_SUM_PPM_GS         // Enable for Graupner/Spektrum    
+//#define SERIAL_SUM_PPM_M          // Enable for Multiplex
+//#define SERIAL_SUM_PPM_HS         // Enable for Hitec/Sanwa
 
 
 /********************       FILTER settings      *********************/
 //Choose ONLY ONE option:
-#define STAGE2FILTER               // Enable for smoother readings of voltage / current / RSSI. 
-//#define SMOOTHFILTER             // Enable for smoothest readings of voltage / current / RSSI. Uses more memory. Prototype
+#define STAGE2FILTER                // Enable for smoother readings of voltage / current / RSSI. 
+//#define SMOOTHFILTER              // Enable for smoothest readings of voltage / current / RSSI. Uses more memory. Prototype
 
 
 /********************       RSSI settings      *********************/
 //Choose ONLY ONE option:
-#define INTPWMRSSI                // Undefine this to use new interrup PWM RSSI method (standard PWM 750-2250ms pulse width)
-//#define PULSEINPWMRSSI          // Undefine this to use legacy non interrupt PWM RSSI method (pulse width 0 - 2250ms pulse width)
-//#define FASTPWMRSSI             // Undefine this to use high PWM refresh frequency RSSI 
+#define INTPWMRSSI                  // Undefine this to use new interrup PWM RSSI method (standard PWM 750-2250ms pulse width)
+//#define PULSEINPWMRSSI            // Undefine this to use legacy non interrupt PWM RSSI method (pulse width 0 - 2250ms pulse width)
+//#define FASTPWMRSSI               // Undefine this to use high PWM refresh frequency RSSI 
 
 
 /********************       GPS settings      *********************/
-#define MINSATFIX 5               // Number of sats required for a fix. 5 minimum. More = better
+#define MINSATFIX 5                 // Number of sats required for a fix. 5 minimum. More = better
 
 
 /********************       WARNING/STATUS settings      *********************/
-#define SATACTIVECHECK            // Alerts if sats below MINSATFIX - in addition to flashing sat indicator
-#define GPSACTIVECHECK 5          // Alerts if no GPS data for more than x secs. Sets GPS sats to zero
-#define MSPACTIVECHECK 3          // Alerts if no Flight controller data for more than x secs. 
-#define DISP_LOW_VOLTS_WARNING    // Alerts if low voltage
-#define FORCE_DISP_LOW_VOLTS      // Enable display low voltage warning override for screen layouts where its disabled
+#define SATACTIVECHECK              // Alerts if sats below MINSATFIX - in addition to flashing sat indicator
+#define GPSACTIVECHECK 5            // Alerts if no GPS data for more than x secs. Sets GPS sats to zero
+#define MSPACTIVECHECK 3            // Alerts if no Flight controller data for more than x secs. 
+#define DISP_LOW_VOLTS_WARNING      // Alerts if low voltage
+#define FORCE_DISP_LOW_VOLTS        // Enable display low voltage warning override for screen layouts where its disabled
 
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
@@ -116,8 +114,8 @@
 
 /******************** Serial MSP speed settings *********************/
 // Choose ONLY ONE option: increases speeds of serial update - but with impact to flight controller 
-//#define MSP_SPEED_LOW
-#define MSP_SPEED_MED
+#define MSP_SPEED_LOW
+//#define MSP_SPEED_MED
 //#define MSP_SPEED_HIGH
 
 
@@ -130,11 +128,11 @@
 
 
 /********************       STARTUP settings      *********************/
-#define INTRO_VERSION               "MWOSD - DEV 1.4.2" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+//#define INTRO_VERSION               "MWOSD - DEV 1.5.1" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
-//#define INTRO_MENU                  // Enable to display TX stick MENU 
+#define INTRO_MENU                  // Enable to display TX stick MENU 
 //#define STARTUPDELAY 2000         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
 
@@ -181,6 +179,12 @@
 #define AHIROLLMAX  400             // Specify maximum AHI roll value displayed. Default 400 = 40.0 degrees 
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 
+
+/********************       NAZA Settings         ************************/
+//#define NAZAMODECONTROL           // Enables NAZA mode control display using a PWM signal into OSD RSSI pin. Can be used with OSD_SWITCH_RSSI   
+#define NAZA_MODE_GPS 1600
+#define NAZA_MODE_ATI 
+#define NAZA_MODE_MAN 1400
 
 /********************       FrSky S.Port settings      *********************/
 //enables data transfer from frsky reciever s.port to osd via multiwii

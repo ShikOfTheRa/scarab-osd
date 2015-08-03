@@ -57,7 +57,7 @@ void SetupGroups(){
                 .activateEvent(true)
                 .setBackgroundColor(color(30,255))
                 .setBackgroundHeight(47)
-                .setLabel("     SETTINGS")
+                .setLabel("            DISK")
                 .disableCollapse();
                 //.close() 
                ; 
