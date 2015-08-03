@@ -13,13 +13,13 @@ GUI requires a restart after font upload - resolved in master / for next release
 
 ## Enhancements planned for next  release: ##
 
-Support for either NAZA or APM
+Support for either NAZA or APM - NAZA implemented, but subsequently removed due to lack of interest
 
 TX switch ch in OSD menu - resolved in master / for next release
 
 Improved PWM RSSI handling - resolved in master / for next release
 
-Improved hardware current sensor handling
+Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
 
 Improved speed performance for serial and PWM based data (AHI etc.) - resolved in master / for next release
 
