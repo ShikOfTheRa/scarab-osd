@@ -79,6 +79,9 @@ uint16_t UntouchedStack(void)
 #include "symbols.h"
 #include "GlobalVariables.h"
 #include "math.h"
+#if defined NAZA
+  #include "Naza.h"
+#endif  
 
 char screen[480];      // Main screen ram for MAX7456
 char screenBuffer[20]; 

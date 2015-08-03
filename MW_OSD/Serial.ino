@@ -1,5 +1,10 @@
  
-#define SERIALBUFFERSIZE 150
+#if defined NAZA
+  #define SERIALBUFFERSIZE 75
+#else
+  #define SERIALBUFFERSIZE 150
+#endif
+
 static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string
 static uint8_t receiverIndex;
 static uint8_t dataSize;
@@ -721,7 +726,11 @@ void serialMSPreceive(uint8_t loops)
 
     #ifdef GPSOSD    
       armedtimer = 0;
-      if (GPS_newFrame(c)) GPS_NewData();   
+      #if defined (NAZA)
+        NAZA_NewData(c);
+      #else
+        if (GPS_newFrame(c)) GPS_NewData();  
+      #endif //NAZA  
     #endif //GPSOSD   
 
     if (c_state == IDLE)
