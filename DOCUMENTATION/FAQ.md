@@ -10,6 +10,7 @@
   * If using MinimOSD board make sure your output stage is properly powered.
   * Ensure you do not have blank screen layout selected
   * If using 3 way switch try different position
+  * If using FRSKY PWM RSSI, unplug until resolved.
 
 ---
 
@@ -38,6 +39,7 @@
 7 My OSD turns off in flight / after powering up motors?
   * Ensure you have a good ground
   * Use a big cap (e.g. 3300uf) on the 5v supply to the OSD
+  * Enable #define MAXSTALLDETECT in config or upgrade if not listed as an option
 
 ---
 
@@ -139,6 +141,31 @@ HARAKIRI USERS - ensure protocol set as follows:
 
 ---
 
-20 I get unspecified Java or Java path error. How do I fix it.
-  * There are many type of Java error. One of the more common ones has a solution in the video below:
+20 I get c:\..... \java\javapath\javaw.exe unspecified error or javapath error. How do I fix it.
+  * There are many type of Java error. It us usually related to Java not setting up paths correctly. The most common ones have a solution in the video below:
   * https://www.youtube.com/watch?v=66crhKstr70
+
+---
+
+21 I get "Waiting FC” or "Waiting OSD". How do I fix it.
+  * Ensure you are connected to the correct com port. 
+  * Ensure baud rate in GUI matches baud rate on the OSD
+  * Ensure only the OSD is connected to programmer
+  * If using OSDOGE ensure switch is in correct position for programming
+  * If using cheap OSDOGE/BROSD clone, disconnect board from the Naze32
+  * Restart PC – especially if hibernated
+  * Ensure physical connections are correct. Test by re-uploading MWOSD if necessary to verify
+  * Upload EEPROM_Clear example sketch then re-upload MWOSD sketch. 
+  * Set serial port default value on PC to be same as OSD (e.g. device manager>ports>comx>port settings)
+
+---
+
+22 I get A screen full of error messages trying to load the GUI - inside the text is "Can't load AMD 64-bit .dll on a IA 32-bit platform" 
+  * You are probably trying to run 64 bit MWOSD GUI on a PC running 32 bit java
+  * Try running 32 bit MWOSD GUI instead or change java to 64 bit version instead. 
+
+---
+
+Cameras with known compatibility issues with MAX7456 chip
+  * Runcam sky - http://shop.runcam.com/runcam-sky/
+

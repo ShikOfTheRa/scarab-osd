@@ -5,20 +5,34 @@
 
 ---
 
-Key Improvements for `current Master trunk`:-
+Key Improvements for `R1.5`:-
 
+ * OSD    - support for newer baseflight release - separate pitch/roll config
+ * OSD    - support for newer cleanflight release - separate pitch/roll/tpa breakpoint config
+ * OSD    - OSD chip automatic fail / recover. Avoids blank screens from supply noise. 
  * OSD    - OSD TX switch channel can be changed in OSD menu
  * OSD    - faster PWM RSSI implementation for standard 50hz PWM
  * OSD    - user adjustable AHI maximum limits
  * OSD    - more accurate mah used / faster display updates. 10 times vs 1 time per second
  * OSD    - choice of MSP speed options for faster display updates
  * OSD    - support for 9600 baud
- * OSD    - support for newer baseflight release - separate pitch/roll config
- * OSD    - general dispaly refresh speed improvements from RSSI / VSNC / MSP
+ * OSD    - general display refresh speed improvements from RSSI / VSNC / MSP
+ * OSD    - improved reset function 
+ * OSD    - improved eeprom default function (adds equivelent to eeprom_clear) 
+ * OSD    - pitch and roll angle display 
  * FONT   - improved new large font from Schnupperm
- * BUGFIX - baseflight PR - missing amperage define added. Amperage out by factor of 10
+ * FONT   - improved new large font from Anton Krug
+ * BUGFIX - Cleanflight amperage correction
+ * BUGFIX - MultiWii 2.4 amperage correction
+ * BUGFIX - GUI not loading custom font after saving. 
+ * BUGFIX - GUI font patch incorrect. 
+ * BUGFIX - Font upload issues when using vsync
+ * BUGFIX - When arming in menu, exits without save and enables serial operations
  * GUI    - more realistic serial simulation method 
+ * GUI    - font upload progress display 
  * GPSOSD - configurable parameters for GPSOSD arming and flight summary setting
+ * GPSOSD - RSSI input can bu used instead for screen switch functionality
+ * BUGFIX - UBLOX/MTK support for GPSOSD users
  
 ---
 Key Improvements for `R1.4.1`:-

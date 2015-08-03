@@ -13,15 +13,13 @@ GUI requires a restart after font upload - resolved in master / for next release
 
 ## Enhancements planned for next  release: ##
 
-GPSOSD - PPM support
-
-Support for either NAZA or APM
+Support for either NAZA or APM - NAZA implemented, but subsequently removed due to lack of interest
 
 TX switch ch in OSD menu - resolved in master / for next release
 
 Improved PWM RSSI handling - resolved in master / for next release
 
-Improved hardware current sensor handling
+Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
 
 Improved speed performance for serial and PWM based data (AHI etc.) - resolved in master / for next release
 
@@ -29,12 +27,18 @@ Adjustable Horizon pitch/ roll limits - resolved in master / for next release
 
 MAX chip hardware stall / recovery detect - resolved in master / for next release
 
-Support for GPSOSD screen layout switching
+Support for GPSOSD screen layout switching - resolved in master / for next release
 
 
 ## Enhancement requests for future releases: ##
 
-Support for either NAZA or APM
+Support for NAZA
+
+Support for APM
+
+Support for OP
+
+GPSOSD - PPM support
 
 Additional AHI layouts - multiple pitch angles
 
@@ -58,7 +62,7 @@ Ability to amend all PID settings from menu
 
 support for cleanflight / baseflight loop time change
 
-pitch / roll angles with alarm
+pitch / roll angles alarm
 
 Support for 8 GUI layouts selectable from OSD menu at field
 

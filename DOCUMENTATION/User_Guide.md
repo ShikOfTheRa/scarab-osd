@@ -12,24 +12,32 @@ To navigate the OSD:<br>
 <li>PITCH/ROLL sticks are used to navigate<br>
 <li>YAW stick is used to adjust / change values<br>
 <br>
-<b>How to - video guide to the OSD menu from DEET</b>
-<li><a href='http://youtu.be/pd_PXnG_PkI'>http://youtu.be/pd_PXnG_PkI</a>  </li>
 
-<b>How to - connecting to CLEANFLIGHT FC from Tr3TopFlyer</b>
-<li><a href='https://drive.google.com/file/d/0B2MInRUrbpWxUjdmdXJIWkRZY0k/view?usp=sharing'>https://drive.google.com/file/d/0B2MInRUrbpWxUjdmdXJIWkRZY0k/view?usp=sharing</a>  </li>
+<b>How to - [video guide to the OSD menu from DEET]
+(http://youtu.be/pd_PXnG_PkI)</b>
 
-<b>How to - [flash the MW OSD firmware to your OSD](https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/FirmwareFlashing.md)</b>
+<b>How to - [connecting to CLEANFLIGHT FC from Tr3TopFlyer]
+(https://drive.google.com/file/d/0B2MInRUrbpWxUjdmdXJIWkRZY0k/view?usp=sharing)</b>
+
+<b>How to - [flash the MW OSD firmware to your OSD]
+(https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/FirmwareFlashing.md)</b>
+
+<b>How to - [alternative way to access frsky via telemtry from Jindalee10368] 
+(http://vk4ghz.com/mwosd-display-rssi-via-spare-radio-channel/)</b>
+
 
 <hr />
 <h1>MW OSD GUI quick reference guide</h1>
 
-<h2>Controls and communication</h2>
+<h3>Controls and communication</h3>
 
 <b>Comm settings</b>
 <li>Toggle between com ports and baud rates</li>
 
 <b>Baud Rate</b>
 <li>Hidden option. Minimise "Comm settings" to access and change </li>
+
+<h3>DISK</h3>
 
 <b>Load</b>
 <li>Loads previously saved configuration file from disk </li>
