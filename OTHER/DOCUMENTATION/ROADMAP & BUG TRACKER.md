@@ -2,35 +2,18 @@
 
 ## Known bugs: ##
 
-Screen updates are slow when in PWM RSSI mode - resolved in master / for next release
-
-Screen updates are slow for GPS data - resolved in master / for next release
-
-GUI requires a restart after font upload - resolved in master / for next release
-
+HARIKIRI / MW2.1 npt working (R1.5) 
 
 ---
 
 ## Enhancements planned for next  release: ##
 
-Support for either NAZA or APM - NAZA implemented, but subsequently removed due to lack of interest
-
-TX switch ch in OSD menu - resolved in master / for next release
-
-Improved PWM RSSI handling - resolved in master / for next release
-
 Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
-
-Improved speed performance for serial and PWM based data (AHI etc.) - resolved in master / for next release
-
-Adjustable Horizon pitch/ roll limits - resolved in master / for next release
-
-MAX chip hardware stall / recovery detect - resolved in master / for next release
-
-Support for GPSOSD screen layout switching - resolved in master / for next release
 
 
 ## Enhancement requests for future releases: ##
+
+Support for PWMRSSI via RC data (Flight Controller types) or PPM stream (GPS OSD)
 
 Support for NAZA
 
