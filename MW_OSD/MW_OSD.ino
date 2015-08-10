@@ -82,6 +82,11 @@ uint16_t UntouchedStack(void)
 #if defined NAZA
   #include "Naza.h"
 #endif  
+#if defined LOADFONT_LARGE
+  #include "fontL.h"
+#elif defined LOADFONT_DEFAULT 
+  #include "fontD.h"
+#endif
 
 char screen[480];      // Main screen ram for MAX7456
 char screenBuffer[20]; 
@@ -90,6 +95,15 @@ uint32_t queuedMSPRequests;
 uint8_t sensorpinarray[]={VOLTAGEPIN,VIDVOLTAGEPIN,AMPERAGEPIN,TEMPPIN,RSSIPIN};  
 unsigned long previous_millis_low=0;
 unsigned long previous_millis_high =0;
+
+#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE
+uint8_t fontStatus=0;
+//uint16_t MAX_screen_size;
+boolean ledstatus=HIGH;
+//uint8_t fontData[54];
+//uint8_t Settings[1];
+#endif
+
 
 
 //------------------------------------------------------------------------
@@ -143,7 +157,33 @@ void setup()
   
 }
 
-
+//------------------------------------------------------------------------
+#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE
+void loop()
+{
+  switch(fontStatus) {
+    case 0:
+      MAX7456_WriteString_P(messageF0, 32);
+      MAX7456_DrawScreen();
+      delay(3000);
+      displayFont();  
+      MAX7456_WriteString_P(messageF1, 32);
+      MAX7456_DrawScreen();
+      fontStatus++;
+      delay(3000);      
+      break;
+    case 1:
+      updateFont();
+      MAX7456Setup(); 
+      MAX7456_WriteString_P(messageF2, 32);
+      displayFont();  
+      MAX7456_DrawScreen();
+      fontStatus++;
+      break;
+  }
+  digitalWrite(LEDPIN,LOW);
+}
+#else
 
 //------------------------------------------------------------------------
 void loop()
@@ -463,7 +503,7 @@ void loop()
 //  setMspRequests();
   serialMSPreceive(1);
 }  // End of main loop
-
+#endif //main loop
 
 
 //------------------------------------------------------------------------

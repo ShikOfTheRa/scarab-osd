@@ -702,6 +702,13 @@ const char message0[] PROGMEM = INTRO_VERSION;
 #else
 const char message0[] PROGMEM = MWVERS;
 #endif
+
+#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE
+const char messageF0[] PROGMEM = "DO NOT POWER OFF";
+const char messageF1[] PROGMEM = "SCREEN WILL GO BLANK";
+const char messageF2[] PROGMEM = "UPDATE COMPLETE";
+#endif
+
 //const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
 //const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
 const char message5[]  PROGMEM = "FW VERSION:";
