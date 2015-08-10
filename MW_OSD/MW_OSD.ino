@@ -112,7 +112,9 @@ void setup()
 #endif
   pinMode(LEDPIN,OUTPUT);
 
-//  EEPROM.write(0,0); //;test
+#if defined EEPROM_CLEAR
+  EEPROM_clear();
+#endif  
   checkEEPROM();
   readEEPROM();
   
@@ -982,4 +984,10 @@ ISR(PCINT1_vect) { //
   }
 }
 #endif
+
+void EEPROM_clear(){
+  for (int i = 0; i < 512; i++)
+    EEPROM.write(i, 0);
+}
+
 

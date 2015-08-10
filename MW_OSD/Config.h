@@ -1,5 +1,8 @@
-/*--------------------------       configurable parameters      ----------------------------------------------------*/
+/*--------------------------       initialisation options      ----------------------------------------------------*/
+//#define EEPROM_CLEAR             // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch. Recomment/upload once completed. 
 
+
+/*--------------------------       configurable parameters      ----------------------------------------------------*/
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:

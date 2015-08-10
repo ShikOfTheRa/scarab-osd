@@ -139,9 +139,8 @@ void serialMSPCheck()
       }
     }
     if(cmd == OSD_DEFAULT) {
-      for (int i = 0; i < 512; i++)
-        EEPROM.write(i, 0);
-      checkEEPROM();
+      EEPROM_clear(); 
+//      checkEEPROM();
       flags.reset=1;
     }
     if(cmd == OSD_RESET) {
