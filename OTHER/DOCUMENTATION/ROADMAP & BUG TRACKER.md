@@ -2,7 +2,7 @@
 
 ## Known bugs: ##
 
-HARIKIRI / MW2.1 npt working (R1.5) 
+HARIKIRI / MW2.1 not working (R1.5)- resolution available from master repository
 
 ---
 
