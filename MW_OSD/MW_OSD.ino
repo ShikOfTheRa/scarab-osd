@@ -259,7 +259,7 @@ void loop()
         MSPcmdsend = MSP_PID;
         break;
       case REQ_MSP_BOX:
-#ifdef USE_BOXNAMES
+#ifdef BOXNAMES
         MSPcmdsend = MSP_BOXNAMES;
 #else
         MSPcmdsend = MSP_BOXIDS;
