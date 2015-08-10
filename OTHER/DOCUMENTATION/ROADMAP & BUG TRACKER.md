@@ -89,6 +89,10 @@ Improve icon buttons
 
 Improved heading / pitch& roll graphics 
 
+Ability to drag/drop items to layout editor
+
+List to enable/disable items on display instea dof clicking to find item
+
 
 Code quality:
 
