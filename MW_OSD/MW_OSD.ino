@@ -619,9 +619,7 @@ void setMspRequests() {
 
     modeMSPRequests = 
       REQ_MSP_STATUS|
-     #ifdef OSD_SWITCH_RC
       REQ_MSP_RC|
-     #endif
      #ifdef DEBUGMW
       REQ_MSP_DEBUG|
      #endif
@@ -640,10 +638,8 @@ void setMspRequests() {
     }
     if(MwSensorPresent&GPSSENSOR) 
       modeMSPRequests |= REQ_MSP_RAW_GPS| REQ_MSP_COMP_GPS;
-    if(Settings[S_THROTTLEPOSITION] || fieldIsVisible(pMeterSumPosition) || fieldIsVisible(amperagePosition) )
-      modeMSPRequests |= REQ_MSP_RC;
     if(mode.armed == 0)
-      modeMSPRequests |=REQ_MSP_BOX|REQ_MSP_RC;
+      modeMSPRequests |=REQ_MSP_BOX;
 #if defined MULTIWII_V24
     if(MwSensorActive&mode.gpsmission)
     modeMSPRequests |= REQ_MSP_NAV_STATUS;
@@ -783,6 +779,8 @@ void ProcessSensors(void) {
         sensortemp = FastpulseIn(PWMRSSIPIN, HIGH,1024);
 #elif defined INTPWMRSSI
         sensortemp = pwmRSSI>>1;
+#elif defined RCRSSI
+        sensortemp = MwRcData[RCRSSI]>>1;
 #else
         sensortemp = pulseIn(PWMRSSIPIN, HIGH,18000)>>1;
 #endif
