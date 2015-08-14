@@ -28,11 +28,13 @@ Key Improvements for `R1.5`:-
  * BUGFIX - GUI font patch incorrect. 
  * BUGFIX - Font upload issues when using vsync
  * BUGFIX - When arming in menu, exits without save and enables serial operations
- * GUI    - more realistic serial simulation method 
- * GUI    - font upload progress display 
+ * BUGFIX - UBLOX/MTK support for GPSOSD users
+ * GUI - more realistic serial simulation method
+ * GUI - font upload progress display
  * GPSOSD - configurable parameters for GPSOSD arming and flight summary setting
  * GPSOSD - RSSI input can bu used instead for screen switch functionality
- * BUGFIX - UBLOX/MTK support for GPSOSD users
+ * MISC - option to clear EEPROM
+ * MISC - option to upload font without using GUI
  
 ---
 Key Improvements for `R1.4.1`:-
