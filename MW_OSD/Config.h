@@ -196,6 +196,7 @@
 #define NAZA_MODE_ATI 
 #define NAZA_MODE_MAN 1400
 
+
 /********************       FrSky S.Port settings      *********************/
 //enables data transfer from frsky reciever s.port to osd via multiwii
 //requires serial inverter cable & multiwii with s.port code
