@@ -165,6 +165,10 @@ HARAKIRI USERS - ensure protocol set as follows:
   * Try running 32 bit MWOSD GUI instead or change java to 64 bit version instead. 
 
 ---
+23 How do I configure for standalone GPS OSD (no controller)
+  * https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Guide_standalone_GPS_OSD.md
+
+---
 
 Cameras with known compatibility issues with MAX7456 chip
   * Runcam sky - http://shop.runcam.com/runcam-sky/
