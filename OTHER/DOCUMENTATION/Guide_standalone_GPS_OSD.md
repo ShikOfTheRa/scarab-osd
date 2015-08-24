@@ -1,4 +1,4 @@
-# How to setup for stanadalone GPS OSD
+# How to setup for standalone GPS OSD
 
 See other guides for installing Arduino and uploading MWOSD:
 https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/FirmwareFlashing.md
@@ -6,24 +6,39 @@ https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Firmwa
 ## Step 1: prepare your config.h file
 
 Select the GPS chip type by removing the comments:
-//#define GPSOSD_UBLOX
-//#define GPSOSD_NMEA
-//#define GPSOSD_MTK
+
+  //#define GPSOSD_UBLOX
+  
+  //#define GPSOSD_NMEA
+  
+  //#define GPSOSD_MTK
+  
 
 Select the aircaraft type:
-//#define ROTORCRAFT
-//#define FIXEDWING
+
+  //#define ROTORCRAFT
+  
+  //#define FIXEDWING
+  
 
 Select baud rate to use with GPS:
 Note - if changed from default 115200, the GUI baud rate will need to be changed. 
-#define BAUDRATE 115200
-//#define BAUDRATE 57600
-//#define BAUDRATE 38400
-//#define BAUDRATE 19200
+
+  //#define BAUDRATE 115200
+
+  //#define BAUDRATE 57600
+
+  //#define BAUDRATE 38400
+
+  //#define BAUDRATE 19200
+
 //#define BAUDRATE 9600
 
+
 Optional screeen layout switching options if RSSI is not used. Requires a spare RC channel 
+
 //#define OSD_SWITCH_RSSI           // Enables 3 way screen switch using a TX channel via a RX channel connected to the OSD RSSI pin. Typically used for GPSOSD.
+
 
 ## Step 2: Upload 
 https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/FirmwareFlashing.md
