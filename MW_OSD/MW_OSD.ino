@@ -1007,7 +1007,7 @@ ISR(PCINT1_vect) { //
   sei();
   uint16_t CurrentTime;
   uint16_t PulseDuration;
-  CurrentTime = micros();
+  CurrentTime = micros(); 
   if((CurrentTime-LastTime)>3000) RCchan = 0; // assume this is PPM gap
   LastTime = CurrentTime;
   if (!(pinstatus & (1<<DDC3))) { // RSSI pin A3 - ! measures low duration
