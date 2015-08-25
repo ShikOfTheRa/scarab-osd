@@ -3,6 +3,7 @@
 ## Known bugs: ##
 
 HARIKIRI / MW2.1 not working (R1.5)- resolution available from master repository
+Center crosshair font partially missing on default_large font - resolution available from master repository
 
 ---
 
