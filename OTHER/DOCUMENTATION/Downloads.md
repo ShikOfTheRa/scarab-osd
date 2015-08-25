@@ -5,7 +5,7 @@ Download the latest release of MW OSD here:-
 
 **Release 1.5 - 14/08/2015 :**
 
-[MW OSD R1.5](https://github.com/ShikOfTheRa/scarab-osd/archive/R1.5.zip)
+[MW OSD R1.5](https://drive.google.com/uc?export=download&id=0B2MInRUrbpWxZ1lYbHZLWmxlSDQ)
 
 ---
 

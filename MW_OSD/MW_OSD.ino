@@ -1013,6 +1013,7 @@ ISR(PCINT1_vect) { //
   if (!(pinstatus & (1<<DDC3))) { // RSSI pin A3 - ! measures low duration
     PulseDuration = CurrentTime-PulseStart; 
     if ((750<PulseDuration) && (PulseDuration<2250)) {
+      if (RCchan<8)// avoid array overflow if > standard 8 ch PPM
       MwRcData[RCchan] = PulseDuration; // Val updated
     }
     RCchan++;
