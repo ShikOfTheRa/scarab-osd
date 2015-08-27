@@ -22,7 +22,7 @@
 	<dict>
 		<key>Java/MW_OSD_GUI.jar</key>
 		<data>
-		IS6erbuvwZmnen2ftdC5S9v3F6g=
+		e/MsYQususwtZIMtCdieTIcpQck=
 		</data>
 		<key>Java/controlP5.jar</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Java/data/default bold.mcm</key>
 		<data>
-		T0VuA3CVfD0B6yLlJ4Vq5HJ8Tnw=
+		+rQSvedSrQE1vphd8E7uoJ6QomU=
 		</data>
 		<key>Java/data/default large higher contrast.mcm</key>
 		<data>
@@ -58,11 +58,15 @@
 		</data>
 		<key>Java/data/default large.mcm</key>
 		<data>
-		RUgp2PESL1WdvOY1Lo0a8X6OVzE=
+		C3eqjso7MvvPw69c2Ty36N8u/4o=
 		</data>
 		<key>Java/data/default.mcm</key>
 		<data>
 		/qcDM1mAe0PDxCkHJULeE597wus=
+		</data>
+		<key>Java/data/gui.cfg</key>
+		<data>
+		DjwKZ4GNxwx2s2YtHEhvnNpel1M=
 		</data>
 		<key>Java/data/hudlayout.xml</key>
 		<data>
