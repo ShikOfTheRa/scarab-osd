@@ -10,20 +10,34 @@ Center crosshair font partially missing on default_large font - resolution avail
 
 ## Enhancements planned for next  release: ##
 
+Support for PWMRSSI via RC data (Flight Controller types) or PPM stream (GPS OSD)
+
 Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
+
+GPSOSD - PPM support
+
+Power consumtion W/Hr 
+
+Air speed sensor
+
+autodetect cell count
+
+video volts alarm
+
+Fast start - Autodetect MAX ready or timeout
+
+RSSI calibration from GUI
+
+Display anal / PWM sensors on GUI - via MW OSD protocol
 
 
 ## Enhancement requests for future releases: ##
 
-Support for PWMRSSI via RC data (Flight Controller types) or PPM stream (GPS OSD)
-
-Support for NAZA
+Migrate controller/aircraft choice to GUI
 
 Support for APM
 
 Support for OP
-
-GPSOSD - PPM support
 
 Additional AHI layouts - multiple pitch angles
 
@@ -32,10 +46,6 @@ Migrate Current Sensor to GUI / potentially migrate to offset / mv/A calc
 Config.h option to enable / disable dist/al/volt alarms etc.
 
 Improved fastpwm and rssi calibration
-
-video volts alarm
-
-autodetect cell count
 
 autoset warning voltage
 
@@ -51,8 +61,6 @@ pitch / roll angles alarm
 
 Support for 8 GUI layouts selectable from OSD menu at field
 
-Fast start - Autodetect MAX ready or timeout
-
 Improve Standalone / Groundstation startup. Remove multiwii
 
 Filtering for MSP sensor data
@@ -60,10 +68,6 @@ Filtering for MSP sensor data
 Flight path vector
 
 Navigation mode layout
-
-Power consumtion W/Hr 
-
-Air speed sensor
 
 Climb rate alarm
 
@@ -76,10 +80,6 @@ Impelement more descriptive "help" text within confih.h
 
 
 ## GUI: ##
-
-Display anal / PWM sensors on GUI - via MW OSD protocol
-
-RSSI calibration button
 
 BATTERY calibration button
 
