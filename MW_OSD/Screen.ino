@@ -481,6 +481,11 @@ void displayVoltage(void)
   if(!fieldIsVisible(vidvoltagePosition))
     return;
 
+#ifdef VIDVOLTSWARNING
+  if((vidvoltage<VIDVOLTSWARNING)||(timer.Blink2hz))
+    return;
+#endif //VIDVOLTSWARNING
+
   if (Settings[S_VIDVOLTAGE]){
     screenBuffer[0]=SYM_VID_BAT;
     ItoaPadded(vidvoltage, screenBuffer+1, 4, 3);

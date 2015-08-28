@@ -188,6 +188,7 @@
 #define AHIPITCHMAX 200             // Specify maximum AHI pitch value displayed. Default 200 = 20.0 degrees
 #define AHIROLLMAX  400             // Specify maximum AHI roll value displayed. Default 400 = 40.0 degrees 
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
+//#define VIDVOLTSWARNING 106       // Enable flashing of video volts if less than value XXX. If XXX=104 then warning voltage = 10.6v
 
 
 /********************       NAZA Settings         ************************/
