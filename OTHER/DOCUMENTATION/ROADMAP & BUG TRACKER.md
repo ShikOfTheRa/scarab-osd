@@ -10,6 +10,8 @@ Center crosshair font partially missing on default_large font - resolution avail
 
 ## Enhancements planned for next  release: ##
 
+Done - video volts alarm
+
 Support for PWMRSSI via RC data (Flight Controller types) or PPM stream (GPS OSD)
 
 Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
@@ -21,8 +23,6 @@ Power consumtion W/Hr
 Air speed sensor
 
 autodetect cell count
-
-video volts alarm
 
 Fast start - Autodetect MAX ready or timeout
 
