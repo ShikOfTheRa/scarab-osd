@@ -5,6 +5,12 @@
 
 ---
 
+Key Improvements available in development repository:-
+
+ * OSD    - support for video voltage flashing low warning - via config.h
+
+---
+
 Key Improvements for `R1.5`:-
 
  * OSD    - support for newer baseflight release - separate pitch/roll config
