@@ -174,6 +174,7 @@ void displayMode(void)
       screenBuffer[0] = SYM_GHOLD;
       screenBuffer[1] = SYM_GHOLD1;
     }
+#if defined MULTIWII_V24
     else if(MwSensorActive&mode.gpsmission){
       itoa(GPS_waypoint_step,screenBuffer+2,10);
       screenBuffer[4]=0;
@@ -185,6 +186,8 @@ void displayMode(void)
       screenBuffer[0] = SYM_GLAND;
       screenBuffer[1] = SYM_GLAND1;
     }
+#endif //MULTIWII_V24
+    
     else if(MwSensorActive&mode.stable){
       screenBuffer[2]=0;
       screenBuffer[0]=SYM_STABLE;

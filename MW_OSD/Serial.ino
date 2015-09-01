@@ -91,33 +91,18 @@ void serialMSPCheck()
       eeaddress++;
     settingswriteSerialRequest();
     }
-
-/*
+//#define GUISENSORS
+#ifdef GUISENSORS
     if (cmd == OSD_SENSORS) {
-      uint8_t txCheckSum, txSize;
-      uint16_t osd_voltage,osd_vidvoltage,osd_RSSI,osd_amperage;
-      headSerialRequest();
-      txCheckSum=0;
-      txSize = 8; // no. bytes to tx
-      Serial.write(txSize);
-      txCheckSum ^= txSize;
-      Serial.write(OSD_SENSORS);
-      txCheckSum ^= OSD_SENSORS;
-      Serial.write(cmd);
-      txCheckSum ^= cmd;
-
-      Serial.write(osd_voltage);
-      txCheckSum ^= osd_voltage;
-      Serial.write(osd_vidvoltage);
-      txCheckSum ^= osd_vidvoltage;
-      Serial.write(osd_RSSI);
-      txCheckSum ^= osd_RSSI;
-      Serial.write(osd_amperage);
-      txCheckSum ^= osd_amperage;
-
-      Serial.write(txCheckSum);
+      mspWriteRequest(MSP_OSD,1+10);
+      mspWrite8(OSD_SENSORS);
+      for (uint8_t sensor=0;sensor<SENSORTOTAL;sensor++) {
+        uint16_t sensortemp = analogRead(sensorpinarray[sensor]);
+        mspWrite16(sensortemp);
+      }
+       mspWriteChecksum();
     }
-*/
+#endif
 
     if(cmd == OSD_GET_FONT) {
       if(dataSize == 5) {
@@ -224,16 +209,15 @@ void serialMSPCheck()
 #endif
   }
 
+#if defined MULTIWII_V24
   if (cmdMSP==MSP_NAV_STATUS)
   {
      read8();
      read8();
      read8();
      GPS_waypoint_step=read8();
-//     read8();
-//     read8();
-//     read8();
   }
+#endif //MULTIWII_V24
 
   if (cmdMSP==MSP_ATTITUDE)
   {
