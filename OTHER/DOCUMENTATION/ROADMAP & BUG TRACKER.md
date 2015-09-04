@@ -14,7 +14,7 @@ Done - video volts alarm
 
 Done - Display anal / PWM sensors on GUI - via MW OSD protocol
 
-Support for PWMRSSI via RC data (Flight Controller types) or PPM stream (GPS OSD)
+Done - Support for PWMRSSI via RC data (Flight Controller types) or PPM stream (GPS OSD)
 
 Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
 
