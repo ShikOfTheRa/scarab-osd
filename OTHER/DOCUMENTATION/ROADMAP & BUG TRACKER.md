@@ -16,9 +16,9 @@ Done - Display anal / PWM sensors on GUI - via MW OSD protocol
 
 Done - Support for PWMRSSI via RC data (Flight Controller types) or PPM stream (GPS OSD)
 
-Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
+Done - GPSOSD - PPM support
 
-GPSOSD - PPM support
+Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
 
 Power consumtion W/Hr 
 
