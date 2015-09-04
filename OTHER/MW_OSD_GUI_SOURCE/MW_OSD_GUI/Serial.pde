@@ -104,8 +104,10 @@ private static final int
   OSD_SERIAL_SPEED         =4,
   OSD_RESET                =5,
   OSD_DEFAULT              =6,
+  OSD_SENSORS              =7,
   OSD_WRITE_CMD_EE         =8,
   OSD_READ_CMD_EE          =9;
+
 
 
 // initialize the serial port selected in the listBox
@@ -767,6 +769,40 @@ public void evaluateCommand(byte cmd, int size) {
 
       if(cmd_internal == OSD_NULL) {
       }
+      if(cmd_internal == OSD_SENSORS) { // response to a sensor request
+//        if(size == 11) { // confirmed request received
+         int analL;
+         int analH;
+         int analsense;
+         analmessage.setValue("OSD sensors 0-1023");
+         for (int i=0; i<analSENSORS; i++) {
+           analL=read8();
+           analH=read8();
+           analsense=analL+(analH<<8);
+           switch(i) {
+             case 0:
+               txtlblanal[i].setValue("Volt 1 : "+analsense);
+               break;
+             case 1:
+               txtlblanal[i].setValue("Volt 2 : "+analsense);
+               break;
+             case 2:
+               txtlblanal[i].setValue("Amps  : "+analsense);
+               break;
+             case 3:
+               txtlblanal[i].setValue("Temp  : "+analsense);
+               break;
+             case 4:
+               txtlblanal[i].setValue("RSSI  : "+analsense);
+               break;
+             default:  
+               txtlblanal[i].setValue("Sens "+i+" : "+analsense);
+           }
+
+         }
+//        }
+      }
+
 
       if(cmd_internal == OSD_READ_CMD_EE) { // response to a read / write request
         if(size == 3) { // confirmed write request received
@@ -1019,6 +1055,12 @@ void MWData_Com() {
 //  toggleMSP_Data = false; //???????????????????
   ReadConfigMSPMillis=1000+millis(); 
 }
+
+  public void get_OSD_SENSORS(){
+    headSerialReply(MSP_OSD, 1);
+    serialize8(OSD_SENSORS);
+    tailSerialReply();
+  }
 
   public void WRITEconfigMSP_init(){
     eeaddressGUI=0;  

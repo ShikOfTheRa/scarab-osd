@@ -189,6 +189,7 @@
 #define AHIROLLMAX  400             // Specify maximum AHI roll value displayed. Default 400 = 40.0 degrees 
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 //#define VIDVOLTSWARNING 106       // Enable flashing of video volts if less than value XXX. If XXX=104 then warning voltage = 10.6v
+#define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
 
 
 /********************       NAZA Settings         ************************/

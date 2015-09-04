@@ -666,7 +666,6 @@ uint16_t flyingTime=0;
 #define OSD_SENSORS              7
 #define OSD_WRITE_CMD_EE         8
 #define OSD_READ_CMD_EE          9
-#define OSD_SENSORS              10
 // End private MSP for use with the GUI
 
 

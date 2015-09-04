@@ -141,7 +141,7 @@ ControlP5 SmallcontrolP5;
 ControlP5 ScontrolP5;
 ControlP5 FontGroupcontrolP5;
 ControlP5 GroupcontrolP5;
-Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage; 
+Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage,analmessage; 
 Textlabel txtlblLayoutTxt,txtlblLayoutEnTxt, txtlblLayoutHudTxt; 
 Textlabel txtlblLayoutTxt2,txtlblLayoutEnTxt2, txtlblLayoutHudTxt2; 
 ListBox commListbox,baudListbox;
@@ -220,6 +220,8 @@ int[] serialInArray = new int[3];    // Where we'll put what we receive
 int[] debug = new int[4];    
 String progresstxt="";
 String msptxt="";
+String analtxt="";
+int analSENSORS=5;
 int xcolor=20;  
 
 
@@ -625,6 +627,7 @@ color yellow_ = color(200, 200, 20),
 Textarea myTextarea;
 
 // textlabels -------------------------------------------------------------------------------------------------------------
+Textlabel txtlblanal[] = new Textlabel[analSENSORS] ;
 Textlabel txtlblconfItem[] = new Textlabel[CONFIGITEMS] ;
 Textlabel txtlblSimItem[] = new Textlabel[SIMITEMS] ;
 Textlabel FileUploadText, TXText, RXText;
@@ -803,6 +806,14 @@ DONATEimage  = loadImage("DON_def.png");
   txtlblWhichcom = controlP5.addTextlabel("txtlblWhichcom","No Port Selected",5,22).setGroup(G_PortStatus); // textlabel(name,text,x,y)
   txtmessage = controlP5.addTextlabel("txtmessage","",3,295); // textdebug
   mspmessage = controlP5.addTextlabel("mspmessage","",XHUD+735,155); // textdebug
+
+
+  analmessage = controlP5.addTextlabel("analmessage","",XHUD+735,255); //
+  txtlblanal[0] = controlP5.addTextlabel("txtlblanal0","",XHUD+735,275); // analog sensor value
+  txtlblanal[1] = controlP5.addTextlabel("txtlblanal1","",XHUD+735,295); // analog sensor value
+  txtlblanal[2] = controlP5.addTextlabel("txtlblanal2","",XHUD+735,315); // analog sensor value
+  txtlblanal[3] = controlP5.addTextlabel("txtlblanal3","",XHUD+735,335); // analog sensor value
+  txtlblanal[4] = controlP5.addTextlabel("txtlblanal4","",XHUD+735,355); // analog sensor value
 //  XHUD+735,22
 
 // BUTTONS SELECTION ---------------------------------------
@@ -1205,6 +1216,7 @@ void draw() {
     
     txtmessage.setValue(progresstxt);
     mspmessage.setValue(msptxt);
+// txtlblconfItem[0].setValue(""); huh?
 
 // Layout editor
   txtlblLayoutTxt.setValue(" : "+ CONFIGHUDTEXT[hudeditposition]);
@@ -1256,6 +1268,10 @@ void draw() {
     PortRead = false;
     MakePorts();
     msptxt="";
+    analmessage.setValue("");
+    for (int i=0; i<analSENSORS; i++) {
+      txtlblanal[i].setValue("");
+    }
   }
 
   if ((SendSim ==1) && (ClosePort == false)) 
@@ -1263,6 +1279,8 @@ void draw() {
     if (!FontMode&&(WriteConfig==0)) {
       if (init_com==1) {
         if (ClosePort) return;
+        
+        get_OSD_SENSORS();
  ///*
         if ((int(SimControlToggle.getValue())!=0)&&(Simtype==0)) {
 
@@ -1280,6 +1298,7 @@ void draw() {
         case 2:
           if (init_com==1)SendCommand(MSP_ANALOG);
           if (init_com==1)SendCommand(MSP_COMP_GPS); 
+          if (init_com==1)SendCommand(OSD_SENSORS);
           break;
         case 3:
           if (init_com==1)SendCommand(MSP_ATTITUDE);
@@ -1308,6 +1327,8 @@ void draw() {
           break;
         case 11:
           if (init_com==1)SendCommand(MSP_PID);
+        case 12:
+          if (init_com==1)SendCommand(OSD_SENSORS);
           MSP_sendOrder=1;
           break;
         default:  

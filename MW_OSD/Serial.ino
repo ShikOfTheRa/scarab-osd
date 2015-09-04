@@ -91,13 +91,13 @@ void serialMSPCheck()
       eeaddress++;
     settingswriteSerialRequest();
     }
-//#define GUISENSORS
 #ifdef GUISENSORS
     if (cmd == OSD_SENSORS) {
       mspWriteRequest(MSP_OSD,1+10);
       mspWrite8(OSD_SENSORS);
       for (uint8_t sensor=0;sensor<SENSORTOTAL;sensor++) {
-        uint16_t sensortemp = analogRead(sensorpinarray[sensor]);
+//        uint16_t sensortemp = analogRead(sensorpinarray[sensor]);
+        uint16_t sensortemp = (uint16_t)sensorfilter[sensor][SENSORFILTERSIZE]/SENSORFILTERSIZE;
         mspWrite16(sensortemp);
       }
        mspWriteChecksum();
