@@ -117,8 +117,7 @@ void setup()
   UCSR0A  |= (1<<U2X0); UBRR0H = h; UBRR0L = l; 
 //---
   Serial.flush();
-
-#if defined INTPWMRSSI
+#if defined (INTPWMRSSI) || defined (PPMOSDCONTROL)
   initRSSIint();
 #else 
   pinMode(PWMRSSIPIN, INPUT);
@@ -905,8 +904,12 @@ void ProcessSensors(void) {
 //-------------- RSSI
   if (Settings[S_DISPLAYRSSI]) {           
     if(Settings[S_MWRSSI]) {
-      rssi = MwRssi>>2;
-    }
+      #if defined RCRSSI
+        rssi = MwRcData[THROTTLESTICK] >> 2
+      #else
+        rssi = MwRssi>>2;
+      #endif
+  }
     else { 
       rssi = sensorfilter[4][SENSORFILTERSIZE]>>5; // filter and move to 8 bit
     }    
