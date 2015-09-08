@@ -372,6 +372,9 @@ void loop()
       else
       {
         setMspRequests();
+#if defined USE_AIRSPEED_SENSOR
+        useairspeed();
+#endif //USE_AIRSPEED_SENSOR          
         if(MwSensorPresent&ACCELEROMETER)
            displayHorizon(MwAngle[0],MwAngle[1]);
         if(Settings[S_DISPLAYVOLTAGE]&&((voltage>Settings[S_VOLTAGEMIN])||(timer.Blink2hz))) 
@@ -1033,3 +1036,13 @@ void EEPROM_clear(){
 }
 
 
+#if defined USE_AIRSPEED_SENSOR
+void useairspeed(){
+  float airspeed_cal = AIRSPEED_CAL; // move to GUI or config
+  float airspeed_pressure;
+  uint16_t airspeedsensor = max((sensorfilter[3][SENSORTOTAL]-AIRSPEED_ZERO), 0);
+  float airspeedraw    = sqrt(airspeedsensor * airspeed_cal);
+  static float airspeed       = 27.7777 *( 8.0f * airspeed  +  2.0f * airspeedraw); //averaging filter. In cm/s *10
+  GPS_speed = (int16_t) airspeed;
+}
+#endif //USE_AIRSPEED_SENSOR 

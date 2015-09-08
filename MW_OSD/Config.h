@@ -194,6 +194,15 @@
 #define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
 
 
+/********************       Airspeed Settings         ************************/
+// Completely UNTESTED for future integration of support for airspeed sensor
+// Uses temp pin
+// Overrides GPS speed
+//#define USE_AIRSPEED_SENSOR
+//#define AIRSPEED_ZERO 512           // AIRSPEED ZERO calibration (0-1024) typically 512 for HK pilot sensor
+//#define AIRSPEED_CAL 1.9936f        // Adjusting factor
+
+
 /********************       NAZA Settings         ************************/
 //#define NAZAMODECONTROL           // Enables NAZA mode control display using a PWM signal into OSD RSSI pin. Can be used with OSD_SWITCH_RSSI   
 #define NAZA_MODE_GPS 1600
