@@ -167,6 +167,7 @@
 #define SYM_VOLT 0XA9
 #define SYM_AMP 0X9A
 #define SYM_MAH 0XA4
+#define SYM_WATT 0X57
 
 // Flying Mode
 #define SYM_ACRO 0XAE

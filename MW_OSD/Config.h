@@ -192,7 +192,7 @@
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 //#define VIDVOLTSWARNING 106       // Enable flashing of video volts if less than value XXX. If XXX=104 then warning voltage = 10.6v
 #define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
-
+#define DISPLAYWATTS                // Enable this to display Watts above Amps - temporary until added into GUI
 
 /********************       Airspeed Settings         ************************/
 // Completely UNTESTED for future integration of support for airspeed sensor
