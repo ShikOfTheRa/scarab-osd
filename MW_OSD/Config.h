@@ -89,10 +89,10 @@
 /********************       RSSI settings      *********************/
 //Choose ONLY ONE option: 
 //Note all require PWM RSSI to be enabled on GUI
-#define INTPWMRSSI                  // Undefine this to use new interrupt PWM RSSI method (standard PWM 750-2250ms pulse width)
-//#define PULSEINPWMRSSI            // Undefine this to use legacy non interrupt PWM RSSI method (pulse width 0 - 2250ms pulse width)
+#define INTPWMRSSI                  // Undefine this to use new interrupt PWM RSSI method (standard PWM 0-2000ms pulse width)
+//#define PULSEINPWMRSSI            // Undefine this to use legacy non interrupt PWM RSSI method (pulse width 0 - 2000ms pulse width)
 //#define FASTPWMRSSI               // Undefine this to use high PWM refresh frequency RSSI 
-#define RCRSSI 3                   // Undefine this to use RC channel (0-7) for RSSI (this can be from the FC - or a PPM channel with GPSOSD)
+//#define RCRSSI 3                  // Undefine this to use RC channel (0-7) for RSSI (this can be from the FC - or a PPM channel with GPSOSD)
  
 
 /********************       GPS settings      *********************/

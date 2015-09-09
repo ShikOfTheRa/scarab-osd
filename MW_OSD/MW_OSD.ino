@@ -790,6 +790,9 @@ void ProcessSensors(void) {
           sensortemp=sensorfilter[sensor][sensorindex];
         }
       }
+      if(Settings[S_MWRSSI]) {
+        sensortemp = MwRssi;
+      }
     }
 #if defined STAGE2FILTER // Use averaged change    
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
@@ -906,12 +909,7 @@ void ProcessSensors(void) {
 
 //-------------- RSSI
   if (Settings[S_DISPLAYRSSI]) {           
-    if(Settings[S_MWRSSI]) {
-        rssi = MwRssi>>2;
-    }
-    else { 
-      rssi = sensorfilter[4][SENSORFILTERSIZE]>>5; // filter and move to 8 bit
-    }    
+    rssi = sensorfilter[4][SENSORFILTERSIZE]>>5; // filter and move to 8 bit
     if (configMode){
       if((timer.rssiTimer==15)) {
         Settings[S_RSSIMAX]=rssi; // tx on
