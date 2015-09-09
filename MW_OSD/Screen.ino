@@ -451,7 +451,7 @@ void displayVoltage(void)
 {
  
   if (Settings[S_MAINVOLTAGE_VBAT]){
-    voltage=MwVBat;
+//    voltage=MwVBat;
   }
 
   if (Settings[S_SHOWBATLEVELEVOLUTION]){

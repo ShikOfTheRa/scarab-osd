@@ -774,6 +774,13 @@ void ProcessSensors(void) {
   for (uint8_t sensor=0;sensor<SENSORTOTAL;sensor++) {
     uint16_t sensortemp;
     sensortemp = analogRead(sensorpinarray[sensor]);
+    
+    if (sensor ==0) { 
+      if (Settings[S_MAINVOLTAGE_VBAT]){
+        sensortemp=MwVBat;
+      }
+    }
+    
     if (sensor ==4) { 
       if (Settings[S_PWMRSSI]){
 #if defined RCRSSI
@@ -859,6 +866,9 @@ void ProcessSensors(void) {
     else {
       voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (DIVIDER5v);     
     }
+  }
+  else{
+      voltage=sensorfilter[0][SENSORFILTERSIZE]>>3;
   }
 
   if (!Settings[S_VIDVOLTAGE_VBAT]) {
