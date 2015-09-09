@@ -18,6 +18,8 @@ Done - Support for PWMRSSI via RC data (Flight Controller types) or PPM stream (
 
 Done - GPSOSD - PPM support - PENDING TESTING
 
+Done - enable Filtering and calibration for MSP sensor data (RSSI)
+
 Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
 
 Power consumtion W/Hr 
@@ -62,8 +64,6 @@ pitch / roll angles alarm
 Support for 8 GUI layouts selectable from OSD menu at field
 
 Improve Standalone / Groundstation startup. Remove multiwii
-
-Filtering for MSP sensor data
 
 Flight path vector
 
