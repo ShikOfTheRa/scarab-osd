@@ -20,11 +20,12 @@ Done - GPSOSD - PPM support - PENDING TESTING
 
 Done - enable Filtering and calibration for MSP sensor data (RSSI)
 
+Done - Air speed sensor. - PENDING TESTING
+
 Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
 
 Power consumtion W/Hr 
 
-Done - Air speed sensor. - PENDING TESTING
 
 autodetect cell count
 
