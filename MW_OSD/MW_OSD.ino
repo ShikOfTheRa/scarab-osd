@@ -773,18 +773,18 @@ void ProcessSensors(void) {
   static uint8_t sensorindex;
   for (uint8_t sensor=0;sensor<SENSORTOTAL;sensor++) {
     uint16_t sensortemp;
-//    uint8_t sensorpin = sensorpinarray[sensor];
     sensortemp = analogRead(sensorpinarray[sensor]);
     if (sensor ==4) { 
       if (Settings[S_PWMRSSI]){
-#if defined FASTPWMRSSI
+#if defined RCRSSI
+//        sensortemp = constrain(MwRcData[RCRSSI],1000,2000)>>1;
+        sensortemp = MwRcData[RCRSSI]>>1;
+#elif defined FASTPWMRSSI
         sensortemp = FastpulseIn(PWMRSSIPIN, HIGH,1024);
 #elif defined INTPWMRSSI
         sensortemp = pwmRSSI>>1;
-#elif defined RCRSSI
-        sensortemp = MwRcData[RCRSSI]>>1;
 #else
-        sensortemp = pulseIn(PWMRSSIPIN, HIGH,18000)>>1;
+        sensortemp = pulseIn(PWMRSSIPIN, HIGH,18000)>>1;        
 #endif
         if (sensortemp==0) { // timed out - use previous
           sensortemp=sensorfilter[sensor][sensorindex];
@@ -907,12 +907,8 @@ void ProcessSensors(void) {
 //-------------- RSSI
   if (Settings[S_DISPLAYRSSI]) {           
     if(Settings[S_MWRSSI]) {
-      #if defined RCRSSI
-        rssi = MwRcData[THROTTLESTICK] >> 2
-      #else
         rssi = MwRssi>>2;
-      #endif
-  }
+    }
     else { 
       rssi = sensorfilter[4][SENSORFILTERSIZE]>>5; // filter and move to 8 bit
     }    

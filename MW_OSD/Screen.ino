@@ -588,8 +588,23 @@ void displayWatt(void)
 {
   uint16_t WhrPosition = getPosition(amperagePosition)-30;
 
-  uint16_t Whrconsumption = amperage*voltage/100; 
-  ItoaPadded(Whrconsumption, screenBuffer+1 , 5, 5);
+  uint16_t watts = amperage*voltage/100; 
+  ItoaPadded(watts, screenBuffer+1 , 5, 5);
+  screenBuffer[5] = SYM_WATT;
+  screenBuffer[6] = 0;
+  MAX7456_WriteString(screenBuffer,WhrPosition); // DEV only
+//  MAX7456_WriteString(screenBuffer,getPosition(MWHrPosition)-1);
+}
+
+//whr/km ??
+
+void displayWattHour(void)
+{
+  uint16_t WhrPosition = getPosition(amperagePosition)-30;
+
+  uint16_t Whrconsumption = (voltage/10) * amperagesum/(360*1000); 
+  ItoaPadded(Whrconsumption, screenBuffer+1 , 4, 4);
+  screenBuffer[4] = SYM_WATT;
   screenBuffer[5] = SYM_WATT;
   screenBuffer[6] = 0;
   MAX7456_WriteString(screenBuffer,WhrPosition); // DEV only
