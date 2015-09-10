@@ -20,17 +20,19 @@ Done - GPSOSD - PPM support - PENDING TESTING
 
 Done - enable Filtering and calibration for MSP sensor data (RSSI)
 
-Done - enable Filtering for MSP sensor data (MAin battery via FC)
+Done - enable Filtering for MSP sensor data (Main battery via FC)
 
 Done - Air speed sensor. - PENDING TESTING
+
+Done - autodetect cell count option 
+
+Done - autoset battery warning based upon cell count (for those who swap batteries) 
 
 Temperature sensor improvements
 
 Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
 
 Power consumtion W/Hr 
-
-autodetect cell count
 
 Fast start - Autodetect MAX ready or timeout
 
@@ -52,8 +54,6 @@ Migrate Current Sensor to GUI / potentially migrate to offset / mv/A calc
 Config.h option to enable / disable dist/al/volt alarms etc.
 
 Improved fastpwm and rssi calibration
-
-autoset warning voltage
 
 Fresnel warning indicator
 
