@@ -24,10 +24,11 @@ Done - enable Filtering for MSP sensor data (MAin battery via FC)
 
 Done - Air speed sensor. - PENDING TESTING
 
+Temperature sensor improvements
+
 Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
 
 Power consumtion W/Hr 
-
 
 autodetect cell count
 
