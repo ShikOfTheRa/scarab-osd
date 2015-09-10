@@ -523,9 +523,9 @@ uint16_t pMeterSum=0;
 uint16_t MwRssi=0;
 uint32_t GPS_time = 0;        //local time of coord calc - haydent
 
-uint8_t MvVBatMinCellVoltage=0;
-uint8_t MvVBatMaxCellVoltage=0;
-uint8_t MvVBatWarningCellVoltage=0;
+uint8_t MvVBatMinCellVoltage=CELL_VOLTS_MIN;
+uint8_t MvVBatMaxCellVoltage=CELL_VOLTS_MAX;
+uint8_t MvVBatWarningCellVoltage=CELL_VOLTS_WARN;
 
 // For decoration
 uint8_t SYM_AH_DECORATION_LEFT = 0x10;

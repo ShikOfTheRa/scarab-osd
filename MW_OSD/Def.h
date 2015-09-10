@@ -263,4 +263,4 @@
   #define YAWSTICK         2
   #define THROTTLESTICK    3
 #endif
-
+ 

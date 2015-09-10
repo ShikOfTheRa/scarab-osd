@@ -880,8 +880,8 @@ void ProcessSensors(void) {
       voltage=sensorfilter[0][SENSORFILTERSIZE]>>3;
   }
 
-#ifdef USE_FC_VOLTS_CONFIG
-  uint8_t cells = (voltage / MvVBatMaxCellVoltage) + 1;
+#ifdef AUTOVOLTWARNING
+  uint8_t cells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
   voltageWarning = cells * MvVBatWarningCellVoltage;
 #else
   voltageWarning = Settings[S_VOLTAGEMIN];

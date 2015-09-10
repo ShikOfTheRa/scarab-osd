@@ -166,6 +166,7 @@
 //#define GPSTIME       // Enable/disable GPS Time functions
 //#define SPORT         // Enable/disable FRSKY S.PORT cell code
 
+
 /********************       Display Settings         ************************/
 #define MAXSTALLDETECT              // Enable to attempt to detect MAX chip stall from bad power. Attempts to restart.
 //#define AUTOCAM                   // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
@@ -190,9 +191,9 @@
 #define AHIPITCHMAX 200             // Specify maximum AHI pitch value displayed. Default 200 = 20.0 degrees
 #define AHIROLLMAX  400             // Specify maximum AHI roll value displayed. Default 400 = 40.0 degrees 
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
-//#define VIDVOLTSWARNING 106       // Enable flashing of video volts if less than value XXX. If XXX=104 then warning voltage = 10.6v
 #define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
-#define DISPLAYWATTS                // Enable this to display Watts above Amps - temporary until added into GUI
+//#define DISPLAYWATTS                // Enable this to display Watts above Amps - temporary until added into GUI
+
 
 /********************       Airspeed Settings         ************************/
 // Completely UNTESTED for future integration of support for airspeed sensor
@@ -204,13 +205,20 @@
 
 
 /********************       NAZA Settings         ************************/
-//#define NAZAMODECONTROL           // Enables NAZA mode control display using a PWM signal into OSD RSSI pin. Can be used with OSD_SWITCH_RSSI   
+//#define NAZAMODECONTROL             // Enables NAZA mode control display using a PWM signal into OSD RSSI pin. Can be used with OSD_SWITCH_RSSI   
 #define NAZA_MODE_GPS 1600
 #define NAZA_MODE_ATI 
 #define NAZA_MODE_MAN 1400
 
-/********************       Baseflight / Cleanflight Settings         ************************/
-//#define FC_VOLTAGE_CONFIG            // Uncomment this if you are using the vbat voltage config (include: min cell voltage, max cell voltage and warning cell voltage) from the flight controller (only for Baseflight and Cleanflight)
+
+/********************       Voltage Warning Settings         ************************/
+#define AUTOVOLTWARNING               // Uncomment this to use automatic voltage warning. Overrides GUI/OSD voltage warrning setting. Usefull if using different cell count batteries.
+//#define FC_VOLTAGE_CONFIG           // Additionally uncomment this if you want to use the vbat voltage config with BASEFLIGHT and CLEANFLIGHT on the flight controller (include: min cell voltage, max cell voltage and warning cell voltage)
+//#define VIDVOLTSWARNING 106         // Enable flashing of video volts (when used) if less than value XXX. e.g If XXX=104 then warning voltage = 10.4v
+//The following variables are available for adjustment unless using FC_VOLTAGE_CONFIG 
+#define CELL_VOLTS_WARN 35            // Specify the cell voltage level at which low voltage warning takes place eg. 35 = 3.5 volts per cell
+#define CELL_VOLTS_MIN 33             // Specify the cell voltage at which it is considered empty
+#define CELL_VOLTS_MAX 42             // Specify the max normal LIPO cell voltage
 
 
 /********************       FrSky S.Port settings      *********************/
