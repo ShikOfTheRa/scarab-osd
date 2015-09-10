@@ -84,6 +84,10 @@
   #define BOXNAMES                  // required to support legacy protocol
 #endif
 
+#if defined (FC_VOLTAGE_CONFIG) && (defined (CLEANFLIGHT) || defined(BASEFLIGHT))
+  #define USE_FC_VOLTS_CONFIG
+#endif
+
 /********************   ENABLE/DISABLE CONFIG PAGES via STICK MENU     *********************/
 //large memory savings if not needed, comment to disable
 #define PAGE1 //PID CONFIG

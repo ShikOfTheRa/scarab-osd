@@ -293,6 +293,9 @@ void loop()
       case REQ_MSP_ANALOG:
         MSPcmdsend = MSP_ANALOG;
         break;
+      case REQ_MSP_MISC:
+        MSPcmdsend = MSP_MISC;
+        break;
       case REQ_MSP_RC_TUNING:
         MSPcmdsend = MSP_RC_TUNING;
         break;
@@ -377,7 +380,7 @@ void loop()
 #endif //USE_AIRSPEED_SENSOR          
         if(MwSensorPresent&ACCELEROMETER)
            displayHorizon(MwAngle[0],MwAngle[1]);
-        if(Settings[S_DISPLAYVOLTAGE]&&((voltage>Settings[S_VOLTAGEMIN])||(timer.Blink2hz))) 
+        if(Settings[S_DISPLAYVOLTAGE]&&((voltage>voltageWarning)||(timer.Blink2hz))) 
           displayVoltage();
         if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz))) 
           displayRSSI();
@@ -650,8 +653,14 @@ void setMspRequests() {
  
   if(Settings[S_MAINVOLTAGE_VBAT] ||
     Settings[S_VIDVOLTAGE_VBAT] ||
-    Settings[S_MWRSSI])
+    Settings[S_MWRSSI]) {
     modeMSPRequests |= REQ_MSP_ANALOG;
+    
+#ifdef USE_FC_VOLTS_CONFIG
+    modeMSPRequests |= REQ_MSP_MISC;
+#endif
+
+  }
 
   queuedMSPRequests &= modeMSPRequests;   // so we do not send requests that are not needed.
 }
@@ -870,6 +879,13 @@ void ProcessSensors(void) {
   else{
       voltage=sensorfilter[0][SENSORFILTERSIZE]>>3;
   }
+
+#ifdef USE_FC_VOLTS_CONFIG
+  uint8_t cells = (voltage / MvVBatMaxCellVoltage) + 1;
+  voltageWarning = cells * MvVBatWarningCellVoltage;
+#else
+  voltageWarning = Settings[S_VOLTAGEMIN];
+#endif  
 
   if (!Settings[S_VIDVOLTAGE_VBAT]) {
     uint16_t vidvoltageRaw = sensorfilter[1][SENSORFILTERSIZE];

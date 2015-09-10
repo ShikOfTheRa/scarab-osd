@@ -455,10 +455,17 @@ void displayVoltage(void)
   }
 
   if (Settings[S_SHOWBATLEVELEVOLUTION]){
-
+#ifdef USE_FC_VOLTS_CONFIG
+    uint8_t cells = (voltage / MvVBatMaxCellVoltage) + 1;
+    int battev = voltage/(int)cells;
+    battev = constrain(battev, MvVBatMinCellVoltage, MvVBatMaxCellVoltage);
+    battev = map(battev, MvVBatMinCellVoltage, MvVBatMaxCellVoltage, 0, 6);
+#else
     int battev=voltage/Settings[S_BATCELLS];
     battev=constrain(battev,34,42);
     battev = map(battev, 34, 42, 0, 6);
+#endif //USE_FC_VOLTS_CONFIG
+
     screenBuffer[0]=SYM_BATT_EMPTY-battev;
   }
   else {
@@ -466,12 +473,12 @@ void displayVoltage(void)
   }
 
 #ifdef DISP_LOW_VOLTS_WARNING
-  if (voltage<=Settings[S_VOLTAGEMIN]&&!armedtimer)
+  if (voltage<=voltageWarning&&!armedtimer)
     MAX7456_WriteString_P(lowvolts_text, getPosition(motorArmedPosition));
 #endif
 
 #ifdef FORCE_DISP_LOW_VOLTS
-  if(fieldIsVisible(voltagePosition)||(voltage<=Settings[S_VOLTAGEMIN])) 
+  if(fieldIsVisible(voltagePosition)||(voltage<=voltageWarning)) 
 #else
   if(fieldIsVisible(voltagePosition)) 
 #endif
