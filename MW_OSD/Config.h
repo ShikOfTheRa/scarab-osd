@@ -209,6 +209,9 @@
 #define NAZA_MODE_ATI 
 #define NAZA_MODE_MAN 1400
 
+/********************       Baseflight / Cleanflight Settings         ************************/
+//#define FC_VOLTAGE_CONFIG            // Uncomment this if you are using the vbat voltage config (include: min cell voltage, max cell voltage and warning cell voltage) from the flight controller (only for Baseflight and Cleanflight)
+
 
 /********************       FrSky S.Port settings      *********************/
 //enables data transfer from frsky reciever s.port to osd via multiwii

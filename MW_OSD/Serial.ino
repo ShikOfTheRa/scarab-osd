@@ -266,6 +266,35 @@ void serialMSPCheck()
     MWAmperage = read16();
  }
 
+#ifdef USE_FC_VOLTS_CONFIG
+  if (cmdMSP==MSP_MISC)
+  {
+    read16(); //ignore: midrc
+
+    read16(); //ignore: minthrottle
+    read16(); //ignore: maxthrottle
+    read16(); //ignore: mincommand
+
+    read16(); //ignore: failsafe_throttle
+    
+    read8(); //ignore: gps_type
+    read8(); //ignore: gps_baudrate
+    read8(); //ignore: gps_ubx_sbas
+
+    read8(); //ignore: multiwiiCurrentMeterOutput
+    read8(); //ignore: rssi_channel
+    read8(); //ignore: 0
+
+    read16(); //ignore: mag_declination
+
+    read8(); //ignore: vbatscale
+    MvVBatMinCellVoltage = read8(); //vbatmincellvoltage
+    MvVBatMaxCellVoltage = read8(); //vbatmaxcellvoltage
+    MvVBatWarningCellVoltage = read8(); //vbatwarningcellvoltage
+    
+  }
+#endif //USE_FC_VOLTS_CONFIG
+
 #if defined (BASEFLIGHT20150627)  
   if (cmdMSP==MSP_CONFIG)
   {

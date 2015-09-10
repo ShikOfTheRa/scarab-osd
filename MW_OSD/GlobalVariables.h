@@ -523,6 +523,10 @@ uint16_t pMeterSum=0;
 uint16_t MwRssi=0;
 uint32_t GPS_time = 0;        //local time of coord calc - haydent
 
+uint8_t MvVBatMinCellVoltage=0;
+uint8_t MvVBatMaxCellVoltage=0;
+uint8_t MvVBatWarningCellVoltage=0;
+
 // For decoration
 uint8_t SYM_AH_DECORATION_LEFT = 0x10;
 uint8_t SYM_AH_DECORATION_RIGHT = 0x10;
@@ -564,6 +568,7 @@ int16_t pwmRSSI = 0;
 // For Voltage
 uint16_t voltage=0;                      // its the value x10
 uint16_t vidvoltage=0;                   // its the value x10
+uint8_t voltageWarning=0;
 
 // For temprature
 int16_t temperature=0;                  // temperature in degrees Centigrade
@@ -905,6 +910,7 @@ uint16_t screenPosition[POSITIONS_SETTINGS];
 #define REQ_MSP_CELLS     (1 << 14)
 #define REQ_MSP_NAV_STATUS  32768 //(1 << 15)
 #define REQ_MSP_CONFIG  32768 //(1 << 15)
+#define REQ_MSP_MISC      65536 // (1 << 16)
 
 // Menu
 //PROGMEM const char *menu_stats_item[] =
