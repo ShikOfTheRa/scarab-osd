@@ -157,6 +157,8 @@ HARAKIRI USERS - ensure protocol set as follows:
   * Ensure physical connections are correct. Test by re-uploading MWOSD if necessary to verify
   * Upload EEPROM_Clear example sketch then re-upload MWOSD sketch. 
   * Set serial port default value on PC to be same as OSD (e.g. device manager>ports>comx>port settings)
+  * If anything connected to RSSI, try removing it.
+  * If camera connected, try disconnecting it. 
 
 ---
 
