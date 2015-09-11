@@ -141,7 +141,7 @@ ControlP5 SmallcontrolP5;
 ControlP5 ScontrolP5;
 ControlP5 FontGroupcontrolP5;
 ControlP5 GroupcontrolP5;
-Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage,analmessage; 
+Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage,eeindexmessage,analmessage; 
 Textlabel txtlblLayoutTxt,txtlblLayoutEnTxt, txtlblLayoutHudTxt; 
 Textlabel txtlblLayoutTxt2,txtlblLayoutEnTxt2, txtlblLayoutHudTxt2; 
 ListBox commListbox,baudListbox;
@@ -208,6 +208,7 @@ String CallSign = "";
 String Title;
 int Passthroughcomm;
 int AutoSimulator=0;
+int AutoDebugGUI=1;
 int Simtype=0;
 int StartupMessage=0;
 int FrameRate=30;
@@ -220,6 +221,7 @@ int[] serialInArray = new int[3];    // Where we'll put what we receive
 int[] debug = new int[4];    
 String progresstxt="";
 String msptxt="";
+String eeindextxt="";
 String analtxt="";
 int analSENSORS=5;
 int xcolor=20;  
@@ -806,6 +808,7 @@ DONATEimage  = loadImage("DON_def.png");
   txtlblWhichcom = controlP5.addTextlabel("txtlblWhichcom","No Port Selected",5,22).setGroup(G_PortStatus); // textlabel(name,text,x,y)
   txtmessage = controlP5.addTextlabel("txtmessage","",3,295); // textdebug
   mspmessage = controlP5.addTextlabel("mspmessage","",XHUD+735,155); // textdebug
+  eeindexmessage = controlP5.addTextlabel("eeindexmessage","",XHUD+735,175); // eeindexdebug
 
 
   analmessage = controlP5.addTextlabel("analmessage","",XHUD+735,255); //
@@ -1216,6 +1219,8 @@ void draw() {
     
     txtmessage.setValue(progresstxt);
     mspmessage.setValue(msptxt);
+    eeindexmessage.setValue(eeindextxt);
+    
 // txtlblconfItem[0].setValue(""); huh?
 
 // Layout editor
@@ -1268,6 +1273,7 @@ void draw() {
     PortRead = false;
     MakePorts();
     msptxt="";
+    eeindextxt="";
     analmessage.setValue("");
     for (int i=0; i<analSENSORS; i++) {
       txtlblanal[i].setValue("");
@@ -2055,6 +2061,7 @@ public void updateConfig(){
   ConfigClass.setProperty("Title",Title);
   ConfigClass.setProperty("Passthroughcomm",str(Passthroughcomm));
   ConfigClass.setProperty("AutoSimulator",str(AutoSimulator));
+  ConfigClass.setProperty("AutoDebugGUI",str(AutoDebugGUI));
   ConfigClass.setProperty("Simtype",str(Simtype));
   ConfigClass.setProperty("StartupMessage",str(StartupMessage));
   ConfigClass.setProperty("FrameRate",str(FrameRate));
@@ -2095,6 +2102,7 @@ public void LoadConfig(){
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
     AutoSimulator = 0;
+    AutoDebugGUI = 1;
     Simtype=1;
     FrameRate = 15;
     StartupMessage = 0;
@@ -2112,6 +2120,7 @@ public void LoadConfig(){
       Title =ConfigClass.getProperty("Title");
       Passthroughcomm = int(ConfigClass.getProperty("Passthroughcomm"));
       AutoSimulator = int(ConfigClass.getProperty("AutoSimulator"));
+      AutoDebugGUI = int(ConfigClass.getProperty("AutoDebugGUI"));
       Simtype = int(ConfigClass.getProperty("Simtype"));
       FrameRate = int(ConfigClass.getProperty("FrameRate"));
       frameRate(FrameRate); 
@@ -2134,6 +2143,9 @@ public void LoadConfig(){
   }
   if (AutoSimulator !=0){
     SimControlToggle.setValue(1);
+  }
+  if (AutoDebugGUI !=0){
+    DEBUGGUI.setValue(1);
   }
 
 }
@@ -2400,6 +2412,10 @@ void coloriseswitches(){
     SimControlToggle.setColorActive(switches_);
   else
     SimControlToggle.setColorActive(red_);
+  if (int(DEBUGGUI.getValue())==1)
+    DEBUGGUI.setColorActive(switches_);
+  else
+    DEBUGGUI.setColorActive(red_);
 }
 
 void LEW(){

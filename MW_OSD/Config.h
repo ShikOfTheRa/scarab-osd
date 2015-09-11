@@ -234,5 +234,7 @@
 /********************  TEMPERATURE  settings      *********************/
 //#define TEMPSENSOR                // Enable if you have a hardware temperature sensor - DEPRECATED
 #define TEMPERATUREMAX 50           // Temperature warning value
+#define TEMP_ZERO 0                 // Temperature Zero calibration (range = 0-1024 :512 = 2.5v with vref of 5v and 0.55v for vref of 1.1v) 
+#define TEMP_CAL 0                  // Temperature calibration value (range = 0-1024 :512 = 0.5v with vref of 5v and 0.55v for vref of 1.1v) 
 
 

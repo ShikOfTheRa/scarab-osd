@@ -709,9 +709,10 @@ public void evaluateCommand(byte cmd, int size) {
   PortRead = true;
   MakePorts(); 
   int icmd = int(cmd&0xFF);
-  msptxt="MSP: "+icmd;   
-  mspmessage.setValue(msptxt);
-
+  if (int(DEBUGGUI.getValue())==1){
+    msptxt="MSP: "+icmd;   
+    mspmessage.setValue(msptxt);
+  }
 //  if (icmd !=MSP_OSD)return;  //System.out.println("Not Valid Command");
   time2=time;
 
@@ -770,7 +771,7 @@ public void evaluateCommand(byte cmd, int size) {
       if(cmd_internal == OSD_NULL) {
       }
       if(cmd_internal == OSD_SENSORS) { // response to a sensor request
-//        if(size == 11) { // confirmed request received
+        if (int(DEBUGGUI.getValue())==1){
          int analL;
          int analH;
          int analsense;
@@ -798,9 +799,15 @@ public void evaluateCommand(byte cmd, int size) {
              default:  
                txtlblanal[i].setValue("Sens "+i+" : "+analsense);
            }
-
          }
-//        }
+        }
+        else {
+          msptxt="";
+          analmessage.setValue("");
+          for (int i=0; i<analSENSORS; i++) {
+            txtlblanal[i].setValue("");
+          }
+        }
       }
 
 
@@ -809,6 +816,9 @@ public void evaluateCommand(byte cmd, int size) {
           int eeaddressOSDL=read8();
           int eeaddressOSDH=read8();
           eeaddressOSD=eeaddressOSDL+(eeaddressOSDH<<8);
+          eeindextxt="EEW: "+eeaddressOSD;   
+          eeindexmessage.setValue(eeindextxt);
+
           if (eeaddressOSD>=eeaddressGUI){ // update base address
             eeaddressGUI=eeaddressOSD;
           }
@@ -827,6 +837,9 @@ public void evaluateCommand(byte cmd, int size) {
           for(int i=0; i<10; i++) {
             eeaddressOSD=read8();
             eeaddressOSD=eeaddressOSD+read8();
+            eeindextxt="EER: "+eeaddressOSD;   
+            eeindexmessage.setValue(eeindextxt);
+
             eedataOSD=read8();
             if (eeaddressOSD==0){
               confCheck=eedataOSD;

@@ -174,7 +174,7 @@ ControlP5 SmallcontrolP5;
 ControlP5 ScontrolP5;
 ControlP5 FontGroupcontrolP5;
 ControlP5 GroupcontrolP5;
-Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage; 
+Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage,eeindexmessage,analmessage; 
 Textlabel txtlblLayoutTxt,txtlblLayoutEnTxt, txtlblLayoutHudTxt; 
 Textlabel txtlblLayoutTxt2,txtlblLayoutEnTxt2, txtlblLayoutHudTxt2; 
 ListBox commListbox,baudListbox;
@@ -241,6 +241,7 @@ String CallSign = "";
 String Title;
 int Passthroughcomm;
 int AutoSimulator=0;
+int AutoDebugGUI=1;
 int Simtype=0;
 int StartupMessage=0;
 int FrameRate=30;
@@ -253,6 +254,9 @@ int[] serialInArray = new int[3];    // Where we'll put what we receive
 int[] debug = new int[4];    
 String progresstxt="";
 String msptxt="";
+String eeindextxt="";
+String analtxt="";
+int analSENSORS=5;
 int xcolor=20;  
 
 
@@ -658,6 +662,7 @@ int yellow_ = color(200, 200, 20),
 Textarea myTextarea;
 
 // textlabels -------------------------------------------------------------------------------------------------------------
+Textlabel txtlblanal[] = new Textlabel[analSENSORS] ;
 Textlabel txtlblconfItem[] = new Textlabel[CONFIGITEMS] ;
 Textlabel txtlblSimItem[] = new Textlabel[SIMITEMS] ;
 Textlabel FileUploadText, TXText, RXText;
@@ -836,6 +841,15 @@ DONATEimage  = loadImage("DON_def.png");
   txtlblWhichcom = controlP5.addTextlabel("txtlblWhichcom","No Port Selected",5,22).setGroup(G_PortStatus); // textlabel(name,text,x,y)
   txtmessage = controlP5.addTextlabel("txtmessage","",3,295); // textdebug
   mspmessage = controlP5.addTextlabel("mspmessage","",XHUD+735,155); // textdebug
+  eeindexmessage = controlP5.addTextlabel("eeindexmessage","",XHUD+735,175); // eeindexdebug
+
+
+  analmessage = controlP5.addTextlabel("analmessage","",XHUD+735,255); //
+  txtlblanal[0] = controlP5.addTextlabel("txtlblanal0","",XHUD+735,275); // analog sensor value
+  txtlblanal[1] = controlP5.addTextlabel("txtlblanal1","",XHUD+735,295); // analog sensor value
+  txtlblanal[2] = controlP5.addTextlabel("txtlblanal2","",XHUD+735,315); // analog sensor value
+  txtlblanal[3] = controlP5.addTextlabel("txtlblanal3","",XHUD+735,335); // analog sensor value
+  txtlblanal[4] = controlP5.addTextlabel("txtlblanal4","",XHUD+735,355); // analog sensor value
 //  XHUD+735,22
 
 // BUTTONS SELECTION ---------------------------------------
@@ -1238,6 +1252,9 @@ public void draw() {
     
     txtmessage.setValue(progresstxt);
     mspmessage.setValue(msptxt);
+    eeindexmessage.setValue(eeindextxt);
+    
+// txtlblconfItem[0].setValue(""); huh?
 
 // Layout editor
   txtlblLayoutTxt.setValue(" : "+ CONFIGHUDTEXT[hudeditposition]);
@@ -1289,6 +1306,11 @@ public void draw() {
     PortRead = false;
     MakePorts();
     msptxt="";
+    eeindextxt="";
+    analmessage.setValue("");
+    for (int i=0; i<analSENSORS; i++) {
+      txtlblanal[i].setValue("");
+    }
   }
 
   if ((SendSim ==1) && (ClosePort == false)) 
@@ -1296,6 +1318,8 @@ public void draw() {
     if (!FontMode&&(WriteConfig==0)) {
       if (init_com==1) {
         if (ClosePort) return;
+        
+        get_OSD_SENSORS();
  ///*
         if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==0)) {
 
@@ -1313,6 +1337,7 @@ public void draw() {
         case 2:
           if (init_com==1)SendCommand(MSP_ANALOG);
           if (init_com==1)SendCommand(MSP_COMP_GPS); 
+          if (init_com==1)SendCommand(OSD_SENSORS);
           break;
         case 3:
           if (init_com==1)SendCommand(MSP_ATTITUDE);
@@ -1341,6 +1366,8 @@ public void draw() {
           break;
         case 11:
           if (init_com==1)SendCommand(MSP_PID);
+        case 12:
+          if (init_com==1)SendCommand(OSD_SENSORS);
           MSP_sendOrder=1;
           break;
         default:  
@@ -2067,6 +2094,7 @@ public void updateConfig(){
   ConfigClass.setProperty("Title",Title);
   ConfigClass.setProperty("Passthroughcomm",str(Passthroughcomm));
   ConfigClass.setProperty("AutoSimulator",str(AutoSimulator));
+  ConfigClass.setProperty("AutoDebugGUI",str(AutoDebugGUI));
   ConfigClass.setProperty("Simtype",str(Simtype));
   ConfigClass.setProperty("StartupMessage",str(StartupMessage));
   ConfigClass.setProperty("FrameRate",str(FrameRate));
@@ -2107,6 +2135,7 @@ public void LoadConfig(){
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
     AutoSimulator = 0;
+    AutoDebugGUI = 1;
     Simtype=1;
     FrameRate = 15;
     StartupMessage = 0;
@@ -2124,6 +2153,7 @@ public void LoadConfig(){
       Title =ConfigClass.getProperty("Title");
       Passthroughcomm = PApplet.parseInt(ConfigClass.getProperty("Passthroughcomm"));
       AutoSimulator = PApplet.parseInt(ConfigClass.getProperty("AutoSimulator"));
+      AutoDebugGUI = PApplet.parseInt(ConfigClass.getProperty("AutoDebugGUI"));
       Simtype = PApplet.parseInt(ConfigClass.getProperty("Simtype"));
       FrameRate = PApplet.parseInt(ConfigClass.getProperty("FrameRate"));
       frameRate(FrameRate); 
@@ -2146,6 +2176,9 @@ public void LoadConfig(){
   }
   if (AutoSimulator !=0){
     SimControlToggle.setValue(1);
+  }
+  if (AutoDebugGUI !=0){
+    DEBUGGUI.setValue(1);
   }
 
 }
@@ -2412,6 +2445,10 @@ public void coloriseswitches(){
     SimControlToggle.setColorActive(switches_);
   else
     SimControlToggle.setColorActive(red_);
+  if (PApplet.parseInt(DEBUGGUI.getValue())==1)
+    DEBUGGUI.setColorActive(switches_);
+  else
+    DEBUGGUI.setColorActive(red_);
 }
 
 public void LEW(){
@@ -3459,8 +3496,10 @@ private static final int
   OSD_SERIAL_SPEED         =4,
   OSD_RESET                =5,
   OSD_DEFAULT              =6,
+  OSD_SENSORS              =7,
   OSD_WRITE_CMD_EE         =8,
   OSD_READ_CMD_EE          =9;
+
 
 
 // initialize the serial port selected in the listBox
@@ -4062,9 +4101,10 @@ public void evaluateCommand(byte cmd, int size) {
   PortRead = true;
   MakePorts(); 
   int icmd = PApplet.parseInt(cmd&0xFF);
-  msptxt="MSP: "+icmd;   
-  mspmessage.setValue(msptxt);
-
+  if (PApplet.parseInt(DEBUGGUI.getValue())==1){
+    msptxt="MSP: "+icmd;   
+    mspmessage.setValue(msptxt);
+  }
 //  if (icmd !=MSP_OSD)return;  //System.out.println("Not Valid Command");
   time2=time;
 
@@ -4122,12 +4162,55 @@ public void evaluateCommand(byte cmd, int size) {
 
       if(cmd_internal == OSD_NULL) {
       }
+      if(cmd_internal == OSD_SENSORS) { // response to a sensor request
+        if (PApplet.parseInt(DEBUGGUI.getValue())==1){
+         int analL;
+         int analH;
+         int analsense;
+         analmessage.setValue("OSD sensors 0-1023");
+         for (int i=0; i<analSENSORS; i++) {
+           analL=read8();
+           analH=read8();
+           analsense=analL+(analH<<8);
+           switch(i) {
+             case 0:
+               txtlblanal[i].setValue("Volt 1 : "+analsense);
+               break;
+             case 1:
+               txtlblanal[i].setValue("Volt 2 : "+analsense);
+               break;
+             case 2:
+               txtlblanal[i].setValue("Amps  : "+analsense);
+               break;
+             case 3:
+               txtlblanal[i].setValue("Temp  : "+analsense);
+               break;
+             case 4:
+               txtlblanal[i].setValue("RSSI  : "+analsense);
+               break;
+             default:  
+               txtlblanal[i].setValue("Sens "+i+" : "+analsense);
+           }
+         }
+        }
+        else {
+          msptxt="";
+          analmessage.setValue("");
+          for (int i=0; i<analSENSORS; i++) {
+            txtlblanal[i].setValue("");
+          }
+        }
+      }
+
 
       if(cmd_internal == OSD_READ_CMD_EE) { // response to a read / write request
         if(size == 3) { // confirmed write request received
           int eeaddressOSDL=read8();
           int eeaddressOSDH=read8();
           eeaddressOSD=eeaddressOSDL+(eeaddressOSDH<<8);
+          eeindextxt="EEW: "+eeaddressOSD;   
+          eeindexmessage.setValue(eeindextxt);
+
           if (eeaddressOSD>=eeaddressGUI){ // update base address
             eeaddressGUI=eeaddressOSD;
           }
@@ -4146,6 +4229,9 @@ public void evaluateCommand(byte cmd, int size) {
           for(int i=0; i<10; i++) {
             eeaddressOSD=read8();
             eeaddressOSD=eeaddressOSD+read8();
+            eeindextxt="EER: "+eeaddressOSD;   
+            eeindexmessage.setValue(eeindextxt);
+
             eedataOSD=read8();
             if (eeaddressOSD==0){
               confCheck=eedataOSD;
@@ -4375,6 +4461,12 @@ public void MWData_Com() {
   ReadConfigMSPMillis=1000+millis(); 
 }
 
+  public void get_OSD_SENSORS(){
+    headSerialReply(MSP_OSD, 1);
+    serialize8(OSD_SENSORS);
+    tailSerialReply();
+  }
+
   public void WRITEconfigMSP_init(){
     eeaddressGUI=0;  
     CheckCallSign(); 
@@ -4503,7 +4595,7 @@ CheckBox checkboxSimItem[] = new CheckBox[SIMITEMS] ;
 CheckBox ShowSimBackground, UnlockControls, SGPS_FIX,SFRSKY;
 //Toggles
 Toggle toggleModeItems[] = new Toggle[boxnames.length] ;
-Toggle SimControlToggle;
+Toggle SimControlToggle,DEBUGGUI;
 // Toggle HudOptionEnabled;
 
 // Slider2d-
@@ -4512,7 +4604,7 @@ Slider2D Pitch_Roll, Throttle_Yaw,MW_Pitch_Roll;
 Slider s_Altitude,s_Vario,s_VBat,s_MRSSI;
 
 Textlabel txtlblModeItems[] = new Textlabel[boxnames.length] ;
-Textlabel SimControlText;
+Textlabel SimControlText,DEBUGGUItext;
 
 // Knobs----
 Knob HeadingKnob,SGPSHeadHome;
@@ -4763,9 +4855,17 @@ SimControlToggle.setMode(ControlP5.SWITCH);
 SimControlToggle.setGroup(SGControlBox);
 SimControlToggle.setValue(0);
 
+//SimControlText = (controlP5.Toggle) hideLabel(controlP5.addTextlabel("SimControlText","Simulate on OSD",45,3));
 SimControlText = controlP5.addTextlabel("SimControlText","Simulate on OSD",45,3);
 SimControlText.setGroup(SGControlBox);
 
+DEBUGGUI =  (controlP5.Toggle) hideLabel(controlP5.addToggle("DEBUGGUI"));
+DEBUGGUI.setPosition(5,18);
+DEBUGGUI.setSize(35,10);
+DEBUGGUI.setMode(ControlP5.SWITCH);
+DEBUGGUI.setGroup(G_Debug);
+DEBUGGUItext = controlP5.addTextlabel("DEBUGGUItext","Diagnostic:",45,15);
+DEBUGGUItext.setGroup(G_Debug);
                
 SFRSKY =  ScontrolP5.addCheckBox("SFRSKY",5,5);
     SFRSKY.setColorBackground(color(120));

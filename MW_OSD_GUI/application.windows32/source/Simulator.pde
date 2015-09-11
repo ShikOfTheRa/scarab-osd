@@ -30,7 +30,7 @@ CheckBox checkboxSimItem[] = new CheckBox[SIMITEMS] ;
 CheckBox ShowSimBackground, UnlockControls, SGPS_FIX,SFRSKY;
 //Toggles
 Toggle toggleModeItems[] = new Toggle[boxnames.length] ;
-Toggle SimControlToggle;
+Toggle SimControlToggle,DEBUGGUI;
 // Toggle HudOptionEnabled;
 
 // Slider2d-
@@ -39,7 +39,7 @@ Slider2D Pitch_Roll, Throttle_Yaw,MW_Pitch_Roll;
 Slider s_Altitude,s_Vario,s_VBat,s_MRSSI;
 
 Textlabel txtlblModeItems[] = new Textlabel[boxnames.length] ;
-Textlabel SimControlText;
+Textlabel SimControlText,DEBUGGUItext;
 
 // Knobs----
 Knob HeadingKnob,SGPSHeadHome;
@@ -290,9 +290,17 @@ SimControlToggle.setMode(ControlP5.SWITCH);
 SimControlToggle.setGroup(SGControlBox);
 SimControlToggle.setValue(0);
 
+//SimControlText = (controlP5.Toggle) hideLabel(controlP5.addTextlabel("SimControlText","Simulate on OSD",45,3));
 SimControlText = controlP5.addTextlabel("SimControlText","Simulate on OSD",45,3);
 SimControlText.setGroup(SGControlBox);
 
+DEBUGGUI =  (controlP5.Toggle) hideLabel(controlP5.addToggle("DEBUGGUI"));
+DEBUGGUI.setPosition(5,18);
+DEBUGGUI.setSize(35,10);
+DEBUGGUI.setMode(ControlP5.SWITCH);
+DEBUGGUI.setGroup(G_Debug);
+DEBUGGUItext = controlP5.addTextlabel("DEBUGGUItext","Diagnostic:",45,15);
+DEBUGGUItext.setGroup(G_Debug);
                
 SFRSKY =  ScontrolP5.addCheckBox("SFRSKY",5,5);
     SFRSKY.setColorBackground(color(120));
