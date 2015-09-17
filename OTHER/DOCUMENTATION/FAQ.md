@@ -10,7 +10,7 @@
   * If using MinimOSD board make sure your output stage is properly powered.
   * Ensure you do not have blank screen layout selected
   * If using 3 way switch try different position
-  * If using FRSKY PWM RSSI, unplug until resolved.
+  * If using FRSKY or other high frequency RSSI, unplug until resolved.
 
 ---
 
