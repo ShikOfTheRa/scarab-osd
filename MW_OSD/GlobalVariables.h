@@ -31,9 +31,9 @@
 #define PIDITEMS 10
 
 // STICK POSITION
-#define MAXSTICK         1900
-#define MINSTICK         1100
-#define MINTROTTLE       1000
+#define MAXSTICK         1850
+#define MINSTICK         1150
+//#define MINTROTTLE       1000
 
 // FOR POSITION OF PID CONFIG VALUE
 #define ROLLT 93
