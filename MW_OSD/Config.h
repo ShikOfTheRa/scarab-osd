@@ -192,7 +192,8 @@
 #define AHIROLLMAX  400             // Specify maximum AHI roll value displayed. Default 400 = 40.0 degrees 
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 #define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
-//#define DISPLAYWATTS                // Enable this to display Watts above Amps - temporary until added into GUI
+//#define DISPLAYWATTS              // Enable this to display Watts above Amps - temporary until added into GUI
+//#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft
 
 
 /********************       Airspeed Settings         ************************/

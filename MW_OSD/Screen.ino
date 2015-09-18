@@ -30,6 +30,36 @@ char *ItoaPadded(int val, char *str, uint8_t bytes, uint8_t decimalpos)  {
   return str;
 }
 
+char *ItoaUnPadded(int val, char *str, uint8_t bytes, uint8_t decimalpos)  {
+// Val to convert
+// Return String
+// Length
+// Decimal position
+  uint8_t neg = 0;
+  if(val < 0) {
+    neg = 1;
+    val = -val;
+  } 
+
+  str[bytes] = 0;
+  for(;;) {
+    if(bytes == decimalpos) {
+      str[--bytes] = DECIMAL;
+      decimalpos = 0;
+    }
+    str[--bytes] = '0' + (val % 10);
+    val = val / 10;
+    if(bytes == 0 || (decimalpos == 0 && val == 0))
+      break;
+  }
+
+  if(neg && bytes > 0)
+    str[--bytes] = '-';
+
+  while(bytes != 0)
+    str[--bytes] = ' ';
+  return str;
+}
 char *FormatGPSCoord(int32_t val, char *str, uint8_t p, char pos, char neg) {
   if(val < 0) {
     pos = neg;
@@ -882,7 +912,6 @@ void displayDistanceToHome(void)
 {
   if(!GPS_fix)
     return;
-
   uint16_t dist;
   if(Settings[S_UNITSYSTEM])
     dist = GPS_distanceToHome * 3.2808;           // mt to feet
@@ -892,10 +921,37 @@ void displayDistanceToHome(void)
     distanceMAX = dist;
   if(!fieldIsVisible(GPS_distanceToHomePosition))
     return;
+
   if(((dist/100)>=Settings[S_DISTANCE_ALARM])&&(timer.Blink2hz))
     return;
+    
   screenBuffer[0] = GPS_distanceToHomeAdd[Settings[S_UNITSYSTEM]];
   itoa(dist, screenBuffer+1, 10);
+
+#if defined LONG_RANGE_DISPLAY // Change to decimal KM / Miles    
+  if (dist>9999){
+
+    if(Settings[S_UNITSYSTEM]){
+      dist = int(GPS_distanceToHome * 0.0062137);           // mt to miles*10
+    }
+    else{
+      dist = dist=dist/100;
+    }
+    itoa(dist, screenBuffer+1, 10);
+    uint8_t xx = FindNull();
+//    if (xx==2){ // if want to limit distance to 999 or less instead of 9999. This adds a leading 0 for improved display
+//      screenBuffer[2]=screenBuffer[1];
+//      screenBuffer[1]=0x30;
+//      xx++;
+//    }
+    screenBuffer[xx]=screenBuffer[xx-1];
+    screenBuffer[xx-1] = DECIMAL;
+    xx++;
+    screenBuffer[xx] = 0;
+  }
+#endif // LONG_RANGE_DISPLAY
+
+  screenBuffer[0] = GPS_distanceToHomeAdd[Settings[S_UNITSYSTEM]];
   MAX7456_WriteString(screenBuffer,getPosition(GPS_distanceToHomePosition));
 }
 
