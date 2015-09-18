@@ -28,6 +28,8 @@ Done - autodetect cell count option
 
 Done - autoset battery warning based upon cell count (for those who swap batteries) 
 
+Done - long distance display for fixed wing - e.g. 15.3km instaed of 1530m 
+
 Temperature sensor improvements
 
 Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
