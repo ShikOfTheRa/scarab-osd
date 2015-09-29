@@ -30,6 +30,8 @@ Done - autoset battery warning based upon cell count (for those who swap batteri
 
 Done - long distance display for fixed wing - e.g. 15.3km instaed of 1530m 
 
+Fast AHI update to VSYNC rate of 25/30 hz
+
 Temperature sensor improvements
 
 Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
