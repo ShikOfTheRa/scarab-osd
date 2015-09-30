@@ -11,6 +11,7 @@
   * Ensure you do not have blank screen layout selected
   * If using 3 way switch try different position
   * If using FRSKY or other high frequency RSSI, unplug until resolved.
+  * Some stups require a consistent ground between camera and OSD video output
 
 ---
 
