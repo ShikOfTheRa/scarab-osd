@@ -525,13 +525,21 @@ void handleRawRC() {
 	waitStick = 2;
 	configExit();
       }
+#ifdef MODE1
+      if(configMode&&(MwRcData[YAWSTICK]>MAXSTICK)) // MOVE RIGHT
+#else
       if(configMode&&(MwRcData[ROLLSTICK]>MAXSTICK)) // MOVE RIGHT
+#endif
       {
 	waitStick = 1;
 	COL++;
 	if(COL>3) COL=3;
       }
+#ifdef MODE1
+      else if(configMode&&(MwRcData[YAWSTICK]<MINSTICK)) // MOVE LEFT
+#else
       else if(configMode&&(MwRcData[ROLLSTICK]<MINSTICK)) // MOVE LEFT
+#endif
       {
 	waitStick = 1;
 	COL--;
@@ -554,13 +562,21 @@ void handleRawRC() {
 	if(ROW>10)
 	  ROW=10;
       }
+#ifdef MODE1
+      else if(!previousarmedstatus&&configMode&&(MwRcData[ROLLSTICK]<MINSTICK)) // DECREASE
+#else
       else if(!previousarmedstatus&&configMode&&(MwRcData[YAWSTICK]<MINSTICK)) // DECREASE
+#endif
       {
 	waitStick = 1;
         menudir=-1+oldmenudir;
         serialMenuCommon();  
       }
+#ifdef MODE1
+      else if(!previousarmedstatus&&configMode&&(MwRcData[ROLLSTICK]>MAXSTICK)) // INCREASE
+#else
       else if(!previousarmedstatus&&configMode&&(MwRcData[YAWSTICK]>MAXSTICK)) // INCREASE
+#endif
       { 
 	waitStick =1;
         menudir=1+oldmenudir;
