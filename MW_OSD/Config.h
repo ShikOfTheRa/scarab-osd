@@ -126,9 +126,9 @@
 
 /******************** Serial MSP speed settings *********************/
 // Choose ONLY ONE option: increases speeds of serial update - but with impact to flight controller 
-//#define MSP_SPEED_LOW // Enable for soft serial / slow baud rates.
-#define MSP_SPEED_MED // default
-//#define MSP_SPEED_HIGH
+//#define MSP_SPEED_LOW     // Enable for soft serial / slow baud rates.
+#define MSP_SPEED_MED       // Default
+//#define MSP_SPEED_HIGH    // Enable for faster AHI and speed updates. Requires higher baud rates and increases overhead on the FC to process
 
 
 /********************       CALLSIGN settings      *********************/
