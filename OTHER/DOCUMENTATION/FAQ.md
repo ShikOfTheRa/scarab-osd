@@ -169,6 +169,12 @@ HARAKIRI USERS - ensure protocol set as follows:
   * https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Guide_standalone_GPS_OSD.md
 
 ---
+23 GUI will not launch
+  * Try both 32 and 64 bit versions
+  * Check other GUI FAQ points (therere a re several)
+  * Completely uninstall all Java versions and re-install latest. Note you will have to google to find instructions to completely remove. As part of this, make sure path variables are completely erased before re-installing.
+
+---
 
 Cameras with known compatibility issues with MAX7456 chip
   * Runcam sky - http://shop.runcam.com/runcam-sky/
