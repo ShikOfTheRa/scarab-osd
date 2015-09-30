@@ -224,11 +224,11 @@
 /********************  MSP enhancements rule definitions  *********************/
 
 #if defined MSP_SPEED_HIGH
-  #define hi_speed_cycle  5
+  #define hi_speed_cycle  10  // updates everything approx 6.3 times per second, updates attitude 30 times per second
 #elif defined MSP_SPEED_MED
-  #define hi_speed_cycle  15
+  #define hi_speed_cycle  50  // same as low, but also updates attitude 10 times per second
 #else
-  #define hi_speed_cycle  50
+  #define hi_speed_cycle  50  // updates everything approx 1.3 times per second
 #endif
 
 

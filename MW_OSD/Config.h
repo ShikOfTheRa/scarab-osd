@@ -126,8 +126,8 @@
 
 /******************** Serial MSP speed settings *********************/
 // Choose ONLY ONE option: increases speeds of serial update - but with impact to flight controller 
-#define MSP_SPEED_LOW
-//#define MSP_SPEED_MED
+//#define MSP_SPEED_LOW // Enable for soft serial / slow baud rates.
+#define MSP_SPEED_MED // default
 //#define MSP_SPEED_HIGH
 
 
@@ -183,7 +183,6 @@
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
 //#define SHORTSTATS                // Display only timer on flight summary 
-//#define FASTMSP                   // Enable for soft serial / slow baud rates if don't need GPS/BARO/HORIZON data. Speeds up remainder
 //#define NOTHROTTLESPACE           // Enable to remove space between throttle symbol and the data
 //#define REVERSEAHI                // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
 //#define DISPLAY_PR                // Display pitch / roll angles. Requires relevant layout ppositions to be enabled

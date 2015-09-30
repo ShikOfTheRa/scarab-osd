@@ -20,6 +20,7 @@
 #define IMPERIAL 1
 
 #define lo_speed_cycle  100
+#define sync_speed_cycle  33
 
 #define CALIBRATION_DELAY 10       // Calibration timeouts   
 #define EEPROM_WRITE_DELAY 5       // Calibration timeouts

@@ -95,6 +95,7 @@ uint32_t queuedMSPRequests;
 uint8_t sensorpinarray[]={VOLTAGEPIN,VIDVOLTAGEPIN,AMPERAGEPIN,TEMPPIN,RSSIPIN};  
 unsigned long previous_millis_low=0;
 unsigned long previous_millis_high =0;
+unsigned long previous_millis_sync =0;
 
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE
 uint8_t fontStatus=0;
@@ -240,6 +241,16 @@ void loop()
   //---------------  Start Timed Service Routines  ---------------------------------------
   unsigned long currentMillis = millis();
 
+#ifdef MSP_SPEED_HIGH
+  if((currentMillis - previous_millis_sync) >= sync_speed_cycle)  // (Executed > NTSC/PAL hz 33ms)
+  {
+    previous_millis_sync = previous_millis_sync+sync_speed_cycle;    
+    if(!fontMode)
+      mspWriteRequest(MSP_ATTITUDE,0);
+  }
+#endif //MSP_SPEED_HIGH
+
+
   if((currentMillis - previous_millis_low) >= lo_speed_cycle)  // 10 Hz (Executed every 100ms)
   {
     previous_millis_low = previous_millis_low+lo_speed_cycle;    
@@ -250,14 +261,14 @@ void loop()
     if (Settings[S_AMPER_HOUR]) 
       amperagesum += amperage;
     #ifndef GPSOSD 
-      #ifndef FASTMSP
+      #ifdef MSP_SPEED_MED
         if(!fontMode)
-      #endif //FASTMSP  
-      mspWriteRequest(MSP_ATTITUDE,0);
+          mspWriteRequest(MSP_ATTITUDE,0);
+      #endif //MSP_SPEED_MED  
     #endif //GPSOSD
    }  // End of slow Timed Service Routine (100ms loop)
 
-  if((currentMillis - previous_millis_high) >= hi_speed_cycle)  // 20 Hz (Executed every 50ms)
+  if((currentMillis - previous_millis_high) >= hi_speed_cycle)  // 20 Hz or 100hz in MSP high mode
   {
     previous_millis_high = previous_millis_high+hi_speed_cycle;       
       uint8_t MSPcmdsend=0;
@@ -284,9 +295,11 @@ void loop()
       case REQ_MSP_COMP_GPS:
         MSPcmdsend = MSP_COMP_GPS;
         break;
+    #ifdef MSP_SPEED_LOW
       case REQ_MSP_ATTITUDE:
         MSPcmdsend = MSP_ATTITUDE;
         break;
+    #endif //MSP_SPEED_LOW  
       case REQ_MSP_ALTITUDE:
         MSPcmdsend = MSP_ALTITUDE;
         break;
