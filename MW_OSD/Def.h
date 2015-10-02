@@ -100,9 +100,6 @@
 #define PAGE8 //GPS TIME
 #define PAGE9 //ALARMS
 
-/********************   TRANSMETTER MODE for STICK MENU     *********************/
-#define MODE1  // MODE 1, not define for MODE 2
-
 
 /********************  HARDWARE PINS definitions  *********************/
 #define AMPERAGEPIN   A1

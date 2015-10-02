@@ -195,6 +195,10 @@
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft
 
 
+/********************   TRANSMITTER MODE for STICK MENU     *********************/
+//#define MODE1                     // Enable this if wish to use cursor controls on same stick - for MODE 1 TX users
+
+
 /********************       Airspeed Settings         ************************/
 // Completely UNTESTED for future integration of support for airspeed sensor
 // Uses temp pin
