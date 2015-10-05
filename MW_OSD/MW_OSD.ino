@@ -96,6 +96,7 @@ uint8_t sensorpinarray[]={VOLTAGEPIN,VIDVOLTAGEPIN,AMPERAGEPIN,TEMPPIN,RSSIPIN};
 unsigned long previous_millis_low=0;
 unsigned long previous_millis_high =0;
 unsigned long previous_millis_sync =0;
+unsigned long previous_millis_rssi =0;
 
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE
 uint8_t fontStatus=0;
@@ -250,6 +251,13 @@ void loop()
   }
 #endif //MSP_SPEED_HIGH
 
+#ifdef INTPWMRSSI
+// to prevent issues with high pulse RSSi consuming CPU
+  if((currentMillis - previous_millis_rssi) >= (1000/RSSIhz)){  
+    previous_millis_rssi = currentMillis; 
+    initRSSIint();
+  }   
+#endif // INTPWMRSSI
 
   if((currentMillis - previous_millis_low) >= lo_speed_cycle)  // 10 Hz (Executed every 100ms)
   {
@@ -808,8 +816,8 @@ void ProcessSensors(void) {
 #if defined RCRSSI
 //        sensortemp = constrain(MwRcData[RCRSSI],1000,2000)>>1;
         sensortemp = MwRcData[RCRSSI]>>1;
-#elif defined FASTPWMRSSI
-        sensortemp = FastpulseIn(PWMRSSIPIN, HIGH,1024);
+// #elif defined FASTPWMRSSI
+//        sensortemp = FastpulseIn(PWMRSSIPIN, HIGH,1024);
 #elif defined INTPWMRSSI
         sensortemp = pwmRSSI>>1;
 #else
@@ -1007,6 +1015,7 @@ void initRSSIint() { // enable ONLY RSSI pin A3 for interrupt (bit 3 on port C)
 
 ISR(PCINT1_vect) { //
   static uint16_t PulseStart;  
+  static uint8_t PulseCounter;  
   uint8_t pinstatus;
   pinstatus = PINC;
   sei();
@@ -1014,16 +1023,27 @@ ISR(PCINT1_vect) { //
   uint16_t PulseDuration;
   CurrentTime = micros();
   if (!(pinstatus & (1<<DDC3))) { // RSSI pin A3 - ! measures low duration
-    PulseDuration = CurrentTime-PulseStart; 
-    if ((750<PulseDuration) && (PulseDuration<2250)) {
-      pwmRSSI = PulseDuration; // Val updated
+    if (PulseCounter >1){ // why? - to skip any partial pulse due to toggling of int's
+      PulseDuration = CurrentTime-PulseStart; 
+      PulseCounter=0;
+    #if defined FASTPWMRSSI
+      pwmRSSI = PulseDuration;
+      PCMSK1 =0;
+    #else
+      if ((750<PulseDuration) && (PulseDuration<2250)) {
+        pwmRSSI = PulseDuration;
+        PCMSK1 =0;
+      }
+    #endif 
     }
+    PulseCounter++;
   } 
   else {
     PulseStart = CurrentTime;
   }
+//  sei();   
 }
-#endif
+#endif // INTPWMRSSI
 
 
 #if defined PPMOSDCONTROL
@@ -1061,7 +1081,7 @@ ISR(PCINT1_vect) { //
     PulseStart = CurrentTime;
   }
 }
-#endif
+#endif //PPMOSDCONTROL
 
 void EEPROM_clear(){
   for (int i = 0; i < 512; i++)

@@ -261,4 +261,11 @@
   #define YAWSTICK         2
   #define THROTTLESTICK    3
 #endif
- 
+
+/********************  RSSI  *********************/
+#if defined FASTPWMRSSI
+  #define INTPWMRSSI
+#endif  
+
+/********************  other paramters  *********************/
+#define RSSIhz           10 
