@@ -119,13 +119,12 @@ void setup()
   UCSR0A  |= (1<<U2X0); UBRR0H = h; UBRR0L = l; 
 //---
   Serial.flush();
-#if defined (INTPWMRSSI) || defined (PPMOSDCONTROL)
-  initRSSIint();
-#else 
   pinMode(PWMRSSIPIN, INPUT);
   pinMode(RSSIPIN, INPUT);
-#endif
   pinMode(LEDPIN,OUTPUT);
+#if defined (INTPWMRSSI) || defined (PPMOSDCONTROL)
+  initRSSIint();
+#endif
 
 #if defined EEPROM_CLEAR
   EEPROM_clear();
@@ -155,7 +154,6 @@ void setup()
     MwSensorPresent |=ACCELEROMETER;
   #endif
   setMspRequests();
-  
 }
 
 //------------------------------------------------------------------------
@@ -492,14 +490,9 @@ void loop()
         timer.GPS_active--;
       }      
     #endif // GPSACTIVECHECK 
-    #ifdef MSPACTIVECHECK
-      if (timer.MSP_active==0){
-      }
-      else {
-        timer.MSP_active--;
-      }      
-    #endif // MSPACTIVECHECK 
-
+    if (timer.MSP_active>0){
+      timer.MSP_active--;
+    }  
     if(!armed) {
 //      setMspRequests();
 #ifndef MAPMODENORTH

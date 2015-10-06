@@ -60,7 +60,7 @@ void serialMSPCheck()
 {
   readIndex = 0;
   #ifdef MSPACTIVECHECK
-    timer.MSP_active=MSPACTIVECHECK;
+    timer.MSP_active=MSPACTIVECHECK; // getting something on serial port
   #endif
 
   if (cmdMSP == MSP_OSD) {
@@ -83,8 +83,10 @@ void serialMSPCheck()
         settingsMode=1;
         MSP_OSD_timer=3000+millis();
         EEPROM.write(eeaddress,eedata);
-        if ((eeaddress==EEPROM_SETTINGS)||(eeaddress==EEPROM_SETTINGS+(3*2*POSITIONS_SETTINGS))){
+//        if (eeaddress==0){
           EEPROM.write(0,MWOSDVER);
+//        }
+        if ((eeaddress==EEPROM_SETTINGS)||(eeaddress==EEPROM_SETTINGS+(3*2*POSITIONS_SETTINGS))){
           readEEPROM();
         }
       }
@@ -125,7 +127,7 @@ void serialMSPCheck()
     }
     if(cmd == OSD_DEFAULT) {
       EEPROM_clear(); 
-//      checkEEPROM();
+      checkEEPROM();
       flags.reset=1;
     }
     if(cmd == OSD_RESET) {

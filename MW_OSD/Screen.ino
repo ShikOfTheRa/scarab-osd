@@ -171,7 +171,10 @@ void displayTemperature(void)        // DEPRECATED RUSHDUINO SUPPORT
 
 void displayMode(void)
 {
-  
+  if(timer.MSP_active==0){ // no MSP >> mode display not valid
+    return;
+  }  
+
   uint32_t dist;
   if(Settings[S_UNITSYSTEM])
     dist = GPS_distanceToHome * 3.2808;           // mt to feet
