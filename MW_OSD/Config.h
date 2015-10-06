@@ -13,9 +13,9 @@
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
-//#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware (default for 95% of boards) 
+#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware (default for 95% of boards) 
 //#define WITESPYV1                 // Uncomment this if using Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
-#define WITESPYMICRO              // Uncomment this if using Witespy Micro Minim OSD, select this to correct for swapped bat1/bat 2.  
+//#define WITESPYMICRO              // Uncomment this if using Witespy Micro Minim OSD, select this to correct for swapped bat1/bat 2.  
 //#define RUSHDUINO                 // Uncomment this if using Rushduino
 
 // NOTE-some of the popular RTFQ/Witespy boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
@@ -33,7 +33,7 @@
 // Choose ONLY ONE option from the following long list :-
 
 // latest release...
-//#define MULTIWII                  // Uncomment this if you are using latest MULTIWII version from repository (2.4 at time of this MWOSD release)
+#define MULTIWII                  // Uncomment this if you are using latest MULTIWII version from repository (2.4 at time of this MWOSD release)
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.06.27 at time of this MWOSD release)
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9.0 at time or this MWOSD release)
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
@@ -53,8 +53,8 @@
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
-//#define ROTORCRAFT                  // Default for multirotors etc. 
-#define FIXEDWING                 // Uncomment this if you are using fixed wing MultiWii or Baseflight 
+#define ROTORCRAFT                  // Default for multirotors etc. 
+//#define FIXEDWING                 // Uncomment this if you are using fixed wing MultiWii or Baseflight 
 
 
 /********************       HARDWARE CURRENT sensor settings      *********************/
