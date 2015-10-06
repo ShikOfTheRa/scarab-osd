@@ -119,9 +119,11 @@ void setup()
   UCSR0A  |= (1<<U2X0); UBRR0H = h; UBRR0L = l; 
 //---
   Serial.flush();
+
   pinMode(PWMRSSIPIN, INPUT);
   pinMode(RSSIPIN, INPUT);
   pinMode(LEDPIN,OUTPUT);
+
 #if defined (INTPWMRSSI) || defined (PPMOSDCONTROL)
   initRSSIint();
 #endif
@@ -998,7 +1000,7 @@ unsigned long FastpulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
 #if defined INTPWMRSSI
 void initRSSIint() { // enable ONLY RSSI pin A3 for interrupt (bit 3 on port C)
   DDRC &= ~(1 << DDC3);
-  PORTC |= (1 << PORTC3);
+//  PORTC |= (1 << PORTC3);
   cli();
   PCICR =  (1 << PCIE1);
   PCMSK1 = (1 << PCINT11);
@@ -1042,7 +1044,7 @@ ISR(PCINT1_vect) { //
 #if defined PPMOSDCONTROL
 void initRSSIint() { // enable ONLY RSSI pin A3 for interrupt (bit 3 on port C)
   DDRC &= ~(1 << DDC3);
-  PORTC |= (1 << PORTC3);
+//  PORTC |= (1 << PORTC3);
   cli();
   PCICR =  (1 << PCIE1);
   PCMSK1 = (1 << PCINT11);
