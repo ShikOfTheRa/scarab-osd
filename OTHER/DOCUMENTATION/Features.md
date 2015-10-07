@@ -7,7 +7,25 @@
 
 Key Improvements available in development repository:-
 
- * OSD    - support for video voltage flashing low warning - via config.h
+ * OSD    - Video volts alarm via config.h
+ * OSD    - Display analogue / PWM sensors on GUI - via MW OSD protocol
+ * OSD    - Support for PWMRSSI via RC data (Flight Controller types)
+ * OSD    - Support for PWMRSSI via PPM stream (GPS OSD) - PENDING TESTING
+ * OSD    - Support for PPM menu control via PPM for GSOSD - PENDING TESTING
+ * OSD    - Enabled filtering and calibration for RSSI data from Flight Controller
+ * OSD    - Enabled filtering and calibration for Main battery voltage from Flight Controller
+ * OSD    - Support for Air speed sensor. - PENDING TESTING
+ * OSD    - Added autodetect cell count option 
+ * OSD    - Added autoset battery warning based upon cell count (for those who swap batteries) 
+ * OSD    - Added long distance display for fixed wing - e.g. 15.3km instaed of 1530m 
+ * OSD    - Added Faster support options for VSYNC rate of 25/30 hz
+ * OSD    - Support for mode 1 TX users
+ * GUI    - Support for RSSI Auto calibration from GUI
+ * BUGFIX - HARIKIRI / MW2.1 not working since R1.5
+ * BUGFIX - Center crosshair font partially missing on default_large font
+ * BUGFIX - High frequency RSSI causing update performance issues. Can prevent startup.
+ * COMPAT - Compatability support for latest cleanflight - conflict with MultiWii.
+ * FONT   - improved large font from Schnupperm enhanced by Leo
 
 ---
 
