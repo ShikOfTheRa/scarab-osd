@@ -184,7 +184,7 @@ int eedataOSD=0;
 int ReadConfigMSPMillis=0;
 int WriteConfigMSPMillis=0;
 int FontMSPMillis=0;
-
+int rssical=99;
 
 // XML config editorvariables
 int hudeditposition=0;
@@ -620,7 +620,8 @@ color yellow_ = color(200, 200, 20),
       clear_ = color(0, 0, 0),
       donateback_ = color(180, 100, 0),
       donatefront_ = color(50, 50, 255),
-      osdcontr_ = color(50, 50, 50)
+      osdcontr_ = color(50, 50, 50),
+      calibrate_ = color(50, 50, 255)
       ;
 //Colors--------------------------------------------------------------------------------------------------------------------
 
@@ -639,7 +640,7 @@ Textlabel FileUploadText, TXText, RXText;
 Button buttonIMPORT,buttonSAVE,buttonREAD,buttonRESET,buttonWRITE,buttonRESTART, buttonGPSTIMELINK, buttonSPORTLINK;
 Button buttonLUP, buttonLDOWN, buttonLLEFT, buttonLRIGHT, buttonLPOSUP, buttonLPOSDOWN;
 Button buttonLHUDUP,buttonLPOSHUDDOWN,buttonLPOSEN, buttonLSET, buttonLADD, buttonLSAVE, buttonLCANCEL;
-Button buttonLEW;
+Button buttonLEW,buttonSetRSSIlow,buttonSetRSSIhigh;
 Button buttonGUIDELINK, buttonFAQLINK, buttonCALIBLINK, buttonSUPPORTLINK, buttonDONATELINK;
 // Buttons------------------------------------------------------------------------------------------------------------------
 
@@ -828,6 +829,9 @@ DONATEimage  = loadImage("DON_def.png");
   buttonRESET = controlP5.addButton("DEFAULT",1,20,45,60,16);buttonRESET.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel(" DEFAULT");
   buttonRESTART = controlP5.addButton("RESTART",1,20,65,60,16);buttonRESTART.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel(" RESTART");
   buttonLEW = controlP5.addButton("LEW",1,30,(6*17),92,16);buttonLEW.setColorBackground(osdcontr_).setGroup(G_RCSWITCH).setLabel("Layout Editor");
+
+  buttonSetRSSIlow = controlP5.addButton("bSetRSSIlow",1,140,(3*17),30,16);buttonSetRSSIlow.setColorBackground(calibrate_).setGroup(G_RSSI).setLabel("SET");
+  buttonSetRSSIhigh = controlP5.addButton("bSetRSSIhigh",1,140,(4*17),30,16);buttonSetRSSIhigh.setColorBackground(calibrate_).setGroup(G_RSSI).setLabel("SET");
     
 
 // EEPROM----------------------------------------------------------------
@@ -2424,6 +2428,14 @@ void LEW(){
   LEW.show();
   LEWvisible=1;
 //  Lock_All_Controls(true);
+}
+
+public void bSetRSSIlow(){
+  confItem[GetSetting("S_RSSIMIN")].setValue(rssical>>2);
+}
+
+public void bSetRSSIhigh(){
+  confItem[GetSetting("S_RSSIMAX")].setValue(rssical>>2);
 }
 
 void READEEMSP(){

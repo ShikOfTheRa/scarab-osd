@@ -2431,11 +2431,11 @@ void LEW(){
 }
 
 public void bSetRSSIlow(){
-  confItem[GetSetting("S_RSSIMIN")].setValue(rssical<<2);
+  confItem[GetSetting("S_RSSIMIN")].setValue(rssical>>2);
 }
 
 public void bSetRSSIhigh(){
-  confItem[GetSetting("S_RSSIMAX")].setValue(rssical<<2);
+  confItem[GetSetting("S_RSSIMAX")].setValue(rssical>>2);
 }
 
 void READEEMSP(){

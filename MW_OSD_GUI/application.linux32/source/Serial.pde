@@ -794,6 +794,7 @@ public void evaluateCommand(byte cmd, int size) {
                txtlblanal[i].setValue("Temp  : "+analsense);
                break;
              case 4:
+               rssical=analsense;
                txtlblanal[i].setValue("RSSI  : "+analsense);
                break;
              default:  

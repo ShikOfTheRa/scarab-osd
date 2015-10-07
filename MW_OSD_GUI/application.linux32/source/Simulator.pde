@@ -361,7 +361,7 @@ SGPS_altitude = ScontrolP5.addNumberbox("SGPS_altitude",0,5,40,40,14);
     //SGPS_numSat.setColorBackground(red_);
     SGPS_distanceToHome.setMin(0);
     SGPS_distanceToHome.setDirection(Controller.HORIZONTAL);
-    SGPS_distanceToHome.setMax(1000);
+    SGPS_distanceToHome.setMax(20000);
     SGPS_distanceToHome.setDecimalPrecision(0);
     SGPS_distanceToHome.setGroup(SGGPS); 
     SGPS_distanceToHome.setValue(350);
