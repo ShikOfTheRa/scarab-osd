@@ -32,6 +32,8 @@ Done - long distance display for fixed wing - e.g. 15.3km instaed of 1530m
 
 Done - Fast AHI update to VSYNC rate of 25/30 hz
 
+Done - RSSI Auto calibration from GUI
+
 WIP - Watts display
 
 WIP - Temperature sensor improvements
@@ -41,8 +43,6 @@ Improved hardware current sensor handling - carried forward, however bugfix impl
 Power consumtion W/Hr 
 
 Fast start - Autodetect MAX ready or timeout
-
-RSSI calibration from GUI
 
 RSSI - increase resolution
 
