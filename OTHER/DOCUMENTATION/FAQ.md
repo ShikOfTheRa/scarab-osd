@@ -176,6 +176,14 @@ HARAKIRI USERS - ensure protocol set as follows:
   * Completely uninstall all Java versions and re-install latest. Note you will have to google to find instructions to completely remove. As part of this, make sure path variables are completely erased before re-installing.
 
 ---
+24 How do I use RSSI with FRSKY (D4R-II)
+  * USe an LC filter like CASE 2 here : https://code.google.com/p/minoposd/wiki/AnalogRSSI
+  * Connect directly to NAZE like this : https://github.com/cleanflight/cleanflight/blob/master/docs/Rssi.md
+  * For Taranis users there is this option: http://blog.oscarliang.net/rssi-ppm-channel-taranis/
+  * For OpenTX users there is this option: http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI&p=741209&viewfull=1#post741209
+
+
+---
 
 Cameras with known compatibility issues with MAX7456 chip
   * Runcam sky - http://shop.runcam.com/runcam-sky/
