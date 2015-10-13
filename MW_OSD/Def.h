@@ -103,7 +103,7 @@
 
 /********************  HARDWARE PINS definitions  *********************/
 #define AMPERAGEPIN   A1
-#define TEMPPIN       A6           
+#define TEMPPIN       A3  // also used for airspeed         
 #define RSSIPIN       A3              
 #define PWMRSSIPIN    A3              
 #define LEDPIN        7

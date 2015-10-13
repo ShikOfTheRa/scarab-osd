@@ -204,8 +204,8 @@
 // Uses temp pin
 // Overrides GPS speed
 //#define USE_AIRSPEED_SENSOR
-//#define AIRSPEED_ZERO 512           // AIRSPEED ZERO calibration (0-1024) typically 512 for HK pilot sensor
-//#define AIRSPEED_CAL 1.9936f        // Adjusting factor
+#define AIRSPEED_ZERO 512           // AIRSPEED ZERO calibration (0-1024) typically 512 for HK pilot sensor
+#define AIRSPEED_CAL  78.125        // Adjusting factor
 
 
 /********************       NAZA Settings         ************************/
