@@ -1,6 +1,6 @@
 ---
 
-## Known bugs: ##
+## Outstanding bugs: ##
 
 ---
 
