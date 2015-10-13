@@ -17,7 +17,7 @@ Center crosshair font partially missing on default_large font - resolution avail
  * OSD    - Support for PPM menu control via PPM for GSOSD - PENDING TESTING
  * OSD    - Enabled filtering and calibration for RSSI data from Flight Controller
  * OSD    - Enabled filtering and calibration for Main battery voltage from Flight Controller
- * OSD    - Support for Air speed sensor. - PENDING TESTING
+ * OSD    - Support for Air speed sensor
  * OSD    - Added autodetect cell count option 
  * OSD    - Added autoset battery warning based upon cell count (for those who swap batteries) 
  * OSD    - Added long distance display for fixed wing - e.g. 15.3km instaed of 1530m 
