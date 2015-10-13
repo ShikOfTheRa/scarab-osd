@@ -38,7 +38,7 @@ Fast start - Autodetect MAX ready or timeout
 
 RSSI - increase resolution
 
-
+---
 
 ## Enhancement requests for future releases: ##
 
@@ -78,15 +78,7 @@ Climb rate alarm
 
 Descriptive chracter font for for heading / angle to home
 
-
-Other changes
-
 Impelement more descriptive "help" text within confih.h
-
-
-## GUI: ##
-
-BATTERY calibration button
 
 Migrate GUI to chrome
 
@@ -98,7 +90,7 @@ Improved heading / pitch& roll graphics
 
 Ability to drag/drop items to layout editor
 
-List to enable/disable items on display instea dof clicking to find item
+List to enable/disable items on display instead of clicking to find item
 
 
 Code quality:
