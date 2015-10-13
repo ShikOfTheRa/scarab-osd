@@ -2,13 +2,9 @@
 
 ## Known bugs: ##
 
-HARIKIRI / MW2.1 not working (R1.5)- resolution available from master repository
-
-Center crosshair font partially missing on default_large font - resolution available from master repository
-
 ---
 
-## Enhancements planned for next  release: ##
+## Bugfixes / Enhancements completed for next  release: ##
 
  * OSD    - Video volts alarm via config.h
  * OSD    - Display analogue / PWM sensors on GUI - via MW OSD protocol
@@ -26,6 +22,9 @@ Center crosshair font partially missing on default_large font - resolution avail
  * BUGFIX - HARIKIRI / MW2.1 not working since R1.5
  * BUGFIX - Center crosshair font partially missing on default_large font
 
+---
+
+## Bugfixes / Enhancements planned for next  release: ##
 
 WIP - Watts display
 
