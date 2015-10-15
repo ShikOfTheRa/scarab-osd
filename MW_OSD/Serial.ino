@@ -156,12 +156,6 @@ void serialMSPCheck()
 
   }
 
-  if (cmdMSP==MSP_RAW_IMU)
-  {
-    for(uint8_t i=0;i<3;i++)
-      MwAccSmooth[i] = read16();
-  }
-
   if (cmdMSP==MSP_RC)
   {
     for(uint8_t i=0;i<8;i++)

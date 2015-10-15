@@ -291,9 +291,6 @@ void loop()
       case REQ_MSP_STATUS:
         MSPcmdsend = MSP_STATUS;
         break;
-      case REQ_MSP_RAW_IMU:
-        MSPcmdsend = MSP_RAW_IMU;
-        break;
       case REQ_MSP_RC:
         MSPcmdsend = MSP_RC;
         break;
@@ -616,7 +613,6 @@ void setMspRequests() {
       REQ_MSP_STATUS|
       REQ_MSP_RAW_GPS|
       REQ_MSP_ATTITUDE|
-      REQ_MSP_RAW_IMU|
       REQ_MSP_ALTITUDE|
       REQ_MSP_RC_TUNING|
       REQ_MSP_PID|
@@ -648,9 +644,6 @@ void setMspRequests() {
       REQ_MSP_CELLS|
      #endif
       REQ_MSP_ATTITUDE;
-    if(MwSensorPresent&MAGNETOMETER){ 
-      modeMSPRequests |= REQ_MSP_RAW_IMU;
-    }
     if(MwSensorPresent&BAROMETER){ 
       modeMSPRequests |= REQ_MSP_ALTITUDE;
     }
