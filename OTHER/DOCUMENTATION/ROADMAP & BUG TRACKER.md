@@ -38,7 +38,7 @@ WIP - Temperature sensor improvements
 
 Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
 
-Power consumtion W/Hr 
+Power consumtion W/Hr and W/Km 
 
 Fast start - Autodetect MAX ready or timeout
 
