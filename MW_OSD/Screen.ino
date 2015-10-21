@@ -303,7 +303,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
     screenBuffer[1]='-';
     offset++;
   }
-  itoa(xx, screenBuffer+offset,5);     
+  itoa(xx, screenBuffer+offset,10);     
   if(fieldIsVisible(pitchAnglePosition))
     MAX7456_WriteString(screenBuffer,getPosition(pitchAnglePosition));
   screenBuffer[0]=0x52;
@@ -313,7 +313,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
     screenBuffer[1]='-';
     offset++;
   }
-  itoa(xx, screenBuffer+offset,5);     
+  itoa(xx, screenBuffer+offset,10);     
   if(fieldIsVisible(rollAnglePosition))
     MAX7456_WriteString(screenBuffer,getPosition(rollAnglePosition));
 #endif
@@ -655,7 +655,7 @@ void displayI2CError(void)
     return;
   screenBuffer[0] = 0x49;
   screenBuffer[1] = 0X3A;
-  itoa(I2CError,screenBuffer+2,7);
+  itoa(I2CError,screenBuffer+2,10);
   MAX7456_WriteString(screenBuffer,getPosition(temperaturePosition));
 #endif
 }
