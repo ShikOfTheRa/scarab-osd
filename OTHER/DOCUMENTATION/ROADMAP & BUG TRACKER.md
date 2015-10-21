@@ -16,11 +16,17 @@
  * OSD    - Support for Air speed sensor
  * OSD    - Added autodetect cell count option 
  * OSD    - Added autoset battery warning based upon cell count (for those who swap batteries) 
- * OSD    - Added long distance display for fixed wing - e.g. 15.3km instaed of 1530m 
+ * OSD    - Added long distance display for fixed wing - e.g. 15.3km instead of 1530m 
  * OSD    - Added Faster support options for VSYNC rate of 25/30 hz
+ * OSD    - Added support for forced crosshair for boards without accelerometer
+ * OSD    - Added support for Mode 1 TX users
  * GUI    - Support for RSSI Auto calibration from GUI
  * BUGFIX - HARIKIRI / MW2.1 not working since R1.5
  * BUGFIX - Center crosshair font partially missing on default_large font
+ * BUGFIX - AHI incroect at large angles
+ * BUGFIX - Analogue ports had RSSI pulled high - impacting range and accuracy of values 
+ * COMPAT - Compatability support for latest cleanflight - conflict with MultiWii
+ * FONT   - improved large font from Schnupperm enhanced by Leo
 
 ---
 
@@ -91,6 +97,8 @@ Improved heading / pitch& roll graphics
 Ability to drag/drop items to layout editor
 
 List to enable/disable items on display instead of clicking to find item
+
+Move AHI/crosshair with camera gimbal RC ch
 
 
 Code quality:
