@@ -56,6 +56,8 @@ Support for TauLabs
 
 Support for OP
 
+Support for BetaFlight
+
 Additional AHI layouts - multiple pitch angles
 
 Migrate Current Sensor to GUI / potentially migrate to offset / mv/A calc 
