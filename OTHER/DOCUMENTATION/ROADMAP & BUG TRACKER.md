@@ -52,6 +52,8 @@ Migrate controller/aircraft choice to GUI
 
 Support for APM
 
+Support for TauLabs
+
 Support for OP
 
 Additional AHI layouts - multiple pitch angles
