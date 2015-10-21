@@ -398,6 +398,9 @@ void loop()
 #endif //USE_AIRSPEED_SENSOR          
         if(MwSensorPresent&ACCELEROMETER)
            displayHorizon(MwAngle[0],MwAngle[1]);
+#if defined FORCECROSSHAIR
+        displayForcedCrosshair();
+#endif //FORCECROSSHAIR          
         if(Settings[S_DISPLAYVOLTAGE]&&((voltage>voltageWarning)||(timer.Blink2hz))) 
           displayVoltage();
         if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz))) 
