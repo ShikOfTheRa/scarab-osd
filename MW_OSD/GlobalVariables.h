@@ -167,6 +167,13 @@ struct {
   uint32_t gpsland;
 }mode;
 
+// Settings Locations
+enum Setting16_ {
+  S16_AMPMAX,
+  S16_2,
+  // EEPROM16_SETTINGS must be last!
+  EEPROM16_SETTINGS
+};
 
 // Settings Locations
 enum Setting_ {
@@ -225,8 +232,8 @@ enum Setting_ {
   S_MODESENSOR,
   S_SIDEBARTOPS,
   S_AMPMIN,
-  S_AMPMAXL,
-  S_AMPMAXH,
+  S_UNUSED_1, //S_AMPMAXL,
+  S_UNUSED_2, //S_AMPMAXH,
   S_RCWSWITCH,
   S_RCWSWITCH_CH,
   S_HUDSW0,
@@ -251,9 +258,8 @@ enum Setting_ {
 };
 
 
-uint16_t S16_AMPMAX = 999; // 16 bit eeprom setting of AMPMAX  
-
-uint8_t Settings[EEPROM_SETTINGS];
+uint8_t  Settings[EEPROM_SETTINGS];
+uint16_t Settings16[EEPROM16_SETTINGS];
 
 //const uint8_t screenlayoutoffset=((EEPROM_SETTINGS-EEPROM16_SETTINGS_START)>>2);
 
@@ -304,7 +310,7 @@ MWOSDVER,   // used for check              0
 0,   // GPStime                     37a
 0,   // GPSTZ +/-                   37b
 0,   // GPSTZ                       37c
-0,   // DEBUG                       37e
+1,   // DEBUG                       37e
 1,   // SCROLLING LADDERS           37f
 1,   // SHOW GIMBAL ICON            37g
 1,   // SHOW VARIO                  37h
@@ -315,8 +321,8 @@ MWOSDVER,   // used for check              0
 1,   // S_MODESENSOR                42h
 1,   // S_SIDEBARTOPS               43h
 4,   // S_AMPMIN,
-150,  // S_AMPMAXL,
-0,   // S_AMPMAXH,
+0,   // S_UNUSED_1, S_AMPMAXL,
+0,   // S_UNUSED_2, S_AMPMAXH,
 0,   // S_RCWSWITCH,
 4,   // S_RCWSWITCH_CH,
 0,   // S_HUDSW0, LOW / NORMAL
@@ -339,6 +345,10 @@ MWOSDVER,   // used for check              0
 
 };
 
+uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
+  150, //S16_AMPMAX, 
+  600,
+};
 uint16_t SCREENLAYOUT_DEFAULT[EEPROM_SETTINGS] = {
 
 (LINE02+2)|DISPLAY_ALWAYS,  // GPS_numSatPosition

@@ -71,7 +71,7 @@ uint16_t UntouchedStack(void)
 
 //------------------------------------------------------------------------
 #define MWVERS "MW-OSD - R1.5"  
-#define MWOSDVER 9      // for eeprom layout verification      
+#define MWOSDVER 9      // for eeprom layout verification    was 9  
 #include <avr/pgmspace.h>
 #include <EEPROM.h>
 #include "Config.h"
@@ -399,9 +399,8 @@ void loop()
         if(MwSensorPresent&ACCELEROMETER)
            displayHorizon(MwAngle[0],MwAngle[1]);
 #if defined FORCECROSSHAIR
-        displayForcedCrosshair();
-#endif //FORCECROSSHAIR          
-        if(Settings[S_DISPLAYVOLTAGE]&&((voltage>voltageWarning)||(timer.Blink2hz))) 
+           displayForcedCrosshair();
+#endif //FORCECROSSHAIR         if(Settings[S_DISPLAYVOLTAGE]&&((voltage>voltageWarning)||(timer.Blink2hz))) 
           displayVoltage();
         if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz))) 
           displayRSSI();
@@ -647,6 +646,7 @@ void setMspRequests() {
       REQ_MSP_CELLS|
      #endif
       REQ_MSP_ATTITUDE;
+    }
     if(MwSensorPresent&BAROMETER){ 
       modeMSPRequests |= REQ_MSP_ALTITUDE;
     }
@@ -693,10 +693,13 @@ void calculateTrip(void)
 
 void writeEEPROM(void) // OSD will only change 8 bit values. GUI changes directly
 {
-  Settings[S_AMPMAXH] = S16_AMPMAX>>8;
-  Settings[S_AMPMAXL] = S16_AMPMAX&0xFF;
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
     EEPROM.write(en,Settings[en]);
+  } 
+  for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
+    uint16_t pos=EEPROM_SETTINGS+(en*2);
+    EEPROM.write(pos,Settings16[en]&0xFF);
+    EEPROM.write(pos+1,Settings16[en]>>8);
   } 
   EEPROM.write(0,MWOSDVER);
 }
@@ -707,14 +710,22 @@ void readEEPROM(void)
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
      Settings[en] = EEPROM.read(en);
   }
-  S16_AMPMAX=(Settings[S_AMPMAXH]<<8)+Settings[S_AMPMAXL];
+  for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
+     uint16_t pos=(en*2)+EEPROM_SETTINGS;
+     Settings16[en] = EEPROM.read(pos);
+     uint16_t xx = EEPROM.read(pos+1);
+     Settings16[en] = Settings16[en]+(xx<<8);
+  }
+  debug[1]=Settings16[0];
+  debug[2]=Settings16[1];
+
   readEEPROM_screenlayout();
 }
 
 
 void readEEPROM_screenlayout(void)
 {
-  uint16_t EEPROMscreenoffset=EEPROM_SETTINGS+(screenlayout*POSITIONS_SETTINGS*2);
+  uint16_t EEPROMscreenoffset=EEPROM_SETTINGS+(EEPROM16_SETTINGS*2);
   for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
     uint16_t pos=(en*2)+EEPROMscreenoffset;
     screenPosition[en] = EEPROM.read(pos);
@@ -745,15 +756,19 @@ void checkEEPROM(void)
     for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
       EEPROM.write(en,EEPROM_DEFAULT[en]);
     }
-    for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
-      EEPROM.write(EEPROM_SETTINGS+(en*2),SCREENLAYOUT_DEFAULT[en]&0xFF);
-      EEPROM.write(EEPROM_SETTINGS+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
-      EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*2)+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]&0xFF);
-      EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*2)+1+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]>>8);
-      EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*4)+(en*2),SCREENLAYOUT_DEFAULT[en]&0xFF);
-      EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*4)+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
+    for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
+      uint16_t pos=EEPROM_SETTINGS+(en*2);
+      EEPROM.write(pos,EEPROM16_DEFAULT[en]&0xFF);
+      EEPROM.write(pos+1,EEPROM16_DEFAULT[en]>>8);
     }
-
+    for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
+      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(en*2),SCREENLAYOUT_DEFAULT[en]&0xFF);
+      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
+      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*2)+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]&0xFF);
+      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*2)+1+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]>>8);
+      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*4)+(en*2),SCREENLAYOUT_DEFAULT[en]&0xFF);
+      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*4)+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
+    }
 /*
     for(uint8_t osd_switch_pos=0;osd_switch_pos<3;osd_switch_pos++){
       for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
@@ -919,13 +934,13 @@ void ProcessSensors(void) {
   if(!Settings[S_MWAMPERAGE]) {
     if (!Settings[S_AMPERAGE_VIRTUAL]) { // Analogue
       amperage = sensorfilter[2][SENSORFILTERSIZE]>>3;
-      amperage = map(amperage, Settings[S_AMPMIN]+AMPERAGEOFFSET, S16_AMPMAX, 0, AMPERAGEMAX);
+      amperage = map(amperage, Settings[S_AMPMIN]+AMPERAGEOFFSET, Settings[S16_AMPMAX], 0, AMPERAGEMAX);
       if (amperage < 0) amperage=0;
     }  
     else {  // Virtual
       uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],1000,2000);
       Vthrottle = constrain((Vthrottle-1000)/10,10,100);
-      amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*S16_AMPMAX*0.01;
+      amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings[S16_AMPMAX]*0.01;
       if(armed)
         amperage += Settings[S_AMPMIN];
       else 

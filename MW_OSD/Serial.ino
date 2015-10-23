@@ -86,7 +86,7 @@ void serialMSPCheck()
 //        if (eeaddress==0){
           EEPROM.write(0,MWOSDVER);
 //        }
-        if ((eeaddress==EEPROM_SETTINGS)||(eeaddress==EEPROM_SETTINGS+(3*2*POSITIONS_SETTINGS))){
+        if ((eeaddress==EEPROM_SETTINGS+(EEPROM16_SETTINGS*2))||(eeaddress==EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(3*2*POSITIONS_SETTINGS))){
           readEEPROM();
         }
       }
@@ -679,7 +679,7 @@ void serialMenuCommon()
 	  if(ROW==1) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
 	  if(ROW==2) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
 	  if(ROW==3) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
-	  if(ROW==4) S16_AMPMAX=S16_AMPMAX+menudir;
+	  if(ROW==4) Settings[S16_AMPMAX]=Settings[S16_AMPMAX]+menudir;
 	  if(ROW==5) Settings[S_AMPMIN]=Settings[S_AMPMIN]+menudir;
 	}
 #endif
