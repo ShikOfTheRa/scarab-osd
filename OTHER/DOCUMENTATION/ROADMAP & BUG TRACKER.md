@@ -104,6 +104,10 @@ List to enable/disable items on display instead of clicking to find item
 
 Move AHI/crosshair with camera gimbal RC ch
 
+Display GPS max instead of BARO max at end of flight summary
+
+Use aernotautical units - knots - speed, nautical miles - distance, feet - altitude
+
 
 Code quality:
 
