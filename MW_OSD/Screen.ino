@@ -480,7 +480,12 @@ void displayVoltage(void)
 //    voltage=MwVBat;
   }
 
-   if (Settings[S_SHOWBATLEVELEVOLUTION] &&  !Settings[S_AMPER_HOUR]){
+#ifdef BATICON4AMPHR
+  if (Settings[S_SHOWBATLEVELEVOLUTION] &&  !Settings[S_AMPER_HOUR] )
+#else
+  if (Settings[S_SHOWBATLEVELEVOLUTION])
+#endif
+{
 #ifdef AUTOVOLTWARNING
     uint8_t cells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
     int battev = voltage/(int)cells;
