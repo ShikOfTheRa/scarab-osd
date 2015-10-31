@@ -894,7 +894,7 @@ void ProcessSensors(void) {
 
 #ifdef AUTOVOLTWARNING
   uint8_t cells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
-  voltageWarning = cells * MvVBatWarningCellVoltage;
+  voltageWarning = cells * (Settings[S_VOLTAGEMIN]/Settings[S_BATCELLS]);
 #else
   voltageWarning = Settings[S_VOLTAGEMIN];
 #endif  
