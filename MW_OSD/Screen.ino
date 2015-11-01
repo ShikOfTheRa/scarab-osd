@@ -480,9 +480,14 @@ void displayVoltage(void)
 //    voltage=MwVBat;
   }
 
-  if (Settings[S_SHOWBATLEVELEVOLUTION]){
-#ifdef AUTOVOLTWARNING
-    
+#ifdef BATICON4AMPHR
+  if (Settings[S_SHOWBATLEVELEVOLUTION] &&  !Settings[S_AMPER_HOUR] )
+#else
+  if (Settings[S_SHOWBATLEVELEVOLUTION])
+#endif
+
+{
+#ifdef AUTOVOLTWARNING   
     int battev = voltage/(int)cells;
     battev = constrain(battev, MvVBatMinCellVoltage, MvVBatMaxCellVoltage-2);
     battev = map(battev, MvVBatMinCellVoltage, MvVBatMaxCellVoltage-1, 0, 7);
@@ -632,13 +637,30 @@ void displayWatt(void)
 
 void displaypMeterSum(void)
 {
+  uint16_t battev =0;
   if(!fieldIsVisible(pMeterSumPosition))
     return;
+  #ifdef BATICON4AMPHR
+    if (Settings[S_SHOWBATLEVELEVOLUTION]){
+    battev=amperagesum/(360*Settings[S_AMPER_HOUR_ALARM]);
+    battev=constrain(battev,0,100);
+    battev = map(100-battev, 0, 101, 0, 7);
+    screenBuffer[0]=SYM_BATT_EMPTY-battev;
+    screenBuffer[1]=SYM_MAH;
+    int xx=amperagesum/360;
+    itoa(xx,screenBuffer+2,10);
+  }else 
+  #endif
+  {
   screenBuffer[0]=SYM_MAH;
   int xx=amperagesum/360;
   itoa(xx,screenBuffer+1,10);
-  MAX7456_WriteString(screenBuffer,getPosition(pMeterSumPosition));
+  }
+
+MAX7456_WriteString(screenBuffer,getPosition(pMeterSumPosition));
+
 }
+
 
 
 void displayI2CError(void)

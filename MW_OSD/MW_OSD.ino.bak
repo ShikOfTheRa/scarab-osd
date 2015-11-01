@@ -409,12 +409,7 @@ void loop()
           displayRSSI();
         if(Settings[S_AMPERAGE]&&(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz))) 
           displayAmperage();
-#ifdef BATICON4AMPHR
-        if(Settings[S_AMPER_HOUR]&&((((amperagesum)/3600)<8*Settings[S_AMPER_HOUR_ALARM])||(timer.Blink2hz)))
-#else
         if(Settings[S_AMPER_HOUR]&&((((amperagesum)/36000)<Settings[S_AMPER_HOUR_ALARM])||(timer.Blink2hz)))
-#endif        
-
           displaypMeterSum();
         displayTime();
 #ifdef TEMPSENSOR
