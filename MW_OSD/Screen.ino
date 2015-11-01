@@ -482,14 +482,14 @@ void displayVoltage(void)
 
   if (Settings[S_SHOWBATLEVELEVOLUTION]){
 #ifdef AUTOVOLTWARNING
-    uint8_t cells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
+    
     int battev = voltage/(int)cells;
-    battev = constrain(battev, MvVBatMinCellVoltage, MvVBatMaxCellVoltage);
-    battev = map(battev, MvVBatMinCellVoltage, MvVBatMaxCellVoltage, 0, 6);
+    battev = constrain(battev, MvVBatMinCellVoltage, MvVBatMaxCellVoltage-2);
+    battev = map(battev, MvVBatMinCellVoltage, MvVBatMaxCellVoltage-1, 0, 7);
 #else
     int battev=voltage/Settings[S_BATCELLS];
-    battev=constrain(battev,34,42);
-    battev = map(battev, 34, 42, 0, 6);
+    battev=constrain(battev,33,40);
+    battev = map(battev, 33, 41, 0, 7);
 #endif //USE_FC_VOLTS_CONFIG
 
     screenBuffer[0]=SYM_BATT_EMPTY-battev;

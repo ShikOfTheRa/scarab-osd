@@ -400,7 +400,9 @@ void loop()
            displayHorizon(MwAngle[0],MwAngle[1]);
 #if defined FORCECROSSHAIR
         displayForcedCrosshair();
-#endif //FORCECROSSHAIR          
+#endif //FORCECROSSHAIR
+        if ((cells==0)&& (timer.seconds>=10000))  //autodetect cells once after powerup, whether used or not
+          cells =((voltage - 3)/MvVBatMaxCellVoltage)+1;
         if(Settings[S_DISPLAYVOLTAGE]&&((voltage>voltageWarning)||(timer.Blink2hz))) 
           displayVoltage();
         if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz))) 
@@ -893,7 +895,7 @@ void ProcessSensors(void) {
   }
 
 #ifdef AUTOVOLTWARNING
-  uint8_t cells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
+  
   voltageWarning = cells * MvVBatWarningCellVoltage;
 #else
   voltageWarning = Settings[S_VOLTAGEMIN];
