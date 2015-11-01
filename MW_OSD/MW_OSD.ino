@@ -896,7 +896,7 @@ void ProcessSensors(void) {
 
 #ifdef AUTOVOLTWARNING
   
-  voltageWarning = cells * MvVBatWarningCellVoltage;
+  voltageWarning = cells * Settings[S_VOLTAGEMIN]/Settings[S_BATCELLS];
 #else
   voltageWarning = Settings[S_VOLTAGEMIN];
 #endif  
