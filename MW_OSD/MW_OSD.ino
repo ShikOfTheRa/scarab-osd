@@ -400,14 +400,21 @@ void loop()
            displayHorizon(MwAngle[0],MwAngle[1]);
 #if defined FORCECROSSHAIR
         displayForcedCrosshair();
-#endif //FORCECROSSHAIR          
+#endif //FORCECROSSHAIR
+        if ((cells==0)&& (timer.seconds>=10000))  //autodetect cells once after powerup, whether used or not
+          cells =((voltage - 3)/MvVBatMaxCellVoltage)+1;
         if(Settings[S_DISPLAYVOLTAGE]&&((voltage>voltageWarning)||(timer.Blink2hz))) 
           displayVoltage();
         if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz))) 
           displayRSSI();
         if(Settings[S_AMPERAGE]&&(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz))) 
           displayAmperage();
+#ifdef BATICON4AMPHR
+        if(Settings[S_AMPER_HOUR]&&((((amperagesum)/3600)<8*Settings[S_AMPER_HOUR_ALARM])||(timer.Blink2hz)))
+#else
         if(Settings[S_AMPER_HOUR]&&((((amperagesum)/36000)<Settings[S_AMPER_HOUR_ALARM])||(timer.Blink2hz)))
+#endif        
+
           displaypMeterSum();
         displayTime();
 #ifdef TEMPSENSOR
@@ -893,8 +900,11 @@ void ProcessSensors(void) {
   }
 
 #ifdef AUTOVOLTWARNING
-  uint8_t cells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
-  voltageWarning = cells * MvVBatWarningCellVoltage;
+ #ifdef FC_VOLTAGE_CONFIG  
+  voltageWarning = MvVBatWarningCellVoltage;
+ #else
+ voltageWarning = cells * Settings[S_VOLTAGEMIN]/Settings[S_BATCELLS];
+ #endif
 #else
   voltageWarning = Settings[S_VOLTAGEMIN];
 #endif  

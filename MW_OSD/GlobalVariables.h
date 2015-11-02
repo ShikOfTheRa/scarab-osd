@@ -525,7 +525,7 @@ uint32_t GPS_time = 0;        //local time of coord calc - haydent
 
 uint8_t MvVBatMinCellVoltage=CELL_VOLTS_MIN;
 uint8_t MvVBatMaxCellVoltage=CELL_VOLTS_MAX;
-uint8_t MvVBatWarningCellVoltage=CELL_VOLTS_WARN;
+uint8_t MvVBatWarningCellVoltage=0;
 
 // For decoration
 uint8_t SYM_AH_DECORATION_LEFT = 0x10;
@@ -569,6 +569,7 @@ int16_t pwmRSSI = 0;
 uint16_t voltage=0;                      // its the value x10
 uint16_t vidvoltage=0;                   // its the value x10
 uint8_t voltageWarning=0;
+uint8_t cells=0;
 
 // For temprature
 int16_t temperature=0;                  // temperature in degrees Centigrade
