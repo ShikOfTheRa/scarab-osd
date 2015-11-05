@@ -186,6 +186,14 @@ void loop()
 }
 #else
 
+// ampAlarming returns true if the total consumed mAh is greater than
+// the configured alarm value (which is stored as 100s of amps)
+static bool ampAlarming() {
+    int used = pMeterSum > 0 ? pMeterSum : (amperagesum / 360);
+    return used > (Settings[S_AMPER_HOUR_ALARM]*100);
+}
+
+
 //------------------------------------------------------------------------
 void loop()
 {
@@ -407,7 +415,7 @@ void loop()
           displayRSSI();
         if(Settings[S_AMPERAGE]&&(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz))) 
           displayAmperage();
-        if(Settings[S_AMPER_HOUR]&&((((amperagesum)/36000)<Settings[S_AMPER_HOUR_ALARM])||(timer.Blink2hz)))
+        if(Settings[S_AMPER_HOUR] && ((!ampAlarming()) || timer.Blink2hz))
           displaypMeterSum();
         displayTime();
 #ifdef TEMPSENSOR

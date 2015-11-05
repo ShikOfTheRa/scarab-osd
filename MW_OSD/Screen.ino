@@ -635,7 +635,7 @@ void displaypMeterSum(void)
   if(!fieldIsVisible(pMeterSumPosition))
     return;
   screenBuffer[0]=SYM_MAH;
-  int xx=amperagesum/360;
+  int xx = pMeterSum > 0 ? pMeterSum : amperagesum/360;
   itoa(xx,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(pMeterSumPosition));
 }
