@@ -1664,6 +1664,13 @@ void displayArmed(void)
     return;  
   uint8_t message_no = 0;
 
+#ifdef HAS_ALARMS
+  if (alarmState != ALARM_OK) {
+      // There's an alarm, let it have this space.
+      return;
+  }
+#endif
+
   if(!armed){
     message_no=1;
     armedtimer=30;
@@ -1727,3 +1734,15 @@ void displayForcedCrosshair(){
   screen[position+2*LINE+7+1] = SYM_AH_CENTER_LINE_RIGHT;
   screen[position+2*LINE+7] =   SYM_AH_CENTER;
 }
+
+
+#ifdef HAS_ALARMS
+void displayAlarms() {
+    if (alarmState == ALARM_OK) {
+        return;
+    }
+    if (alarmState == ALARM_CRIT || alarmState == ALARM_ERROR || timer.Blink2hz) {
+        MAX7456_WriteString((const char*)alarmMsg, getPosition(motorArmedPosition));
+    }
+}
+#endif
