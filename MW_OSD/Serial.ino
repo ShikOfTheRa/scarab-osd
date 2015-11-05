@@ -670,8 +670,8 @@ void serialMenuCommon()
 	  if(ROW==2) timer.rssiTimer=15; // 15 secs to turn off tx anwait to read min RSSI
 	  if(ROW==3) Settings[S_MWRSSI]=!Settings[S_MWRSSI];
 	  if(ROW==4) Settings[S_PWMRSSI]=!Settings[S_PWMRSSI];
-	  if(ROW==5) Settings[S_RSSIMAX]=Settings[S_RSSIMAX]+menudir;
-	  if(ROW==6) Settings[S_RSSIMIN]=Settings[S_RSSIMIN]+menudir;
+	  if(ROW==5) Settings16[S16_RSSIMAX]=Settings16[S16_RSSIMAX]+menudir;
+	  if(ROW==6) Settings16[S16_RSSIMIN]=Settings16[S16_RSSIMIN]+menudir;
 	}
 #endif
 #ifdef PAGE5
@@ -679,7 +679,7 @@ void serialMenuCommon()
 	  if(ROW==1) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
 	  if(ROW==2) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
 	  if(ROW==3) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
-	  if(ROW==4) Settings[S16_AMPMAX]=Settings[S16_AMPMAX]+menudir;
+	  if(ROW==4) Settings[S16_AMPDIVIDERRATIO]=Settings[S16_AMPDIVIDERRATIO]+menudir;
 	  if(ROW==5) Settings[S_AMPMIN]=Settings[S_AMPMIN]+menudir;
 	}
 #endif

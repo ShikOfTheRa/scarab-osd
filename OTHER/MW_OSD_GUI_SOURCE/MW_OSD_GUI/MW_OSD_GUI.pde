@@ -47,8 +47,8 @@ import java.text.DecimalFormat;
 
 
 String MW_OSD_GUI_Version = "MWOSD R1.5 - NextGeneration";
-int MW_OSD_EEPROM_Version = 9;
-
+int MW_OSD_EEPROM_Version = 11;
+int CONFIGITEMS16 = 7;
 
 int  GPS_numSatPosition = 0;
 int  GPS_directionToHomePosition = 1;
@@ -134,7 +134,16 @@ int currentCol = 0;
 int currentRow = 0;  
 //Boolean SimulateMW = true;
 
-int S16_AMPMAX = 0; //16bit from 8 EEPROM values
+
+/*
+int S16_AMPMAX = 0; //16bit
+int S16_AMPZERO = 1; //16bit
+int S16_AMPMULT = 2; //16bit
+int S16_RSSIMIN = 3; //16bit
+int S16_RSSIMAX = 4; //16bit
+int S16_SPARE1 = 5; //16bit
+int S16_SPARE2 = 6; //16bit
+*/
 
 ControlP5 controlP5;
 ControlP5 SmallcontrolP5;
@@ -185,6 +194,7 @@ int ReadConfigMSPMillis=0;
 int WriteConfigMSPMillis=0;
 int FontMSPMillis=0;
 int rssical=99;
+int eedataOSDtemp = 0;
 
 // XML config editorvariables
 int hudeditposition=0;
@@ -319,8 +329,8 @@ char MwHeadingUnitAdd=0xbd;
 
 String[] ConfigNames = {
   "EEPROM Loaded",
-  "RSSI Min",
-  "RSSI Max",
+  "Unused5",
+  "Unused6",
   "RSSI Alarm",
   "Display RSSI",
   "Use FC RSSI",
@@ -334,10 +344,10 @@ String[] ConfigNames = {
   "Use FC amperage",
   "Display mAh",
   "Use Virtual Sensor",
-  "Amps Adjust",
+  "Unused3",
   "Display Video Voltage",
   "Voltage Adjust",
-  "Use FC video voltage",
+  "Unused4",
   "x100 mAh Alarm",
   "Amp Alarm",
   "Display GPS",
@@ -394,12 +404,20 @@ String[] ConfigNames = {
   "S_CS7",
   "S_CS8",
   "S_CS9",
+// 16 bit after here  
+  "S16_AMPMAX",
+  "S16_AMPZERO",
+  "Amps Adjust",
+  "RSSI min",
+  "RSSI max",
+  "S16_SPARE1",
+  "S16_SPARE2",
 };
 
 String[] ConfigHelp = {
   "EEPROM Loaded",
-  "RSSI Min",
-  "RSSI Max",
+  "Unused5",
+  "Unused6",
   "RSSI Alarm",
   "Display RSSI",
   "Use MWii",
@@ -413,10 +431,10 @@ String[] ConfigHelp = {
   "Use MWii",
   "Display mAh",
   "Use Virtual Sensor",
-  "Amps Adjust",
+  "Unused3",
   "Display Video Voltage",
   "Voltage Adjust",
-  "Use MWii",
+  "Unused4",
   "mAh Alarm",
   "Amp Alarm",
   "Display GPS",
@@ -473,6 +491,14 @@ String[] ConfigHelp = {
   "S_CS7",
   "S_CS8",
   "S_CS9",
+// 16 bit after here
+  "S16_AMPMAX",
+  "S16_AMPZERO",
+  "Amps Adjust",
+  "RSSI min",
+  "RSSI max",
+  "S16_SPARE1",
+  "S16_SPARE2",
   };
 
 
@@ -488,8 +514,8 @@ static int SIMITEMS=6;
 int[] ConfigRanges = {
 1,   // used for check             0
 
-255,   // S_RSSIMIN                1
-255,   // S_RSSIMAX                2
+255,   // Unused5                1
+255,   // Unused6                2
 100,   // S_RSSI_ALARM             3
 1,     // S_DISPLAYRSSI            4
 1,     // S_MWRSSI                 5
@@ -505,11 +531,11 @@ int[] ConfigRanges = {
 1,     // S_MWAMPERAGE,              12a
 1,     // S_AMPER_HOUR,            13
 1,     // S_AMPERAGE_VIRTUAL,
-1023,   // S_AMPDIVIDERRATIO,      // note this is 8>>16 bit EPROM var
+1,     // UNUSED_3,      
 
 1,     // S_VIDVOLTAGE             14
 255,   // S_VIDDIVIDERRATIO        15    
-1,     // S_VIDVOLTAGE_VBAT        16
+1,     // S_UNUSED_4               16
 
 10000,     // S_AMPER_HOUR_ALARM       17
 255,   // S_AMPERAGE_ALARM         18
@@ -552,8 +578,8 @@ int[] ConfigRanges = {
 1,     // S_MODESENSOR             42h
 1,     //S_SIDEBARTOPS             43h
 1023,  // S_AMPMIN,
-255,   // S_AMPMAXL,
-3,     // S_AMPMAXH,
+1,   // S_UNUSED_1,
+1,     // S_UNUSED_2,
 1,     // S_RCWSWITCH,
 7,     // S_RCWSWITCH_CH,
 7,     // S_HUDSW0,
@@ -573,6 +599,13 @@ int[] ConfigRanges = {
  255,
  255,
  255,
+ 1023,  //"S16_AMPMAX",
+ 1023,  //"S16_AMPZERO",
+ 1023,  //"S16_AMPDIVIDERRATIO",
+ 1023,  //"S16_RSSIMIN",
+ 1023,  //"S16_RSSIMAX",
+ 1023,  //"S16_SPARE1",
+ 1023,  //"S16_SPARE2",
 
 };
 
@@ -837,10 +870,19 @@ DONATEimage  = loadImage("DON_def.png");
 // EEPROM----------------------------------------------------------------
 
 CreateItem(GetSetting("S_CHECK_"), 5, 0, G_EEPROM);
-CreateItem(GetSetting("S_AMPMAXL"), 5, 0, G_EEPROM);
-CreateItem(GetSetting("S_AMPMAXH"), 5, 0, G_EEPROM);
+CreateItem(GetSetting("S_UNUSED_1"), 5, 0, G_EEPROM);
+CreateItem(GetSetting("S_UNUSED_2"), 5, 0, G_EEPROM);
+CreateItem(GetSetting("S_UNUSED_3"),  5,0, G_EEPROM);
+CreateItem(GetSetting("S_UNUSED_4"),  5,1*17, G_EEPROM);
 CreateItem(GetSetting("S_USE_BOXNAMES"),  5,0, G_EEPROM);
 CreateItem(GetSetting("S_GPSCOORDTOP"),  5,0, G_EEPROM);
+CreateItem(GetSetting("S_UNUSED5"), 5, 3*17, G_EEPROM);
+CreateItem(GetSetting("S_UNUSED6"), 5,4*17, G_EEPROM);
+
+CreateItem(GetSetting("S16_AMPMAXn"),  5,0, G_EEPROM);
+CreateItem(GetSetting("S16_AMPZERO"),  5,0, G_EEPROM);
+CreateItem(GetSetting("S16_SPARE1"),  5,0, G_EEPROM);
+CreateItem(GetSetting("S16_SPARE2"),  5,0, G_EEPROM);
 
 
 // RSSI  ---------------------------------------------------------------------------
@@ -848,8 +890,8 @@ CreateItem(GetSetting("S_GPSCOORDTOP"),  5,0, G_EEPROM);
 CreateItem(GetSetting("S_DISPLAYRSSI"), 5, 0, G_RSSI);
 CreateItem(GetSetting("S_MWRSSI"),  5,1*17, G_RSSI);
 CreateItem(GetSetting("S_PWMRSSI"),  5,2*17, G_RSSI);
-CreateItem(GetSetting("S_RSSIMIN"), 5, 3*17, G_RSSI);
-CreateItem(GetSetting("S_RSSIMAX"), 5,4*17, G_RSSI);
+CreateItem(GetSetting("S16_RSSIMIN"),  5, 3*17, G_RSSI);
+CreateItem(GetSetting("S16_RSSIMAX"),  5, 4*17, G_RSSI);
 CreateItem(GetSetting("S_RSSI_ALARM"), 5,5*17, G_RSSI);
 
 // Voltage  ------------------------------------------------------------------------
@@ -874,7 +916,6 @@ CreateItem(GetSetting("S_AMPERAGE_ALARM"),  5,7*17, G_Amperage);
 
 // Video Voltage  ------------------------------------------------------------------------
 CreateItem(GetSetting("S_VIDVOLTAGE"),  5,0, G_VVoltage);
-CreateItem(GetSetting("S_VIDVOLTAGE_VBAT"),  5,1*17, G_VVoltage);
 CreateItem(GetSetting("S_VIDDIVIDERRATIO"),  5,2*17, G_VVoltage);
 
 //  Temperature  --------------------------------------------------------------------
@@ -1279,6 +1320,7 @@ void draw() {
     msptxt="";
     eeindextxt="";
     analmessage.setValue("");
+    eeindexmessage.setValue("");
     for (int i=0; i<analSENSORS; i++) {
       txtlblanal[i].setValue("");
     }
@@ -2431,11 +2473,11 @@ void LEW(){
 }
 
 public void bSetRSSIlow(){
-  confItem[GetSetting("S_RSSIMIN")].setValue(rssical>>2);
+  confItem[GetSetting("S16_RSSIMIN")].setValue(rssical);
 }
 
 public void bSetRSSIhigh(){
-  confItem[GetSetting("S_RSSIMAX")].setValue(rssical>>2);
+  confItem[GetSetting("S16_RSSIMAX")].setValue(rssical);
 }
 
 void READEEMSP(){

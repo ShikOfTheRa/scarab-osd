@@ -805,6 +805,7 @@ public void evaluateCommand(byte cmd, int size) {
         else {
           msptxt="";
           analmessage.setValue("");
+          eeindextxt="";
           for (int i=0; i<analSENSORS; i++) {
             txtlblanal[i].setValue("");
           }
@@ -824,18 +825,25 @@ public void evaluateCommand(byte cmd, int size) {
             eeaddressGUI=eeaddressOSD;
           }
           if (WriteLayouts==1){
-            if (eeaddressGUI>=(CONFIGITEMS + (hudoptions*2*3))){ // hit end address
+            if (eeaddressGUI>=(CONFIGITEMS + CONFIGITEMS16 + 1+(hudoptions*2*3))){ // hit end address
               WriteConfigMSPMillis=0;
             }
           }              
           else{
-            if (eeaddressGUI>=(CONFIGITEMS)){ // hit end address
+            if (eeaddressGUI>=(CONFIGITEMS + CONFIGITEMS16+1)){ // hit end address
               WriteConfigMSPMillis=0;
             }
           }
         }
         else{ // confirmed read request received
-          for(int i=0; i<10; i++) {
+         int eeaddressoffset = 0;
+         int configcount8  = CONFIGITEMS-CONFIGITEMS16-1;
+         int configcount16 = CONFIGITEMS16;
+         int bit16=0;
+         int lowbit=0;
+         int highbit=0;
+         int gbug=0;
+         for(int i=0; i<10; i++) {
             eeaddressOSD=read8();
             eeaddressOSD=eeaddressOSD+read8();
             eeindextxt="EER: "+eeaddressOSD;   
@@ -854,18 +862,38 @@ public void evaluateCommand(byte cmd, int size) {
             if (eeaddressOSD==GetSetting("S_HUDSW2")){
               OSD_S_HUDSW2=eedataOSD;
             }
-            if (eeaddressOSD<CONFIGITEMS){
+            if (eeaddressOSD<(configcount8)){
               SetConfigItem(eeaddressOSD, eedataOSD);
+              bit16=0;
             }
-            if (eeaddressOSD==GetSetting("S_AMPMAXH")){ // 16 bit value amps manipulation now received all data
-              S16_AMPMAX=(int(confItem[GetSetting("S_AMPMAXH")].value())<<8)+ int(confItem[GetSetting("S_AMPMAXL")].value()); 
-              SetConfigItem(GetSetting("S_AMPDIVIDERRATIO"), (int) S16_AMPMAX);
+            else if(eeaddressOSD==configcount8){
             }
+            else if(eeaddressOSD<(configcount8+configcount16<<2)){
+              bit16=1;
+              eeaddressoffset = (eeaddressOSD-1-configcount8)/2;
+              gbug=(eeaddressOSD-configcount8)%2;
+              if(((eeaddressOSD+1-configcount8)%2)==0){ // low bit
+               highbit=0;
+               eedataOSDtemp = eedataOSD;
+              }
+              else{
+               highbit=1;
+               int eedataOSDtemph = eedataOSD<<8;
+               eedataOSDtemp = eedataOSDtemp+eedataOSDtemph;
+               SetConfigItem((configcount8+1+eeaddressoffset), eedataOSDtemp);
+              }
+            } 
+//            System.out.println("A:"+ eeaddressOSD+" D:"+eedataOSD+" T:"+eedataOSDtemp+" O:"+eeaddressoffset+" 16:"+bit16+" HB:"+highbit+" GB:"+gbug);
+            
+//            if (eeaddressOSD==GetSetting("S_AMPMAXH")){ // 16 bit value amps manipulation now received all data
+//              S16_AMPMAX=(int(confItem[GetSetting("S_AMPMAXH")].value())<<8)+ int(confItem[GetSetting("S_AMPMAXL")].value()); 
+//              SetConfigItem(GetSetting("S_AMPDIVIDERRATIO"), (int) S16_AMPMAX);
+//            }
             if (eeaddressOSD==eeaddressGUI){ // update base address
               eeaddressGUI++;
             }
           }
-          if (eeaddressGUI>=(CONFIGITEMS)){ // hit end address config only
+          if (eeaddressGUI>=(CONFIGITEMS+CONFIGITEMS16)){ // hit end address config only
             ReadConfigMSPMillis=0;
           }
         }
@@ -875,7 +903,11 @@ public void evaluateCommand(byte cmd, int size) {
           loop();   
           ReadConfigMSPMillis=0;
           WriteConfigMSPMillis=0;   
-        }        
+        }   
+     debug[0]=1;
+     debug[1]=int(confItem[GetSetting("S16_RSSIMAX")].value());
+     debug[2]=int(confItem[GetSetting("S16_SPARE1")].value());
+     debug[3]=eeaddressOSD;     
       }
 
 
@@ -1095,9 +1127,9 @@ void MWData_Com() {
       WriteLayouts=1;
     }
 
-    EepromWriteSize = CONFIGITEMS +1;
+    EepromWriteSize = CONFIGITEMS+1;
     if (WriteLayouts==1){
-      EepromWriteSize = CONFIGITEMS + (hudoptions*2*3) +1;
+      EepromWriteSize = CONFIGITEMS+1+(hudoptions*2*3);
     }
 
     WriteConfigMSPMillis=1000+millis(); 
@@ -1116,7 +1148,7 @@ void MWData_Com() {
       tmpeeadd = (i+eeaddressGUI)>>8;
       serialize8(tmpeeadd);
       serialize8(EElookuptable[i+eeaddressGUI]);
-//System.out.println(eeaddressGUI+i+":"+EElookuptable[i+eeaddressGUI]);
+System.out.println(eeaddressGUI+i+":"+EElookuptable[i+eeaddressGUI]);
     }
     tailSerialReply();
   }
@@ -1125,8 +1157,8 @@ void MWData_Com() {
 }
 
   public void EElookuptableReSet(){ // preparing for a write
-    confItem[GetSetting("S_AMPMAXL")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())&0xFF); // for 8>>16 bit EEPROM
-    confItem[GetSetting("S_AMPMAXH")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())>>8);
+//    confItem[GetSetting("S_AMPMAXL")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())&0xFF); // for 8>>16 bit EEPROM
+//    confItem[GetSetting("S_AMPMAXH")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())>>8);
     for(int i = 0; i < CONFIGITEMS; i++){
       if(i == GetSetting("S_VOLTAGEMIN")){
         EElookuptable[i]=int(confItem[i].value()*10);
@@ -1134,20 +1166,27 @@ void MWData_Com() {
       else if(i == GetSetting("S_GPSTZ")){
         EElookuptable[i]=int(confItem[i].value()*10);
       }
-      else if(i == GetSetting("S_AMPDIVIDERRATIO")){
-        EElookuptable[i]=0;
-      }
       else{
         EElookuptable[i]=int(confItem[i].value());
       }
 
     }
-//     for(int i = 0; i < (hudoptions); i++){
-//       ConfigLayout[0][i]=CONFIGHUD[int(confItem[GetSetting("S_HUD")].value())][i];
-//       ConfigLayout[1][i]=CONFIGHUD[int(confItem[GetSetting("S_HUDOSDSW")].value())][i];
-//     }
 
-     int EElookuptableaddress=CONFIGITEMS;
+      int EElookuptableaddress=CONFIGITEMS-CONFIGITEMS16;
+      for(int i = 0; i < CONFIGITEMS16; i++){
+        int ii=(CONFIGITEMS-CONFIGITEMS16)+(i);
+        int gtmp=int(confItem[ii].value())&0xFF;
+        EElookuptable[EElookuptableaddress]=int(confItem[ii].value())&0xFF;
+//        System.out.println("A:"+ EElookuptableaddress+" D:"+gtmp);
+        EElookuptableaddress++;
+        gtmp=int(confItem[ii].value())>>8;
+        EElookuptable[EElookuptableaddress]=int(confItem[ii].value())>>8;
+//        System.out.println("A:"+ EElookuptableaddress+" D:"+gtmp);
+        EElookuptableaddress++;
+      }
+
+
+     EElookuptableaddress=CONFIGITEMS+CONFIGITEMS16;
      for(int i = 0; i < (hudoptions); i++){
        EElookuptable[EElookuptableaddress]=int(ConfigLayout[0][i]&0xFF);
        EElookuptableaddress++;
@@ -1168,7 +1207,10 @@ void MWData_Com() {
      }
   }
   
-  public void EElookuptableSync(){ // Sync settings with EE table
-  }
   
+//  public void OSD2EElookuptable(){ // Sync settings with EE table
+//  }
+
+  public void EElookuptable2GUIsettings(){ // Sync settings from EE table to GUI
+  }
 
