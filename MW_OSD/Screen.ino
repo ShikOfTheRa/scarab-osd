@@ -723,33 +723,49 @@ void displayHeadingGraph(void)
 
 void displayIntro(void)
 {
-  MAX7456_WriteString_P(message0, MWOSDVersionPosition);
+  const int startCol = 4;
+  int line = LINE02;
+
+  MAX7456_WriteString_P(message0, line+startCol);
+  line += LINE*2;
 #ifndef GPSOSD
-  MAX7456_WriteString_P(message5, MWOSDVersionPosition+LINE+LINE);
-  MAX7456_WriteString(ItoaPadded(MwVersion, screenBuffer, 4, 2),MWOSDVersionPosition+11+LINE+LINE+1);
-#endif  
+  MAX7456_WriteString_P(message5, line+startCol);
+  MAX7456_WriteString(ItoaPadded(MwVersion, screenBuffer, 4, 2), line+startCol+11);
+  line += LINE;
+#endif
 #ifdef INTRO_CALLSIGN
-  MAX7456_WriteString_P(message9, MWOSDVersionPosition+LINE+LINE+LINE);
-  displayCallsign(MWOSDVersionPosition+LINE+LINE+LINE+4);
-#endif   
+  MAX7456_WriteString_P(message9, line+startCol);
+  displayCallsign(line+startCol+4);
+  line += LINE;
+#endif
 #ifdef GPSTIME
 #ifdef INTRO_TIMEZONE
 //timezone
-  MAX7456_WriteString_P(message10, MWOSDVersionPosition+LINE+LINE+LINE+LINE); 
+  MAX7456_WriteString_P(message10, line+startCol);
   if(abs(Settings[S_GPSTZ]) >= 100)ItoaPadded(Settings[S_GPSTZ], screenBuffer, 5, 4);
   else ItoaPadded(Settings[S_GPSTZ], screenBuffer, 4, 3);
   if(Settings[S_GPSTZAHEAD] || Settings[S_GPSTZ] == 0)screenBuffer[0] = '+';
-  else screenBuffer[0] = '-';   
-  MAX7456_WriteString(screenBuffer, MWOSDVersionPosition+LINE+LINE+LINE+LINE+8); 
+  else screenBuffer[0] = '-';
+  MAX7456_WriteString(screenBuffer, line+startCol+8);
+  line += LINE;
 //more settings
-  MAX7456_WriteString_P(message11, MWOSDVersionPosition+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE);
+  MAX7456_WriteString_P(message11, line+startCol);
 #endif
 #endif
 #ifdef INTRO_MENU
-  MAX7456_WriteString_P(message6, MWOSDVersionPosition+LINE+LINE+LINE+LINE+LINE+LINE);
-  MAX7456_WriteString_P(message7,  MWOSDVersionPosition+LINE+LINE+LINE+LINE+LINE+LINE+LINE+10);
-  MAX7456_WriteString_P(message8,  MWOSDVersionPosition+LINE+LINE+LINE+LINE+LINE+LINE+LINE+LINE+10); 
- #endif 
+  MAX7456_WriteString_P(message6, line+startCol);
+  line += LINE;
+  MAX7456_WriteString_P(message7, line+startCol+10);
+  line += LINE;
+  MAX7456_WriteString_P(message8, line+startCol+10);
+  line += LINE;
+ #endif
+#ifdef HAS_ALARMS
+  if (alarmState != ALARM_OK) {
+      line += LINE;
+      MAX7456_WriteString((const char*)alarmMsg, line+startCol);
+  }
+#endif
 }
 
 
