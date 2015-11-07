@@ -1175,6 +1175,12 @@ void displayConfigScreen(void)
     formatTime(flyingTime, screenBuffer, 1);
     MAX7456_WriteString(screenBuffer,ROLLD-4);
 #endif
+#ifdef HAS_ALARMS
+    if (alarmState != ALARM_OK) {
+        MAX7456_WriteString((const char*)alarmMsg, LINE12 + 3);
+    }
+#endif
+
     }
 #ifdef PAGE1
   if(configPage==1)
