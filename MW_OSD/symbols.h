@@ -5,7 +5,7 @@
  *
  */
 
-#define SYM_BLANK 0X3F
+#define SYM_BLANK 0X20
 
 // Satellite Graphics
 #define SYM_SAT_L 0X1E

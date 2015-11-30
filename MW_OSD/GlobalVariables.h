@@ -338,16 +338,16 @@ MWOSDVER,   // used for check              0
 100, // S_ALTITUDE_ALARM,
 100, // S_SPEED_ALARM,
 30,  // S_FLYTIME_ALARM
-1,   // S_CS0,
-2,   // S_CS1,
-3,   // S_CS2,
-4,   // S_CS3,
-5,   // S_CS4,
-6,   // S_CS5,
-7,   // S_CS6,
-8,   // S_CS7,
-9,   // S_CS8,
-10,   // S_CS9,
+0x53,   // S_CS0,
+0x48,   // S_CS1,
+0x49,   // S_CS2,
+0x4B,   // S_CS3,
+0x49,   // S_CS4,
+0x20,   // S_CS5,
+0x20,   // S_CS6,
+0x20,   // S_CS7,
+0x20,   // S_CS8,
+0x20,   // S_CS9,
 
 };
 
