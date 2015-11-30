@@ -358,6 +358,11 @@ void loop()
          MSPcmdsend = MSP_CONFIG;
       break;
 #endif
+#ifdef HAS_ALARMS
+      case REQ_MSP_ALARMS:
+          MSPcmdsend = MSP_ALARMS;
+      break;
+#endif
     }
     
     if(!fontMode){
@@ -471,6 +476,9 @@ void loop()
 #ifdef SPORT        
         if(MwSensorPresent)
           displayCells();
+#endif
+#ifdef HAS_ALARMS
+        displayAlarms();
 #endif
       }
     }
@@ -652,6 +660,9 @@ void setMspRequests() {
      #endif
      #ifdef SPORT      
       REQ_MSP_CELLS|
+     #endif
+     #ifdef HAS_ALARMS
+      REQ_MSP_ALARMS|
      #endif
       REQ_MSP_ATTITUDE;
     if(MwSensorPresent&BAROMETER){ 

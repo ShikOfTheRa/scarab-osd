@@ -92,6 +92,15 @@
   #define USE_FC_VOLTS_CONFIG
 #endif
 
+#if defined(TAULABS)
+  #define AMPERAGE_DIV 10
+  #define HAS_ALARMS
+#endif
+
+#ifdef HAS_ALARMS
+  #define MAX_ALARM_LEN 30
+#endif
+
 /********************   ENABLE/DISABLE CONFIG PAGES via STICK MENU     *********************/
 //large memory savings if not needed, comment to disable
 #define PAGE1 //PID CONFIG

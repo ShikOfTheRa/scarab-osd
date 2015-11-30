@@ -351,6 +351,17 @@ void serialMSPCheck()
 
   }
 
+#ifdef HAS_ALARMS
+  if (cmdMSP == MSP_ALARMS)
+  {
+      alarmState = read8();
+      alarmMsg[min(dataSize-1, MAX_ALARM_LEN-1)] = 0;
+      for(uint8_t i = 0; i < dataSize-1; i++) {
+          alarmMsg[min(i, MAX_ALARM_LEN-1)] = read8();
+      }
+  }
+#endif /* HAS_ALARMS */
+
 #ifdef BOXNAMES
   if(cmdMSP==MSP_BOXNAMES) {
     flags.box=1;

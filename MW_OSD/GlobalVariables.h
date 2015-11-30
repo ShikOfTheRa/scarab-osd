@@ -545,6 +545,16 @@ uint16_t pMeterSum=0;
 uint16_t MwRssi=0;
 uint32_t GPS_time = 0;        //local time of coord calc - haydent
 
+#ifdef HAS_ALARMS
+#define ALARM_OK 0
+#define ALARM_WARN 1
+#define ALARM_ERROR 2
+#define ALARM_CRIT 3
+
+uint8_t alarmState = ALARM_OK;
+uint8_t alarmMsg[MAX_ALARM_LEN];
+#endif
+
 uint8_t MvVBatMinCellVoltage=CELL_VOLTS_MIN;
 uint8_t MvVBatMaxCellVoltage=CELL_VOLTS_MAX;
 uint8_t MvVBatWarningCellVoltage=CELL_VOLTS_WARN;
@@ -666,6 +676,8 @@ uint16_t flyingTime=0;
 #define MSP_SET_HEAD             211   //in message          define a new heading hold direction
 
 #define MSP_BIND                 240   //in message          no param
+
+#define MSP_ALARMS               242   //in message          poll for alert text
 
 #define MSP_EEPROM_WRITE         250   //in message          no param
 
@@ -933,6 +945,7 @@ uint16_t screenPosition[POSITIONS_SETTINGS];
 #define REQ_MSP_NAV_STATUS  32768 //(1 << 15)
 #define REQ_MSP_CONFIG  32768 //(1 << 15)
 #define REQ_MSP_MISC      65536 // (1 << 16)
+#define REQ_MSP_ALARMS    131072 // (1 << 17)
 
 // Menu
 //PROGMEM const char *menu_stats_item[] =
