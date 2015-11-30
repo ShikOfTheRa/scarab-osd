@@ -50,37 +50,41 @@
   #define BOXNAMES                  // required to support legacy protocol
 #endif
 
-#if defined (BASEFLIGHT20150327)            
-  #define AMPERAGE_10ma
+// The unit of current varies across implementations.  There are effectively three set:
+// * 100mA, for which case the value is usable as it comes aross the wire.
+// * 10mA, which sends a value 10x higher than we work wth
+// * 1ma, which sends a value 100x higher than normal
+#define AMPERAGE_DIV 100
+
+#if defined (BASEFLIGHT20150327)
+  #define AMPERAGE_DIV 10
 #endif
 
 #if defined (BASEFLIGHT20150627)
-  #define AMPERAGE_10ma
+  #define AMPERAGE_DIV 10
   #define SETCONFIG 25                  //for BASEFLIGHT20150627 to use MSP_SET_CONFIG
 #endif
 
-#if defined (CLEANFLIGHT190)         
-  #define AMPERAGE_10ma
+#if defined (CLEANFLIGHT190)
+  #define AMPERAGE_DIV 10
 #endif
 
 #if defined (CLEANFLIGHT180)
-  #define AMPERAGE_10ma
+  #define AMPERAGE_DIV 10
 #endif
 
 #if defined (CLEANFLIGHT172)
-  #define AMPERAGE_10ma
+  #define AMPERAGE_DIV 10
 #endif
 
-#if defined (MULTIWII_V24)                
-  #define AMPERAGE_100ma
+#if defined (MULTIWII_V24)
+  #define AMPERAGE_DIV 1
 #endif
 
-#if defined (MULTIWII_V23)                
-  #define AMPERAGE_1ma
+#if defined (MULTIWII_V23)
 #endif
 
-#if defined (MULTIWII_V21)                
-  #define AMPERAGE_1ma         
+#if defined (MULTIWII_V21)
   #define BOXNAMES                  // required to support legacy protocol
 #endif
 

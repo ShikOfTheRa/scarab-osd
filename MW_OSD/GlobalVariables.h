@@ -167,12 +167,25 @@ struct {
   uint32_t gpsland;
 }mode;
 
+// Settings Locations
+enum Setting16_ {
+  S16_AMPMAXn,
+  S16_AMPZERO,
+  S16_AMPDIVIDERRATIO,
+  S16_RSSIMIN,
+  S16_RSSIMAX,
+  S16_SPARE1,
+  S16_SPARE2,
+  
+  // EEPROM16_SETTINGS must be last!
+  EEPROM16_SETTINGS
+};
 
 // Settings Locations
 enum Setting_ {
   S_CHECK_,		// used for check
-  S_RSSIMIN,
-  S_RSSIMAX,
+  S_UNUSED_5,
+  S_UNUSED_6,
   S_RSSI_ALARM,
   S_DISPLAYRSSI,
   S_MWRSSI,
@@ -186,10 +199,10 @@ enum Setting_ {
   S_MWAMPERAGE,
   S_AMPER_HOUR,
   S_AMPERAGE_VIRTUAL,
-  S_AMPDIVIDERRATIO,
+  S_UNUSED_3,
   S_VIDVOLTAGE,
   S_VIDDIVIDERRATIO,
-  S_VIDVOLTAGE_VBAT,
+  S_UNUSED_4,
   S_AMPER_HOUR_ALARM,
   S_AMPERAGE_ALARM,
   S_DISPLAYGPS,
@@ -225,8 +238,8 @@ enum Setting_ {
   S_MODESENSOR,
   S_SIDEBARTOPS,
   S_AMPMIN,
-  S_AMPMAXL,
-  S_AMPMAXH,
+  S_UNUSED_1, //S_AMPMAXL,
+  S_UNUSED_2, //S_AMPMAXH,
   S_RCWSWITCH,
   S_RCWSWITCH_CH,
   S_HUDSW0,
@@ -251,9 +264,8 @@ enum Setting_ {
 };
 
 
-uint16_t S16_AMPMAX = 999; // 16 bit eeprom setting of AMPMAX  
-
-uint8_t Settings[EEPROM_SETTINGS];
+uint8_t  Settings[EEPROM_SETTINGS];
+uint16_t Settings16[EEPROM16_SETTINGS];
 
 //const uint8_t screenlayoutoffset=((EEPROM_SETTINGS-EEPROM16_SETTINGS_START)>>2);
 
@@ -261,8 +273,8 @@ uint8_t Settings[EEPROM_SETTINGS];
 // For Settings Defaults
 uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 MWOSDVER,   // used for check              0
-0,   // S_RSSIMIN                   1
-150, // S_RSSIMAX                   2
+0,   // S_UNUSED_5                   1
+150, // S_UNUSED_6                   2
 60,  // S_RSSI_ALARM                3
 0,   // S_DISPLAYRSSI               4
 0,   // S_MWRSSI                    5
@@ -276,7 +288,7 @@ MWOSDVER,   // used for check              0
 0,   // S_MWAMPERAGE                12a :)
 0,   // S_AMPER_HOUR                13
 0,   // S_AMPERAGE_VIRTUAL,
-150, // S_AMPDIVIDERRATIO,
+150, // S_UNUSED_3,
 0,   // S_VIDVOLTAGE                14
 200, // S_VIDDIVIDERRATIO           15
 0,   // S_VIDVOLTAGE_VBAT           16 
@@ -304,7 +316,7 @@ MWOSDVER,   // used for check              0
 0,   // GPStime                     37a
 0,   // GPSTZ +/-                   37b
 0,   // GPSTZ                       37c
-0,   // DEBUG                       37e
+1,   // DEBUG                       37e
 1,   // SCROLLING LADDERS           37f
 1,   // SHOW GIMBAL ICON            37g
 1,   // SHOW VARIO                  37h
@@ -315,8 +327,8 @@ MWOSDVER,   // used for check              0
 1,   // S_MODESENSOR                42h
 1,   // S_SIDEBARTOPS               43h
 4,   // S_AMPMIN,
-150,  // S_AMPMAXL,
-0,   // S_AMPMAXH,
+0,   // S_UNUSED_1, S_AMPMAXL,
+0,   // S_UNUSED_2, S_AMPMAXH,
 0,   // S_RCWSWITCH,
 4,   // S_RCWSWITCH_CH,
 0,   // S_HUDSW0, LOW / NORMAL
@@ -326,19 +338,29 @@ MWOSDVER,   // used for check              0
 100, // S_ALTITUDE_ALARM,
 100, // S_SPEED_ALARM,
 30,  // S_FLYTIME_ALARM
-0,   // S_CS0,
-0,   // S_CS1,
-0,   // S_CS2,
-0,   // S_CS3,
-0,   // S_CS4,
-0,   // S_CS5,
-0,   // S_CS6,
-0,   // S_CS7,
-0,   // S_CS8,
-0,   // S_CS9,
+0x53,   // S_CS0,
+0x48,   // S_CS1,
+0x49,   // S_CS2,
+0x4B,   // S_CS3,
+0x49,   // S_CS4,
+0x20,   // S_CS5,
+0x20,   // S_CS6,
+0x20,   // S_CS7,
+0x20,   // S_CS8,
+0x20,   // S_CS9,
 
 };
 
+uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
+  0,// S16_AMPMAX,
+  100,// S16_AMPZERO,
+  900,// S_AMPDIVIDERRATIO,
+  0,// S16_RSSIMIN,
+  1024,// S16_RSSIMAX,
+  500,// S16_SPARE1,
+  600,// S16_SPARE2,
+  
+};
 uint16_t SCREENLAYOUT_DEFAULT[EEPROM_SETTINGS] = {
 
 (LINE02+2)|DISPLAY_ALWAYS,  // GPS_numSatPosition

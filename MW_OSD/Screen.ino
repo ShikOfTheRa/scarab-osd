@@ -635,7 +635,7 @@ void displaypMeterSum(void)
   if(!fieldIsVisible(pMeterSumPosition))
     return;
   screenBuffer[0]=SYM_MAH;
-  int xx=amperagesum/360;
+  int xx = pMeterSum > 0 ? pMeterSum : amperagesum/360;
   itoa(xx,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(pMeterSumPosition));
 }
@@ -1287,8 +1287,8 @@ void displayConfigScreen(void)
     }
     Menuconfig_onoff(YAWD,S_MWRSSI);
     Menuconfig_onoff(ALTD,S_PWMRSSI);
-    MAX7456_WriteString(itoa(Settings[S_RSSIMAX],screenBuffer,10),VELD);
-    MAX7456_WriteString(itoa(Settings[S_RSSIMIN],screenBuffer,10),LEVD);
+    MAX7456_WriteString(itoa(Settings16[S16_RSSIMAX],screenBuffer,10),VELD);
+    MAX7456_WriteString(itoa(Settings16[S16_RSSIMIN],screenBuffer,10),LEVD);
   }
 #else
     if(configPage == 4)configPage+=menudir;  
@@ -1308,7 +1308,7 @@ void displayConfigScreen(void)
     Menuconfig_onoff(ROLLD,S_AMPERAGE);
     Menuconfig_onoff(PITCHD,S_AMPER_HOUR);
     Menuconfig_onoff(YAWD,S_AMPERAGE_VIRTUAL);
-    MAX7456_WriteString(itoa(S16_AMPMAX,screenBuffer,10),ALTD);
+    MAX7456_WriteString(itoa(S16_AMPDIVIDERRATIO,screenBuffer,10),ALTD);
     MAX7456_WriteString(itoa(Settings[S_AMPMIN],screenBuffer,10),VELD);
   }
 #else

@@ -71,7 +71,7 @@ uint16_t UntouchedStack(void)
 
 //------------------------------------------------------------------------
 #define MWVERS "MW-OSD - R1.5"  
-#define MWOSDVER 9      // for eeprom layout verification      
+#define MWOSDVER 11      // for eeprom layout verification    was 9  
 #include <avr/pgmspace.h>
 #include <EEPROM.h>
 #include "Config.h"
@@ -186,6 +186,14 @@ void loop()
 }
 #else
 
+// ampAlarming returns true if the total consumed mAh is greater than
+// the configured alarm value (which is stored as 100s of amps)
+static bool ampAlarming() {
+    int used = pMeterSum > 0 ? pMeterSum : (amperagesum / 360);
+    return used > (Settings[S_AMPER_HOUR_ALARM]*100);
+}
+
+
 //------------------------------------------------------------------------
 void loop()
 {
@@ -227,7 +235,6 @@ void loop()
     else  
       screenlayout=0;
   #endif
-    
   if (screenlayout!=oldscreenlayout){
     readEEPROM_screenlayout();
   }
@@ -405,14 +412,13 @@ void loop()
            displayHorizon(MwAngle[0],MwAngle[1]);
 #if defined FORCECROSSHAIR
         displayForcedCrosshair();
-#endif //FORCECROSSHAIR          
-        if(Settings[S_DISPLAYVOLTAGE]&&((voltage>voltageWarning)||(timer.Blink2hz))) 
+#endif //FORCECROSSHAIR         if(Settings[S_DISPLAYVOLTAGE]&&((voltage>voltageWarning)||(timer.Blink2hz))) 
           displayVoltage();
         if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz))) 
           displayRSSI();
         if(Settings[S_AMPERAGE]&&(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz))) 
           displayAmperage();
-        if(Settings[S_AMPER_HOUR]&&((((amperagesum)/36000)<Settings[S_AMPER_HOUR_ALARM])||(timer.Blink2hz)))
+        if(Settings[S_AMPER_HOUR] && ((!ampAlarming()) || timer.Blink2hz))
           displaypMeterSum();
         displayTime();
 #ifdef TEMPSENSOR
@@ -624,6 +630,7 @@ void setMspRequests() {
       REQ_MSP_STATUS|
       REQ_MSP_RAW_GPS|
       REQ_MSP_ATTITUDE|
+      REQ_MSP_RAW_IMU|
       REQ_MSP_ALTITUDE|
       REQ_MSP_RC_TUNING|
       REQ_MSP_PID|
@@ -675,7 +682,6 @@ void setMspRequests() {
   }
  
   if(Settings[S_MAINVOLTAGE_VBAT] ||
-    Settings[S_VIDVOLTAGE_VBAT] ||
     Settings[S_MWRSSI]) {
     modeMSPRequests |= REQ_MSP_ANALOG;
     
@@ -704,10 +710,13 @@ void calculateTrip(void)
 
 void writeEEPROM(void) // OSD will only change 8 bit values. GUI changes directly
 {
-  Settings[S_AMPMAXH] = S16_AMPMAX>>8;
-  Settings[S_AMPMAXL] = S16_AMPMAX&0xFF;
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
     EEPROM.write(en,Settings[en]);
+  } 
+  for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
+    uint16_t pos=EEPROM_SETTINGS+(en*2);
+    EEPROM.write(pos,Settings16[en]&0xFF);
+    EEPROM.write(pos+1,Settings16[en]>>8);
   } 
   EEPROM.write(0,MWOSDVER);
 }
@@ -718,25 +727,27 @@ void readEEPROM(void)
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
      Settings[en] = EEPROM.read(en);
   }
-  S16_AMPMAX=(Settings[S_AMPMAXH]<<8)+Settings[S_AMPMAXL];
+  for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
+     uint16_t pos=(en*2)+EEPROM_SETTINGS;
+     Settings16[en] = EEPROM.read(pos);
+     uint16_t xx = EEPROM.read(pos+1);
+     Settings16[en] = Settings16[en]+(xx<<8);
+  }
+
   readEEPROM_screenlayout();
 }
 
 
 void readEEPROM_screenlayout(void)
 {
-  uint16_t EEPROMscreenoffset=EEPROM_SETTINGS+(screenlayout*POSITIONS_SETTINGS*2);
+
+  uint16_t EEPROMscreenoffset=EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(screenlayout*POSITIONS_SETTINGS*2);
   for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
     uint16_t pos=(en*2)+EEPROMscreenoffset;
     screenPosition[en] = EEPROM.read(pos);
     uint16_t xx=(uint16_t)EEPROM.read(pos+1)<<8;
     screenPosition[en] = screenPosition[en] + xx;
-/*
-  debug[0]=screenlayout;
-  debug[1]=EEPROMscreenoffset;
-  debug[2]=pos;
-  debug[3]=POSITIONS_SETTINGS;
-*/
+
     if(Settings[S_VIDEOSIGNALTYPE]){
       uint16_t x = screenPosition[en]&0x1FF; 
       if (x>LINE06) screenPosition[en] = screenPosition[en] + LINE;
@@ -756,15 +767,19 @@ void checkEEPROM(void)
     for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
       EEPROM.write(en,EEPROM_DEFAULT[en]);
     }
-    for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
-      EEPROM.write(EEPROM_SETTINGS+(en*2),SCREENLAYOUT_DEFAULT[en]&0xFF);
-      EEPROM.write(EEPROM_SETTINGS+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
-      EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*2)+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]&0xFF);
-      EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*2)+1+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]>>8);
-      EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*4)+(en*2),SCREENLAYOUT_DEFAULT[en]&0xFF);
-      EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*4)+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
+    for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
+      uint16_t pos=EEPROM_SETTINGS+(en*2);
+      EEPROM.write(pos,EEPROM16_DEFAULT[en]&0xFF);
+      EEPROM.write(pos+1,EEPROM16_DEFAULT[en]>>8);
     }
-
+    for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
+      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(en*2),SCREENLAYOUT_DEFAULT[en]&0xFF);
+      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
+      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*2)+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]&0xFF);
+      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*2)+1+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]>>8);
+      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*4)+(en*2),SCREENLAYOUT_DEFAULT[en]&0xFF);
+      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*4)+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
+    }
 /*
     for(uint8_t osd_switch_pos=0;osd_switch_pos<3;osd_switch_pos++){
       for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
@@ -910,15 +925,13 @@ void ProcessSensors(void) {
   voltageWarning = Settings[S_VOLTAGEMIN];
 #endif  
 
-  if (!Settings[S_VIDVOLTAGE_VBAT]) {
-    uint16_t vidvoltageRaw = sensorfilter[1][SENSORFILTERSIZE];
+  uint16_t vidvoltageRaw = sensorfilter[1][SENSORFILTERSIZE];
     if (!Settings[S_VREFERENCE]){
       vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER1v1);
     }
     else {
       vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER5v);
     }
-  }
 
 //-------------- Temperature
 #ifdef TEMPSENSOR
@@ -930,13 +943,13 @@ void ProcessSensors(void) {
   if(!Settings[S_MWAMPERAGE]) {
     if (!Settings[S_AMPERAGE_VIRTUAL]) { // Analogue
       amperage = sensorfilter[2][SENSORFILTERSIZE]>>3;
-      amperage = map(amperage, Settings[S_AMPMIN]+AMPERAGEOFFSET, S16_AMPMAX, 0, AMPERAGEMAX);
+      amperage = map(amperage, Settings[S_AMPMIN]+AMPERAGEOFFSET, Settings[S16_AMPDIVIDERRATIO], 0, AMPERAGEMAX);
       if (amperage < 0) amperage=0;
     }  
     else {  // Virtual
       uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],1000,2000);
       Vthrottle = constrain((Vthrottle-1000)/10,10,100);
-      amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*S16_AMPMAX*0.01;
+      amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings[S16_AMPDIVIDERRATIO]*0.01;
       if(armed)
         amperage += Settings[S_AMPMIN];
       else 
@@ -944,31 +957,22 @@ void ProcessSensors(void) {
     }  
   }
   else{
-#if defined AMPERAGE_100ma
-      amperage = MWAmperage ;
-#elif defined AMPERAGE_10ma
-      amperage = MWAmperage / 10;
-#elif defined AMPERAGE_1ma
-      amperage = MWAmperage / 100;
-#else
-      amperage = MWAmperage / 100;
-#endif
-
+    amperage = MWAmperage / AMPERAGE_DIV;
   }
 
 //-------------- RSSI
   if (Settings[S_DISPLAYRSSI]) {           
-    rssi = sensorfilter[4][SENSORFILTERSIZE]>>5; // filter and move to 8 bit
+    rssi = sensorfilter[4][SENSORFILTERSIZE]>>3; // filter and remain 16 bit
     if (configMode){
       if((timer.rssiTimer==15)) {
-        Settings[S_RSSIMAX]=rssi; // tx on
+        Settings16[S16_RSSIMAX]=rssi; // tx on
       }
       if((timer.rssiTimer==1)) {
-        Settings[S_RSSIMIN]=rssi; // tx off
+        Settings16[S16_RSSIMIN]=rssi; // tx off
         timer.rssiTimer=0;
       }
     }
-    rssi = map(rssi, Settings[S_RSSIMIN], Settings[S_RSSIMAX], 0, 100);
+    rssi = map(rssi, Settings16[S16_RSSIMIN], Settings16[S16_RSSIMAX], 0, 100);
     rssi=constrain(rssi,0,100);
   }
 
