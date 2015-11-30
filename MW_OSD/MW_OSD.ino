@@ -421,6 +421,10 @@ void loop()
         if(Settings[S_AMPER_HOUR] && ((!ampAlarming()) || timer.Blink2hz))
           displaypMeterSum();
         displayTime();
+#if defined DISPLAYWATTS  
+        displayWatt();
+#endif //DISPLAYWATTS
+
 #ifdef TEMPSENSOR
         if(((temperature<Settings[TEMPERATUREMAX])||(timer.Blink2hz))) displayTemperature();
 #endif

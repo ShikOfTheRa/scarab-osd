@@ -87,6 +87,7 @@ int  ModePosition = 33;
 int  MapModePosition = 34;
 int  MapCenterPosition = 35;
 int  APstatusPosition = 36;
+int  wattPosition = 37;
 int GPSstartlat = 430948610;
 int GPSstartlon = -718897060;
 

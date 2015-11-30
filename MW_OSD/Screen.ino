@@ -610,23 +610,20 @@ void displayAmperage(void)
   screenBuffer[5] = SYM_AMP;
   screenBuffer[6] = 0;
   MAX7456_WriteString(screenBuffer,getPosition(amperagePosition));
-
-#if defined DISPLAYWATTS  
-  displayWatt();
-#endif //DISPLAYWATTS
 }
 
 
 void displayWatt(void)
 {
-  uint16_t WhrPosition = getPosition(amperagePosition)-30;
-
+  if(!fieldIsVisible(wattPosition))
+    return;
+  uint16_t WhrPosition = getPosition(wattPosition);
   uint16_t watts = amperage*voltage/100; 
   ItoaPadded(watts, screenBuffer+1 , 5, 5);
+  screenBuffer[0] = SYM_BLANK;
   screenBuffer[5] = SYM_WATT;
   screenBuffer[6] = 0;
-  MAX7456_WriteString(screenBuffer,WhrPosition); // DEV only
-//  MAX7456_WriteString(screenBuffer,getPosition(MWHrPosition)-1);
+  MAX7456_WriteString(screenBuffer,WhrPosition);
 }
 
 

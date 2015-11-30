@@ -400,6 +400,7 @@ uint16_t SCREENLAYOUT_DEFAULT[EEPROM_SETTINGS] = {
 (LINE02+22)|DISPLAY_NEVER,   // MapModePosition
 (LINE07+15)|DISPLAY_NEVER,   // MapCenterPosition
 (LINE04+10)|DISPLAY_ALWAYS,   // APstatusPosition
+(LINE12+9)|DISPLAY_ALWAYS,   // wattPosition
 
 };
 
@@ -443,6 +444,7 @@ uint16_t SCREENLAYOUT_DEFAULT_OSDSW[EEPROM_SETTINGS] = {
 (LINE02+22)|DISPLAY_NEVER,   // MapModePosition
 (LINE07+17)|DISPLAY_NEVER,   // MapCenterPosition
 (LINE04+10)|DISPLAY_NEVER,   // APstatusPosition
+(LINE12+13)|DISPLAY_NEVER,   // wattPosition
 
 };
 
@@ -486,6 +488,7 @@ LINE04+2 |DISPLAY_ALWAYS,   // modePosition
 LINE02+22 |DISPLAY_NEVER,   // MapModePosition
 LINE07+15 |DISPLAY_NEVER,   // MapCenterPosition
 LINE04+10 |DISPLAY_ALWAYS,   // APstatusPosition
+LINE12+9 |DISPLAY_ALWAYS,   // wattPosition
 
 };
 */
@@ -921,6 +924,7 @@ enum Positions {
   MapModePosition,
   MapCenterPosition,
   APstatusPosition,
+  wattPosition,
   POSITIONS_SETTINGS
 };
 
