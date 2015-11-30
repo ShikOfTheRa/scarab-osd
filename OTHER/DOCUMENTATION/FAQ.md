@@ -183,6 +183,10 @@ HARAKIRI USERS - ensure protocol set as follows:
   * For Taranis users there is this option: http://blog.oscarliang.net/rssi-ppm-channel-taranis/
   * For 9x/9xr OpenTX users there is this option: http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI&p=741209&viewfull=1#post741209
 
+---
+25 Display keeps blinking. May be worse at high throttle
+  * This is noise on the power to the OSD. It need sto be sorted
+  * Google LC power filter for FPV
 
 ---
 
