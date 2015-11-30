@@ -636,12 +636,15 @@ void setMspRequests() {
       REQ_MSP_PID|
 #ifdef BASEFLIGHT20150627
       REQ_MSP_CONFIG|
-#endif      
+#endif
 #ifdef DEBUGMW
       REQ_MSP_DEBUG|
 #endif
-#ifdef SPORT      
+#ifdef SPORT
       REQ_MSP_CELLS|
+#endif
+#ifdef HAS_ALARMS
+      REQ_MSP_ALARMS|
 #endif
       REQ_MSP_RC;
   }

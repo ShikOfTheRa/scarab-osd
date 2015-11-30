@@ -881,7 +881,6 @@ const unsigned char GPS_distanceToHomeAdd[2]={
   0xbb,0xb9};
 const unsigned char MwGPSAltPositionAdd[2]={
   0xa7,0xa8};
-const char MWOSDVersionPosition = 34;
 
 
 enum Positions {
