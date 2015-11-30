@@ -20,6 +20,7 @@
  * OSD    - Added Faster support options for VSYNC rate of 25/30 hz
  * OSD    - Added support for forced crosshair for boards without accelerometer
  * OSD    - Added support for Mode 1 TX users
+ * OSD    - Watts display added. Available via layouts editor
  * GUI    - Support for RSSI Auto calibration from GUI
  * BUGFIX - HARIKIRI / MW2.1 not working since R1.5
  * BUGFIX - Center crosshair font partially missing on default_large font
@@ -31,8 +32,6 @@
 ---
 
 ## Bugfixes / Enhancements planned for next  release: ##
-
-WIP - Watts display
 
 WIP - Temperature sensor improvements
 
