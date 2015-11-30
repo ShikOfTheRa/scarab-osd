@@ -21,6 +21,7 @@
  * OSD    - Added support for forced crosshair for boards without accelerometer
  * OSD    - Added support for Mode 1 TX users
  * OSD    - Watts display added. Available via layouts editor
+ * OSD    - RSSI sensitivity via OSD inputs quadrupled. Inreased resolution for some RX. e.g. Scherrer
  * GUI    - Support for RSSI Auto calibration from GUI
  * BUGFIX - HARIKIRI / MW2.1 not working since R1.5
  * BUGFIX - Center crosshair font partially missing on default_large font
@@ -40,8 +41,6 @@ Improved hardware current sensor handling - carried forward, however bugfix impl
 Power consumtion W/Hr and W/Km 
 
 Fast start - Autodetect MAX ready or timeout
-
-RSSI - increase resolution
 
 ---
 
