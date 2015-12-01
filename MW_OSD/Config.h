@@ -68,8 +68,8 @@
 // a, 2 different screen layouts to be selected using the Flight controller "OSD_SWITCH" feature or
 // b, 2 or 3 different screen layouts to be selected using a specificed RC channel assigned to a TX switch
 //Choose ONLY ONE option:
-//#define OSD_SWITCH                // Uses original 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
 #define OSD_SWITCH_RC               // Enables 3 way screen switch using a TX channel via FC. Specify channel on GUI (range 0-7 AUX1=4 AUX4=7)
+//#define OSD_SWITCH                // Forces original 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
 //#define OSD_SWITCH_RSSI           // Enables 3 way screen switch using a TX channel via a RX channel connected to the OSD RSSI pin. Typically used for GPSOSD.
 
 
@@ -104,8 +104,9 @@
 #define SATACTIVECHECK              // Alerts if sats below MINSATFIX - in addition to flashing sat indicator
 #define GPSACTIVECHECK 5            // Alerts if no GPS data for more than x secs. Sets GPS sats to zero
 #define MSPACTIVECHECK 3            // Alerts if no Flight controller data for more than x secs. 
-#define DISP_LOW_VOLTS_WARNING      // Alerts if low voltage
+#define DISP_LOW_VOLTS_WARNING      // Alerts with additional text warning if low voltage
 #define FORCE_DISP_LOW_VOLTS        // Enable display low voltage warning override for screen layouts where its disabled
+//#define FORCE_DISP_LOW_VID_VOLTS  // Enable display low VIDEO voltage warning override for screen layouts where its disabled
 
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
@@ -144,7 +145,7 @@
 //#define INTRO_VERSION               "MWOSD - DEV 1.5.1" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
-//#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 10 
+//#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 8 
 #define INTRO_MENU                  // Enable to display TX stick MENU 
 //#define STARTUPDELAY 2000         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
@@ -217,9 +218,8 @@
 
 
 /********************       Voltage Warning Settings         ************************/
-#define AUTOVOLTWARNING               // Uncomment this to use automatic voltage warning. Overrides GUI/OSD voltage warrning setting. Usefull if using different cell count batteries.
+//#define AUTOVOLTWARNING             // Uncomment this to use automatic voltage warning. Overrides GUI/OSD voltage warrning setting. Usefull if using different cell count batteries.
 //#define FC_VOLTAGE_CONFIG           // Additionally uncomment this if you want to use the vbat voltage config with BASEFLIGHT and CLEANFLIGHT on the flight controller (include: min cell voltage, max cell voltage and warning cell voltage)
-//#define VIDVOLTSWARNING 106         // Enable flashing of video volts (when used) if less than value XXX. e.g If XXX=104 then warning voltage = 10.4v
 //The following variables are available for adjustment unless using FC_VOLTAGE_CONFIG 
 #define CELL_VOLTS_WARN 35            // Specify the cell voltage level at which low voltage warning takes place eg. 35 = 3.5 volts per cell
 #define CELL_VOLTS_MIN 33             // Specify the cell voltage at which it is considered empty

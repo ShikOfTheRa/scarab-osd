@@ -1,7 +1,7 @@
 enum Settings {
   S_CHECK_,    // used for check
   S_UNUSED5,
-  S_UNUSED6,
+  S_VIDVOLTAGEMIN,
   S_RSSI_ALARM,
   S_DISPLAYRSSI,
   S_MWRSSI,

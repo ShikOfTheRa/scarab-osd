@@ -475,11 +475,9 @@ void displayHorizon(int rollAngle, int pitchAngle)
 
 void displayVoltage(void)
 {
- 
   if (Settings[S_MAINVOLTAGE_VBAT]){
-//    voltage=MwVBat;
+    voltage=MwVBat;
   }
-
   if (Settings[S_SHOWBATLEVELEVOLUTION]){
 #ifdef AUTOVOLTWARNING
     uint8_t cells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
@@ -491,18 +489,17 @@ void displayVoltage(void)
     battev=constrain(battev,34,42);
     battev = map(battev, 34, 42, 0, 6);
 #endif //USE_FC_VOLTS_CONFIG
-
     screenBuffer[0]=SYM_BATT_EMPTY-battev;
   }
   else {
     screenBuffer[0]=SYM_MAIN_BATT;
   }
-
 #ifdef DISP_LOW_VOLTS_WARNING
   if (voltage<=voltageWarning&&!armedtimer)
     MAX7456_WriteString_P(lowvolts_text, getPosition(motorArmedPosition));
 #endif
-
+  if ((voltage<voltageWarning)&&(timer.Blink2hz))
+    return;
 #ifdef FORCE_DISP_LOW_VOLTS
   if(fieldIsVisible(voltagePosition)||(voltage<=voltageWarning)) 
 #else
@@ -514,15 +511,19 @@ void displayVoltage(void)
     screenBuffer[6] = 0;
     MAX7456_WriteString(screenBuffer,getPosition(voltagePosition)-1);
   }
-  if(!fieldIsVisible(vidvoltagePosition))
-    return;
+}
 
-#ifdef VIDVOLTSWARNING
-  if((vidvoltage<VIDVOLTSWARNING)||(timer.Blink2hz))
-    return;
-#endif //VIDVOLTSWARNING
 
-  if (Settings[S_VIDVOLTAGE]){
+void displayVidVoltage(void)
+{
+  if((vidvoltage<vidvoltageWarning)&&(timer.Blink2hz))
+    return;
+#ifdef FORCE_DISP_LOW_VID_VOLTS
+  if(fieldIsVisible(vidvoltagePosition)||(vidvoltage<=vidvoltageWarning)) 
+#else
+  if(fieldIsVisible(vidvoltagePosition)) 
+#endif  
+  {
     screenBuffer[0]=SYM_VID_BAT;
     ItoaPadded(vidvoltage, screenBuffer+1, 4, 3);
     screenBuffer[5] = SYM_VOLT;
@@ -530,6 +531,7 @@ void displayVoltage(void)
     MAX7456_WriteString(screenBuffer,getPosition(vidvoltagePosition)-1);
   }
 }
+
 
 void displayCurrentThrottle(void)
 {

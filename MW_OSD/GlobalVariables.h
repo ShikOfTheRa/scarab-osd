@@ -185,7 +185,7 @@ enum Setting16_ {
 enum Setting_ {
   S_CHECK_,		// used for check
   S_UNUSED_5,
-  S_UNUSED_6,
+  S_VIDVOLTAGEMIN,
   S_RSSI_ALARM,
   S_DISPLAYRSSI,
   S_MWRSSI,
@@ -273,8 +273,8 @@ uint16_t Settings16[EEPROM16_SETTINGS];
 // For Settings Defaults
 uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 MWOSDVER,   // used for check              0
-0,   // S_UNUSED_5                   1
-150, // S_UNUSED_6                   2
+0,   // S_UNUSED_5                  1
+0, // S_VIDVOLTAGEMIN             2
 60,  // S_RSSI_ALARM                3
 0,   // S_DISPLAYRSSI               4
 0,   // S_MWRSSI                    5
@@ -604,6 +604,7 @@ int16_t pwmRSSI = 0;
 uint16_t voltage=0;                      // its the value x10
 uint16_t vidvoltage=0;                   // its the value x10
 uint8_t voltageWarning=0;
+uint8_t vidvoltageWarning=0;
 
 // For temprature
 int16_t temperature=0;                  // temperature in degrees Centigrade

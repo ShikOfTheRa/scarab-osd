@@ -135,7 +135,7 @@ void setup()
   readEEPROM();
   
   #ifndef STARTUPDELAY
-    #define STARTUPDELAY 1000
+    #define STARTUPDELAY 500
   #endif
   delay(STARTUPDELAY);
  
@@ -413,8 +413,10 @@ void loop()
 #if defined FORCECROSSHAIR
         displayForcedCrosshair();
 #endif //FORCECROSSHAIR
-        if(Settings[S_DISPLAYVOLTAGE]&&((voltage>voltageWarning)||(timer.Blink2hz)))
+        if(Settings[S_DISPLAYVOLTAGE])
           displayVoltage();
+        if (Settings[S_VIDVOLTAGE])
+          displayVidVoltage();
         if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz)))
           displayRSSI();
         if(Settings[S_AMPERAGE]&&(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz)))
@@ -932,7 +934,7 @@ void ProcessSensors(void) {
 #else
   voltageWarning = Settings[S_VOLTAGEMIN];
 #endif  
-
+  vidvoltageWarning = Settings[S_VIDVOLTAGEMIN];
   uint16_t vidvoltageRaw = sensorfilter[1][SENSORFILTERSIZE];
     if (!Settings[S_VREFERENCE]){
       vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER1v1);
