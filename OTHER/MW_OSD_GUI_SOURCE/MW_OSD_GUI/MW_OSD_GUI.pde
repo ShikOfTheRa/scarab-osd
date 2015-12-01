@@ -331,7 +331,7 @@ char MwHeadingUnitAdd=0xbd;
 String[] ConfigNames = {
   "EEPROM Loaded",
   "Unused5",
-  "Unused6",
+  "Vid Voltage Alarm",
   "RSSI Alarm",
   "Display RSSI",
   "Use FC RSSI",
@@ -418,7 +418,7 @@ String[] ConfigNames = {
 String[] ConfigHelp = {
   "EEPROM Loaded",
   "Unused5",
-  "Unused6",
+  "Vid Voltage Alarm",
   "RSSI Alarm",
   "Display RSSI",
   "Use MWii",
@@ -515,8 +515,8 @@ static int SIMITEMS=6;
 int[] ConfigRanges = {
 1,   // used for check             0
 
-255,   // Unused5                1
-255,   // Unused6                2
+255,   // Unused5                  1
+255,   // S_VIDVOLTAGEMIN          2
 100,   // S_RSSI_ALARM             3
 1,     // S_DISPLAYRSSI            4
 1,     // S_MWRSSI                 5
@@ -878,7 +878,6 @@ CreateItem(GetSetting("S_UNUSED_4"),  5,1*17, G_EEPROM);
 CreateItem(GetSetting("S_USE_BOXNAMES"),  5,0, G_EEPROM);
 CreateItem(GetSetting("S_GPSCOORDTOP"),  5,0, G_EEPROM);
 CreateItem(GetSetting("S_UNUSED5"), 5, 3*17, G_EEPROM);
-CreateItem(GetSetting("S_UNUSED6"), 5,4*17, G_EEPROM);
 
 CreateItem(GetSetting("S16_AMPMAXn"),  5,0, G_EEPROM);
 CreateItem(GetSetting("S16_AMPZERO"),  5,0, G_EEPROM);
@@ -917,7 +916,8 @@ CreateItem(GetSetting("S_AMPERAGE_ALARM"),  5,7*17, G_Amperage);
 
 // Video Voltage  ------------------------------------------------------------------------
 CreateItem(GetSetting("S_VIDVOLTAGE"),  5,0, G_VVoltage);
-CreateItem(GetSetting("S_VIDDIVIDERRATIO"),  5,2*17, G_VVoltage);
+CreateItem(GetSetting("S_VIDDIVIDERRATIO"),  5,1*17, G_VVoltage);
+CreateItem(GetSetting("S_VIDVOLTAGEMIN"), 5,2*17, G_VVoltage);
 
 //  Temperature  --------------------------------------------------------------------
 //CreateItem(GetSetting("S_DISPLAYTEMPERATURE"),  5,0, G_Alarms);
