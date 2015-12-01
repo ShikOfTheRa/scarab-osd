@@ -7,7 +7,8 @@
 ## Bugfixes / Enhancements completed for next  release: ##
 
  * OSD    - Support for TUALABS - thanks to Dustin
- * OSD    - Video volts alarm via config.h
+ * OSD    - Video volts alarm adjustable via GUI
+ * OSD    - Video volts independant of main battery
  * OSD    - Display analogue / PWM sensors on GUI - via MW OSD protocol
  * OSD    - Support for PWMRSSI via RC data (Flight Controller types)
  * OSD    - Support for PWMRSSI via PPM stream (GPS OSD) - PENDING TESTING
