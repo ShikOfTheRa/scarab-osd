@@ -407,21 +407,22 @@ void loop()
         setMspRequests();
 #if defined USE_AIRSPEED_SENSOR
         useairspeed();
-#endif //USE_AIRSPEED_SENSOR          
+#endif //USE_AIRSPEED_SENSOR
         if(MwSensorPresent&ACCELEROMETER)
            displayHorizon(MwAngle[0],MwAngle[1]);
 #if defined FORCECROSSHAIR
         displayForcedCrosshair();
-#endif //FORCECROSSHAIR         if(Settings[S_DISPLAYVOLTAGE]&&((voltage>voltageWarning)||(timer.Blink2hz))) 
+#endif //FORCECROSSHAIR
+        if(Settings[S_DISPLAYVOLTAGE]&&((voltage>voltageWarning)||(timer.Blink2hz)))
           displayVoltage();
-        if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz))) 
+        if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz)))
           displayRSSI();
-        if(Settings[S_AMPERAGE]&&(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz))) 
+        if(Settings[S_AMPERAGE]&&(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz)))
           displayAmperage();
         if(Settings[S_AMPER_HOUR] && ((!ampAlarming()) || timer.Blink2hz))
           displaypMeterSum();
         displayTime();
-#if defined DISPLAYWATTS  
+#if defined DISPLAYWATTS
         displayWatt();
 #endif //DISPLAYWATTS
 
