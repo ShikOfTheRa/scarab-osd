@@ -6,6 +6,7 @@
 
 ## Bugfixes / Enhancements completed for next  release: ##
 
+ * OSD    - Support for TUALABS - thanks to Dustin
  * OSD    - Video volts alarm via config.h
  * OSD    - Display analogue / PWM sensors on GUI - via MW OSD protocol
  * OSD    - Support for PWMRSSI via RC data (Flight Controller types)
@@ -40,8 +41,6 @@ Improved hardware current sensor handling - carried forward, however bugfix impl
 
 Power consumtion W/Hr and W/Km 
 
-Fast start - Autodetect MAX ready or timeout
-
 ---
 
 ## Enhancement requests for future releases: ##
@@ -49,8 +48,6 @@ Fast start - Autodetect MAX ready or timeout
 Migrate controller/aircraft choice to GUI
 
 Support for APM
-
-Support for TauLabs
 
 Support for OP
 
@@ -105,6 +102,9 @@ Move AHI/crosshair with camera gimbal RC ch
 Display GPS max instead of BARO max at end of flight summary
 
 Use aernotautical units - knots - speed, nautical miles - distance, feet - altitude
+
+Fast start - Autodetect MAX ready or timeout
+
 
 
 Code quality:
