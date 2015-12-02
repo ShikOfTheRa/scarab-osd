@@ -377,7 +377,7 @@ void loop()
       displayIntro();
       timer.lastCallSign=onTime-CALLSIGNINTERVAL;
 #ifdef AUTOVOLTWARNING
-      uint8_t cells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
+      cells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
       voltageWarning = cells * MvVBatWarningCellVoltage;
 #endif //AUTOVOLTWARNING
     }  
@@ -928,6 +928,7 @@ void ProcessSensors(void) {
 
 #ifndef AUTOVOLTWARNING
   voltageWarning = Settings[S_VOLTAGEMIN];
+  cells = Settings[S_BATCELLS];
 #endif // AUTOVOLTWARNING  
   vidvoltageWarning = Settings[S_VIDVOLTAGEMIN];
   uint16_t vidvoltageRaw = sensorfilter[1][SENSORFILTERSIZE];

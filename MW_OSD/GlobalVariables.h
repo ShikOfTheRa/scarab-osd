@@ -129,6 +129,7 @@ uint16_t cell_data[6]={0,0,0,0,0,0};
 uint16_t cycleTime;
 uint16_t I2CError;
 uint8_t oldROW=0;
+uint8_t cells=0;
 #if defined SETCONFIG
   uint8_t bfconfig[SETCONFIG];
 #endif
