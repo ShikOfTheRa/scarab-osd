@@ -87,7 +87,7 @@
   <LAYOUT desc="MapModePosition" enabled="0" hud="0" hudname="Shiki" value="46"/>
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="0" hudname="Shiki" value="195"/>
   <LAYOUT desc="APstatusPosition" enabled="1" hud="0" hudname="Shiki" value="70"/>
-  <LAYOUT desc="wattsPosition" enabled="1" hud="0" hudname="Shiki" value="339"/>
+  <LAYOUT desc="wattsPosition" enabled="0" hud="0" hudname="Shiki" value="339"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="0" hud="1" hudname="Minimal" value="32"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="1" hudname="Minimal" value="379"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="0" hud="1" hudname="Minimal" value="42"/>
