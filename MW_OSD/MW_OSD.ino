@@ -197,12 +197,6 @@ static bool ampAlarming() {
 //------------------------------------------------------------------------
 void loop()
 {
-// stall detect test
-//  if (onTime%10==0){
-//  digitalWrite(MAX7456SELECT,LOW);  
-//  MAX7456_Send(0x00, 0x00);
-//  digitalWrite(MAX7456SELECT,HIGH);
-//}
   if (flags.reset){
     resetFunc();
   }
@@ -382,6 +376,10 @@ void loop()
     if( allSec < INTRO_DELAY ){
       displayIntro();
       timer.lastCallSign=onTime-CALLSIGNINTERVAL;
+#ifdef AUTOVOLTWARNING
+      uint8_t cells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
+      voltageWarning = cells * MvVBatWarningCellVoltage;
+#endif //AUTOVOLTWARNING
     }  
     else
     {
@@ -928,12 +926,9 @@ void ProcessSensors(void) {
       voltage=sensorfilter[0][SENSORFILTERSIZE]>>3;
   }
 
-#ifdef AUTOVOLTWARNING
-  uint8_t cells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
-  voltageWarning = cells * MvVBatWarningCellVoltage;
-#else
+#ifndef AUTOVOLTWARNING
   voltageWarning = Settings[S_VOLTAGEMIN];
-#endif  
+#endif // AUTOVOLTWARNING  
   vidvoltageWarning = Settings[S_VIDVOLTAGEMIN];
   uint16_t vidvoltageRaw = sensorfilter[1][SENSORFILTERSIZE];
     if (!Settings[S_VREFERENCE]){
