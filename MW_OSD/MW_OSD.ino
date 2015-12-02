@@ -379,6 +379,9 @@ void loop()
 #ifdef AUTOVOLTWARNING
       cells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
       voltageWarning = cells * MvVBatWarningCellVoltage;
+  #ifdef AUTOVOLTCELLALARM
+      voltageWarning = cells * Settings[S_VOLTAGEMIN];
+  #endif // AUTOVOLTCELLALARM
 #endif //AUTOVOLTWARNING
     }  
     else

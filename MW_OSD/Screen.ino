@@ -480,7 +480,7 @@ void displayVoltage(void)
   }
   if (Settings[S_SHOWBATLEVELEVOLUTION]){
     uint8_t battev = 0;
-    int batevlow  = cells * (MvVBatMinCellVoltage-1);
+    int batevlow  = cells * (MvVBatMinCellVoltage-2);
     int batevhigh = cells * MvVBatMaxCellVoltage;
     battev = constrain(voltage, batevlow, batevhigh);
     battev = map(battev, batevlow, batevhigh, 0, 6);
