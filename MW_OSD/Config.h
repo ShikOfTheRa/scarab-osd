@@ -218,7 +218,7 @@
 
 
 /********************       Voltage Warning Settings         ************************/
-//#define AUTOVOLTWARNING               // Uncomment this to use automatic voltage warning. Overrides GUI/OSD voltage warrning setting. Usefull if using different cell count batteries.
+//#define AUTOVOLTWARNING             // Uncomment this to use automatic voltage warning. Overrides GUI/OSD voltage warrning setting. Usefull if using different cell count batteries.
 //#define FC_VOLTAGE_CONFIG           // Additionally uncomment this if you want to use the vbat voltage config with BASEFLIGHT and CLEANFLIGHT on the flight controller (include: min cell voltage, max cell voltage and warning cell voltage)
 //#define AUTOVOLTCELLALARM           // Overide Main battery Alarm value. Use individual cell value instead of default of total. i.e. 3.4 = 10.2v on a 3s
 //The following variables are available for adjustment unless using FC_VOLTAGE_CONFIG 
@@ -226,6 +226,8 @@
 #define CELL_VOLTS_MIN 34             // Specify the cell voltage at which it is considered empty
 #define CELL_VOLTS_MAX 42             // Specify the max normal LIPO cell voltage
 
+/********************       Current Warning Settings         ************************/
+//#define BATICON4AMPHR                 //Enable to use 'Show Bat Status' icon as percentage of AMPHR alarm limit instead of by cell voltage...warning will now be at 80% of that GUI value
 
 /********************       FrSky S.Port settings      *********************/
 //enables data transfer from frsky reciever s.port to osd via multiwii
