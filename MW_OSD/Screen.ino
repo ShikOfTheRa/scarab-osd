@@ -485,10 +485,10 @@ void displayVoltage(void)
 #endif  
   {
     uint8_t battev = 0;
-    int batevlow  = cells * (MvVBatMinCellVoltage-1);
+    int batevlow  = cells * MvVBatMinCellVoltage;
     int batevhigh = cells * MvVBatMaxCellVoltage;
-    battev = constrain(voltage, batevlow, batevhigh-1);
-    battev = map(battev, batevlow, batevhigh, 0, 7);   
+    battev = constrain(voltage, batevlow, batevhigh-2);
+    battev = map(battev, batevlow, batevhigh-1, 0, 7);   
     screenBuffer[0]=(SYM_BATT_EMPTY)-battev;
   }
   else {

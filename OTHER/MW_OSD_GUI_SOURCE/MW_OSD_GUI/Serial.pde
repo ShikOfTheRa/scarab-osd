@@ -1148,7 +1148,7 @@ void MWData_Com() {
       tmpeeadd = (i+eeaddressGUI)>>8;
       serialize8(tmpeeadd);
       serialize8(EElookuptable[i+eeaddressGUI]);
-System.out.println(eeaddressGUI+i+":"+EElookuptable[i+eeaddressGUI]);
+// System.out.println(eeaddressGUI+i+":"+EElookuptable[i+eeaddressGUI]);
     }
     tailSerialReply();
   }
