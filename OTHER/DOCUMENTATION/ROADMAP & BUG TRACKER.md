@@ -9,6 +9,8 @@
  * OSD    - Support for TUALABS - thanks to Dustin
  * OSD    - Video volts alarm adjustable via GUI
  * OSD    - Video volts independant of main battery
+ * OSD    - Battery voltage status icon improved accuracy - thanks to Hwurzburg
+ * OSD    - Battery capacity ststus icon added - thanks to Hwurzburg
  * OSD    - Display analogue / PWM sensors on GUI - via MW OSD protocol
  * OSD    - Support for PWMRSSI via RC data (Flight Controller types)
  * OSD    - Support for PWMRSSI via PPM stream (GPS OSD) - PENDING TESTING
