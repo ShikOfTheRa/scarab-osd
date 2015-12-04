@@ -1,6 +1,8 @@
 MW_OSD_GUI/data/GUI.Config
 *.cfg
 MW_OSD_GUI/application.windows64/data/custom.mcm
-MW_OSD/NazaDecoderLib.cpp
-MW_OSD/Naza.h
-MW_OSD/NazaDecoderLib.h
+ 
+
+
+
+
