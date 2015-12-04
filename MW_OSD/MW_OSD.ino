@@ -3,7 +3,7 @@
 /*
 Scarab NG OSD ... 
 
- This program is free software: you can redistribute it and/or modify
+ Subject to exceptions listed below, this program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  any later version. see http://www.gnu.org/licenses/
@@ -19,6 +19,12 @@ This work is based on the following open source work :-
  Jean Gabriel Maurice. He started the revolution. He was the first....
  
  Please refer to credits.txt for list of individual contributions
+ 
+ Exceptions:
+ Where there are exceptions, these take precedence over the genereric licencing approach
+ Elements of the code provided by Pawelsky (DJI specific) are not for commercial use. See headers in individual files for further details.  
+ Libraries used and typically provided by compilers may have licening terms stricter than that of GNU 3
+ 
 */
 
 //------------------------------------------------------------------------
@@ -952,17 +958,17 @@ void ProcessSensors(void) {
   if(!Settings[S_MWAMPERAGE]) {
     if (!Settings[S_AMPERAGE_VIRTUAL]) { // Analogue
       amperage = sensorfilter[2][SENSORFILTERSIZE]>>3;
-      amperage = map(amperage, Settings[S_AMPMIN]+AMPERAGEOFFSET, Settings[S16_AMPDIVIDERRATIO], 0, AMPERAGEMAX);
+      amperage = map(amperage, Settings16[S16_AMPZERO], 1024, 0, Settings16[S16_AMPDIVIDERRATIO]);
       if (amperage < 0) amperage=0;
     }  
     else {  // Virtual
       uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],1000,2000);
       Vthrottle = constrain((Vthrottle-1000)/10,10,100);
-      amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings[S16_AMPDIVIDERRATIO]*0.01;
+      amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings16[S16_AMPDIVIDERRATIO]*0.01;
       if(armed)
-        amperage += Settings[S_AMPMIN];
+        amperage += Settings16[S16_AMPZERO];
       else 
-        amperage = Settings[S_AMPMIN];
+        amperage = Settings16[S16_AMPZERO];
     }  
   }
   else{

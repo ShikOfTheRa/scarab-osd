@@ -58,11 +58,6 @@
 //#define FIXEDWING                 // Uncomment this if you are using fixed wing MultiWii or Baseflight 
 
 
-/********************       HARDWARE CURRENT sensor settings      *********************/
-#define AMPERAGEMAX     500         // Size of current sensor / maximum current draw (* 10) e.g. 50A sensor = 500, 100A sensor = 1000
-#define AMPERAGEOFFSET  0           // Optional extra for high offset sensors not supported in GUI (typically bidirectional sensors use a value of 256-512) 
-
-
 /********************       OSD SCREEN SWITCH settings      *********************/
 // This functionality enables :
 // a, 2 different screen layouts to be selected using the Flight controller "OSD_SWITCH" feature or
@@ -211,23 +206,28 @@
 
 
 /********************       NAZA Settings         ************************/
-//#define NAZAMODECONTROL             // Enables NAZA mode control display using a PWM signal into OSD RSSI pin. Can be used with OSD_SWITCH_RSSI   
+//#define NAZAMODECONTROL           // Enables NAZA mode control display using a PWM signal into OSD RSSI pin. Can be used with OSD_SWITCH_RSSI   
 #define NAZA_MODE_GPS 1600
 #define NAZA_MODE_ATI 
 #define NAZA_MODE_MAN 1400
 
 
 /********************       Voltage Warning Settings         ************************/
-//#define AUTOVOLTWARNING             // Uncomment this to use automatic voltage warning. Overrides GUI/OSD voltage warrning setting. Usefull if using different cell count batteries.
-//#define FC_VOLTAGE_CONFIG           // Additionally uncomment this if you want to use the vbat voltage config with BASEFLIGHT and CLEANFLIGHT on the flight controller (include: min cell voltage, max cell voltage and warning cell voltage)
-//#define AUTOVOLTCELLALARM           // Overide Main battery Alarm value. Use individual cell value instead of default of total. i.e. 3.4 = 10.2v on a 3s
+//#define AUTOVOLTWARNING           // Uncomment this to use automatic voltage warning. Overrides GUI/OSD voltage warrning setting. Usefull if using different cell count batteries.
+//#define FC_VOLTAGE_CONFIG         // Additionally uncomment this if you want to use the vbat voltage config with BASEFLIGHT and CLEANFLIGHT on the flight controller (include: min cell voltage, max cell voltage and warning cell voltage)
+//#define AUTOVOLTCELLALARM         // Overide Main battery Alarm value. Use individual cell value instead of default of total. i.e. 3.4 = 10.2v on a 3s
 //The following variables are available for adjustment unless using FC_VOLTAGE_CONFIG 
-#define CELL_VOLTS_WARN 35            // Specify the cell voltage level at which low voltage warning takes place eg. 35 = 3.5 volts per cell
-#define CELL_VOLTS_MIN 34             // Specify the cell voltage at which it is considered empty
-#define CELL_VOLTS_MAX 42             // Specify the max normal LIPO cell voltage
+#define CELL_VOLTS_WARN 35          // Specify the cell voltage level at which low voltage warning takes place eg. 35 = 3.5 volts per cell
+#define CELL_VOLTS_MIN 34           // Specify the cell voltage at which it is considered empty
+#define CELL_VOLTS_MAX 42           // Specify the max normal LIPO cell voltage
 
-/********************       Current Warning Settings         ************************/
-//#define BATICON4AMPHR                 //Enable to use 'Show Bat Status' icon as percentage of AMPHR alarm limit instead of by cell voltage...warning will now be at 80% of that GUI value
+
+/********************       Battery Status Settings         ************************/
+// This works in conjunction with the GUI switch "Display Battery Status
+// Enable to use a battery icon that indicates capacity remaining dependant upon battery voltage or mAh used. Or both if required.
+#define BATTERYICONVOLTS          //Enable to use with voltage as indicator of capacity remaining
+#define BATTERYICONAMPS           //Enable to use with mAh used percentage of AMPHR alarm limit. Warning will now be at 80% of that GUI value
+
 
 /********************       FrSky S.Port settings      *********************/
 //enables data transfer from frsky reciever s.port to osd via multiwii

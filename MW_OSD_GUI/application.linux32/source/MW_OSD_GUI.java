@@ -80,8 +80,8 @@ And to a lesser extent code from the following :-
 
 
 String MW_OSD_GUI_Version = "MWOSD R1.5 - NextGeneration";
-int MW_OSD_EEPROM_Version = 9;
-
+int MW_OSD_EEPROM_Version = 11;
+int CONFIGITEMS16 = 7;
 
 int  GPS_numSatPosition = 0;
 int  GPS_directionToHomePosition = 1;
@@ -120,6 +120,7 @@ int  ModePosition = 33;
 int  MapModePosition = 34;
 int  MapCenterPosition = 35;
 int  APstatusPosition = 36;
+int  wattPosition = 37;
 int GPSstartlat = 430948610;
 int GPSstartlon = -718897060;
 
@@ -167,7 +168,16 @@ int currentCol = 0;
 int currentRow = 0;  
 //Boolean SimulateMW = true;
 
-int S16_AMPMAX = 0; //16bit from 8 EEPROM values
+
+/*
+int S16_AMPMAX = 0; //16bit
+int S16_AMPZERO = 1; //16bit
+int S16_AMPMULT = 2; //16bit
+int S16_RSSIMIN = 3; //16bit
+int S16_RSSIMAX = 4; //16bit
+int S16_SPARE1 = 5; //16bit
+int S16_SPARE2 = 6; //16bit
+*/
 
 ControlP5 controlP5;
 ControlP5 SmallcontrolP5;
@@ -218,6 +228,7 @@ int ReadConfigMSPMillis=0;
 int WriteConfigMSPMillis=0;
 int FontMSPMillis=0;
 int rssical=99;
+int eedataOSDtemp = 0;
 
 // XML config editorvariables
 int hudeditposition=0;
@@ -352,8 +363,8 @@ char MwHeadingUnitAdd=0xbd;
 
 String[] ConfigNames = {
   "EEPROM Loaded",
-  "RSSI Min",
-  "RSSI Max",
+  "Unused5",
+  "Vid Voltage Alarm",
   "RSSI Alarm",
   "Display RSSI",
   "Use FC RSSI",
@@ -367,10 +378,10 @@ String[] ConfigNames = {
   "Use FC amperage",
   "Display mAh",
   "Use Virtual Sensor",
-  "Amps Adjust",
+  "Unused3",
   "Display Video Voltage",
   "Voltage Adjust",
-  "Use FC video voltage",
+  "Unused4",
   "x100 mAh Alarm",
   "Amp Alarm",
   "Display GPS",
@@ -405,7 +416,7 @@ String[] ConfigNames = {
   "Display Timer",
   " - FM sensors",  
   " - SB direction",  
-  "Zero Adjust",
+  "Unused6",
   "Amperage 16L",  
   "Amperage 16H",  
   "RC Switch",  
@@ -427,12 +438,20 @@ String[] ConfigNames = {
   "S_CS7",
   "S_CS8",
   "S_CS9",
+// 16 bit after here  
+  "S16_AMPMAX",
+  "Amps zero",
+  "Amps Adjust",
+  "RSSI min",
+  "RSSI max",
+  "S16_SPARE1",
+  "S16_SPARE2",
 };
 
 String[] ConfigHelp = {
   "EEPROM Loaded",
-  "RSSI Min",
-  "RSSI Max",
+  "Unused5",
+  "Vid Voltage Alarm",
   "RSSI Alarm",
   "Display RSSI",
   "Use MWii",
@@ -446,10 +465,10 @@ String[] ConfigHelp = {
   "Use MWii",
   "Display mAh",
   "Use Virtual Sensor",
-  "Amps Adjust",
+  "Unused3",
   "Display Video Voltage",
   "Voltage Adjust",
-  "Use MWii",
+  "Unused4",
   "mAh Alarm",
   "Amp Alarm",
   "Display GPS",
@@ -484,7 +503,7 @@ String[] ConfigHelp = {
   "Display Timer",
   " - FM sensors",  
   " - SB direction",  
-  "Zero Adjust",
+  "Unused6",
   "Amperage 16L",  
   "Amperage 16H",  
   "RC Switch",  
@@ -506,6 +525,14 @@ String[] ConfigHelp = {
   "S_CS7",
   "S_CS8",
   "S_CS9",
+// 16 bit after here
+  "S16_AMPMAX",
+  "Amps zero",
+  "Amps Adjust",
+  "RSSI min",
+  "RSSI max",
+  "S16_SPARE1",
+  "S16_SPARE2",
   };
 
 
@@ -521,8 +548,8 @@ static int SIMITEMS=6;
 int[] ConfigRanges = {
 1,   // used for check             0
 
-255,   // S_RSSIMIN                1
-255,   // S_RSSIMAX                2
+255,   // S_UNUSED_5               1
+255,   // S_VIDVOLTAGEMIN          2
 100,   // S_RSSI_ALARM             3
 1,     // S_DISPLAYRSSI            4
 1,     // S_MWRSSI                 5
@@ -538,11 +565,11 @@ int[] ConfigRanges = {
 1,     // S_MWAMPERAGE,              12a
 1,     // S_AMPER_HOUR,            13
 1,     // S_AMPERAGE_VIRTUAL,
-1023,   // S_AMPDIVIDERRATIO,      // note this is 8>>16 bit EPROM var
+1,     // UNUSED_3,      
 
 1,     // S_VIDVOLTAGE             14
 255,   // S_VIDDIVIDERRATIO        15    
-1,     // S_VIDVOLTAGE_VBAT        16
+1,     // S_UNUSED_4               16
 
 10000,     // S_AMPER_HOUR_ALARM       17
 255,   // S_AMPERAGE_ALARM         18
@@ -584,9 +611,9 @@ int[] ConfigRanges = {
 1,     // S_TIMER                  41h
 1,     // S_MODESENSOR             42h
 1,     //S_SIDEBARTOPS             43h
-1023,  // S_AMPMIN,
-255,   // S_AMPMAXL,
-3,     // S_AMPMAXH,
+1023,  // S_UNUSED_6,
+1,   // S_UNUSED_1,
+1,     // S_UNUSED_2,
 1,     // S_RCWSWITCH,
 7,     // S_RCWSWITCH_CH,
 7,     // S_HUDSW0,
@@ -606,6 +633,13 @@ int[] ConfigRanges = {
  255,
  255,
  255,
+ 1023,  //"S16_AMPMAX",
+ 1023,  //"S16_AMPZERO",
+ 9999,  //"S16_AMPDIVIDERRATIO",
+ 1023,  //"S16_RSSIMIN",
+ 1023,  //"S16_RSSIMAX",
+ 1023,  //"S16_SPARE1",
+ 1023,  //"S16_SPARE2",
 
 };
 
@@ -673,7 +707,7 @@ Textlabel FileUploadText, TXText, RXText;
 Button buttonIMPORT,buttonSAVE,buttonREAD,buttonRESET,buttonWRITE,buttonRESTART, buttonGPSTIMELINK, buttonSPORTLINK;
 Button buttonLUP, buttonLDOWN, buttonLLEFT, buttonLRIGHT, buttonLPOSUP, buttonLPOSDOWN;
 Button buttonLHUDUP,buttonLPOSHUDDOWN,buttonLPOSEN, buttonLSET, buttonLADD, buttonLSAVE, buttonLCANCEL;
-Button buttonLEW,buttonSetRSSIlow,buttonSetRSSIhigh;
+Button buttonLEW,buttonSetRSSIlow,buttonSetRSSIhigh,buttonSetHWCurrentSensor,buttonSetHWCurrentSensorCancel,buttonSetHWCurrentSensorSave;
 Button buttonGUIDELINK, buttonFAQLINK, buttonCALIBLINK, buttonSUPPORTLINK, buttonDONATELINK;
 // Buttons------------------------------------------------------------------------------------------------------------------
 
@@ -706,6 +740,7 @@ Group
   G_RSSI,
   G_Voltage,
   G_Amperage,
+  G_CurSensor,
   G_VVoltage,
   G_Alarms,
   G_Debug,
@@ -865,15 +900,25 @@ DONATEimage  = loadImage("DON_def.png");
 
   buttonSetRSSIlow = controlP5.addButton("bSetRSSIlow",1,140,(3*17),30,16);buttonSetRSSIlow.setColorBackground(calibrate_).setGroup(G_RSSI).setLabel("SET");
   buttonSetRSSIhigh = controlP5.addButton("bSetRSSIhigh",1,140,(4*17),30,16);buttonSetRSSIhigh.setColorBackground(calibrate_).setGroup(G_RSSI).setLabel("SET");
+  buttonSetHWCurrentSensor = controlP5.addButton("bHW_Current_cal",1,140,(4*17),30,16);buttonSetHWCurrentSensor.setColorBackground(calibrate_).setGroup(G_Amperage).setLabel("CAL");
+  buttonSetHWCurrentSensorCancel = controlP5.addButton("bHW_Current_cal_cancel",1,40,(5*17),50,16);buttonSetHWCurrentSensorCancel.setColorBackground(calibrate_).setGroup(G_CurSensor).setLabel("CANCEL");
+  buttonSetHWCurrentSensorSave = controlP5.addButton("bHW_Current_cal_save",1,100,(5*17),35,16);buttonSetHWCurrentSensorSave.setColorBackground(calibrate_).setGroup(G_CurSensor).setLabel("SAVE");
     
-
 // EEPROM----------------------------------------------------------------
 
 CreateItem(GetSetting("S_CHECK_"), 5, 0, G_EEPROM);
-CreateItem(GetSetting("S_AMPMAXL"), 5, 0, G_EEPROM);
-CreateItem(GetSetting("S_AMPMAXH"), 5, 0, G_EEPROM);
+CreateItem(GetSetting("S_UNUSED_1"), 5, 0, G_EEPROM);
+CreateItem(GetSetting("S_UNUSED_2"), 5, 0, G_EEPROM);
+CreateItem(GetSetting("S_UNUSED_3"),  5,0, G_EEPROM);
+CreateItem(GetSetting("S_UNUSED_4"),  5,1*17, G_EEPROM);
 CreateItem(GetSetting("S_USE_BOXNAMES"),  5,0, G_EEPROM);
 CreateItem(GetSetting("S_GPSCOORDTOP"),  5,0, G_EEPROM);
+CreateItem(GetSetting("S_UNUSED_5"), 5, 3*17, G_EEPROM);
+CreateItem(GetSetting("S_UNUSED_6"), 5, 5*17, G_EEPROM);
+
+CreateItem(GetSetting("S16_AMPMAX"),  5,0, G_EEPROM);
+CreateItem(GetSetting("S16_SPARE1"),  5,0, G_EEPROM);
+CreateItem(GetSetting("S16_SPARE2"),  5,0, G_EEPROM);
 
 
 // RSSI  ---------------------------------------------------------------------------
@@ -881,8 +926,8 @@ CreateItem(GetSetting("S_GPSCOORDTOP"),  5,0, G_EEPROM);
 CreateItem(GetSetting("S_DISPLAYRSSI"), 5, 0, G_RSSI);
 CreateItem(GetSetting("S_MWRSSI"),  5,1*17, G_RSSI);
 CreateItem(GetSetting("S_PWMRSSI"),  5,2*17, G_RSSI);
-CreateItem(GetSetting("S_RSSIMIN"), 5, 3*17, G_RSSI);
-CreateItem(GetSetting("S_RSSIMAX"), 5,4*17, G_RSSI);
+CreateItem(GetSetting("S16_RSSIMIN"),  5, 3*17, G_RSSI);
+CreateItem(GetSetting("S16_RSSIMAX"),  5, 4*17, G_RSSI);
 CreateItem(GetSetting("S_RSSI_ALARM"), 5,5*17, G_RSSI);
 
 // Voltage  ------------------------------------------------------------------------
@@ -900,15 +945,15 @@ CreateItem(GetSetting("S_AMPERAGE"),  5,0, G_Amperage);
 CreateItem(GetSetting("S_AMPER_HOUR"),  5,1*17, G_Amperage);
 CreateItem(GetSetting("S_AMPERAGE_VIRTUAL"),  5,2*17, G_Amperage);
 CreateItem(GetSetting("S_MWAMPERAGE"),  5,3*17, G_Amperage);
-CreateItem(GetSetting("S_AMPDIVIDERRATIO"),  5,4*17, G_Amperage);
-CreateItem(GetSetting("S_AMPMIN"), 5, 5*17, G_Amperage);
+CreateItem(GetSetting("S16_AMPDIVIDERRATIO"),  5,4*17, G_Amperage);
+CreateItem(GetSetting("S16_AMPZERO"), 5, 5*17, G_Amperage);
 CreateItem(GetSetting("S_AMPER_HOUR_ALARM"),  5,6*17, G_Amperage);
 CreateItem(GetSetting("S_AMPERAGE_ALARM"),  5,7*17, G_Amperage);
 
 // Video Voltage  ------------------------------------------------------------------------
 CreateItem(GetSetting("S_VIDVOLTAGE"),  5,0, G_VVoltage);
-CreateItem(GetSetting("S_VIDVOLTAGE_VBAT"),  5,1*17, G_VVoltage);
-CreateItem(GetSetting("S_VIDDIVIDERRATIO"),  5,2*17, G_VVoltage);
+CreateItem(GetSetting("S_VIDDIVIDERRATIO"),  5,1*17, G_VVoltage);
+CreateItem(GetSetting("S_VIDVOLTAGEMIN"), 5,2*17, G_VVoltage);
 
 //  Temperature  --------------------------------------------------------------------
 //CreateItem(GetSetting("S_DISPLAYTEMPERATURE"),  5,0, G_Alarms);
@@ -1312,6 +1357,7 @@ public void draw() {
     msptxt="";
     eeindextxt="";
     analmessage.setValue("");
+    eeindexmessage.setValue("");
     for (int i=0; i<analSENSORS; i++) {
       txtlblanal[i].setValue("");
     }
@@ -1461,6 +1507,7 @@ public void draw() {
   ShowCallsign();
   ShownAngletohome();
   ShowAmperage();
+  ShowWattage();
   ShowVario();
   ShowTemp();
   ShowUTC();
@@ -2463,12 +2510,33 @@ public void LEW(){
 //  Lock_All_Controls(true);
 }
 
+public void bHW_Current_cal(){
+  SHWCS_offset.setValue((confItem[GetSetting("S16_AMPZERO")].value()*SHWCS_voltage.getValue()/1024));
+  SHWCS_sensitivity.setValue( 10000*(SHWCS_voltage.getValue()-SHWCS_offset.getValue())/ (confItem[GetSetting("S16_AMPDIVIDERRATIO")].value())  );
+  G_Amperage.hide();
+  G_CurSensor.show();
+}
+
+public void bHW_Current_cal_cancel(){
+  G_Amperage.show();
+  G_CurSensor.hide();
+}
+
+public void bHW_Current_cal_save(){
+  float HWC_offset=(SHWCS_offset.getValue()*1024)/(SHWCS_voltage.getValue());
+  float HWC_sensitivity=10000*(SHWCS_voltage.getValue()-SHWCS_offset.getValue())/(SHWCS_sensitivity.getValue());
+  confItem[GetSetting("S16_AMPZERO")].setValue(PApplet.parseInt(HWC_offset));
+  confItem[GetSetting("S16_AMPDIVIDERRATIO")].setValue(PApplet.parseInt(HWC_sensitivity));
+  G_Amperage.show();
+  G_CurSensor.hide();
+}
+
 public void bSetRSSIlow(){
-  confItem[GetSetting("S_RSSIMIN")].setValue(rssical>>2);
+  confItem[GetSetting("S16_RSSIMIN")].setValue(rssical);
 }
 
 public void bSetRSSIhigh(){
-  confItem[GetSetting("S_RSSIMAX")].setValue(rssical>>2);
+  confItem[GetSetting("S16_RSSIMAX")].setValue(rssical);
 }
 
 public void READEEMSP(){
@@ -2938,6 +3006,10 @@ public class FontFileFilter extends FileFilter {
     return "*.mcm Font File";
   }   
 }
+  Numberbox SHWCS_voltage;
+  Numberbox SHWCS_sensitivity;
+  Numberbox SHWCS_offset;
+
 public void SetupGroups(){
 
 
@@ -3400,6 +3472,64 @@ G_SPORT = GroupcontrolP5.addGroup("G_SPORT")
                 .align(controlP5.CENTER,controlP5.CENTER)
                 ; 
 
+ G_CurSensor = GroupcontrolP5.addGroup("G_CurSensor")
+                .setPosition(XAmps,YAmps+15)
+                .setWidth(Col1Width)
+                .setBarHeight(15)
+                .setColorForeground(color(30,255))
+                .setColorBackground(color(30,255))
+                .setColorLabel(color(0, 110, 220))
+                .setBarHeight(15)
+                .setBackgroundColor(color(30,255))
+                .setColorActive(red_)
+                .setBackgroundHeight((8*17) +5)
+                .setLabel("HW Current sensor")
+                .hide()
+                .disableCollapse() 
+                ; 
+                G_CurSensor.captionLabel()
+                .toUpperCase(false)
+                .align(controlP5.CENTER,controlP5.CENTER)
+                ; 
+
+  SHWCS_voltage = ScontrolP5.addNumberbox("SHWCS_voltage",0,5,0*17,40,14);
+    SHWCS_voltage.setLabel("Supply Voltage");
+    SHWCS_voltage.setMultiplier(0.1f);
+    SHWCS_voltage.setMin(4.5f);
+//    SHWCS_voltage.setDirection(Controller.HORIZONTAL);
+    SHWCS_voltage.setMax(5.5f);
+    SHWCS_voltage.setDecimalPrecision(1);
+    SHWCS_voltage.setGroup(G_CurSensor); 
+    SHWCS_voltage.setValue(5.0f);
+  ScontrolP5.getController("SHWCS_voltage").getCaptionLabel()
+   .toUpperCase(false)
+   .align(ControlP5.LEFT, ControlP5.RIGHT_OUTSIDE).setPaddingX(45);
+
+  SHWCS_offset = ScontrolP5.addNumberbox("SHWCS_offset",0,5,1*17,40,14);
+    SHWCS_offset.setLabel("0A offset V");
+    SHWCS_offset.setMin(0);
+    SHWCS_offset.setMultiplier(0.01f);
+//    SHWCS_offset.setDirection(Controller.HORIZONTAL);
+    SHWCS_offset.setMax(5.00f);
+    SHWCS_offset.setDecimalPrecision(2);
+    SHWCS_offset.setGroup(G_CurSensor); 
+    SHWCS_offset.setValue(2.50f);
+  ScontrolP5.getController("SHWCS_offset").getCaptionLabel()
+   .toUpperCase(false)
+   .align(ControlP5.LEFT, ControlP5.RIGHT_OUTSIDE).setPaddingX(45);
+
+  SHWCS_sensitivity = ScontrolP5.addNumberbox("SHWCS_sensitivity",0,5,2*17,40,14);
+    SHWCS_sensitivity.setLabel("Sensitivity mV/A");
+    SHWCS_sensitivity.setMin(0);
+    SHWCS_sensitivity.setMultiplier(0.1f);
+//    SHWCS_sensitivity.setDirection(Controller.HORIZONTAL);
+    SHWCS_sensitivity.setMax(250);
+    SHWCS_sensitivity.setDecimalPrecision(1);
+    SHWCS_sensitivity.setGroup(G_CurSensor); 
+    SHWCS_sensitivity.setValue(36.6f);
+  ScontrolP5.getController("SHWCS_sensitivity").getCaptionLabel()
+   .toUpperCase(false)
+   .align(ControlP5.LEFT, ControlP5.RIGHT_OUTSIDE).setPaddingX(45);
 
 }
 
@@ -4209,6 +4339,7 @@ public void evaluateCommand(byte cmd, int size) {
         else {
           msptxt="";
           analmessage.setValue("");
+          eeindextxt="";
           for (int i=0; i<analSENSORS; i++) {
             txtlblanal[i].setValue("");
           }
@@ -4228,18 +4359,25 @@ public void evaluateCommand(byte cmd, int size) {
             eeaddressGUI=eeaddressOSD;
           }
           if (WriteLayouts==1){
-            if (eeaddressGUI>=(CONFIGITEMS + (hudoptions*2*3))){ // hit end address
+            if (eeaddressGUI>=(CONFIGITEMS + CONFIGITEMS16 + 1+(hudoptions*2*3))){ // hit end address
               WriteConfigMSPMillis=0;
             }
           }              
           else{
-            if (eeaddressGUI>=(CONFIGITEMS)){ // hit end address
+            if (eeaddressGUI>=(CONFIGITEMS + CONFIGITEMS16+1)){ // hit end address
               WriteConfigMSPMillis=0;
             }
           }
         }
         else{ // confirmed read request received
-          for(int i=0; i<10; i++) {
+         int eeaddressoffset = 0;
+         int configcount8  = CONFIGITEMS-CONFIGITEMS16-1;
+         int configcount16 = CONFIGITEMS16;
+         int bit16=0;
+         int lowbit=0;
+         int highbit=0;
+         int gbug=0;
+         for(int i=0; i<10; i++) {
             eeaddressOSD=read8();
             eeaddressOSD=eeaddressOSD+read8();
             eeindextxt="EER: "+eeaddressOSD;   
@@ -4258,18 +4396,38 @@ public void evaluateCommand(byte cmd, int size) {
             if (eeaddressOSD==GetSetting("S_HUDSW2")){
               OSD_S_HUDSW2=eedataOSD;
             }
-            if (eeaddressOSD<CONFIGITEMS){
+            if (eeaddressOSD<(configcount8)){
               SetConfigItem(eeaddressOSD, eedataOSD);
+              bit16=0;
             }
-            if (eeaddressOSD==GetSetting("S_AMPMAXH")){ // 16 bit value amps manipulation now received all data
-              S16_AMPMAX=(PApplet.parseInt(confItem[GetSetting("S_AMPMAXH")].value())<<8)+ PApplet.parseInt(confItem[GetSetting("S_AMPMAXL")].value()); 
-              SetConfigItem(GetSetting("S_AMPDIVIDERRATIO"), (int) S16_AMPMAX);
+            else if(eeaddressOSD==configcount8){
             }
+            else if(eeaddressOSD<(configcount8+configcount16<<2)){
+              bit16=1;
+              eeaddressoffset = (eeaddressOSD-1-configcount8)/2;
+              gbug=(eeaddressOSD-configcount8)%2;
+              if(((eeaddressOSD+1-configcount8)%2)==0){ // low bit
+               highbit=0;
+               eedataOSDtemp = eedataOSD;
+              }
+              else{
+               highbit=1;
+               int eedataOSDtemph = eedataOSD<<8;
+               eedataOSDtemp = eedataOSDtemp+eedataOSDtemph;
+               SetConfigItem((configcount8+1+eeaddressoffset), eedataOSDtemp);
+              }
+            } 
+//            System.out.println("A:"+ eeaddressOSD+" D:"+eedataOSD+" T:"+eedataOSDtemp+" O:"+eeaddressoffset+" 16:"+bit16+" HB:"+highbit+" GB:"+gbug);
+            
+//            if (eeaddressOSD==GetSetting("S_AMPMAXH")){ // 16 bit value amps manipulation now received all data
+//              S16_AMPMAX=(int(confItem[GetSetting("S_AMPMAXH")].value())<<8)+ int(confItem[GetSetting("S_AMPMAXL")].value()); 
+//              SetConfigItem(GetSetting("S_AMPDIVIDERRATIO"), (int) S16_AMPMAX);
+//            }
             if (eeaddressOSD==eeaddressGUI){ // update base address
               eeaddressGUI++;
             }
           }
-          if (eeaddressGUI>=(CONFIGITEMS)){ // hit end address config only
+          if (eeaddressGUI>=(CONFIGITEMS+CONFIGITEMS16)){ // hit end address config only
             ReadConfigMSPMillis=0;
           }
         }
@@ -4279,7 +4437,11 @@ public void evaluateCommand(byte cmd, int size) {
           loop();   
           ReadConfigMSPMillis=0;
           WriteConfigMSPMillis=0;   
-        }        
+        }   
+     debug[0]=1;
+     debug[1]=PApplet.parseInt(confItem[GetSetting("S16_RSSIMAX")].value());
+     debug[2]=PApplet.parseInt(confItem[GetSetting("S16_SPARE1")].value());
+     debug[3]=eeaddressOSD;     
       }
 
 
@@ -4499,9 +4661,9 @@ public void MWData_Com() {
       WriteLayouts=1;
     }
 
-    EepromWriteSize = CONFIGITEMS +1;
+    EepromWriteSize = CONFIGITEMS+1;
     if (WriteLayouts==1){
-      EepromWriteSize = CONFIGITEMS + (hudoptions*2*3) +1;
+      EepromWriteSize = CONFIGITEMS+1+(hudoptions*2*3);
     }
 
     WriteConfigMSPMillis=1000+millis(); 
@@ -4520,7 +4682,7 @@ public void MWData_Com() {
       tmpeeadd = (i+eeaddressGUI)>>8;
       serialize8(tmpeeadd);
       serialize8(EElookuptable[i+eeaddressGUI]);
-//System.out.println(eeaddressGUI+i+":"+EElookuptable[i+eeaddressGUI]);
+// System.out.println(eeaddressGUI+i+":"+EElookuptable[i+eeaddressGUI]);
     }
     tailSerialReply();
   }
@@ -4529,8 +4691,8 @@ public void MWData_Com() {
 }
 
   public void EElookuptableReSet(){ // preparing for a write
-    confItem[GetSetting("S_AMPMAXL")].setValue(PApplet.parseInt(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())&0xFF); // for 8>>16 bit EEPROM
-    confItem[GetSetting("S_AMPMAXH")].setValue(PApplet.parseInt(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())>>8);
+//    confItem[GetSetting("S_AMPMAXL")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())&0xFF); // for 8>>16 bit EEPROM
+//    confItem[GetSetting("S_AMPMAXH")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())>>8);
     for(int i = 0; i < CONFIGITEMS; i++){
       if(i == GetSetting("S_VOLTAGEMIN")){
         EElookuptable[i]=PApplet.parseInt(confItem[i].value()*10);
@@ -4538,20 +4700,27 @@ public void MWData_Com() {
       else if(i == GetSetting("S_GPSTZ")){
         EElookuptable[i]=PApplet.parseInt(confItem[i].value()*10);
       }
-      else if(i == GetSetting("S_AMPDIVIDERRATIO")){
-        EElookuptable[i]=0;
-      }
       else{
         EElookuptable[i]=PApplet.parseInt(confItem[i].value());
       }
 
     }
-//     for(int i = 0; i < (hudoptions); i++){
-//       ConfigLayout[0][i]=CONFIGHUD[int(confItem[GetSetting("S_HUD")].value())][i];
-//       ConfigLayout[1][i]=CONFIGHUD[int(confItem[GetSetting("S_HUDOSDSW")].value())][i];
-//     }
 
-     int EElookuptableaddress=CONFIGITEMS;
+      int EElookuptableaddress=CONFIGITEMS-CONFIGITEMS16;
+      for(int i = 0; i < CONFIGITEMS16; i++){
+        int ii=(CONFIGITEMS-CONFIGITEMS16)+(i);
+        int gtmp=PApplet.parseInt(confItem[ii].value())&0xFF;
+        EElookuptable[EElookuptableaddress]=PApplet.parseInt(confItem[ii].value())&0xFF;
+//        System.out.println("A:"+ EElookuptableaddress+" D:"+gtmp);
+        EElookuptableaddress++;
+        gtmp=PApplet.parseInt(confItem[ii].value())>>8;
+        EElookuptable[EElookuptableaddress]=PApplet.parseInt(confItem[ii].value())>>8;
+//        System.out.println("A:"+ EElookuptableaddress+" D:"+gtmp);
+        EElookuptableaddress++;
+      }
+
+
+     EElookuptableaddress=CONFIGITEMS+CONFIGITEMS16;
      for(int i = 0; i < (hudoptions); i++){
        EElookuptable[EElookuptableaddress]=PApplet.parseInt(ConfigLayout[0][i]&0xFF);
        EElookuptableaddress++;
@@ -4572,9 +4741,12 @@ public void MWData_Com() {
      }
   }
   
-  public void EElookuptableSync(){ // Sync settings with EE table
-  }
   
+//  public void OSD2EElookuptable(){ // Sync settings with EE table
+//  }
+
+  public void EElookuptable2GUIsettings(){ // Sync settings from EE table to GUI
+  }
 
 
 
@@ -5392,6 +5564,17 @@ public void ShowAmperage(){
   mapchar(0xa4, SimPosn[pMeterSumPosition]);
   makeText("1221", SimPosn[pMeterSumPosition]+1);
 }}
+
+
+public void ShowWattage(){
+  int SYM_WATT = 0X57;
+  int wattage = 125;
+//  String output = OnePlaceDecimal.format(wattage);
+  String output = str(wattage);
+  output =output+PApplet.parseChar(0X57);
+  makeText(output, SimPosn[wattPosition]+1);   
+
+}
 
 public void ShowTemp(){
   makeText("30", SimPosn[temperaturePosition]);

@@ -16,6 +16,16 @@ Okan Vitaliy
 Bicycle
 Henrique - Katawentos
 Per Magnus Auby - Supersopp
+Dustin Sailings
+Hwurzburg
+LefebvreStephane
+truhlikfredy
+cmavr8
+chrisinvb
+xeno010
+ohhorob
+Pawelsky (DJI decoders)
+
 
 Other Projects and their contributions
 Ardupilot team - some of the original code is probably from / based upon elements of ardupilot team. e.g. GPS

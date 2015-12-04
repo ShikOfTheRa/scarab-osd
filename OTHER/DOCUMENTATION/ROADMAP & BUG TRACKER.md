@@ -10,7 +10,7 @@
  * OSD    - Video volts alarm adjustable via GUI
  * OSD    - Video volts independant of main battery
  * OSD    - Battery voltage status icon improved accuracy - thanks to Hwurzburg
- * OSD    - Battery capacity ststus icon added - thanks to Hwurzburg
+ * OSD    - Battery capacity status icon added - thanks to Hwurzburg
  * OSD    - Display analogue / PWM sensors on GUI - via MW OSD protocol
  * OSD    - Support for PWMRSSI via RC data (Flight Controller types)
  * OSD    - Support for PWMRSSI via PPM stream (GPS OSD) - PENDING TESTING
@@ -27,6 +27,7 @@
  * OSD    - Watts display added. Available via layouts editor
  * OSD    - RSSI sensitivity via OSD inputs quadrupled. Inreased resolution for some RX. e.g. Scherrer
  * GUI    - Support for RSSI Auto calibration from GUI
+ * GUI    - Support for Current sensor calibration from GUI - using cs parameters (0 amp offset  - v, mV per A drawn 
  * BUGFIX - HARIKIRI / MW2.1 not working since R1.5
  * BUGFIX - Center crosshair font partially missing on default_large font
  * BUGFIX - AHI incroect at large angles

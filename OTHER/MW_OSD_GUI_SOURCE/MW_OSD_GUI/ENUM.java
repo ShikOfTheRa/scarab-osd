@@ -1,6 +1,6 @@
 enum Settings {
   S_CHECK_,    // used for check
-  S_UNUSED5,
+  S_UNUSED_5,
   S_VIDVOLTAGEMIN,
   S_RSSI_ALARM,
   S_DISPLAYRSSI,
@@ -55,7 +55,7 @@ enum Settings {
   S_TIMER,
   S_MODESENSOR,
   S_SIDEBARTOPS,
-  S_AMPMIN,
+  S_UNUSED_6,
   S_UNUSED_1,
   S_UNUSED_2,
   S_RCWSWITCH,
@@ -77,9 +77,9 @@ enum Settings {
   S_CS7,
   S_CS8,
   S_CS9,
-  S16_AMPMAXn,
+  S16_AMPMAX,
   S16_AMPZERO,
-  S_AMPDIVIDERRATIO,
+  S16_AMPDIVIDERRATIO,
   S16_RSSIMIN,
   S16_RSSIMAX,
   S16_SPARE1,

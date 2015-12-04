@@ -38,6 +38,7 @@
   <DESCRIPTION desc="Map mode"/>
   <DESCRIPTION desc="Map center"/>
   <DESCRIPTION desc="AP status"/>
+  <DESCRIPTION desc="Watts"/>
   <HUDNAME hudname="Shiki default"/>
   <HUDNAME hudname="Shiki minimal"/>
   <HUDNAME hudname="EZ"/>
@@ -86,6 +87,7 @@
   <LAYOUT desc="MapModePosition" enabled="0" hud="0" hudname="Shiki" value="46"/>
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="0" hudname="Shiki" value="195"/>
   <LAYOUT desc="APstatusPosition" enabled="1" hud="0" hudname="Shiki" value="70"/>
+  <LAYOUT desc="wattsPosition" enabled="0" hud="0" hudname="Shiki" value="339"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="0" hud="1" hudname="Minimal" value="32"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="1" hudname="Minimal" value="379"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="0" hud="1" hudname="Minimal" value="42"/>
@@ -123,6 +125,7 @@
   <LAYOUT desc="MapModePosition" enabled="0" hud="1" hudname="Minimal" value="46"/>
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="1" hudname="Minimal" value="195"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="1" hudname="Minimal" value="195"/>
+  <LAYOUT desc="wattsPosition" enabled="0" hud="1" hudname="Minimal" value="339"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="0" hud="2" hudname="EZ" value="49"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="2" hudname="EZ" value="48"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="2" hudname="EZ" value="40"/>
@@ -160,6 +163,7 @@
   <LAYOUT desc="MapModePosition" enabled="0" hud="2" hudname="EZ" value="46"/>
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="2" hudname="EZ" value="195"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="2" hudname="EZ" value="195"/>
+  <LAYOUT desc="wattsPosition" enabled="0" hud="2" hudname="EZ" value="339"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="0" hud="3" hudname="Blank screen" value="49"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="0" hud="3" hudname="Blank screen" value="48"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="0" hud="3" hudname="Blank screen" value="40"/>
@@ -197,6 +201,7 @@
   <LAYOUT desc="MapModePosition" enabled="0" hud="3" hudname="Blank screen" value="46"/>
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="3" hudname="Blank screen" value="195"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="3" hudname="Blank screen" value="195"/>
+  <LAYOUT desc="wattsPosition" enabled="0" hud="3" hudname="Blank screen" value="339"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="0" hud="4" hudname="Map" value="49"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="4" hudname="Map" value="49"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="4" hudname="Map" value="41"/>
@@ -234,6 +239,7 @@
   <LAYOUT desc="MapModePosition" enabled="1" hud="4" hudname="Map" value="47"/>
   <LAYOUT desc="MapCenterPosition" enabled="1" hud="4" hudname="Map" value="194"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="4" hudname="Map" value="195"/>
+  <LAYOUT desc="wattsPosition" enabled="0" hud="4" hudname="Map" value="339"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="1" hud="5" hudname="F14" value="62"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="5" hudname="F14" value="372"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="5" hudname="F14" value="374"/>
@@ -271,6 +277,7 @@
   <LAYOUT desc="MapModePosition" enabled="0" hud="5" hudname="F14" value="46"/>
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="5" hudname="F14" value="195"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="5" hudname="F14" value="195"/>
+  <LAYOUT desc="wattsPosition" enabled="0" hud="5" hudname="F14" value="339"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="1" hud="6" hudname="Embraer" value="53"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="6" hudname="Embraer" value="344"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="6" hudname="Embraer" value="363"/>
@@ -308,6 +315,7 @@
   <LAYOUT desc="MapModePosition" enabled="0" hud="6" hudname="Embraer" value="46"/>
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="6" hudname="Embraer" value="195"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="6" hudname="Embraer" value="195"/>
+  <LAYOUT desc="wattsPosition" enabled="0" hud="6" hudname="Embraer" value="339"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="1" hud="7" hudname="NAHI" value="54"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="7" hudname="NAHI" value="74"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="7" hudname="NAHI" value="372"/>
@@ -345,6 +353,7 @@
   <LAYOUT desc="MapModePosition" enabled="0" hud="7" hudname="NAHI" value="46"/>
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="7" hudname="NAHI" value="194"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="7" hudname="NAHI" value="195"/>
+  <LAYOUT desc="wattsPosition" enabled="0" hud="7" hudname="NAHI" value="339"/>
   <LAYOUT desc="Sat indicator" enabled="0" hud="8" hudname="Groundstation" value="32"/>
   <LAYOUT desc="Direction to home" enabled="0" hud="8" hudname="Groundstation" value="51"/>
   <LAYOUT desc="Distance" enabled="0" hud="8" hudname="Groundstation" value="54"/>
@@ -382,6 +391,7 @@
   <LAYOUT desc="Map mode" enabled="0" hud="8" hudname="Groundstation" value="46"/>
   <LAYOUT desc="Map center" enabled="0" hud="8" hudname="Groundstation" value="195"/>
   <LAYOUT desc="AP status" enabled="0" hud="8" hudname="Groundstation" value="220"/>
+  <LAYOUT desc="wattsPosition" enabled="0" hud="8" hudname="Groundstation" value="339"/>
   <LAYOUT desc="Sat indicator" enabled="0" hud="9" hudname="Standalone" value="32"/>
   <LAYOUT desc="Direction to home" enabled="0" hud="9" hudname="Standalone" value="51"/>
   <LAYOUT desc="Distance" enabled="0" hud="9" hudname="Standalone" value="54"/>
@@ -419,6 +429,7 @@
   <LAYOUT desc="Map mode" enabled="0" hud="9" hudname="Standalone" value="46"/>
   <LAYOUT desc="Map center" enabled="0" hud="9" hudname="Standalone" value="195"/>
   <LAYOUT desc="AP status" enabled="0" hud="9" hudname="Standalone" value="220"/>
+  <LAYOUT desc="wattsPosition" enabled="0" hud="9" hudname="Standalone" value="339"/>
   <LAYOUT desc="Sat indicator" enabled="0" hud="10" hudname="250 class" value="32"/>
   <LAYOUT desc="Direction to home" enabled="0" hud="10" hudname="250 class" value="51"/>
   <LAYOUT desc="Distance" enabled="0" hud="10" hudname="250 class" value="54"/>
@@ -456,4 +467,5 @@
   <LAYOUT desc="Map mode" enabled="0" hud="10" hudname="250 class" value="46"/>
   <LAYOUT desc="Map center" enabled="0" hud="10" hudname="250 class" value="195"/>
   <LAYOUT desc="AP status" enabled="0" hud="10" hudname="250 class" value="70"/>
+  <LAYOUT desc="wattsPosition" enabled="0" hud="10" hudname="250 class" value="339"/>
 </HUDLAYOUTS>

@@ -1,3 +1,7 @@
+  Numberbox SHWCS_voltage;
+  Numberbox SHWCS_sensitivity;
+  Numberbox SHWCS_offset;
+
 void SetupGroups(){
 
 
@@ -460,5 +464,63 @@ G_SPORT = GroupcontrolP5.addGroup("G_SPORT")
                 .align(controlP5.CENTER,controlP5.CENTER)
                 ; 
 
+ G_CurSensor = GroupcontrolP5.addGroup("G_CurSensor")
+                .setPosition(XAmps,YAmps+15)
+                .setWidth(Col1Width)
+                .setBarHeight(15)
+                .setColorForeground(color(30,255))
+                .setColorBackground(color(30,255))
+                .setColorLabel(color(0, 110, 220))
+                .setBarHeight(15)
+                .setBackgroundColor(color(30,255))
+                .setColorActive(red_)
+                .setBackgroundHeight((8*17) +5)
+                .setLabel("HW Current sensor")
+                .hide()
+                .disableCollapse() 
+                ; 
+                G_CurSensor.captionLabel()
+                .toUpperCase(false)
+                .align(controlP5.CENTER,controlP5.CENTER)
+                ; 
+
+  SHWCS_voltage = ScontrolP5.addNumberbox("SHWCS_voltage",0,5,0*17,40,14);
+    SHWCS_voltage.setLabel("Supply Voltage");
+    SHWCS_voltage.setMultiplier(0.1);
+    SHWCS_voltage.setMin(4.5);
+//    SHWCS_voltage.setDirection(Controller.HORIZONTAL);
+    SHWCS_voltage.setMax(5.5);
+    SHWCS_voltage.setDecimalPrecision(1);
+    SHWCS_voltage.setGroup(G_CurSensor); 
+    SHWCS_voltage.setValue(5.0);
+  ScontrolP5.getController("SHWCS_voltage").getCaptionLabel()
+   .toUpperCase(false)
+   .align(ControlP5.LEFT, ControlP5.RIGHT_OUTSIDE).setPaddingX(45);
+
+  SHWCS_offset = ScontrolP5.addNumberbox("SHWCS_offset",0,5,1*17,40,14);
+    SHWCS_offset.setLabel("0A offset V");
+    SHWCS_offset.setMin(0);
+    SHWCS_offset.setMultiplier(0.01);
+//    SHWCS_offset.setDirection(Controller.HORIZONTAL);
+    SHWCS_offset.setMax(5.00);
+    SHWCS_offset.setDecimalPrecision(2);
+    SHWCS_offset.setGroup(G_CurSensor); 
+    SHWCS_offset.setValue(2.50);
+  ScontrolP5.getController("SHWCS_offset").getCaptionLabel()
+   .toUpperCase(false)
+   .align(ControlP5.LEFT, ControlP5.RIGHT_OUTSIDE).setPaddingX(45);
+
+  SHWCS_sensitivity = ScontrolP5.addNumberbox("SHWCS_sensitivity",0,5,2*17,40,14);
+    SHWCS_sensitivity.setLabel("Sensitivity mV/A");
+    SHWCS_sensitivity.setMin(0);
+    SHWCS_sensitivity.setMultiplier(0.1);
+//    SHWCS_sensitivity.setDirection(Controller.HORIZONTAL);
+    SHWCS_sensitivity.setMax(250);
+    SHWCS_sensitivity.setDecimalPrecision(1);
+    SHWCS_sensitivity.setGroup(G_CurSensor); 
+    SHWCS_sensitivity.setValue(36.6);
+  ScontrolP5.getController("SHWCS_sensitivity").getCaptionLabel()
+   .toUpperCase(false)
+   .align(ControlP5.LEFT, ControlP5.RIGHT_OUTSIDE).setPaddingX(45);
 
 }

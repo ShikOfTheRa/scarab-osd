@@ -238,7 +238,7 @@ enum Setting_ {
   S_TIMER,
   S_MODESENSOR,
   S_SIDEBARTOPS,
-  S_AMPMIN,
+  S_UNUSED_6,
   S_UNUSED_1, //S_AMPMAXL,
   S_UNUSED_2, //S_AMPMAXH,
   S_RCWSWITCH,
@@ -317,7 +317,7 @@ MWOSDVER,   // used for check              0
 0,   // GPStime                     37a
 0,   // GPSTZ +/-                   37b
 0,   // GPSTZ                       37c
-1,   // DEBUG                       37e
+0,   // DEBUG                       37e
 1,   // SCROLLING LADDERS           37f
 1,   // SHOW GIMBAL ICON            37g
 1,   // SHOW VARIO                  37h
@@ -327,7 +327,7 @@ MWOSDVER,   // used for check              0
 1,   // S_TIMER                     41h
 1,   // S_MODESENSOR                42h
 1,   // S_SIDEBARTOPS               43h
-4,   // S_AMPMIN,
+4,   // S_UNUSED_6,
 0,   // S_UNUSED_1, S_AMPMAXL,
 0,   // S_UNUSED_2, S_AMPMAXH,
 0,   // S_RCWSWITCH,
@@ -354,8 +354,8 @@ MWOSDVER,   // used for check              0
 
 uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
   0,// S16_AMPMAX,
-  100,// S16_AMPZERO,
-  900,// S_AMPDIVIDERRATIO,
+  0,// S16_AMPZERO,
+  150,// S16_AMPDIVIDERRATIO,
   0,// S16_RSSIMIN,
   1024,// S16_RSSIMAX,
   500,// S16_SPARE1,
@@ -401,7 +401,7 @@ uint16_t SCREENLAYOUT_DEFAULT[EEPROM_SETTINGS] = {
 (LINE02+22)|DISPLAY_NEVER,   // MapModePosition
 (LINE07+15)|DISPLAY_NEVER,   // MapCenterPosition
 (LINE04+10)|DISPLAY_ALWAYS,   // APstatusPosition
-(LINE12+9)|DISPLAY_ALWAYS,   // wattPosition
+(LINE12+9)|DISPLAY_NEVER,   // wattPosition
 
 };
 
