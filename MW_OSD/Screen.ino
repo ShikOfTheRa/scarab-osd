@@ -1346,7 +1346,7 @@ void displayConfigScreen(void)
     Menuconfig_onoff(PITCHD,S_AMPER_HOUR);
     Menuconfig_onoff(YAWD,S_AMPERAGE_VIRTUAL);
     MAX7456_WriteString(itoa(S16_AMPDIVIDERRATIO,screenBuffer,10),ALTD);
-    MAX7456_WriteString(itoa(Settings[S_AMPMIN],screenBuffer,10),VELD);
+    MAX7456_WriteString(itoa(Settings16[S16_AMPZERO],screenBuffer,10),VELD);
   }
 #else
     if(configPage == 5)configPage+=menudir;  

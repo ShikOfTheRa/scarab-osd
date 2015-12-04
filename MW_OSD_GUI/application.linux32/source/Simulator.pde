@@ -815,6 +815,17 @@ void ShowAmperage(){
   makeText("1221", SimPosn[pMeterSumPosition]+1);
 }}
 
+
+void ShowWattage(){
+  int SYM_WATT = 0X57;
+  int wattage = 125;
+//  String output = OnePlaceDecimal.format(wattage);
+  String output = str(wattage);
+  output =output+char(0X57);
+  makeText(output, SimPosn[wattPosition]+1);   
+
+}
+
 void ShowTemp(){
   makeText("30", SimPosn[temperaturePosition]);
   mapchar(0x0e, SimPosn[temperaturePosition]+2);
