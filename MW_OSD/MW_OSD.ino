@@ -3,7 +3,7 @@
 /*
 Scarab NG OSD ... 
 
- This program is free software: you can redistribute it and/or modify
+ Subject to exceptions listed below, this program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  any later version. see http://www.gnu.org/licenses/
@@ -19,6 +19,12 @@ This work is based on the following open source work :-
  Jean Gabriel Maurice. He started the revolution. He was the first....
  
  Please refer to credits.txt for list of individual contributions
+ 
+ Exceptions:
+ Where there are exceptions, these take precedence over the genereric licencing approach
+ Elements of the code provided by Pawelsky (DJI specific) are not for commercial use. See headers in individual files for further details.  
+ Libraries used and typically provided by compilers may have licening terms stricter than that of GNU 3
+ 
 */
 
 //------------------------------------------------------------------------
