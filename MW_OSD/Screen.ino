@@ -478,11 +478,8 @@ void displayVoltage(void)
   if (Settings[S_MAINVOLTAGE_VBAT]){
     voltage=MwVBat;
   }
-#ifdef BATICON4AMPHR
-  if (Settings[S_SHOWBATLEVELEVOLUTION] &&  !Settings[S_AMPER_HOUR] )
-#else
+  #ifdef BATTERYICONVOLTS
   if (Settings[S_SHOWBATLEVELEVOLUTION])
-#endif  
   {
     uint8_t battev = 0;
     int batevlow  = cells * MvVBatMinCellVoltage;
@@ -491,7 +488,9 @@ void displayVoltage(void)
     battev = map(battev, batevlow, batevhigh-1, 0, 7);   
     screenBuffer[0]=(SYM_BATT_EMPTY)-battev;
   }
-  else {
+  else 
+  #endif // BATTERYICONVOLTS
+  {
     screenBuffer[0]=SYM_MAIN_BATT;
   }
 #ifdef DISP_LOW_VOLTS_WARNING
@@ -634,7 +633,7 @@ void displaypMeterSum(void)
   if(!fieldIsVisible(pMeterSumPosition))
     return;
 
-  #ifdef BATICON4AMPHR
+  #ifdef BATTERYICONAMPS
   uint16_t battev =0;
   if (Settings[S_SHOWBATLEVELEVOLUTION]){
     battev=amperagesum/(360*Settings[S_AMPER_HOUR_ALARM]);
@@ -646,7 +645,7 @@ void displaypMeterSum(void)
     itoa(xx,screenBuffer+2,10);
   }
   else 
-  #endif
+  #endif //BATTERYICONAMPS
   {
   screenBuffer[0]=SYM_MAH;
   int xx=amperagesum/360;

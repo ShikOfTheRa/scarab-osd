@@ -355,7 +355,7 @@ MWOSDVER,   // used for check              0
 uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
   0,// S16_AMPMAX,
   0,// S16_AMPZERO,
-  150,// S_AMPDIVIDERRATIO,
+  150,// S16_AMPDIVIDERRATIO,
   0,// S16_RSSIMIN,
   1024,// S16_RSSIMAX,
   500,// S16_SPARE1,
@@ -401,7 +401,7 @@ uint16_t SCREENLAYOUT_DEFAULT[EEPROM_SETTINGS] = {
 (LINE02+22)|DISPLAY_NEVER,   // MapModePosition
 (LINE07+15)|DISPLAY_NEVER,   // MapCenterPosition
 (LINE04+10)|DISPLAY_ALWAYS,   // APstatusPosition
-(LINE12+9)|DISPLAY_ALWAYS,   // wattPosition
+(LINE12+9)|DISPLAY_NEVER,   // wattPosition
 
 };
 
