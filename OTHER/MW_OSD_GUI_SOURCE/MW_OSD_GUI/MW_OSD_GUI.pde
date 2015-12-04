@@ -383,7 +383,7 @@ String[] ConfigNames = {
   "Display Timer",
   " - FM sensors",  
   " - SB direction",  
-  "Zero Adjust",
+  "Unused6",
   "Amperage 16L",  
   "Amperage 16H",  
   "RC Switch",  
@@ -407,7 +407,7 @@ String[] ConfigNames = {
   "S_CS9",
 // 16 bit after here  
   "S16_AMPMAX",
-  "S16_AMPZERO",
+  "Amps zero",
   "Amps Adjust",
   "RSSI min",
   "RSSI max",
@@ -470,7 +470,7 @@ String[] ConfigHelp = {
   "Display Timer",
   " - FM sensors",  
   " - SB direction",  
-  "Zero Adjust",
+  "Unused6",
   "Amperage 16L",  
   "Amperage 16H",  
   "RC Switch",  
@@ -494,7 +494,7 @@ String[] ConfigHelp = {
   "S_CS9",
 // 16 bit after here
   "S16_AMPMAX",
-  "S16_AMPZERO",
+  "Amps zero",
   "Amps Adjust",
   "RSSI min",
   "RSSI max",
@@ -515,7 +515,7 @@ static int SIMITEMS=6;
 int[] ConfigRanges = {
 1,   // used for check             0
 
-255,   // Unused5                  1
+255,   // S_UNUSED_5               1
 255,   // S_VIDVOLTAGEMIN          2
 100,   // S_RSSI_ALARM             3
 1,     // S_DISPLAYRSSI            4
@@ -578,7 +578,7 @@ int[] ConfigRanges = {
 1,     // S_TIMER                  41h
 1,     // S_MODESENSOR             42h
 1,     //S_SIDEBARTOPS             43h
-1023,  // S_AMPMIN,
+1023,  // S_UNUSED_6,
 1,   // S_UNUSED_1,
 1,     // S_UNUSED_2,
 1,     // S_RCWSWITCH,
@@ -602,7 +602,7 @@ int[] ConfigRanges = {
  255,
  1023,  //"S16_AMPMAX",
  1023,  //"S16_AMPZERO",
- 1023,  //"S16_AMPDIVIDERRATIO",
+ 9999,  //"S16_AMPDIVIDERRATIO",
  1023,  //"S16_RSSIMIN",
  1023,  //"S16_RSSIMAX",
  1023,  //"S16_SPARE1",
@@ -674,7 +674,7 @@ Textlabel FileUploadText, TXText, RXText;
 Button buttonIMPORT,buttonSAVE,buttonREAD,buttonRESET,buttonWRITE,buttonRESTART, buttonGPSTIMELINK, buttonSPORTLINK;
 Button buttonLUP, buttonLDOWN, buttonLLEFT, buttonLRIGHT, buttonLPOSUP, buttonLPOSDOWN;
 Button buttonLHUDUP,buttonLPOSHUDDOWN,buttonLPOSEN, buttonLSET, buttonLADD, buttonLSAVE, buttonLCANCEL;
-Button buttonLEW,buttonSetRSSIlow,buttonSetRSSIhigh;
+Button buttonLEW,buttonSetRSSIlow,buttonSetRSSIhigh,buttonSetHWCurrentSensor,buttonSetHWCurrentSensorCancel,buttonSetHWCurrentSensorSave;
 Button buttonGUIDELINK, buttonFAQLINK, buttonCALIBLINK, buttonSUPPORTLINK, buttonDONATELINK;
 // Buttons------------------------------------------------------------------------------------------------------------------
 
@@ -707,6 +707,7 @@ Group
   G_RSSI,
   G_Voltage,
   G_Amperage,
+  G_CurSensor,
   G_VVoltage,
   G_Alarms,
   G_Debug,
@@ -866,8 +867,10 @@ DONATEimage  = loadImage("DON_def.png");
 
   buttonSetRSSIlow = controlP5.addButton("bSetRSSIlow",1,140,(3*17),30,16);buttonSetRSSIlow.setColorBackground(calibrate_).setGroup(G_RSSI).setLabel("SET");
   buttonSetRSSIhigh = controlP5.addButton("bSetRSSIhigh",1,140,(4*17),30,16);buttonSetRSSIhigh.setColorBackground(calibrate_).setGroup(G_RSSI).setLabel("SET");
+  buttonSetHWCurrentSensor = controlP5.addButton("bHW_Current_cal",1,140,(4*17),30,16);buttonSetHWCurrentSensor.setColorBackground(calibrate_).setGroup(G_Amperage).setLabel("CAL");
+  buttonSetHWCurrentSensorCancel = controlP5.addButton("bHW_Current_cal_cancel",1,40,(5*17),50,16);buttonSetHWCurrentSensorCancel.setColorBackground(calibrate_).setGroup(G_CurSensor).setLabel("CANCEL");
+  buttonSetHWCurrentSensorSave = controlP5.addButton("bHW_Current_cal_save",1,100,(5*17),35,16);buttonSetHWCurrentSensorSave.setColorBackground(calibrate_).setGroup(G_CurSensor).setLabel("SAVE");
     
-
 // EEPROM----------------------------------------------------------------
 
 CreateItem(GetSetting("S_CHECK_"), 5, 0, G_EEPROM);
@@ -877,10 +880,10 @@ CreateItem(GetSetting("S_UNUSED_3"),  5,0, G_EEPROM);
 CreateItem(GetSetting("S_UNUSED_4"),  5,1*17, G_EEPROM);
 CreateItem(GetSetting("S_USE_BOXNAMES"),  5,0, G_EEPROM);
 CreateItem(GetSetting("S_GPSCOORDTOP"),  5,0, G_EEPROM);
-CreateItem(GetSetting("S_UNUSED5"), 5, 3*17, G_EEPROM);
+CreateItem(GetSetting("S_UNUSED_5"), 5, 3*17, G_EEPROM);
+CreateItem(GetSetting("S_UNUSED_6"), 5, 5*17, G_EEPROM);
 
-CreateItem(GetSetting("S16_AMPMAXn"),  5,0, G_EEPROM);
-CreateItem(GetSetting("S16_AMPZERO"),  5,0, G_EEPROM);
+CreateItem(GetSetting("S16_AMPMAX"),  5,0, G_EEPROM);
 CreateItem(GetSetting("S16_SPARE1"),  5,0, G_EEPROM);
 CreateItem(GetSetting("S16_SPARE2"),  5,0, G_EEPROM);
 
@@ -909,8 +912,8 @@ CreateItem(GetSetting("S_AMPERAGE"),  5,0, G_Amperage);
 CreateItem(GetSetting("S_AMPER_HOUR"),  5,1*17, G_Amperage);
 CreateItem(GetSetting("S_AMPERAGE_VIRTUAL"),  5,2*17, G_Amperage);
 CreateItem(GetSetting("S_MWAMPERAGE"),  5,3*17, G_Amperage);
-CreateItem(GetSetting("S_AMPDIVIDERRATIO"),  5,4*17, G_Amperage);
-CreateItem(GetSetting("S_AMPMIN"), 5, 5*17, G_Amperage);
+CreateItem(GetSetting("S16_AMPDIVIDERRATIO"),  5,4*17, G_Amperage);
+CreateItem(GetSetting("S16_AMPZERO"), 5, 5*17, G_Amperage);
 CreateItem(GetSetting("S_AMPER_HOUR_ALARM"),  5,6*17, G_Amperage);
 CreateItem(GetSetting("S_AMPERAGE_ALARM"),  5,7*17, G_Amperage);
 
@@ -1471,6 +1474,7 @@ void draw() {
   ShowCallsign();
   ShownAngletohome();
   ShowAmperage();
+  ShowWattage();
   ShowVario();
   ShowTemp();
   ShowUTC();
@@ -2471,6 +2475,27 @@ void LEW(){
   LEW.show();
   LEWvisible=1;
 //  Lock_All_Controls(true);
+}
+
+public void bHW_Current_cal(){
+  SHWCS_offset.setValue((confItem[GetSetting("S16_AMPZERO")].value()*SHWCS_voltage.getValue()/1024));
+  SHWCS_sensitivity.setValue( 10000*(SHWCS_voltage.getValue()-SHWCS_offset.getValue())/ (confItem[GetSetting("S16_AMPDIVIDERRATIO")].value())  );
+  G_Amperage.hide();
+  G_CurSensor.show();
+}
+
+public void bHW_Current_cal_cancel(){
+  G_Amperage.show();
+  G_CurSensor.hide();
+}
+
+public void bHW_Current_cal_save(){
+  float HWC_offset=(SHWCS_offset.getValue()*1024)/(SHWCS_voltage.getValue());
+  float HWC_sensitivity=10000*(SHWCS_voltage.getValue()-SHWCS_offset.getValue())/(SHWCS_sensitivity.getValue());
+  confItem[GetSetting("S16_AMPZERO")].setValue(int(HWC_offset));
+  confItem[GetSetting("S16_AMPDIVIDERRATIO")].setValue(int(HWC_sensitivity));
+  G_Amperage.show();
+  G_CurSensor.hide();
 }
 
 public void bSetRSSIlow(){

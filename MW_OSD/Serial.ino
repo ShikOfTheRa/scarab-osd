@@ -691,7 +691,7 @@ void serialMenuCommon()
 	  if(ROW==2) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
 	  if(ROW==3) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
 	  if(ROW==4) Settings[S16_AMPDIVIDERRATIO]=Settings[S16_AMPDIVIDERRATIO]+menudir;
-	  if(ROW==5) Settings[S_AMPMIN]=Settings[S_AMPMIN]+menudir;
+	  if(ROW==5) Settings16[S16_AMPZERO]=Settings16[S16_AMPZERO]+menudir;
 	}
 #endif
 #ifdef PAGE6

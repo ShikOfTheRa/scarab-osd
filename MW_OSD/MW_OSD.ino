@@ -952,7 +952,7 @@ void ProcessSensors(void) {
   if(!Settings[S_MWAMPERAGE]) {
     if (!Settings[S_AMPERAGE_VIRTUAL]) { // Analogue
       amperage = sensorfilter[2][SENSORFILTERSIZE]>>3;
-      amperage = map(amperage, Settings[S_AMPMIN]+AMPERAGEOFFSET, Settings[S16_AMPDIVIDERRATIO], 0, AMPERAGEMAX);
+      amperage = map(amperage, Settings16[S16_AMPZERO], 1024, 0, Settings[S16_AMPDIVIDERRATIO]);
       if (amperage < 0) amperage=0;
     }  
     else {  // Virtual
@@ -960,9 +960,9 @@ void ProcessSensors(void) {
       Vthrottle = constrain((Vthrottle-1000)/10,10,100);
       amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings[S16_AMPDIVIDERRATIO]*0.01;
       if(armed)
-        amperage += Settings[S_AMPMIN];
+        amperage += Settings16[S16_AMPZERO];
       else 
-        amperage = Settings[S_AMPMIN];
+        amperage = Settings16[S16_AMPZERO];
     }  
   }
   else{

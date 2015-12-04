@@ -58,11 +58,6 @@
 //#define FIXEDWING                 // Uncomment this if you are using fixed wing MultiWii or Baseflight 
 
 
-/********************       HARDWARE CURRENT sensor settings      *********************/
-#define AMPERAGEMAX     500         // Size of current sensor / maximum current draw (* 10) e.g. 50A sensor = 500, 100A sensor = 1000
-#define AMPERAGEOFFSET  0           // Optional extra for high offset sensors not supported in GUI (typically bidirectional sensors use a value of 256-512) 
-
-
 /********************       OSD SCREEN SWITCH settings      *********************/
 // This functionality enables :
 // a, 2 different screen layouts to be selected using the Flight controller "OSD_SWITCH" feature or
