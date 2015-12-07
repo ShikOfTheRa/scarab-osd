@@ -7,6 +7,7 @@
 ## Bugfixes / Enhancements completed for next  release: ##
 
  * OSD    - Support for TUALABS - thanks to Dustin
+ * OSD    - Support for NAZA
  * OSD    - Video volts alarm adjustable via GUI
  * OSD    - Video volts independant of main battery
  * OSD    - Battery voltage status icon improved accuracy - thanks to Hwurzburg
@@ -26,8 +27,10 @@
  * OSD    - Added support for Mode 1 TX users
  * OSD    - Watts display added. Available via layouts editor
  * OSD    - RSSI sensitivity via OSD inputs quadrupled. Inreased resolution for some RX. e.g. Scherrer
+ * OSD    - Support for consumed current form flight controller
+ * OSD    - Support for temperature sensor re-introduced
  * GUI    - Support for RSSI Auto calibration from GUI
- * GUI    - Support for Current sensor calibration from GUI - using cs parameters (0 amp offset  - v, mV per A drawn 
+ * GUI    - Support for Current sensor calibration from GUI - using hardware parameters (Offset and gain) 
  * BUGFIX - HARIKIRI / MW2.1 not working since R1.5
  * BUGFIX - Center crosshair font partially missing on default_large font
  * BUGFIX - AHI incroect at large angles
@@ -38,10 +41,6 @@
 ---
 
 ## Bugfixes / Enhancements planned for next  release: ##
-
-WIP - Temperature sensor improvements
-
-Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
 
 Power consumtion W/Hr and W/Km 
 
@@ -59,11 +58,7 @@ Support for BetaFlight
 
 Additional AHI layouts - multiple pitch angles
 
-Migrate Current Sensor to GUI / potentially migrate to offset / mv/A calc 
-
 Config.h option to enable / disable dist/al/volt alarms etc.
-
-Improved fastpwm and rssi calibration
 
 Fresnel warning indicator
 
