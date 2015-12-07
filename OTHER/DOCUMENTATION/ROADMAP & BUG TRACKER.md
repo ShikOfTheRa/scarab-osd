@@ -42,13 +42,13 @@
 
 ## Bugfixes / Enhancements planned for next  release: ##
 
-Power consumtion W/Hr and W/Km 
-
 ---
 
 ## Enhancement requests for future releases: ##
 
 Migrate controller/aircraft choice to GUI
+
+Power consumtion W/Hr and W/Km 
 
 Support for APM
 
