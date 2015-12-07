@@ -950,7 +950,8 @@ void ProcessSensors(void) {
 
 //-------------- Temperature
 #ifdef TEMPSENSOR
-    temperature=(sensorfilter[3][SENSORFILTERSIZE])-TEMP_ZERO)*TEMP_CAL/100 
+    temperature=sensorfilter[3][SENSORFILTERSIZE]>>3-TEMPZERO;
+    temperature = map (temperature, TEMPZERO, 1024, 0 , TEMPMAX);
 #endif
 
 //-------------- Current

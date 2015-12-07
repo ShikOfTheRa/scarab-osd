@@ -158,8 +158,8 @@ void displayTemperature(void)        // DEPRECATED RUSHDUINO SUPPORT
   else
     xxx = temperature;
 
-  if(!fieldIsVisible(temperaturePosition))
-    return;
+//  if(!fieldIsVisible(temperaturePosition))
+//    return;
 
   itoa(xxx,screenBuffer,10);
   uint8_t xx = FindNull();   // find the NULL

@@ -755,7 +755,7 @@ const char messageF2[] PROGMEM = "UPDATE COMPLETE";
 
 //const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
 //const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
-const char message5[]  PROGMEM = "FW VERSION:";
+const char message5[]  PROGMEM = "FC VERSION:";
 const char message6[]  PROGMEM = "OPEN MENU: THRT MIDDLE";
 const char message7[]  PROGMEM = "+YAW RIGHT";
 const char message8[]  PROGMEM = "+PITCH FULL";

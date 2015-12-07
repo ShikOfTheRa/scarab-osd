@@ -1,6 +1,8 @@
  
 #if defined NAZA
   #define SERIALBUFFERSIZE 75
+#elif defined GPSOSD
+  #define SERIALBUFFERSIZE 100
 #else
   #define SERIALBUFFERSIZE 150
 #endif

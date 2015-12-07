@@ -137,7 +137,7 @@
 
 
 /********************       STARTUP settings      *********************/
-//#define INTRO_VERSION               "MWOSD - DEV 1.5.1" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+#define INTRO_VERSION               "MWOSD - DEV 1.6.0" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 8 
@@ -226,7 +226,7 @@
 // This works in conjunction with the GUI switch "Display Battery Status
 // Enable to use a battery icon that indicates capacity remaining dependant upon battery voltage or mAh used. Or both if required.
 #define BATTERYICONVOLTS          //Enable to use with voltage as indicator of capacity remaining
-#define BATTERYICONAMPS           //Enable to use with mAh used percentage of AMPHR alarm limit. Warning will now be at 80% of that GUI value
+//#define BATTERYICONAMPS           //Enable to use with mAh used percentage of AMPHR alarm limit. Warning will now be at 80% of that GUI value
 
 
 /********************       FrSky S.Port settings      *********************/
@@ -240,9 +240,9 @@
 
 
 /********************  TEMPERATURE  settings      *********************/
-//#define TEMPSENSOR                // Enable if you have a hardware temperature sensor - DEPRECATED
+//#define TEMPSENSOR                // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
 #define TEMPERATUREMAX 50           // Temperature warning value
-#define TEMP_ZERO 0                 // Temperature Zero calibration (range = 0-1024 :512 = 2.5v with vref of 5v and 0.55v for vref of 1.1v) 
-#define TEMP_CAL 0                  // Temperature calibration value (range = 0-1024 :512 = 0.5v with vref of 5v and 0.55v for vref of 1.1v) 
+#define TEMPZERO 0                  // Temperature Zero calibration (range = 0-1024 :512 = 2.5v with vref of 5v and 0.55v for vref of 1.1v) 
+#define TEMPMAX  500                // Temperature when at sensor output at VCC. Might be  atheoreticla value 
 
 
