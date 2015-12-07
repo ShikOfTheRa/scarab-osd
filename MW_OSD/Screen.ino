@@ -438,7 +438,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
     screen[position+2*LINE+13] =  SYM_AH_RIGHT;
     for(int X=0; X<=4; X++) {
       screen[position+X*LINE] =     SYM_AH_DECORATION_LEFT;
-      screen[position+X*LINE+14] =  SYM_AH_DECORATION_RIGHT;
+      screen[position+X*LINE+14] =  SYM_AH_DECORATION_RIGHT;    
     }
 
   #if defined(USEGLIDESCOPE) && defined(FIXEDWING)                     
@@ -1141,6 +1141,7 @@ void displayCursor(void)
 
 void displayConfigScreen(void)
 {
+  int16_t MenuBuffer[10];
   strcpy_P(screenBuffer, (char*)pgm_read_word(&(menutitle_item[configPage])));
   MAX7456_WriteString(screenBuffer, 35);
   MAX7456_WriteString_P(configMsgEXT, SAVEP);    //EXIT
@@ -1161,30 +1162,22 @@ void displayConfigScreen(void)
     MAX7456_WriteString(screenBuffer,ROLLD-4);
 
 #else
+
+ //     MenuBuffer[0]=rcRate8;
+      xx=amperagesum/360;
+      itoa(xx,screenBuffer,10);
+      MenuBuffer[1]=trip;
+      MenuBuffer[2]=distanceMAX;
+      MenuBuffer[3]=altitudeMAX;
+      MenuBuffer[4]=speedMAX;
+      MenuBuffer[5]=xx;
+      MenuBuffer[6]=ampMAX/10;
+
     for(uint8_t X=0; X<=6; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_stats_item[X])));
-      MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+      MAX7456_WriteString(screenBuffer, ROLLT + (X*30));
+      MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),110+(30*X));
     }
-
-//    MAX7456_WriteString_P(configMsg01, ROLLT);
-    MAX7456_WriteString(itoa(trip,screenBuffer,10),PITCHD-3);
-
-//    MAX7456_WriteString_P(configMsg02, PITCHT);
-    MAX7456_WriteString(itoa(distanceMAX,screenBuffer,10),YAWD-3);
-
-//    MAX7456_WriteString_P(configMsg03, YAWT);
-    MAX7456_WriteString(itoa(altitudeMAX,screenBuffer,10),ALTD-3);
-
- //   MAX7456_WriteString_P(configMsg04, ALTT);
-    MAX7456_WriteString(itoa(speedMAX,screenBuffer,10),VELD-3);
-
-    xx=amperagesum/360;
-    itoa(xx,screenBuffer,10);
-//    MAX7456_WriteString_P(configMsg06, VELT);
-    MAX7456_WriteString(itoa(xx,screenBuffer,10),LEVD-3);
-
-//    MAX7456_WriteString_P(configMsg05, LEVT);
-    MAX7456_WriteString(itoa(ampMAX/10,screenBuffer,10),MAGD-3);
 
     formatTime(flyingTime, screenBuffer, 1);
     MAX7456_WriteString(screenBuffer,ROLLD-4);
@@ -1226,45 +1219,47 @@ void displayConfigScreen(void)
   if(configPage==2)
   {
     #if defined(CLEANFLIGHT190)
+      MenuBuffer[0]=rcRate8;
+      MenuBuffer[1]=rcExpo8;
+      MenuBuffer[2]=rollRate;
+      MenuBuffer[3]=PitchRate;
+      MenuBuffer[4]=yawRate;
+      MenuBuffer[5]=dynThrPID;
+      MenuBuffer[6]=thrMid8;
+      MenuBuffer[7]=thrExpo8;
+      MenuBuffer[8]=tpa_breakpoint16;
        for(uint8_t X=0; X<=8; X++) {
         strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rc[X])));
         MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+        MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
       }
-      MAX7456_WriteString(itoa(rcRate8,screenBuffer,10),ROLLD);
-      MAX7456_WriteString(itoa(rcExpo8,screenBuffer,10),PITCHD);
-      MAX7456_WriteString(itoa(rollRate,screenBuffer,10),YAWD);
-      MAX7456_WriteString(itoa(PitchRate,screenBuffer,10),ALTD);
-      MAX7456_WriteString(itoa(yawRate,screenBuffer,10),VELD);
-      MAX7456_WriteString(itoa(dynThrPID,screenBuffer,10),LEVD);
-      MAX7456_WriteString(itoa(thrMid8,screenBuffer,10),MAGD);
-      MAX7456_WriteString(itoa(thrExpo8,screenBuffer,10),MAGD+LINE);
-      MAX7456_WriteString(itoa(tpa_breakpoint16,screenBuffer,10),MAGD+2*LINE);
     #elif defined(CLEANFLIGHT180) || defined (BASEFLIGHT20150627)
+      MenuBuffer[0]=rcRate8;
+      MenuBuffer[1]=rcExpo8;
+      MenuBuffer[2]=rollRate;
+      MenuBuffer[3]=PitchRate;
+      MenuBuffer[4]=yawRate;
+      MenuBuffer[5]=dynThrPID;
+      MenuBuffer[6]=thrMid8;
+      MenuBuffer[7]=thrExpo8;
        for(uint8_t X=0; X<=7; X++) {
         strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rc[X])));
         MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+        MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
       }
-      MAX7456_WriteString(itoa(rcRate8,screenBuffer,10),ROLLD);
-      MAX7456_WriteString(itoa(rcExpo8,screenBuffer,10),PITCHD);
-      MAX7456_WriteString(itoa(rollRate,screenBuffer,10),YAWD);
-      MAX7456_WriteString(itoa(PitchRate,screenBuffer,10),ALTD);
-      MAX7456_WriteString(itoa(yawRate,screenBuffer,10),VELD);
-      MAX7456_WriteString(itoa(dynThrPID,screenBuffer,10),LEVD);
-      MAX7456_WriteString(itoa(thrMid8,screenBuffer,10),MAGD);
-      MAX7456_WriteString(itoa(thrExpo8,screenBuffer,10),MAGD+LINE);
     #else
-      for(uint8_t X=0; X<=6; X++) {
+      MenuBuffer[0]=rcRate8;
+      MenuBuffer[1]=rcExpo8;
+      MenuBuffer[2]=rollPitchRate;
+      MenuBuffer[3]=yawRate;
+      MenuBuffer[4]=dynThrPID;
+      MenuBuffer[5]=thrMid8;
+      MenuBuffer[6]=thrExpo8;
+     for(uint8_t X=0; X<=6; X++) {
         strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rc[X])));
         MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+        MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
       }
-
-      MAX7456_WriteString(itoa(rcRate8,screenBuffer,10),ROLLD);
-      MAX7456_WriteString(itoa(rcExpo8,screenBuffer,10),PITCHD);
-      MAX7456_WriteString(itoa(rollPitchRate,screenBuffer,10),YAWD);
-      MAX7456_WriteString(itoa(yawRate,screenBuffer,10),ALTD);
-      MAX7456_WriteString(itoa(dynThrPID,screenBuffer,10),VELD);
-      MAX7456_WriteString(itoa(thrMid8,screenBuffer,10),LEVD);
-      MAX7456_WriteString(itoa(thrExpo8,screenBuffer,10),MAGD);
     #endif
   }
  #else
@@ -1420,16 +1415,17 @@ void displayConfigScreen(void)
 #endif  
 #ifdef PAGE9
     if(configPage==9){
+      MenuBuffer[0]=Settings[S_DISTANCE_ALARM];
+      MenuBuffer[1]=Settings[S_ALTITUDE_ALARM];
+      MenuBuffer[2]=Settings[S_SPEED_ALARM];
+      MenuBuffer[3]=Settings[S_FLYTIME_ALARM];
+      MenuBuffer[4]=Settings[S_AMPER_HOUR_ALARM];
+      MenuBuffer[5]=Settings[S_AMPERAGE_ALARM];
       for(uint8_t X=0; X<=5; X++) {
         strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_alarm_item[X])));
         MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+        MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
       }
-      MAX7456_WriteString(itoa(Settings[S_DISTANCE_ALARM],screenBuffer,10),ROLLD);
-      MAX7456_WriteString(itoa(Settings[S_ALTITUDE_ALARM],screenBuffer,10),PITCHD);
-      MAX7456_WriteString(itoa(Settings[S_SPEED_ALARM],screenBuffer,10),YAWD);
-      MAX7456_WriteString(itoa(Settings[S_FLYTIME_ALARM],screenBuffer,10),ALTD);
-      MAX7456_WriteString(itoa(Settings[S_AMPER_HOUR_ALARM],screenBuffer,10),VELD);
-      MAX7456_WriteString(itoa(Settings[S_AMPERAGE_ALARM],screenBuffer,10),LEVD);
     }
 #else
     if(configPage == 9)configPage+=menudir;
