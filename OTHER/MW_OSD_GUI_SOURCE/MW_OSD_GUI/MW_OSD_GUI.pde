@@ -46,7 +46,7 @@ import java.text.DecimalFormat;
 
 
 
-String MW_OSD_GUI_Version = "MWOSD R1.5 - NextGeneration";
+String MW_OSD_GUI_Version = "MWOSD R1.6 - NextGeneration";
 int MW_OSD_EEPROM_Version = 11;
 int CONFIGITEMS16 = 7;
 
@@ -221,6 +221,8 @@ int Passthroughcomm;
 int AutoSimulator=0;
 int AutoDebugGUI=1;
 int Simtype=0;
+int Donate=2;
+int DonateMessage=1;
 int StartupMessage=0;
 int FrameRate=30;
 
@@ -1414,10 +1416,12 @@ void draw() {
   // ------------------------------------------------------------------------
 
   image(GUIBackground,0, 0, windowsX, windowsY); 
-  if (LEWvisible==0){
-   image(DONATEimage,XLINKS+20,YLINKS+207, 100, 40); 
-   
+
+  int seconds = second();
+  if (((seconds&0x1F)!= 0)&&(Donate>0)){
+   image(DONATEimage,XLINKS+20,YLINKS+207, 100, 40);  
   }  
+
   strokeWeight(3);stroke(0);
   rectMode(CORNERS);
     image(OSDBackground,DisplayWindowX+WindowAdjX+10, DisplayWindowY+WindowAdjY, 354-WindowShrinkX, 300-WindowShrinkY); //529-WindowShrinkX, 360-WindowShrinkY);
@@ -1513,21 +1517,13 @@ void draw() {
     s = s+ MW_OSD_GUI_Version;
     s = s+ "\n";
     s = s+ "\n";
-    s = s+ "Check out our new website - MWOSD.com";
+    s = s+ "Check out our website - www.mwosd.com";
     s = s+ "\n";
     s = s+ "\n";
-    s = s+ "New features in this release:";
-    s = s+ "\n";
-    s = s+ "FIXEDWING support";
-    s = s+ "\n";
-    s = s+ "Enhanced CLEANFLIGHT support";
-    s = s+ "\n";
-    s = s+ "3 way switchable OSD layouts";
-    s = s+ "\n";
-    s = s+ "Clearer display - less artifacts";
     s = s+ "\n";
     s = s+ "\n";
-    s = s+ "Help support continued development - donate just a couple of dollars.";
+    s = s+ "\n";
+    s = s+ "\n";
     s = s+ "\n";
     s = s+ "\n";
     s = s+ "Select a COM port to start using MWOSD! \n";
@@ -1536,7 +1532,32 @@ void draw() {
     myTextarea.setText(s);
     myTextarea.show();
   }
-  else{
+  else if (DonateMessage>1){
+    myTextarea.setText("Welcome to ");
+    String s = myTextarea.getText();
+    s = s+ MW_OSD_GUI_Version;
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "Help support continued open source development";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "Please help and DONATE just a couple of dollars";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "Select donate to clear this message! \n";
+    s = s+ "\n";
+    
+    myTextarea.setText(s);
+    myTextarea.show();
+  }  else{
     myTextarea.hide();
   }
 }
@@ -2116,6 +2137,7 @@ public void updateConfig(){
   ConfigClass.setProperty("Simtype",str(Simtype));
   ConfigClass.setProperty("StartupMessage",str(StartupMessage));
   ConfigClass.setProperty("FrameRate",str(FrameRate));
+  ConfigClass.setProperty("Donate",str(Donate));
   
   File file = new File(dataPath("gui.cfg"));
   try{
@@ -2157,6 +2179,7 @@ public void LoadConfig(){
     Simtype=1;
     FrameRate = 15;
     StartupMessage = 0;
+    Donate = 2;
     updateConfig();
   }
   catch( IOException ioe){
@@ -2174,6 +2197,11 @@ public void LoadConfig(){
       AutoDebugGUI = int(ConfigClass.getProperty("AutoDebugGUI"));
       Simtype = int(ConfigClass.getProperty("Simtype"));
       FrameRate = int(ConfigClass.getProperty("FrameRate"));
+      Donate = int(ConfigClass.getProperty("Donate"));
+      
+      DonateMessage=Donate;
+
+
       frameRate(FrameRate); 
 
       StartupMessage = int(ConfigClass.getProperty("StartupMessage"));
@@ -2305,7 +2333,13 @@ public void SUPPORTLINK(){
   link("http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI"); 
 }
 public void DONATELINK(){
-  link("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EBS76N8F426G2&lc=GB&item_name=MW%2dOSD&item_number=R1%2e4&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"); 
+  if (Donate>1){
+    Donate=1;
+    DonateMessage=Donate;
+    updateConfig();
+  }
+
+  link("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EBS76N8F426G2&lc=GB&item_name=MW%2dOSD&item_number=R1%2e6&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"); 
 }
 public void CALIBLINK(){
  link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Calibration.md"); 

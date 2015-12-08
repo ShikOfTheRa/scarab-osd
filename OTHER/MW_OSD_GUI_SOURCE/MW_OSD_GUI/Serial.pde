@@ -119,6 +119,10 @@ void InitSerial(float portValue) {
         StartupMessage=1;
         updateConfig();
       }
+      if (DonateMessage>0){
+        DonateMessage=0;
+      }
+
       String portPos = Serial.list()[int(portValue)];
       txtlblWhichcom.setValue("COM = " + shortifyPortName(portPos, 8));
       g_serial = new Serial(this, portPos, BaudRate);
