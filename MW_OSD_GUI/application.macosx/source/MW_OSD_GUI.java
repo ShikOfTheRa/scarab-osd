@@ -280,7 +280,7 @@ int ConfigVALUE = -1;
 // Box locations -------------------------------------------------------------------------
 int Col1Width = 180;        int Col2Width = 200;    int Col3Width = 165;
 
-int windowsX    = 1041+Col3Width+5;       int windowsY    =578;        //995; //573;
+int windowsX    = 1041+Col3Width+5;       int windowsY    =613; //578;        //995; //573;
 //int windowsX    = 1041;       int windowsY    =578;        //995; //573;
 //int windowsX    = 1200;       int windowsY    =800;        //995; //573;
 int xGraph      = 10;         int yGraph      = 35;
@@ -3605,13 +3605,14 @@ String boxnames[] = { // names for dynamic generation of config GUI
     "ARM;",
     "ANGLE;",
     "HORIZON;",
+    "AIR MODE;",
     "BARO;",
     "MAG;",
     "CAMSTAB;",
     "GPS HOME;",
     "GPS HOLD;",
     "MISSION;",
-    "OSD SW;"    
+    "OSD SW;"   
   };
 String strBoxNames = join(boxnames,""); 
 //int modebits = 0;
@@ -4805,6 +4806,7 @@ int mode_gpsland = 0;
 int mode_llights = 0;
 int mode_camstab = 0;
 int mode_osd_switch = 0;
+int mode_air = 0;
 
 int SendSim = 0;
 
@@ -5761,7 +5763,7 @@ public void displayMode()
       mapchar(0xa0,SimPosn[sensorPosition]);
 
     if((SimModebits&mode_horizon) >0)
-      mapchar(0xa0,SimPosn[sensorPosition]);
+      mapchar(0xa0,SimPosn[sensorPosition]); 
 
     if((SimModebits&mode_baro) >0)
       mapchar(0xa2,SimPosn[sensorPosition]+1);
@@ -5811,6 +5813,11 @@ public void displayMode()
     else{
       mapchar(0xae,SimPosn[ModePosition]);
       mapchar(0xaf,SimPosn[ModePosition]+1);
+    }
+    
+    if((SimModebits&mode_air) >0){
+      mapchar(0xea,SimPosn[ModePosition]+2);
+      mapchar(0xeb,SimPosn[ModePosition]+3);
     }
   }
 
@@ -5959,6 +5966,7 @@ public void GetModes(){
   mode_armed = 0;
   mode_stable = 0;
   mode_horizon = 0;
+  mode_air = 0;
   mode_baro = 0;
   mode_mag = 0;
   mode_gpshome = 0;
@@ -5979,6 +5987,7 @@ public void GetModes(){
     if (boxnames[c] == "GPS HOLD;") mode_gpshold |= bit;
     if (boxnames[c] == "OSD SW;") mode_osd_switch |= bit;
     if (boxnames[c] == "MISSION;") mode_gpsmission |= bit;
+    if (boxnames[c] == "AIR MODE;") mode_air |= bit;
    
     bit <<= 1L;
   }
