@@ -1,5 +1,6 @@
 #ifdef NAZA
   #include "NazaDecoderLib.h"
+  #include "NazaDecoderLib.cpp"
 
 void NAZA_NewData(uint8_t c){
   uint8_t decodedMessage = NazaDecoder.decode(c);

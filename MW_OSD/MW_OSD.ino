@@ -194,7 +194,7 @@ void loop()
 
 // ampAlarming returns true if the total consumed mAh is greater than
 // the configured alarm value (which is stored as 100s of amps)
-static bool ampAlarming() {
+    bool ampAlarming() {
     int used = pMeterSum > 0 ? pMeterSum : (amperagesum / 360);
     return used > (Settings[S_AMPER_HOUR_ALARM]*100);
 }

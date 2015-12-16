@@ -51,10 +51,9 @@
 #endif
 
 // The unit of current varies across implementations.  There are effectively three set:
-// * 100mA, for which case the value is usable as it comes aross the wire.
+// * 100mA, for which case the value is usable as it comes aross the wire. default
 // * 10mA, which sends a value 10x higher than we work wth
 // * 1ma, which sends a value 100x higher than normal
-#define AMPERAGE_DIV 100
 
 #if defined (BASEFLIGHT20150327)
   #define AMPERAGE_DIV 10
@@ -99,6 +98,10 @@
 
 #ifdef HAS_ALARMS
   #define MAX_ALARM_LEN 30
+#endif
+
+#ifndef AMPERAGE_DIV 
+  #define AMPERAGE_DIV 100
 #endif
 
 /********************   ENABLE/DISABLE CONFIG PAGES via STICK MENU     *********************/

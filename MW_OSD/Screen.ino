@@ -291,10 +291,9 @@ void displayCallsign(int cposition)
        MAX7456_WriteString(screenBuffer, cposition); 
 }
 
-//************************************************************************************************************************************************************************************
+
 void displayHorizon(int rollAngle, int pitchAngle)
 {
-
 #ifdef DISPLAY_PR
   screenBuffer[0]=0x50;
   int16_t xx=abs(pitchAngle/10);
@@ -319,7 +318,6 @@ void displayHorizon(int rollAngle, int pitchAngle)
 #endif
 
 #ifdef HORIZON
-
   if (Settings[S_SCROLLING]||Settings[S_SIDEBARTOPS]){
       if(!armed) GPS_speed=0;
   // Scrolling decoration
@@ -331,7 +329,6 @@ void displayHorizon(int rollAngle, int pitchAngle)
         if (SYM_AH_DECORATION_LEFT<0x10)
           SYM_AH_DECORATION_LEFT=0x15;
       }
-
       else if ((GPS_speed+15) < old_GPS_speed){
         sidebarsMillis = millis();
         sidebarsdir = 1;
@@ -349,7 +346,6 @@ void displayHorizon(int rollAngle, int pitchAngle)
         if (SYM_AH_DECORATION_RIGHT<0x10)
           SYM_AH_DECORATION_RIGHT=0x15;
       }
-
       else if (MwAltitude+20 < old_MwAltitude){
         sidebaraMillis = millis();
         sidebaradir = 1;
@@ -365,7 +361,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
      SYM_AH_DECORATION_RIGHT=0x13;
   } 
   
-  uint16_t position = getPosition(horizonPosition)-(2*LINE);
+  uint16_t position = getPosition(horizonPosition);
 
   if(pitchAngle>AHIPITCHMAX) pitchAngle=AHIPITCHMAX;
   if(pitchAngle<-AHIPITCHMAX) pitchAngle=-AHIPITCHMAX;
@@ -389,7 +385,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
       Y -= pitchAngle / 8;
       Y += 41;
       if(Y >= 0 && Y <= 81) {
-        uint16_t pos = position -2 + LINE*(Y/9) + 3 - 2*LINE + X;
+        uint16_t pos = position -9 + LINE*(Y/9) + 3 - 4*LINE + X;
         screen[pos] = SYM_AH_BAR9_0+(Y%9);
       }
     }
@@ -400,7 +396,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
       Y -= pitchAngle / 8;
       Y += 41;
       if(Y >= 0 && Y <= 81) {
-        uint16_t pos = position + LINE*(Y/9) + 3 - 2*LINE + X;
+        uint16_t pos = position -7 + LINE*(Y/9) + 3 - 4*LINE + X;
         screen[pos] = SYM_AH_BAR9_0+(Y%9);
       }
     }
@@ -413,7 +409,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
         Y -= pitchAngle / 8;
         Y += 41;
         if(Y >= 0 && Y <= 81) {
-          uint16_t pos = position + LINE*(Y/9) + 3 - 2*LINE + X;
+          uint16_t pos = position -7 + LINE*(Y/9) + 3 - 4*LINE + X;
         pos = pos - 3*LINE;
         if(pos >= 60 && pos <= 360) 
           screen[pos] = SYM_AH_BAR9_0+(Y%9);
@@ -425,22 +421,26 @@ void displayHorizon(int rollAngle, int pitchAngle)
     }
     if(!fieldIsVisible(MapModePosition)){
       if(Settings[S_DISPLAY_HORIZON_BR]){
-        screen[position+2*LINE+7-1] = SYM_AH_CENTER_LINE;
-        screen[position+2*LINE+7+1] = SYM_AH_CENTER_LINE_RIGHT;
-        screen[position+2*LINE+7] =   SYM_AH_CENTER;
+        screen[position-1] = SYM_AH_CENTER_LINE;
+        screen[position+1] = SYM_AH_CENTER_LINE_RIGHT;
+        screen[position] =   SYM_AH_CENTER;
       }
     }
   }
 
   if (Settings[S_WITHDECORATION]&fieldIsVisible(SideBarPosition)){
     // Draw AH sides
-    screen[position+2*LINE+1] =   SYM_AH_LEFT;
-    screen[position+2*LINE+13] =  SYM_AH_RIGHT;
-    for(int X=0; X<=4; X++) {
-      screen[position+X*LINE] =     SYM_AH_DECORATION_LEFT;
-      screen[position+X*LINE+14] =  SYM_AH_DECORATION_RIGHT;    
+    int8_t hudwidth=  getPosition(SideBarWidthPosition);;
+    int8_t hudheight= getPosition(SideBarHeightPosition);;
+    for(int8_t X=-hudheight; X<=hudheight; X++) {
+      screen[position-hudwidth+(X*LINE)] =  SYM_AH_DECORATION_LEFT;
+      screen[position+hudwidth+(X*LINE)] =  SYM_AH_DECORATION_RIGHT;    
     }
-
+#if defined AHILEVEL
+    screen[position-hudwidth+1] =  SYM_AH_LEFT;
+    screen[position+hudwidth-1] =  SYM_AH_RIGHT;
+#endif //AHILEVEL
+    
   #if defined(USEGLIDESCOPE) && defined(FIXEDWING)                     
     if(Settings[S_DISPLAYGPS]){
       displayfwglidescope();
@@ -452,18 +452,18 @@ void displayHorizon(int rollAngle, int pitchAngle)
     if (Settings[S_SIDEBARTOPS]&fieldIsVisible(SideBarScrollPosition)) {
       if (millis()<(sidebarsMillis + 1000)) {
         if (sidebarsdir == 2){
-          screen[position-LINE] = SYM_AH_DECORATION_UP;
+          screen[position-(hudheight*LINE)-hudwidth] = SYM_AH_DECORATION_UP;
         }
         else{
-          screen[position+5*LINE] = SYM_AH_DECORATION_DOWN;
+          screen[position+(hudheight*LINE)-hudwidth] = SYM_AH_DECORATION_DOWN;
         }
       }
       if (millis()<(sidebaraMillis + 1000)) { 
         if (sidebaradir == 2){
-          screen[position+14-LINE] = SYM_AH_DECORATION_UP;
+          screen[position-(hudheight*LINE)+hudwidth] = SYM_AH_DECORATION_UP;
         }
         else{
-          screen[position+5*LINE+14] = SYM_AH_DECORATION_DOWN;
+          screen[position+(hudheight*LINE)+hudwidth] = SYM_AH_DECORATION_DOWN;
         }
       }
     }
@@ -1339,7 +1339,7 @@ void displayConfigScreen(void)
     Menuconfig_onoff(ROLLD,S_AMPERAGE);
     Menuconfig_onoff(PITCHD,S_AMPER_HOUR);
     Menuconfig_onoff(YAWD,S_AMPERAGE_VIRTUAL);
-    MAX7456_WriteString(itoa(S16_AMPDIVIDERRATIO,screenBuffer,10),ALTD);
+    MAX7456_WriteString(itoa(Settings16[S16_AMPDIVIDERRATIO],screenBuffer,10),ALTD);
     MAX7456_WriteString(itoa(Settings16[S16_AMPZERO],screenBuffer,10),VELD);
   }
 #else
@@ -1666,6 +1666,9 @@ for(uint8_t maptype=mapstart; maptype<mapend; maptype++) {
 
 #ifdef USEGLIDESCOPE
 void displayfwglidescope(void){
+  if(!fieldIsVisible(glidescopePosition))
+    return;  
+
   int8_t GS_deviation_scale   = 0;
   if (GPS_distanceToHome>0){ //watch div 0!!
     int16_t gs_angle          =(573*atan((float)MwAltitude/10/GPS_distanceToHome));
@@ -1677,7 +1680,7 @@ void displayfwglidescope(void){
   int8_t varline              = (GS_deviation_scale/3)-1;
   int8_t varsymbol            = GS_deviation_scale%3;
     
-  uint16_t position = getPosition(horizonPosition)-1;
+  uint16_t position = getPosition(glidescopePosition);
     for(int8_t X=-1; X<=1; X++) {
       screen[position+(X*LINE)] =  SYM_GLIDESCOPE;
     }
