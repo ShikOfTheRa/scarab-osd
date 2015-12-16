@@ -692,7 +692,7 @@ void serialMenuCommon()
 	  if(ROW==1) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
 	  if(ROW==2) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
 	  if(ROW==3) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
-	  if(ROW==4) Settings[S16_AMPDIVIDERRATIO]=Settings[S16_AMPDIVIDERRATIO]+menudir;
+	  if(ROW==4) Settings16[S16_AMPDIVIDERRATIO]=Settings16[S16_AMPDIVIDERRATIO]+menudir;
 	  if(ROW==5) Settings16[S16_AMPZERO]=Settings16[S16_AMPZERO]+menudir;
 	}
 #endif
@@ -924,6 +924,8 @@ void settingswriteSerialRequest() {
   mspWriteRequest(MSP_OSD,3);
   mspWrite8(OSD_READ_CMD_EE);
   mspWrite16(eeaddress);
+debug[0]=eeaddress; //gbug
+debug[1]++; //gbug
   mspWriteChecksum();
 }
 

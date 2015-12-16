@@ -389,11 +389,11 @@ uint16_t SCREENLAYOUT_DEFAULT[EEPROM_SETTINGS] = {
 (LINE11+3)|DISPLAY_ALWAYS,   // vidvoltagePosition
 (LINE13+9)|DISPLAY_ALWAYS,   // amperagePosition
 (LINE13+16)|DISPLAY_ALWAYS,   // pMeterSumPosition
-(LINE07+7)|DISPLAY_ALWAYS,   // horizonPosition
+(LINE07+14)|DISPLAY_ALWAYS,   // horizonPosition
 (LINE07+7)|DISPLAY_ALWAYS,   // SideBarPosition
 (LINE07+7)|DISPLAY_ALWAYS,   // SideBarScrollPosition
-(LINE10+10)|DISPLAY_ALWAYS,   // CallSign Position
-(LINE08+10)|DISPLAY_ALWAYS,   // Debug Position
+(3)|DISPLAY_NEVER,   // SideBarHeight Position
+(7)|DISPLAY_NEVER,   // SideBarWidth Position
 (LINE05+2)|DISPLAY_ALWAYS,   // Gimbal Position
 (LINE12+11)|DISPLAY_ALWAYS,  // GPS_time Position
 (LINE09+22)|DISPLAY_ALWAYS,   // SportPosition
@@ -402,6 +402,9 @@ uint16_t SCREENLAYOUT_DEFAULT[EEPROM_SETTINGS] = {
 (LINE07+15)|DISPLAY_NEVER,   // MapCenterPosition
 (LINE04+10)|DISPLAY_ALWAYS,   // APstatusPosition
 (LINE12+9)|DISPLAY_NEVER,   // wattPosition
+(LINE07+6)|DISPLAY_NEVER,   // glidescopePosition
+(LINE10+10)|DISPLAY_ALWAYS,   // CallSign Position
+(LINE08+10)|DISPLAY_ALWAYS,   // Debug Position
 
 };
 
@@ -433,11 +436,11 @@ uint16_t SCREENLAYOUT_DEFAULT_OSDSW[EEPROM_SETTINGS] = {
 (LINE11+3)|DISPLAY_ALWAYS,   // vidvoltagePosition
 (LINE13+13)|DISPLAY_NEVER,   // amperagePosition
 (LINE13+23)|DISPLAY_NEVER,   // pMeterSumPosition
-(LINE05+7)|DISPLAY_NEVER,   // horizonPosition
+(LINE07+14)|DISPLAY_NEVER,   // horizonPosition
 (LINE07+7)|DISPLAY_NEVER,   // SideBarPosition
-(LINE07+7)|DISPLAY_NEVER,   // SideBarScrollPosition
-(LINE10+10)|DISPLAY_NEVER,   // CallSign Position
-(LINE08+10)|DISPLAY_NEVER,   // Debug Position
+(LINE07+7)|DISPLAY_NEVER,   // SideBarScroll Position
+(3)|DISPLAY_NEVER,   // SideBarHeight Position
+(7)|DISPLAY_NEVER,   // SideBarWidth Position
 (LINE05+2)|DISPLAY_NEVER,   // Gimbal Position
 (LINE12+11)|DISPLAY_NEVER,  // GPS_time Position
 (LINE09+22)|DISPLAY_NEVER,   // SportPosition
@@ -446,6 +449,9 @@ uint16_t SCREENLAYOUT_DEFAULT_OSDSW[EEPROM_SETTINGS] = {
 (LINE07+17)|DISPLAY_NEVER,   // MapCenterPosition
 (LINE04+10)|DISPLAY_NEVER,   // APstatusPosition
 (LINE12+13)|DISPLAY_NEVER,   // wattPosition
+(LINE07+6)|DISPLAY_NEVER,   // glidescopePosition
+(LINE07+7)|DISPLAY_NEVER,   // SideBarPosition
+(LINE07+7)|DISPLAY_NEVER,   // SideBarScrollPosition
 
 };
 
@@ -917,8 +923,8 @@ enum Positions {
   horizonPosition,
   SideBarPosition,
   SideBarScrollPosition,
-  callSignPosition,
-  debugPosition,
+  SideBarHeightPosition,
+  SideBarWidthPosition,
   gimbalPosition,
   GPS_timePosition,
   SportPosition,
@@ -927,6 +933,10 @@ enum Positions {
   MapCenterPosition,
   APstatusPosition,
   wattPosition,
+  glidescopePosition,
+  callSignPosition,
+  debugPosition,
+
   POSITIONS_SETTINGS
 };
 

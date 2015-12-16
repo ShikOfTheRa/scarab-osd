@@ -54,8 +54,8 @@
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
-#define ROTORCRAFT                  // Default for multirotors etc. 
-//#define FIXEDWING                 // Uncomment this if you are using fixed wing MultiWii or Baseflight 
+//#define ROTORCRAFT                  // Default for multirotors etc. 
+#define FIXEDWING                 // Uncomment this if you are using fixed wing MultiWii or Baseflight 
 
 
 /********************       OSD SCREEN SWITCH settings      *********************/
@@ -108,7 +108,7 @@
 // **ONLY** valid when using fixed wing
 //#define USEMAGHEADING             // Undefine this to use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
 //#define USEBAROALTITUDE           // Undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) ** Recommended **
-//#define USEGLIDESCOPE 40          // Enables ILS glidescope where 40 = 4.0° glidescope. 1.0 deg gradiented scope scale
+#define USEGLIDESCOPE 40          // Enables ILS glidescope where 40 = 4.0° glidescope. 1.0 deg gradiented scope scale requires enabling in layouts
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
 
 
@@ -186,6 +186,7 @@
 //#define AHICORRECT 10             // Enable to adjust AHI on display to match horizon. -10 = -1 degree
 #define AHIPITCHMAX 200             // Specify maximum AHI pitch value displayed. Default 200 = 20.0 degrees
 #define AHIROLLMAX  400             // Specify maximum AHI roll value displayed. Default 400 = 40.0 degrees 
+//#define AHILEVEL                    // Enable to display AHI level indicators on sidebars 
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 #define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
 #define DISPLAYWATTS                // Enable this to display Watts
