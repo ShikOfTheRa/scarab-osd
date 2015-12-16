@@ -247,7 +247,7 @@ int ConfigVALUE = -1;
 // Box locations -------------------------------------------------------------------------
 int Col1Width = 180;        int Col2Width = 200;    int Col3Width = 165;
 
-int windowsX    = 1041+Col3Width+5;       int windowsY    =578;        //995; //573;
+int windowsX    = 1041+Col3Width+5;       int windowsY    =613; //578;        //995; //573;
 //int windowsX    = 1041;       int windowsY    =578;        //995; //573;
 //int windowsX    = 1200;       int windowsY    =800;        //995; //573;
 int xGraph      = 10;         int yGraph      = 35;

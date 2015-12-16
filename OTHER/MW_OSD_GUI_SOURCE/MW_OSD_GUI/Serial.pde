@@ -37,13 +37,14 @@ String boxnames[] = { // names for dynamic generation of config GUI
     "ARM;",
     "ANGLE;",
     "HORIZON;",
+    "AIR MODE;",
     "BARO;",
     "MAG;",
     "CAMSTAB;",
     "GPS HOME;",
     "GPS HOLD;",
     "MISSION;",
-    "OSD SW;"    
+    "OSD SW;"   
   };
 String strBoxNames = join(boxnames,""); 
 //int modebits = 0;
