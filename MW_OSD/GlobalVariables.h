@@ -166,6 +166,7 @@ struct {
   uint32_t llights;
   uint32_t gpsmission;
   uint32_t gpsland;
+  uint32_t air;
 }mode;
 
 // Settings Locations

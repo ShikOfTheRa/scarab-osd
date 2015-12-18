@@ -370,7 +370,6 @@ void serialMSPCheck()
     uint32_t bit = 1;
     uint8_t remaining = dataSize;
     uint8_t len = 0;
-    char firstc, lastc;
 
     mode.armed = 0;
     mode.stable = 0;
@@ -381,44 +380,45 @@ void serialMSPCheck()
     mode.llights = 0;
     mode.camstab = 0;
     mode.osd_switch = 0;
+    mode.air = 0;
+
+    char boxname[20];
 
     while(remaining > 0) {
       char c = read8();
-      if(len == 0)
-        firstc = c;
-      len++;
-      if(c == ';') {
-        // Found end of name; set bit if first and last c matches.
-        if(firstc == 'A') {
-          if(lastc == 'M') // "ARM;"
-            mode.armed |= bit;
-          if(lastc == 'E') // "ANGLE;"
-            mode.stable |= bit;
-        }
-        if(firstc == 'H' && lastc == 'N') // "HORIZON;"
+      if(c != ';') {
+        boxname[len] = c;
+        len++;
+      }
+      else {
+        if(strncmp("ARM", boxname, len) == 0)
+          mode.armed |= bit;
+        if(strncmp("ANGLE", boxname, len) == 0)
+          mode.stable |= bit;
+        if(strncmp("HORIZON", boxname, len) == 0)
           mode.horizon |= bit;
-        if(firstc == 'M' && lastc == 'G') // "MAG;"
-           mode.mag |= bit;
-        if(firstc == 'B' && lastc == 'O') // "BARO;"
+        if(strncmp("MAG", boxname, len) == 0)
+          mode.mag |= bit;
+        if(strncmp("BARO", boxname, len) == 0)
           mode.baro |= bit;
-        if(firstc == 'L' && lastc == 'S') // "LLIGHTS;"
+        if(strncmp("LLIGHTS", boxname, len) == 0)
           mode.llights |= bit;
-        if(firstc == 'C' && lastc == 'B') // "CAMSTAB;"
+        if(strncmp("CAMSTAB", boxname, len) == 0)
           mode.camstab |= bit;
-        if(firstc == 'G') {
-          if(lastc == 'E') // "GPS HOME;"
-            mode.gpshome |= bit;
-          if(lastc == 'D') // "GPS HOLD;"
-            mode.gpshold |= bit;
-        }
-        if(firstc == 'P' && lastc == 'U')  mode.passthru |= bit; // "Passthru;"
-        if(firstc == 'O' && lastc == 'W') // "OSD SW;"
+        if(strncmp("AIR MODE", boxname, len) == 0)
+          mode.air |= bit;
+        if(strncmp("GPS HOME", boxname, len) == 0)
+          mode.gpshome |= bit;
+        if(strncmp("GPS HOLD", boxname, len) == 0)
+          mode.gpshold |= bit;
+        if(strncmp("PASSTHRU", boxname, len) == 0)
+          mode.passthru |= bit;
+        if(strncmp("OSD SW", boxname, len) == 0)
           mode.osd_switch |= bit;
 
         len = 0;
         bit <<= 1L;
       }
-      lastc = c;
       --remaining;
     }
   }
@@ -441,6 +441,7 @@ void serialMSPCheck()
     mode.passthru = 0;
     mode.osd_switch = 0;
     mode.camstab = 0;
+    mode.air = 0;
 
     while(remaining > 0) {
       char c = read8();
@@ -483,6 +484,9 @@ void serialMSPCheck()
         break;
       case 21:
         mode.gpsland |= bit;
+        break;
+      case 28: // Needs BetaFlight 2.1.5 and up
+        mode.air |= bit;
         break;
       }
       bit <<= 1;
