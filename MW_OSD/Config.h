@@ -33,10 +33,10 @@
 // Choose ONLY ONE option from the following long list :-
 
 // latest release...
-#define MULTIWII                  // Uncomment this if you are using latest MULTIWII version from repository (2.4 at time of this MWOSD release)
+//#define MULTIWII                  // Uncomment this if you are using latest MULTIWII version from repository (2.4 at time of this MWOSD release)
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.06.27 at time of this MWOSD release)
 //#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
-//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9.0 at time or this MWOSD release)
+#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9.0 at time or this MWOSD release)
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
@@ -174,12 +174,12 @@
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define FORCECROSSHAIR            // Forces a crosshair even if no AHI / horizon used
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
-//#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
+#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x01=100%,0x10=90%,0x11=80%  default is 0x01=100%
 //#define BLACKBRIGHTNESS 0x00      // Optional change from default 0x00=0%,0x01=10%,0x10=20%0x11=30%  default is 0x00=0%
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
-//#define SHORTSTATS                // Display only timer on flight summary 
+#define SHORTSTATS                // Display only timer on flight summary 
 //#define NOTHROTTLESPACE           // Enable to remove space between throttle symbol and the data
 //#define REVERSEAHI                // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
 //#define DISPLAY_PR                // Display pitch / roll angles. Requires relevant layout ppositions to be enabled
@@ -214,8 +214,8 @@
 
 
 /********************       Voltage Warning Settings         ************************/
-//#define AUTOVOLTWARNING           // Uncomment this to use automatic voltage warning. Overrides GUI/OSD voltage warrning setting. Usefull if using different cell count batteries.
-//#define FC_VOLTAGE_CONFIG         // Additionally uncomment this if you want to use the vbat voltage config with BASEFLIGHT and CLEANFLIGHT on the flight controller (include: min cell voltage, max cell voltage and warning cell voltage)
+#define AUTOVOLTWARNING           // Uncomment this to use automatic voltage warning. Overrides GUI/OSD voltage warrning setting. Usefull if using different cell count batteries.
+#define FC_VOLTAGE_CONFIG         // Additionally uncomment this if you want to use the vbat voltage config with BASEFLIGHT and CLEANFLIGHT on the flight controller (include: min cell voltage, max cell voltage and warning cell voltage)
 //#define AUTOVOLTCELLALARM         // Overide Main battery Alarm value. Use individual cell value instead of default of total. i.e. 3.4 = 10.2v on a 3s
 //The following variables are available for adjustment unless using FC_VOLTAGE_CONFIG 
 #define CELL_VOLTS_WARN 35          // Specify the cell voltage level at which low voltage warning takes place eg. 35 = 3.5 volts per cell
