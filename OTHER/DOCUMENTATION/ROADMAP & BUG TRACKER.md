@@ -37,6 +37,7 @@
  * BUGFIX - Analogue ports had RSSI pulled high - impacting range and accuracy of values 
  * COMPAT - Compatability support for latest cleanflight - conflict with MultiWii
  * FONT   - improved large font from Schnupperm enhanced by Leo
+ * FONT   - Support for Betaflight airmode. Displays font icon when active
 
 ---
 
