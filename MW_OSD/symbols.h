@@ -179,6 +179,8 @@
 #define SYM_HORIZON1 0XC5
 #define SYM_PASS 0XAA
 #define SYM_PASS1 0XAB
+#define SYM_AIR 0XEA
+#define SYM_AIR1 0XEB
 
 // Time
 #define SYM_ON_M 0X9B

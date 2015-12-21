@@ -190,75 +190,83 @@ void displayMode(void)
     screenBuffer[xx++] =SYM_M;
   else
    screenBuffer[xx++] =SYM_FT;
+   
    screenBuffer[xx++] =0;
  
-    if(MwSensorActive&mode.gpshome){
-      screenBuffer[0] = SYM_GHOME;
-      screenBuffer[1] = SYM_GHOME1;
+  if(MwSensorActive&mode.gpshome){
+    screenBuffer[0] = SYM_GHOME;
+    screenBuffer[1] = SYM_GHOME1;
 #ifdef APINDICATOR
-      screenBuffer[2]=0;
+    screenBuffer[2]=0;
 #else
-      screenBuffer[2] = SYM_COLON;
-      screenBuffer[8]=0;
+    screenBuffer[2] = SYM_COLON;
+    screenBuffer[8]=0;
 #endif
-    }
-    else if(MwSensorActive&mode.gpshold){
-      screenBuffer[2]=0;
-      screenBuffer[0] = SYM_GHOLD;
-      screenBuffer[1] = SYM_GHOLD1;
-    }
+  }
+  else if(MwSensorActive&mode.gpshold){
+    screenBuffer[2]=0;
+    screenBuffer[0] = SYM_GHOLD;
+    screenBuffer[1] = SYM_GHOLD1;
+  }
 #if defined MULTIWII_V24
-    else if(MwSensorActive&mode.gpsmission){
-      itoa(GPS_waypoint_step,screenBuffer+2,10);
-      screenBuffer[4]=0;
-      screenBuffer[0] = SYM_GMISSION;
-      screenBuffer[1] = SYM_GMISSION1;
-    }
-    else if(MwSensorActive&mode.gpsland){
-      screenBuffer[2]=0;
-      screenBuffer[0] = SYM_GLAND;
-      screenBuffer[1] = SYM_GLAND1;
-    }
+  else if(MwSensorActive&mode.gpsmission){
+    itoa(GPS_waypoint_step,screenBuffer+2,10);
+    screenBuffer[4]=0;
+    screenBuffer[0] = SYM_GMISSION;
+    screenBuffer[1] = SYM_GMISSION1;  
+  }
+  else if(MwSensorActive&mode.gpsland){
+    screenBuffer[2]=0;
+    screenBuffer[0] = SYM_GLAND;
+    screenBuffer[1] = SYM_GLAND1;
+  }
 #endif //MULTIWII_V24
     
-    else if(MwSensorActive&mode.stable){
-      screenBuffer[2]=0;
-      screenBuffer[0]=SYM_STABLE;
-      screenBuffer[1]=SYM_STABLE1;
-    }
-    else if(MwSensorActive&mode.horizon){
-      screenBuffer[2]=0;
-      screenBuffer[0]=SYM_HORIZON;
-      screenBuffer[1]=SYM_HORIZON1;
-    }
-    else if(MwSensorActive&mode.passthru){
-      screenBuffer[2]=0;
-      screenBuffer[0]=SYM_PASS;
-      screenBuffer[1]=SYM_PASS1;
-    }
-   else{
-      screenBuffer[2]=0;
-      #ifdef FIXEDWING
-        screenBuffer[0]=SYM_ACROGY;
-      #else
-        screenBuffer[0]=SYM_ACRO;
-      #endif
-      screenBuffer[1]=SYM_ACRO1;
-    }
+  else if(MwSensorActive&mode.stable){
+    screenBuffer[2]=0;
+    screenBuffer[0]=SYM_STABLE;
+    screenBuffer[1]=SYM_STABLE1;
+  }
+  else if(MwSensorActive&mode.horizon){
+    screenBuffer[2]=0;
+    screenBuffer[0]=SYM_HORIZON;
+    screenBuffer[1]=SYM_HORIZON1;
+  }
+  else if(MwSensorActive&mode.passthru){
+    screenBuffer[2]=0;
+    screenBuffer[0]=SYM_PASS;
+    screenBuffer[1]=SYM_PASS1;
+  }
+  else{
+    screenBuffer[2]=0;
+    #ifdef FIXEDWING
+      screenBuffer[0]=SYM_ACROGY;
+    #else
+      screenBuffer[0]=SYM_ACRO;
+    #endif
+    screenBuffer[1]=SYM_ACRO1;
+  }
+
+  // Display AIR MODE, append after flight mode
+  if(MwSensorActive&mode.air){
+    screenBuffer[2]=SYM_AIR;
+    screenBuffer[3]=SYM_AIR1;
+  }
+  
 #ifdef APINDICATOR
-      displayAPstatus();
+  displayAPstatus();
 #endif
-    if(Settings[S_MODEICON]){
+  if(Settings[S_MODEICON]){
     if(fieldIsVisible(ModePosition))
       MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
-    }
-    if((MwSensorActive&mode.camstab)&&Settings[S_GIMBAL]){
-      screenBuffer[2]=0;
-      screenBuffer[0]=SYM_GIMBAL;
-      screenBuffer[1]=SYM_GIMBAL1;  
+  }
+  if((MwSensorActive&mode.camstab)&&Settings[S_GIMBAL]){
+    screenBuffer[2]=0;
+    screenBuffer[0]=SYM_GIMBAL;
+    screenBuffer[1]=SYM_GIMBAL1;  
     if(fieldIsVisible(gimbalPosition))
       MAX7456_WriteString(screenBuffer,getPosition(gimbalPosition));
-    }
+  }
 
   if(Settings[S_MODESENSOR]){
     xx = 0;
