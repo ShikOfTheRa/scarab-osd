@@ -43,6 +43,10 @@
 
 ## Bugfixes / Enhancements planned for next  release: ##
 
+Support for APM
+
+Support for Multiple crosshair types
+
 ---
 
 ## Enhancement requests for future releases: ##
@@ -51,11 +55,11 @@ Migrate controller/aircraft choice to GUI
 
 Power consumtion W/Hr and W/Km 
 
-Support for APM
-
 Support for OP
 
 Support for BetaFlight
+
+Review throttle autoscaling
 
 Additional AHI layouts - multiple pitch angles
 
