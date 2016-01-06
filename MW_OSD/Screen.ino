@@ -1163,13 +1163,13 @@ void displayConfigScreen(void)
     int xx;
 //    MAX7456_WriteString_P(configMsg00, 35);
 
-#ifdef SHORTSTATS
+#ifdef SHORTSUMMARY
     strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_stats_item[0])));
     MAX7456_WriteString(screenBuffer, ROLLT);
     formatTime(flyingTime, screenBuffer, 1);
     MAX7456_WriteString(screenBuffer,ROLLD-4);
 
-#else
+#else // SHORTSUMMARY
 
  //     MenuBuffer[0]=rcRate8;
       xx=amperagesum/360;

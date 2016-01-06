@@ -397,6 +397,7 @@ void loop()
         if (configMode==1)
           configExit();
       }
+#ifndef HIDESUMMARY
       if(previousarmedstatus && !armed){
         armedtimer=20;
         configPage=0;
@@ -405,6 +406,7 @@ void loop()
         configMode=1;
         setMspRequests();
       }
+#endif //HIDESUMMARY      
       if(configMode)
       {
         displayConfigScreen();
