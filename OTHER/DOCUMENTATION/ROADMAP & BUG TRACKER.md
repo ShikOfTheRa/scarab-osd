@@ -4,7 +4,7 @@
 
 ---
 
-## Bugfixes / Enhancements completed for next  release: ##
+## Bugfixes / Enhancements completed for next release (1.6): ##
 
  * OSD    - Support for TUALABS - thanks to Dustin
  * OSD    - Support for NAZA
@@ -29,6 +29,7 @@
  * OSD    - RSSI sensitivity via OSD inputs quadrupled. Inreased resolution for some RX. e.g. Scherrer
  * OSD    - Support for consumed current form flight controller
  * OSD    - Support for temperature sensor re-introduced
+ * OSD    - Added option to disable display of summary screen via config.h
  * GUI    - Support for RSSI Auto calibration from GUI
  * GUI    - Support for Current sensor calibration from GUI - using hardware parameters (Offset and gain) 
  * BUGFIX - HARIKIRI / MW2.1 not working since R1.5
@@ -41,7 +42,7 @@
 
 ---
 
-## Bugfixes / Enhancements planned for next  release: ##
+## Bugfixes / Enhancements planned for 1.7: ##
 
 Support for APM
 
@@ -72,6 +73,8 @@ Display option for climb rate value instead of vario slider
 Ability to amend all PID settings from menu
 
 support for cleanflight / baseflight loop time change
+
+support for cleanflight profile number display from msp_status
 
 pitch / roll angles alarm
 
