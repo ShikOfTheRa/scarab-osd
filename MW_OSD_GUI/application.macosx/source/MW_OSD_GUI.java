@@ -95,7 +95,7 @@ int  MwHeadingGraphPosition = 8;
 int  MwAltitudePosition = 9;
 int  MwClimbRatePosition = 10;
 int  CurrentThrottlePosition = 11;
-int  flyTimePosition = 12;
+int  flyTimePosition = 12; //unused
 int  onTimePosition = 13;
 int  motorArmedPosition = 14;
 int  pitchAnglePosition = 15;
@@ -111,8 +111,8 @@ int  pMeterSumPosition = 24;
 int  horizonPosition = 25;
 int  SideBarPosition =26; 
 int  SideBarScrollPosition = 27;
-int  callSignPosition = 28;
-int  debugPosition = 29;
+int  SideBarHeight = 28;
+int  SideBarWidth = 29;
 int  gimbalPosition = 30;
 int  GPS_timePosition = 31;
 int  SportPosition = 32;
@@ -121,6 +121,10 @@ int  MapModePosition = 34;
 int  MapCenterPosition = 35;
 int  APstatusPosition = 36;
 int  wattPosition = 37;
+int  glidescopePosition = 38;
+int  callSignPosition = 39;
+int  debugPosition = 40;
+
 int GPSstartlat = 430948610;
 int GPSstartlon = -718897060;
 
@@ -5855,7 +5859,7 @@ if (SimPosn[horizonPosition]<0x3FF){
     Y += pitchAngle / 8;
     Y += 41;
     if(Y >= 0 && Y <= 81) {
-      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) + 3 - 2*LINE + X;
+      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) -4 - 2*LINE + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
       	mapchar(0x80+(Y%9), pos);
       if(Y>=9 && (Y%9) == 0)
@@ -5869,7 +5873,7 @@ if (SimPosn[horizonPosition]<0x3FF){
     Y += pitchAngle / 8;
     Y += 31;
     if(Y >= 0 && Y <= 81) {
-      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) + 3 - 2*LINE + X;
+      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) -4 - 2*LINE + X;
 //      int pos = 30*(2+Y/9) + 10 + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
         mapchar(0x80+(Y%9), pos);
@@ -5878,7 +5882,7 @@ if (SimPosn[horizonPosition]<0x3FF){
     }
     Y += 20;
     if(Y >= 0 && Y <= 81) {
-      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) + 3 - 2*LINE + X;
+      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) -4 - 2*LINE + X;
 //      int pos = 30*(2+Y/9) + 10 + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
         mapchar(0x80+(Y%9), pos);
@@ -5898,27 +5902,30 @@ if (SimPosn[horizonPosition]<0x3FF){
   
   if (SimPosn[SideBarPosition]<0x3FF){
     if(confItem[GetSetting("S_WITHDECORATION")].value() > 0) {
-      int centerpos = SimPosn[horizonPosition]+7;
-      for(int X=-2; X<=2; X++) {
-        mapchar(0x12,centerpos+7+(X*LINE));
-        mapchar(0x12,centerpos-7+(X*LINE));
+      int centerpos = SimPosn[horizonPosition];
+      int hudwidth=  SimPosn[SideBarWidth] ;
+      int hudheight= SimPosn[SideBarHeight];
+      for(int X=-hudheight; X<=hudheight; X++) {
+        mapchar(0x12,centerpos+hudwidth+(X*LINE));
+        mapchar(0x12,centerpos-hudwidth+(X*LINE));
       }
-      mapchar(0x02, centerpos+6);
-      mapchar(0x03, centerpos-6);
+//      mapchar(0x02, centerpos+hudwidth);
+//      mapchar(0x03, centerpos-hudwidth);
     }
   }
   
 }
 
 public void ShowSideBarArrows(){
-  int centerpos = SimPosn[horizonPosition]+7;
+  int centerpos = SimPosn[horizonPosition];
   if (SimPosn[horizonPosition]==0x3FF)
     return;
   if (SimPosn[SideBarScrollPosition]==0x3FF)
     return;
   if(confItem[GetSetting("S_SIDEBARTOPS")].value() > 0) {
-    mapchar(0xCf,centerpos+7+(3*LINE));
-    mapchar(0xCf,centerpos-7+(3*LINE));
+    int hudwidth=  SimPosn[SideBarWidth] ;
+    mapchar(0xCf,centerpos+hudwidth+(3*LINE));
+    mapchar(0xCf,centerpos-hudwidth+(3*LINE));
   }
 }
 

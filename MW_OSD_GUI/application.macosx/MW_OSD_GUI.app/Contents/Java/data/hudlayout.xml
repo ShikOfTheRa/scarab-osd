@@ -29,8 +29,8 @@
   <DESCRIPTION desc="AHI"/>
   <DESCRIPTION desc="Sidebar"/>
   <DESCRIPTION desc="Sidebar arrow"/>
-  <DESCRIPTION desc="Call Sign"/>
-  <DESCRIPTION desc="Debug"/>
+  <DESCRIPTION desc="Sidebar Height"/>
+  <DESCRIPTION desc="Sidebar Width"/>
   <DESCRIPTION desc="Gimbal"/>
   <DESCRIPTION desc="GPS time"/>
   <DESCRIPTION desc="FRSky cells"/>
@@ -39,6 +39,9 @@
   <DESCRIPTION desc="Map center"/>
   <DESCRIPTION desc="AP status"/>
   <DESCRIPTION desc="Watts"/>
+  <DESCRIPTION desc="Glidescope"/>
+  <DESCRIPTION desc="Call Sign"/>
+  <DESCRIPTION desc="Debug"/>
   <HUDNAME hudname="Shiki default"/>
   <HUDNAME hudname="Shiki minimal"/>
   <HUDNAME hudname="EZ"/>
@@ -50,6 +53,7 @@
   <HUDNAME hudname="Groundstation"/>
   <HUDNAME hudname="Standalone"/>
   <HUDNAME hudname="250 class"/>
+  <HUDNAME hudname="Aerial Photography"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="1" hud="0" hudname="Shiki" value="32"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="0" hudname="Shiki" value="51"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="0" hudname="Shiki" value="54"/>
@@ -75,11 +79,11 @@
   <LAYOUT desc="vidvoltagePosition" enabled="1" hud="0" hudname="Shiki" value="303"/>
   <LAYOUT desc="amperagePosition" enabled="1" hud="0" hudname="Shiki" value="369"/>
   <LAYOUT desc="pMeterSumPosition" enabled="1" hud="0" hudname="Shiki" value="376"/>
-  <LAYOUT desc="horizonPosition" enabled="1" hud="0" hudname="Shiki" value="187"/>
+  <LAYOUT desc="horizonPosition" enabled="1" hud="0" hudname="Shiki" value="194"/>
   <LAYOUT desc="SideBarPosition" enabled="1" hud="0" hudname="Shiki" value="187"/>
   <LAYOUT desc="SideBarScrollPosition" enabled="1" hud="0" hudname="Shiki" value="187"/>
-  <LAYOUT desc="CallSign Position" enabled="1" hud="0" hudname="Shiki" value="280"/>
-  <LAYOUT desc="Debug Position" enabled="1" hud="0" hudname="Shiki" value="220"/>
+  <LAYOUT desc="SideBarHeightPosition" enabled="1" hud="0" hudname="Shiki" value="3"/>
+  <LAYOUT desc="SideBarWidthPosition" enabled="1" hud="0" hudname="Shiki" value="7"/>
   <LAYOUT desc="Gimbal Position" enabled="1" hud="0" hudname="Shiki" value="122"/>
   <LAYOUT desc="GPS_time Position" enabled="1" hud="0" hudname="Shiki" value="341"/>
   <LAYOUT desc="SportPosition" enabled="1" hud="0" hudname="Shiki" value="232"/>
@@ -88,6 +92,9 @@
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="0" hudname="Shiki" value="195"/>
   <LAYOUT desc="APstatusPosition" enabled="1" hud="0" hudname="Shiki" value="70"/>
   <LAYOUT desc="wattsPosition" enabled="0" hud="0" hudname="Shiki" value="339"/>
+  <LAYOUT desc="glidescopePosition" enabled="1" hud="0" hudname="Shiki" value="186"/>
+  <LAYOUT desc="CallSign Position" enabled="1" hud="0" hudname="Shiki" value="280"/>
+  <LAYOUT desc="Debug Position" enabled="1" hud="0" hudname="Shiki" value="220"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="0" hud="1" hudname="Minimal" value="32"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="1" hudname="Minimal" value="379"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="0" hud="1" hudname="Minimal" value="42"/>
@@ -113,11 +120,11 @@
   <LAYOUT desc="vidvoltagePosition" enabled="0" hud="1" hudname="Minimal" value="303"/>
   <LAYOUT desc="amperagePosition" enabled="0" hud="1" hudname="Minimal" value="373"/>
   <LAYOUT desc="pMeterSumPosition" enabled="0" hud="1" hudname="Minimal" value="383"/>
-  <LAYOUT desc="horizonPosition" enabled="0" hud="1" hudname="Minimal" value="127"/>
+  <LAYOUT desc="horizonPosition" enabled="0" hud="1" hudname="Minimal" value="194"/>
   <LAYOUT desc="SideBarPosition" enabled="0" hud="1" hudname="Minimal" value="187"/>
   <LAYOUT desc="SideBarScrollPosition" enabled="0" hud="1" hudname="Minimal" value="187"/>
-  <LAYOUT desc="CallSign Position" enabled="0" hud="1" hudname="Minimal" value="280"/>
-  <LAYOUT desc="Debug Position" enabled="0" hud="1" hudname="Minimal" value="220"/>
+  <LAYOUT desc="SideBarHeightPosition" enabled="1" hud="1" hudname="Minimal" value="3"/>
+  <LAYOUT desc="SideBarWidthPosition" enabled="1" hud="1" hudname="Minimal" value="7"/>
   <LAYOUT desc="Gimbal Position" enabled="0" hud="1" hudname="Minimal" value="122"/>
   <LAYOUT desc="GPS_time Position" enabled="0" hud="1" hudname="Minimal" value="341"/>
   <LAYOUT desc="SportPosition" enabled="0" hud="1" hudname="Minimal" value="232"/>
@@ -126,6 +133,9 @@
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="1" hudname="Minimal" value="195"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="1" hudname="Minimal" value="195"/>
   <LAYOUT desc="wattsPosition" enabled="0" hud="1" hudname="Minimal" value="339"/>
+  <LAYOUT desc="glidescopePosition" enabled="0" hud="1" hudname="Minimal" value="186"/>
+  <LAYOUT desc="CallSign Position" enabled="0" hud="1" hudname="Minimal" value="280"/>
+  <LAYOUT desc="Debug Position" enabled="0" hud="1" hudname="Minimal" value="220"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="0" hud="2" hudname="EZ" value="49"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="2" hudname="EZ" value="48"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="2" hudname="EZ" value="40"/>
@@ -151,11 +161,11 @@
   <LAYOUT desc="vidvoltagePosition" enabled="0" hud="2" hudname="EZ" value="303"/>
   <LAYOUT desc="amperagePosition" enabled="1" hud="2" hudname="EZ" value="368"/>
   <LAYOUT desc="pMeterSumPosition" enabled="1" hud="2" hudname="EZ" value="376"/>
-  <LAYOUT desc="horizonPosition" enabled="0" hud="2" hudname="EZ" value="127"/>
+  <LAYOUT desc="horizonPosition" enabled="0" hud="2" hudname="EZ" value="194"/>
   <LAYOUT desc="SideBarPosition" enabled="0" hud="2" hudname="EZ" value="187"/>
   <LAYOUT desc="SideBarScrollPosition" enabled="0" hud="2" hudname="EZ" value="187"/>
-  <LAYOUT desc="CallSign Position" enabled="1" hud="2" hudname="EZ" value="280"/>
-  <LAYOUT desc="Debug Position" enabled="1" hud="2" hudname="EZ" value="220"/>
+  <LAYOUT desc="SideBarHeightPosition" enabled="1" hud="2" hudname="EZ" value="3"/>
+  <LAYOUT desc="SideBarWidthPosition" enabled="1" hud="2" hudname="EZ" value="7"/>
   <LAYOUT desc="Gimbal Position" enabled="0" hud="2" hudname="EZ" value="122"/>
   <LAYOUT desc="GPS_time Position" enabled="0" hud="2" hudname="EZ" value="341"/>
   <LAYOUT desc="SportPosition" enabled="0" hud="2" hudname="EZ" value="232"/>
@@ -164,6 +174,9 @@
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="2" hudname="EZ" value="195"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="2" hudname="EZ" value="195"/>
   <LAYOUT desc="wattsPosition" enabled="0" hud="2" hudname="EZ" value="339"/>
+  <LAYOUT desc="glidescopePosition" enabled="0" hud="2" hudname="EZ" value="186"/>
+  <LAYOUT desc="CallSign Position" enabled="1" hud="2" hudname="EZ" value="280"/>
+  <LAYOUT desc="Debug Position" enabled="1" hud="2" hudname="EZ" value="220"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="0" hud="3" hudname="Blank screen" value="49"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="0" hud="3" hudname="Blank screen" value="48"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="0" hud="3" hudname="Blank screen" value="40"/>
@@ -189,11 +202,11 @@
   <LAYOUT desc="vidvoltagePosition" enabled="0" hud="3" hudname="Blank screen" value="303"/>
   <LAYOUT desc="amperagePosition" enabled="0" hud="3" hudname="Blank screen" value="368"/>
   <LAYOUT desc="pMeterSumPosition" enabled="0" hud="3" hudname="Blank screen" value="376"/>
-  <LAYOUT desc="horizonPosition" enabled="0" hud="3" hudname="Blank screen" value="187"/>
+  <LAYOUT desc="horizonPosition" enabled="0" hud="3" hudname="Blank screen" value="194"/>
   <LAYOUT desc="SideBarPosition" enabled="0" hud="3" hudname="Blank screen" value="187"/>
   <LAYOUT desc="SideBarScrollPosition" enabled="0" hud="3" hudname="Blank screen" value="187"/>
-  <LAYOUT desc="CallSign Position" enabled="0" hud="3" hudname="Blank screen" value="280"/>
-  <LAYOUT desc="Debug Position" enabled="0" hud="3" hudname="Blank screen" value="220"/>
+  <LAYOUT desc="SideBarHeightPosition" enabled="1" hud="3" hudname="Blank screen" value="3"/>
+  <LAYOUT desc="SideBarWidthPosition" enabled="1" hud="3" hudname="Blank screen" value="7"/>
   <LAYOUT desc="Gimbal Position" enabled="0" hud="3" hudname="Blank screen" value="122"/>
   <LAYOUT desc="GPS_time Position" enabled="0" hud="3" hudname="Blank screen" value="341"/>
   <LAYOUT desc="SportPosition" enabled="0" hud="3" hudname="Blank screen" value="232"/>
@@ -202,6 +215,9 @@
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="3" hudname="Blank screen" value="195"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="3" hudname="Blank screen" value="195"/>
   <LAYOUT desc="wattsPosition" enabled="0" hud="3" hudname="Blank screen" value="339"/>
+  <LAYOUT desc="glidescopePosition" enabled="0" hud="3" hudname="Blank screen" value="186"/>
+  <LAYOUT desc="CallSign Position" enabled="0" hud="3" hudname="Blank screen" value="280"/>
+  <LAYOUT desc="Debug Position" enabled="0" hud="3" hudname="Blank screen" value="220"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="0" hud="4" hudname="Map" value="49"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="4" hudname="Map" value="49"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="4" hudname="Map" value="41"/>
@@ -227,11 +243,11 @@
   <LAYOUT desc="vidvoltagePosition" enabled="0" hud="4" hudname="Map" value="303"/>
   <LAYOUT desc="amperagePosition" enabled="1" hud="4" hudname="Map" value="368"/>
   <LAYOUT desc="pMeterSumPosition" enabled="1" hud="4" hudname="Map" value="376"/>
-  <LAYOUT desc="horizonPosition" enabled="0" hud="4" hudname="Map" value="187"/>
+  <LAYOUT desc="horizonPosition" enabled="0" hud="4" hudname="Map" value="194"/>
   <LAYOUT desc="SideBarPosition" enabled="0" hud="4" hudname="Map" value="187"/>
   <LAYOUT desc="SideBarScrollPosition" enabled="0" hud="4" hudname="Map" value="187"/>
-  <LAYOUT desc="CallSign Position" enabled="1" hud="4" hudname="Map" value="280"/>
-  <LAYOUT desc="Debug Position" enabled="1" hud="4" hudname="Map" value="220"/>
+  <LAYOUT desc="SideBarHeightPosition" enabled="1" hud="4" hudname="Map" value="3"/>
+  <LAYOUT desc="SideBarWidthPosition" enabled="1" hud="4" hudname="Map" value="7"/>
   <LAYOUT desc="Gimbal Position" enabled="0" hud="4" hudname="Map" value="122"/>
   <LAYOUT desc="GPS_time Position" enabled="0" hud="4" hudname="Map" value="341"/>
   <LAYOUT desc="SportPosition" enabled="0" hud="4" hudname="Map" value="232"/>
@@ -240,6 +256,9 @@
   <LAYOUT desc="MapCenterPosition" enabled="1" hud="4" hudname="Map" value="194"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="4" hudname="Map" value="195"/>
   <LAYOUT desc="wattsPosition" enabled="0" hud="4" hudname="Map" value="339"/>
+  <LAYOUT desc="glidescopePosition" enabled="0" hud="4" hudname="Map" value="186"/>
+  <LAYOUT desc="CallSign Position" enabled="1" hud="4" hudname="Map" value="280"/>
+  <LAYOUT desc="Debug Position" enabled="1" hud="4" hudname="Map" value="220"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="1" hud="5" hudname="F14" value="62"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="5" hudname="F14" value="372"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="5" hudname="F14" value="374"/>
@@ -265,11 +284,11 @@
   <LAYOUT desc="vidvoltagePosition" enabled="0" hud="5" hudname="F14" value="303"/>
   <LAYOUT desc="amperagePosition" enabled="1" hud="5" hudname="F14" value="304"/>
   <LAYOUT desc="pMeterSumPosition" enabled="1" hud="5" hudname="F14" value="319"/>
-  <LAYOUT desc="horizonPosition" enabled="1" hud="5" hudname="F14" value="187"/>
+  <LAYOUT desc="horizonPosition" enabled="1" hud="5" hudname="F14" value="194"/>
   <LAYOUT desc="SideBarPosition" enabled="1" hud="5" hudname="F14" value="187"/>
   <LAYOUT desc="SideBarScrollPosition" enabled="0" hud="5" hudname="F14" value="187"/>
-  <LAYOUT desc="CallSign Position" enabled="1" hud="5" hudname="F14" value="280"/>
-  <LAYOUT desc="Debug Position" enabled="1" hud="5" hudname="F14" value="220"/>
+  <LAYOUT desc="SideBarHeightPosition" enabled="1" hud="5" hudname="F14" value="3"/>
+  <LAYOUT desc="SideBarWidthPosition" enabled="1" hud="5" hudname="F14" value="7"/>
   <LAYOUT desc="Gimbal Position" enabled="0" hud="5" hudname="F14" value="122"/>
   <LAYOUT desc="GPS_time Position" enabled="0" hud="5" hudname="F14" value="341"/>
   <LAYOUT desc="SportPosition" enabled="0" hud="5" hudname="F14" value="232"/>
@@ -278,6 +297,9 @@
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="5" hudname="F14" value="195"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="5" hudname="F14" value="195"/>
   <LAYOUT desc="wattsPosition" enabled="0" hud="5" hudname="F14" value="339"/>
+  <LAYOUT desc="glidescopePosition" enabled="0" hud="5" hudname="F14" value="186"/>
+  <LAYOUT desc="CallSign Position" enabled="1" hud="5" hudname="F14" value="280"/>
+  <LAYOUT desc="Debug Position" enabled="1" hud="5" hudname="F14" value="220"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="1" hud="6" hudname="Embraer" value="53"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="6" hudname="Embraer" value="344"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="6" hudname="Embraer" value="363"/>
@@ -303,9 +325,9 @@
   <LAYOUT desc="vidvoltagePosition" enabled="1" hud="6" hudname="Embraer" value="263"/>
   <LAYOUT desc="amperagePosition" enabled="1" hud="6" hudname="Embraer" value="292"/>
   <LAYOUT desc="pMeterSumPosition" enabled="1" hud="6" hudname="Embraer" value="322"/>
-  <LAYOUT desc="horizonPosition" enabled="0" hud="6" hudname="Embraer" value="187"/>
-  <LAYOUT desc="SideBarPosition" enabled="0" hud="6" hudname="Embraer" value="187"/>
-  <LAYOUT desc="SideBarScrollPosition" enabled="0" hud="6" hudname="Embraer" value="187"/>
+  <LAYOUT desc="horizonPosition" enabled="0" hud="6" hudname="Embraer" value="194"/>
+  <LAYOUT desc="SideBarHeightPosition" enabled="1" hud="6" hudname="Embraer" value="3"/>
+  <LAYOUT desc="SideBarWidthPosition" enabled="1" hud="6" hudname="Embraer" value="7"/>
   <LAYOUT desc="CallSign Position" enabled="1" hud="6" hudname="Embraer" value="280"/>
   <LAYOUT desc="Debug Position" enabled="1" hud="6" hudname="Embraer" value="220"/>
   <LAYOUT desc="Gimbal Position" enabled="0" hud="6" hudname="Embraer" value="122"/>
@@ -316,6 +338,9 @@
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="6" hudname="Embraer" value="195"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="6" hudname="Embraer" value="195"/>
   <LAYOUT desc="wattsPosition" enabled="0" hud="6" hudname="Embraer" value="339"/>
+  <LAYOUT desc="glidescopePosition" enabled="0" hud="6" hudname="Embraer" value="186"/>
+  <LAYOUT desc="SideBarPosition" enabled="0" hud="6" hudname="Embraer" value="187"/>
+  <LAYOUT desc="SideBarScrollPosition" enabled="0" hud="6" hudname="Embraer" value="187"/>
   <LAYOUT desc="GPS_numSatPosition" enabled="1" hud="7" hudname="NAHI" value="54"/>
   <LAYOUT desc="GPS_directionToHomePosition" enabled="1" hud="7" hudname="NAHI" value="74"/>
   <LAYOUT desc="GPS_distanceToHomePosition" enabled="1" hud="7" hudname="NAHI" value="372"/>
@@ -341,11 +366,11 @@
   <LAYOUT desc="vidvoltagePosition" enabled="1" hud="7" hudname="NAHI" value="353"/>
   <LAYOUT desc="amperagePosition" enabled="1" hud="7" hudname="NAHI" value="361"/>
   <LAYOUT desc="pMeterSumPosition" enabled="1" hud="7" hudname="NAHI" value="332"/>
-  <LAYOUT desc="horizonPosition" enabled="0" hud="7" hudname="NAHI" value="187"/>
+  <LAYOUT desc="horizonPosition" enabled="0" hud="7" hudname="NAHI" value="194"/>
   <LAYOUT desc="SideBarPosition" enabled="1" hud="7" hudname="NAHI" value="187"/>
   <LAYOUT desc="SideBarScrollPosition" enabled="1" hud="7" hudname="NAHI" value="187"/>
-  <LAYOUT desc="CallSign Position" enabled="1" hud="7" hudname="NAHI" value="280"/>
-  <LAYOUT desc="Debug Position" enabled="1" hud="7" hudname="NAHI" value="220"/>
+  <LAYOUT desc="SideBarHeightPosition" enabled="1" hud="7" hudname="NAHI" value="3"/>
+  <LAYOUT desc="SideBarWidthPosition" enabled="1" hud="7" hudname="NAHI" value="7"/>
   <LAYOUT desc="Gimbal Position" enabled="0" hud="7" hudname="NAHI" value="122"/>
   <LAYOUT desc="GPS_time Position" enabled="0" hud="7" hudname="NAHI" value="341"/>
   <LAYOUT desc="SportPosition" enabled="0" hud="7" hudname="NAHI" value="232"/>
@@ -354,6 +379,9 @@
   <LAYOUT desc="MapCenterPosition" enabled="0" hud="7" hudname="NAHI" value="194"/>
   <LAYOUT desc="APstatusPosition" enabled="0" hud="7" hudname="NAHI" value="195"/>
   <LAYOUT desc="wattsPosition" enabled="0" hud="7" hudname="NAHI" value="339"/>
+  <LAYOUT desc="glidescopePosition" enabled="0" hud="7" hudname="NAHI" value="186"/>
+  <LAYOUT desc="CallSign Position" enabled="1" hud="7" hudname="NAHI" value="280"/>
+  <LAYOUT desc="Debug Position" enabled="1" hud="7" hudname="NAHI" value="220"/>
   <LAYOUT desc="Sat indicator" enabled="0" hud="8" hudname="Groundstation" value="32"/>
   <LAYOUT desc="Direction to home" enabled="0" hud="8" hudname="Groundstation" value="51"/>
   <LAYOUT desc="Distance" enabled="0" hud="8" hudname="Groundstation" value="54"/>
@@ -382,8 +410,8 @@
   <LAYOUT desc="AHI" enabled="0" hud="8" hudname="Groundstation" value="187"/>
   <LAYOUT desc="Sidebar" enabled="0" hud="8" hudname="Groundstation" value="187"/>
   <LAYOUT desc="Sidebar arrow" enabled="0" hud="8" hudname="Groundstation" value="187"/>
-  <LAYOUT desc="CallSign" enabled="1" hud="8" hudname="Groundstation" value="280"/>
-  <LAYOUT desc="Debug" enabled="0" hud="8" hudname="Groundstation" value="220"/>
+  <LAYOUT desc="SideBarHeightPosition" enabled="1" hud="8" hudname="Groundstation" value="3"/>
+  <LAYOUT desc="SideBarWidthPosition" enabled="1" hud="8" hudname="Groundstation" value="7"/>
   <LAYOUT desc="Gimbal" enabled="0" hud="8" hudname="Groundstation" value="122"/>
   <LAYOUT desc="GPS time" enabled="0" hud="8" hudname="Groundstation" value="341"/>
   <LAYOUT desc="FRSky cells" enabled="0" hud="8" hudname="Groundstation" value="232"/>
@@ -392,6 +420,9 @@
   <LAYOUT desc="Map center" enabled="0" hud="8" hudname="Groundstation" value="195"/>
   <LAYOUT desc="AP status" enabled="0" hud="8" hudname="Groundstation" value="220"/>
   <LAYOUT desc="wattsPosition" enabled="0" hud="8" hudname="Groundstation" value="339"/>
+  <LAYOUT desc="glidescopePosition" enabled="0" hud="8" hudname="Groundstation" value="186"/>
+  <LAYOUT desc="CallSign" enabled="1" hud="8" hudname="Groundstation" value="280"/>
+  <LAYOUT desc="Debug" enabled="0" hud="8" hudname="Groundstation" value="220"/>
   <LAYOUT desc="Sat indicator" enabled="0" hud="9" hudname="Standalone" value="32"/>
   <LAYOUT desc="Direction to home" enabled="0" hud="9" hudname="Standalone" value="51"/>
   <LAYOUT desc="Distance" enabled="0" hud="9" hudname="Standalone" value="54"/>
@@ -420,8 +451,8 @@
   <LAYOUT desc="AHI" enabled="0" hud="9" hudname="Standalone" value="187"/>
   <LAYOUT desc="Sidebar" enabled="0" hud="9" hudname="Standalone" value="187"/>
   <LAYOUT desc="Sidebar arrow" enabled="0" hud="9" hudname="Standalone" value="187"/>
-  <LAYOUT desc="CallSign" enabled="1" hud="9" hudname="Standalone" value="280"/>
-  <LAYOUT desc="Debug" enabled="0" hud="9" hudname="Standalone" value="220"/>
+  <LAYOUT desc="SideBarHeightPosition" enabled="1" hud="9" hudname="Standalone" value="3"/>
+  <LAYOUT desc="SideBarWidthPosition" enabled="1" hud="9" hudname="Standalone" value="7"/>
   <LAYOUT desc="Gimbal" enabled="0" hud="9" hudname="Standalone" value="122"/>
   <LAYOUT desc="GPS time" enabled="0" hud="9" hudname="Standalone" value="341"/>
   <LAYOUT desc="FRSky cells" enabled="0" hud="9" hudname="Standalone" value="232"/>
@@ -430,6 +461,9 @@
   <LAYOUT desc="Map center" enabled="0" hud="9" hudname="Standalone" value="195"/>
   <LAYOUT desc="AP status" enabled="0" hud="9" hudname="Standalone" value="220"/>
   <LAYOUT desc="wattsPosition" enabled="0" hud="9" hudname="Standalone" value="339"/>
+  <LAYOUT desc="glidescopePosition" enabled="0" hud="9" hudname="Standalone" value="186"/>
+  <LAYOUT desc="CallSign" enabled="1" hud="9" hudname="Standalone" value="280"/>
+  <LAYOUT desc="Debug" enabled="0" hud="9" hudname="Standalone" value="220"/>
   <LAYOUT desc="Sat indicator" enabled="0" hud="10" hudname="250 class" value="32"/>
   <LAYOUT desc="Direction to home" enabled="0" hud="10" hudname="250 class" value="51"/>
   <LAYOUT desc="Distance" enabled="0" hud="10" hudname="250 class" value="54"/>
@@ -458,8 +492,8 @@
   <LAYOUT desc="AHI" enabled="0" hud="10" hudname="250 class" value="187"/>
   <LAYOUT desc="Sidebar" enabled="0" hud="10" hudname="250 class" value="187"/>
   <LAYOUT desc="Sidebar arrow" enabled="0" hud="10" hudname="250 class" value="187"/>
-  <LAYOUT desc="CallSign" enabled="1" hud="10" hudname="250 class" value="280"/>
-  <LAYOUT desc="Debug" enabled="1" hud="10" hudname="250 class" value="220"/>
+  <LAYOUT desc="SideBarHeightPosition" enabled="1" hud="10" hudname="250 class" value="3"/>
+  <LAYOUT desc="SideBarWidthPosition" enabled="1" hud="10" hudname="250 class" value="7"/>
   <LAYOUT desc="Gimbal" enabled="0" hud="10" hudname="250 class" value="122"/>
   <LAYOUT desc="GPS time" enabled="0" hud="10" hudname="250 class" value="341"/>
   <LAYOUT desc="FRSky cells" enabled="0" hud="10" hudname="250 class" value="232"/>
@@ -468,43 +502,48 @@
   <LAYOUT desc="Map center" enabled="0" hud="10" hudname="250 class" value="195"/>
   <LAYOUT desc="AP status" enabled="0" hud="10" hudname="250 class" value="70"/>
   <LAYOUT desc="wattsPosition" enabled="0" hud="10" hudname="250 class" value="339"/>
-  <LAYOUT desc="Sat indicator" enabled="1" hud="11" value="32"/>
-  <LAYOUT desc="Direction to home" enabled="1" hud="11" value="51"/>
-  <LAYOUT desc="Distance" enabled="1" hud="11" value="54"/>
-  <LAYOUT desc="Speed" enabled="1" hud="11" value="183"/>
-  <LAYOUT desc="Angle to home" enabled="1" hud="11" value="144"/>
-  <LAYOUT desc="GPS altitude" enabled="1" hud="11" value="84"/>
-  <LAYOUT desc="Sensor" enabled="1" hud="11" value="36"/>
-  <LAYOUT desc="Heading" enabled="1" hud="11" value="114"/>
-  <LAYOUT desc="Compass" enabled="1" hud="11" value="40"/>
-  <LAYOUT desc="Altitude" enabled="1" hud="11" value="203"/>
-  <LAYOUT desc="Climb Rate" enabled="1" hud="11" value="202"/>
-  <LAYOUT desc="Throttle" enabled="1" hud="11" value="352"/>
+  <LAYOUT desc="glidescopePosition" enabled="0" hud="10" hudname="250 class" value="186"/>
+  <LAYOUT desc="CallSign" enabled="1" hud="10" hudname="250 class" value="280"/>
+  <LAYOUT desc="Debug" enabled="1" hud="10" hudname="250 class" value="220"/>
+  <LAYOUT desc="Sat indicator" enabled="1" hud="11" value="47"/>
+  <LAYOUT desc="Direction to home" enabled="1" hud="11" value="344"/>
+  <LAYOUT desc="Distance" enabled="1" hud="11" value="40"/>
+  <LAYOUT desc="Speed" enabled="1" hud="11" value="33"/>
+  <LAYOUT desc="Angle to home" enabled="0" hud="11" value="144"/>
+  <LAYOUT desc="GPS altitude" enabled="0" hud="11" value="84"/>
+  <LAYOUT desc="Sensor" enabled="0" hud="11" value="36"/>
+  <LAYOUT desc="Heading" enabled="0" hud="11" value="114"/>
+  <LAYOUT desc="Compass" enabled="1" hud="11" value="370"/>
+  <LAYOUT desc="Altitude" enabled="1" hud="11" value="54"/>
+  <LAYOUT desc="Climb Rate" enabled="0" hud="11" value="202"/>
+  <LAYOUT desc="Throttle" enabled="0" hud="11" value="352"/>
   <LAYOUT desc="Unused" enabled="1" hud="11" value="382"/>
   <LAYOUT desc="Timer" enabled="1" hud="11" value="382"/>
   <LAYOUT desc="Armed Status" enabled="1" hud="11" value="311"/>
   <LAYOUT desc="Pitch Angle" enabled="0" hud="11" value="233"/>
   <LAYOUT desc="Roll Angle" enabled="0" hud="11" value="263"/>
-  <LAYOUT desc="Latitude" enabled="1" hud="11" value="2"/>
-  <LAYOUT desc="Longitude" enabled="1" hud="11" value="17"/>
-  <LAYOUT desc="RSSI" enabled="1" hud="11" value="333"/>
+  <LAYOUT desc="Latitude" enabled="0" hud="11" value="2"/>
+  <LAYOUT desc="Longitude" enabled="0" hud="11" value="17"/>
+  <LAYOUT desc="RSSI" enabled="1" hud="11" value="332"/>
   <LAYOUT desc="Temperature" enabled="0" hud="11" value="213"/>
   <LAYOUT desc="Voltage - main" enabled="1" hud="11" value="363"/>
   <LAYOUT desc="Voltage - video" enabled="1" hud="11" value="303"/>
   <LAYOUT desc="Amps" enabled="1" hud="11" value="369"/>
   <LAYOUT desc="mAh" enabled="1" hud="11" value="376"/>
-  <LAYOUT desc="AHI" enabled="1" hud="11" value="187"/>
+  <LAYOUT desc="AHI" enabled="1" hud="11" value="194"/>
   <LAYOUT desc="Sidebar" enabled="1" hud="11" value="187"/>
-  <LAYOUT desc="Sidebar arrow" enabled="1" hud="11" value="187"/>
-  <LAYOUT desc="Call Sign" enabled="1" hud="11" value="280"/>
-  <LAYOUT desc="Debug" enabled="1" hud="11" value="220"/>
-  <LAYOUT desc="Gimbal" enabled="1" hud="11" value="122"/>
-  <LAYOUT desc="GPS time" enabled="1" hud="11" value="341"/>
-  <LAYOUT desc="FRSky cells" enabled="1" hud="11" value="232"/>
-  <LAYOUT desc="Mode" enabled="1" hud="11" value="352"/>
+  <LAYOUT desc="Sidebar arrow" enabled="0" hud="11" value="187"/>
+  <LAYOUT desc="Sidebar Height" enabled="1" hud="11" value="3"/>
+  <LAYOUT desc="Sidebar Width" enabled="1" hud="11" value="11"/>
+  <LAYOUT desc="Gimbal" enabled="1" hud="11" value="353"/>
+  <LAYOUT desc="GPS time" enabled="0" hud="11" value="341"/>
+  <LAYOUT desc="FRSky cells" enabled="0" hud="11" value="232"/>
+  <LAYOUT desc="Mode" enabled="1" hud="11" value="355"/>
   <LAYOUT desc="Map mode" enabled="0" hud="11" value="46"/>
   <LAYOUT desc="Map center" enabled="0" hud="11" value="195"/>
   <LAYOUT desc="AP status" enabled="1" hud="11" value="70"/>
   <LAYOUT desc="Watts" enabled="0" hud="11" value="339"/>
-  <HUDNAME hudname="Custom HUD 11"/>
+  <LAYOUT desc="Glidescope" enabled="0" hud="11" value="186"/>
+  <LAYOUT desc="Call Sign" enabled="1" hud="11" value="280"/>
+  <LAYOUT desc="Debug" enabled="1" hud="11" value="220"/>
 </HUDLAYOUTS>

@@ -17,6 +17,7 @@ int mode_gpsland = 0;
 int mode_llights = 0;
 int mode_camstab = 0;
 int mode_osd_switch = 0;
+int mode_air = 0;
 
 int SendSim = 0;
 
@@ -973,7 +974,7 @@ void displayMode()
       mapchar(0xa0,SimPosn[sensorPosition]);
 
     if((SimModebits&mode_horizon) >0)
-      mapchar(0xa0,SimPosn[sensorPosition]);
+      mapchar(0xa0,SimPosn[sensorPosition]); 
 
     if((SimModebits&mode_baro) >0)
       mapchar(0xa2,SimPosn[sensorPosition]+1);
@@ -1024,6 +1025,11 @@ void displayMode()
       mapchar(0xae,SimPosn[ModePosition]);
       mapchar(0xaf,SimPosn[ModePosition]+1);
     }
+    
+    if((SimModebits&mode_air) >0){
+      mapchar(0xea,SimPosn[ModePosition]+2);
+      mapchar(0xeb,SimPosn[ModePosition]+3);
+    }
   }
 
 }
@@ -1060,7 +1066,7 @@ if (SimPosn[horizonPosition]<0x3FF){
     Y += pitchAngle / 8;
     Y += 41;
     if(Y >= 0 && Y <= 81) {
-      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) + 3 - 2*LINE + X;
+      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) -4 - 2*LINE + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
       	mapchar(0x80+(Y%9), pos);
       if(Y>=9 && (Y%9) == 0)
@@ -1074,7 +1080,7 @@ if (SimPosn[horizonPosition]<0x3FF){
     Y += pitchAngle / 8;
     Y += 31;
     if(Y >= 0 && Y <= 81) {
-      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) + 3 - 2*LINE + X;
+      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) -4 - 2*LINE + X;
 //      int pos = 30*(2+Y/9) + 10 + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
         mapchar(0x80+(Y%9), pos);
@@ -1083,7 +1089,7 @@ if (SimPosn[horizonPosition]<0x3FF){
     }
     Y += 20;
     if(Y >= 0 && Y <= 81) {
-      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) + 3 - 2*LINE + X;
+      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) -4 - 2*LINE + X;
 //      int pos = 30*(2+Y/9) + 10 + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
         mapchar(0x80+(Y%9), pos);
@@ -1103,27 +1109,30 @@ if (SimPosn[horizonPosition]<0x3FF){
   
   if (SimPosn[SideBarPosition]<0x3FF){
     if(confItem[GetSetting("S_WITHDECORATION")].value() > 0) {
-      int centerpos = SimPosn[horizonPosition]+7;
-      for(int X=-2; X<=2; X++) {
-        mapchar(0x12,centerpos+7+(X*LINE));
-        mapchar(0x12,centerpos-7+(X*LINE));
+      int centerpos = SimPosn[horizonPosition];
+      int hudwidth=  SimPosn[SideBarWidth] ;
+      int hudheight= SimPosn[SideBarHeight];
+      for(int X=-hudheight; X<=hudheight; X++) {
+        mapchar(0x12,centerpos+hudwidth+(X*LINE));
+        mapchar(0x12,centerpos-hudwidth+(X*LINE));
       }
-      mapchar(0x02, centerpos+6);
-      mapchar(0x03, centerpos-6);
+//      mapchar(0x02, centerpos+hudwidth);
+//      mapchar(0x03, centerpos-hudwidth);
     }
   }
   
 }
 
 void ShowSideBarArrows(){
-  int centerpos = SimPosn[horizonPosition]+7;
+  int centerpos = SimPosn[horizonPosition];
   if (SimPosn[horizonPosition]==0x3FF)
     return;
   if (SimPosn[SideBarScrollPosition]==0x3FF)
     return;
   if(confItem[GetSetting("S_SIDEBARTOPS")].value() > 0) {
-    mapchar(0xCf,centerpos+7+(3*LINE));
-    mapchar(0xCf,centerpos-7+(3*LINE));
+    int hudwidth=  SimPosn[SideBarWidth] ;
+    mapchar(0xCf,centerpos+hudwidth+(3*LINE));
+    mapchar(0xCf,centerpos-hudwidth+(3*LINE));
   }
 }
 
@@ -1171,6 +1180,7 @@ void GetModes(){
   mode_armed = 0;
   mode_stable = 0;
   mode_horizon = 0;
+  mode_air = 0;
   mode_baro = 0;
   mode_mag = 0;
   mode_gpshome = 0;
@@ -1191,6 +1201,7 @@ void GetModes(){
     if (boxnames[c] == "GPS HOLD;") mode_gpshold |= bit;
     if (boxnames[c] == "OSD SW;") mode_osd_switch |= bit;
     if (boxnames[c] == "MISSION;") mode_gpsmission |= bit;
+    if (boxnames[c] == "AIR MODE;") mode_air |= bit;
    
     bit <<= 1L;
   }

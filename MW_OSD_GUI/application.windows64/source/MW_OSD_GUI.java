@@ -79,7 +79,7 @@ And to a lesser extent code from the following :-
 
 
 
-String MW_OSD_GUI_Version = "MWOSD R1.5 - NextGeneration";
+String MW_OSD_GUI_Version = "MWOSD R1.6 - NextGeneration";
 int MW_OSD_EEPROM_Version = 11;
 int CONFIGITEMS16 = 7;
 
@@ -95,7 +95,7 @@ int  MwHeadingGraphPosition = 8;
 int  MwAltitudePosition = 9;
 int  MwClimbRatePosition = 10;
 int  CurrentThrottlePosition = 11;
-int  flyTimePosition = 12;
+int  flyTimePosition = 12; //unused
 int  onTimePosition = 13;
 int  motorArmedPosition = 14;
 int  pitchAnglePosition = 15;
@@ -111,8 +111,8 @@ int  pMeterSumPosition = 24;
 int  horizonPosition = 25;
 int  SideBarPosition =26; 
 int  SideBarScrollPosition = 27;
-int  callSignPosition = 28;
-int  debugPosition = 29;
+int  SideBarHeight = 28;
+int  SideBarWidth = 29;
 int  gimbalPosition = 30;
 int  GPS_timePosition = 31;
 int  SportPosition = 32;
@@ -121,6 +121,10 @@ int  MapModePosition = 34;
 int  MapCenterPosition = 35;
 int  APstatusPosition = 36;
 int  wattPosition = 37;
+int  glidescopePosition = 38;
+int  callSignPosition = 39;
+int  debugPosition = 40;
+
 int GPSstartlat = 430948610;
 int GPSstartlon = -718897060;
 
@@ -254,6 +258,8 @@ int Passthroughcomm;
 int AutoSimulator=0;
 int AutoDebugGUI=1;
 int Simtype=0;
+int Donate=2;
+int DonateMessage=1;
 int StartupMessage=0;
 int FrameRate=30;
 
@@ -278,7 +284,7 @@ int ConfigVALUE = -1;
 // Box locations -------------------------------------------------------------------------
 int Col1Width = 180;        int Col2Width = 200;    int Col3Width = 165;
 
-int windowsX    = 1041+Col3Width+5;       int windowsY    =578;        //995; //573;
+int windowsX    = 1041+Col3Width+5;       int windowsY    =613; //578;        //995; //573;
 //int windowsX    = 1041;       int windowsY    =578;        //995; //573;
 //int windowsX    = 1200;       int windowsY    =800;        //995; //573;
 int xGraph      = 10;         int yGraph      = 35;
@@ -1447,10 +1453,12 @@ public void draw() {
   // ------------------------------------------------------------------------
 
   image(GUIBackground,0, 0, windowsX, windowsY); 
-  if (LEWvisible==0){
-   image(DONATEimage,XLINKS+20,YLINKS+207, 100, 40); 
-   
+
+  int seconds = second();
+  if (((seconds&0x1F)!= 0)&&(Donate>0)){
+   image(DONATEimage,XLINKS+20,YLINKS+207, 100, 40);  
   }  
+
   strokeWeight(3);stroke(0);
   rectMode(CORNERS);
     image(OSDBackground,DisplayWindowX+WindowAdjX+10, DisplayWindowY+WindowAdjY, 354-WindowShrinkX, 300-WindowShrinkY); //529-WindowShrinkX, 360-WindowShrinkY);
@@ -1546,21 +1554,13 @@ public void draw() {
     s = s+ MW_OSD_GUI_Version;
     s = s+ "\n";
     s = s+ "\n";
-    s = s+ "Check out our new website - MWOSD.com";
+    s = s+ "Check out our website - www.mwosd.com";
     s = s+ "\n";
     s = s+ "\n";
-    s = s+ "New features in this release:";
-    s = s+ "\n";
-    s = s+ "FIXEDWING support";
-    s = s+ "\n";
-    s = s+ "Enhanced CLEANFLIGHT support";
-    s = s+ "\n";
-    s = s+ "3 way switchable OSD layouts";
-    s = s+ "\n";
-    s = s+ "Clearer display - less artifacts";
     s = s+ "\n";
     s = s+ "\n";
-    s = s+ "Help support continued development - donate just a couple of dollars.";
+    s = s+ "\n";
+    s = s+ "\n";
     s = s+ "\n";
     s = s+ "\n";
     s = s+ "Select a COM port to start using MWOSD! \n";
@@ -1569,7 +1569,32 @@ public void draw() {
     myTextarea.setText(s);
     myTextarea.show();
   }
-  else{
+  else if (DonateMessage>1){
+    myTextarea.setText("Welcome to ");
+    String s = myTextarea.getText();
+    s = s+ MW_OSD_GUI_Version;
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "Help support continued open source development";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "Please help and DONATE just a couple of dollars";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "\n";
+    s = s+ "Select donate to clear this message! \n";
+    s = s+ "\n";
+    
+    myTextarea.setText(s);
+    myTextarea.show();
+  }  else{
     myTextarea.hide();
   }
 }
@@ -2149,6 +2174,7 @@ public void updateConfig(){
   ConfigClass.setProperty("Simtype",str(Simtype));
   ConfigClass.setProperty("StartupMessage",str(StartupMessage));
   ConfigClass.setProperty("FrameRate",str(FrameRate));
+  ConfigClass.setProperty("Donate",str(Donate));
   
   File file = new File(dataPath("gui.cfg"));
   try{
@@ -2190,6 +2216,7 @@ public void LoadConfig(){
     Simtype=1;
     FrameRate = 15;
     StartupMessage = 0;
+    Donate = 2;
     updateConfig();
   }
   catch( IOException ioe){
@@ -2207,6 +2234,11 @@ public void LoadConfig(){
       AutoDebugGUI = PApplet.parseInt(ConfigClass.getProperty("AutoDebugGUI"));
       Simtype = PApplet.parseInt(ConfigClass.getProperty("Simtype"));
       FrameRate = PApplet.parseInt(ConfigClass.getProperty("FrameRate"));
+      Donate = PApplet.parseInt(ConfigClass.getProperty("Donate"));
+      
+      DonateMessage=Donate;
+
+
       frameRate(FrameRate); 
 
       StartupMessage = PApplet.parseInt(ConfigClass.getProperty("StartupMessage"));
@@ -2338,7 +2370,13 @@ public void SUPPORTLINK(){
   link("http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI"); 
 }
 public void DONATELINK(){
-  link("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EBS76N8F426G2&lc=GB&item_name=MW%2dOSD&item_number=R1%2e4&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"); 
+  if (Donate>1){
+    Donate=1;
+    DonateMessage=Donate;
+    updateConfig();
+  }
+
+  link("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EBS76N8F426G2&lc=GB&item_name=MW%2dOSD&item_number=R1%2e6&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"); 
 }
 public void CALIBLINK(){
  link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Calibration.md"); 
@@ -3571,13 +3609,14 @@ String boxnames[] = { // names for dynamic generation of config GUI
     "ARM;",
     "ANGLE;",
     "HORIZON;",
+    "AIR MODE;",
     "BARO;",
     "MAG;",
     "CAMSTAB;",
     "GPS HOME;",
     "GPS HOLD;",
     "MISSION;",
-    "OSD SW;"    
+    "OSD SW;"   
   };
 String strBoxNames = join(boxnames,""); 
 //int modebits = 0;
@@ -3653,6 +3692,10 @@ public void InitSerial(float portValue) {
         StartupMessage=1;
         updateConfig();
       }
+      if (DonateMessage>0){
+        DonateMessage=0;
+      }
+
       String portPos = Serial.list()[PApplet.parseInt(portValue)];
       txtlblWhichcom.setValue("COM = " + shortifyPortName(portPos, 8));
       g_serial = new Serial(this, portPos, BaudRate);
@@ -4767,6 +4810,7 @@ int mode_gpsland = 0;
 int mode_llights = 0;
 int mode_camstab = 0;
 int mode_osd_switch = 0;
+int mode_air = 0;
 
 int SendSim = 0;
 
@@ -5723,7 +5767,7 @@ public void displayMode()
       mapchar(0xa0,SimPosn[sensorPosition]);
 
     if((SimModebits&mode_horizon) >0)
-      mapchar(0xa0,SimPosn[sensorPosition]);
+      mapchar(0xa0,SimPosn[sensorPosition]); 
 
     if((SimModebits&mode_baro) >0)
       mapchar(0xa2,SimPosn[sensorPosition]+1);
@@ -5774,6 +5818,11 @@ public void displayMode()
       mapchar(0xae,SimPosn[ModePosition]);
       mapchar(0xaf,SimPosn[ModePosition]+1);
     }
+    
+    if((SimModebits&mode_air) >0){
+      mapchar(0xea,SimPosn[ModePosition]+2);
+      mapchar(0xeb,SimPosn[ModePosition]+3);
+    }
   }
 
 }
@@ -5810,7 +5859,7 @@ if (SimPosn[horizonPosition]<0x3FF){
     Y += pitchAngle / 8;
     Y += 41;
     if(Y >= 0 && Y <= 81) {
-      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) + 3 - 2*LINE + X;
+      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) -4 - 2*LINE + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
       	mapchar(0x80+(Y%9), pos);
       if(Y>=9 && (Y%9) == 0)
@@ -5824,7 +5873,7 @@ if (SimPosn[horizonPosition]<0x3FF){
     Y += pitchAngle / 8;
     Y += 31;
     if(Y >= 0 && Y <= 81) {
-      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) + 3 - 2*LINE + X;
+      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) -4 - 2*LINE + X;
 //      int pos = 30*(2+Y/9) + 10 + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
         mapchar(0x80+(Y%9), pos);
@@ -5833,7 +5882,7 @@ if (SimPosn[horizonPosition]<0x3FF){
     }
     Y += 20;
     if(Y >= 0 && Y <= 81) {
-      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) + 3 - 2*LINE + X;
+      int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) -4 - 2*LINE + X;
 //      int pos = 30*(2+Y/9) + 10 + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
         mapchar(0x80+(Y%9), pos);
@@ -5853,27 +5902,30 @@ if (SimPosn[horizonPosition]<0x3FF){
   
   if (SimPosn[SideBarPosition]<0x3FF){
     if(confItem[GetSetting("S_WITHDECORATION")].value() > 0) {
-      int centerpos = SimPosn[horizonPosition]+7;
-      for(int X=-2; X<=2; X++) {
-        mapchar(0x12,centerpos+7+(X*LINE));
-        mapchar(0x12,centerpos-7+(X*LINE));
+      int centerpos = SimPosn[horizonPosition];
+      int hudwidth=  SimPosn[SideBarWidth] ;
+      int hudheight= SimPosn[SideBarHeight];
+      for(int X=-hudheight; X<=hudheight; X++) {
+        mapchar(0x12,centerpos+hudwidth+(X*LINE));
+        mapchar(0x12,centerpos-hudwidth+(X*LINE));
       }
-      mapchar(0x02, centerpos+6);
-      mapchar(0x03, centerpos-6);
+//      mapchar(0x02, centerpos+hudwidth);
+//      mapchar(0x03, centerpos-hudwidth);
     }
   }
   
 }
 
 public void ShowSideBarArrows(){
-  int centerpos = SimPosn[horizonPosition]+7;
+  int centerpos = SimPosn[horizonPosition];
   if (SimPosn[horizonPosition]==0x3FF)
     return;
   if (SimPosn[SideBarScrollPosition]==0x3FF)
     return;
   if(confItem[GetSetting("S_SIDEBARTOPS")].value() > 0) {
-    mapchar(0xCf,centerpos+7+(3*LINE));
-    mapchar(0xCf,centerpos-7+(3*LINE));
+    int hudwidth=  SimPosn[SideBarWidth] ;
+    mapchar(0xCf,centerpos+hudwidth+(3*LINE));
+    mapchar(0xCf,centerpos-hudwidth+(3*LINE));
   }
 }
 
@@ -5921,6 +5973,7 @@ public void GetModes(){
   mode_armed = 0;
   mode_stable = 0;
   mode_horizon = 0;
+  mode_air = 0;
   mode_baro = 0;
   mode_mag = 0;
   mode_gpshome = 0;
@@ -5941,6 +5994,7 @@ public void GetModes(){
     if (boxnames[c] == "GPS HOLD;") mode_gpshold |= bit;
     if (boxnames[c] == "OSD SW;") mode_osd_switch |= bit;
     if (boxnames[c] == "MISSION;") mode_gpsmission |= bit;
+    if (boxnames[c] == "AIR MODE;") mode_air |= bit;
    
     bit <<= 1L;
   }

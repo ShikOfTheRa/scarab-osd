@@ -32,8 +32,7 @@
     <string>Created with Processing</string>
     <!-- End of the set that can be customized -->
 
-    <key>JVMRuntime</key>
-    <string>jdk1.7.0_55.jdk</string>
+    
 
     <key>JVMMainClassName</key>
     <string>MW_OSD_GUI</string>

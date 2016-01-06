@@ -37,13 +37,14 @@ String boxnames[] = { // names for dynamic generation of config GUI
     "ARM;",
     "ANGLE;",
     "HORIZON;",
+    "AIR MODE;",
     "BARO;",
     "MAG;",
     "CAMSTAB;",
     "GPS HOME;",
     "GPS HOLD;",
     "MISSION;",
-    "OSD SW;"    
+    "OSD SW;"   
   };
 String strBoxNames = join(boxnames,""); 
 //int modebits = 0;
@@ -119,6 +120,10 @@ void InitSerial(float portValue) {
         StartupMessage=1;
         updateConfig();
       }
+      if (DonateMessage>0){
+        DonateMessage=0;
+      }
+
       String portPos = Serial.list()[int(portValue)];
       txtlblWhichcom.setValue("COM = " + shortifyPortName(portPos, 8));
       g_serial = new Serial(this, portPos, BaudRate);
