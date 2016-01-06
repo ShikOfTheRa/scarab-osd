@@ -249,3 +249,10 @@
 #define TEMPMAX  500                // Temperature when at sensor output at VCC. Might be  atheoreticla value 
 
 
+/********************  RECORD CAPTURE  settings      *********************/
+// This is used for those who are attempting records to always show the maximum achieved.
+// Maximum values (as shown on statistics summary screen will be displayed on line IMMEDAITELY BELOW where current live data is displayed
+// It may require layouts to be amended to show data without overwriting other information
+//#define SHOW_MAX_SPEED                 // Enable to display MAX speed achieved on line below current speed
+//#define SHOW_MAX_ALTITUDE              // Enable to display MAX altitude achieved on line below current altitude
+

@@ -869,6 +869,10 @@ void displayGPS_speed(void)
   screenBuffer[0]=speedUnitAdd[Settings[S_UNITSYSTEM]];
   itoa(xx,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(speedPosition));
+#ifdef SHOW_MAX_SPEED
+  itoa(speedMAX,screenBuffer+1,10);
+  MAX7456_WriteString(screenBuffer,getPosition(speedPosition)+LINE);
+#endif //SHOW_MAX_SPEED
 }
 
 
@@ -919,6 +923,11 @@ void displayAltitude(void)
   screenBuffer[0]=MwAltitudeAdd[Settings[S_UNITSYSTEM]];
   itoa(altitude,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition));
+#ifdef SHOW_MAX_ALTITUDE
+  itoa(altitudeMAX,screenBuffer+1,10);
+  MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+LINE);
+#endif //SHOW_MAX_ALTITUDE
+
 }
 
 
