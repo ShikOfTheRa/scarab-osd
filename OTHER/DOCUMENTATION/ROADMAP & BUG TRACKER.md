@@ -8,6 +8,7 @@
 
  * OSD    - Support for TUALABS - thanks to Dustin
  * OSD    - Support for NAZA
+ * OSD    - Support for BETAFLIGHT
  * OSD    - Video volts alarm adjustable via GUI
  * OSD    - Video volts independant of main battery
  * OSD    - Battery voltage status icon improved accuracy - thanks to Hwurzburg
