@@ -23,6 +23,10 @@
 //  #define MULTIWII_V21              // Using boxnames
 #endif
 
+#ifdef BETAFLIGHT    //set up latest at time of release
+  #define CLEANFLIGHT190   //MSP added P+R+DTHR
+#endif
+
 #ifdef CLEANFLIGHT    //set up latest at time of release
   #define CLEANFLIGHT190   //MSP added P+R+DTHR
   //#define CLEANFLIGHT180           //MSP added P+R
