@@ -614,8 +614,8 @@ void ShowVideoVolts(float voltage){
 void ShowFlyTime(String FMinutes_Seconds){
 
   if (int(confItem[GetSetting("S_TIMER")].value()) > 0){
-  mapchar(0x9c, SimPosn[flyTimePosition]);
-  makeText(FMinutes_Seconds, SimPosn[flyTimePosition]+1);
+  mapchar(0x9c, SimPosn[onTimePosition]);
+  makeText(FMinutes_Seconds, SimPosn[onTimePosition]+1);
 }}
 
 void ShowOnTime(String Minutes_Seconds){
@@ -899,7 +899,7 @@ void displayHeading()
 
 
 void SimulateTimer(){
-  if (SimPosn[flyTimePosition]==0x3FF){
+  if (SimPosn[onTimePosition]==0x3FF){
      return;
   }
 

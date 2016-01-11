@@ -68,7 +68,7 @@
   <LAYOUT desc="CurrentThrottlePosition" enabled="1" hud="0" hudname="Shiki" value="352"/>
   <LAYOUT desc="flyTimePosition" enabled="1" hud="0" hudname="Shiki" value="382"/>
   <LAYOUT desc="onTimePosition" enabled="1" hud="0" hudname="Shiki" value="382"/>
-  <LAYOUT desc="Armed Status" enabled="1" hud="0" hudname="Shiki" value="311"/>
+  <LAYOUT desc="Armed Status" enabled="0" hud="0" hudname="Shiki" value="311"/>
   <LAYOUT desc="PitchAnglePosition" enabled="0" hud="0" hudname="Shiki" value="233"/>
   <LAYOUT desc="RollAnglePosition" enabled="0" hud="0" hudname="Shiki" value="263"/>
   <LAYOUT desc="MwGPSLatPositionTop" enabled="1" hud="0" hudname="Shiki" value="2"/>
@@ -89,8 +89,8 @@
   <LAYOUT desc="SportPosition" enabled="1" hud="0" hudname="Shiki" value="232"/>
   <LAYOUT desc="modePosition" enabled="1" hud="0" hudname="Shiki" value="92"/>
   <LAYOUT desc="MapModePosition" enabled="0" hud="0" hudname="Shiki" value="46"/>
-  <LAYOUT desc="MapCenterPosition" enabled="0" hud="0" hudname="Shiki" value="195"/>
-  <LAYOUT desc="APstatusPosition" enabled="1" hud="0" hudname="Shiki" value="70"/>
+  <LAYOUT desc="MapCenterPosition" enabled="1" hud="0" hudname="Shiki" value="195"/>
+  <LAYOUT desc="APstatusPosition" enabled="0" hud="0" hudname="Shiki" value="70"/>
   <LAYOUT desc="wattsPosition" enabled="0" hud="0" hudname="Shiki" value="339"/>
   <LAYOUT desc="glidescopePosition" enabled="1" hud="0" hudname="Shiki" value="186"/>
   <LAYOUT desc="CallSign Position" enabled="1" hud="0" hudname="Shiki" value="280"/>

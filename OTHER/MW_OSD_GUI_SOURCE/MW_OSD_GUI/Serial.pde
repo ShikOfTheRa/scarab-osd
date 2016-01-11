@@ -698,7 +698,7 @@ void headSerialReply(int requestMSP, int s) {
 //}
 
 void tailSerialReply() {
-  if (outChecksum > 0) serialize8(outChecksum);
+  serialize8(outChecksum);
 }
 
 public void DelayTimer(int ms){

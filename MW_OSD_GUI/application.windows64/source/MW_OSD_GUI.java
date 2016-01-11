@@ -4270,7 +4270,7 @@ public void headSerialReply(int requestMSP, int s) {
 //}
 
 public void tailSerialReply() {
-  if (outChecksum > 0) serialize8(outChecksum);
+  serialize8(outChecksum);
 }
 
 public void DelayTimer(int ms){
@@ -4396,6 +4396,7 @@ public void evaluateCommand(byte cmd, int size) {
           int eeaddressOSDH=read8();
           eeaddressOSD=eeaddressOSDL+(eeaddressOSDH<<8);
           eeindextxt="EEW: "+eeaddressOSD;   
+System.out.println("OSD req:"+ eeaddressOSD);
           eeindexmessage.setValue(eeindextxt);
 
           if (eeaddressOSD>=eeaddressGUI){ // update base address
@@ -5407,8 +5408,8 @@ public void ShowVideoVolts(float voltage){
 public void ShowFlyTime(String FMinutes_Seconds){
 
   if (PApplet.parseInt(confItem[GetSetting("S_TIMER")].value()) > 0){
-  mapchar(0x9c, SimPosn[flyTimePosition]);
-  makeText(FMinutes_Seconds, SimPosn[flyTimePosition]+1);
+  mapchar(0x9c, SimPosn[onTimePosition]);
+  makeText(FMinutes_Seconds, SimPosn[onTimePosition]+1);
 }}
 
 public void ShowOnTime(String Minutes_Seconds){
@@ -5692,7 +5693,7 @@ public void displayHeading()
 
 
 public void SimulateTimer(){
-  if (SimPosn[flyTimePosition]==0x3FF){
+  if (SimPosn[onTimePosition]==0x3FF){
      return;
   }
 

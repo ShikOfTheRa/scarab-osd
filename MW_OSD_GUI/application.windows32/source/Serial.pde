@@ -698,7 +698,7 @@ void headSerialReply(int requestMSP, int s) {
 //}
 
 void tailSerialReply() {
-  if (outChecksum > 0) serialize8(outChecksum);
+  serialize8(outChecksum);
 }
 
 public void DelayTimer(int ms){
@@ -824,6 +824,7 @@ public void evaluateCommand(byte cmd, int size) {
           int eeaddressOSDH=read8();
           eeaddressOSD=eeaddressOSDL+(eeaddressOSDH<<8);
           eeindextxt="EEW: "+eeaddressOSD;   
+System.out.println("OSD req:"+ eeaddressOSD);
           eeindexmessage.setValue(eeindextxt);
 
           if (eeaddressOSD>=eeaddressGUI){ // update base address
