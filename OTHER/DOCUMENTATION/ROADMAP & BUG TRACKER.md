@@ -32,6 +32,7 @@
  * OSD    - Support for temperature sensor re-introduced
  * OSD    - Added option to disable display of summary screen via config.h
  * OSD    - Added option to display some maximum values immediately below live data - for record breaking attempts
+ * OSD    - Throttle calibration values can be amended for inreased accuracy of throllte in some scenarios
  * GUI    - Support for RSSI Auto calibration from GUI
  * GUI    - Support for Current sensor calibration from GUI - using hardware parameters (Offset and gain) 
  * BUGFIX - HARIKIRI / MW2.1 not working since R1.5
