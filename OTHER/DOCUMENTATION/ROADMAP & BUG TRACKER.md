@@ -39,6 +39,7 @@
  * BUGFIX - Center crosshair font partially missing on default_large font
  * BUGFIX - AHI incroect at large angles
  * BUGFIX - Analogue ports had RSSI pulled high - impacting range and accuracy of values 
+ * BUGFIX - intermittant sticking on writing to OSD. Also resolves other intermittant checksum errors  
  * COMPAT - Compatability support for latest cleanflight - conflict with MultiWii
  * FONT   - improved large font from Schnupperm enhanced by Leo
  * FONT   - Support for Betaflight airmode. Displays font icon when active
