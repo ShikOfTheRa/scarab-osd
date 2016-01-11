@@ -257,3 +257,11 @@
 //#define SHOW_MAX_SPEED                 // Enable to display MAX speed achieved on line below current speed
 //#define SHOW_MAX_ALTITUDE              // Enable to display MAX altitude achieved on line below current altitude
 
+
+/********************  THROTTLE calibration  settings      *********************/
+// This is used for those who want to specify non default throttle calibration values. 
+// To use comment out AUTOTHROTTLE and adjusts the maximum and minimum throttle values 
+#define AUTOTHROTTLE 
+#define HIGHTHROTTLE 2000                // Maximum recognised value for throttle 
+#define LOWTHROTTLE  1000                // Minimum recognised value for throttle
+
