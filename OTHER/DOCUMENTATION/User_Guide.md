@@ -75,7 +75,7 @@ To navigate the OSD:<br>
 
 <b>Voltage</b>
 <li>Display Voltage - select if you wish to display voltage on OSD<br>
-<li>Use MWII - select this if you wish to use the Flight controllers voltage. If not selected, it will use the OSD voltage from the hardware pins connection (default).<br>
+<li>Use FC main voltage - select this if you wish to use the Flight controllers voltage. If not selected, it will use the OSD voltage from the hardware pins connection (default).<br>
 <li>Voltage adjust - use this to adjust the displayed voltage to match the actual battery voltage. Note if voltage is taken from the flight controller this adjustment is not applicable.<br>
 <li>Battery cells - set this to the correct number of battery cells. It is only used for the battery capacity status icon.<br>
 <li>Voltage alarm - set this to the voltage at which you require the battery voltage to start to flash.<br>
