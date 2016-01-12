@@ -62,6 +62,7 @@ Vendors who have supported us through provision of hardware:
 <li>www.multiwiicopter.com</a>
 <li>www.dtuhf.com</a>
 <li>www.readytoflyquads.com</a>
+<br>
 (Please check the above websites and support them)  
 
 
