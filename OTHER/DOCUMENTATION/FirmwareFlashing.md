@@ -21,3 +21,10 @@
 * Click on the "Upload" button and observe the serial console at the bottom of arduino. Success is noted as white text on black background stating just the binary sketch size. If messages in red letters appear, something went wrong.
 
 To test the setup, close Arduino and start MW OSD GUI. It should connect and work normally with the newly flashed OSD.
+
+## Updating fonts 
+* Connect to the OSD using the GUI.
+* Select the font you require otherwise the default one will be used
+* The font chosen will be seen in the simulator window
+* Select upload from the GUI
+* NOTE - check the FAQ - requires the OSD to be powered correctly or teh fonts will not save (upload looks OK)
