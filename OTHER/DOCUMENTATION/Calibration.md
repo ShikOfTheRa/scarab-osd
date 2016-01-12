@@ -3,7 +3,7 @@
 
 ## Calibration - Voltage ##
 
-NOTE: if use Multiwii FC voltage, then ALL adjustments are made on the FC. The following does not apply.
+NOTE: if use Flight Controller voltage, then ALL adjustments are made on the FC. The following does not apply.
 
 **Main or video voltage connected directly to OSD**
   1. If > 4s select "Enable, ADC 5v ref"
@@ -45,8 +45,9 @@ NOTE: if use a hardware sensor connected to teh Flight Controller, then ALL adju
   1. Fly a complete battery and note the total mah used on the OSD and put back into the battery by your charger
   1. The correct amp adjust = old amp adjust `*` charger mah used / OSD mah used
 
-Save
- 1. "WRITE" to OSD
+**Software current sensor alternative method - with a battery charger**
+ 1. Click "WRITE" to save settings to OSD
+ 2. 
 ---
 
 ## Calibration - RSSI ##
@@ -64,8 +65,8 @@ Save
   1. Set RSSI min to zero and RSSI max to 255 and write
   1. With TX off, click "SET" (Min)
   1. With TX on, click "SET" (Max)
-  1. "WRITE" to OSD
 
-
+**Software current sensor alternative method - with a battery charger**
+ 1. Click "WRITE" to save settings to OSD
 
 ---
