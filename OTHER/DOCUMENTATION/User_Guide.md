@@ -1,9 +1,9 @@
 
 ---
 
-# MW OSD quick reference guide #
+# MW OSD quick reference guide - MWOSD R1.6 #
 
-To access the inbuilt OSD menu, with MultiWii DISARMED:
+To access the inbuilt OSD menu, with the FC DISARMED:
 <li>THROTTLE MIDDLE<br>
 <li>YAW RIGHT<br>
 <li>PITCH FULL<br>
@@ -32,10 +32,10 @@ To navigate the OSD:<br>
 <h3>Controls and communication</h3>
 
 <b>Comm settings</b>
-<li>Toggle between com ports and baud rates</li>
+<li>Toggle between com ports and baud rates. Selected values Are indicated above.</li>
 
 <b>Baud Rate</b>
-<li>Hidden option. Minimise "Comm settings" to access and change </li>
+<li>Hidden option. Click "Comm settings" to access and change </li>
 
 <h3>DISK</h3>
 
@@ -75,27 +75,32 @@ To navigate the OSD:<br>
 
 <b>Voltage</b>
 <li>Display Voltage - select if you wish to display voltage on OSD<br>
-<li>Use MWII - select this if you wish to use the Multiwii controllers voltage. If not selected, it will use the OSD voltage from the hardware pins connection (default).<br>
-<li>Voltage adjust - use this to adjust the displayed voltage to match the actual battery voltage.<br>
+<li>Use MWII - select this if you wish to use the Flight controllers voltage. If not selected, it will use the OSD voltage from the hardware pins connection (default).<br>
+<li>Voltage adjust - use this to adjust the displayed voltage to match the actual battery voltage. Note if voltage is taken from the flight controller this adjustment is not applicable.<br>
 <li>Battery cells - set this to the correct number of battery cells. It is only used for the battery capacity status icon.<br>
 <li>Voltage alarm - set this to the voltage at which you require the battery voltage to start to flash.<br>
 <br>
 <b>Amperage</b>
 <li>Display Amps - select this if you wish to display the instantaneous Amps draw<br>
 <li>Display mAh - select this if you wish to display the cumulative mAh consumed during flight<br>
-<li>Use virtual sensor - select this instead of a hardware sensor to use a software estimation of calibrated current draw against throttle position.<br>
-<li>Zero adjust - use this to adjust the Amps drawn when the copter is idle<br>
-<li>Amps adjust - use this to adjust the Amps drawn value. It is recommended to adjust for accuracy against an Ampmeter around 50% throttle with a Multicopter<br>
+<li>If neither FC or Virtual are selected, the OSD will use analogue input on OSD<br>
+<li>Use virtual sensor - select this instead of default hardware sensor to use a software estimation of calibrated current draw against throttle position.<br>
+<li>Use FC Amperage - select this instead of deafault hardware sensor to Amerage values from Flight Controller .<br>
+<li>Amps adjust - use this to adjust the Amps drawn value. It is recommended to adjust for accuracy against an Ampmeter around 50% <li>Zero adjust - use this to adjust the Amps drawn when the copter is idle<br>
+throttle with a Multicopter<br>
 <li>x100 mAh Alarm - use this to set alarm warning for bat capacity. 10 = 1000mah<br>
 <li>Amp Alarm - use this to set alarm warning for Current draw<br>
-<li>!! NOTE !! See guide for how to calibrate<br>
+<li>CAL Button - use this if you have a HW current sensor to set correct values<br>
+<li> !!NOTE !! - remeber to select 5v reference whn using OSD hardware sensor<br>
 <br>
 <b>RSSI</b>
 <li>Display RSSI - select this if you wish to display RSSI on the OSD. By default this enables Analog RSSI direct to the controller<br>
-<li>Use MWII - select this if you wish to to use the RSSI value from the Flight Controller instead of the OSD. This can be analogue or PWM - but only when its connected to the Flight controller<br>
+<li>Use FC - select this if you wish to to use the RSSI value from the Flight Controller instead of the OSD. This can be analogue or PWM - but only when its connected to the Flight controller<br>
 <li>Use PWM - select this if you wish to use the RSSI value from a RX providing PWM RSSI connected to the OSD<br>
-<li>If neither MWII or PWM are selected, the OSD will use analogue RSSI from a RX directly connected to the OSD<br>
+<li>If neither FC or PWM are selected, the OSD will use analogue RSSI from a RX directly connected to the OSD<br>
 <li>RSSI alarm - set this to the value at which you require the RSSI value to start to flash<br>
+<li>SET (Min) - click this to calibrate RSSI minimum value with TX turned off<br>
+<li>SET (Max) - click this to calibrate RSSI maximum value with TX turned on<br>
 <li>!! NOTE !! See guide for how to calibrate<br>
 <br>
 <b>Reference Voltage</b>
@@ -105,7 +110,7 @@ To navigate the OSD:<br>
 <br>
 <b>Display Callsign</b>
 <li>You must select this if you wish to use callsign display<br>
-<li>Enter the callsign in the Box<br>
+<li>Enter the callsign in the Box. Use UPPER CASE and NUMERIC only<br>
 <br>
 <b>Other</b>
 <li>Select Metric or Imperial units for display and measurements<br>
@@ -150,7 +155,7 @@ To navigate the OSD:<br>
 <li>Time zone offset - corrects UTC time to local time in hours<br>
 <li>Timezone +/-  determines if offset is forward or back<br>
 <li>DST Minutes - corrects for daylight time<br>
-<li>!! NOTE !! requires patched Multiwii prior to 2.4<br>
+<li>!! NOTE !! Support MultiWii only - and requires specific load<br>
 <br>
 <b>Alarms</b>
 <li>Distance Alarm - use this to set alarm warning for max altitude. Value is <b>100<br></b><li>Altitude Alarm - use this to set alarm warning for max altitude. Value is <b>10<br></b><li>Speed Alarm    - use this to set alarm warning for max speed<br>
@@ -163,7 +168,8 @@ To navigate the OSD:<br>
 <li>HUD - Default / OSD SW - layouts selected for FC OSD_SWITCH option<br>
 <br>
 <b>Debug</b>
-<li>Displays Debug - for Multiwii developers<br>
+<li>Debug - displays debug values for FC/OSD developers<br>
+<li>Diagnostic - turns diagnostic values off / on<br>
 <br>
 <hr />
 <h2>Simulator</h2>
@@ -192,10 +198,14 @@ To navigate the OSD:<br>
 <hr />
 <h2>Layout Editor</h2>
 <b>Understanding the concept of how it works</b>
+<li>Any 3 can be uploaded to OSD<br>
+<li>Use the layout editor to create a layout that is available to the OSD to use.<br>
+<li>Fields can be enabled or disabled.<br>
+<li>Fields can be moved around.<br>
+<li>Note that if a feature is disabled by the switches on the GUI or OSD menu, this overrides all screen layouts on the OSD.<br>
 <li>Up to 256 individual HUD layouts can be created within the GUI<br>
-<li>Any 2 can be uploaded to OSD<br>
 <li>The layout defines the fields available to view<br>
-<li>GUI switches or OSD menu can be used to optionally turn on/off fields available<br>
+<li>GUI switches or OSD menu can be used to optionally turn on/off fields available. Turning off disables field on OSD irrespective of the layout settings.<br>
 <br>
 <b>Buttons and what they do</b>
 
@@ -222,9 +232,10 @@ ADD<br>
 <li>Click this to add an extra hud if you want to leave the existing ones unmodified.<br>
 <li>A fresh permanent HUD will be created identical to HUD0<br>
 <br>
-SAVE<br>
+WRITE<br>
 <li>Click this to save any edits made to HUD layouts<br>
-<li>NOTE - not needed for ADD<br>
+<li>ALSO updates the OSD<br>
+<li>NOTE - not needed for ADD unless changes are made to teh added layout<br>
 <br>
 CANCEL<br>
 <li>Click this to reload last saved HUD layouts<br>
@@ -233,8 +244,13 @@ CANCEL<br>
 <br>
 <br>
 <hr />
-<h2>Advanced settings - config.h</h2>
-
-Advanced settings are available in config.h because rarely used or have not yet been made available via GUI<br>
+<h2>Further settings</h2>
+Further settings are available in config.h due to :
+  memory constraints to leave enabled permananetly
+  rarely used
+  not yet moved to the GUI
 <br>
+<h2>Advanced settings</h2>
+Advanced settings are available in def.h. Primarily for developers
+
 
