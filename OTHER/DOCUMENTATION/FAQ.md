@@ -1,6 +1,9 @@
-1 How do I use OSD / smart switch
-  * Enable #define OSD\_SWITCH on multiwii FC or via CLI / GUI for other FC
-  * Assign a switch on the MultiWii GUI to the OSD Switch which will now be visible
+1 How do I use OSD / smart switch / Screen switching
+  * There are 2 methods - using a RC channel (0-7) or by using OSD SWITCH if the FC supports it.
+  * Step1 - Select which method on the GUI
+  * if using OSD_SWITCH method, enablele #define OSD_SWITCH on multiwii FC or via CLI / GUI for other FC
+  * if using OSD_SWITCH method, assign a switch on the FC GUI to the OSD Switch which will now be visible
+  * if using RC Channel, just make sure you use teh correct channel. 
 
 ---
 
@@ -16,6 +19,7 @@
 ---
 
 3 Lines on my display are very feint
+  * This is usually a compatibility issue with the camera
   * Use a large font file such as the one from ABL
   * Try increasing brightness and enabling fastpixel in config.h
   * if your camera is hi res (650TVL+) change camera CRT/LCD setting to LCD
@@ -32,7 +36,7 @@
 
 ---
 
-6 I have a bi-directional current sensor - how do I set it up
+6 How do I setup a current sensor
   * The information is now updated in the calibration guide
 
 ---
@@ -52,23 +56,23 @@
 ---
 
 9 My voltage doesn't change during flight
-  * If using a witespy board you may have to select WITESPY in config.h
-  * Ensure you are connected to the correct vbat pin
-  * Ensure you have selected the correct battery option - MWII if using FC connection
+ * Ensure you have selected the correct battery option - MWII if using FC connection
+ * If using a witespy board you may have to select WITESPY in config.h
+ * Ensure you are connected to the correct vbat pin some are reversed bat1 / bat2
 
 ---
 
 10 My Voltage/RSSI/Current does not change with adjusters
-  * Note that adjusters are only for connections direct to OSD - NOT via the controller
+  * Note that adjusters are only for connections direct to OSD - NOT when connected via the controller
 
 ---
 
-11 The OSD always shows DISARMED and one or more other items do not work
+11 The OSD always shows NO DATA / DISARMED permanentlty and one or more other items do not work
   * This usually means the OSD is not getting information from the Flight Controller
   * Ensure your connections are correct. Especially tx/rx orientation
   * Makes sure you are using the correct baud rate - 115k is default
   * You cannot share serial with other devices like telemetry
-  * Note if using AIRPLANE mode it can be disabled in config.h
+  * Note it can be disabled in config.h
   * Baud rate in config.h MUST match baud rate in GUI (access via comsettings button)
 
 BASEFLIGHT USERS - remove telemetry as follows:
@@ -89,6 +93,7 @@ HARAKIRI USERS - ensure protocol set as follows:
 
 12 The OSD always shows random characters on the NESW compass heading
   * This is typically a mismatch between the Flight controller type and the OSD controller selected in config.h
+  * Latest version of OSD should correct for this
 
 ---
 
@@ -105,6 +110,7 @@ HARAKIRI USERS - ensure protocol set as follows:
   * The output stage (max chip) MUST be powered when uploading font. How depends upon your board / configuration
   * A programming voltage of 4.8v or higher is required.
   * Note some programmers have 3.3v/5v selection text swapped. Verify with a meter
+  * Some stacked boards with USB connector also require vbat connected which powers the MAX chip and enables font upload
 
 ---
 
@@ -177,9 +183,8 @@ HARAKIRI USERS - ensure protocol set as follows:
 
 ---
 24 How do I use RSSI with FRSKY (D4R-II)
-  * Use an LC filter like CASE 2 here : https://code.google.com/p/minoposd/wiki/AnalogRSSI
+  * RECOMMENDED - Use an LC filter like CASE 2 here : https://code.google.com/p/minoposd/wiki/AnalogRSSI
   * Connect directly to NAZE like this : https://github.com/cleanflight/cleanflight/blob/master/docs/Rssi.md
-  * Try FASTPWMRSSI option in config.h
   * For Taranis users there is this option: http://blog.oscarliang.net/rssi-ppm-channel-taranis/
   * For 9x/9xr OpenTX users there is this option: http://fpvlab.com/forums/showthread.php?34250-MWOSD-for-MULTIWII-NAZE32-BASEFLIGHT-HARIKIRI&p=741209&viewfull=1#post741209
 
