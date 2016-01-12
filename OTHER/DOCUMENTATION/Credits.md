@@ -59,9 +59,9 @@ Also special thanks:
 Alex Dubus - AlexinParis - For MultiWii and inspiration!
 
 Vendors who have supported us through provision of hardware:
-<li>www.multiwiicopter.com
-<li>www.dtuhf.com
-<li>www.readytoflyquads.com
+<li>www.multiwiicopter.com</a>
+<li>www.dtuhf.com</a>
+<li>www.readytoflyquads.com</a>
 (Please check the above websites and support them)  
 
 
