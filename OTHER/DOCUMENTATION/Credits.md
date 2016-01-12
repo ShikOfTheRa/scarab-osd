@@ -11,15 +11,30 @@ This work is based on the following open source work :-
 
 Its base is taken as a fork from "Rush OSD Development" <a href='https://code.google.com/p/multiwii-osd/source/detail?r=370'>R370</a>
 
-
-
 All credit and full acknowledgement to the incredible work and hours from the many developers, contributors and testers that have helped along the way.<br>
 <br>
 Jean Gabriel Maurice. He started the revolution. He was the first....<br>
 
 
-Credits for the many who developed this software for the Multiwii community:
+Other Projects and their contributions
+Ardupilot team - some of the original code is probably from / based upon elements of ardupilot team. e.g. GPS
+Arducam-osd - also probably some code / ideas came from here in past
+MultiWii
+Please check all their excellent projects. 
+Acknowledge and support contributions from these open source teams and developers
 
+Also special thanks:
+Alex Dubus - AlexinParis - For MultiWii and inspiration!
+
+Vendors who have supported us through provision of hardware:
+<li>www.multiwiicopter.com</a>
+<li>www.dtuhf.com</a>
+<li>www.readytoflyquads.com</a>
+<br>
+(Please check the above websites and support them)  
+
+Credits for the many who developed this software for the Multiwii community:<br>
+Please report any missing names and aplogies if not already included...<br>
 Code contributors:
 Jean Gabriel Maurice - Johhnygab
 Gary Moscardini - Shikra
@@ -48,22 +63,3 @@ Basdelfos
 Nathantsoi
 
 
-Other Projects and their contributions
-Ardupilot team - some of the original code is probably from / based upon elements of ardupilot team. e.g. GPS
-Arducam-osd - also probably some code / ideas came from here in past
-MultiWii
-Please check all their excellent projects. 
-Acknowledge and support contributions from these open source teams and developers
-
-Also special thanks:
-Alex Dubus - AlexinParis - For MultiWii and inspiration!
-
-Vendors who have supported us through provision of hardware:
-<li>www.multiwiicopter.com</a>
-<li>www.dtuhf.com</a>
-<li>www.readytoflyquads.com</a>
-<br>
-(Please check the above websites and support them)  
-
-
-Please report any missing names and aplogies if not already included...
