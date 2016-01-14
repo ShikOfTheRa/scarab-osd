@@ -61,9 +61,9 @@ NOTE: if use a hardware sensor connected to teh Flight Controller, then ALL adju
   1. Minor adjustments can be made on the GUI if necessary
 
 **Via GUI**
-  1. Set RSSI min to zero and RSSI max to 255 and write
   1. With TX off, click "SET" (Min)
   1. With TX on, click "SET" (Max)
+  1. Remeber to "WRITE" to save to OSD
 
 **Software current sensor alternative method - with a battery charger**
  1. Click "WRITE" to save settings to OSD
