@@ -94,10 +94,11 @@ throttle with a Multicopter<br>
 <li> !!NOTE !! - remeber to select 5v reference whn using OSD hardware sensor<br>
 <br>
 <b>RSSI</b>
-<li>Display RSSI - select this if you wish to display RSSI on the OSD. By default this enables Analog RSSI direct to the controller<br>
+<li>Display RSSI - select this if you wish to display RSSI on the OSD.<br>
+<li>If neither FC or PWM are selected, the OSD will use ANALOGUE RSSI from a RX directly connected to the OSD<br>
 <li>Use FC - select this if you wish to to use the RSSI value from the Flight Controller instead of the OSD. The FC must configured to support this<br>
-<li>Use PWM - select this if you wish to use the RSSI value from a RX providing PWM RSSI connected to the OSD. Alternatively if RCRSSI is configured in config.h you can also use a RC channel conencted to the FC<br>
-<li>If neither FC or PWM are selected, the OSD will use analogue RSSI from a RX directly connected to the OSD<br>
+<li>Use PWM - select this if you wish to use the PWM RSSI value from a RX connected directly to the OSD<br> 
+<li>Use PWM - (with RCRSSI configured in config.h) select thisif you want to use a RC channel 0-7 for RSSI<br>
 <li>RSSI alarm - set this to the value at which you require the RSSI value to start to flash<br>
 <li>SET (Min) - click this to calibrate RSSI minimum value with TX turned off<br>
 <li>SET (Max) - click this to calibrate RSSI maximum value with TX turned on<br>
