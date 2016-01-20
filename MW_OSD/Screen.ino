@@ -1057,8 +1057,8 @@ void displayCursor(void)
   }
   if(ROW<10)
     {
-#ifdef PAGE1
-    if(configPage==1){
+#ifdef MENU1
+    if(configPage==MENU1){
       if (ROW==8) ROW=10;
       if (ROW==9) ROW=7;
       if(COL==1) cursorpos=(ROW+2)*30+10;
@@ -1066,14 +1066,14 @@ void displayCursor(void)
       if(COL==3) cursorpos=(ROW+2)*30+10+6+6;
      }
 #endif
-#ifdef PAGE2
-  #if defined(CLEANFLIGHT190)
-     if(configPage==2){  
+#ifdef MENU2
+  #if defined CORRECT_MENU_RCT2
+     if(configPage==MENU2){  
       COL=3;
       cursorpos=(ROW+2)*30+10+6+6;
     }
-  #elif defined(CLEANFLIGHT180) || defined (BASEFLIGHT20150627)
-    if(configPage==2)
+  #elif defined CORRECT_MENU_RCT1
+    if(configPage==MENU2)
     {  
       if (ROW==9){
         if (oldROW==8)
@@ -1086,7 +1086,7 @@ void displayCursor(void)
       cursorpos=(ROW+2)*30+10+6+6;
       }
   #else
-    if(configPage==2){
+    if(configPage==MENU2){
       COL=3;
       if (ROW==8) ROW=10;
       if (ROW==9) ROW=7;
@@ -1095,24 +1095,24 @@ void displayCursor(void)
   #endif
       
 #endif
-#ifdef PAGE3      
-    if(configPage==3){
+#ifdef MENU3      
+    if(configPage==MENU3){
       COL=3;
       if (ROW==8) ROW=10;
       if (ROW==9) ROW=7;
       cursorpos=(ROW+2)*30+10+6+6;     
       }
 #endif
-#ifdef PAGE4      
-    if(configPage==4){
+#ifdef MENU4      
+    if(configPage==MENU4){
       COL=3;
       if (ROW==7) ROW=10;
       if (ROW==9) ROW=6;
       cursorpos=(ROW+2)*30+10+6+6;
       }    
 #endif
-#ifdef PAGE5      
-    if(configPage==5)
+#ifdef MENU5      
+    if(configPage==MENU5)
       {  
       COL=3;
       if (ROW==9) ROW=5;
@@ -1120,8 +1120,8 @@ void displayCursor(void)
       cursorpos=(ROW+2)*30+10+6+6;
       }
 #endif
-#ifdef PAGE6      
-    if(configPage==6)
+#ifdef MENU6      
+    if(configPage==MENU6)
       {  
         if (ROW==9){
           if (oldROW==8)
@@ -1134,8 +1134,8 @@ void displayCursor(void)
       cursorpos=(ROW+2)*30+10+6+6;
       }
 #endif
-#ifdef PAGE7      
-    if(configPage==7)
+#ifdef MENU7      
+    if(configPage==MENU7)
       {  
       COL=3;
       if (ROW==9) ROW=6;
@@ -1143,8 +1143,8 @@ void displayCursor(void)
        cursorpos=(ROW+2)*30+10+6+6;
       }
 #endif
-#ifdef PAGE8      
-    if(configPage==8)
+#ifdef MENU8      
+    if(configPage==MENU8)
       {  
       COL=3;
       if (ROW==9) ROW=3;
@@ -1152,12 +1152,21 @@ void displayCursor(void)
        cursorpos=(ROW+2)*30+10+6+6;
       }
 #endif     
-#ifdef PAGE9      
-    if(configPage==9)
+#ifdef MENU9      
+    if(configPage==MENU9)
       {  
       COL=3;
       if (ROW==9) ROW=6;
       if (ROW==7) ROW=10;
+       cursorpos=(ROW+2)*30+10+6+6;
+      }
+#endif     
+#ifdef MENU10      
+    if(configPage==MENU10)
+      {  
+      COL=3;
+      if (ROW==9) ROW=2;
+      if (ROW==3) ROW=10;
        cursorpos=(ROW+2)*30+10+6+6;
       }
 #endif     
@@ -1172,13 +1181,16 @@ void displayConfigScreen(void)
   int16_t MenuBuffer[10];
   strcpy_P(screenBuffer, (char*)pgm_read_word(&(menutitle_item[configPage])));
   MAX7456_WriteString(screenBuffer, 35);
+  #ifdef MENU10
+//   MAX7456_WriteString(itoa(FCProfile,screenBuffer,10),50); // Display Profile number
+  #endif 
   MAX7456_WriteString_P(configMsgEXT, SAVEP);    //EXIT
   if(!previousarmedstatus) {
     MAX7456_WriteString_P(configMsgSAVE, SAVEP+6);  //SaveExit
     MAX7456_WriteString_P(configMsgPGS, SAVEP+16); //<Page>
   }
 
-  if(configPage==0)
+  if(configPage==MENU0)
   {
     int xx;
 //    MAX7456_WriteString_P(configMsg00, 35);
@@ -1217,8 +1229,8 @@ void displayConfigScreen(void)
 #endif
 
     }
-#ifdef PAGE1
-  if(configPage==1)
+#ifdef MENU1
+  if(configPage==MENU1)
   {
     for(uint8_t X=0; X<=6; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_pid[X])));
@@ -1240,13 +1252,11 @@ void displayConfigScreen(void)
     MAX7456_WriteString("I",77);
     MAX7456_WriteString("D",83);
   }
-#else
-    if(configPage == 1)configPage+=menudir;
 #endif
-#ifdef PAGE2
-  if(configPage==2)
+#ifdef MENU2
+  if(configPage==MENU2)
   {
-    #if defined(CLEANFLIGHT190)
+    #if defined CORRECT_MENU_RCT2
       MenuBuffer[0]=rcRate8;
       MenuBuffer[1]=rcExpo8;
       MenuBuffer[2]=rollRate;
@@ -1261,7 +1271,7 @@ void displayConfigScreen(void)
         MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
         MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
       }
-    #elif defined(CLEANFLIGHT180) || defined (BASEFLIGHT20150627)
+    #elif defined CORRECT_MENU_RCT1
       MenuBuffer[0]=rcRate8;
       MenuBuffer[1]=rcExpo8;
       MenuBuffer[2]=rollRate;
@@ -1290,11 +1300,9 @@ void displayConfigScreen(void)
       }
     #endif
   }
- #else
-    if(configPage == 2)configPage+=menudir; 
 #endif
-#ifdef PAGE3
-  if(configPage==3)
+#ifdef MENU3
+  if(configPage==MENU3)
   {
     ProcessSensors();
     screenBuffer[0]=SYM_MAIN_BATT;
@@ -1322,11 +1330,9 @@ void displayConfigScreen(void)
     MAX7456_WriteString(itoa(Settings[S_BATCELLS],screenBuffer,10),LEVD);
     Menuconfig_onoff(MAGD,S_MAINVOLTAGE_VBAT);
   }
-#else
-    if(configPage == 3)configPage+=menudir;  
 #endif
-#ifdef PAGE4
-  if(configPage==4)
+#ifdef MENU4
+  if(configPage==MENU4)
   {
     itoa(rssi,screenBuffer,10);
     uint8_t xx = FindNull();
@@ -1349,11 +1355,9 @@ void displayConfigScreen(void)
     MAX7456_WriteString(itoa(Settings16[S16_RSSIMAX],screenBuffer,10),VELD);
     MAX7456_WriteString(itoa(Settings16[S16_RSSIMIN],screenBuffer,10),LEVD);
   }
-#else
-    if(configPage == 4)configPage+=menudir;  
 #endif
-#ifdef PAGE5
-  if(configPage==5)
+#ifdef MENU5
+  if(configPage==MENU5)
   {
     ItoaPadded(amperage, screenBuffer, 4, 3);     // 99.9 ampere max!
     screenBuffer[4] = SYM_AMP;
@@ -1370,11 +1374,9 @@ void displayConfigScreen(void)
     MAX7456_WriteString(itoa(Settings16[S16_AMPDIVIDERRATIO],screenBuffer,10),ALTD);
     MAX7456_WriteString(itoa(Settings16[S16_AMPZERO],screenBuffer,10),VELD);
   }
-#else
-    if(configPage == 5)configPage+=menudir;  
 #endif
-#ifdef PAGE6
-  if(configPage==6)
+#ifdef MENU6
+  if(configPage==MENU6)
   {
     for(uint8_t X=0; X<=7; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_display[X])));
@@ -1389,11 +1391,9 @@ void displayConfigScreen(void)
     Menuconfig_onoff(MAGD,S_GIMBAL);
     MAX7456_WriteString(itoa(Settings[S_MAPMODE],screenBuffer,10),MAGD+LINE);
   }
-#else
-    if(configPage == 6)configPage+=menudir;  
 #endif
-#ifdef PAGE7
-  if(configPage==7)
+#ifdef MENU7
+  if(configPage==MENU7)
   {
     for(uint8_t X=0; X<=5; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_advanced[X])));
@@ -1424,11 +1424,9 @@ void displayConfigScreen(void)
       MAX7456_WriteString("-",VELD);
     MAX7456_WriteString(itoa(Settings[S_RCWSWITCH_CH],screenBuffer,10),LEVD);
    }
-#else
-    if(configPage == 7)configPage+=menudir;
 #endif
-#ifdef PAGE8
-  if(configPage==8)
+#ifdef MENU8
+  if(configPage==MENU8)
   {
     for(uint8_t X=0; X<=2; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_gps_time[X])));
@@ -1438,11 +1436,9 @@ void displayConfigScreen(void)
   Menuconfig_onoff(PITCHD,S_GPSTZAHEAD);    
   MAX7456_WriteString(itoa(Settings[S_GPSTZ],screenBuffer,10),YAWD);
   }    
-#else
-    if(configPage == 8)configPage+=menudir;
 #endif  
-#ifdef PAGE9
-    if(configPage==9){
+#ifdef MENU9
+    if(configPage==MENU9){
       MenuBuffer[0]=Settings[S_DISTANCE_ALARM];
       MenuBuffer[1]=Settings[S_ALTITUDE_ALARM];
       MenuBuffer[2]=Settings[S_SPEED_ALARM];
@@ -1455,8 +1451,17 @@ void displayConfigScreen(void)
         MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
       }
     }
-#else
-    if(configPage == 9)configPage+=menudir;
+#endif  
+#ifdef MENU10
+    if(configPage==MENU10){
+      MenuBuffer[0]=FCProfile;
+      MenuBuffer[1]=PIDController;
+      for(uint8_t X=0; X<=1; X++) {
+        strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_profile[X])));
+        MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+        MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
+      }
+    }
 #endif  
     if(configPage > MAXPAGE)configPage=MINPAGE;
 

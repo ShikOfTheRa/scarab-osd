@@ -155,7 +155,11 @@ void serialMSPCheck()
       MwSensorPresent=GPSSENSOR|BAROMETER|MAGNETOMETER|ACCELEROMETER;
     #endif  
     armed = (MwSensorActive & mode.armed) != 0;
-
+    FCProfile = read8();
+    if (!configMode){
+      CurrentFCProfile=FCProfile;
+      PreviousFCProfile=FCProfile;
+     }
   }
 
   if (cmdMSP==MSP_RC)
@@ -293,10 +297,10 @@ void serialMSPCheck()
   }
 #endif //USE_FC_VOLTS_CONFIG
 
-#if defined (BASEFLIGHT20150627)  
+#if defined (CORRECT_MSP_BF1)  
   if (cmdMSP==MSP_CONFIG)
   {
-    for(uint8_t i=0; i<SETCONGFIG; i++) {
+    for(uint8_t i=0; i<25; i++) {
       bfconfig[i]=read8();
     }
     rollRate = bfconfig[18];
@@ -307,7 +311,7 @@ void serialMSPCheck()
   
   if (cmdMSP==MSP_RC_TUNING)
   {
-    #ifdef CLEANFLIGHT190
+    #ifdef CORRECT_MSP_CF2
       rcRate8 = read8();
       rcExpo8 = read8();
       rollRate = read8();
@@ -319,7 +323,7 @@ void serialMSPCheck()
       tpa_breakpoint16 = read16();
       rcYawExpo8 = read8();
       modeMSPRequests &=~ REQ_MSP_RC_TUNING;
-    #elif defined CLEANFLIGHT180
+    #elif defined CORRECT_MSP_CF1
       rcRate8 = read8();
       rcExpo8 = read8();
       rollRate = read8();
@@ -564,7 +568,7 @@ void handleRawRC() {
 	ROW--;
 	if(ROW<1)
 	  ROW=1;
-        if(configPage == 0) {
+        if(configPage == MENU0) {
           ROW=10;
         }
       }
@@ -593,7 +597,7 @@ void handleRawRC() {
       { 
 	waitStick =1;
         menudir=1+oldmenudir;
-	if(configPage == 9 && COL == 3) {
+	if(configPage == MENU9 && COL == 3) {
 	  if(ROW==5) timer.magCalibrationTimer=0;
         }
         serialMenuCommon();  
@@ -621,8 +625,8 @@ void serialMenuCommon()
     }
     if(configPage<MINPAGE) configPage = MAXPAGE;
     if(configPage>MAXPAGE) configPage = MINPAGE;
-#ifdef PAGE1
-	if(configPage == 1) {
+#ifdef MENU1
+	if(configPage == MENU1) {
 	  if(ROW >= 1 && ROW <= 7) {
             uint8_t MODROW=ROW-1;
             if (ROW>5){
@@ -634,9 +638,9 @@ void serialMenuCommon()
 	  }
 	}
 #endif
-#ifdef PAGE2
-        #if defined(CLEANFLIGHT190)
-          if(configPage == 2 && COL == 3) {
+#ifdef MENU2
+        #if defined CORRECT_MENU_RCT2
+          if(configPage == MENU2 && COL == 3) {
 	    if(ROW==1) rcRate8=rcRate8+menudir;
 	    if(ROW==2) rcExpo8=rcExpo8+menudir;
 	    if(ROW==3) rollRate=rollRate+menudir;
@@ -647,8 +651,8 @@ void serialMenuCommon()
 	    if(ROW==8) thrExpo8=thrExpo8+menudir;
 	    if(ROW==9) tpa_breakpoint16=tpa_breakpoint16+menudir;
           }
-        #elif defined(CLEANFLIGHT180) || defined (BASEFLIGHT20150627)
-          if(configPage == 2 && COL == 3) {
+        #elif defined CORRECT_MENU_RCT1
+          if(configPage == MENU2 && COL == 3) {
 	    if(ROW==1) rcRate8=rcRate8+menudir;
 	    if(ROW==2) rcExpo8=rcExpo8+menudir;
 	    if(ROW==3) rollRate=rollRate+menudir;
@@ -659,7 +663,7 @@ void serialMenuCommon()
 	    if(ROW==8) thrExpo8=thrExpo8+menudir;
          }
         #else
-          if(configPage == 2 && COL == 3) {
+          if(configPage == MENU2 && COL == 3) {
 	    if(ROW==1) rcRate8=rcRate8+menudir;
 	    if(ROW==2) rcExpo8=rcExpo8+menudir;
 	    if(ROW==3) rollPitchRate=rollPitchRate+menudir;
@@ -670,8 +674,8 @@ void serialMenuCommon()
 	  }
         #endif
 #endif
-#ifdef PAGE3
-	if(configPage == 3 && COL == 3) {
+#ifdef MENU3
+	if(configPage == MENU3 && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAYVOLTAGE]=!Settings[S_DISPLAYVOLTAGE];  
 	  if(ROW==2) Settings[S_DIVIDERRATIO]=Settings[S_DIVIDERRATIO]+menudir;
 	  if(ROW==3) Settings[S_VOLTAGEMIN]=Settings[S_VOLTAGEMIN]+menudir;
@@ -681,8 +685,8 @@ void serialMenuCommon()
 	  if(ROW==7) Settings[S_MAINVOLTAGE_VBAT]=!Settings[S_MAINVOLTAGE_VBAT];
 	}
 #endif
-#ifdef PAGE4
-	if(configPage == 4 && COL == 3) {
+#ifdef MENU4
+	if(configPage == MENU4 && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
 	  if(ROW==2) timer.rssiTimer=15; // 15 secs to turn off tx anwait to read min RSSI
 	  if(ROW==3) Settings[S_MWRSSI]=!Settings[S_MWRSSI];
@@ -691,8 +695,8 @@ void serialMenuCommon()
 	  if(ROW==6) Settings16[S16_RSSIMIN]=Settings16[S16_RSSIMIN]+menudir;
 	}
 #endif
-#ifdef PAGE5
-	if(configPage == 5 && COL == 3) {
+#ifdef MENU5
+	if(configPage == MENU5 && COL == 3) {
 	  if(ROW==1) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
 	  if(ROW==2) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
 	  if(ROW==3) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
@@ -700,8 +704,8 @@ void serialMenuCommon()
 	  if(ROW==5) Settings16[S16_AMPZERO]=Settings16[S16_AMPZERO]+menudir;
 	}
 #endif
-#ifdef PAGE6
-	if(configPage == 6 && COL == 3) {
+#ifdef MENU6
+	if(configPage == MENU6 && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAY_HORIZON_BR]=!Settings[S_DISPLAY_HORIZON_BR];
 	  if(ROW==2) Settings[S_WITHDECORATION]=!Settings[S_WITHDECORATION];
 	  if(ROW==3) Settings[S_SCROLLING]=!Settings[S_SCROLLING];
@@ -712,8 +716,8 @@ void serialMenuCommon()
 	  if(ROW==8) Settings[S_MAPMODE]=Settings[S_MAPMODE]+menudir;
 	}
 #endif
-#ifdef PAGE7
-	if(configPage == 7 && COL == 3) {
+#ifdef MENU7
+	if(configPage == MENU7 && COL == 3) {
 	  if(ROW==1) Settings[S_UNITSYSTEM]=!Settings[S_UNITSYSTEM];
 	  if(ROW==2) {
 	    Settings[S_VIDEOSIGNALTYPE]=!Settings[S_VIDEOSIGNALTYPE];
@@ -724,15 +728,15 @@ void serialMenuCommon()
 	  if(ROW==5) timer.magCalibrationTimer=CALIBRATION_DELAY;
 	  if(ROW==6) Settings[S_RCWSWITCH_CH]=Settings[S_RCWSWITCH_CH]+menudir;	}
 #endif
-#ifdef PAGE8
-	if(configPage == 8 && COL == 3) {
+#ifdef MENU8
+	if(configPage == MENU8 && COL == 3) {
 	  if(ROW==1) Settings[S_GPSTIME]=!Settings[S_GPSTIME];
 	  if(ROW==2) Settings[S_GPSTZAHEAD]=!Settings[S_GPSTZAHEAD];
 	  if(ROW==3) if((menudir == 1 && Settings[S_GPSTZ] < 130) || (menudir == -1 && Settings[S_GPSTZ] > 0))Settings[S_GPSTZ]=Settings[S_GPSTZ]+menudir*5;
 	}
 #endif
-#ifdef PAGE9
-	if(configPage == 9 && COL == 3) {
+#ifdef MENU9
+	if(configPage == MENU9 && COL == 3) {
 	  if(ROW==1) Settings[S_DISTANCE_ALARM]=Settings[S_DISTANCE_ALARM]+menudir;
 	  if(ROW==2) Settings[S_ALTITUDE_ALARM]=Settings[S_ALTITUDE_ALARM]+menudir;
 	  if(ROW==3) Settings[S_SPEED_ALARM]=Settings[S_SPEED_ALARM]+menudir;
@@ -741,7 +745,19 @@ void serialMenuCommon()
 	  if(ROW==6) Settings[S_AMPERAGE_ALARM]=Settings[S_AMPERAGE_ALARM]+menudir;
 	}
 #endif
-  	if((ROW==10)&&(COL==1)) configExit();
+#ifdef MENU10
+	if(configPage == MENU10 && COL == 3) {
+	  if(ROW==1) FCProfile=FCProfile+menudir;
+	  if(ROW==2) PIDController=PIDController+menudir;
+	};
+        constrain(FCProfile,0,3);
+        if (FCProfile!=PreviousFCProfile){
+//          MAX7456_WriteString("PROFILE CHANGED",VELT);
+          setFCProfile();
+          PreviousFCProfile=FCProfile;
+        }        
+#endif  
+	if((ROW==10)&&(COL==1)) configExit();
 	if((ROW==10)&&(COL==2)) configSave();
 }
 
@@ -826,7 +842,7 @@ void serialMSPreceive(uint8_t loops)
 
 void configExit()
 {
-  configPage=1;
+  configPage=MENU1;
   ROW=10;
   COL=3;
   configMode=0;
@@ -840,11 +856,20 @@ void configExit()
     ampMAX=0;
     flyingTime=0;
   }
+  if (FCProfile!=CurrentFCProfile){
+    FCProfile=CurrentFCProfile;
+    setFCProfile();
+  }
   setMspRequests();
 }
 
 void configSave()
 {
+
+  mspWriteRequest(MSP_SET_PID_CONTROLLER, 1);
+  mspWrite8(PIDController);
+  mspWriteChecksum();
+
   mspWriteRequest(MSP_SET_PID, PIDITEMS*3);
   for(uint8_t i=0; i<PIDITEMS; i++) {
     mspWrite8(P8[i]);
@@ -853,7 +878,7 @@ void configSave()
   }
   mspWriteChecksum();
   
-#if defined CLEANFLIGHT190
+#if defined CORRECT_MSP_CF2
   mspWriteRequest(MSP_SET_RC_TUNING,11);
   mspWrite8(rcRate8);
   mspWrite8(rcExpo8);
@@ -866,7 +891,7 @@ void configSave()
   mspWrite16(tpa_breakpoint16);
   mspWrite8(rcYawExpo8);
   mspWriteChecksum();
-#elif defined CLEANFLIGHT180
+#elif defined CORRECT_MSP_CF1
   mspWriteRequest(MSP_SET_RC_TUNING,10);
   mspWrite8(rcRate8);
   mspWrite8(rcExpo8);
@@ -890,7 +915,7 @@ void configSave()
   mspWriteChecksum();
  #endif
 
-#if defined BASEFLIGHT20150627
+#if defined CORRECT_MSP_BF1
   mspWriteRequest(MSP_SET_CONFIG,25);
   bfconfig[18] =rollRate;
   bfconfig[19] =PitchRate;
@@ -928,8 +953,16 @@ void settingswriteSerialRequest() {
   mspWriteRequest(MSP_OSD,3);
   mspWrite8(OSD_READ_CMD_EE);
   mspWrite16(eeaddress);
-debug[0]=eeaddress; //gbug
-debug[1]++; //gbug
   mspWriteChecksum();
 }
+
+void setFCProfile()
+{
+  mspWriteRequest(MSP_SELECT_SETTING, 1);
+  mspWrite8(FCProfile);
+  mspWriteChecksum();
+  mspWriteRequest(MSP_EEPROM_WRITE, 0);
+  setMspRequests();
+}
+
 

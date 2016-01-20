@@ -28,7 +28,7 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
-#define MEMCHECK 3 // to enable memeory checking and set debug[x] value
+#define MEMCHECK 3 // to enable memory checking and set debug[x] value
 #if 1
 __asm volatile ("nop");
 #endif
@@ -353,7 +353,7 @@ void loop()
          MSPcmdsend = MSP_NAV_STATUS;
       break;
 #endif
-#ifdef BASEFLIGHT20150627
+#ifdef CORRECT_MSP_BF1
       case REQ_MSP_CONFIG:
          MSPcmdsend = MSP_CONFIG;
       break;
@@ -400,7 +400,7 @@ void loop()
 #ifndef HIDESUMMARY
       if(previousarmedstatus && !armed){
         armedtimer=20;
-        configPage=0;
+        configPage=MENU0;
         ROW=10;
         COL=1;
         configMode=1;
@@ -649,8 +649,9 @@ void setMspRequests() {
       REQ_MSP_RAW_IMU|
       REQ_MSP_ALTITUDE|
       REQ_MSP_RC_TUNING|
+      REQ_MSP_PID_CONTROLLER|
       REQ_MSP_PID|
-#ifdef BASEFLIGHT20150627
+#ifdef CORRECT_MSP_BF1
       REQ_MSP_CONFIG|
 #endif
 #ifdef DEBUGMW

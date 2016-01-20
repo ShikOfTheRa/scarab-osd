@@ -33,10 +33,10 @@
 // Choose ONLY ONE option from the following long list :-
 
 // latest release...
-#define MULTIWII                  // Uncomment this if you are using latest MULTIWII version from repository (2.4 at time of this MWOSD release)
+//#define MULTIWII                  // Uncomment this if you are using latest MULTIWII version from repository (2.4 at time of this MWOSD release)
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.06.27 at time of this MWOSD release)
 //#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
-//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9.0 at time of this MWOSD release)
+#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9.0 at time of this MWOSD release)
 //#define BETAFLIGHT                // Uncomment this if you are using BETAFLIGHT (same as CLEANFLIGHT t time of this MWOSD release)
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
