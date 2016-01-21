@@ -161,11 +161,11 @@ struct {
   uint16_t gpshome;
   uint16_t gpshold;
   uint16_t passthru;
+  uint32_t air;
   uint32_t osd_switch;
   uint32_t llights;
   uint32_t gpsmission;
   uint32_t gpsland;
-  uint32_t air;
 }mode;
 
 // Settings Locations
@@ -326,7 +326,7 @@ MWOSDVER,   // used for check              0
 0,   // S_HORIZON_ELEVATION         40h
 1,   // S_TIMER                     41h
 1,   // S_MODESENSOR                42h
-1,   // S_SIDEBARTOPS               43h
+0,   // S_SIDEBARTOPS               43h
 4,   // S_UNUSED_6,
 0,   // S_UNUSED_1, S_AMPMAXL,
 0,   // S_UNUSED_2, S_AMPMAXH,

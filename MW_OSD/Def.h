@@ -18,40 +18,24 @@
 #endif
 
 #ifdef MULTIWII       //set up latest at time of release
-  #define MULTIWII_V24                // Using amperage corrections  
-//  #define MULTIWII_V23              // Using boxid  
-//  #define MULTIWII_V21              // Using boxnames
+  #define MULTIWII_V24
 #endif
 
 #ifdef BETAFLIGHT    //set up latest at time of release
-  #define CLEANFLIGHT190   //MSP added P+R+DTHR
+  #define CLEANFLIGHT190
 #endif
 
 #ifdef CLEANFLIGHT    //set up latest at time of release
-  #define CLEANFLIGHT190   //MSP added P+R+DTHR
-  //#define CLEANFLIGHT180           //MSP added P+R
-  //#define CLEANFLIGHT172           //default original MSP request
+  #define CLEANFLIGHT190
 #endif
 
 #ifdef BASEFLIGHT     //set up latest at time of release
-  #define BASEFLIGHT20150627         //MSP added P+R
-  //#define BASEFLIGHT20150327       //default original MSP request
+  #define BASEFLIGHT20150627
 #endif
 
-#ifdef FIXEDWING                     
-  #define USEGPSHEADING
-  #define USEGPSALTITUDE
-  #if defined USEMAGHEADING 
-    #undef USEGPSHEADING
-  #endif  
-  #if defined USEBAROALTITUDE
-    #undef USEGPSALTITUDE
-  #endif
-  #define FORCESENSORS
-#endif
-
-#if defined(HARIKIRI)
-  #define BOXNAMES                  // required to support legacy protocol
+#ifdef HARIKIRI
+  #define BOXNAMES
+  #define MULTIWII_V24
 #endif
 
 // The unit of current varies across implementations.  There are effectively three set:
@@ -163,8 +147,8 @@
   #define MENU7  7 //ADVANCED
   #define MENU8  8 //GPS TIME
   #define MENU9  9 //ALARMS
-//  #define MENU10 9//PROFILE+PID CONTROLLER
-  #define MAXPAGE MENU9   
+  #define MENU10 10//PROFILE+PID CONTROLLER
+  #define MAXPAGE MENU10   
 #endif
 
 #if defined (MULTIWII_V23)
@@ -227,6 +211,18 @@
   #define AMPERAGE_DIV 100
 #endif
 
+/********************  FIXEDWING definitions  *********************/
+#ifdef FIXEDWING                     
+  #define USEGPSHEADING
+  #define USEGPSALTITUDE
+  #if defined USEMAGHEADING 
+    #undef USEGPSHEADING
+  #endif  
+  #if defined USEBAROALTITUDE
+    #undef USEGPSALTITUDE
+  #endif
+  #define FORCESENSORS
+#endif
 
 /********************  HARDWARE PINS definitions  *********************/
 #define AMPERAGEPIN   A1

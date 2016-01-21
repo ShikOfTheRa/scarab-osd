@@ -222,6 +222,11 @@ void displayMode(void)
   }
 #endif //MULTIWII_V24
     
+  else if((MwSensorActive)&(mode.air)){
+    screenBuffer[2]=0;
+    screenBuffer[0]=SYM_AIR;
+    screenBuffer[1]=SYM_AIR1;
+  }
   else if(MwSensorActive&mode.stable){
     screenBuffer[2]=0;
     screenBuffer[0]=SYM_STABLE;
@@ -247,11 +252,6 @@ void displayMode(void)
     screenBuffer[1]=SYM_ACRO1;
   }
 
-  // Display AIR MODE, append after flight mode
-  if(MwSensorActive&mode.air){
-    screenBuffer[2]=SYM_AIR;
-    screenBuffer[3]=SYM_AIR1;
-  }
   
 #ifdef APINDICATOR
   displayAPstatus();

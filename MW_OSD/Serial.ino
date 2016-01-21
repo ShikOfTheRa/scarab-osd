@@ -467,7 +467,7 @@ void serialMSPCheck()
         break;
       case 8:
         mode.camstab |= bit;
-        break;
+       break;
       case 10:
         mode.gpshome |= bit;
         break;
@@ -489,7 +489,7 @@ void serialMSPCheck()
       case 21:
         mode.gpsland |= bit;
         break;
-      case 28: // Needs BetaFlight 2.1.5 and up
+      case 28:
         mode.air |= bit;
         break;
       }
@@ -750,7 +750,8 @@ void serialMenuCommon()
 	  if(ROW==1) FCProfile=FCProfile+menudir;
 	  if(ROW==2) PIDController=PIDController+menudir;
 	};
-        constrain(FCProfile,0,3);
+        if (FCProfile>2)
+          FCProfile=0;
         if (FCProfile!=PreviousFCProfile){
 //          MAX7456_WriteString("PROFILE CHANGED",VELT);
           setFCProfile();
@@ -963,6 +964,7 @@ void setFCProfile()
   mspWriteChecksum();
   mspWriteRequest(MSP_EEPROM_WRITE, 0);
   setMspRequests();
+  delay(100);
 }
 
 
