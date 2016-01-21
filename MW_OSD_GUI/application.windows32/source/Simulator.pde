@@ -198,7 +198,7 @@ LinksSetup() ;
                 .activateEvent(true)
                 .disableCollapse()
                 .setBackgroundColor(color(30,255))
-                .setBackgroundHeight((boxnames.length*17) + 9)
+                .setBackgroundHeight((boxnames.length*16)+1)
                 .setLabel("Modes")
                 .setGroup(SG)
                 .disableCollapse() 
@@ -1131,8 +1131,11 @@ void ShowSideBarArrows(){
     return;
   if(confItem[GetSetting("S_SIDEBARTOPS")].value() > 0) {
     int hudwidth=  SimPosn[SideBarWidth] ;
-    mapchar(0xCf,centerpos+hudwidth+(3*LINE));
-    mapchar(0xCf,centerpos-hudwidth+(3*LINE));
+    int hudheight= SimPosn[SideBarHeight];
+    mapchar(0xCf,centerpos+hudwidth+(hudheight*LINE));
+    mapchar(0xCf,centerpos-hudwidth+(hudheight*LINE));
+    mapchar(0xC9,centerpos+hudwidth-(hudheight*LINE));
+    mapchar(0xC9,centerpos-hudwidth-(hudheight*LINE));
   }
 }
 
@@ -1199,9 +1202,9 @@ void GetModes(){
     if (boxnames[c] == "CAMSTAB;") mode_camstab |= bit;
     if (boxnames[c] == "GPS HOME;") mode_gpshome |= bit;
     if (boxnames[c] == "GPS HOLD;") mode_gpshold |= bit;
-    if (boxnames[c] == "OSD SW;") mode_osd_switch |= bit;
     if (boxnames[c] == "MISSION;") mode_gpsmission |= bit;
     if (boxnames[c] == "AIR MODE;") mode_air |= bit;
+    if (boxnames[c] == "OSD SW;") mode_osd_switch |= bit;
    
     bit <<= 1L;
   }

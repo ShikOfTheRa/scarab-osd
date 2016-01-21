@@ -284,9 +284,10 @@ int ConfigVALUE = -1;
 // Box locations -------------------------------------------------------------------------
 int Col1Width = 180;        int Col2Width = 200;    int Col3Width = 165;
 
-int windowsX    = 1041+Col3Width+5;       int windowsY    =613; //578;        //995; //573;
-//int windowsX    = 1041;       int windowsY    =578;        //995; //573;
-//int windowsX    = 1200;       int windowsY    =800;        //995; //573;
+// Window Size -------------------------------------------------------------------------
+int windowsX    = 1041+Col3Width+5;
+int windowsY    =578;
+
 int xGraph      = 10;         int yGraph      = 35;
 int xObj        = 520;        int yObj        = 293; //900,450
 int xCompass    = 920;        int yCompass    = 341; //760,336
@@ -714,7 +715,7 @@ Button buttonIMPORT,buttonSAVE,buttonREAD,buttonRESET,buttonWRITE,buttonRESTART,
 Button buttonLUP, buttonLDOWN, buttonLLEFT, buttonLRIGHT, buttonLPOSUP, buttonLPOSDOWN;
 Button buttonLHUDUP,buttonLPOSHUDDOWN,buttonLPOSEN, buttonLSET, buttonLADD, buttonLSAVE, buttonLCANCEL;
 Button buttonLEW,buttonSetRSSIlow,buttonSetRSSIhigh,buttonSetHWCurrentSensor,buttonSetHWCurrentSensorCancel,buttonSetHWCurrentSensorSave;
-Button buttonGUIDELINK, buttonFAQLINK, buttonCALIBLINK, buttonSUPPORTLINK, buttonDONATELINK;
+Button buttonGUIDELINK, buttonFAQLINK, buttonCALIBLINK, buttonSUPPORTLINK, buttonDONATELINK, buttonMWOSD, buttonGITHUB;
 // Buttons------------------------------------------------------------------------------------------------------------------
 
 // Toggles------------------------------------------------------------------------------------------------------------------
@@ -1039,6 +1040,10 @@ buttonGPSTIMELINK = controlP5.addButton("GPSTIMELINK",1,200,10,125,16);
 buttonGPSTIMELINK.setCaptionLabel("GPS Requirements").setGroup(G_LINKS);
 buttonSPORTLINK = controlP5.addButton("SPORTLINK",1,200,30,125,16);
 buttonSPORTLINK.setCaptionLabel("FRSKY Requirements").setGroup(G_LINKS);
+buttonMWOSD = controlP5.addButton("MWOSDLINK",1,200,50,125,16);
+buttonMWOSD.setCaptionLabel("MWOSD website").setGroup(G_LINKS);
+buttonGITHUB = controlP5.addButton("GITHUBLINK",1,200,70,125,16);
+buttonGITHUB.setCaptionLabel("LATEST SOFTWARE").setGroup(G_LINKS);
 buttonDONATELINK = controlP5.addButton("DONATELINK",1,XLINKS+30,YLINKS+217, 80, 20).setVisible(false);
 //   image(DONATEimage,XLINKS+20,YLINKS+207, 100, 40); 
 
@@ -1752,6 +1757,8 @@ public void controlEvent(ControlEvent theEvent) {
 
 
 public void mapchar(int address, int screenAddress){
+  if (screenAddress>480)
+    return;
   int placeX = (screenAddress % 30) * 12;
   int placeY = (screenAddress / 30) * 18;
 
@@ -2357,8 +2364,11 @@ public void GPSTIMELINK(){
 public void SPORTLINK(){
  link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Frsky_SPort.md"); 
 }
-public void CODELINK(){
- link("https://www.mwosd.com/"); 
+public void MWOSDLINK(){
+ link("http://www.mwosd.com"); 
+}
+public void GITHUBLINK(){
+ link("https://github.com/ShikOfTheRa/scarab-osd/releases"); 
 }
 public void FAQLINK(){
  link("https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/FAQ.md"); 
@@ -3609,13 +3619,13 @@ String boxnames[] = { // names for dynamic generation of config GUI
     "ARM;",
     "ANGLE;",
     "HORIZON;",
-    "AIR MODE;",
     "BARO;",
     "MAG;",
     "CAMSTAB;",
     "GPS HOME;",
     "GPS HOLD;",
-    "MISSION;",
+//    "MISSION;",
+    "AIR MODE;",
     "OSD SW;"   
   };
 String strBoxNames = join(boxnames,""); 
@@ -3963,10 +3973,11 @@ public void SendCommand(int cmd){
         if(toggleModeItems[5].getValue()> 0) modebits |=1<<8;
         if(toggleModeItems[6].getValue()> 0) modebits |=1<<10;
         if(toggleModeItems[7].getValue()> 0) modebits |=1<<11;
-        if(toggleModeItems[8].getValue()> 0) modebits |=1<<20;
+        if(toggleModeItems[8].getValue()> 0) modebits |=1<<28;
         if(toggleModeItems[9].getValue()> 0) modebits |=1<<19;
-//        if(toggleModeItems[8].getValue()> 0) modebits |=1<<16; //Also send LLIGHTS when OSD enabled - for testing
-//        if(toggleModeItems[5].getValue()> 0) modebits |=1<<12; //Also send PASS when CAMSTAB enabled - for testing
+//        if(toggleModeItems[5].getValue()> 0) modebits |=1<<16; //Also send LLIGHTS      when CAMSTAB enabled - for testing
+//        if(toggleModeItems[5].getValue()> 0) modebits |=1<<12; //Also send PASS         when CAMSTAB enabled - for testing
+//        if(toggleModeItems[5].getValue()> 0) modebits |=1<<20; //Also send MISSION MODE when CAMSTAB enabled - for testing
         serialize32(modebits);
         serialize8(0);   // current setting
         tailSerialReply();
@@ -4040,8 +4051,8 @@ public void SendCommand(int cmd){
       
       case MSP_BOXIDS:
         PortIsWriting = true;
-        headSerialReply(MSP_BOXIDS,23);
-        for (int i=0; i<23; i++) {
+        headSerialReply(MSP_BOXIDS,29);
+        for (int i=0; i<29; i++) {
         serialize8(i);
         }
         tailSerialReply();
@@ -4396,7 +4407,7 @@ public void evaluateCommand(byte cmd, int size) {
           int eeaddressOSDH=read8();
           eeaddressOSD=eeaddressOSDL+(eeaddressOSDH<<8);
           eeindextxt="EEW: "+eeaddressOSD;   
-System.out.println("OSD req:"+ eeaddressOSD);
+// System.out.println("OSD req:"+ eeaddressOSD);
           eeindexmessage.setValue(eeindextxt);
 
           if (eeaddressOSD>=eeaddressGUI){ // update base address
@@ -4992,7 +5003,7 @@ LinksSetup() ;
                 .activateEvent(true)
                 .disableCollapse()
                 .setBackgroundColor(color(30,255))
-                .setBackgroundHeight((boxnames.length*17) + 9)
+                .setBackgroundHeight((boxnames.length*16)+1)
                 .setLabel("Modes")
                 .setGroup(SG)
                 .disableCollapse() 
@@ -5925,8 +5936,11 @@ public void ShowSideBarArrows(){
     return;
   if(confItem[GetSetting("S_SIDEBARTOPS")].value() > 0) {
     int hudwidth=  SimPosn[SideBarWidth] ;
-    mapchar(0xCf,centerpos+hudwidth+(3*LINE));
-    mapchar(0xCf,centerpos-hudwidth+(3*LINE));
+    int hudheight= SimPosn[SideBarHeight];
+    mapchar(0xCf,centerpos+hudwidth+(hudheight*LINE));
+    mapchar(0xCf,centerpos-hudwidth+(hudheight*LINE));
+    mapchar(0xC9,centerpos+hudwidth-(hudheight*LINE));
+    mapchar(0xC9,centerpos-hudwidth-(hudheight*LINE));
   }
 }
 
@@ -5993,9 +6007,9 @@ public void GetModes(){
     if (boxnames[c] == "CAMSTAB;") mode_camstab |= bit;
     if (boxnames[c] == "GPS HOME;") mode_gpshome |= bit;
     if (boxnames[c] == "GPS HOLD;") mode_gpshold |= bit;
-    if (boxnames[c] == "OSD SW;") mode_osd_switch |= bit;
     if (boxnames[c] == "MISSION;") mode_gpsmission |= bit;
     if (boxnames[c] == "AIR MODE;") mode_air |= bit;
+    if (boxnames[c] == "OSD SW;") mode_osd_switch |= bit;
    
     bit <<= 1L;
   }
