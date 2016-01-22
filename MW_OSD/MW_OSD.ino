@@ -324,9 +324,15 @@ void loop()
       case REQ_MSP_RC_TUNING:
         MSPcmdsend = MSP_RC_TUNING;
         break;
+      case REQ_MSP_PID_CONTROLLER:
+        MSPcmdsend = MSP_PID_CONTROLLER;
+        break;
       case REQ_MSP_PID:
         MSPcmdsend = MSP_PID;
         break;
+      case REQ_MSP_LOOP_TIME:
+        MSPcmdsend = MSP_LOOP_TIME;
+        break;        
       case REQ_MSP_BOX:
 #ifdef BOXNAMES
         MSPcmdsend = MSP_BOXNAMES;
@@ -651,6 +657,7 @@ void setMspRequests() {
       REQ_MSP_RC_TUNING|
       REQ_MSP_PID_CONTROLLER|
       REQ_MSP_PID|
+      REQ_MSP_LOOP_TIME|
 #ifdef CORRECT_MSP_BF1
       REQ_MSP_CONFIG|
 #endif

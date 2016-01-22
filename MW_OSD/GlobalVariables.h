@@ -471,6 +471,7 @@ static uint8_t FCProfile;
 static uint8_t PreviousFCProfile;
 static uint8_t CurrentFCProfile;
 static uint8_t PIDController;
+static uint16_t LoopTime;
 
 int32_t  MwAltitude=0;                         // This hold barometric value
 int32_t  old_MwAltitude=0;                     // This hold barometric value
@@ -654,9 +655,10 @@ uint16_t flyingTime=0;
 #define MSP_DEBUGMSG             253   //out message         debug string buffer
 #define MSP_DEBUG                254   //out message         debug1,debug2,debug3,debug4
 
-// Cleanflight specific
+// Baseflight/Cleanflight/Betaflight specific
 #define MSP_PID_CONTROLLER       59    //in message          no param
 #define MSP_SET_PID_CONTROLLER   60    //out message         sets a given pid controller
+#define MSP_LOOP_TIME            73    //out message         Returns FC cycle time i.e looptime 
 
 // Baseflight specific
 #define MSP_SET_CONFIG           67    //in message          baseflight-specific settings save
@@ -839,9 +841,10 @@ const char configMsg94[] PROGMEM = "TIMER";
 const char configMsg95[] PROGMEM = "MAH X100";
 const char configMsg96[] PROGMEM = "AMPS";
 //-----------------------------------------------------------Page10
-const char configMsg100[] PROGMEM = "PROFILES";
+const char configMsg100[] PROGMEM = "ADVANCE TUNING";
 const char configMsg101[] PROGMEM = "PROFILE";
 const char configMsg102[] PROGMEM = "PID CONTROLLER";
+const char configMsg103[] PROGMEM = "LOOPTIME";
 
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
@@ -928,6 +931,7 @@ uint16_t screenPosition[POSITIONS_SETTINGS];
 #define REQ_MSP_MISC            65536  // (1 << 16)
 #define REQ_MSP_ALARMS          131072 // (1 << 17)
 #define REQ_MSP_PID_CONTROLLER  262144 // (1 << 18)
+#define REQ_MSP_LOOP_TIME       524288 // (1 << 19) 
 
 // Menu
 //PROGMEM const char *menu_stats_item[] =

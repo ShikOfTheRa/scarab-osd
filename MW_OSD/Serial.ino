@@ -357,6 +357,18 @@ void serialMSPCheck()
 
   }
 
+  if (cmdMSP == MSP_PID_CONTROLLER)
+  {
+    PIDController = read8();
+    modeMSPRequests &=~ REQ_MSP_PID_CONTROLLER;
+  }
+
+  if (cmdMSP == MSP_LOOP_TIME)
+  {
+    LoopTime = read16();
+    modeMSPRequests &=~ REQ_MSP_LOOP_TIME;
+  }
+        
 #ifdef HAS_ALARMS
   if (cmdMSP == MSP_ALARMS)
   {
@@ -749,6 +761,7 @@ void serialMenuCommon()
 	if(configPage == MENU10 && COL == 3) {
 	  if(ROW==1) FCProfile=FCProfile+menudir;
 	  if(ROW==2) PIDController=PIDController+menudir;
+	  if(ROW==3) LoopTime=LoopTime+menudir;
 	};
         if (FCProfile>2)
           FCProfile=0;
@@ -866,6 +879,7 @@ void configExit()
 
 void configSave()
 {
+  CurrentFCProfile=FCProfile;
 
   mspWriteRequest(MSP_SET_PID_CONTROLLER, 1);
   mspWrite8(PIDController);

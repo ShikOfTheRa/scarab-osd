@@ -1165,8 +1165,8 @@ void displayCursor(void)
     if(configPage==MENU10)
       {  
       COL=3;
-      if (ROW==9) ROW=2;
-      if (ROW==3) ROW=10;
+      if (ROW==9) ROW=3;
+      if (ROW==4) ROW=10;
        cursorpos=(ROW+2)*30+10+6+6;
       }
 #endif     
@@ -1456,7 +1456,8 @@ void displayConfigScreen(void)
     if(configPage==MENU10){
       MenuBuffer[0]=FCProfile;
       MenuBuffer[1]=PIDController;
-      for(uint8_t X=0; X<=1; X++) {
+      MenuBuffer[1]=LoopTime;
+      for(uint8_t X=0; X<=2; X++) {
         strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_profile[X])));
         MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
         MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
