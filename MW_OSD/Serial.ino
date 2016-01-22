@@ -357,6 +357,7 @@ void serialMSPCheck()
 
   }
 
+#ifdef ENABLE_MSP_SAVE_ADVANCED
   if (cmdMSP == MSP_PID_CONTROLLER)
   {
     PIDController = read8();
@@ -368,7 +369,8 @@ void serialMSPCheck()
     LoopTime = read16();
     modeMSPRequests &=~ REQ_MSP_LOOP_TIME;
   }
-        
+#endif
+
 #ifdef HAS_ALARMS
   if (cmdMSP == MSP_ALARMS)
   {
@@ -763,13 +765,14 @@ void serialMenuCommon()
 	  if(ROW==2) PIDController=PIDController+menudir;
 	  if(ROW==3) LoopTime=LoopTime+menudir;
 	};
+  #ifdef ENABLE_MSP_SAVE_ADVANCED
         if (FCProfile>2)
           FCProfile=0;
         if (FCProfile!=PreviousFCProfile){
-//          MAX7456_WriteString("PROFILE CHANGED",VELT);
           setFCProfile();
           PreviousFCProfile=FCProfile;
         }        
+  #endif
 #endif  
 	if((ROW==10)&&(COL==1)) configExit();
 	if((ROW==10)&&(COL==2)) configSave();
@@ -870,10 +873,12 @@ void configExit()
     ampMAX=0;
     flyingTime=0;
   }
-  if (FCProfile!=CurrentFCProfile){
-    FCProfile=CurrentFCProfile;
-    setFCProfile();
-  }
+  #ifdef ENABLE_MSP_SAVE_ADVANCED
+    if (FCProfile!=CurrentFCProfile){
+      FCProfile=CurrentFCProfile;
+      setFCProfile();
+    }
+  #endif
   setMspRequests();
 }
 
@@ -881,9 +886,15 @@ void configSave()
 {
   CurrentFCProfile=FCProfile;
 
+#if defined ENABLE_MSP_SAVE_ADVANCED
   mspWriteRequest(MSP_SET_PID_CONTROLLER, 1);
   mspWrite8(PIDController);
   mspWriteChecksum();
+
+  mspWriteRequest(MSP_SET_LOOP_TIME, 2);
+  mspWrite16(LoopTime);
+  mspWriteChecksum();  
+#endif
 
   mspWriteRequest(MSP_SET_PID, PIDITEMS*3);
   for(uint8_t i=0; i<PIDITEMS; i++) {
@@ -980,5 +991,4 @@ void setFCProfile()
   setMspRequests();
   delay(100);
 }
-
 

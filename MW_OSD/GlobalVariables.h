@@ -658,7 +658,10 @@ uint16_t flyingTime=0;
 // Baseflight/Cleanflight/Betaflight specific
 #define MSP_PID_CONTROLLER       59    //in message          no param
 #define MSP_SET_PID_CONTROLLER   60    //out message         sets a given pid controller
+
+// Cleanflight/Betaflight specific
 #define MSP_LOOP_TIME            73    //out message         Returns FC cycle time i.e looptime 
+#define MSP_SET_LOOP_TIME        74    //in message          Sets FC cycle time i.e looptime parameter
 
 // Baseflight specific
 #define MSP_SET_CONFIG           67    //in message          baseflight-specific settings save
@@ -740,6 +743,8 @@ const char configMsgEXT[]  PROGMEM = "EXIT";
 const char configMsgSAVE[] PROGMEM = "SAVE+EXIT";
 const char configMsgPGS[]  PROGMEM = "<PAGE>";
 const char configMsgMWII[] PROGMEM = "USE FC";
+
+// For APSTATUS
 
 // For Config pages
 //-----------------------------------------------------------Page0
@@ -846,7 +851,6 @@ const char configMsg101[] PROGMEM = "PROFILE";
 const char configMsg102[] PROGMEM = "PID CONTROLLER";
 const char configMsg103[] PROGMEM = "LOOPTIME";
 
-
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={
   0xa5,0xa6} ; // [0][0] and [0][1] = Km/h   [1][0] and [1][1] = Mph
@@ -932,6 +936,24 @@ uint16_t screenPosition[POSITIONS_SETTINGS];
 #define REQ_MSP_ALARMS          131072 // (1 << 17)
 #define REQ_MSP_PID_CONTROLLER  262144 // (1 << 18)
 #define REQ_MSP_LOOP_TIME       524288 // (1 << 19) 
+
+// Menu selections
+const PROGMEM char * const menu_choice_unit[] =
+{   
+  configMsg710,
+  configMsg711,
+};
+// Menu selections
+const PROGMEM char * const menu_choice_video[] =
+{   
+  configMsg720,
+  configMsg721,
+};// Menu selections
+const PROGMEM char * const menu_choice_ref[] =
+{   
+  configMsg731,
+  configMsg730,
+};
 
 // Menu
 //PROGMEM const char *menu_stats_item[] =
@@ -1062,6 +1084,7 @@ const PROGMEM char * const menu_profile[] =
 {   
   configMsg101,
   configMsg102,
+  configMsg103,
 };
 
 const PROGMEM char * const menutitle_item[] = 

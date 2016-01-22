@@ -46,11 +46,13 @@
 //CORRECT_MSP_BF1 introduced BF201506 - adds seperate Pitch/Roll/Yaw + TPA     (MSP support)
 //CORRECT_MENU_RCT1 introduced CF180/BF201506 - adds seperate Pitch/Roll/Yaw + TPA     (Menu Support)
 //CORRECT_MENU_RCT2 introduced CF190 - adds seperate Pitch/Roll/Yaw + TPA + Yaw expo     (Menu support)
+//ENABLE_MSP_SAVE_ADVANCED - adds the code to read/write PROFILE+LOOPIME+PID CONTROLLER if supported
 
 #if defined CLEANFLIGHT190
   #define AMPERAGE_DIV 10
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
+  #define ENABLE_MSP_SAVE_ADVANCED
 
   #define MENU0  0 //STATISTICS
   #define MENU1  1 //PID CONFIG
@@ -105,6 +107,8 @@
   #define AMPERAGE_DIV 10
   #define CORRECT_MSP_BF1
   #define CORRECT_MENU_RCT1
+  #define ENABLE_MSP_SAVE_ADVANCED
+
   #define MENU0  0 //STATISTICS
   #define MENU1  1 //PID CONFIG
   #define MENU2  2 //RC TUNING
@@ -147,8 +151,8 @@
   #define MENU7  7 //ADVANCED
   #define MENU8  8 //GPS TIME
   #define MENU9  9 //ALARMS
-  #define MENU10 10//PROFILE+PID CONTROLLER
-  #define MAXPAGE MENU10   
+//  #define MENU10 10//PROFILE+PID CONTROLLER
+  #define MAXPAGE MENU9   
 #endif
 
 #if defined (MULTIWII_V23)

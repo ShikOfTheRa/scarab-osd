@@ -251,11 +251,7 @@ void displayMode(void)
     #endif
     screenBuffer[1]=SYM_ACRO1;
   }
-
   
-#ifdef APINDICATOR
-  displayAPstatus();
-#endif
   if(Settings[S_MODEICON]){
     if(fieldIsVisible(ModePosition))
       MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
@@ -287,6 +283,10 @@ void displayMode(void)
       MAX7456_WriteString(screenBuffer,getPosition(sensorPosition));
     }
   }
+#ifdef APINDICATOR
+  displayAPstatus();
+#endif
+
 }
 
 
@@ -564,6 +564,7 @@ void displayCurrentThrottle(void)
   
   uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],1000,2000);
 
+#ifndef FIXEDWING   
   if(!armed) {
     screenBuffer[0+THROTTLESPACE]=' ';
     screenBuffer[1+THROTTLESPACE]=' ';
@@ -573,6 +574,7 @@ void displayCurrentThrottle(void)
 
   }
   else
+#endif // FIXEDWING    
   {
     int CurThrottle = map(MwRcData[THROTTLESTICK],LowT,HighT,0,100);
     ItoaPadded(CurThrottle,screenBuffer+1+THROTTLESPACE,3,0);
@@ -706,6 +708,7 @@ void displayAPstatus()
     return;
   if(!fieldIsVisible(APstatusPosition))
     return;
+/*
   if (MwSensorActive&mode.gpshome)
     MAX7456_WriteString_P(APRTHtext,getPosition(APstatusPosition));
    else if (MwSensorActive&mode.gpshold)
@@ -714,6 +717,19 @@ void displayAPstatus()
     MAX7456_WriteString_P(APWAYPOINTtext,getPosition(APstatusPosition));
 //  else if (MwSensorActive&mode.gpsland)
 //    MAX7456_WriteString_P(APLANDtext,getPosition(APstatusPosition));
+*/
+  uint8_t apactive=0;
+  if (MwSensorActive&mode.gpshome)
+    apactive=6;
+  else if (MwSensorActive&mode.gpshold)
+    apactive=7;
+  else if (MwSensorActive&mode.gpsmission)
+    apactive=8;
+  else
+    return;
+  strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[apactive])));
+  MAX7456_WriteString(screenBuffer, getPosition(APstatusPosition));
+
 }
 
 void displayHeading(void)
@@ -812,10 +828,6 @@ void displayGPSPosition(void)
   if (!MwSensorActive&mode.gpshome)
     return;
   if(Settings[S_COORDINATES]|(MwSensorActive&mode.gpshome)){
-//    if(MwSensorActive&mode.gpshome) {
-//      if(!Settings[S_GPSCOORDTOP])
-//        position = getPosition(MwGPSLatPosition);
-//      else
       position = getPosition(MwGPSLatPositionTop);  
       screenBuffer[0] = SYM_LAT;
       FormatGPSCoord(GPS_latitude,screenBuffer+1,4,'N','S');
@@ -824,7 +836,6 @@ void displayGPSPosition(void)
       screenBuffer[0] = SYM_LON;
       FormatGPSCoord(GPS_longitude,screenBuffer+1,4,'E','W');
       MAX7456_WriteString(screenBuffer, position);  
-//    }
   }
   if(Settings[S_GPSALTITUDE]){
     if(!fieldIsVisible(MwGPSAltPosition))
@@ -845,11 +856,6 @@ void displayGPSPosition(void)
 
 void displayNumberOfSat(void)
 {
-//  if(!GPS_fix)
-//    return;
-
-
-
   if((GPS_numSat<MINSATFIX)&&(timer.Blink2hz)){
     return;
   }
@@ -1399,6 +1405,11 @@ void displayConfigScreen(void)
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_advanced[X])));
       MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
     }
+
+//  strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[apactive])));
+//  MAX7456_WriteString(screenBuffer, getPosition(APstatusPosition));
+
+
     if(!Settings[S_UNITSYSTEM]){
       MAX7456_WriteString_P(configMsg710, ROLLD);
     }
@@ -1417,6 +1428,15 @@ void displayConfigScreen(void)
     else {
       MAX7456_WriteString_P(configMsg731, YAWD);
       }
+
+/*
+  strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[Settings[S_UNITSYSTEM]])));
+  MAX7456_WriteString(screenBuffer, ROLLD);
+  strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[Settings[S_VIDEOSIGNALTYPE]])));
+  MAX7456_WriteString(screenBuffer, PITCHD);
+  strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[Settings[S_VREFERENCE]])));
+  MAX7456_WriteString(screenBuffer, YAWD);
+*/
     Menuconfig_onoff(ALTD,S_DEBUG);    
     if(timer.magCalibrationTimer>0)
       MAX7456_WriteString(itoa(timer.magCalibrationTimer,screenBuffer,10),VELD);
