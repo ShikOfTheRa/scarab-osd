@@ -10,6 +10,10 @@ Key Improvements for `R1.6`:-
  * OSD    - Support for TUALABS - thanks to Dustin
  * OSD    - Support for NAZA
  * OSD    - Support for BETAFLIGHT
+ * OSD    - Support for BETAFLIGHT / CLEANFLIGHT / BASEFLIGHT FC profiles selection
+ * OSD    - Support for BETAFLIGHT / CLEANFLIGHT / BASEFLIGHT FC pid controller selection
+ * OSD    - BETAFLIGHT AIRMODE display indicator
+ * OSD    - Support for CLEANFLIGHT time selection
  * OSD    - Video volts alarm adjustable via GUI
  * OSD    - Video volts independant of main battery
  * OSD    - Battery voltage status icon improved accuracy - thanks to Hwurzburg
@@ -33,17 +37,19 @@ Key Improvements for `R1.6`:-
  * OSD    - Support for temperature sensor re-introduced
  * OSD    - Added option to disable display of summary screen via config.h
  * OSD    - Added option to display some maximum values immediately below live data - for record breaking attempts
+ * OSD    - Support for fixed wing throttle actions when disarmed.
  * OSD    - Throttle calibration values can be amended for inreased accuracy of throllte in some scenarios
  * GUI    - Support for RSSI Auto calibration from GUI
  * GUI    - Support for Current sensor calibration from GUI - using hardware parameters (Offset and gain) 
  * BUGFIX - HARIKIRI / MW2.1 not working since R1.5
  * BUGFIX - Center crosshair font partially missing on default_large font
- * BUGFIX - AHI incorrect at large angles
+ * BUGFIX - AHI incroect at large angles
  * BUGFIX - Analogue ports had RSSI pulled high - impacting range and accuracy of values 
  * BUGFIX - intermittant sticking on writing to OSD. Also resolves other intermittant checksum errors  
  * COMPAT - Compatability support for latest cleanflight - conflict with MultiWii
  * FONT   - improved large font from Schnupperm enhanced by Leo
  * FONT   - Support for Betaflight airmode. Displays font icon when active
+
 
 ---
 
