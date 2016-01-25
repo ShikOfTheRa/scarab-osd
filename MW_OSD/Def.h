@@ -22,7 +22,7 @@
 #endif
 
 #ifdef BETAFLIGHT    //set up latest at time of release
-  #define CLEANFLIGHT190
+  #define BETAFLIGHT
 #endif
 
 #ifdef CLEANFLIGHT    //set up latest at time of release
@@ -47,6 +47,27 @@
 //CORRECT_MENU_RCT1 introduced CF180/BF201506 - adds seperate Pitch/Roll/Yaw + TPA     (Menu Support)
 //CORRECT_MENU_RCT2 introduced CF190 - adds seperate Pitch/Roll/Yaw + TPA + Yaw expo     (Menu support)
 //ENABLE_MSP_SAVE_ADVANCED - adds the code to read/write PROFILE+LOOPIME+PID CONTROLLER if supported
+//CORRECTLOOPTIME show looptime option in Adavanced tuning menu
+
+#if defined BETAFLIGHT
+  #define AMPERAGE_DIV 10
+  #define CORRECT_MSP_CF2
+  #define CORRECT_MENU_RCT2
+  #define ENABLE_MSP_SAVE_ADVANCED
+
+  #define MENU0  0 //STATISTICS
+  #define MENU1  1 //PID CONFIG
+  #define MENU2  2 //RC TUNING
+  #define MENU3  3 //VOLTAGE
+  #define MENU4  4 //RSSI
+  #define MENU5  5 //CURRENT
+  #define MENU6  6 //DISPLAY
+  #define MENU7  7 //ADVANCED
+//  #define MENU8  X //GPS TIME
+  #define MENU9  8 //ALARMS
+  #define MENU10 9//PROFILE+PID CONTROLLER
+  #define MAXPAGE MENU10  
+#endif
 
 #if defined CLEANFLIGHT190
   #define AMPERAGE_DIV 10
@@ -65,7 +86,8 @@
 //  #define MENU8  X //GPS TIME
   #define MENU9  8 //ALARMS
   #define MENU10 9//PROFILE+PID CONTROLLER
-  #define MAXPAGE MENU10   
+  #define MAXPAGE MENU10  
+  #define CORRECTLOOPTIME
 #endif
 
 #if defined CLEANFLIGHT180
@@ -119,8 +141,8 @@
   #define MENU7  7 //ADVANCED
 //  #define MENU8  X //GPS TIME
   #define MENU9  8 //ALARMS
-//  #define MENU10 9//PROFILE+PID CONTROLLER
-  #define MAXPAGE MENU9   
+  #define MENU10 9//PROFILE+PID CONTROLLER
+  #define MAXPAGE MENU10   
 #endif  
 
 #if defined (BASEFLIGHT20150327)

@@ -189,7 +189,7 @@
 #define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
 //#define DISPLAYWATTS              // Enable this to display Watts (if selected in layouts)
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft
-
+#define AIRMODE 30                  // Enable this to dispaly airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
 
 /********************   TRANSMITTER MODE for STICK MENU     *********************/
 //#define MODE1                     // Enable this if wish to use cursor controls on same stick - for MODE 1 TX users

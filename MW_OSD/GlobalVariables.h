@@ -655,17 +655,17 @@ uint16_t flyingTime=0;
 #define MSP_DEBUGMSG             253   //out message         debug string buffer
 #define MSP_DEBUG                254   //out message         debug1,debug2,debug3,debug4
 
-// Baseflight/Cleanflight/Betaflight specific
+// Cleanflight/Betaflight specific
 #define MSP_PID_CONTROLLER       59    //in message          no param
 #define MSP_SET_PID_CONTROLLER   60    //out message         sets a given pid controller
 
-// Cleanflight/Betaflight specific
+// Cleanflight specific
 #define MSP_LOOP_TIME            73    //out message         Returns FC cycle time i.e looptime 
 #define MSP_SET_LOOP_TIME        74    //in message          Sets FC cycle time i.e looptime parameter
 
 // Baseflight specific
-#define MSP_SET_CONFIG           67    //in message          baseflight-specific settings save
 #define MSP_CONFIG               66    //out message         baseflight-specific settings that aren't covered elsewhere
+#define MSP_SET_CONFIG           67    //in message          baseflight-specific settings save
 
 // End of imported defines from Multiwii Serial Protocol MultiWii_shared svn r1333
 // ---------------------------------------------------------------------------------------

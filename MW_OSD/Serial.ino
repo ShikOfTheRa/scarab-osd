@@ -763,7 +763,9 @@ void serialMenuCommon()
 	if(configPage == MENU10 && COL == 3) {
 	  if(ROW==1) FCProfile=FCProfile+menudir;
 	  if(ROW==2) PIDController=PIDController+menudir;
+        #ifdef CORRECTLOOPTIME
 	  if(ROW==3) LoopTime=LoopTime+menudir;
+        #endif
 	};
   #ifdef ENABLE_MSP_SAVE_ADVANCED
         if (FCProfile>2)
@@ -945,7 +947,7 @@ void configSave()
   mspWriteRequest(MSP_SET_CONFIG,25);
   bfconfig[18] =rollRate;
   bfconfig[19] =PitchRate;
-  for(uint8_t i=0; i<SETCONGFIG; i++) {
+  for(uint8_t i=0; i<25; i++) {
     mspWrite8(bfconfig[i]);
   }
   mspWriteChecksum();

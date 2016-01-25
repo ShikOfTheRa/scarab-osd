@@ -1,4 +1,5 @@
 
+
 char *ItoaPadded(int val, char *str, uint8_t bytes, uint8_t decimalpos)  {
 // Val to convert
 // Return String
@@ -174,31 +175,61 @@ void displayMode(void)
   if(timer.MSP_active==0){ // no MSP >> mode display not valid
     return;
   }  
+  uint8_t xx = 0;
+  
+  if((MwSensorActive&mode.camstab)&&Settings[S_GIMBAL]){
+    screenBuffer[2]=0;
+    screenBuffer[0]=SYM_GIMBAL;
+    screenBuffer[1]=SYM_GIMBAL1;  
+    if(fieldIsVisible(gimbalPosition))
+      MAX7456_WriteString(screenBuffer,getPosition(gimbalPosition));
+  }
+  if(Settings[S_MODESENSOR]){
+    xx = 0;
+    if(MwSensorActive&mode.stable||MwSensorActive&mode.horizon){
+      screenBuffer[xx] = SYM_ACC;
+      xx++;
+    }
+    if (MwSensorActive&mode.baro){
+      screenBuffer[xx] = SYM_BAR;
+      xx++;
+    }
+    if (MwSensorActive&mode.mag){
+      screenBuffer[xx] = SYM_MAG;
+      xx++;
+    }
+    screenBuffer[xx] = 0;
+    if(fieldIsVisible(sensorPosition)){
+      MAX7456_WriteString(screenBuffer,getPosition(sensorPosition));
+    }
+  }  
 
-  uint32_t dist;
-  if(Settings[S_UNITSYSTEM])
-    dist = GPS_distanceToHome * 3.2808;           // mt to feet
-  else
-    dist = GPS_distanceToHome;                    // Mt
-
-  if(dist > distanceMAX)
-    distanceMAX = dist;
-  itoa(dist, screenBuffer+3, 10);
-  uint8_t xx = FindNull();
-
-  if(Settings[S_UNITSYSTEM]==METRIC)
-    screenBuffer[xx++] =SYM_M;
-  else
-   screenBuffer[xx++] =SYM_FT;
-   
-   screenBuffer[xx++] =0;
- 
+  
   if(MwSensorActive&mode.gpshome){
+#ifdef APINDICATOR
     screenBuffer[0] = SYM_GHOME;
     screenBuffer[1] = SYM_GHOME1;
-#ifdef APINDICATOR
     screenBuffer[2]=0;
 #else
+    uint32_t dist;
+    if(Settings[S_UNITSYSTEM]){
+      dist = GPS_distanceToHome * 3.2808;           // mt to feet
+    }
+    else{
+      dist = GPS_distanceToHome;                    // Mt
+    }
+    itoa(dist, screenBuffer+3, 10);
+    xx = FindNull()+1;
+
+    if(Settings[S_UNITSYSTEM]==METRIC){
+      screenBuffer[xx] =SYM_M;
+    }
+    else{
+     screenBuffer[xx] =SYM_FT;
+    }
+    screenBuffer[xx] =0;
+    screenBuffer[0] = SYM_GHOME;
+    screenBuffer[1] = SYM_GHOME1;
     screenBuffer[2] = SYM_COLON;
     screenBuffer[8]=0;
 #endif
@@ -220,13 +251,7 @@ void displayMode(void)
     screenBuffer[0] = SYM_GLAND;
     screenBuffer[1] = SYM_GLAND1;
   }
-#endif //MULTIWII_V24
-    
-  else if((MwSensorActive)&(mode.air)){
-    screenBuffer[2]=0;
-    screenBuffer[0]=SYM_AIR;
-    screenBuffer[1]=SYM_AIR1;
-  }
+#endif //MULTIWII_V24    
   else if(MwSensorActive&mode.stable){
     screenBuffer[2]=0;
     screenBuffer[0]=SYM_STABLE;
@@ -251,40 +276,36 @@ void displayMode(void)
     #endif
     screenBuffer[1]=SYM_ACRO1;
   }
-  
   if(Settings[S_MODEICON]){
-    if(fieldIsVisible(ModePosition))
+    if(fieldIsVisible(ModePosition)){
       MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
-  }
-  if((MwSensorActive&mode.camstab)&&Settings[S_GIMBAL]){
-    screenBuffer[2]=0;
-    screenBuffer[0]=SYM_GIMBAL;
-    screenBuffer[1]=SYM_GIMBAL1;  
-    if(fieldIsVisible(gimbalPosition))
-      MAX7456_WriteString(screenBuffer,getPosition(gimbalPosition));
+    #ifdef AIRMODE
+      if((MwSensorActive)&(mode.air)){
+        screenBuffer[0]=SYM_AIR;
+        screenBuffer[1]=SYM_AIR1;
+        screenBuffer[2]=0;
+      MAX7456_WriteString(screenBuffer,getPosition(ModePosition)+AIRMODE);
+      }
+    #endif //AIRMODE  
+    }  
   }
 
-  if(Settings[S_MODESENSOR]){
-    xx = 0;
-    if(MwSensorActive&mode.stable||MwSensorActive&mode.horizon){
-      screenBuffer[xx] = SYM_ACC;
-      xx++;
-    }
-    if (MwSensorActive&mode.baro){
-      screenBuffer[xx] = SYM_BAR;
-      xx++;
-    }
-    if (MwSensorActive&mode.mag){
-      screenBuffer[xx] = SYM_MAG;
-      xx++;
-    }
-    screenBuffer[xx] = 0;
-    if(fieldIsVisible(sensorPosition)){
-      MAX7456_WriteString(screenBuffer,getPosition(sensorPosition));
-    }
-  }
 #ifdef APINDICATOR
-  displayAPstatus();
+  if(timer.Blink2hz)
+    return;
+  if(!fieldIsVisible(APstatusPosition))
+    return;
+  uint8_t apactive=0;
+  if (MwSensorActive&mode.gpshome)
+    apactive=6;
+  else if (MwSensorActive&mode.gpshold)
+    apactive=7;
+  else if (MwSensorActive&mode.gpsmission)
+    apactive=8;
+  else
+    return;
+  strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[apactive])));
+  MAX7456_WriteString(screenBuffer, getPosition(APstatusPosition));
 #endif
 
 }
@@ -701,36 +722,6 @@ void displayRSSI(void)
   MAX7456_WriteString(screenBuffer,getPosition(rssiPosition)-1);
 }
 
-
-void displayAPstatus()
-{
-  if(timer.Blink2hz)
-    return;
-  if(!fieldIsVisible(APstatusPosition))
-    return;
-/*
-  if (MwSensorActive&mode.gpshome)
-    MAX7456_WriteString_P(APRTHtext,getPosition(APstatusPosition));
-   else if (MwSensorActive&mode.gpshold)
-    MAX7456_WriteString_P(APHOLDtext,getPosition(APstatusPosition));
-   else if (MwSensorActive&mode.gpsmission)
-    MAX7456_WriteString_P(APWAYPOINTtext,getPosition(APstatusPosition));
-//  else if (MwSensorActive&mode.gpsland)
-//    MAX7456_WriteString_P(APLANDtext,getPosition(APstatusPosition));
-*/
-  uint8_t apactive=0;
-  if (MwSensorActive&mode.gpshome)
-    apactive=6;
-  else if (MwSensorActive&mode.gpshold)
-    apactive=7;
-  else if (MwSensorActive&mode.gpsmission)
-    apactive=8;
-  else
-    return;
-  strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[apactive])));
-  MAX7456_WriteString(screenBuffer, getPosition(APstatusPosition));
-
-}
 
 void displayHeading(void)
 {
@@ -1170,9 +1161,15 @@ void displayCursor(void)
 #ifdef MENU10      
     if(configPage==MENU10)
       {  
+      #ifdef CORRECTLOOPTIME
+        if (ROW==9) ROW=3;
+        if (ROW==4) ROW=10;
+      #else
+        if (ROW==9) ROW=2;
+        if (ROW==3) ROW=10;
+      #endif
+
       COL=3;
-      if (ROW==9) ROW=3;
-      if (ROW==4) ROW=10;
        cursorpos=(ROW+2)*30+10+6+6;
       }
 #endif     
@@ -1474,10 +1471,15 @@ void displayConfigScreen(void)
 #endif  
 #ifdef MENU10
     if(configPage==MENU10){
+      #ifdef CORRECTLOOPTIME
+        #define MENU10MAX 2
+      #else
+        #define MENU10MAX 1
+      #endif
       MenuBuffer[0]=FCProfile;
       MenuBuffer[1]=PIDController;
       MenuBuffer[2]=LoopTime;
-      for(uint8_t X=0; X<=2; X++) {
+      for(uint8_t X=0; X<=MENU10MAX; X++) {
         strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_profile[X])));
         MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
         MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
