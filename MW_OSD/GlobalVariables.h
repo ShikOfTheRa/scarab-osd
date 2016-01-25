@@ -27,7 +27,6 @@
 
 // DEFINE CONFIGURATION MENU PAGES
 #define MINPAGE 0
-#define MAXPAGE 9
 
 #define PIDITEMS 10
 
@@ -130,8 +129,8 @@ uint16_t cycleTime;
 uint16_t I2CError;
 uint8_t oldROW=0;
 uint8_t cells=0;
-#if defined SETCONFIG
-  uint8_t bfconfig[SETCONFIG];
+#if defined CORRECT_MSP_BF1
+  uint8_t bfconfig[25];
 #endif
 
 // Config status and cursor location
@@ -139,7 +138,7 @@ uint8_t screenlayout=0;
 uint8_t oldscreenlayout=0;
 uint8_t ROW=10;
 uint8_t COL=3;
-int8_t configPage=1;
+int8_t configPage=MENU1;
 uint8_t configMode=0;
 uint8_t fontMode = 0;
 uint8_t fontData[54];
@@ -162,11 +161,11 @@ struct {
   uint16_t gpshome;
   uint16_t gpshold;
   uint16_t passthru;
+  uint32_t air;
   uint32_t osd_switch;
   uint32_t llights;
   uint32_t gpsmission;
   uint32_t gpsland;
-  uint32_t air;
 }mode;
 
 // Settings Locations
@@ -327,7 +326,7 @@ MWOSDVER,   // used for check              0
 0,   // S_HORIZON_ELEVATION         40h
 1,   // S_TIMER                     41h
 1,   // S_MODESENSOR                42h
-1,   // S_SIDEBARTOPS               43h
+0,   // S_SIDEBARTOPS               43h
 4,   // S_UNUSED_6,
 0,   // S_UNUSED_1, S_AMPMAXL,
 0,   // S_UNUSED_2, S_AMPMAXH,
@@ -468,6 +467,11 @@ static uint8_t thrMid8;
 static uint8_t thrExpo8;
 static uint16_t tpa_breakpoint16;
 static uint8_t rcYawExpo8;
+static uint8_t FCProfile;
+static uint8_t PreviousFCProfile;
+static uint8_t CurrentFCProfile;
+static uint8_t PIDController;
+static uint16_t LoopTime;
 
 int32_t  MwAltitude=0;                         // This hold barometric value
 int32_t  old_MwAltitude=0;                     // This hold barometric value
@@ -651,10 +655,17 @@ uint16_t flyingTime=0;
 #define MSP_DEBUGMSG             253   //out message         debug string buffer
 #define MSP_DEBUG                254   //out message         debug1,debug2,debug3,debug4
 
+// Cleanflight/Betaflight specific
+#define MSP_PID_CONTROLLER       59    //in message          no param
+#define MSP_SET_PID_CONTROLLER   60    //out message         sets a given pid controller
+
+// Cleanflight specific
+#define MSP_LOOP_TIME            73    //out message         Returns FC cycle time i.e looptime 
+#define MSP_SET_LOOP_TIME        74    //in message          Sets FC cycle time i.e looptime parameter
+
 // Baseflight specific
-#define MSP_SET_CONFIG           67    //in message          baseflight-specific settings save
 #define MSP_CONFIG               66    //out message         baseflight-specific settings that aren't covered elsewhere
-#define SETCONGFIG 25                  //for BASEFLIGHT20150627
+#define MSP_SET_CONFIG           67    //in message          baseflight-specific settings save
 
 // End of imported defines from Multiwii Serial Protocol MultiWii_shared svn r1333
 // ---------------------------------------------------------------------------------------
@@ -733,6 +744,8 @@ const char configMsgSAVE[] PROGMEM = "SAVE+EXIT";
 const char configMsgPGS[]  PROGMEM = "<PAGE>";
 const char configMsgMWII[] PROGMEM = "USE FC";
 
+// For APSTATUS
+
 // For Config pages
 //-----------------------------------------------------------Page0
 const char configMsg00[] PROGMEM = "STATISTICS";
@@ -761,11 +774,11 @@ const char configMsg24[] PROGMEM = "YAW RATE";
 const char configMsg25[] PROGMEM = "TPA";
 const char configMsg26[] PROGMEM = "THROTTLE MID";
 const char configMsg27[] PROGMEM = "THROTTLE EXPO";
-#if defined(CLEANFLIGHT180)|| defined (BASEFLIGHT20150627)
+#if defined CORRECT_MENU_RCT1
   const char configMsg23a[] PROGMEM = "ROLL RATE";
   const char configMsg23b[] PROGMEM = "PITCH RATE";
 #endif
-#if defined(CLEANFLIGHT190)
+#if defined CORRECT_MENU_RCT2
   const char configMsg23a[] PROGMEM = "ROLL RATE";
   const char configMsg23b[] PROGMEM = "PITCH RATE";
   const char configMSg28[]  PROGMEM = "TPA BREAKPOINT";
@@ -832,7 +845,11 @@ const char configMsg93[] PROGMEM = "SPEED";
 const char configMsg94[] PROGMEM = "TIMER";
 const char configMsg95[] PROGMEM = "MAH X100";
 const char configMsg96[] PROGMEM = "AMPS";
-
+//-----------------------------------------------------------Page10
+const char configMsg100[] PROGMEM = "ADVANCE TUNING";
+const char configMsg101[] PROGMEM = "PROFILE";
+const char configMsg102[] PROGMEM = "PID CONTROLLER";
+const char configMsg103[] PROGMEM = "LOOPTIME";
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={
@@ -913,10 +930,30 @@ uint16_t screenPosition[POSITIONS_SETTINGS];
 #define REQ_MSP_FONT      (1 << 12)
 #define REQ_MSP_DEBUG     (1 << 13)
 #define REQ_MSP_CELLS     (1 << 14)
-#define REQ_MSP_NAV_STATUS  32768 //(1 << 15)
-#define REQ_MSP_CONFIG  32768 //(1 << 15)
-#define REQ_MSP_MISC      65536 // (1 << 16)
-#define REQ_MSP_ALARMS    131072 // (1 << 17)
+#define REQ_MSP_NAV_STATUS      32768  // (1 << 15)
+#define REQ_MSP_CONFIG          32768  // (1 << 15)
+#define REQ_MSP_MISC            65536  // (1 << 16)
+#define REQ_MSP_ALARMS          131072 // (1 << 17)
+#define REQ_MSP_PID_CONTROLLER  262144 // (1 << 18)
+#define REQ_MSP_LOOP_TIME       524288 // (1 << 19) 
+
+// Menu selections
+const PROGMEM char * const menu_choice_unit[] =
+{   
+  configMsg710,
+  configMsg711,
+};
+// Menu selections
+const PROGMEM char * const menu_choice_video[] =
+{   
+  configMsg720,
+  configMsg721,
+};// Menu selections
+const PROGMEM char * const menu_choice_ref[] =
+{   
+  configMsg731,
+  configMsg730,
+};
 
 // Menu
 //PROGMEM const char *menu_stats_item[] =
@@ -944,7 +981,7 @@ const PROGMEM char * const menu_pid[] =
 
 const PROGMEM char * const menu_rc[] = 
 {   
-  #if defined(CLEANFLIGHT190)
+  #if defined CORRECT_MENU_RCT2
     configMsg21,
     configMsg22,
     configMsg23a,
@@ -954,7 +991,7 @@ const PROGMEM char * const menu_rc[] =
     configMsg26,
     configMsg27,
     configMSg28,
-  #elif defined(CLEANFLIGHT180) || defined (BASEFLIGHT20150627) 
+  #elif defined CORRECT_MENU_RCT1 
     configMsg21,
     configMsg22,
     configMsg23a,
@@ -1043,18 +1080,48 @@ const PROGMEM char * const menu_alarm_item[] =
   configMsg96,
 };
 
+const PROGMEM char * const menu_profile[] = 
+{   
+  configMsg101,
+  configMsg102,
+  configMsg103,
+};
+
 const PROGMEM char * const menutitle_item[] = 
 {   
+#ifdef MENU0
   configMsg00,
+#endif
+#ifdef MENU1
   configMsg10,
+#endif
+#ifdef MENU2
   configMsg20,
+#endif
+#ifdef MENU3
   configMsg30,
+#endif
+#ifdef MENU4
   configMsg40,
+#endif
+#ifdef MENU5
   configMsg50,
+#endif
+#ifdef MENU6
   configMsg60,
+#endif
+#ifdef MENU7
   configMsg70,
+#endif
+#ifdef MENU8
   configMsg80,
+#endif
+#ifdef MENU9
   configMsg90,
+#endif
+#ifdef MENU10
+  configMsg100,
+#endif
 };
 
 const PROGMEM char * const menu_on_off[] = 

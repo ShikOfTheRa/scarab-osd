@@ -1,15 +1,5 @@
-/*--------------------------       initialisation options      ----------------------------------------------------*/
-// Ignore this section unless you know you need to use it !!
-// This section contains initialisation options that only require to be run once.
-// Once the initialisation has completed, all sections should be commented and the sketch re-uploaded.
-
-//#define EEPROM_CLEAR             // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
-//#define LOADFONT_DEFAULT         // Uncomment to force an upload of default font instead of using GUI
-//#define LOADFONT_LARGE           // Uncomment to force an upload of large font instead of using GUI
-
-
-
-/*--------------------------       configurable parameters      ----------------------------------------------------*/
+/*--------------------------       MANDATORY configurable parameters      ----------------------------------------------------*/
+/*--------------------------       MANDATORY configurable parameters      ----------------------------------------------------*/
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
@@ -33,10 +23,10 @@
 // Choose ONLY ONE option from the following long list :-
 
 // latest release...
-#define MULTIWII                  // Uncomment this if you are using latest MULTIWII version from repository (2.4 at time of this MWOSD release)
-//#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.06.27 at time of this MWOSD release)
+//#define MULTIWII                  // Uncomment this if you are using latest MULTIWII version from repository (2.4 at time of this MWOSD release)
+//#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
 //#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
-//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9.0 at time of this MWOSD release)
+#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
 //#define BETAFLIGHT                // Uncomment this if you are using BETAFLIGHT (same as CLEANFLIGHT t time of this MWOSD release)
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
@@ -58,6 +48,11 @@
 #define ROTORCRAFT                  // Default for multirotors etc. 
 //#define FIXEDWING                 // Uncomment this if you are using fixed wing MultiWii or Baseflight 
 
+
+
+
+/*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
+/*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
 
 /********************       OSD SCREEN SWITCH settings      *********************/
 // This functionality enables :
@@ -109,7 +104,7 @@
 // **ONLY** valid when using fixed wing
 //#define USEMAGHEADING             // Undefine this to use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
 //#define USEBAROALTITUDE           // Undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) ** Recommended **
-#define USEGLIDESCOPE 40          // Enables ILS glidescope where 40 = 4.0° glidescope. 1.0 deg gradiented scope scale requires enabling in layouts
+//#define USEGLIDESCOPE 40          // Enables ILS glidescope where 40 = 4.0° glidescope. 1.0 deg gradiented scope scale requires enabling in layouts
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft
 
@@ -139,7 +134,7 @@
 
 
 /********************       STARTUP settings      *********************/
-#define INTRO_VERSION               "MWOSD - DEV 1.5.2.2" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+#define INTRO_VERSION               "MWOSD - DEV 1.5.2.3" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 8 
@@ -159,7 +154,7 @@
 /********************       FEATURES      *********************/
 // Disable features if you require memory for other features
 // Further configuration may be require elsewhere in config.h + option enabled on GUI
-#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
+//#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
 #define HORIZON         // Enable/disable HORIZON indicator
 #define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
 //#define GPSTIME       // Enable/disable GPS Time functions
@@ -178,7 +173,7 @@
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 //#define HIDESUMMARY               // Enable to suspend display of summary screen when disarming
 //#define SHORTSUMMARY              // Display only timer on flight summary 
-#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
+//#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x01=100%,0x10=90%,0x11=80%  default is 0x01=100%
 //#define BLACKBRIGHTNESS 0x00      // Optional change from default 0x00=0%,0x01=10%,0x10=20%0x11=30%  default is 0x00=0%
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
@@ -189,12 +184,12 @@
 //#define AHICORRECT 10             // Enable to adjust AHI on display to match horizon. -10 = -1 degree
 #define AHIPITCHMAX 200             // Specify maximum AHI pitch value displayed. Default 200 = 20.0 degrees
 #define AHIROLLMAX  400             // Specify maximum AHI roll value displayed. Default 400 = 40.0 degrees 
-//#define AHILEVEL                    // Enable to display AHI level indicators on sidebars 
+#define AHILEVEL                    // Enable to display AHI level indicators on sidebars 
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 #define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
-#define DISPLAYWATTS                // Enable this to display Watts (if selected in layouts)
+//#define DISPLAYWATTS              // Enable this to display Watts (if selected in layouts)
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft
-
+#define AIRMODE 30                  // Enable this to display BETAFLIGHT airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
 
 /********************   TRANSMITTER MODE for STICK MENU     *********************/
 //#define MODE1                     // Enable this if wish to use cursor controls on same stick - for MODE 1 TX users
@@ -264,4 +259,22 @@
 #define AUTOTHROTTLE 
 #define HIGHTHROTTLE 2000                // Maximum recognised value for throttle 
 #define LOWTHROTTLE  1000                // Minimum recognised value for throttle
+
+
+
+
+
+/*--------------------------       INITIALISATION options       ----------------------------------------------------*/
+/*--------------------------       INITIALISATION options       ----------------------------------------------------*/
+// Ignore this section unless you know you need to use it !!
+// This section contains initialisation options that only require to be run once.
+// Once the initialisation has completed, all sections should be commented and the sketch re-uploaded.
+
+//#define EEPROM_CLEAR             // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
+//#define LOADFONT_DEFAULT         // Uncomment to force an upload of default font instead of using GUI
+//#define LOADFONT_LARGE           // Uncomment to force an upload of large font instead of using GUI
+
+
+
+
 

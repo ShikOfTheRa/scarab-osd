@@ -37,13 +37,13 @@ String boxnames[] = { // names for dynamic generation of config GUI
     "ARM;",
     "ANGLE;",
     "HORIZON;",
-    "AIR MODE;",
     "BARO;",
     "MAG;",
     "CAMSTAB;",
     "GPS HOME;",
     "GPS HOLD;",
-    "MISSION;",
+//    "MISSION;",
+    "AIR MODE;",
     "OSD SW;"   
   };
 String strBoxNames = join(boxnames,""); 
@@ -391,10 +391,11 @@ void SendCommand(int cmd){
         if(toggleModeItems[5].getValue()> 0) modebits |=1<<8;
         if(toggleModeItems[6].getValue()> 0) modebits |=1<<10;
         if(toggleModeItems[7].getValue()> 0) modebits |=1<<11;
-        if(toggleModeItems[8].getValue()> 0) modebits |=1<<20;
+        if(toggleModeItems[8].getValue()> 0) modebits |=1<<28;
         if(toggleModeItems[9].getValue()> 0) modebits |=1<<19;
-//        if(toggleModeItems[8].getValue()> 0) modebits |=1<<16; //Also send LLIGHTS when OSD enabled - for testing
-//        if(toggleModeItems[5].getValue()> 0) modebits |=1<<12; //Also send PASS when CAMSTAB enabled - for testing
+//        if(toggleModeItems[5].getValue()> 0) modebits |=1<<16; //Also send LLIGHTS      when CAMSTAB enabled - for testing
+//        if(toggleModeItems[5].getValue()> 0) modebits |=1<<12; //Also send PASS         when CAMSTAB enabled - for testing
+//        if(toggleModeItems[5].getValue()> 0) modebits |=1<<20; //Also send MISSION MODE when CAMSTAB enabled - for testing
         serialize32(modebits);
         serialize8(0);   // current setting
         tailSerialReply();
@@ -468,8 +469,8 @@ void SendCommand(int cmd){
       
       case MSP_BOXIDS:
         PortIsWriting = true;
-        headSerialReply(MSP_BOXIDS,23);
-        for (int i=0; i<23; i++) {
+        headSerialReply(MSP_BOXIDS,29);
+        for (int i=0; i<29; i++) {
         serialize8(i);
         }
         tailSerialReply();
@@ -824,7 +825,7 @@ public void evaluateCommand(byte cmd, int size) {
           int eeaddressOSDH=read8();
           eeaddressOSD=eeaddressOSDL+(eeaddressOSDH<<8);
           eeindextxt="EEW: "+eeaddressOSD;   
-System.out.println("OSD req:"+ eeaddressOSD);
+// System.out.println("OSD req:"+ eeaddressOSD);
           eeindexmessage.setValue(eeindextxt);
 
           if (eeaddressOSD>=eeaddressGUI){ // update base address

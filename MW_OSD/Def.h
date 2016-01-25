@@ -18,26 +18,226 @@
 #endif
 
 #ifdef MULTIWII       //set up latest at time of release
-  #define MULTIWII_V24                // Using amperage corrections  
-//  #define MULTIWII_V23              // Using boxid  
-//  #define MULTIWII_V21              // Using boxnames
+  #define MULTIWII_V24
 #endif
 
 #ifdef BETAFLIGHT    //set up latest at time of release
-  #define CLEANFLIGHT190   //MSP added P+R+DTHR
+  #define BETAFLIGHT
 #endif
 
 #ifdef CLEANFLIGHT    //set up latest at time of release
-  #define CLEANFLIGHT190   //MSP added P+R+DTHR
-  //#define CLEANFLIGHT180           //MSP added P+R
-  //#define CLEANFLIGHT172           //default original MSP request
+  #define CLEANFLIGHT190
 #endif
 
 #ifdef BASEFLIGHT     //set up latest at time of release
-  #define BASEFLIGHT20150627         //MSP added P+R
-  //#define BASEFLIGHT20150327       //default original MSP request
+  #define BASEFLIGHT20150627
 #endif
 
+#ifdef HARIKIRI
+  #define BOXNAMES
+  #define MULTIWII_V24
+#endif
+
+// The unit of current varies across implementations.  There are effectively three set:
+// * 100mA, for which case the value is usable as it comes aross the wire. default
+// * 10mA, which sends a value 10x higher than we work wth
+// * 1ma, which sends a value 100x higher than normal
+
+//CORRECT_MSP_BF1 introduced BF201506 - adds seperate Pitch/Roll/Yaw + TPA     (MSP support)
+//CORRECT_MENU_RCT1 introduced CF180/BF201506 - adds seperate Pitch/Roll/Yaw + TPA     (Menu Support)
+//CORRECT_MENU_RCT2 introduced CF190 - adds seperate Pitch/Roll/Yaw + TPA + Yaw expo     (Menu support)
+//ENABLE_MSP_SAVE_ADVANCED - adds the code to read/write PROFILE+LOOPIME+PID CONTROLLER if supported
+//CORRECTLOOPTIME show looptime option in Adavanced tuning menu
+
+#if defined BETAFLIGHT
+  #define AMPERAGE_DIV 10
+  #define CORRECT_MSP_CF2
+  #define CORRECT_MENU_RCT2
+  #define ENABLE_MSP_SAVE_ADVANCED
+
+  #define MENU0  0 //STATISTICS
+  #define MENU1  1 //PID CONFIG
+  #define MENU2  2 //RC TUNING
+  #define MENU3  3 //VOLTAGE
+  #define MENU4  4 //RSSI
+  #define MENU5  5 //CURRENT
+  #define MENU6  6 //DISPLAY
+  #define MENU7  7 //ADVANCED
+//  #define MENU8  X //GPS TIME
+  #define MENU9  8 //ALARMS
+  #define MENU10 9//PROFILE+PID CONTROLLER
+  #define MAXPAGE MENU10  
+#endif
+
+#if defined CLEANFLIGHT190
+  #define AMPERAGE_DIV 10
+  #define CORRECT_MSP_CF2
+  #define CORRECT_MENU_RCT2
+  #define ENABLE_MSP_SAVE_ADVANCED
+
+  #define MENU0  0 //STATISTICS
+  #define MENU1  1 //PID CONFIG
+  #define MENU2  2 //RC TUNING
+  #define MENU3  3 //VOLTAGE
+  #define MENU4  4 //RSSI
+  #define MENU5  5 //CURRENT
+  #define MENU6  6 //DISPLAY
+  #define MENU7  7 //ADVANCED
+//  #define MENU8  X //GPS TIME
+  #define MENU9  8 //ALARMS
+  #define MENU10 9//PROFILE+PID CONTROLLER
+  #define MAXPAGE MENU10  
+  #define CORRECTLOOPTIME
+#endif
+
+#if defined CLEANFLIGHT180
+  #define AMPERAGE_DIV 10
+  #define CORRECT_MSP_CF1
+  #define CORRECT_MENU_RCT1
+
+  #define MENU0  0 //STATISTICS
+  #define MENU1  1 //PID CONFIG
+  #define MENU2  2 //RC TUNING
+  #define MENU3  3 //VOLTAGE
+  #define MENU4  4 //RSSI
+  #define MENU5  5 //CURRENT
+  #define MENU6  6 //DISPLAY
+  #define MENU7  7 //ADVANCED
+//  #define MENU8  X //GPS TIME
+  #define MENU9  8 //ALARMS
+//  #define MENU10 9//PROFILE+PID CONTROLLER
+  #define MAXPAGE MENU9   
+#endif
+
+#if defined CLEANFLIGHT172
+  #define AMPERAGE_DIV 10
+  #define MENU0  0 //STATISTICS
+  #define MENU1  1 //PID CONFIG
+  #define MENU2  2 //RC TUNING
+  #define MENU3  3 //VOLTAGE
+  #define MENU4  4 //RSSI
+  #define MENU5  5 //CURRENT
+  #define MENU6  6 //DISPLAY
+  #define MENU7  7 //ADVANCED
+//  #define MENU8  X //GPS TIME
+  #define MENU9  8 //ALARMS
+//  #define MENU10 9//PROFILE+PID CONTROLLER
+  #define MAXPAGE MENU9   
+#endif
+
+#if defined BASEFLIGHT20150627
+  #define AMPERAGE_DIV 10
+  #define CORRECT_MSP_BF1
+  #define CORRECT_MENU_RCT1
+  #define ENABLE_MSP_SAVE_ADVANCED
+
+  #define MENU0  0 //STATISTICS
+  #define MENU1  1 //PID CONFIG
+  #define MENU2  2 //RC TUNING
+  #define MENU3  3 //VOLTAGE
+  #define MENU4  4 //RSSI
+  #define MENU5  5 //CURRENT
+  #define MENU6  6 //DISPLAY
+  #define MENU7  7 //ADVANCED
+//  #define MENU8  X //GPS TIME
+  #define MENU9  8 //ALARMS
+  #define MENU10 9//PROFILE+PID CONTROLLER
+  #define MAXPAGE MENU10   
+#endif  
+
+#if defined (BASEFLIGHT20150327)
+  #define AMPERAGE_DIV 10
+  #define MENU0  0 //STATISTICS
+  #define MENU1  1 //PID CONFIG
+  #define MENU2  2 //RC TUNING
+  #define MENU3  3 //VOLTAGE
+  #define MENU4  4 //RSSI
+  #define MENU5  5 //CURRENT
+  #define MENU6  6 //DISPLAY
+  #define MENU7  7 //ADVANCED
+//  #define MENU8  X //GPS TIME
+  #define MENU9  8 //ALARMS
+//  #define MENU10 9//PROFILE+PID CONTROLLER
+  #define MAXPAGE MENU9   
+#endif
+
+#if defined (MULTIWII_V24)
+  #define AMPERAGE_DIV 1
+  #define MENU0  0 //STATISTICS
+  #define MENU1  1 //PID CONFIG
+  #define MENU2  2 //RC TUNING
+  #define MENU3  3 //VOLTAGE
+  #define MENU4  4 //RSSI
+  #define MENU5  5 //CURRENT
+  #define MENU6  6 //DISPLAY
+  #define MENU7  7 //ADVANCED
+  #define MENU8  8 //GPS TIME
+  #define MENU9  9 //ALARMS
+//  #define MENU10 10//PROFILE+PID CONTROLLER
+  #define MAXPAGE MENU9   
+#endif
+
+#if defined (MULTIWII_V23)
+  #define MENU0  0 //STATISTICS
+  #define MENU1  1 //PID CONFIG
+  #define MENU2  2 //RC TUNING
+  #define MENU3  3 //VOLTAGE
+  #define MENU4  4 //RSSI
+  #define MENU5  5 //CURRENT
+  #define MENU6  6 //DISPLAY
+  #define MENU7  7 //ADVANCED
+//  #define MENU8  X //GPS TIME
+  #define MENU9  8 //ALARMS
+//  #define MENU10 9//PROFILE+PID CONTROLLER
+  #define MAXPAGE MENU9   
+#endif
+
+#if defined (MULTIWII_V21)
+  #define BOXNAMES                  // required to support legacy protocol
+  #define MENU0  0 //STATISTICS
+  #define MENU1  1 //PID CONFIG
+  #define MENU2  2 //RC TUNING
+  #define MENU3  3 //VOLTAGE
+  #define MENU4  4 //RSSI
+  #define MENU5  5 //CURRENT
+  #define MENU6  6 //DISPLAY
+  #define MENU7  7 //ADVANCED
+//  #define MENU8  X //GPS TIME
+  #define MENU9  8 //ALARMS
+//  #define MENU10 9//PROFILE+PID CONTROLLER
+  #define MAXPAGE MENU9   
+#endif
+
+#if defined (FC_VOLTAGE_CONFIG) && (defined (CLEANFLIGHT) || defined(BASEFLIGHT))
+  #define USE_FC_VOLTS_CONFIG
+#endif
+
+#if defined(TAULABS)
+  #define AMPERAGE_DIV 10
+  #define HAS_ALARMS
+  #define MENU0  0 //STATISTICS
+  #define MENU1  1 //PID CONFIG
+  #define MENU2  2 //RC TUNING
+  #define MENU3  3 //VOLTAGE
+  #define MENU4  4 //RSSI
+  #define MENU5  5 //CURRENT
+  #define MENU6  6 //DISPLAY
+  #define MENU7  7 //ADVANCED
+//  #define MENU8  X //GPS TIME
+  #define MENU9  8 //ALARMS
+//  #define MENU10 9//PROFILE+PID CONTROLLER
+  #define MAXPAGE MENU9   
+#endif
+
+#ifdef HAS_ALARMS
+  #define MAX_ALARM_LEN 30
+#endif
+
+#ifndef AMPERAGE_DIV 
+  #define AMPERAGE_DIV 100
+#endif
+
+/********************  FIXEDWING definitions  *********************/
 #ifdef FIXEDWING                     
   #define USEGPSHEADING
   #define USEGPSALTITUDE
@@ -49,77 +249,6 @@
   #endif
   #define FORCESENSORS
 #endif
-
-#if defined(HARIKIRI)
-  #define BOXNAMES                  // required to support legacy protocol
-#endif
-
-// The unit of current varies across implementations.  There are effectively three set:
-// * 100mA, for which case the value is usable as it comes aross the wire. default
-// * 10mA, which sends a value 10x higher than we work wth
-// * 1ma, which sends a value 100x higher than normal
-
-#if defined (BASEFLIGHT20150327)
-  #define AMPERAGE_DIV 10
-#endif
-
-#if defined (BASEFLIGHT20150627)
-  #define AMPERAGE_DIV 10
-  #define SETCONFIG 25                  //for BASEFLIGHT20150627 to use MSP_SET_CONFIG
-#endif
-
-#if defined (CLEANFLIGHT190)
-  #define AMPERAGE_DIV 10
-#endif
-
-#if defined (CLEANFLIGHT180)
-  #define AMPERAGE_DIV 10
-#endif
-
-#if defined (CLEANFLIGHT172)
-  #define AMPERAGE_DIV 10
-#endif
-
-#if defined (MULTIWII_V24)
-  #define AMPERAGE_DIV 1
-#endif
-
-#if defined (MULTIWII_V23)
-#endif
-
-#if defined (MULTIWII_V21)
-  #define BOXNAMES                  // required to support legacy protocol
-#endif
-
-#if defined (FC_VOLTAGE_CONFIG) && (defined (CLEANFLIGHT) || defined(BASEFLIGHT))
-  #define USE_FC_VOLTS_CONFIG
-#endif
-
-#if defined(TAULABS)
-  #define AMPERAGE_DIV 10
-  #define HAS_ALARMS
-#endif
-
-#ifdef HAS_ALARMS
-  #define MAX_ALARM_LEN 30
-#endif
-
-#ifndef AMPERAGE_DIV 
-  #define AMPERAGE_DIV 100
-#endif
-
-/********************   ENABLE/DISABLE CONFIG PAGES via STICK MENU     *********************/
-//large memory savings if not needed, comment to disable
-#define PAGE1 //PID CONFIG
-#define PAGE2 //RC TUNING
-#define PAGE3 //VOLTAGE
-#define PAGE4 //RSSI
-#define PAGE5 //CURRENT
-#define PAGE6 //DISPLAY
-#define PAGE7 //ADVANCED
-#define PAGE8 //GPS TIME
-#define PAGE9 //ALARMS
-
 
 /********************  HARDWARE PINS definitions  *********************/
 #define AMPERAGEPIN   A1
@@ -234,6 +363,19 @@
   #define FORCESENSORS
   #define HIDEARMEDSTATUS
   #define GPSACTIVECHECK 5  
+
+  #define MENU0  0 //STATISTICS
+//  #define MENU1  X //PID CONFIG
+//  #define MENU2  X //RC TUNING
+  #define MENU3  1 //VOLTAGE
+  #define MENU4  2 //RSSI
+  #define MENU5  3 //CURRENT
+  #define MENU6  4 //DISPLAY
+  #define MENU7  5 //ADVANCED
+//  #define MENU8  X //GPS TIME
+  #define MENU9  6 //ALARMS
+//  #define MENU10 9//PROFILE+PID CONTROLLER
+  #define MAXPAGE MENU9   
 #endif
 
 #if defined (OSD_SWITCH_RSSI)  
@@ -241,7 +383,7 @@
 #endif
 
 
-/********************  MSP enhancements rule definitions  *********************/
+/********************  MSP speed enhancements rule definitions  *********************/
 
 #if defined MSP_SPEED_HIGH
   #define hi_speed_cycle  10  // updates everything approx 6.3 times per second, updates attitude 30 times per second
