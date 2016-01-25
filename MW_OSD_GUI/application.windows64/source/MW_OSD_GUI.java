@@ -5818,6 +5818,10 @@ public void displayMode()
       mapchar(0xb6,SimPosn[ModePosition]+1);
       mapchar(0x30,SimPosn[ModePosition]+2);
     }
+    else if((SimModebits&mode_air) >0){
+      mapchar(0xea,SimPosn[ModePosition]+30);
+      mapchar(0xeb,SimPosn[ModePosition]+31);
+    }
     else if((SimModebits&mode_stable) >0){
       mapchar(0xac,SimPosn[ModePosition]);
       mapchar(0xad,SimPosn[ModePosition]+1);
@@ -5830,12 +5834,7 @@ public void displayMode()
       mapchar(0xae,SimPosn[ModePosition]);
       mapchar(0xaf,SimPosn[ModePosition]+1);
     }
-    
-    if((SimModebits&mode_air) >0){
-      mapchar(0xea,SimPosn[ModePosition]+2);
-      mapchar(0xeb,SimPosn[ModePosition]+3);
-    }
-  }
+   }
 
 }
 }

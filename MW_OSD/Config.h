@@ -24,9 +24,9 @@
 
 // latest release...
 //#define MULTIWII                  // Uncomment this if you are using latest MULTIWII version from repository (2.4 at time of this MWOSD release)
-//#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.06.27 at time of this MWOSD release)
+//#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
 //#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
-#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9.0 at time of this MWOSD release)
+#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
 //#define BETAFLIGHT                // Uncomment this if you are using BETAFLIGHT (same as CLEANFLIGHT t time of this MWOSD release)
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
@@ -134,7 +134,7 @@
 
 
 /********************       STARTUP settings      *********************/
-#define INTRO_VERSION               "MWOSD - DEV 1.5.2.2" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+#define INTRO_VERSION               "MWOSD - DEV 1.5.2.3" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 8 
@@ -189,7 +189,7 @@
 #define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
 //#define DISPLAYWATTS              // Enable this to display Watts (if selected in layouts)
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft
-#define AIRMODE 30                  // Enable this to dispaly airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
+#define AIRMODE 30                  // Enable this to display BETAFLIGHT airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
 
 /********************   TRANSMITTER MODE for STICK MENU     *********************/
 //#define MODE1                     // Enable this if wish to use cursor controls on same stick - for MODE 1 TX users
