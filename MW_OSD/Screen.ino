@@ -514,9 +514,9 @@ void displayVoltage(void)
     cells=tcells;
   }   
   voltageWarning = cells * MvVBatWarningCellVoltage;
- #ifdef AUTOCELL_VOLTAGE
+ #ifdef AUTOCELLVOLTAGE
   voltageWarning = cells * Settings[S_VOLTAGEMIN];
- #endif // AUTOCELL_VOLTAGE
+ #endif // AUTOCELLVOLTAGE
 #endif //AUTOCELL
 
 

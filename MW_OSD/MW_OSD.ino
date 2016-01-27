@@ -747,6 +747,10 @@ void readEEPROM(void)
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
      Settings[en] = EEPROM.read(en);
   }
+  #ifdef AUTOCELL
+  Settings[S_BATCELLS]=1;
+  #endif
+
   for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
      uint16_t pos=(en*2)+EEPROM_SETTINGS;
      Settings16[en] = EEPROM.read(pos);
