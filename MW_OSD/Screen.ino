@@ -508,16 +508,16 @@ void displayVoltage(void)
     voltage=MwVBat;
   }
   
-#ifdef AUTOVOLTWARNING
+#ifdef AUTOCELL
   uint8_t tcells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
   if (tcells>cells){
     cells=tcells;
   }   
   voltageWarning = cells * MvVBatWarningCellVoltage;
- #ifdef AUTOVOLTCELLALARM
+ #ifdef AUTOCELL_VOLTAGE
   voltageWarning = cells * Settings[S_VOLTAGEMIN];
- #endif // AUTOVOLTCELLALARM
-#endif //AUTOVOLTWARNING
+ #endif // AUTOCELL_VOLTAGE
+#endif //AUTOCELL
 
 
 #ifdef BATTERYICONVOLTS
