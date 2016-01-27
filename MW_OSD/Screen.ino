@@ -507,7 +507,20 @@ void displayVoltage(void)
   if (Settings[S_MAINVOLTAGE_VBAT]){
     voltage=MwVBat;
   }
-  #ifdef BATTERYICONVOLTS
+  
+#ifdef AUTOVOLTWARNING
+  uint8_t tcells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
+  if (tcells>cells){
+    cells=tcells;
+  }   
+  voltageWarning = cells * MvVBatWarningCellVoltage;
+ #ifdef AUTOVOLTCELLALARM
+  voltageWarning = cells * Settings[S_VOLTAGEMIN];
+ #endif // AUTOVOLTCELLALARM
+#endif //AUTOVOLTWARNING
+
+
+#ifdef BATTERYICONVOLTS
   if (Settings[S_SHOWBATLEVELEVOLUTION])
   {
     uint8_t battev = 0;
@@ -518,16 +531,20 @@ void displayVoltage(void)
     screenBuffer[0]=(SYM_BATT_EMPTY)-battev;
   }
   else 
-  #endif // BATTERYICONVOLTS
+#endif // BATTERYICONVOLTS
+
   {
     screenBuffer[0]=SYM_MAIN_BATT;
   }
+
+  if ((voltage<voltageWarning)&&(timer.Blink2hz))
+    return;
+
 #ifdef DISP_LOW_VOLTS_WARNING
   if (voltage<=voltageWarning&&!armedtimer)
     MAX7456_WriteString_P(lowvolts_text, getPosition(motorArmedPosition));
 #endif
-  if ((voltage<voltageWarning)&&(timer.Blink2hz))
-    return;
+
 #ifdef FORCE_DISP_LOW_VOLTS
   if(fieldIsVisible(voltagePosition)||(voltage<=voltageWarning)) 
 #else
