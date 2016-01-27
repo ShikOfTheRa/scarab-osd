@@ -205,7 +205,12 @@ void displayMode(void)
   }  
 
   
-  if(MwSensorActive&mode.gpshome){
+  if(MwSensorActive&mode.passthru){
+    screenBuffer[2]=0;
+    screenBuffer[0]=SYM_PASS;
+    screenBuffer[1]=SYM_PASS1;
+  }
+  else if(MwSensorActive&mode.gpshome){
 #ifdef APINDICATOR
     screenBuffer[0] = SYM_GHOME;
     screenBuffer[1] = SYM_GHOME1;
@@ -261,11 +266,6 @@ void displayMode(void)
     screenBuffer[2]=0;
     screenBuffer[0]=SYM_HORIZON;
     screenBuffer[1]=SYM_HORIZON1;
-  }
-  else if(MwSensorActive&mode.passthru){
-    screenBuffer[2]=0;
-    screenBuffer[0]=SYM_PASS;
-    screenBuffer[1]=SYM_PASS1;
   }
   else{
     screenBuffer[2]=0;
