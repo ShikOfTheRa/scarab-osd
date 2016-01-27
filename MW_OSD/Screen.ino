@@ -511,12 +511,17 @@ void displayVoltage(void)
 #ifdef AUTOCELL
   uint8_t tcells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
   if (tcells>cells){
-    cells=tcells;
+    if (tcells<11){
+      cells=tcells;
+    }
   }   
   voltageWarning = cells * MvVBatWarningCellVoltage;
- #ifdef AUTOCELLVOLTAGE
+ #ifdef AUTOCELL_VOLTAGE
   voltageWarning = cells * Settings[S_VOLTAGEMIN];
- #endif // AUTOCELLVOLTAGE
+ #endif // AUTOCELL_VOLTAGE
+#else //NOT AUTOCELL
+  voltageWarning = Settings[S_VOLTAGEMIN];
+  cells = Settings[S_BATCELLS];
 #endif //AUTOCELL
 
 

@@ -942,10 +942,6 @@ void ProcessSensors(void) {
       voltage=sensorfilter[0][SENSORFILTERSIZE]>>3;
   }
 
-#ifndef AUTOVOLTWARNING
-  voltageWarning = Settings[S_VOLTAGEMIN];
-  cells = Settings[S_BATCELLS];
-#endif // AUTOVOLTWARNING  
   vidvoltageWarning = Settings[S_VIDVOLTAGEMIN];
   uint16_t vidvoltageRaw = sensorfilter[1][SENSORFILTERSIZE];
     if (!Settings[S_VREFERENCE]){
