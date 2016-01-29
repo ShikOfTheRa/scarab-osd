@@ -542,8 +542,8 @@ unsigned long sidebarsMillis = 0;
 unsigned long sidebaraMillis = 0;
 
 //For Current Throttle
-uint16_t LowT = 1100;
-uint16_t HighT = 1900;
+uint16_t LowT = LOWTHROTTLE;
+uint16_t HighT = HIGHTHROTTLE;
 
 // For Time
 uint16_t onTime=0;

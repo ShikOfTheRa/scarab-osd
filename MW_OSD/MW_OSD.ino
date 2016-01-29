@@ -162,6 +162,11 @@ void setup()
     MwSensorPresent |=ACCELEROMETER;
   #endif
   setMspRequests();
+  
+  #ifdef ALWAYSARMED
+    armed=1;
+  #endif //ALWAYSARMED
+
 }
 
 //------------------------------------------------------------------------
@@ -213,7 +218,6 @@ void loop()
   #ifdef PWMTHROTTLE
     MwRcData[THROTTLESTICK] = pwmRSSI;
   #endif //THROTTLE_RSSI
-
 
   #if defined (OSD_SWITCH_RC)                   
     uint8_t rcswitch_ch = Settings[S_RCWSWITCH_CH];
@@ -971,8 +975,8 @@ void ProcessSensors(void) {
       if (amperage < 0) amperage=0;
     }  
     else {  // Virtual
-      uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],1000,2000);
-      Vthrottle = constrain((Vthrottle-1000)/10,10,100);
+      uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],LowT,HighT);
+      Vthrottle = constrain((Vthrottle-1000)/10,0,100);
       amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings16[S16_AMPDIVIDERRATIO]*0.01;
       if(armed)
         amperage += Settings16[S16_AMPZERO];

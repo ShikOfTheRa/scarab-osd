@@ -7,6 +7,20 @@
 #define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 
+
+/*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
+
+/********************       OSD SCREEN SWITCH settings      *********************/
+// This functionality enables :
+// a, 2 different screen layouts to be selected using the Flight controller "OSD_SWITCH" feature or
+// b, 2 or 3 different screen layouts to be selected using a specificed RC channel assigned to a TX switch
+//Choose ONLY ONE option:
+#define OSD_SWITCH_RC               // Enables 3 way screen switch using a TX channel via FC. Specify channel on GUI (range 0-7 AUX1=4 AUX4=7)
+//#define OSD_SWITCH                // DEPRECATED Forces original 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
+
+
+
+
 /********************  CONTROLLER rule definitions  **********************/
 
 #ifdef MULTIWII       //set up latest at time of release
@@ -223,6 +237,7 @@
   #undef  SATACTIVECHECK
   #undef  GPSACTIVECHECK
   #undef  OSD_SWITCH_RC
+  #def ALWAYSARMED
   #define MENU0  0 //STATISTICS
   #define MAXPAGE MENU0   
 #endif
@@ -433,3 +448,9 @@
 
 /********************  other paramters  *********************/
 #define RSSIhz           10 
+
+#ifdef PWMTHROTTLE
+  #define ALWAYSARMED  // starts OSD in armed mode
+#endif
+
+

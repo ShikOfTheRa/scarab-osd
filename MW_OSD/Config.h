@@ -54,19 +54,11 @@
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
 
-/********************       OSD SCREEN SWITCH settings      *********************/
-// This functionality enables :
-// a, 2 different screen layouts to be selected using the Flight controller "OSD_SWITCH" feature or
-// b, 2 or 3 different screen layouts to be selected using a specificed RC channel assigned to a TX switch
-//Choose ONLY ONE option:
-#define OSD_SWITCH_RC               // Enables 3 way screen switch using a TX channel via FC. Specify channel on GUI (range 0-7 AUX1=4 AUX4=7)
-//#define OSD_SWITCH                // DEPRECATED Forces original 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
-//#define OSD_SWITCH_RSSI           // Enables 3 way screen switch using a TX channel via a RX channel connected to the OSD RSSI pin. Typically used for GPSOSD.
-
-
 /********************       GPS OSD settings      *********************/
-//#define PPMOSDCONTROL             // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD RSSI pin 
-//#define PWMTHROTTLE               // Enables throttle feature, virtual current sensor using RC throttle connected into OSD RSSI pin 
+//#define OSD_SWITCH_RSSI           // Enables 3 way screen switch using a TX channel via a RX channel connected to the OSD RSSI pin. Typically used for GPSOSD.
+//#define PWMTHROTTLE               // Enables throttle feature, virtual current sensor using RC throttle connected into OSD RSSI pin. Calibrate throttle using GUI RSSI cal functions 
+
+//#define PPMOSDCONTROL             // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD RSSI pin. Requires TX type to be set below. 
 //#define SERIAL_SUM_PPM_RHF        // Enable for Robe/Hitec/Futaba
 //#define SERIAL_SUM_PPM_GS         // Enable for Graupner/Spektrum    
 //#define SERIAL_SUM_PPM_M          // Enable for Multiplex
@@ -258,8 +250,8 @@
 // This is used for those who want to specify non default throttle calibration values. 
 // To use comment out AUTOTHROTTLE and adjusts the maximum and minimum throttle values 
 #define AUTOTHROTTLE 
-#define HIGHTHROTTLE 2000                // Maximum recognised value for throttle 
-#define LOWTHROTTLE  1000                // Minimum recognised value for throttle
+#define HIGHTHROTTLE 1900                // Maximum recognised value for throttle 
+#define LOWTHROTTLE  1100                // Minimum recognised value for throttle
 
 
 

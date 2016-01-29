@@ -595,10 +595,10 @@ void displayCurrentThrottle(void)
   #endif  
   screenBuffer[1]=' ';
   #ifdef AUTOTHROTTLE
-    if (MwRcData[THROTTLESTICK] > HighT) HighT = MwRcData[THROTTLESTICK] -5;
+    if (MwRcData[THROTTLESTICK] > HighT) HighT = MwRcData[THROTTLESTICK];
     if (MwRcData[THROTTLESTICK] < LowT) LowT = MwRcData[THROTTLESTICK];      // Calibrate high and low throttle settings  --defaults set in GlobalVariables.h 1100-1900
-    if (HighT>HIGHTHROTTLE) HighT=HIGHTHROTTLE-5;
-    if (LowT<LOWTHROTTLE) LowT=LOWTHROTTLE;
+    if (HighT>2050) HighT=2050;
+    if (LowT<950) LowT=950;
   #else
     HighT=HIGHTHROTTLE;
     LowT=LOWTHROTTLE;
