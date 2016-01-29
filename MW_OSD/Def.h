@@ -9,14 +9,6 @@
 
 /********************  CONTROLLER rule definitions  **********************/
 
-#ifdef NOCONTROLLER
-  #undef  INTRO_MENU
-  #undef  MSPACTIVECHECK
-  #undef  SATACTIVECHECK
-  #undef  GPSACTIVECHECK
-  #undef  OSD_SWITCH_RC
-#endif
-
 #ifdef MULTIWII       //set up latest at time of release
   #define MULTIWII_V24
 #endif
@@ -208,10 +200,6 @@
   #define MAXPAGE MENU9   
 #endif
 
-#if defined (FC_VOLTAGE_CONFIG) && (defined (CLEANFLIGHT) || defined(BASEFLIGHT))
-  #define USE_FC_VOLTS_CONFIG
-#endif
-
 #if defined(TAULABS)
   #define AMPERAGE_DIV 10
   #define HAS_ALARMS
@@ -229,12 +217,26 @@
   #define MAXPAGE MENU9   
 #endif
 
+#ifdef NOCONTROLLER
+  #undef  INTRO_MENU
+  #undef  MSPACTIVECHECK
+  #undef  SATACTIVECHECK
+  #undef  GPSACTIVECHECK
+  #undef  OSD_SWITCH_RC
+  #define MENU0  0 //STATISTICS
+  #define MAXPAGE MENU0   
+#endif
+
 #ifdef HAS_ALARMS
   #define MAX_ALARM_LEN 30
 #endif
 
 #ifndef AMPERAGE_DIV 
   #define AMPERAGE_DIV 100
+#endif
+
+#if defined (FC_VOLTAGE_CONFIG) && (defined (CLEANFLIGHT) || defined(BASEFLIGHT))
+  #define USE_FC_VOLTS_CONFIG
 #endif
 
 /********************  FIXEDWING definitions  *********************/

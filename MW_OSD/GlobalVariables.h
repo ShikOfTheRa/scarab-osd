@@ -138,7 +138,7 @@ uint8_t screenlayout=0;
 uint8_t oldscreenlayout=0;
 uint8_t ROW=10;
 uint8_t COL=3;
-int8_t configPage=MENU1;
+int8_t configPage=MENU0;
 uint8_t configMode=0;
 uint8_t fontMode = 0;
 uint8_t fontData[54];

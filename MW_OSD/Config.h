@@ -65,7 +65,8 @@
 
 
 /********************       GPS OSD settings      *********************/
-//#define PPMOSDCONTROL             // Enables full OSD menu, screen switching, RSSI, Throttle fature, virtual current sensor, etc using a PPM signal into OSD RSSI pin 
+//#define PPMOSDCONTROL             // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD RSSI pin 
+//#define PWMTHROTTLE               // Enables throttle feature, virtual current sensor using RC throttle connected into OSD RSSI pin 
 //#define SERIAL_SUM_PPM_RHF        // Enable for Robe/Hitec/Futaba
 //#define SERIAL_SUM_PPM_GS         // Enable for Graupner/Spektrum    
 //#define SERIAL_SUM_PPM_M          // Enable for Multiplex

@@ -611,9 +611,11 @@ void handleRawRC() {
       { 
 	waitStick =1;
         menudir=1+oldmenudir;
+        #ifdef MENU9
 	if(configPage == MENU9 && COL == 3) {
 	  if(ROW==5) timer.magCalibrationTimer=0;
         }
+        #endif //MENU9
         serialMenuCommon();  
       }      
     }
@@ -861,7 +863,7 @@ void serialMSPreceive(uint8_t loops)
 
 void configExit()
 {
-  configPage=MENU1;
+  configPage=MENU0;
   ROW=10;
   COL=3;
   configMode=0;
