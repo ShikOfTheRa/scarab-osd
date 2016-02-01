@@ -408,7 +408,7 @@ void loop()
 #ifndef HIDESUMMARY
       if(previousarmedstatus && !armed){
         armedtimer=20;
-        configPage=MENU0;
+        configPage=0;
         ROW=10;
         COL=1;
         configMode=1;

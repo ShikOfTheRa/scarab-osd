@@ -537,10 +537,7 @@ void handleRawRC() {
   if(!waitStick)
   {
     if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THROTTLESTICK]>MINSTICK)){
-      if ((allSec-menuSec)>5) {
-        armed=0;
-      }
-      else if (!configMode&&(allSec>5)&&!armed){
+      if (!configMode&&(allSec>5)&&!armed){
           // Enter config mode using stick combination
           waitStick =  2;	// Sticks must return to center before continue!
           configMode = 1;
@@ -582,7 +579,7 @@ void handleRawRC() {
 	ROW--;
 	if(ROW<1)
 	  ROW=1;
-        if(configPage == MENU0) {
+        if(configPage == 0) {
           ROW=10;
         }
       }
@@ -618,9 +615,6 @@ void handleRawRC() {
         #endif //MENU9
         serialMenuCommon();  
       }      
-    }
-    else{
-      menuSec=allSec;
     }
     if(waitStick == 1)
       stickTime = millis();
@@ -863,7 +857,7 @@ void serialMSPreceive(uint8_t loops)
 
 void configExit()
 {
-  configPage=MENU0;
+  configPage=1;
   ROW=10;
   COL=3;
   configMode=0;
