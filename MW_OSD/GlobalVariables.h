@@ -436,9 +436,9 @@ uint16_t SCREENLAYOUT_DEFAULT_OSDSW[EEPROM_SETTINGS] = {
 (LINE11+3)|DISPLAY_ALWAYS,   // vidvoltagePosition
 (LINE13+13)|DISPLAY_NEVER,   // amperagePosition
 (LINE13+23)|DISPLAY_NEVER,   // pMeterSumPosition
-(LINE07+14)|DISPLAY_NEVER,   // horizonPosition
+(LINE07+14)|DISPLAY_NEVER,   // AHIPosition
+(LINE07+7)|DISPLAY_NEVER,   // horizonPosition
 (LINE07+7)|DISPLAY_NEVER,   // SideBarPosition
-(LINE07+7)|DISPLAY_NEVER,   // SideBarScroll Position
 (3)|DISPLAY_NEVER,   // SideBarHeight Position
 (7)|DISPLAY_NEVER,   // SideBarWidth Position
 (LINE05+2)|DISPLAY_NEVER,   // Gimbal Position
@@ -450,8 +450,8 @@ uint16_t SCREENLAYOUT_DEFAULT_OSDSW[EEPROM_SETTINGS] = {
 (LINE04+10)|DISPLAY_NEVER,   // APstatusPosition
 (LINE12+13)|DISPLAY_NEVER,   // wattPosition
 (LINE07+6)|DISPLAY_NEVER,   // glidescopePosition
-(LINE07+7)|DISPLAY_NEVER,   // SideBarPosition
-(LINE07+7)|DISPLAY_NEVER,   // SideBarScrollPosition
+(LINE10+10)|DISPLAY_NEVER,   // CallSign Position
+(LINE08+10)|DISPLAY_ALWAYS,   // Debug Position
 
 };
 

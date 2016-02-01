@@ -459,8 +459,8 @@ void displayHorizon(int rollAngle, int pitchAngle)
 
   if (Settings[S_WITHDECORATION]&fieldIsVisible(SideBarPosition)){
     // Draw AH sides
-    int8_t hudwidth=  getPosition(SideBarWidthPosition);;
-    int8_t hudheight= getPosition(SideBarHeightPosition);;
+    int8_t hudwidth=  getPosition(SideBarWidthPosition)&0x0F;
+    int8_t hudheight= getPosition(SideBarHeightPosition)&0x0F;
     for(int8_t X=-hudheight; X<=hudheight; X++) {
       screen[position-hudwidth+(X*LINE)] =  SYM_AH_DECORATION_LEFT;
       screen[position+hudwidth+(X*LINE)] =  SYM_AH_DECORATION_RIGHT;    

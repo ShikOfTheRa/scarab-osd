@@ -1100,17 +1100,17 @@ if (SimPosn[horizonPosition]<0x3FF){
 
   if(confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() > 0) {
     //Draw center screen
-    mapchar(0x7e, 224-30);
-    mapchar(0x26, 224-30-1);
-    mapchar(0xbc, 224-30+1);
+    mapchar(0x7e, SimPosn[horizonPosition]);
+    mapchar(0x26, SimPosn[horizonPosition]-1);
+    mapchar(0xbc, SimPosn[horizonPosition]+1);
   }
   }
   
   if (SimPosn[SideBarPosition]<0x3FF){
     if(confItem[GetSetting("S_WITHDECORATION")].value() > 0) {
       int centerpos = SimPosn[horizonPosition];
-      int hudwidth=  SimPosn[SideBarWidth] ;
-      int hudheight= SimPosn[SideBarHeight];
+      int hudwidth=  SimPosn[SideBarWidth]&0x0F ;
+      int hudheight= SimPosn[SideBarHeight]&0x0F;
       for(int X=-hudheight; X<=hudheight; X++) {
         mapchar(0x12,centerpos+hudwidth+(X*LINE));
         mapchar(0x12,centerpos-hudwidth+(X*LINE));
