@@ -12,7 +12,7 @@
  * OSD    - Support for BETAFLIGHT / CLEANFLIGHT / BASEFLIGHT FC profiles selection
  * OSD    - Support for BETAFLIGHT / CLEANFLIGHT / BASEFLIGHT FC pid controller selection
  * OSD    - BETAFLIGHT AIRMODE display indicator
- * OSD    - Support for CLEANFLIGHT time selection
+ * OSD    - Support for CLEANFLIGHT loop time selection
  * OSD    - Video volts alarm adjustable via GUI
  * OSD    - Video volts independant of main battery
  * OSD    - Battery voltage status icon improved accuracy - thanks to Hwurzburg
@@ -21,6 +21,7 @@
  * OSD    - Support for PWMRSSI via RC data (Flight Controller types)
  * OSD    - Support for PWMRSSI via PPM stream (GPS OSD) - PENDING TESTING
  * OSD    - Support for PPM menu control via PPM for GSOSD - PENDING TESTING
+ * OSD    - Support for using RSSI pin as PWM throttle for throttle % / virtual current GPSOSD/standalone/NAZA
  * OSD    - Enabled filtering and calibration for RSSI data from Flight Controller
  * OSD    - Enabled filtering and calibration for Main battery voltage from Flight Controller
  * OSD    - Support for Air speed sensor
@@ -40,11 +41,13 @@
  * OSD    - Throttle calibration values can be amended for inreased accuracy of throllte in some scenarios
  * GUI    - Support for RSSI Auto calibration from GUI
  * GUI    - Support for Current sensor calibration from GUI - using hardware parameters (Offset and gain) 
+ * GUI    - Displays active screen refresh rate
  * BUGFIX - HARIKIRI / MW2.1 not working since R1.5
  * BUGFIX - Center crosshair font partially missing on default_large font
  * BUGFIX - AHI incroect at large angles
  * BUGFIX - Analogue ports had RSSI pulled high - impacting range and accuracy of values 
- * BUGFIX - intermittant sticking on writing to OSD. Also resolves other intermittant checksum errors  
+ * BUGFIX - intermittant sticking on writing to OSD. Also resolves other intermittant checksum errors
+ * BUGFIX - PASTHROUGH icon priority matches FC for FIXEDWING
  * COMPAT - Compatability support for latest cleanflight - conflict with MultiWii
  * FONT   - improved large font from Schnupperm enhanced by Leo
  * FONT   - Support for Betaflight airmode. Displays font icon when active
@@ -66,6 +69,10 @@ Migrate controller/aircraft choice to GUI
 Power consumtion W/Hr and W/Km 
 
 Support for OP
+
+Support for displaying PID RPW values for in flight tuning
+
+Improvements to PAL/NTSC autodetect / config change.
 
 Review throttle autoscaling
 
