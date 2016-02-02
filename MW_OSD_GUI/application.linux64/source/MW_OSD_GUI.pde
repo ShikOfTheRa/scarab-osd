@@ -155,7 +155,7 @@ ControlP5 SmallcontrolP5;
 ControlP5 ScontrolP5;
 ControlP5 FontGroupcontrolP5;
 ControlP5 GroupcontrolP5;
-Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage,eeindexmessage,analmessage; 
+Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage,eeindexmessage,processingmessage,analmessage; 
 Textlabel txtlblLayoutTxt,txtlblLayoutEnTxt, txtlblLayoutHudTxt; 
 Textlabel txtlblLayoutTxt2,txtlblLayoutEnTxt2, txtlblLayoutHudTxt2; 
 ListBox commListbox,baudListbox;
@@ -200,6 +200,10 @@ int WriteConfigMSPMillis=0;
 int FontMSPMillis=0;
 int rssical=99;
 int eedataOSDtemp = 0;
+int processingtxtval = 0;
+int oldseconds=0;
+int framerate=0;
+String frameratetxt="";
 
 // XML config editorvariables
 int hudeditposition=0;
@@ -239,6 +243,7 @@ int[] debug = new int[4];
 String progresstxt="";
 String msptxt="";
 String eeindextxt="";
+String processingtxt="";
 String analtxt="";
 int analSENSORS=5;
 int xcolor=20;  
@@ -852,6 +857,7 @@ DONATEimage  = loadImage("DON_def.png");
   txtmessage = controlP5.addTextlabel("txtmessage","",3,295); // textdebug
   mspmessage = controlP5.addTextlabel("mspmessage","",XHUD+735,155); // textdebug
   eeindexmessage = controlP5.addTextlabel("eeindexmessage","",XHUD+735,175); // eeindexdebug
+  processingmessage = controlP5.addTextlabel("processingmessage","",XHUD+735+70,155); // eeindexdebug
 
 
   analmessage = controlP5.addTextlabel("analmessage","",XHUD+735,255); //
@@ -1212,9 +1218,40 @@ void draw() {
 //  debug[2]=OSD_S_HUDSW1;
 //  debug[3]=OSD_S_HUDSW2;
 // Initial setup
+  int seconds = second();
   time=millis();
   progresstxt="";
+  switch(processingtxtval) {
+    case 0:
+      processingtxt="/";
+      break;
+    case 1:
+      processingtxt="-";
+      break;
+    case 2:
+      processingtxt="\\";
+      break;
+    case 3:
+      processingtxt="|";
+      break;
+  }
+  processingtxtval++;
 
+  if (seconds!=oldseconds){
+    frameratetxt=str(framerate);
+    framerate=0;
+    oldseconds=seconds;
+  }
+  framerate++;
+  processingtxt="Framerate: "+ frameratetxt +" "+ processingtxt;
+
+  if (processingtxtval>3) processingtxtval=0;
+  if (int(DEBUGGUI.getValue())!=1){
+    processingtxt="";
+  }
+  
+  
+  
   if (commListbox.isOpen())
     baudListbox.close();
   else
@@ -1280,6 +1317,7 @@ void draw() {
     txtmessage.setValue(progresstxt);
     mspmessage.setValue(msptxt);
     eeindexmessage.setValue(eeindextxt);
+    processingmessage.setValue(processingtxt);
     
 // txtlblconfItem[0].setValue(""); huh?
 
@@ -1296,7 +1334,7 @@ void draw() {
   txtlblLayoutHudTxt.setValue(" : "+hudid);
   LEW.setLabel("Layout Editor for profile: "+hudid+" - "+CONFIGHUDNAME[hudid]);
   if (CONFIGHUDEN[hudid][hudeditposition]>0)
-    txtlblLayoutEnTxt.setValue(" : Enabled");
+    txtlblLayoutEnTxt.setValue(" : Enabled "+(CONFIGHUD[hudid][hudeditposition]&0x01FF));
   else
     txtlblLayoutEnTxt.setValue(" : Disabled");
 
@@ -1334,8 +1372,10 @@ void draw() {
     MakePorts();
     msptxt="";
     eeindextxt="";
+//    processingtxt="";
     analmessage.setValue("");
     eeindexmessage.setValue("");
+    processingmessage.setValue("");
     for (int i=0; i<analSENSORS; i++) {
       txtlblanal[i].setValue("");
     }
@@ -1426,7 +1466,6 @@ void draw() {
 
   image(GUIBackground,0, 0, windowsX, windowsY); 
 
-  int seconds = second();
   if (((seconds&0x1F)!= 0)&&(Donate>0)){
    image(DONATEimage,XLINKS+20,YLINKS+207, 100, 40);  
   }  
@@ -1506,12 +1545,14 @@ void draw() {
   ShowDirection();
  }
  
+ 
   ShowMapMode();
     
   MatchConfigs();
   MakePorts();
   
   ShowSPort();
+ 
   
   if ((ClosePort ==true)&& (PortWrite == false)){ //&& (init_com==1)
     ClosePort();
@@ -1780,6 +1821,10 @@ public void bLUP() {
   int ii = CONFIGHUD[i][hudeditposition]&0x1FF;
   ii-=30;
   ii=constrain(ii,0,419);
+  if(hudeditposition==SideBarHeight)
+    ii=constrain(ii,1,7);
+  if(hudeditposition==SideBarWidth)
+    ii=constrain(ii,1,14);
   println(ii);
   CONFIGHUD[i][hudeditposition]&=0xFE00;
   CONFIGHUD[i][hudeditposition]|=ii;
@@ -1796,10 +1841,13 @@ public void bLDOWN() {
   int ii = CONFIGHUD[i][hudeditposition]&0x1FF;
   ii+=30;
   ii=constrain(ii,0,419);
+  if(hudeditposition==SideBarHeight)
+    ii=constrain(ii,1,7);
+  if(hudeditposition==SideBarWidth)
+    ii=constrain(ii,1,14);
   println(ii);
   CONFIGHUD[i][hudeditposition]&=0xFE00;
   CONFIGHUD[i][hudeditposition]|=ii;
-//  CONFIGHUD[i][hudeditposition]+=30;
 }
 
 public void bLLEFT() {
@@ -1813,6 +1861,10 @@ public void bLLEFT() {
   int ii = CONFIGHUD[i][hudeditposition]&0x1FF;
   ii-=1;
   ii=constrain(ii,0,419);
+  if(hudeditposition==SideBarHeight)
+    ii=constrain(ii,1,7);
+  if(hudeditposition==SideBarWidth)
+    ii=constrain(ii,1,14);
   println(ii);
   CONFIGHUD[i][hudeditposition]&=0xFE00;
   CONFIGHUD[i][hudeditposition]|=ii;
@@ -1829,6 +1881,10 @@ public void bLRIGHT() {
   int ii = CONFIGHUD[i][hudeditposition]&0x1FF;
   ii+=1;
   ii=constrain(ii,0,419);
+  if(hudeditposition==SideBarHeight)
+    ii=constrain(ii,1,7);
+  if(hudeditposition==SideBarWidth)
+    ii=constrain(ii,1,14);
   println(ii);
   CONFIGHUD[i][hudeditposition]&=0xFE00;
   CONFIGHUD[i][hudeditposition]|=ii;
@@ -2412,6 +2468,7 @@ void initxml(){
 
 
 void xmlsavelayout(){
+  XML[] xmlhuddescription = xml.getChildren("DESCRIPTION");
   XML[] allhudoptions = xml.getChildren("LAYOUT");
   int i=0;
 
@@ -2419,6 +2476,9 @@ void xmlsavelayout(){
     for (int hudindex = 0; hudindex < hudoptions; hudindex++) {
       allhudoptions[i].setInt("enabled",CONFIGHUDEN[hud][hudindex]);
       allhudoptions[i].setInt("value",CONFIGHUD[hud][hudindex]&0x3FF);
+      String text = xmlhuddescription[hudindex].getString("desc");
+//      String text=str(i);
+      allhudoptions[i].setString("desc",text);
       i++;  
     }    
   }

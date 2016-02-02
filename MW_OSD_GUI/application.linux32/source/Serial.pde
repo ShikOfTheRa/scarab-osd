@@ -388,13 +388,14 @@ void SendCommand(int cmd){
         if(toggleModeItems[2].getValue()> 0) modebits |=1<<2;
         if(toggleModeItems[3].getValue()> 0) modebits |=1<<3;
         if(toggleModeItems[4].getValue()> 0) modebits |=1<<5;
-        if(toggleModeItems[5].getValue()> 0) modebits |=1<<8;
         if(toggleModeItems[6].getValue()> 0) modebits |=1<<10;
         if(toggleModeItems[7].getValue()> 0) modebits |=1<<11;
         if(toggleModeItems[8].getValue()> 0) modebits |=1<<28;
         if(toggleModeItems[9].getValue()> 0) modebits |=1<<19;
+
+//        if(toggleModeItems[5].getValue()> 0) modebits |=1<<8;
 //        if(toggleModeItems[5].getValue()> 0) modebits |=1<<16; //Also send LLIGHTS      when CAMSTAB enabled - for testing
-//        if(toggleModeItems[5].getValue()> 0) modebits |=1<<12; //Also send PASS         when CAMSTAB enabled - for testing
+        if(toggleModeItems[5].getValue()> 0) modebits |=1<<12; //Also send PASS         when CAMSTAB enabled - for testing
 //        if(toggleModeItems[5].getValue()> 0) modebits |=1<<20; //Also send MISSION MODE when CAMSTAB enabled - for testing
         serialize32(modebits);
         serialize8(0);   // current setting

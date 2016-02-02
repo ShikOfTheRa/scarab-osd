@@ -201,6 +201,9 @@ int FontMSPMillis=0;
 int rssical=99;
 int eedataOSDtemp = 0;
 int processingtxtval = 0;
+int oldseconds=0;
+int framerate=0;
+String frameratetxt="";
 
 // XML config editorvariables
 int hudeditposition=0;
@@ -854,7 +857,7 @@ DONATEimage  = loadImage("DON_def.png");
   txtmessage = controlP5.addTextlabel("txtmessage","",3,295); // textdebug
   mspmessage = controlP5.addTextlabel("mspmessage","",XHUD+735,155); // textdebug
   eeindexmessage = controlP5.addTextlabel("eeindexmessage","",XHUD+735,175); // eeindexdebug
-  processingmessage = controlP5.addTextlabel("processingmessage","",XHUD+735+150,155); // eeindexdebug
+  processingmessage = controlP5.addTextlabel("processingmessage","",XHUD+735+70,155); // eeindexdebug
 
 
   analmessage = controlP5.addTextlabel("analmessage","",XHUD+735,255); //
@@ -1215,6 +1218,7 @@ void draw() {
 //  debug[2]=OSD_S_HUDSW1;
 //  debug[3]=OSD_S_HUDSW2;
 // Initial setup
+  int seconds = second();
   time=millis();
   progresstxt="";
   switch(processingtxtval) {
@@ -1232,10 +1236,21 @@ void draw() {
       break;
   }
   processingtxtval++;
+
+  if (seconds!=oldseconds){
+    frameratetxt=str(framerate);
+    framerate=0;
+    oldseconds=seconds;
+  }
+  framerate++;
+  processingtxt="Framerate: "+ frameratetxt +" "+ processingtxt;
+
   if (processingtxtval>3) processingtxtval=0;
   if (int(DEBUGGUI.getValue())!=1){
     processingtxt="";
   }
+  
+  
   
   if (commListbox.isOpen())
     baudListbox.close();
@@ -1451,7 +1466,6 @@ void draw() {
 
   image(GUIBackground,0, 0, windowsX, windowsY); 
 
-  int seconds = second();
   if (((seconds&0x1F)!= 0)&&(Donate>0)){
    image(DONATEimage,XLINKS+20,YLINKS+207, 100, 40);  
   }  
@@ -1531,12 +1545,14 @@ void draw() {
   ShowDirection();
  }
  
+ 
   ShowMapMode();
     
   MatchConfigs();
   MakePorts();
   
   ShowSPort();
+ 
   
   if ((ClosePort ==true)&& (PortWrite == false)){ //&& (init_com==1)
     ClosePort();
