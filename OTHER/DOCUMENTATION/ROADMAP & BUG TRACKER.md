@@ -120,6 +120,8 @@ Use aernotautical units - knots - speed, nautical miles - distance, feet - altit
 
 Fast start - Autodetect MAX ready or timeout
 
+Servo config page for fixedwing
+
 
 
 Code quality:
