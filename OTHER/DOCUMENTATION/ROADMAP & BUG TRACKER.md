@@ -54,15 +54,20 @@
 
 ---
 
-## Bugfixes / Enhancements planned for 1.7: ##
+## Bugfixes / Enhancements intended for 1.7: ##
 
 Support for APM
 
 Support for Multiple crosshair types
 
+Improve GUI speed
+
+
 ---
 
 ## Enhancement requests for future releases: ##
+
+Vortex style capacity indicator
 
 Migrate controller/aircraft choice to GUI
 
