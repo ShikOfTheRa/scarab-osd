@@ -547,7 +547,7 @@ void handleRawRC() {
     else if(configMode) {
       int8_t oldmenudir=constrain(menudir,-5,5);
       menudir=0;
-      if(previousarmedstatus&&(MwRcData[THROTTLESTICK]>MINSTICK))
+      if(previousarmedstatus&&(MwRcData[THROTTLESTICK]>1300))
       {
 	// EXIT from SHOW STATISTICS AFTER DISARM (push throttle up)
 	waitStick = 2;
