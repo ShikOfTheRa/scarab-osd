@@ -48,6 +48,8 @@
  * BUGFIX - Analogue ports had RSSI pulled high - impacting range and accuracy of values 
  * BUGFIX - intermittant sticking on writing to OSD. Also resolves other intermittant checksum errors
  * BUGFIX - PASTHROUGH icon priority matches FC for FIXEDWING
+ * BUGFIX - GPS altitude only enabled/displayed if GPS location enabled
+ * BUGFIX - OSD exits menu first time after disarm when throttl eabove minimum threshold. Highered threshold
  * COMPAT - Compatability support for latest cleanflight - conflict with MultiWii
  * FONT   - improved large font from Schnupperm enhanced by Leo
  * FONT   - Support for Betaflight airmode. Displays font icon when active
