@@ -836,6 +836,7 @@ void displayGPSPosition(void)
   uint16_t position;
   if(!GPS_fix)
     return;
+  displayGPSAltitude();
   if(!fieldIsVisible(MwGPSLatPositionTop))
     return;
   if (!MwSensorActive&mode.gpshome)
@@ -850,6 +851,10 @@ void displayGPSPosition(void)
       FormatGPSCoord(GPS_longitude,screenBuffer+1,4,'E','W');
       MAX7456_WriteString(screenBuffer, position);  
   }
+}
+
+
+void displayGPSAltitude(void){
   if(Settings[S_GPSALTITUDE]){
     if(!fieldIsVisible(MwGPSAltPosition))
     return;
