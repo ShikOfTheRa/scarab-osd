@@ -414,6 +414,11 @@ void loop()
         configMode=1;
         setMspRequests();
       }
+#else
+      if(previousarmedstatus && !armed){
+        previousarmedstatus=0;
+        configMode=0;
+      }
 #endif //HIDESUMMARY      
       if(configMode)
       {
