@@ -71,6 +71,8 @@ Improve GUI speed
 
 Vortex style capacity indicator
 
+Display PIDS when flying for in flight tuning
+
 Migrate controller/aircraft choice to GUI
 
 Power consumtion W/Hr and W/Km 
