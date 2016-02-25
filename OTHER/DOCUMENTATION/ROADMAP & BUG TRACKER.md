@@ -11,7 +11,8 @@
  * OSD    - Support for BETAFLIGHT
  * OSD    - Support for BETAFLIGHT / CLEANFLIGHT / BASEFLIGHT FC profiles selection
  * OSD    - Support for BETAFLIGHT / CLEANFLIGHT / BASEFLIGHT FC pid controller selection
- * OSD    - BETAFLIGHT AIRMODE display indicator
+ * OSD    - BETAFLIGHT/CLEANFLIGHT AIRMODE display indicator
+ * OSD    - BETAFLIGHT ACRO PLUS mode display indicator
  * OSD    - Support for CLEANFLIGHT loop time selection
  * OSD    - Video volts alarm adjustable via GUI
  * OSD    - Video volts independant of main battery
@@ -63,8 +64,6 @@ Support for APM
 Support for Multiple crosshair types
 
 Improve GUI speed
-
-Support for ACRO+ mode icon in BETAFLIGHT
 
 
 ---
