@@ -64,6 +64,8 @@ Support for Multiple crosshair types
 
 Improve GUI speed
 
+Support for ACRO+ mode icon in BETAFLIGHT
+
 
 ---
 
