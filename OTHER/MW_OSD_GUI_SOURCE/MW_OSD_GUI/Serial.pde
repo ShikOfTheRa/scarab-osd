@@ -397,6 +397,7 @@ void SendCommand(int cmd){
 //        if(toggleModeItems[5].getValue()> 0) modebits |=1<<16; //Also send LLIGHTS      when CAMSTAB enabled - for testing
 //        if(toggleModeItems[5].getValue()> 0) modebits |=1<<12; //Also send PASS         when CAMSTAB enabled - for testing
 //        if(toggleModeItems[5].getValue()> 0) modebits |=1<<20; //Also send MISSION MODE when CAMSTAB enabled - for testing
+//        if(toggleModeItems[5].getValue()> 0) modebits |=1<<29; //Also send ACROPLUS MODE when CAMSTAB enabled - for testing
         serialize32(modebits);
         serialize8(0);   // current setting
         tailSerialReply();
@@ -470,8 +471,8 @@ void SendCommand(int cmd){
       
       case MSP_BOXIDS:
         PortIsWriting = true;
-        headSerialReply(MSP_BOXIDS,29);
-        for (int i=0; i<29; i++) {
+        headSerialReply(MSP_BOXIDS,30);
+        for (int i=0; i<30; i++) {
         serialize8(i);
         }
         tailSerialReply();

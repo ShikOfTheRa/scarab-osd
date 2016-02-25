@@ -275,6 +275,11 @@ void displayMode(void)
       screenBuffer[0]=SYM_ACRO;
     #endif
     screenBuffer[1]=SYM_ACRO1;
+//#if defined BETAFLIGHT
+    if((MwSensorActive)&(mode.acroplus)){
+      screenBuffer[1]=SYM_PLUS;
+    }
+//#endif //BETAFLIGHT
   }
   if(Settings[S_MODEICON]){
     if(fieldIsVisible(ModePosition)){

@@ -181,6 +181,7 @@
 #define SYM_PASS1 0XAB
 #define SYM_AIR 0XEA
 #define SYM_AIR1 0XEB
+#define SYM_PLUS 0X89
 
 // Time
 #define SYM_ON_M 0X9B

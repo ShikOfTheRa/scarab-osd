@@ -18,6 +18,7 @@ int mode_llights = 0;
 int mode_camstab = 0;
 int mode_osd_switch = 0;
 int mode_air = 0;
+int mode_acroplus = 0;
 
 int SendSim = 0;
 
@@ -1025,6 +1026,10 @@ void displayMode()
       mapchar(0xc4,SimPosn[ModePosition]);
       mapchar(0xc5,SimPosn[ModePosition]+1);
     }
+    else if((SimModebits&mode_acroplus) >0){
+      mapchar(0xae,SimPosn[ModePosition]);
+      mapchar(0x89,SimPosn[ModePosition]+1);
+    }
     else{
       mapchar(0xae,SimPosn[ModePosition]);
       mapchar(0xaf,SimPosn[ModePosition]+1);
@@ -1183,6 +1188,7 @@ void GetModes(){
   mode_stable = 0;
   mode_horizon = 0;
   mode_air = 0;
+  mode_acroplus = 0;
   mode_baro = 0;
   mode_mag = 0;
   mode_gpshome = 0;
@@ -1204,6 +1210,8 @@ void GetModes(){
     if (boxnames[c] == "MISSION;") mode_gpsmission |= bit;
     if (boxnames[c] == "AIR MODE;") mode_air |= bit;
     if (boxnames[c] == "OSD SW;") mode_osd_switch |= bit;
+
+//    if (boxnames[c] == "CAMSTAB;") mode_acroplus |= bit;
    
     bit <<= 1L;
   }

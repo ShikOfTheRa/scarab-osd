@@ -162,6 +162,7 @@ struct {
   uint16_t gpshold;
   uint16_t passthru;
   uint32_t air;
+  uint32_t acroplus;
   uint32_t osd_switch;
   uint32_t llights;
   uint32_t gpsmission;

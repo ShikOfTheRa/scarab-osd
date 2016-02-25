@@ -399,6 +399,7 @@ void serialMSPCheck()
     mode.camstab = 0;
     mode.osd_switch = 0;
     mode.air = 0;
+    mode.acroplus = 0;
 
     char boxname[20];
 
@@ -425,6 +426,8 @@ void serialMSPCheck()
           mode.camstab |= bit;
         if(strncmp("AIR MODE", boxname, len) == 0)
           mode.air |= bit;
+        if(strncmp("ACRO PLUS", boxname, len) == 0)
+          mode.acroplus |= bit;
         if(strncmp("GPS HOME", boxname, len) == 0)
           mode.gpshome |= bit;
         if(strncmp("GPS HOLD", boxname, len) == 0)
@@ -460,6 +463,7 @@ void serialMSPCheck()
     mode.osd_switch = 0;
     mode.camstab = 0;
     mode.air = 0;
+    mode.acroplus = 0;
 
     while(remaining > 0) {
       char c = read8();
@@ -506,6 +510,11 @@ void serialMSPCheck()
       case 28:
         mode.air |= bit;
         break;
+#if defined BETAFLIGHT
+      case 29:
+        mode.acroplus |= bit;
+        break;
+#endif //BETAFLIGHT        
       }
       bit <<= 1;
       --remaining;
