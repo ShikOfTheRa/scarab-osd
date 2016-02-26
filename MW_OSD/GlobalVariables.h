@@ -721,7 +721,7 @@ const char message0[] PROGMEM = INTRO_VERSION;
 const char message0[] PROGMEM = MWVERS;
 #endif
 
-#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE
+#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
 const char messageF0[] PROGMEM = "DO NOT POWER OFF";
 const char messageF1[] PROGMEM = "SCREEN WILL GO BLANK";
 const char messageF2[] PROGMEM = "UPDATE COMPLETE";

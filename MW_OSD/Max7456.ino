@@ -373,7 +373,7 @@ void MAX7456Stalldetect(void){
     MAX7456Setup(); 
 }
 
-#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE
+#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
 void displayFont()
 {
   for(uint8_t x = 0; x < 255; x++) {

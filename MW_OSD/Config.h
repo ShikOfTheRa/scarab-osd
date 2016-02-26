@@ -266,6 +266,7 @@
 //#define EEPROM_CLEAR             // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
 //#define LOADFONT_DEFAULT         // Uncomment to force an upload of default font instead of using GUI
 //#define LOADFONT_LARGE           // Uncomment to force an upload of large font instead of using GUI
+//#define LOADFONT_BOLD            // Uncomment to force an upload of bold font instead of using GUI
 
 
 

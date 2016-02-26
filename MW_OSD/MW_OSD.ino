@@ -92,6 +92,8 @@ uint16_t UntouchedStack(void)
   #include "fontL.h"
 #elif defined LOADFONT_DEFAULT 
   #include "fontD.h"
+#elif defined LOADFONT_BOLD 
+  #include "fontB.h"
 #endif
 
 char screen[480];      // Main screen ram for MAX7456
@@ -104,7 +106,7 @@ unsigned long previous_millis_high =0;
 unsigned long previous_millis_sync =0;
 unsigned long previous_millis_rssi =0;
 
-#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE
+#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
 uint8_t fontStatus=0;
 //uint16_t MAX_screen_size;
 boolean ledstatus=HIGH;
@@ -170,7 +172,7 @@ void setup()
 }
 
 //------------------------------------------------------------------------
-#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE
+#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
 void loop()
 {
   switch(fontStatus) {
