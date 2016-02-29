@@ -49,7 +49,7 @@ void SetupGroups(){
                 .activateEvent(true)
                 .setBackgroundColor(color(30,255))
                 .setBackgroundHeight(90)
-                .setLabel("   OSD CONTROLS")
+                .setLabel("       SETTINGS")
                 .disableCollapse();
                 //.close() 
                ; 

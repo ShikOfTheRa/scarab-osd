@@ -80,7 +80,7 @@ And to a lesser extent code from the following :-
 
 
 String MW_OSD_GUI_Version = "MWOSD R1.6 - NextGeneration";
-int MW_OSD_EEPROM_Version = 11;
+int MW_OSD_EEPROM_Version = 12;
 int CONFIGITEMS16 = 7;
 
 int  GPS_numSatPosition = 0;
@@ -265,7 +265,7 @@ int Simtype=0;
 int Donate=2;
 int DonateMessage=1;
 int StartupMessage=0;
-int FrameRate=30;
+int FrameRate=5;
 
 int init_com = 0;
 int commListMax = 0;
@@ -2274,10 +2274,10 @@ public void LoadConfig(){
     BaudRate = 115200;
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
-    AutoSimulator = 0;
+    AutoSimulator = 1;
     AutoDebugGUI = 1;
     Simtype=1;
-    FrameRate = 15;
+    FrameRate = 7;
     StartupMessage = 0;
     Donate = 2;
     updateConfig();
@@ -3165,7 +3165,7 @@ public void SetupGroups(){
                 .activateEvent(true)
                 .setBackgroundColor(color(30,255))
                 .setBackgroundHeight(90)
-                .setLabel("   OSD CONTROLS")
+                .setLabel("       SETTINGS")
                 .disableCollapse();
                 //.close() 
                ; 
@@ -3980,18 +3980,14 @@ public void DEFAULT(){
     loop();
     switch (Reset_result) {
       case JOptionPane.YES_OPTION:
-//        toggleMSP_Data = true;
-        for (int txTimes = 0; txTimes<3; txTimes++) {
+        for (int txTimes = 0; txTimes<1; txTimes++) {
           headSerialReply(MSP_OSD, 1);
           serialize8(OSD_DEFAULT);
           tailSerialReply();
           delay(100);
         }
-//        toggleMSP_Data = false;
-//        READinit();
+        delay(1000);     
         READconfigMSP_init();
-//        delay(2000);     
-//        ReadConfig=100;
         return;
       case JOptionPane.CANCEL_OPTION:
 //        SimControlToggle.setValue(1);
@@ -4035,10 +4031,11 @@ public void SendCommand(int cmd){
         if(toggleModeItems[8].getValue()> 0) modebits |=1<<28;
         if(toggleModeItems[9].getValue()> 0) modebits |=1<<19;
 
-//        if(toggleModeItems[5].getValue()> 0) modebits |=1<<8;
+        if(toggleModeItems[5].getValue()> 0) modebits |=1<<8;  //Send CAMSTAB
 //        if(toggleModeItems[5].getValue()> 0) modebits |=1<<16; //Also send LLIGHTS      when CAMSTAB enabled - for testing
-        if(toggleModeItems[5].getValue()> 0) modebits |=1<<12; //Also send PASS         when CAMSTAB enabled - for testing
+//        if(toggleModeItems[5].getValue()> 0) modebits |=1<<12; //Also send PASS         when CAMSTAB enabled - for testing
 //        if(toggleModeItems[5].getValue()> 0) modebits |=1<<20; //Also send MISSION MODE when CAMSTAB enabled - for testing
+//        if(toggleModeItems[5].getValue()> 0) modebits |=1<<29; //Also send ACROPLUS MODE when CAMSTAB enabled - for testing
         serialize32(modebits);
         serialize8(0);   // current setting
         tailSerialReply();
@@ -4112,8 +4109,8 @@ public void SendCommand(int cmd){
       
       case MSP_BOXIDS:
         PortIsWriting = true;
-        headSerialReply(MSP_BOXIDS,29);
-        for (int i=0; i<29; i++) {
+        headSerialReply(MSP_BOXIDS,30);
+        for (int i=0; i<30; i++) {
         serialize8(i);
         }
         tailSerialReply();
@@ -4884,6 +4881,7 @@ int mode_llights = 0;
 int mode_camstab = 0;
 int mode_osd_switch = 0;
 int mode_air = 0;
+int mode_acroplus = 0;
 
 int SendSim = 0;
 
@@ -5625,8 +5623,8 @@ public void ShowVario(){
 public void ShowRSSI(){
   String output = str(PApplet.parseInt(s_MRSSI.getValue()));
   if(confItem[GetSetting("S_DISPLAYRSSI")].value() > 0) {
-  mapchar(0xba, SimPosn[rssiPosition]);
-  makeText(output + "%", SimPosn[rssiPosition]+1);
+  mapchar(0xba, SimPosn[rssiPosition]-1);
+  makeText(output + "%", SimPosn[rssiPosition]);
 }}
 
 public void ShowAPstatus(){
@@ -5891,6 +5889,10 @@ public void displayMode()
       mapchar(0xc4,SimPosn[ModePosition]);
       mapchar(0xc5,SimPosn[ModePosition]+1);
     }
+    else if((SimModebits&mode_acroplus) >0){
+      mapchar(0xae,SimPosn[ModePosition]);
+      mapchar(0x89,SimPosn[ModePosition]+1);
+    }
     else{
       mapchar(0xae,SimPosn[ModePosition]);
       mapchar(0xaf,SimPosn[ModePosition]+1);
@@ -5935,7 +5937,7 @@ if (SimPosn[horizonPosition]<0x3FF){
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
       	mapchar(0x80+(Y%9), pos);
       if(Y>=9 && (Y%9) == 0)
-        mapchar(0x89, pos-30);
+        mapchar(0x20, pos-30);
     }
   }
   if(confItem[GetSetting("S_HORIZON_ELEVATION")].value() > 0) {
@@ -5946,21 +5948,20 @@ if (SimPosn[horizonPosition]<0x3FF){
     Y += 31;
     if(Y >= 0 && Y <= 81) {
       int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) -4 - 2*LINE + X;
-//      int pos = 30*(2+Y/9) + 10 + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
         mapchar(0x80+(Y%9), pos);
       if(Y>=9 && (Y%9) == 0)
-        mapchar(0x89, pos-30);
+        mapchar(0x20, pos-30);
     }
-    Y += 20;
-    if(Y >= 0 && Y <= 81) {
+    Y+=20;
+     if(Y >= 0 && Y <= 81) {
       int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) -4 - 2*LINE + X;
-//      int pos = 30*(2+Y/9) + 10 + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
         mapchar(0x80+(Y%9), pos);
       if(Y>=9 && (Y%9) == 0)
-        mapchar(0x89, pos-30);
+        mapchar(0x20, pos-30);
     }
+
   }}
 
 
@@ -6049,6 +6050,7 @@ public void GetModes(){
   mode_stable = 0;
   mode_horizon = 0;
   mode_air = 0;
+  mode_acroplus = 0;
   mode_baro = 0;
   mode_mag = 0;
   mode_gpshome = 0;
@@ -6070,6 +6072,8 @@ public void GetModes(){
     if (boxnames[c] == "MISSION;") mode_gpsmission |= bit;
     if (boxnames[c] == "AIR MODE;") mode_air |= bit;
     if (boxnames[c] == "OSD SW;") mode_osd_switch |= bit;
+
+//    if (boxnames[c] == "CAMSTAB;") mode_acroplus |= bit;
    
     bit <<= 1L;
   }
