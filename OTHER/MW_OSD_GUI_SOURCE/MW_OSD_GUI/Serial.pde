@@ -338,18 +338,14 @@ public void DEFAULT(){
     loop();
     switch (Reset_result) {
       case JOptionPane.YES_OPTION:
-//        toggleMSP_Data = true;
-        for (int txTimes = 0; txTimes<3; txTimes++) {
+        for (int txTimes = 0; txTimes<1; txTimes++) {
           headSerialReply(MSP_OSD, 1);
           serialize8(OSD_DEFAULT);
           tailSerialReply();
           delay(100);
         }
-//        toggleMSP_Data = false;
-//        READinit();
+        delay(1000);     
         READconfigMSP_init();
-//        delay(2000);     
-//        ReadConfig=100;
         return;
       case JOptionPane.CANCEL_OPTION:
 //        SimControlToggle.setValue(1);

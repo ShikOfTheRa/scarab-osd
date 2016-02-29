@@ -760,8 +760,8 @@ void ShowVario(){
 void ShowRSSI(){
   String output = str(int(s_MRSSI.getValue()));
   if(confItem[GetSetting("S_DISPLAYRSSI")].value() > 0) {
-  mapchar(0xba, SimPosn[rssiPosition]);
-  makeText(output + "%", SimPosn[rssiPosition]+1);
+  mapchar(0xba, SimPosn[rssiPosition]-1);
+  makeText(output + "%", SimPosn[rssiPosition]);
 }}
 
 void ShowAPstatus(){
@@ -1074,7 +1074,7 @@ if (SimPosn[horizonPosition]<0x3FF){
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
       	mapchar(0x80+(Y%9), pos);
       if(Y>=9 && (Y%9) == 0)
-        mapchar(0x89, pos-30);
+        mapchar(0x20, pos-30);
     }
   }
   if(confItem[GetSetting("S_HORIZON_ELEVATION")].value() > 0) {
@@ -1085,21 +1085,20 @@ if (SimPosn[horizonPosition]<0x3FF){
     Y += 31;
     if(Y >= 0 && Y <= 81) {
       int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) -4 - 2*LINE + X;
-//      int pos = 30*(2+Y/9) + 10 + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
         mapchar(0x80+(Y%9), pos);
       if(Y>=9 && (Y%9) == 0)
-        mapchar(0x89, pos-30);
+        mapchar(0x20, pos-30);
     }
-    Y += 20;
-    if(Y >= 0 && Y <= 81) {
+    Y+=20;
+     if(Y >= 0 && Y <= 81) {
       int pos = SimPosn[horizonPosition] - 2*LINE + LINE*(Y/9) -4 - 2*LINE + X;
-//      int pos = 30*(2+Y/9) + 10 + X;
       if(X < 3 || X >5 || (Y/9) != 4 || confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() == 0)
         mapchar(0x80+(Y%9), pos);
       if(Y>=9 && (Y%9) == 0)
-        mapchar(0x89, pos-30);
+        mapchar(0x20, pos-30);
     }
+
   }}
 
 

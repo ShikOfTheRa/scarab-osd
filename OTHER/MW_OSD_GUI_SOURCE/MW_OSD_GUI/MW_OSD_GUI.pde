@@ -232,7 +232,7 @@ int Simtype=0;
 int Donate=2;
 int DonateMessage=1;
 int StartupMessage=0;
-int FrameRate=30;
+int FrameRate=5;
 
 int init_com = 0;
 int commListMax = 0;
@@ -2241,10 +2241,10 @@ public void LoadConfig(){
     BaudRate = 115200;
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
-    AutoSimulator = 0;
+    AutoSimulator = 1;
     AutoDebugGUI = 1;
     Simtype=1;
-    FrameRate = 15;
+    FrameRate = 7;
     StartupMessage = 0;
     Donate = 2;
     updateConfig();
