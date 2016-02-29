@@ -21,48 +21,54 @@
 
 ---
 
-4 I can't open GUI on my MAC - unidentified developer error
+4 I can't open GUI on my MAC - can't open application
+  * Ensure the application.macosx/MW_OSD_GUI.app/Contents/MacOS/MW_OSD_GUI file is executable
+  * If not issue chmod +x on that file
+
+---
+
+5 I can't open GUI on my MAC - unidentified developer error
   * http://www.imore.com/how-open-apps-unidentified-developer-os-x-mountain-lion
 
 ---
 
-5 I can't open GUI on my MAC -  .app is damaged and can’t be opened
+6 I can't open GUI on my MAC -  .app is damaged and can’t be opened
   * http://www.tech-recipes.com/rx/45404/mac-downloaded-app-is-damaged-and-cant-be-opened-error-solved/
 
 ---
 
-6 I have a bi-directional current sensor - how do I set it up
+7 I have a bi-directional current sensor - how do I set it up
   * The information is now updated in the calibration guide
 
 ---
 
-7 My OSD turns off in flight / after powering up motors?
+8 My OSD turns off in flight / after powering up motors?
   * Ensure you have a good ground
   * Use a big cap (e.g. 3300uf) on the 5v supply to the OSD
   * Enable #define MAXSTALLDETECT in config or upgrade if not listed as an option
 
 ---
 
-8 I get white glow effect/white streaks behind the osd text with Fatshark PilotHD
+9 I get white glow effect/white streaks behind the osd text with Fatshark PilotHD
   * Set the following in config.h
   * #define FASTPIXEL
   * #define WHITEBRIGHTNESS 0xB
 
 ---
 
-9 My voltage doesn't change during flight
+10 My voltage doesn't change during flight
   * If using a witespy board you may have to select WITESPY in config.h
   * Ensure you are connected to the correct vbat pin
   * Ensure you have selected the correct battery option - MWII if using FC connection
 
 ---
 
-10 My Voltage/RSSI/Current does not change with adjusters
+11 My Voltage/RSSI/Current does not change with adjusters
   * Note that adjusters are only for connections direct to OSD - NOT via the controller
 
 ---
 
-11 The OSD always shows DISARMED and one or more other items do not work
+12 The OSD always shows DISARMED and one or more other items do not work
   * This usually means the OSD is not getting information from the Flight Controller
   * Ensure your connections are correct. Especially tx/rx orientation
   * Makes sure you are using the correct baud rate - 115k is default
@@ -86,12 +92,12 @@ HARAKIRI USERS - ensure protocol set as follows:
 
 ---
 
-12 The OSD always shows random characters on the NESW compass heading
+13 The OSD always shows random characters on the NESW compass heading
   * This is typically a mismatch between the Flight controller type and the OSD controller selected in config.h
 
 ---
 
-13 Data does not save when press write on the GUI.
+14 Data does not save when press write on the GUI.
   * Pre 1.3, this is typically a mismatch between OSD and GUI versions.
   * If unable to update firmware, also check rx/tx connections are correct.
   * Ensure USB programmer provides correct voltage
@@ -99,7 +105,7 @@ HARAKIRI USERS - ensure protocol set as follows:
 
 ---
 
-14 I get garbage characters and / or font upload doesn't work.
+15 I get garbage characters and / or font upload doesn't work.
   * Sounds like fonts need to be re-uploaded - but note:
   * The output stage (max chip) MUST be powered when uploading font. How depends upon your board / configuration
   * A programming voltage of 4.8v or higher is required.
@@ -107,29 +113,29 @@ HARAKIRI USERS - ensure protocol set as follows:
 
 ---
 
-15 I don't know if I should enable 5v ADC. When should I?
+16 I don't know if I should enable 5v ADC. When should I?
   * If using analog RSSI connected directly to OSD you must enable 5v ADC
   * If using a hardware Current sensor connected directly to OSD you must enable 5v ADC
   * If using more than 4 cells you must enable 5v ADC
 
 ---
 
-16 Direction, distance and speed are not working
+17 Direction, distance and speed are not working
   * Normally the FC needs to be armed. Not applicable to GPS/FIXEDWING mode
 
 ---
 
-17 I can't enter values into the GUI
+18 I can't enter values into the GUI
   * Click onto the box and drag up / down. Obvious eh ?!
 
 ---
 
-18 I can't enter OSD menu
+19 I can't enter OSD menu
   * FULL RATES are required for the stick menus to be selected currently
 
 ---
 
-19 How do I use MAP mode? It doesn't seem to work
+20 How do I use MAP mode? It doesn't seem to work
   * Quick answer: Select HUD layout 4 and set MAP mode to 1
   * Long answer:
   * Firstly items to be displayed need to be enabled in the hud layout being used. (Map Mode & Map Center)
@@ -141,13 +147,13 @@ HARAKIRI USERS - ensure protocol set as follows:
 
 ---
 
-20 I get c:\..... \java\javapath\javaw.exe unspecified error or javapath error. How do I fix it.
+21 I get c:\..... \java\javapath\javaw.exe unspecified error or javapath error. How do I fix it.
   * There are many type of Java error. It us usually related to Java not setting up paths correctly. The most common ones have a solution in the video below:
   * https://www.youtube.com/watch?v=66crhKstr70
 
 ---
 
-21 I get "Waiting FC” or "Waiting OSD". How do I fix it.
+22 I get "Waiting FC” or "Waiting OSD". How do I fix it.
   * Ensure you are connected to the correct com port. 
   * Ensure baud rate in GUI matches baud rate on the OSD
   * Ensure only the OSD is connected to programmer
@@ -162,12 +168,12 @@ HARAKIRI USERS - ensure protocol set as follows:
 
 ---
 
-22 I get A screen full of error messages trying to load the GUI - inside the text is "Can't load AMD 64-bit .dll on a IA 32-bit platform" 
+23 I get A screen full of error messages trying to load the GUI - inside the text is "Can't load AMD 64-bit .dll on a IA 32-bit platform" 
   * You are probably trying to run 64 bit MWOSD GUI on a PC running 32 bit java
   * Try running 32 bit MWOSD GUI instead or change java to 64 bit version instead. 
 
 ---
-23 How do I configure for standalone GPS OSD (no controller)
+24 How do I configure for standalone GPS OSD (no controller)
   * https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Guide_standalone_GPS_OSD.md
 
 ---
