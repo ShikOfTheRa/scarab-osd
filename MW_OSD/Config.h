@@ -50,7 +50,6 @@
 
 
 
-
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
 
@@ -255,8 +254,6 @@
 
 
 
-
-
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
 // Ignore this section unless you know you need to use it !!
@@ -267,8 +264,3 @@
 //#define LOADFONT_DEFAULT         // Uncomment to force an upload of default font instead of using GUI
 //#define LOADFONT_LARGE           // Uncomment to force an upload of large font instead of using GUI
 //#define LOADFONT_BOLD            // Uncomment to force an upload of bold font instead of using GUI
-
-
-
-
-
