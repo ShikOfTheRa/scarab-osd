@@ -34,7 +34,6 @@
 #ifdef CLEANFLIGHT    //set up latest at time of release
   #define CLEANFLIGHT190
 #endif
-
 #ifdef BASEFLIGHT     //set up latest at time of release
   #define BASEFLIGHT20150627
 #endif
@@ -60,7 +59,6 @@
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
   #define ENABLE_MSP_SAVE_ADVANCED
-
   #define MENU0  0 //STATISTICS
   #define MENU1  1 //PID CONFIG
   #define MENU2  2 //RC TUNING
@@ -69,7 +67,6 @@
   #define MENU5  5 //CURRENT
   #define MENU6  6 //DISPLAY
   #define MENU7  7 //ADVANCED
-//  #define MENU8  X //GPS TIME
   #define MENU9  8 //ALARMS
   #define MENU10 9//PROFILE+PID CONTROLLER
   #define MAXPAGE MENU10  
@@ -80,7 +77,6 @@
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
   #define ENABLE_MSP_SAVE_ADVANCED
-
   #define MENU0  0 //STATISTICS
   #define MENU1  1 //PID CONFIG
   #define MENU2  2 //RC TUNING
@@ -89,7 +85,6 @@
   #define MENU5  5 //CURRENT
   #define MENU6  6 //DISPLAY
   #define MENU7  7 //ADVANCED
-//  #define MENU8  X //GPS TIME
   #define MENU9  8 //ALARMS
   #define MENU10 9//PROFILE+PID CONTROLLER
   #define MAXPAGE MENU10  
@@ -100,7 +95,6 @@
   #define AMPERAGE_DIV 10
   #define CORRECT_MSP_CF1
   #define CORRECT_MENU_RCT1
-
   #define MENU0  0 //STATISTICS
   #define MENU1  1 //PID CONFIG
   #define MENU2  2 //RC TUNING
@@ -109,9 +103,7 @@
   #define MENU5  5 //CURRENT
   #define MENU6  6 //DISPLAY
   #define MENU7  7 //ADVANCED
-//  #define MENU8  X //GPS TIME
   #define MENU9  8 //ALARMS
-//  #define MENU10 9//PROFILE+PID CONTROLLER
   #define MAXPAGE MENU9   
 #endif
 
@@ -125,9 +117,7 @@
   #define MENU5  5 //CURRENT
   #define MENU6  6 //DISPLAY
   #define MENU7  7 //ADVANCED
-//  #define MENU8  X //GPS TIME
   #define MENU9  8 //ALARMS
-//  #define MENU10 9//PROFILE+PID CONTROLLER
   #define MAXPAGE MENU9   
 #endif
 
@@ -136,7 +126,6 @@
   #define CORRECT_MSP_BF1
   #define CORRECT_MENU_RCT1
   #define ENABLE_MSP_SAVE_ADVANCED
-
   #define MENU0  0 //STATISTICS
   #define MENU1  1 //PID CONFIG
   #define MENU2  2 //RC TUNING
@@ -145,7 +134,6 @@
   #define MENU5  5 //CURRENT
   #define MENU6  6 //DISPLAY
   #define MENU7  7 //ADVANCED
-//  #define MENU8  X //GPS TIME
   #define MENU9  8 //ALARMS
   #define MENU10 9//PROFILE+PID CONTROLLER
   #define MAXPAGE MENU10   
@@ -161,9 +149,7 @@
   #define MENU5  5 //CURRENT
   #define MENU6  6 //DISPLAY
   #define MENU7  7 //ADVANCED
-//  #define MENU8  X //GPS TIME
   #define MENU9  8 //ALARMS
-//  #define MENU10 9//PROFILE+PID CONTROLLER
   #define MAXPAGE MENU9   
 #endif
 
@@ -179,7 +165,6 @@
   #define MENU7  7 //ADVANCED
   #define MENU8  8 //GPS TIME
   #define MENU9  9 //ALARMS
-//  #define MENU10 10//PROFILE+PID CONTROLLER
   #define MAXPAGE MENU9   
 #endif
 
@@ -192,9 +177,7 @@
   #define MENU5  5 //CURRENT
   #define MENU6  6 //DISPLAY
   #define MENU7  7 //ADVANCED
-//  #define MENU8  X //GPS TIME
   #define MENU9  8 //ALARMS
-//  #define MENU10 9//PROFILE+PID CONTROLLER
   #define MAXPAGE MENU9   
 #endif
 
@@ -208,9 +191,7 @@
   #define MENU5  5 //CURRENT
   #define MENU6  6 //DISPLAY
   #define MENU7  7 //ADVANCED
-//  #define MENU8  X //GPS TIME
   #define MENU9  8 //ALARMS
-//  #define MENU10 9//PROFILE+PID CONTROLLER
   #define MAXPAGE MENU9   
 #endif
 
@@ -225,9 +206,7 @@
   #define MENU5  5 //CURRENT
   #define MENU6  6 //DISPLAY
   #define MENU7  7 //ADVANCED
-//  #define MENU8  X //GPS TIME
   #define MENU9  8 //ALARMS
-//  #define MENU10 9//PROFILE+PID CONTROLLER
   #define MAXPAGE MENU9   
 #endif
 
@@ -246,7 +225,7 @@
   #define MAX_ALARM_LEN 30
 #endif
 
-#ifndef AMPERAGE_DIV 
+#ifndef AMPERAGE_DIV
   #define AMPERAGE_DIV 100
 #endif
 
@@ -255,12 +234,12 @@
 #endif
 
 /********************  FIXEDWING definitions  *********************/
-#ifdef FIXEDWING                     
+#ifdef FIXEDWING
   #define USEGPSHEADING
   #define USEGPSALTITUDE
-  #if defined USEMAGHEADING 
+  #if defined USEMAGHEADING
     #undef USEGPSHEADING
-  #endif  
+  #endif
   #if defined USEBAROALTITUDE
     #undef USEGPSALTITUDE
   #endif
@@ -270,8 +249,8 @@
 /********************  HARDWARE PINS definitions  *********************/
 #define AMPERAGEPIN   A1
 #define TEMPPIN       A3  // also used for airspeed         
-#define RSSIPIN       A3              
-#define PWMRSSIPIN    A3              
+#define RSSIPIN       A3
+#define PWMRSSIPIN    A3
 #define LEDPIN        7
 
 // All aircraft / FC types defaults...
@@ -282,34 +261,33 @@
   #undef RESETGPSALTITUDEATARM
 #endif
 
-
 /********************  OSD HARDWARE rule definitions  *********************/
-#ifdef RUSHDUINO                     
+#ifdef RUSHDUINO
     # define MAX7456SELECT 10        // ss 
     # define MAX7456RESET  9         // RESET
-#else                                  
+#else
     # define MAX7456SELECT 6         // ss
     # define MAX7456RESET  10        // RESET
 #endif
 
-#ifdef WITESPYV1                     
+#ifdef WITESPYV1
     #define SWAPVOLTAGEPINS
     #define ALTERNATEDIVIDERS
 #endif
 
-#ifdef WITESPYMICRO                     
+#ifdef WITESPYMICRO
     #define SWAPVOLTAGEPINS
 #endif
 
-#ifdef SWAPVOLTAGEPINS                     
+#ifdef SWAPVOLTAGEPINS
     #define VOLTAGEPIN    A2
     #define VIDVOLTAGEPIN A0
-#else                                  
+#else
     #define VOLTAGEPIN    A0
     #define VIDVOLTAGEPIN A2
 #endif
 
-#ifdef ALTERNATEDIVIDERS                     
+#ifdef ALTERNATEDIVIDERS
     #define DIVIDER1v1      0.0002      // Voltage divider for 1.1v reference. 
     #define DIVIDER5v       0.0008      // Voltage divider for 5v reference. 
 #else                                  
@@ -379,23 +357,18 @@
   #undef  OSD_SWITCH_RC
   #define FORCESENSORS
   #define HIDEARMEDSTATUS
-  #define GPSACTIVECHECK 5  
-
+  #define GPSACTIVECHECK 5
   #define MENU0  0 //STATISTICS
-//  #define MENU1  X //PID CONFIG
-//  #define MENU2  X //RC TUNING
   #define MENU3  1 //VOLTAGE
   #define MENU4  2 //RSSI
   #define MENU5  3 //CURRENT
   #define MENU6  4 //DISPLAY
   #define MENU7  5 //ADVANCED
-//  #define MENU8  X //GPS TIME
   #define MENU9  6 //ALARMS
-//  #define MENU10 9//PROFILE+PID CONTROLLER
   #define MAXPAGE MENU9   
 #endif
 
-#if defined (OSD_SWITCH_RSSI)  
+#if defined (OSD_SWITCH_RSSI)
   #define OSD_SWITCH_RC
 #endif
 
@@ -444,13 +417,11 @@
 /********************  RSSI  *********************/
 #if defined FASTPWMRSSI
   #define INTPWMRSSI
-#endif  
+#endif
 
 /********************  other paramters  *********************/
-#define RSSIhz           10 
+#define RSSIhz           10
 
 #ifdef PWMTHROTTLE
   #define ALWAYSARMED  // starts OSD in armed mode
 #endif
-
-
