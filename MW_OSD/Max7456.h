@@ -113,6 +113,12 @@ uint8_t spi_transfer(uint8_t data)
 
 // ============================================================   WRITE TO SCREEN
 
+void MAX7456_Send(uint8_t add, uint8_t data)
+{
+  spi_transfer(add);
+  spi_transfer(data);
+}
+
 void MAX7456Setup(void)
 {
   uint8_t MAX7456_reset=0x02;
@@ -244,65 +250,10 @@ void MAX7456_WriteString_P(const char *string, int Adresse)
   }
 #endif
 
-void MAX7456_DrawScreen()
-{
-  uint16_t xx;
-  #ifdef USE_VSYNC
-    digitalWrite(MAX7456SELECT,LOW);
-    spi_transfer(DMM_reg);
-    spi_transfer(1);
-    spi_transfer(DMAH_reg);
-    spi_transfer(0);
-    spi_transfer(DMAL_reg);
-    spi_transfer(0);
-    vsync_wait = 1;
-    uint32_t vsynctimer=40+millis();
-
-  #endif
-
-  digitalWrite(MAX7456SELECT,LOW);
-
-  for(xx=0;xx<MAX_screen_size;++xx){
-    #ifdef USE_VSYNC
-      SPDR = MAX7456ADD_DMDI;
-      if (xx==240) {
-        vsynctimer=40+millis();
-        vsync_wait = 1;      // Not enough time to load all characters within VBI period. This splits and waits until next field
-      }
-      while (!(SPSR & (1<<SPIF)));     // Wait the end of the last SPI transmission is clear
-      while (vsync_wait){
-        if (millis()>vsynctimer){
-          vsync_wait=0;
-        }
-        else{
-          serialMSPreceive(0); // Might as well do something whilst waiting :)
-        }
-      }
-      SPDR = screen[xx];
-      screen[xx] = ' ';
-      while (!(SPSR & (1<<SPIF)));     // Wait the end of the last SPI transmission is clear
-    #else   
-      MAX7456_Send(MAX7456ADD_DMAH, xx>>8);
-      MAX7456_Send(MAX7456ADD_DMAL, xx);
-      MAX7456_Send(MAX7456ADD_DMDI, screen[xx]);
-      screen[xx] = ' ';
-    #endif
-  }
-  #ifdef USE_VSYNC
-    spi_transfer(DMDI_reg);
-    spi_transfer(END_string);
-    spi_transfer(DMM_reg);
-    spi_transfer(B00000000);
-  #endif
-  digitalWrite(MAX7456SELECT,HIGH);
-}
 
 
-void MAX7456_Send(uint8_t add, uint8_t data)
-{
-  spi_transfer(add);
-  spi_transfer(data);
-}
+
+
 
 
 //MAX7456 commands

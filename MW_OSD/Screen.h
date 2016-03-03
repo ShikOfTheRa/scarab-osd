@@ -835,6 +835,22 @@ void displayIntro(void)
 #endif
 }
 
+void displayGPSAltitude(void){
+  if(Settings[S_GPSALTITUDE]){
+    if(!fieldIsVisible(MwGPSAltPosition))
+    return;
+    screenBuffer[0] = MwGPSAltPositionAdd[Settings[S_UNITSYSTEM]];
+    uint16_t xx;
+    if(Settings[S_UNITSYSTEM])
+      xx = GPS_altitude * 3.2808; // Mt to Feet
+    else
+      xx = GPS_altitude;          // Mt
+    if(((xx/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
+      return;
+    itoa(xx,screenBuffer+1,10);
+    MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
+  }
+}
 
 void displayGPSPosition(void)
 {
@@ -859,22 +875,7 @@ void displayGPSPosition(void)
 }
 
 
-void displayGPSAltitude(void){
-  if(Settings[S_GPSALTITUDE]){
-    if(!fieldIsVisible(MwGPSAltPosition))
-    return;
-    screenBuffer[0] = MwGPSAltPositionAdd[Settings[S_UNITSYSTEM]];
-    uint16_t xx;
-    if(Settings[S_UNITSYSTEM])
-      xx = GPS_altitude * 3.2808; // Mt to Feet
-    else
-      xx = GPS_altitude;          // Mt
-    if(((xx/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
-      return;
-    itoa(xx,screenBuffer+1,10);
-    MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
-  }
-}
+
 
 
 void displayNumberOfSat(void)
@@ -1210,6 +1211,10 @@ void displayCursor(void)
     screen[cursorpos] = SYM_CURSOR;
 }
 
+void Menuconfig_onoff(uint16_t pos, uint8_t setting){
+    strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_on_off[(Settings[setting])])));
+    MAX7456_WriteString(screenBuffer, pos);
+}
 
 void displayConfigScreen(void)
 {
@@ -1776,10 +1781,7 @@ void displayfwglidescope(void){
 }
 #endif //USEGLIDESCOPE
 
-void Menuconfig_onoff(uint16_t pos, uint8_t setting){
-    strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_on_off[(Settings[setting])])));
-    MAX7456_WriteString(screenBuffer, pos);
-}
+
 
 void displayArmed(void)
 {
