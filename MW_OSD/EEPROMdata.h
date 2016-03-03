@@ -72,14 +72,6 @@ void checkEEPROM(void)
       EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*4)+(en*2),SCREENLAYOUT_DEFAULT[en]&0xFF);
       EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*4)+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
     }
-/*
-    for(uint8_t osd_switch_pos=0;osd_switch_pos<3;osd_switch_pos++){
-      for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
-        EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*osd_switch_pos)+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]&0xFF);
-        EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*osd_switch_pos)+1+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]>>8);
-      }
-    }    
-*/
   }
 }
 

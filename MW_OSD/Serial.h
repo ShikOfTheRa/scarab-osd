@@ -1053,21 +1053,9 @@ void MAX7456_DrawScreen()
 }
 
 
-
-
-
-
-
-
 void fontSerialRequest() {
   mspWriteRequest(MSP_OSD,3);
   mspWrite8(OSD_GET_FONT);
   mspWrite16(getNextCharToRequest());
   mspWriteChecksum();
 }
-
-
-
-
-
-
