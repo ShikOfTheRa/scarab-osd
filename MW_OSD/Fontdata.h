@@ -1,11 +1,3 @@
-//Defines for fonts
-#if defined LOADFONT_LARGE
-  #include "fontL.h"
-#elif defined LOADFONT_DEFAULT 
-  #include "fontD.h"
-#elif defined LOADFONT_BOLD 
-  #include "fontB.h"
-#endif
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
 uint8_t fontStatus=0;
 //uint16_t MAX_screen_size;

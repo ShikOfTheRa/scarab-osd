@@ -72,6 +72,13 @@ uint16_t UntouchedStack(void)
 char screen[480];      // Main screen ram for MAX7456
 char screenBuffer[20];   
 
+#if defined LOADFONT_LARGE
+  #include "fontL.h"
+#elif defined LOADFONT_DEFAULT 
+  #include "fontD.h"
+#elif defined LOADFONT_BOLD 
+  #include "fontB.h"
+#endif
 #define MWVERS "MW-OSD - R1.6"  
 #define MWOSDVER 12      // for eeprom layout verification    was 9  
 #include <avr/pgmspace.h>
@@ -90,7 +97,7 @@ char screenBuffer[20];
 #include "math.h"
 #if defined NAZA
   #include "Naza.h"
-#endif  
+#endif
 
 unsigned long previous_millis_low=0;
 unsigned long previous_millis_high =0;
@@ -167,7 +174,6 @@ void setup(){
   bool ampAlarming() {
     int used = pMeterSum > 0 ? pMeterSum : (amperagesum / 360);
     return used > (Settings[S_AMPER_HOUR_ALARM]*100);}
-#endif
 
 
 //------------------------------------------------------------------------
@@ -407,7 +413,7 @@ void loop(){
             displayCurrentThrottle();}
         #ifdef CALLSIGNALWAYS
           if(Settings[S_DISPLAY_CS]){
-            displayCallsign(getPosition(callSignPosition));} 
+            displayCallsign(getPosition(callSignPosition));}
         #elif  FREETEXTLLIGHTS
         if (MwSensorActive&mode.llights){
           displayCallsign(getPosition(callSignPosition));} 
@@ -443,9 +449,10 @@ void loop(){
             #endif
             #ifdef MAPMODE
               mapmode();
-            #endif}
-          displayMode();       
-          displayDebug();}
+            #endif
+            }}
+          displayMode();
+          displayDebug();
         #ifdef I2CERROR
           displayI2CError();
         #endif        
@@ -456,8 +463,8 @@ void loop(){
         #ifdef HAS_ALARMS
           displayAlarms();
         #endif
+    }
       } //End of if else for config screen
-    } //End of if else for callsign
   }  // End of fast Timed Service Routine (50ms loop)
 
   if(timer.halfSec >= 5){
@@ -467,7 +474,7 @@ void loop(){
   if(millis() > timer.seconds+1000){     // this execute 1 time a second
     timer.seconds+=1000;
     timer.tenthSec=0;
-    onTime++;}
+    onTime++;
   #ifdef MAXSTALLDETECT
     if (!fontMode){
       MAX7456Stalldetect();}
@@ -479,7 +486,7 @@ void loop(){
       timer.GPS_active--;}
   #endif
   if (timer.MSP_active>0){
-    timer.MSP_active--;
+    timer.MSP_active--;}
     if(!armed){
       // setMspRequests();
       #ifndef MAPMODENORTH
@@ -490,20 +497,18 @@ void loop(){
       flyTime++;
       flyingTime++;
       configMode=0;
-      allSec++;}
+      setMspRequests();}
+    allSec++;
     if((timer.magCalibrationTimer==1)&&(configMode)){
       mspWriteRequest(MSP_MAG_CALIBRATION,0);
       timer.magCalibrationTimer=0;}
     if(timer.magCalibrationTimer>0){
       timer.magCalibrationTimer--;}
     if(timer.rssiTimer>0){
-      timer.rssiTimer--;}}
+      timer.rssiTimer--;}
   } // End of 1 per second loop
   // setMspRequests();
   
   serialMSPreceive(1);
 }  // End of main loop
-
-
-
-
+#endif
