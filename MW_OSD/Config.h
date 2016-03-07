@@ -169,11 +169,11 @@
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x00      // Optional change from default 0x00=120%,0x01=100%,0x10=90%,0x11=80%  default is 0x01=100%
 //#define BLACKBRIGHTNESS 0x00      // Optional change from default 0x00=0%,0x01=10%,0x10=20%0x11=30%  default is 0x00=0%
-//#define FULLAHI                   // Enable to display a slightly longer AHI line
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
 //#define NOTHROTTLESPACE           // Enable to remove space between throttle symbol and the data
-//#define REVERSEAHI                // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
 //#define DISPLAY_PR                // Display pitch / roll angles. Requires relevant layout ppositions to be enabled
+//#define FULLAHI                   // Enable to display a slightly longer AHI line
+//#define REVERSEAHI                // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
 //#define AHICORRECT 10             // Enable to adjust AHI on display to match horizon. -10 = -1 degree
 #define AHIPITCHMAX 200             // Specify maximum AHI pitch value displayed. Default 200 = 20.0 degrees
 #define AHIROLLMAX  400             // Specify maximum AHI roll value displayed. Default 400 = 40.0 degrees 

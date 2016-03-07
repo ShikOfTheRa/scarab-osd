@@ -414,45 +414,40 @@ void displayHorizon(int rollAngle, int pitchAngle)
 
   #ifdef FULLAHI
     for(uint8_t X=0; X<=12; X++) {
-      if (X==5) X=8;
+      if (X==6) X=7;
       int Y = (rollAngle * (4-X)) / 64;
       Y -= pitchAngle / 8;
       Y += 41;
       if(Y >= 0 && Y <= 81) {
         uint16_t pos = position -9 + LINE*(Y/9) + 3 - 4*LINE + X;
         screen[pos] = SYM_AH_BAR9_0+(Y%9);
+        if (Settings[S_HORIZON_ELEVATION]){ 
+          if(X >= 4 && X <= 8) {
+           screen[pos-3*LINE] = SYM_AH_BAR9_0+(Y%9);
+           screen[pos+3*LINE] = SYM_AH_BAR9_0+(Y%9);
+          }
+        }
       }
     }
   #else //FULLAHI
     for(uint8_t X=0; X<=8; X++) {
-      if (X==3) X=6;
+      if (X==4) X=5;
       int Y = (rollAngle * (4-X)) / 64;
       Y -= pitchAngle / 8;
       Y += 41;
       if(Y >= 0 && Y <= 81) {
         uint16_t pos = position -7 + LINE*(Y/9) + 3 - 4*LINE + X;
         screen[pos] = SYM_AH_BAR9_0+(Y%9);
+        if (Settings[S_HORIZON_ELEVATION]){ 
+          if(X >= 2 && X <= 6) {
+           screen[pos-3*LINE] = SYM_AH_BAR9_0+(Y%9);
+           screen[pos+3*LINE] = SYM_AH_BAR9_0+(Y%9);
+          }
+        }            
       }
     }
   #endif //FULLAHI
 
-    if (Settings[S_HORIZON_ELEVATION]){                   
-      for(int X=2; X<=6; X++) { 
-        if (X==4) X=5;
-        int Y = (rollAngle * (4-X)) / 64;
-        Y -= pitchAngle / 8;
-        Y += 41;
-        if(Y >= 0 && Y <= 81) {
-          uint16_t pos = position -7 + LINE*(Y/9) + 3 - 4*LINE + X;
-        pos = pos - 3*LINE;
-        if(pos >= 60 && pos <= 360) 
-          screen[pos] = SYM_AH_BAR9_0+(Y%9);
-        pos = pos + 2*3*LINE;
-        if(pos >= 60 && pos <= 330) 
-          screen[pos] = SYM_AH_BAR9_0+(Y%9);
-        }
-      }
-    }
     if(!fieldIsVisible(MapModePosition)){
       if(Settings[S_DISPLAY_HORIZON_BR]){
         screen[position-1] = SYM_AH_CENTER_LINE;
