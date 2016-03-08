@@ -26,8 +26,11 @@
 
 ---
 
-4 I can't open GUI on my MAC - unidentified developer error
+4 I can't open GUI on my MAC - unidentified developer error / unable to open
   * http://www.imore.com/how-open-apps-unidentified-developer-os-x-mountain-lion
+  
+* Ensure the application.macosx/MW_OSD_GUI.app/Contents/MacOS/MW_OSD_GUI file is executable
+  * If not issue chmod +x on that file
 
 ---
 
