@@ -27,6 +27,8 @@ Vortex style capacity indicator
 
 MutiWii Nav PID config
 
+Scaleable pitch - for racers to ensure ahi stays on screen
+
 Display PIDS when flying for in flight tuning
 
 Migrate controller/aircraft choice to GUI
