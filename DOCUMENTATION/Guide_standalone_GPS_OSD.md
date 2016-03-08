@@ -22,9 +22,14 @@ Note - if changed from default 115200, the GUI baud rate will need to be changed
 * //#define BAUDRATE 19200
 * //#define BAUDRATE 9600
 
-## Optional:
+## Optional Considerations:
 Screeen layout switching options if RSSI is not used. Requires a spare RC channel 
 * //#define OSD_SWITCH_RSSI
+Full OSD control:
+* //#define PPMOSDCONTROL             // Enables full OSD menu, screen switching, RSSI, Throttle fature, virtual current sensor, etc using a PPM signal into OSD RSSI pin 
+Disable Armed status (automatically dissappears at launch in GPS mode)
+//#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
+
 
 # Step 2: Upload 
 https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/FirmwareFlashing.md

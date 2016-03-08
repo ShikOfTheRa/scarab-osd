@@ -1,87 +1,71 @@
 ---
 
-## Known bugs: ##
-
-HARIKIRI / MW2.1 not working (R1.5)- resolution available from master repository
-
-Center crosshair font partially missing on default_large font - resolution available from master repository
+## Outstanding bugs: ##
 
 ---
 
-## Enhancements planned for next  release: ##
+## Bugfixes / Enhancements completed for next release (1.7): ##
 
-Improved hardware current sensor handling - carried forward, however bugfix implemented for MW2.4
+ * OSD    - Nothing yet :)
 
+---
 
-## Enhancement requests for future releases: ##
-
-Support for PWMRSSI via RC data (Flight Controller types) or PPM stream (GPS OSD)
-
-Support for NAZA
+## Bugfixes / Enhancements intended for 1.7: ##
 
 Support for APM
 
+Support for Multiple crosshair types
+
+Improve GUI speed
+
+
+---
+
+## Enhancement requests for future releases: ##
+
+Vortex style capacity indicator
+
+MutiWii Nav PID config
+
+Scaleable pitch - for racers to ensure ahi stays on screen
+
+Display PIDS when flying for in flight tuning
+
+Migrate controller/aircraft choice to GUI
+
+Power consumtion W/Hr and W/Km 
+
 Support for OP
 
-GPSOSD - PPM support
+Support for displaying PID RPW values for in flight tuning
+
+Improvements to PAL/NTSC autodetect / config change.
+
+Review throttle autoscaling
 
 Additional AHI layouts - multiple pitch angles
 
-Migrate Current Sensor to GUI / potentially migrate to offset / mv/A calc 
-
 Config.h option to enable / disable dist/al/volt alarms etc.
-
-Improved fastpwm and rssi calibration
-
-video volts alarm
-
-autodetect cell count
-
-autoset warning voltage
 
 Fresnel warning indicator
 
 Display option for climb rate value instead of vario slider
 
-Ability to amend all PID settings from menu
-
-support for cleanflight / baseflight loop time change
-
 pitch / roll angles alarm
 
 Support for 8 GUI layouts selectable from OSD menu at field
 
-Fast start - Autodetect MAX ready or timeout
-
 Improve Standalone / Groundstation startup. Remove multiwii
-
-Filtering for MSP sensor data
 
 Flight path vector
 
 Navigation mode layout
 
-Power consumtion W/Hr 
-
-Air speed sensor
-
 Climb rate alarm
 
 Descriptive chracter font for for heading / angle to home
 
-
-Other changes
-
 Impelement more descriptive "help" text within confih.h
-
-
-## GUI: ##
-
-Display anal / PWM sensors on GUI - via MW OSD protocol
-
-RSSI calibration button
-
-BATTERY calibration button
 
 Migrate GUI to chrome
 
@@ -93,7 +77,18 @@ Improved heading / pitch& roll graphics
 
 Ability to drag/drop items to layout editor
 
-List to enable/disable items on display instea dof clicking to find item
+List to enable/disable items on display instead of clicking to find item
+
+Move AHI/crosshair with camera gimbal RC ch
+
+Display GPS max instead of BARO max at end of flight summary
+
+Use aernotautical units - knots - speed, nautical miles - distance, feet - altitude
+
+Fast start - Autodetect MAX ready or timeout
+
+Servo config page for fixedwing
+
 
 
 Code quality:
