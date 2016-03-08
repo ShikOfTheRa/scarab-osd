@@ -1081,8 +1081,8 @@ void displayCursor(void)
   }
   if(ROW<10)
     {
-#ifdef MENU1
-    if(configPage==MENU1){
+#ifdef MENU_PID
+    if(configPage==MENU_PID){
       if (ROW==8) ROW=10;
       if (ROW==9) ROW=7;
       if(COL==1) cursorpos=(ROW+2)*30+10;
@@ -1090,14 +1090,14 @@ void displayCursor(void)
       if(COL==3) cursorpos=(ROW+2)*30+10+6+6;
      }
 #endif
-#ifdef MENU2
+#ifdef MENU_RC
   #if defined CORRECT_MENU_RCT2
-     if(configPage==MENU2){  
+     if(configPage==MENU_RC){
       COL=3;
       cursorpos=(ROW+2)*30+10+6+6;
     }
   #elif defined CORRECT_MENU_RCT1
-    if(configPage==MENU2)
+    if(configPage==MENU_RC)
     {  
       if (ROW==9){
         if (oldROW==8)
@@ -1110,7 +1110,7 @@ void displayCursor(void)
       cursorpos=(ROW+2)*30+10+6+6;
       }
   #else
-    if(configPage==MENU2){
+    if(configPage==MENU_RC){
       COL=3;
       if (ROW==8) ROW=10;
       if (ROW==9) ROW=7;
@@ -1119,24 +1119,24 @@ void displayCursor(void)
   #endif
       
 #endif
-#ifdef MENU3      
-    if(configPage==MENU3){
+#ifdef MENU_VOLTAGE
+    if(configPage==MENU_VOLTAGE){
       COL=3;
       if (ROW==8) ROW=10;
       if (ROW==9) ROW=7;
       cursorpos=(ROW+2)*30+10+6+6;     
       }
 #endif
-#ifdef MENU4      
-    if(configPage==MENU4){
+#ifdef MENU_RSSI
+    if(configPage==MENU_RSSI){
       COL=3;
       if (ROW==7) ROW=10;
       if (ROW==9) ROW=6;
       cursorpos=(ROW+2)*30+10+6+6;
       }    
 #endif
-#ifdef MENU5      
-    if(configPage==MENU5)
+#ifdef MENU_CURRENT
+    if(configPage==MENU_CURRENT)
       {  
       COL=3;
       if (ROW==9) ROW=5;
@@ -1144,8 +1144,8 @@ void displayCursor(void)
       cursorpos=(ROW+2)*30+10+6+6;
       }
 #endif
-#ifdef MENU6      
-    if(configPage==MENU6)
+#ifdef MENU_DISPLAY
+    if(configPage==MENU_DISPLAY)
       {  
         if (ROW==9){
           if (oldROW==8)
@@ -1158,8 +1158,8 @@ void displayCursor(void)
       cursorpos=(ROW+2)*30+10+6+6;
       }
 #endif
-#ifdef MENU7      
-    if(configPage==MENU7)
+#ifdef MENU_ADVANCED
+    if(configPage==MENU_ADVANCED)
       {  
       COL=3;
       if (ROW==9) ROW=6;
@@ -1167,8 +1167,8 @@ void displayCursor(void)
        cursorpos=(ROW+2)*30+10+6+6;
       }
 #endif
-#ifdef MENU8      
-    if(configPage==MENU8)
+#ifdef MENU_GPS_TIME
+    if(configPage==MENU_GPS_TIME)
       {  
       COL=3;
       if (ROW==9) ROW=3;
@@ -1176,8 +1176,8 @@ void displayCursor(void)
        cursorpos=(ROW+2)*30+10+6+6;
       }
 #endif     
-#ifdef MENU9      
-    if(configPage==MENU9)
+#ifdef MENU_ALARMS
+    if(configPage==MENU_ALARMS)
       {  
       COL=3;
       if (ROW==9) ROW=6;
@@ -1185,8 +1185,8 @@ void displayCursor(void)
        cursorpos=(ROW+2)*30+10+6+6;
       }
 #endif     
-#ifdef MENU10      
-    if(configPage==MENU10)
+#ifdef MENU_PROFILE
+    if(configPage==MENU_PROFILE)
       {  
       #ifdef CORRECTLOOPTIME
         if (ROW==9) ROW=3;
@@ -1211,7 +1211,7 @@ void displayConfigScreen(void)
   int16_t MenuBuffer[10];
   strcpy_P(screenBuffer, (char*)pgm_read_word(&(menutitle_item[configPage])));
   MAX7456_WriteString(screenBuffer, 35);
-  #ifdef MENU10
+  #ifdef MENU_PROFILE
 //   MAX7456_WriteString(itoa(FCProfile,screenBuffer,10),50); // Display Profile number
   #endif 
   MAX7456_WriteString_P(configMsgEXT, SAVEP);    //EXIT
@@ -1220,7 +1220,7 @@ void displayConfigScreen(void)
     MAX7456_WriteString_P(configMsgPGS, SAVEP+16); //<Page>
   }
 
-  if(configPage==MENU0)
+  if(configPage==MENU_STAT)
   {
     int xx;
 //    MAX7456_WriteString_P(configMsg00, 35);
@@ -1259,8 +1259,8 @@ void displayConfigScreen(void)
 #endif
 
     }
-#ifdef MENU1
-  if(configPage==MENU1)
+#ifdef MENU_PID
+  if(configPage==MENU_PID)
   {
     for(uint8_t X=0; X<=6; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_pid[X])));
@@ -1283,8 +1283,8 @@ void displayConfigScreen(void)
     MAX7456_WriteString("D",83);
   }
 #endif
-#ifdef MENU2
-  if(configPage==MENU2)
+#ifdef MENU_RC
+  if(configPage==MENU_RC)
   {
     #if defined CORRECT_MENU_RCT2
       MenuBuffer[0]=rcRate8;
@@ -1331,8 +1331,8 @@ void displayConfigScreen(void)
     #endif
   }
 #endif
-#ifdef MENU3
-  if(configPage==MENU3)
+#ifdef MENU_VOLTAGE
+  if(configPage==MENU_VOLTAGE)
   {
     ProcessSensors();
     screenBuffer[0]=SYM_MAIN_BATT;
@@ -1361,8 +1361,8 @@ void displayConfigScreen(void)
     Menuconfig_onoff(MAGD,S_MAINVOLTAGE_VBAT);
   }
 #endif
-#ifdef MENU4
-  if(configPage==MENU4)
+#ifdef MENU_RSSI
+  if(configPage==MENU_RSSI)
   {
     itoa(rssi,screenBuffer,10);
     uint8_t xx = FindNull();
@@ -1386,8 +1386,8 @@ void displayConfigScreen(void)
     MAX7456_WriteString(itoa(Settings16[S16_RSSIMIN],screenBuffer,10),LEVD);
   }
 #endif
-#ifdef MENU5
-  if(configPage==MENU5)
+#ifdef MENU_CURRENT
+  if(configPage==MENU_CURRENT)
   {
     ItoaPadded(amperage, screenBuffer, 4, 3);     // 99.9 ampere max!
     screenBuffer[4] = SYM_AMP;
@@ -1405,8 +1405,8 @@ void displayConfigScreen(void)
     MAX7456_WriteString(itoa(Settings16[S16_AMPZERO],screenBuffer,10),VELD);
   }
 #endif
-#ifdef MENU6
-  if(configPage==MENU6)
+#ifdef MENU_DISPLAY
+  if(configPage==MENU_DISPLAY)
   {
     for(uint8_t X=0; X<=7; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_display[X])));
@@ -1422,8 +1422,8 @@ void displayConfigScreen(void)
     MAX7456_WriteString(itoa(Settings[S_MAPMODE],screenBuffer,10),MAGD+LINE);
   }
 #endif
-#ifdef MENU7
-  if(configPage==MENU7)
+#ifdef MENU_ADVANCED
+  if(configPage==MENU_ADVANCED)
   {
     for(uint8_t X=0; X<=5; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_advanced[X])));
@@ -1469,8 +1469,8 @@ void displayConfigScreen(void)
     MAX7456_WriteString(itoa(Settings[S_RCWSWITCH_CH],screenBuffer,10),LEVD);
    }
 #endif
-#ifdef MENU8
-  if(configPage==MENU8)
+#ifdef MENU_GPS_TIME
+  if(configPage==MENU_GPS_TIME)
   {
     for(uint8_t X=0; X<=2; X++) {
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_gps_time[X])));
@@ -1481,8 +1481,8 @@ void displayConfigScreen(void)
   MAX7456_WriteString(itoa(Settings[S_GPSTZ],screenBuffer,10),YAWD);
   }    
 #endif  
-#ifdef MENU9
-    if(configPage==MENU9){
+#ifdef MENU_ALARMS
+    if(configPage==MENU_ALARMS){
       MenuBuffer[0]=Settings[S_DISTANCE_ALARM];
       MenuBuffer[1]=Settings[S_ALTITUDE_ALARM];
       MenuBuffer[2]=Settings[S_SPEED_ALARM];
@@ -1496,8 +1496,8 @@ void displayConfigScreen(void)
       }
     }
 #endif  
-#ifdef MENU10
-    if(configPage==MENU10){
+#ifdef MENU_PROFILE
+    if(configPage==MENU_PROFILE){
       #ifdef CORRECTLOOPTIME
         #define MENU10MAX 2
       #else

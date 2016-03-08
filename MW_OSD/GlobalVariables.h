@@ -1090,37 +1090,37 @@ const PROGMEM char * const menu_profile[] =
 
 const PROGMEM char * const menutitle_item[] = 
 {   
-#ifdef MENU0
+#ifdef MENU_STAT
   configMsg00,
 #endif
-#ifdef MENU1
+#ifdef MENU_PID
   configMsg10,
 #endif
-#ifdef MENU2
+#ifdef MENU_RC
   configMsg20,
 #endif
-#ifdef MENU3
+#ifdef MENU_VOLTAGE
   configMsg30,
 #endif
-#ifdef MENU4
+#ifdef MENU_RSSI
   configMsg40,
 #endif
-#ifdef MENU5
+#ifdef MENU_CURRENT
   configMsg50,
 #endif
-#ifdef MENU6
+#ifdef MENU_DISPLAY
   configMsg60,
 #endif
-#ifdef MENU7
+#ifdef MENU_ADVANCED
   configMsg70,
 #endif
-#ifdef MENU8
+#ifdef MENU_GPS_TIME
   configMsg80,
 #endif
-#ifdef MENU9
+#ifdef MENU_ALARMS
   configMsg90,
 #endif
-#ifdef MENU10
+#ifdef MENU_PROFILE
   configMsg100,
 #endif
 };

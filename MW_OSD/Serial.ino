@@ -617,11 +617,11 @@ void handleRawRC() {
       { 
 	waitStick =1;
         menudir=1+oldmenudir;
-        #ifdef MENU9
-	if(configPage == MENU9 && COL == 3) {
+        #ifdef MENU_ALARMS
+	if(configPage == MENU_ALARMS && COL == 3) {
 	  if(ROW==5) timer.magCalibrationTimer=0;
         }
-        #endif //MENU9
+        #endif //MENU_ALARMS
         serialMenuCommon();  
       }      
     }
@@ -644,8 +644,8 @@ void serialMenuCommon()
     }
     if(configPage<MINPAGE) configPage = MAXPAGE;
     if(configPage>MAXPAGE) configPage = MINPAGE;
-#ifdef MENU1
-	if(configPage == MENU1) {
+#ifdef MENU_PID
+	if(configPage == MENU_PID) {
 	  if(ROW >= 1 && ROW <= 7) {
             uint8_t MODROW=ROW-1;
             if (ROW>5){
@@ -657,9 +657,9 @@ void serialMenuCommon()
 	  }
 	}
 #endif
-#ifdef MENU2
+#ifdef MENU_RC
         #if defined CORRECT_MENU_RCT2
-          if(configPage == MENU2 && COL == 3) {
+          if(configPage == MENU_RC && COL == 3) {
 	    if(ROW==1) rcRate8=rcRate8+menudir;
 	    if(ROW==2) rcExpo8=rcExpo8+menudir;
 	    if(ROW==3) rollRate=rollRate+menudir;
@@ -671,7 +671,7 @@ void serialMenuCommon()
 	    if(ROW==9) tpa_breakpoint16=tpa_breakpoint16+menudir;
           }
         #elif defined CORRECT_MENU_RCT1
-          if(configPage == MENU2 && COL == 3) {
+          if(configPage == MENU_RC && COL == 3) {
 	    if(ROW==1) rcRate8=rcRate8+menudir;
 	    if(ROW==2) rcExpo8=rcExpo8+menudir;
 	    if(ROW==3) rollRate=rollRate+menudir;
@@ -682,7 +682,7 @@ void serialMenuCommon()
 	    if(ROW==8) thrExpo8=thrExpo8+menudir;
          }
         #else
-          if(configPage == MENU2 && COL == 3) {
+          if(configPage == MENU_RC && COL == 3) {
 	    if(ROW==1) rcRate8=rcRate8+menudir;
 	    if(ROW==2) rcExpo8=rcExpo8+menudir;
 	    if(ROW==3) rollPitchRate=rollPitchRate+menudir;
@@ -693,8 +693,8 @@ void serialMenuCommon()
 	  }
         #endif
 #endif
-#ifdef MENU3
-	if(configPage == MENU3 && COL == 3) {
+#ifdef MENU_VOLTAGE
+	if(configPage == MENU_VOLTAGE && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAYVOLTAGE]=!Settings[S_DISPLAYVOLTAGE];  
 	  if(ROW==2) Settings[S_DIVIDERRATIO]=Settings[S_DIVIDERRATIO]+menudir;
 	  if(ROW==3) Settings[S_VOLTAGEMIN]=Settings[S_VOLTAGEMIN]+menudir;
@@ -704,8 +704,8 @@ void serialMenuCommon()
 	  if(ROW==7) Settings[S_MAINVOLTAGE_VBAT]=!Settings[S_MAINVOLTAGE_VBAT];
 	}
 #endif
-#ifdef MENU4
-	if(configPage == MENU4 && COL == 3) {
+#ifdef MENU_RSSI
+	if(configPage == MENU_RSSI && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
 	  if(ROW==2) timer.rssiTimer=15; // 15 secs to turn off tx anwait to read min RSSI
 	  if(ROW==3) Settings[S_MWRSSI]=!Settings[S_MWRSSI];
@@ -714,8 +714,8 @@ void serialMenuCommon()
 	  if(ROW==6) Settings16[S16_RSSIMIN]=Settings16[S16_RSSIMIN]+menudir;
 	}
 #endif
-#ifdef MENU5
-	if(configPage == MENU5 && COL == 3) {
+#ifdef MENU_CURRENT
+	if(configPage == MENU_CURRENT && COL == 3) {
 	  if(ROW==1) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
 	  if(ROW==2) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
 	  if(ROW==3) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
@@ -723,8 +723,8 @@ void serialMenuCommon()
 	  if(ROW==5) Settings16[S16_AMPZERO]=Settings16[S16_AMPZERO]+menudir;
 	}
 #endif
-#ifdef MENU6
-	if(configPage == MENU6 && COL == 3) {
+#ifdef MENU_DISPLAY
+	if(configPage == MENU_DISPLAY && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAY_HORIZON_BR]=!Settings[S_DISPLAY_HORIZON_BR];
 	  if(ROW==2) Settings[S_WITHDECORATION]=!Settings[S_WITHDECORATION];
 	  if(ROW==3) Settings[S_SCROLLING]=!Settings[S_SCROLLING];
@@ -735,8 +735,8 @@ void serialMenuCommon()
 	  if(ROW==8) Settings[S_MAPMODE]=Settings[S_MAPMODE]+menudir;
 	}
 #endif
-#ifdef MENU7
-	if(configPage == MENU7 && COL == 3) {
+#ifdef MENU_ADVANCED
+	if(configPage == MENU_ADVANCED && COL == 3) {
 	  if(ROW==1) Settings[S_UNITSYSTEM]=!Settings[S_UNITSYSTEM];
 	  if(ROW==2) {
 	    Settings[S_VIDEOSIGNALTYPE]=!Settings[S_VIDEOSIGNALTYPE];
@@ -747,15 +747,15 @@ void serialMenuCommon()
 	  if(ROW==5) timer.magCalibrationTimer=CALIBRATION_DELAY;
 	  if(ROW==6) Settings[S_RCWSWITCH_CH]=Settings[S_RCWSWITCH_CH]+menudir;	}
 #endif
-#ifdef MENU8
-	if(configPage == MENU8 && COL == 3) {
+#ifdef MENU_GPS_TIME
+	if(configPage == MENU_GPS_TIME && COL == 3) {
 	  if(ROW==1) Settings[S_GPSTIME]=!Settings[S_GPSTIME];
 	  if(ROW==2) Settings[S_GPSTZAHEAD]=!Settings[S_GPSTZAHEAD];
 	  if(ROW==3) if((menudir == 1 && Settings[S_GPSTZ] < 130) || (menudir == -1 && Settings[S_GPSTZ] > 0))Settings[S_GPSTZ]=Settings[S_GPSTZ]+menudir*5;
 	}
 #endif
-#ifdef MENU9
-	if(configPage == MENU9 && COL == 3) {
+#ifdef MENU_ALARMS
+	if(configPage == MENU_ALARMS && COL == 3) {
 	  if(ROW==1) Settings[S_DISTANCE_ALARM]=Settings[S_DISTANCE_ALARM]+menudir;
 	  if(ROW==2) Settings[S_ALTITUDE_ALARM]=Settings[S_ALTITUDE_ALARM]+menudir;
 	  if(ROW==3) Settings[S_SPEED_ALARM]=Settings[S_SPEED_ALARM]+menudir;
@@ -764,8 +764,8 @@ void serialMenuCommon()
 	  if(ROW==6) Settings[S_AMPERAGE_ALARM]=Settings[S_AMPERAGE_ALARM]+menudir;
 	}
 #endif
-#ifdef MENU10
-	if(configPage == MENU10 && COL == 3) {
+#ifdef MENU_PROFILE
+	if(configPage == MENU_PROFILE && COL == 3) {
 	  if(ROW==1) FCProfile=FCProfile+menudir;
 	  if(ROW==2) PIDController=PIDController+menudir;
         #ifdef CORRECTLOOPTIME
