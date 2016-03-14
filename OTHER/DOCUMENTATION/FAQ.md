@@ -199,7 +199,7 @@ HARAKIRI USERS - ensure protocol set as follows:
 ---
 26 GUI very slow to update / unable to turn simulator off
   * Edit gui.cfg in GUI data folder
-  * Set AutoSimulator to 0 <entry key="AutoSimulator">0</entry>
+  * Set AutoSimulator to 0
   * Note it may also be a sign of an old pc or other application / malware running on PC
 
 
