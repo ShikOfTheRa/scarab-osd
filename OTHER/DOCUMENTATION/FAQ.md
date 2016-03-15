@@ -193,8 +193,15 @@ HARAKIRI USERS - ensure protocol set as follows:
 
 ---
 25 Display keeps blinking. May be worse at high throttle
-  * This is noise on the power to the OSD. It need sto be sorted
+  * This is noise on the power to the OSD. It needs to be sorted
   * Google LC power filter for FPV
+
+---
+26 GUI very slow to update / unable to turn simulator off
+  * Edit gui.cfg in GUI data folder
+  * Set AutoSimulator to 0
+  * Note it may also be a sign of an old pc or other application / malware running on PC
+
 
 ---
 
