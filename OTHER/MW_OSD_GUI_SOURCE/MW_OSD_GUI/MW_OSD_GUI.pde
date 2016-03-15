@@ -2241,7 +2241,7 @@ public void LoadConfig(){
     BaudRate = 115200;
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
-    AutoSimulator = 1;
+    AutoSimulator = 0;
     AutoDebugGUI = 1;
     Simtype=1;
     FrameRate = 7;

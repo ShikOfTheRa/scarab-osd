@@ -552,6 +552,7 @@ void handleRawRC() {
           // Enter config mode using stick combination
           waitStick =  2;	// Sticks must return to center before continue!
           configMode = 1;
+          configPage = previousconfigPage;
           setMspRequests();
       }
     }
@@ -783,8 +784,11 @@ void serialMenuCommon()
         }        
   #endif
 #endif  
-	if((ROW==10)&&(COL==1)) configExit();
-	if((ROW==10)&&(COL==2)) configSave();
+	if(ROW==10) {
+          previousconfigPage=configPage;
+	  if(COL==1) configExit();
+	  if(COL==2) configSave();
+        }
 }
 
 void serialMSPreceive(uint8_t loops)
