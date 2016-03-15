@@ -88,6 +88,9 @@ uint16_t UntouchedStack(void)
 #if defined NAZA
   #include "Naza.h"
 #endif  
+#if defined MAVLINK
+  #include "MAVLINK.h"
+#endif  
 #if defined LOADFONT_LARGE
   #include "fontL.h"
 #elif defined LOADFONT_DEFAULT 

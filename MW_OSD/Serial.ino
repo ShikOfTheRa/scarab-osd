@@ -1,5 +1,7 @@
  
-#if defined NAZA
+#if defined MAVLINK
+  #define SERIALBUFFERSIZE 75
+#elif defined NAZA
   #define SERIALBUFFERSIZE 75
 #elif defined GPSOSD
   #define SERIALBUFFERSIZE 100
@@ -813,6 +815,10 @@ void serialMSPreceive(uint8_t loops)
         if (GPS_newFrame(c)) GPS_NewData();  
       #endif //NAZA  
     #endif //GPSOSD   
+
+    #if defined (MAVLINK)
+       MAVLINK_NewData(c);
+    #endif //MAVLINK   
 
     if (c_state == IDLE)
     {

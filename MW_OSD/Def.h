@@ -35,6 +35,10 @@
   #define CLEANFLIGHT190
 #endif
 
+#ifdef iNAV    //set up latest at time of release
+  #define CLEANFLIGHT190
+#endif
+
 #ifdef BASEFLIGHT     //set up latest at time of release
   #define BASEFLIGHT20150627
 #endif
@@ -42,6 +46,10 @@
 #ifdef HARIKIRI
   #define BOXNAMES
   #define MULTIWII_V24
+#endif
+
+#ifdef APM     //set up latest at time of release
+  #define MAVLINK
 #endif
 
 // The unit of current varies across implementations.  There are effectively three set:
@@ -229,6 +237,18 @@
   #define MENU_ALARMS   8       //ALARMS
 //  #define MENU_PROFILE 9//PROFILE+PID CONTROLLER
   #define MAXPAGE       MENU_ALARMS
+#endif
+
+#if defined(APM)
+  #define MENU_STAT     0       //STATISTICS
+  #define MENU_VOLTAGE  1       //VOLTAGE
+  #define MENU_RSSI     2       //RSSI
+  #define MENU_CURRENT  3       //CURRENT
+  #define MENU_DISPLAY  4       //DISPLAY
+  #define MENU_ADVANCED 5       //ADVANCED
+  #define MENU_ALARMS   6       //ALARMS
+  #define MAXPAGE       MENU_ALARMS
+  #define MAVLINK
 #endif
 
 #ifdef NOCONTROLLER
