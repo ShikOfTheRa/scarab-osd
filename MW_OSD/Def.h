@@ -28,7 +28,11 @@
 #endif
 
 #ifdef BETAFLIGHT    //set up latest at time of release
-  #define BETAFLIGHT
+//  #define BETAFLIGHT
+#endif
+
+#ifdef TAULABS    //set up latest at time of release
+//  #define TAULABS
 #endif
 
 #ifdef CLEANFLIGHT    //set up latest at time of release
@@ -68,6 +72,7 @@
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
   #define ENABLE_MSP_SAVE_ADVANCED
+  #define ACROPLUS
 
   #define MENU_STAT     0       //STATISTICS
   #define MENU_PID      1       //PID CONFIG
@@ -225,6 +230,7 @@
 #if defined(TAULABS)
   #define AMPERAGE_DIV  10
   #define HAS_ALARMS
+  #define ACROPLUS
   #define MENU_STAT     0       //STATISTICS
   #define MENU_PID      1       //PID CONFIG
   #define MENU_RC       2       //RC TUNING

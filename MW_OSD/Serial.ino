@@ -512,11 +512,11 @@ void serialMSPCheck()
       case 28:
         mode.air |= bit;
         break;
-#if defined BETAFLIGHT
+#if defined ACROPLUS
       case 29:
         mode.acroplus |= bit;
         break;
-#endif //BETAFLIGHT        
+#endif //ACROPLUS        
       }
       bit <<= 1;
       --remaining;

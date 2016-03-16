@@ -30,6 +30,7 @@
 //#define BETAFLIGHT                // Uncomment this if you are using BETAFLIGHT (same as CLEANFLIGHT t time of this MWOSD release)
 //#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
+//#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
 //#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
 //#define GPSOSD_MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
@@ -41,12 +42,12 @@
 //#define CLEANFLIGHT172            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.7.2
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1 
 
-
+//#define APM                       // Uncomment this if you are using APM compatible FC (Under development only)
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
 #define ROTORCRAFT                  // Default for multirotors etc. 
-//#define FIXEDWING                 // Uncomment this if you are using fixed wing MultiWii or Baseflight 
+//#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight 
 
 
 
