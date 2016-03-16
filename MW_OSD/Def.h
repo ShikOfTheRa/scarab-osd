@@ -35,6 +35,10 @@
 //  #define TAULABS
 #endif
 
+#ifdef DRONIN    //set up latest at time of release
+  #define TAULABS
+#endif
+
 #ifdef CLEANFLIGHT    //set up latest at time of release
   #define CLEANFLIGHT190
 #endif
