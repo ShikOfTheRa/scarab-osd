@@ -69,7 +69,7 @@
   <LAYOUT desc="Throttle" enabled="1" hud="0" hudname="Shiki" value="352"/>
   <LAYOUT desc="Unused" enabled="1" hud="0" hudname="Shiki" value="382"/>
   <LAYOUT desc="Timer" enabled="1" hud="0" hudname="Shiki" value="382"/>
-  <LAYOUT desc="Armed Status" enabled="0" hud="0" hudname="Shiki" value="311"/>
+  <LAYOUT desc="Armed Status" enabled="1" hud="0" hudname="Shiki" value="311"/>
   <LAYOUT desc="Pitch Angle" enabled="0" hud="0" hudname="Shiki" value="233"/>
   <LAYOUT desc="Roll Angle" enabled="0" hud="0" hudname="Shiki" value="263"/>
   <LAYOUT desc="Latitude" enabled="1" hud="0" hudname="Shiki" value="2"/>
