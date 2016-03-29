@@ -59,7 +59,7 @@
 ---
 
 9 My voltage doesn't change during flight
- * Ensure you have selected the correct battery option - MWII if using FC connection
+ * Ensure you have selected the correct battery option - FC if using FC connection
  * If using a witespy board you may have to select WITESPY in config.h
  * Ensure you are connected to the correct vbat pin some are reversed bat1 / bat2
 
