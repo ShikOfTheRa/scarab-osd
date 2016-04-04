@@ -205,7 +205,13 @@ HARAKIRI USERS - ensure protocol set as follows:
   * Set AutoSimulator to 0
   * Note it may also be a sign of an old pc or other application / malware running on PC
 
-
+---
+26 Can I swap between different batteries 3/4s and set alarms automatically
+  * Use R1.6 and higher
+  * uncomment AUTOCELL
+  * Amend Woltage waring section in config.h as you require 
+  * Consider use of AUTOCELL_VOLTAGE
+  
 ---
 
 Cameras with known compatibility issues with MAX7456 chip
