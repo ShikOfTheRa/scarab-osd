@@ -28,7 +28,8 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
-#define MEMCHECK 3 // to enable memory checking and set debug[x] value
+#define DEVELOPMENT // to enable development checking and set debug[x] value
+//#define MEMCHECK 3  // to enable memory checking and set debug[x] value. Requires DEVELOPMENT to be enabled
 #if 1
 __asm volatile ("nop");
 #endif
@@ -87,9 +88,6 @@ uint16_t UntouchedStack(void)
 #include "math.h"
 #if defined NAZA
   #include "Naza.h"
-#endif  
-#if defined MAVLINK
-  #include "MAVLINK.h"
 #endif  
 #if defined LOADFONT_LARGE
   #include "fontL.h"
@@ -216,7 +214,7 @@ void loop()
   if (flags.reset){
     resetFunc();
   }
-  #ifdef MEMCHECK
+  #if defined (MEMCHECK) && defined (DEVELOPMENT)
     debug[MEMCHECK] = UntouchedStack();
   #endif
 
@@ -249,6 +247,11 @@ void loop()
     else  
       screenlayout=0;
   #endif
+  
+#if defined (DEVELOPMENT)
+      screenlayout=0;
+#endif
+
   if (screenlayout!=oldscreenlayout){
     readEEPROM_screenlayout();
   }
