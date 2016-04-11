@@ -215,5 +215,7 @@ HARAKIRI USERS - ensure protocol set as follows:
 ---
 
 Cameras with known compatibility issues with MAX7456 chip
+Either no OSD test displayed or more likely feint / flickering text
   * Runcam sky - http://shop.runcam.com/runcam-sky/
+  * Eachine CCD 700TVL - http://www.banggood.com/Eachine-CCD-700TVL-148-Degree-Lens-FPV-Camera-p-977401.html
 
