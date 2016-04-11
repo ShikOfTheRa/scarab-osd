@@ -6,11 +6,13 @@
 
 ## Bugfixes / Enhancements completed for next release (1.7): ##
 
- * OSD    - GPS mode home set improvement. Not really a bug - more manage GPS chip startup innaccuracy
 
 ---
 
 ## Bugfixes / Enhancements intended for 1.7: ##
+
+ * OSD    - GPS mode home set improvement. Not really a bug - more manage GPS chip startup innaccuracy
+ * OSD    - Voltage load sag hysterysis
 
 Support for APM / MAVLINK
 
