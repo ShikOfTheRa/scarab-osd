@@ -6,17 +6,21 @@
 
 ## Bugfixes / Enhancements completed for next release (1.7): ##
 
- * OSD    - Nothing yet :)
 
 ---
 
 ## Bugfixes / Enhancements intended for 1.7: ##
 
-Support for APM
+ * OSD    - GPS mode home set improvement. Not really a bug - more manage GPS chip startup innaccuracy
+ * OSD    - Voltage load sag hysterysis
+
+Support for APM / MAVLINK
 
 Support for Multiple crosshair types
 
 Improve GUI speed
+
+Support for GPS / NAV PID adjustments
 
 
 ---
@@ -33,9 +37,9 @@ Display PIDS when flying for in flight tuning
 
 Migrate controller/aircraft choice to GUI
 
-Power consumtion W/Hr and W/Km 
+Power consumtion W/Hr and W/Km / Efficiency similar to other OSD
 
-Support for OP
+Support for KISS OSD
 
 Support for displaying PID RPW values for in flight tuning
 
