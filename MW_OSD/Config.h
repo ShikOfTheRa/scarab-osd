@@ -3,10 +3,12 @@
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
-#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware (default for 95% of boards) 
-//#define WITESPYV1                 // Uncomment this if using Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
-//#define WITESPYMICRO              // Uncomment this if using Witespy Micro Minim OSD, select this to correct for swapped bat1/bat 2.  
+#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware
+//#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
+//#define RTFQV1                    // Uncomment this if using standard RTFQ/Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
+//#define RTFQMICRO                 // Uncomment this if using micro RTFQ/Witespy Micro Minim OSD, select this to correct for swapped bat1/bat 2.  
 //#define RUSHDUINO                 // Uncomment this if using Rushduino
+//#define KYLIN250PDB               // Uncomment this if using a Kylin 250 FPV PDB (Using A6 as VOLTAGEPIN)
 
 // NOTE-some of the popular RTFQ/Witespy boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct: 
@@ -42,7 +44,6 @@
 //#define BASEFLIGHT20150327        // Uncomment this if you are using BASEFLIGHT up to and including version Stable 2015.03.27
 //#define CLEANFLIGHT172            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.7.2
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1 
-
 //#define APM                       // Uncomment this if you are using APM compatible FC (Under development only)
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
