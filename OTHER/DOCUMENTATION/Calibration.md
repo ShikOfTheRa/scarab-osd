@@ -23,7 +23,7 @@ NOTE: if use a hardware sensor connected to teh Flight Controller, then ALL adju
   1. Select "Enable ADC 5v ref"
   1. If "Enable ADC 5v ref" is changed, save and restart the OSD
   1. Click Amperage "CAL" on the GUI
-  1. Enter the measured OSD voltage (recommended for improved accuracy) 
+  1. Enter the OSD onboard 5v voltage measured with a volt meter (recommended for improved accuracy) 
   1. Enter the offset voltage. (Voltage when 0A drawn)
   1. Enter the sensitvity - mV change per 1A change
 
