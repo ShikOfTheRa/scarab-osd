@@ -44,8 +44,8 @@ NOTE: if use a hardware sensor connected to teh Flight Controller, then ALL adju
   1. Fly a complete battery and note the total mah used on the OSD and put back into the battery by your charger
   1. The correct amp adjust = old amp adjust `*` charger mah used / OSD mah used
 
-**Software current sensor alternative method - with a battery charger**
- 1. Click "WRITE" to save settings to OSD
+**Save settings**
+  Click "WRITE" to save settings to OSD
 
 ---
 
