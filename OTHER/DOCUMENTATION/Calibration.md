@@ -13,6 +13,9 @@ NOTE: if use Flight Controller voltage, then ALL adjustments are made on the FC.
   1. With a voltage meter, change "Voltage adjust" and save until the voltage on the OSD matches the meter
   1. Repeat for video if appropriate
 
+**Save settings**
+  Click "WRITE" to save settings to OSD
+
 ---
 
 ## Calibration - Current ##
@@ -65,7 +68,7 @@ NOTE: if use a hardware sensor connected to teh Flight Controller, then ALL adju
   1. With TX on, click "SET" (Max)
   1. Remeber to "WRITE" to save to OSD
 
-**Software current sensor alternative method - with a battery charger**
- 1. Click "WRITE" to save settings to OSD
+**Save settings**
+  Click "WRITE" to save settings to OSD
 
 ---
