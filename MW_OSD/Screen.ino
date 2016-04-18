@@ -483,7 +483,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
 
   #ifdef SBDIRECTION
 
-    if (Settings[S_SIDEBARTOPS]&fieldIsVisible(SideBarScrollPosition)) {
+    if (Settings[S_SIDEBARTOPS]&&fieldIsVisible(SideBarScrollPosition)) {
       if (millis()<(sidebarsMillis + 1000)) {
         if (sidebarsdir == 2){
           screen[position-(hudheight*LINE)-hudwidth] = SYM_AH_DECORATION_UP;
