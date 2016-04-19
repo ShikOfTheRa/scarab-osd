@@ -805,20 +805,32 @@ void checkEEPROM(void)
   uint8_t EEPROM_Loaded = EEPROM.read(0);
   if (EEPROM_Loaded!=MWOSDVER){
     for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
-      EEPROM.write(en,EEPROM_DEFAULT[en]);
+      EEPROM.write(en,pgm_read_byte(&EEPROM_DEFAULT[en]));
     }
     for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
       uint16_t pos=EEPROM_SETTINGS+(en*2);
-      EEPROM.write(pos,EEPROM16_DEFAULT[en]&0xFF);
-      EEPROM.write(pos+1,EEPROM16_DEFAULT[en]>>8);
+      uint16_t w = pgm_read_word(&EEPROM16_DEFAULT[en]);
+      EEPROM.write(pos, w & 0xff);
+      EEPROM.write(pos+1, w >> 8);
     }
-    for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
-      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(en*2),SCREENLAYOUT_DEFAULT[en]&0xFF);
-      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
-      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*2)+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]&0xFF);
-      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*2)+1+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]>>8);
-      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*4)+(en*2),SCREENLAYOUT_DEFAULT[en]&0xFF);
-      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*4)+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
+
+#define L0START EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)
+#define L1START EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*2)
+#define L2START EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*4)
+
+    for(uint8_t en=0;en<POSITIONS_SETTINGS*2;en++){
+      uint16_t w;
+      w = pgm_read_word(&SCREENLAYOUT_DEFAULT[en]);
+      EEPROM.write(L0START+(en*2), w & 0xff);
+      EEPROM.write(L0START+(en*2)+1, w >> 8);
+
+      w = pgm_read_word(&SCREENLAYOUT_DEFAULT_OSDSW[en]);
+      EEPROM.write(L1START+(en*2), w & 0xff);
+      EEPROM.write(L1START+(en*2)+1, w >> 8);
+
+      w = pgm_read_word(&SCREENLAYOUT_DEFAULT[en]);
+      EEPROM.write(L2START+(en*2), w & 0xff);
+      EEPROM.write(L2START+(en*2)+1, w >> 8);
     }
 /*
     for(uint8_t osd_switch_pos=0;osd_switch_pos<3;osd_switch_pos++){
