@@ -11,17 +11,14 @@
 
 ## Bugfixes / Enhancements intended for 1.7: ##
 
- * OSD    - GPS mode home set improvement. Not really a bug - more manage GPS chip startup innaccuracy
+ * OSD    - Support for MAVLINK/APM/PIXHAWK
+ * OSD    - GPS mode home set improvement
  * OSD    - Voltage load sag hysterysis
-
-Support for APM / MAVLINK
-
-Support for Multiple crosshair types
-
-Improve GUI speed
-
-Support for GPS / NAV PID adjustments
-
+ * OSD    - BUGFIX: Warning message display overwriting
+ * OSD    - Support for GPS / NAV PID adjustments
+ * OSD    - Support for alternative crosshairs
+ * GUI    - Improved speed
+ * GUI    - Support for MAVLINK/APM/PIXHAWK
 
 ---
 
