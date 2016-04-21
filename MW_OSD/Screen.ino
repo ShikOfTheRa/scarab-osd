@@ -457,7 +457,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
     }
   }
 
-  if (Settings[S_WITHDECORATION]&fieldIsVisible(SideBarPosition)){
+  if (Settings[S_WITHDECORATION]&&fieldIsVisible(SideBarPosition)){
     // Draw AH sides
     int8_t hudwidth=  getPosition(SideBarWidthPosition)&0x0F;
     int8_t hudheight= getPosition(SideBarHeightPosition)&0x0F;
@@ -478,7 +478,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
 
   #ifdef SBDIRECTION
 
-    if (Settings[S_SIDEBARTOPS]&fieldIsVisible(SideBarScrollPosition)) {
+    if (Settings[S_SIDEBARTOPS]&&fieldIsVisible(SideBarScrollPosition)) {
       if (millis()<(sidebarsMillis + 1000)) {
         if (sidebarsdir == 2){
           screen[position-(hudheight*LINE)-hudwidth] = SYM_AH_DECORATION_UP;
