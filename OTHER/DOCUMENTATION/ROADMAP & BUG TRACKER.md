@@ -17,6 +17,7 @@
  * OSD    - BUGFIX: Warning message display overwriting
  * OSD    - Support for GPS / NAV PID adjustments
  * OSD    - Support for alternative crosshairs
+ * OSD    - FC version display change
  * GUI    - Improved speed
  * GUI    - Support for MAVLINK/APM/PIXHAWK
 
