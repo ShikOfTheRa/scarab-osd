@@ -388,6 +388,8 @@ void serialMSPCheck()
   }
 #endif /* HAS_ALARMS */
 
+#define BOXNAMES 1
+
 #ifdef BOXNAMES
   if(cmdMSP==MSP_BOXNAMES) {
     flags.box=1;
@@ -395,17 +397,28 @@ void serialMSPCheck()
     uint8_t remaining = dataSize;
     uint8_t len = 0;
 
-    mode.armed = 0;
-    mode.stable = 0;
-    mode.baro = 0;
-    mode.mag = 0;
-    mode.gpshome = 0;
-    mode.gpshold = 0;
-    mode.llights = 0;
-    mode.camstab = 0;
-    mode.osd_switch = 0;
-    mode.air = 0;
-    mode.acroplus = 0;
+    struct boxes {
+        void    *var;
+        uint8_t size;
+        const char *name;
+    } boxnames[] = {
+        { &mode.armed,      8,  PSTR("ARM") },
+        { &mode.stable,     8,  PSTR("ANGLE") },
+        { &mode.horizon,    8,  PSTR("HORIZON") },
+        { &mode.mag,        8,  PSTR("MAG") },
+        { &mode.baro,       8,  PSTR("BARO") },
+        { &mode.llights,    16, PSTR("LLIGHTS") },
+        { &mode.camstab,    16, PSTR("CAMSTAB") },
+        { &mode.air,        32, PSTR("AIR MODE") },
+        { &mode.acroplus,   32, PSTR("ACRO PLUS") },
+        { &mode.gpshome,    16, PSTR("GPS HOME") },
+        { &mode.gpshold,    16, PSTR("GPS HOLD") },
+        { &mode.passthru,   16, PSTR("PASSTHRU") },
+        { &mode.osd_switch, 32, PSTR("OSD SW") },
+        { NULL,             0,  NULL },
+    };
+
+    memset(&mode, 0, sizeof(mode));
 
     char boxname[20];
 
@@ -416,32 +429,22 @@ void serialMSPCheck()
         len++;
       }
       else {
-        if (strncmp_P(boxname, PSTR("ARM"), len) == 0)
-          mode.armed |= bit;
-        if (strncmp(boxname, PSTR("ANGLE"), len) == 0)
-          mode.stable |= bit;
-        if (strncmp_P(boxname, PSTR("HORIZON"), len) == 0)
-          mode.horizon |= bit;
-        if (strncmp_P(boxname, PSTR("MAG"), len) == 0)
-          mode.mag |= bit;
-        if (strncmp_P(boxname, PSTR("BARO"), len) == 0)
-          mode.baro |= bit;
-        if (strncmp_P(boxname, PSTR("LLIGHTS"), len) == 0)
-          mode.llights |= bit;
-        if (strncmp_P(boxname, PSTR("CAMSTAB"), len) == 0)
-          mode.camstab |= bit;
-        if (strncmp_P(boxname, PSTR("AIR MODE"), len) == 0)
-          mode.air |= bit;
-        if (strncmp_P(boxname, PSTR("ACRO PLUS"), len) == 0)
-          mode.acroplus |= bit;
-        if (strncmp_P(boxname, PSTR("GPS HOME"), len) == 0)
-          mode.gpshome |= bit;
-        if (strncmp_P(boxname, PSTR("GPS HOLD"), len) == 0)
-          mode.gpshold |= bit;
-        if (strncmp_P(boxname, PSTR("PASSTHRU"), len) == 0)
-          mode.passthru |= bit;
-        if (strncmp_P(boxname, PSTR("OSD SW"), len) == 0)
-          mode.osd_switch |= bit;
+          for (int i = 0; boxnames[i].name; i++) {
+              if (strncmp_P(boxname, boxnames[i].name, len) == 0) {
+                  switch (boxnames[i].size) {
+                  case 8:
+                      *(uint8_t*)boxnames[i].var |= bit;
+                      break;
+                  case 16:
+                      *(uint16_t*)boxnames[i].var |= bit;
+                      break;
+                  case 32:
+                      *(uint32_t*)boxnames[i].var |= bit;
+                      break;
+                  }
+                  break;
+              }
+          }
 
         len = 0;
         bit <<= 1L;
@@ -455,21 +458,7 @@ void serialMSPCheck()
     uint32_t bit = 1;
     uint8_t remaining = dataSize;
 
-    mode.armed = 0;
-    mode.stable = 0;
-    mode.horizon = 0;
-    mode.baro = 0;
-    mode.mag = 0;
-    mode.gpshome = 0;
-    mode.gpshold = 0;
-    mode.gpsmission = 0;
-    mode.gpsland = 0;
-    mode.llights = 0;
-    mode.passthru = 0;
-    mode.osd_switch = 0;
-    mode.camstab = 0;
-    mode.air = 0;
-    mode.acroplus = 0;
+    memset(&mode, 0, sizeof(mode));
 
     while(remaining > 0) {
       char c = read8();
