@@ -559,7 +559,7 @@ void SendCommand(int cmd){
         serialize8(int(SGPS_FIX.arrayValue()[0]));
         serialize8(int(SGPS_numSat.value()));
         GPSstartlat=GPSstartlat+100;
-        GPSstartlon=GPSstartlon-100;
+        GPSstartlon=GPSstartlon+100;
         serialize32(GPSstartlat);
         serialize32(GPSstartlon);
         serialize16(int(SGPS_altitude.value()/100));

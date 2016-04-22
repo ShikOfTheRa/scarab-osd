@@ -204,7 +204,9 @@ void displayMode(void)
     }
   }  
 
-  
+#ifdef MAVLINK // override MWOSD mode icons
+    strcpy_P(screenBuffer, (char*)pgm_read_word(&(mav_mode_index[apm_mav_mode])));
+#else  
   if(MwSensorActive&mode.passthru){
     screenBuffer[2]=0;
     screenBuffer[0]=SYM_PASS;
@@ -281,6 +283,7 @@ void displayMode(void)
     }
 #endif //ACROPLUS
   }
+#endif //MAVLINK
   if(Settings[S_MODEICON]){
     if(fieldIsVisible(ModePosition)){
       MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
@@ -1522,18 +1525,18 @@ void displayConfigScreen(void)
 
 void displayDebug(void)
 {
-#if defined (DEBUG)||defined (DEBUGMW)
+#if defined (DEBUG)||defined (DEBUGMW)||defined (FORCEDEBUG)
+#ifndef FORCEDEBUG 
   if(!Settings[S_DEBUG])
     return;
- 
+#endif //FORCEDEBUG 
   for(uint8_t X=0; X<4; X++) {
     ItoaPadded(debug[X], screenBuffer+2,7,0);     
     screenBuffer[0] = 0x30+X;
     screenBuffer[1] = 0X3A;
     MAX7456_WriteString(screenBuffer,getPosition(debugPosition)+(X*LINE));
   } 
- 
-#endif
+#endif //(DEBUG)||defined (DEBUGMW)||defined (FORCEDEBUG)
 }
 
 void displayCells(void){
