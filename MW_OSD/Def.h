@@ -4,8 +4,11 @@
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-#define DEBUG         // Enable/disable option to display OSD debug values 
+//#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
+//#define ALWAYSARMED
+//#define DEVELOPMENT   // to force layout 0, set debug default eeprombit = 1
+//#define FORCEDEBUG    // to debug display
 
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
@@ -57,7 +60,7 @@
 #endif
 
 #ifdef APM     //set up latest at time of release
-  #define MAVLINK
+//  #define MAVLINK
 #endif
 
 // The unit of current varies across implementations.  There are effectively three set:
@@ -259,6 +262,9 @@
   #define MENU_ALARMS   6       //ALARMS
   #define MAXPAGE       MENU_ALARMS
   #define MAVLINK
+  #define SENSORS
+  #define AMPERAGE_DIV 10
+  #define FORCESENSORS
 #endif
 
 #ifdef NOCONTROLLER

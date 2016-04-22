@@ -648,20 +648,44 @@ void ShowCurrentThrottlePosition(){
 
 void ShowLatLon(){
   if(confItem[GetSetting("S_COORDINATES")].value() > 0) {
-//  if(confItem[GetSetting("S_GPSCOORDTOP")].value() > 0) {
-  mapchar(0xca, SimPosn[MwGPSLatPositionTop]);
-  makeText(" 43.09486N", SimPosn[MwGPSLatPositionTop]+1);
-  mapchar(0xcb, SimPosn[MwGPSLonPositionTop]);
-  makeText(" 71.88970W", SimPosn[MwGPSLonPositionTop]+1);
-//  }
-//  else {
-//  mapchar(0xca, SimPosn[MwGPSLatPosition]);
-//  makeText(" 43.09486N", SimPosn[MwGPSLatPosition]+1);
-//  mapchar(0xcb, SimPosn[MwGPSLonPosition]);
-//  makeText(" 71.88970W", SimPosn[MwGPSLonPosition]+1);
-//  }
+    String lat=" 71.88970S";
+    String lon=" 71.88970W";
+
+    float t1=GPSstartlat;
+    t1=t1/10000000;
+    String latsign="N";
+    if (t1<0) latsign="S";
+    lat = " "+t1;
+    while (lat.length()<9){
+      lat+=" ";
+    }
+    lat=lat.substring(0,9);
+    lat=lat+latsign;
+
+    float t2=GPSstartlon;
+    t2=t2/10000000;
+    String lonsign="E";
+    if (t2<0){
+      lonsign="W";
+      t2=-t2;
+    }
+    lon = " "+t2;
+    while (lon.length()<9){
+      lon+=" ";
+    }
+    lon=lon.substring(0,9);
+    lon=lon+lonsign;
+
+
+
+    mapchar(0xca, SimPosn[MwGPSLatPositionTop]);
+    makeText(lat, SimPosn[MwGPSLatPositionTop]+1);
+    mapchar(0xcb, SimPosn[MwGPSLonPositionTop]);
+    makeText(lon, SimPosn[MwGPSLonPositionTop]+1);
+//    makeText(" 71.88970W", SimPosn[MwGPSLonPositionTop]+1);
+  }
 }
-}
+
 
 void ShowDebug(){
   if(confItem[GetSetting("S_DEBUG")].value() > 0) {

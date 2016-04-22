@@ -92,6 +92,11 @@
 #define GPSSENSOR      8//0b00001000
 //#define SONAR         16//0b00010000
 
+#if defined (DEVELOPMENT)
+#define DEBUGDEF 1
+#else
+#define DEBUGDEF 0   
+#endif
 
 //General use variables
 struct {
@@ -319,7 +324,7 @@ MWOSDVER,   // used for check              0
 0,   // GPStime                     37a
 0,   // GPSTZ +/-                   37b
 0,   // GPSTZ                       37c
-0,   // DEBUG                       37e
+DEBUGDEF,   // DEBUG                       37e
 1,   // SCROLLING LADDERS           37f
 1,   // SHOW GIMBAL ICON            37g
 1,   // SHOW VARIO                  37h
@@ -1131,5 +1136,109 @@ const PROGMEM char * const menu_on_off[] =
   configMsgOFF,
   configMsgON,
 };
+
+
+#ifdef MAVLINK
+
+#define MAVLINK_MSG_ID_HEARTBEAT 0
+#define MAVLINK_MSG_ID_HEARTBEAT_MAGIC 50
+#define AVLINK_MSG_ID_HEARTBEAT_LEN 9
+#define MAVLINK_MSG_ID_VFR_HUD 74
+#define MAVLINK_MSG_ID_VFR_HUD_MAGIC 20
+#define MAVLINK_MSG_ID_VFR_HUD_LEN 20
+#define MAVLINK_MSG_ID_ATTITUDE 30
+#define MAVLINK_MSG_ID_ATTITUDE_MAGIC 39
+#define MAVLINK_MSG_ID_ATTITUDE_LEN 28
+#define MAVLINK_MSG_ID_GPS_RAW_INT 24
+#define MAVLINK_MSG_ID_GPS_RAW_INT_MAGIC 24
+#define MAVLINK_MSG_ID_GPS_RAW_INT_LEN 30
+#define MAVLINK_MSG_ID_RC_CHANNELS_RAW 35
+#define MAVLINK_MSG_ID_RC_CHANNELS_RAW_MAGIC 244
+#define MAVLINK_MSG_ID_RC_CHANNELS_RAW_LEN 22    
+#define MAVLINK_MSG_ID_SYS_STATUS 1
+#define MAVLINK_MSG_ID_SYS_STATUS_MAGIC 124
+#define MAVLINK_MSG_ID_SYS_STATUS_LEN 31  
+#define  LAT  0
+#define  LON  1
+
+const char mav_mode_APM[] PROGMEM    = "APM "; //Unknown APM mode
+const char mav_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
+const char mav_mode_ACRO[] PROGMEM   = "ACRO"; //Acrobatic: rate control
+const char mav_mode_AUTO[] PROGMEM   = "AUTO"; //Auto: auto control
+const char mav_mode_LOIT[] PROGMEM   = "LOIT"; //Loiter: hold a single location
+const char mav_mode_RETL[] PROGMEM   = "RETL"; //Return to Launch: auto control
+const char mav_mode_CIRC[] PROGMEM   = "CIRC"; //Circle: auto control
+const char mav_mode_ATUN[] PROGMEM   = "ATUN"; //Auto Tune: autotune the vehicle's roll and pitch gains
+const char mav_mode_GUID[] PROGMEM   = "GUID"; //Guided: auto control
+#ifdef FIXEDWING
+const char mav_mode_MANU[] PROGMEM   = "MANU"; //Manual
+const char mav_mode_TRNG[] PROGMEM   = "TRNG"; //Training
+const char mav_mode_FBWA[] PROGMEM   = "FBWA"; //Fly-by-wire A
+const char mav_mode_FBWB[] PROGMEM   = "FBWB"; //Fly-by-wire B
+const char mav_mode_CRUI[] PROGMEM   = "CRUI"; //Cruise
+const char mav_mode_INIT[] PROGMEM   = "INIT"; //Init
+const PROGMEM char * const mav_mode_index[] = 
+{   
+ mav_mode_MANU, //0
+ mav_mode_CIRC,
+ mav_mode_STAB,
+ mav_mode_TRNG,
+ mav_mode_ACRO,
+ mav_mode_FBWA,
+ mav_mode_FBWB,
+ mav_mode_CRUI,
+ mav_mode_ATUN, 
+ mav_mode_APM , 
+ mav_mode_AUTO,
+ mav_mode_RETL,
+ mav_mode_LOIT,
+ mav_mode_APM , 
+ mav_mode_APM , 
+ mav_mode_GUID,
+ mav_mode_INIT, //16
+ mav_mode_APM , 
+};
+#else
+const char mav_mode_ALTH[] PROGMEM   = "ALTH"; //Altitude Hold: auto control
+const char mav_mode_POSI[] PROGMEM   = "POSI"; //Position: auto control
+const char mav_mode_LAND[] PROGMEM   = "LAND"; //Land:: auto control
+const char mav_mode_OFLO[] PROGMEM   = "OFLO"; //OF_Loiter: hold a single location using optical flow sensor
+const char mav_mode_DRIF[] PROGMEM   = "DRIF"; //Drift mode: 
+const char mav_mode_SPRT[] PROGMEM   = "SPRT"; //Sport: earth frame rate control
+const char mav_mode_FLIP[] PROGMEM   = "FLIP"; //Flip: flip the vehicle on the roll axis
+const char mav_mode_HYBR[] PROGMEM   = "HYBR"; //Hybrid: position hold with manual override
+const PROGMEM char * const mav_mode_index[] = 
+{   
+ mav_mode_STAB, //0
+ mav_mode_ACRO,
+ mav_mode_ALTH,
+ mav_mode_AUTO,
+ mav_mode_GUID,
+ mav_mode_LOIT,
+ mav_mode_RETL,
+ mav_mode_CIRC,
+ mav_mode_POSI,
+ mav_mode_LAND,
+ mav_mode_OFLO,
+ mav_mode_DRIF,
+ mav_mode_APM, 
+ mav_mode_SPRT,
+ mav_mode_FLIP,
+ mav_mode_ATUN,
+ mav_mode_HYBR, //16
+ mav_mode_APM , 
+};
+#endif //FIXEDWING
+
+uint8_t  mav_message_length;
+uint8_t  mav_message_cmd;
+uint16_t mav_serial_checksum;
+int32_t  GPS_home[2];
+int16_t  GPS_altitude_home;                            
+uint8_t  GPS_fix_HOME;
+float    GPS_scaleLonDown;
+uint8_t  apm_mav_mode;
+
+#endif //MAVLINK
 
 
