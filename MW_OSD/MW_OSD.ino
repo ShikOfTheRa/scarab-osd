@@ -168,6 +168,7 @@ void loop()
     MwRcData[THROTTLESTICK] = pwmRSSI;
   #endif //THROTTLE_RSSI
 
+  // TODO: $$$ screenlayout global -> local
   #if defined (OSD_SWITCH_RC)                   
     uint8_t rcswitch_ch = Settings[S_RCWSWITCH_CH];
     screenlayout=0;
@@ -199,7 +200,7 @@ void loop()
 #endif
 
   if (screenlayout!=oldscreenlayout){
-    Eeprom.read_screenlayout();
+    Screen.ReadLayout(Eeprom.getEEPROM());
   }
   oldscreenlayout=screenlayout;
     

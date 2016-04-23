@@ -34,31 +34,9 @@ void EepromClass::read(void)
      Settings16[en] = Settings16[en]+(xx<<8);
   }
 
-  EepromClass::read_screenlayout();
+  // TODO: $$$ move this function back to EepromClass, return a settings struct
+  Screen.ReadLayout(_EEPROM);
 }
-
-
-void EepromClass::read_screenlayout(void)
-{
-
-  uint16_t EEPROMscreenoffset=EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(screenlayout*POSITIONS_SETTINGS*2);
-  for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
-    uint16_t pos=(en*2)+EEPROMscreenoffset;
-    screenPosition[en] = _EEPROM->read(pos);
-    uint16_t xx=(uint16_t)_EEPROM->read(pos+1)<<8;
-    screenPosition[en] = screenPosition[en] + xx;
-
-    if(Settings[S_VIDEOSIGNALTYPE]){
-      uint16_t x = screenPosition[en]&0x1FF; 
-      if (x>LINE06) screenPosition[en] = screenPosition[en] + LINE;
-      if (x>LINE09) screenPosition[en] = screenPosition[en] + LINE;
-    }
-#ifdef SHIFTDOWN
-    if ((screenPosition[en]&0x1FF)<LINE04) screenPosition[en] = screenPosition[en] + LINE;
-#endif
-  }
-}
-
 
 void EepromClass::check(void)
 {
@@ -91,8 +69,15 @@ void EepromClass::check(void)
   }
 }
 
-void EepromClass::clear(){
+void EepromClass::clear()
+{
   for (int i = 0; i < 512; i++) {
     _EEPROM->write(i, 0);
   }
+}
+
+// TODO: $$$ encapsulation
+EEPROMClass* EepromClass::getEEPROM()
+{
+  return _EEPROM;
 }

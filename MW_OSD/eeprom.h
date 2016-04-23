@@ -9,9 +9,9 @@ class EepromClass
     EepromClass(EEPROMClass &EEPROM);
     void write(void);
     void read(void);
-    void read_screenlayout(void);
     void check(void);
     void clear(void);
+    EEPROMClass* getEEPROM();
   private:
     EEPROMClass* _EEPROM;
 };

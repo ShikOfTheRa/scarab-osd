@@ -130,6 +130,7 @@ class MAX7456Class
     void DisplayFont();
     void UpdateFont();
 
+    // From program memory
     void WriteBytes_P(const void* src, uint16_t address, size_t n);
     // Write a single character
     void WriteChar(const char c, uint16_t address);

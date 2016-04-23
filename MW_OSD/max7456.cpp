@@ -1,5 +1,6 @@
 #include "platform.h"
 
+// from program memory on arduino
 void MAX7456Class::WriteBytes_P(const void* src, uint16_t address, size_t n)
 {
 #ifdef ARDUINO
@@ -18,13 +19,22 @@ void MAX7456Class::WriteChar(const char c, uint16_t address)
 // Copy string from ram into screen buffer
 void MAX7456Class::WriteString(const char *string, uint16_t address)
 {
-  strcpy(&_screen[address], string);
+  uint8_t xx;
+  for(xx=0;string[xx]!=0;)
+  {
+    _screen[address++] = string[xx++];
+  }
 }
 
 // Copy string from progmem into the screen buffer
 void MAX7456Class::WriteString_P(const char *string, uint16_t address)
 {
-  WriteBytes_P(string, address, strlen(string));
+  uint8_t xx = 0;
+  char c;
+  while((c = (char)pgm_read_byte(&string[xx++])) != 0)
+  {
+    _screen[address++] = c;
+  }
 }
 
 void MAX7456Class::Setup(void)
@@ -130,7 +140,7 @@ void MAX7456Class::Setup(void)
 }
 
 #ifdef USE_VSYNC
-  volatile unsigned char vsync_wait = 0;
+  volatile char vsync_wait = 0;
   ISR(INT0_vect) {
     vsync_wait = 0;
   }

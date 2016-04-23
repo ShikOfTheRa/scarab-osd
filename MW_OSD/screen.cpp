@@ -125,15 +125,15 @@ uint8_t ScreenClass::findNull(void)
  
 uint16_t ScreenClass::getPosition(uint8_t pos)
 {
-  uint16_t val = screenPosition[pos];
+  uint16_t val = _screenPosition[pos];
   uint16_t ret = val&POS_MASK;
   return ret;
 }
 
 uint8_t ScreenClass::fieldIsVisible(uint8_t pos)
 {
-//  uint16_t val = (uint16_t)pgm_read_word(&screenPosition[pos]);
-  uint16_t val = screenPosition[pos];
+//  uint16_t val = (uint16_t)pgm_read_word(&_screenPosition[pos]);
+  uint16_t val = _screenPosition[pos];
   if ((val & DISPLAY_MASK)==DISPLAY_ALWAYS)
     return 1;
   else
@@ -635,7 +635,7 @@ void ScreenClass::DisplayTime(void)
 { 
   if(!Settings[S_TIMER])
     return;
-  if (screenPosition[onTimePosition]<512)
+  if (_screenPosition[onTimePosition]<512)
     return;
 
   uint32_t displaytime;
@@ -1856,6 +1856,29 @@ void ScreenClass::DisplayForcedCrosshair()
   MAX7456.WriteChar(SYM_AH_CENTER_LINE_RIGHT, position+1);
   MAX7456.WriteChar(SYM_AH_CENTER, position);
 }
+
+// TODO: $$$ this should be in EEPROM, and return a struct or something that gets assigned to _screenPosition
+void ScreenClass::ReadLayout(EEPROMClass* EEPROM)
+{
+  // $$$ screenlayout is global
+  uint16_t EEPROMscreenoffset=EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(screenlayout*POSITIONS_SETTINGS*2);
+  for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
+    uint16_t pos = (en*2)+EEPROMscreenoffset;
+    _screenPosition[en] = EEPROM->read(pos);
+    uint16_t xx = (uint16_t)EEPROM->read(pos+1)<<8;
+    _screenPosition[en] = _screenPosition[en] + xx;
+
+    if(Settings[S_VIDEOSIGNALTYPE]){
+      uint16_t x = _screenPosition[en]&0x1FF;
+      if (x>LINE06) _screenPosition[en] = _screenPosition[en] + LINE;
+      if (x>LINE09) _screenPosition[en] = _screenPosition[en] + LINE;
+    }
+#ifdef SHIFTDOWN
+    if ((_screenPosition[en]&0x1FF)<LINE04) _screenPosition[en] = _screenPosition[en] + LINE;
+#endif
+  }
+}
+
 
 
 #ifdef HAS_ALARMS
