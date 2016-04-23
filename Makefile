@@ -12,6 +12,8 @@ TOOLS_DIR := $(ROOT_DIR)/tools
 BUILD_DIR := $(ROOT_DIR)/build
 DL_DIR := $(ROOT_DIR)/downloads
 
+SIZE_LOG := sizes.log
+
 export RM := rm
 
 # import macros that are OS specific
@@ -87,8 +89,7 @@ arduino:
 
 .PHONY: arduino-size
 arduino-size:
-	$(V1) SIZE=$(ARDUINO_TOOLS_BIN)/avr-size $(BUILD_DIR)/$(MAIN_INO).elf
-	@echo $(SIZE)
+	$(V1) SIZE=$(ARDUINO_TOOLS_BIN)/avr-size $(BUILD_DIR)/$(MAIN_INO).elf | tee -a $(SIZE_LOG)
 
 all: arduino arduino-size
 
