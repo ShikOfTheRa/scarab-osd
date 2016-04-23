@@ -27,7 +27,7 @@
 #define lo_speed_cycle  100
 #define sync_speed_cycle  33
 
-#define CALIBRATION_DELAY 10       // Calibration timeouts   
+#define CALIBRATION_DELAY 10       // Calibration timeouts
 #define EEPROM_WRITE_DELAY 5       // Calibration timeouts
 
 // DEFINE CONFIGURATION MENU PAGES
@@ -99,7 +99,7 @@
 
 
 // TODO: $$$ arduino only?
-static uint8_t sensorpinarray[]={VOLTAGEPIN,VIDVOLTAGEPIN,AMPERAGEPIN,TEMPPIN,RSSIPIN};  
+static uint8_t sensorpinarray[]={VOLTAGEPIN,VIDVOLTAGEPIN,AMPERAGEPIN,TEMPPIN,RSSIPIN};
 // TODO: $$$ MSP only?
 static uint32_t modeMSPRequests;
 static uint32_t queuedMSPRequests;
@@ -179,7 +179,7 @@ static struct {
   uint32_t llights;
   uint32_t gpsmission;
   uint32_t gpsland;
-}mode;
+} mode;
 
 // Settings Locations
 enum Setting16_ {
@@ -190,7 +190,7 @@ enum Setting16_ {
   S16_RSSIMAX,
   S16_SPARE1,
   S16_SPARE2,
-  
+
   // EEPROM16_SETTINGS must be last!
   EEPROM16_SETTINGS
 };
@@ -305,14 +305,14 @@ MWOSDVER,   // used for check              0
 150, // S_UNUSED_3,
 0,   // S_VIDVOLTAGE                14
 200, // S_VIDDIVIDERRATIO           15
-0,   // S_VIDVOLTAGE_VBAT           16 
+0,   // S_VIDVOLTAGE_VBAT           16
 50,  // S_AMPER_HOUR_ALARM          17
 100, // S_AMPERAGE_ALARM            18
 1,   // S_DISPLAYGPS                20
 1,   // S_COORDINATES               21
 1,   // S_GPSCOORDTOP               22
 0,   // S_GPSALTITUDE               23
-0,   // S_ANGLETOHOME               24 
+0,   // S_ANGLETOHOME               24
 0,   // S_SHOWHEADING               25
 1,   // S_HEADING360                26
 0,   // S_UNITSYSTEM                27
@@ -373,7 +373,7 @@ static uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
   1024,// S16_RSSIMAX,
   500,// S16_SPARE1,
   600,// S16_SPARE2,
-  
+
 };
 static uint16_t SCREENLAYOUT_DEFAULT[EEPROM_SETTINGS] = {
 
@@ -494,10 +494,10 @@ static int MwAngle[2]={0,0};           // Those will hold Accelerator Angle
 static uint16_t MwRcData[8]={   // This hold receiver pulse signal
   1500,1500,1500,1500,1500,1500,1500,1500} ;
 
-// for analogue / PWM sensor filtering 
+// for analogue / PWM sensor filtering
 #define SENSORFILTERSIZE 8
 #define SENSORTOTAL 5
-static int16_t sensorfilter[SENSORTOTAL][SENSORFILTERSIZE+2]; 
+static int16_t sensorfilter[SENSORTOTAL][SENSORFILTERSIZE+2];
 
 static uint16_t  MwSensorPresent=0;
 static uint32_t  MwSensorActive=0;
@@ -594,7 +594,7 @@ static int16_t altitudeMAX=0;
 static uint32_t distanceMAX=0;
 static uint16_t ampMAX=0;
 static uint32_t trip=0;
-static uint16_t flyingTime=0; 
+static uint16_t flyingTime=0;
 
 
 // For GPSOSD
@@ -605,14 +605,13 @@ static uint16_t flyingTime=0;
   uint32_t GPS_home_timer=0;
   int32_t  GPS_coord[2];
   int32_t  GPS_home[2];
-//  uint16_t GPS_ground_course = 0;                       
-  int16_t  GPS_altitude_home;                            
-  uint8_t  GPS_Present = 0;                             
+//  uint16_t GPS_ground_course = 0;
+  int16_t  GPS_altitude_home;
+  uint8_t  GPS_Present = 0;
 //  uint8_t  GPS_SerialInitialised=5;
   uint8_t  GPS_armedangleset = 0;
-  uint8_t  GPS_active=5; 
+  uint8_t  GPS_active=5;
   uint8_t  GPS_fix_HOME=0;
 #endif
-
 
 #endif
