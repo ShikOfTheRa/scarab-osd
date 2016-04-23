@@ -23,6 +23,8 @@ include $(ROOT_DIR)/make/tools.mk
 # Decide on a verbosity level based on the V= parameter
 export AT := @
 
+export VERBOSE_FLAG :=
+
 ifndef V
 export V0    :=
 export V1    := $(AT)
@@ -30,6 +32,7 @@ else ifeq ($(V), 0)
 export V0    := $(AT)
 export V1    := $(AT)
 else ifeq ($(V), 1)
+export VERBOSE_FLAG := -verbose
 endif
 
 $(DL_DIR):
@@ -62,8 +65,13 @@ help:
 	@echo "         All build output will be placed in $(BUILD_DIR)"
 	@echo
 
-ARDUINO_DEVICE_TARGET := arduino:avr:pro:cpu=16MHzatmega328
+
 SRC_DIR := $(ROOT_DIR)/MW_OSD
+
+# ARDUINO CONFIG
+MAIN_INO := MW_OSD.ino
+ARDUINO_DEVICE_TARGET := arduino:avr:pro:cpu=16MHzatmega328
+
 arduino: $(BUILD_DIR)
 arduino:
 	$(V1) $(ARDUINO_BUILDER_BIN) \
@@ -73,11 +81,16 @@ arduino:
 		-libraries $(ROOT_DIR)/MW_OSD \
 		-fqbn=$(ARDUINO_DEVICE_TARGET) \
 		-build-path $(BUILD_DIR) \
-		-verbose \
+		$(VERBOSE_FLAG) \
 		-compile \
-	  $(SRC_DIR)/MW_OSD.ino
+	  $(SRC_DIR)/$(MAIN_INO)
 
-all: arduino
+.PHONY: arduino-size
+arduino-size:
+	$(V1) SIZE=$(ARDUINO_TOOLS_BIN)/avr-size $(BUILD_DIR)/$(MAIN_INO).elf
+	@echo $(SIZE)
+
+all: arduino arduino-size
 
 clean:
 	$(V1) $(RM) -rf $(BUILD_DIR)/*

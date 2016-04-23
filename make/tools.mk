@@ -7,6 +7,8 @@ ARDUINO_BUILDER_BIN := $(TOOLS_DIR)/arduino-builder-$(ARDUINO_BUILDER_VERSION)/a
 ARDUINO_APP_VERSION := 1.6.8
 ARDUINO_APP_DIR:= $(TOOLS_DIR)/arduino-app-$(ARDUINO_APP_VERSION)
 
+ARDUINO_TOOLS_BIN =: $(ARDUINO_APP_RESOURCE_DIR)/hardware/tools/avr/bin
+
 # from: https://github.com/arduino/arduino-builder/releases
 ifdef LINUX
 	# or linux64
