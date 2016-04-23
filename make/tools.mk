@@ -83,3 +83,49 @@ ifeq ($(wildcard $(ARDUINO_BUILDER_DIR)),)
   $(error please run: `make arduino_builder_install`, missing "$(ARDUINO_BUILDER_DIR)", install arduino builder)
 endif
 endif
+
+
+# Set up uncrustify tools
+UNCRUSTIFY_DIR := $(TOOLS_DIR)/uncrustify-0.61
+UNCRUSTIFY_BUILD_DIR := $(DL_DIR)/uncrustify
+
+.PHONY: uncrustify_install
+uncrustify_install: | $(DL_DIR) $(TOOLS_DIR)
+uncrustify_install: UNCRUSTIFY_URL := http://downloads.sourceforge.net/project/uncrustify/uncrustify/uncrustify-0.61/uncrustify-0.61.tar.gz
+uncrustify_install: UNCRUSTIFY_FILE := uncrustify-0.61.tar.gz
+uncrustify_install: UNCRUSTIFY_OPTIONS := prefix=$(UNCRUSTIFY_DIR)
+uncrustify_install: uncrustify_clean
+ifneq ($(OSFAMILY), windows)
+	$(V0) @echo " DOWNLOAD     $(UNCRUSTIFY_URL)"
+	$(V1) wget --no-check-certificate -N -P "$(DL_DIR)" "$(UNCRUSTIFY_URL)"
+else
+	$(V1) curl -L -k -o "$(DL_DIR)/$(UNCRUSTIFY_FILE)" "$(UNCRUSTIFY_URL)"
+endif
+        # extract the src
+	$(V0) @echo " EXTRACT      $(UNCRUSTIFY_FILE)"
+	$(V1) tar -C $(TOOLS_DIR) -xf "$(DL_DIR)/$(UNCRUSTIFY_FILE)"
+
+	$(V0) @echo " BUILD        $(UNCRUSTIFY_DIR)"
+	$(V1) ( \
+	  cd $(UNCRUSTIFY_DIR) ; \
+	  ./configure --prefix="$(UNCRUSTIFY_DIR)" ; \
+	  $(MAKE) ; \
+	  $(MAKE) install ; \
+	)
+	      # delete the extracted source when we're done
+	$(V1) [ ! -d "$(UNCRUSTIFY_BUILD_DIR)" ] || $(RM) -r "$(UNCRUSTIFY_BUILD_DIR)"
+
+.PHONY: uncrustify_clean
+uncrustify_clean:
+	$(V0) @echo " CLEAN        $(UNCRUSTIFY_DIR)"
+	$(V1) [ ! -d "$(UNCRUSTIFY_DIR)" ] || $(RM) -r "$(UNCRUSTIFY_DIR)"
+	$(V0) @echo " CLEAN        $(UNCRUSTIFY_BUILD_DIR)"
+	$(V1) [ ! -d "$(UNCRUSTIFY_BUILD_DIR)" ] || $(RM) -r "$(UNCRUSTIFY_BUILD_DIR)"
+
+ifeq ($(shell [ -d "$(UNCRUSTIFY_DIR)" ] && echo "exists"), exists)
+  UNCRUSTIFY := $(UNCRUSTIFY_DIR)/bin/uncrustify
+else
+  # not installed, hope it's in the path...
+  UNCRUSTIFY ?= uncrustify
+endif
+

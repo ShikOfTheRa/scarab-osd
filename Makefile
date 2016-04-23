@@ -57,6 +57,7 @@ help:
 	@echo
 	@echo "   [Tool Installers]"
 	@echo "     arduino_builder_install      - Install the arduino_builder toolchain"
+	@echo "     uncrustify_install           - Install the uncrustify code formatter"
 	@echo
 	@echo "   [Firmware]"
 	@echo "     arduino                      - Build firmware for the arduino based MinimOsd"
@@ -80,7 +81,7 @@ arduino:
 		-hardware $(ARDUINO_APP_RESOURCE_DIR)/hardware \
 		-tools $(ARDUINO_APP_RESOURCE_DIR)/hardware/tools \
 		-tools $(ARDUINO_BUILDER_DIR)/tools \
-		-libraries $(ROOT_DIR)/MW_OSD \
+		-libraries $(SRC_DIR) \
 		-fqbn=$(ARDUINO_DEVICE_TARGET) \
 		-build-path $(BUILD_DIR) \
 		$(VERBOSE_FLAG) \
@@ -95,3 +96,16 @@ all: arduino arduino-size
 
 clean:
 	$(V1) $(RM) -rf $(BUILD_DIR)/*
+
+
+# uncrustify
+ifneq ($(strip $(filter uncrustify,$(MAKECMDGOALS))),)
+  ifeq ($(FILE),)
+    $(error pass files to uncrustify by adding FILE=<file> to the make command line)
+  endif
+endif
+
+.PHONY: uncrustify
+uncrustify: UNCRUSTIFY_OPTIONS := -c make/uncrustify.cfg --replace
+uncrustify:
+	$(V1) $(UNCRUSTIFY) $(UNCRUSTIFY_OPTIONS) $(SRC_DIR)/$(FILE)
