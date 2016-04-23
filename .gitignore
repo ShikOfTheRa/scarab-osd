@@ -4,3 +4,8 @@ MW_OSD_GUI/application.windows64/data/custom.mcm
 
 MW_OSD/mavlinkvars.h
 MW_OSD/MAVLINK.h
+
+# make output
+tools
+build
+downloads
