@@ -136,7 +136,7 @@ void loop()
     case 1:
       MAX7456.UpdateFont();
       MAX7456.Setup(); 
-      ScreenWriteString_P(messageF2, 32);
+      MAX7456.WriteString_P(messageF2, 32);
       MAX7456.DisplayFont();  
       MAX7456.DrawScreen();
       fontStatus++;
