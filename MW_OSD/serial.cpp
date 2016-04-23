@@ -1,13 +1,6 @@
- 
-#if defined MAVLINK
-  #define SERIALBUFFERSIZE 75
-#elif defined NAZA
-  #define SERIALBUFFERSIZE 75
-#elif defined GPSOSD
-  #define SERIALBUFFERSIZE 100
-#else
-  #define SERIALBUFFERSIZE 150
-#endif
+#include "platform.h"
+
+static HardwareSerial* serial;
 
 static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string
 static uint8_t receiverIndex;
@@ -17,8 +10,12 @@ static uint8_t rcvChecksum;
 static uint8_t readIndex;
 uint8_t txChecksum;
 
+uint8_t read8(void);
+uint16_t read16(void);
+uint32_t read32(void);
+
 uint32_t read32() {
-  uint32_t t = read16();
+  uint32_t t = (uint32_t) read16();
   t |= (uint32_t)read16()<<16;
   return t;
 }
@@ -33,10 +30,14 @@ uint8_t read8()  {
   return serialBuffer[readIndex++];
 }
 
+void serialInit(HardwareSerial &_serial) {
+  serial = &_serial;
+}
+
 void mspWriteRequest(uint8_t mspCommand, uint8_t txDataSize){
-  Serial.write('$');
-  Serial.write('M');
-  Serial.write('<');
+  serial->write('$');
+  serial->write('M');
+  serial->write('<');
   txChecksum = 0;
   mspWrite8(txDataSize);
   mspWrite8(mspCommand);
@@ -45,7 +46,7 @@ void mspWriteRequest(uint8_t mspCommand, uint8_t txDataSize){
 }
 
 void mspWrite8(uint8_t t){
-  Serial.write(t);
+  serial->write(t);
   txChecksum ^= t;
 }
 
@@ -55,7 +56,7 @@ void mspWrite16(uint16_t t){
 }
 
 void mspWriteChecksum(){
-  Serial.write(txChecksum);
+  serial->write(txChecksum);
 }
 
 // --------------------------------------------------------------------------------------
@@ -91,7 +92,7 @@ void serialMSPCheck()
           EEPROM.write(0,MWOSDVER);
 //        }
         if ((eeaddress==EEPROM_SETTINGS+(EEPROM16_SETTINGS*2))||(eeaddress==EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(3*2*POSITIONS_SETTINGS))){
-          readEEPROM();
+          Eeprom.read();
         }
       }
       eeaddress++;
@@ -115,7 +116,7 @@ void serialMSPCheck()
         if(read16() == 7456) {
           nextCharToRequest = read8();
           lastCharToRequest = read8();
-          initFontMode();
+          Font.enterFontMode();
         }
       }
       else if(dataSize == 56) {
@@ -123,15 +124,15 @@ void serialMSPCheck()
           fontData[i] = read8();
       
 	uint8_t c = read8();
-        write_NVM(c);
+        MAX7456.WriteNvm(c);
 	//fontCharacterReceived(c);
         if (c==255)
-          MAX7456Setup();
+          MAX7456.Setup();
       }
     }
     if(cmd == OSD_DEFAULT) {
-      EEPROM_clear(); 
-      checkEEPROM();
+      Eeprom.clear(); 
+      Eeprom.check();
       flags.reset=1;
     }
     if(cmd == OSD_RESET) {
@@ -743,7 +744,7 @@ void serialMenuCommon()
 	  if(ROW==1) Settings[S_UNITSYSTEM]=!Settings[S_UNITSYSTEM];
 	  if(ROW==2) {
 	    Settings[S_VIDEOSIGNALTYPE]=!Settings[S_VIDEOSIGNALTYPE];
-	    MAX7456Setup();
+	    MAX7456.Setup();
 	    }
 	  if(ROW==3) Settings[S_VREFERENCE]=!Settings[S_VREFERENCE];
 	  if(ROW==4) Settings[S_DEBUG]=!Settings[S_DEBUG];
@@ -806,10 +807,10 @@ void serialMSPreceive(uint8_t loops)
   }
   c_state = IDLE;
 
-  if (Serial.available()) loopserial=1;
+  if (serial->available()) loopserial=1;
   while(loopserial==1)
   {
-    c = Serial.read();
+    c = serial->read();
 
     #ifdef GPSOSD    
       armedtimer = 0;
@@ -870,7 +871,7 @@ void serialMSPreceive(uint8_t loops)
         serialBuffer[receiverIndex++]=c;
     }
     if (loops==0) loopserial=0;
-    if (!Serial.available()) loopserial=0;
+    if (!serial->available()) loopserial=0;
   }
 }
 
@@ -968,7 +969,7 @@ void configSave()
   mspWriteChecksum();
 #endif
 
-  writeEEPROM();
+  Eeprom.write();
   mspWriteRequest(MSP_EEPROM_WRITE,0);
   configExit();
 }
@@ -976,7 +977,7 @@ void configSave()
 void fontSerialRequest() {
   mspWriteRequest(MSP_OSD,3);
   mspWrite8(OSD_GET_FONT);
-  mspWrite16(getNextCharToRequest());
+  mspWrite16(Font.getNextCharToRequest());
   mspWriteChecksum();
 }
 

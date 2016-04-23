@@ -1,3 +1,4 @@
+// omghax -- it's all in the .h file...
 // GPS protocol GGA and RMC  sentences are needed
 // Ublox config con be set using u-blox-config.ublox.txt 
 
@@ -770,11 +771,13 @@ restart:
 
 #endif // GPS
 
-void gpsvario(){
-  if (millis()>timer.fwAltitudeTimer){ // To make vario from GPS altitude
-    timer.fwAltitudeTimer +=1000;
-    previousfwaltitude=interimfwaltitude;
-    interimfwaltitude=GPS_altitude;
-    MwVario=(GPS_altitude-previousfwaltitude)*20;
-  }  
-}
+// This doesn't go here...
+// TODO: $$$ move
+//void gpsvario(){
+//  if (millis()>timer.fwAltitudeTimer){ // To make vario from GPS altitude
+//    timer.fwAltitudeTimer +=1000;
+//    previousfwaltitude=interimfwaltitude;
+//    interimfwaltitude=GPS_altitude;
+//    MwVario=(GPS_altitude-previousfwaltitude)*20;
+//  }  
+//}

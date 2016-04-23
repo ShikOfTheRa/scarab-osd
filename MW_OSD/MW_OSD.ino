@@ -28,47 +28,6 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
-#define DEVELOPMENT // to enable development checking and set debug[x] value
-//#define MEMCHECK 3  // to enable memory checking and set debug[x] value. Requires DEVELOPMENT to be enabled
-#if 1
-__asm volatile ("nop");
-#endif
-#ifdef MEMCHECK
-extern uint8_t _end;  //end of program variables 
-extern uint8_t __stack; //start of stack (highest RAM address)
-
-void PaintStack(void) __attribute__ ((naked)) __attribute__ ((section (".init1")));    //Make sure this is executed at the first time
-
-void PaintStack(void) 
-{ 
-  //using asm since compiller could not be trusted here
-    __asm volatile ("    ldi r30,lo8(_end)\n" 
-                    "    ldi r31,hi8(_end)\n" 
-                    "    ldi r24,lo8(0xa5)\n" /* Paint color = 0xa5 */ 
-                    "    ldi r25,hi8(__stack)\n" 
-                    "    rjmp .cmp\n" 
-                    ".loop:\n" 
-                    "    st Z+,r24\n" 
-                    ".cmp:\n" 
-                    "    cpi r30,lo8(__stack)\n" 
-                    "    cpc r31,r25\n" 
-                    "    brlo .loop\n" 
-                    "    breq .loop"::); 
-} 
-
-uint16_t UntouchedStack(void) 
-{ 
-    const uint8_t *ptr = &_end; 
-    uint16_t       count = 0; 
-
-    while(*ptr == 0xa5 && ptr <= &__stack) 
-    { 
-        ptr++; count++; 
-    } 
-
-    return count; 
-} 
-#endif
 
 // Workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34734
 //#ifdef PROGMEM
@@ -77,31 +36,17 @@ uint16_t UntouchedStack(void)
 //#endif
 
 //------------------------------------------------------------------------
-#define MWVERS "MW-OSD - R1.6"  
-#define MWOSDVER 12      // for eeprom layout verification    was 9  
-#include <avr/pgmspace.h>
-#include <EEPROM.h>
-#include "Config.h"
-#include "Def.h"
-#include "symbols.h"
-#include "GlobalVariables.h"
-#include "math.h"
-#if defined NAZA
-  #include "Naza.h"
-#endif  
-#if defined LOADFONT_LARGE
-  #include "fontL.h"
-#elif defined LOADFONT_DEFAULT 
-  #include "fontD.h"
-#elif defined LOADFONT_BOLD 
-  #include "fontB.h"
+
+#if 1
+__asm volatile ("nop");
 #endif
 
-char screen[480];      // Main screen ram for MAX7456
-char screenBuffer[20]; 
-uint32_t modeMSPRequests;
-uint32_t queuedMSPRequests;
-uint8_t sensorpinarray[]={VOLTAGEPIN,VIDVOLTAGEPIN,AMPERAGEPIN,TEMPPIN,RSSIPIN};  
+// memory-checking assembly
+#include "memory.h"
+
+// everything else
+#include "platform.h"
+
 unsigned long previous_millis_low=0;
 unsigned long previous_millis_high =0;
 unsigned long previous_millis_sync =0;
@@ -109,12 +54,10 @@ unsigned long previous_millis_rssi =0;
 
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
 uint8_t fontStatus=0;
-//uint16_t MAX_screen_size;
 boolean ledstatus=HIGH;
 //uint8_t fontData[54];
 //uint8_t Settings[1];
 #endif
-
 
 
 //------------------------------------------------------------------------
@@ -129,6 +72,9 @@ void setup()
 //---
   Serial.flush();
 
+  // tell the serial lib about our serial port
+  serialInit(Serial);
+
   pinMode(PWMRSSIPIN, INPUT);
   pinMode(RSSIPIN, INPUT);
   pinMode(LEDPIN,OUTPUT);
@@ -138,10 +84,10 @@ void setup()
 #endif
 
 #if defined EEPROM_CLEAR
-  EEPROM_clear();
+  Eeprom.clear();
 #endif  
-  checkEEPROM();
-  readEEPROM();
+  Eeprom.check();
+  Eeprom.read();
   
   #ifndef STARTUPDELAY
     #define STARTUPDELAY 500
@@ -153,7 +99,7 @@ void setup()
   else
     analogReference(INTERNAL);
 
-  MAX7456Setup();
+  MAX7456.Setup();
   #if defined GPSOSD
     GPS_SerialInit();
   #else
@@ -178,21 +124,21 @@ void loop()
 {
   switch(fontStatus) {
     case 0:
-      MAX7456_WriteString_P(messageF0, 32);
-      MAX7456_DrawScreen();
+      MAX7456.WriteString_P(messageF0, 32);
+      MAX7456.DrawScreen();
       delay(3000);
-      displayFont();  
-      MAX7456_WriteString_P(messageF1, 32);
-      MAX7456_DrawScreen();
+      MAX7456.DisplayFont();  
+      MAX7456.WriteString_P(messageF1, 32);
+      MAX7456.DrawScreen();
       fontStatus++;
       delay(3000);      
       break;
     case 1:
-      updateFont();
-      MAX7456Setup(); 
-      MAX7456_WriteString_P(messageF2, 32);
-      displayFont();  
-      MAX7456_DrawScreen();
+      MAX7456.UpdateFont();
+      MAX7456.Setup(); 
+      ScreenWriteString_P(messageF2, 32);
+      MAX7456.DisplayFont();  
+      MAX7456.DrawScreen();
       fontStatus++;
       break;
   }
@@ -253,7 +199,7 @@ void loop()
 #endif
 
   if (screenlayout!=oldscreenlayout){
-    readEEPROM_screenlayout();
+    Eeprom.read_screenlayout();
   }
   oldscreenlayout=screenlayout;
     
@@ -270,7 +216,7 @@ void loop()
   if((currentMillis - previous_millis_sync) >= sync_speed_cycle)  // (Executed > NTSC/PAL hz 33ms)
   {
     previous_millis_sync = previous_millis_sync+sync_speed_cycle;    
-    if(!fontMode)
+    if(!Font.inFontMode())
       mspWriteRequest(MSP_ATTITUDE,0);
   }
 #endif //MSP_SPEED_HIGH
@@ -294,7 +240,7 @@ void loop()
       amperagesum += amperage;
     #ifndef GPSOSD 
       #ifdef MSP_SPEED_MED
-        if(!fontMode)
+        if(!Font.inFontMode())
           mspWriteRequest(MSP_ATTITUDE,0);
       #endif //MSP_SPEED_MED  
     #endif //GPSOSD
@@ -388,11 +334,11 @@ void loop()
 #endif
     }
     
-    if(!fontMode){
+    if(!Font.inFontMode()){
       #ifndef GPSOSD
       mspWriteRequest(MSPcmdsend, 0);      
       #endif //GPSOSD
-      MAX7456_DrawScreen();
+      MAX7456.DrawScreen();
 
     }
 
@@ -403,7 +349,7 @@ void loop()
 #define INTRO_DELAY 8
 #endif
     if( allSec < INTRO_DELAY ){
-      displayIntro();
+      Screen.DisplayIntro();
       timer.lastCallSign=onTime-CALLSIGNINTERVAL;
     }  
     else
@@ -430,7 +376,7 @@ void loop()
 #endif //HIDESUMMARY      
       if(configMode)
       {
-        displayConfigScreen();
+        Screen.DisplayConfigScreen();
       }
       else
       {
@@ -439,83 +385,83 @@ void loop()
         useairspeed();
 #endif //USE_AIRSPEED_SENSOR
         if(MwSensorPresent&ACCELEROMETER)
-           displayHorizon(MwAngle[0],MwAngle[1]);
+           Screen.DisplayHorizon(MwAngle[0],MwAngle[1]);
 #if defined FORCECROSSHAIR
-        displayForcedCrosshair();
+        Screen.DisplayForcedCrosshair();
 #endif //FORCECROSSHAIR
         if(Settings[S_DISPLAYVOLTAGE])
-          displayVoltage();
+          Screen.DisplayVoltage();
         if (Settings[S_VIDVOLTAGE])
-          displayVidVoltage();
+          Screen.DisplayVidVoltage();
         if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz)))
-          displayRSSI();
+          Screen.DisplayRSSI();
         if(Settings[S_AMPERAGE]&&(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz)))
-          displayAmperage();
+          Screen.DisplayAmperage();
         if(Settings[S_AMPER_HOUR] && ((!ampAlarming()) || timer.Blink2hz))
-          displaypMeterSum();
-        displayTime();
+          Screen.DisplaypMeterSum();
+        Screen.DisplayTime();
 #if defined DISPLAYWATTS
-        displayWatt();
+        Screen.DisplayWatt();
 #endif //DISPLAYWATTS
 
 #ifdef TEMPSENSOR
-        if(((temperature<Settings[TEMPERATUREMAX])||(timer.Blink2hz))) displayTemperature();
+        if(((temperature<Settings[TEMPERATUREMAX])||(timer.Blink2hz))) Screen.DisplayTemperature();
 #endif
-        displayArmed();
+        Screen.DisplayArmed();
         if (Settings[S_THROTTLEPOSITION])
-          displayCurrentThrottle();
+          Screen.DisplayCurrentThrottle();
 #ifdef CALLSIGNALWAYS
-        if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition)); 
+        if(Settings[S_DISPLAY_CS]) Screen.DisplayCallsign(getPosition(callSignPosition)); 
 #elif  FREETEXTLLIGHTS
-        if (MwSensorActive&mode.llights) displayCallsign(getPosition(callSignPosition)); 
+        if (MwSensorActive&mode.llights) Screen.DisplayCallsign(getPosition(callSignPosition)); 
 #elif  FREETEXTGIMBAL
-        if (MwSensorActive&mode.camstab) displayCallsign(getPosition(callSignPosition)); 
+        if (MwSensorActive&mode.camstab) DisplayCallsign(getPosition(callSignPosition)); 
 #else 
         if ( (onTime > (timer.lastCallSign+CALLSIGNINTERVAL)))
        {
            // Displays 4 sec every 5min (no blink during flight)
         if ( onTime > (timer.lastCallSign+CALLSIGNINTERVAL+CALLSIGNDURATION)) timer.lastCallSign = onTime; 
-        if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition));      
+        if(Settings[S_DISPLAY_CS]) Screen.DisplayCallsign();      
        }
 #endif
         if(MwSensorPresent&MAGNETOMETER) {
-          displayHeadingGraph();
-          displayHeading();
+          Screen.DisplayHeadingGraph();
+          Screen.DisplayHeading();
         }
         if(MwSensorPresent&BAROMETER) {
-          displayAltitude();
-          displayClimbRate();
+          Screen.DisplayAltitude();
+          Screen.DisplayClimbRate();
         }
         if(MwSensorPresent&GPSSENSOR) 
         if(Settings[S_DISPLAYGPS]){
-          displayNumberOfSat();
-          displayDirectionToHome();
-          displayDistanceToHome();
-          displayAngleToHome();
+          Screen.DisplayNumberOfSat();
+          Screen.DisplayDirectionToHome();
+          Screen.DisplayDistanceToHome();
+          Screen.DisplayAngleToHome();
           #ifdef USEGLIDESCOPE
-            // displayfwglidescope(); //note hook for this is in display horizon function
+            // Screen.Displayfwglidescope(); //note hook for this is in display horizon function
           #endif //USEGLIDESCOPE  
-          displayGPS_speed();
-          displayGPSPosition();  
+          Screen.DisplayGPSSpeed();
+          Screen.DisplayGPSPosition();  
       
 #ifdef GPSTIME
-          displayGPS_time();
+          Screen.DisplayGPSTime();
 #endif
 #ifdef MAPMODE
-          mapmode();
+          Screen.MapMode();
 #endif
         }
-        displayMode();       
-        displayDebug();
+        Screen.DisplayMode();       
+        Screen.DisplayDebug();
 #ifdef I2CERROR
-        displayI2CError();
+        Screen.DisplayI2CError();
 #endif        
 #ifdef SPORT        
         if(MwSensorPresent)
-          displayCells();
+          Screen.DisplayCells();
 #endif
 #ifdef HAS_ALARMS
-        displayAlarms();
+        Screen.DisplayAlarms();
 #endif
       }
     }
@@ -532,8 +478,8 @@ void loop()
     timer.tenthSec=0;
     onTime++;
     #ifdef MAXSTALLDETECT
-      if (!fontMode)
-        MAX7456Stalldetect();
+      if (!Font.inFontMode())
+        MAX7456.Stalldetect();
     #endif 
     #ifdef GPSACTIVECHECK
       if (timer.GPS_active==0){
@@ -577,78 +523,6 @@ void loop()
 }  // End of main loop
 #endif //main loop
 
-
-//------------------------------------------------------------------------
-//FONT management 
-
-uint8_t safeMode() {
-  return 1;	// XXX
-}
-
-
-// Font upload queue implementation.
-// Implement a window for curr + the previous 6 requests.
-// First-chance to retransmit at curr-3 (retransmitQueue & 0x10)
-// First-chance retransmit marked as used at retransmitQueue |= 0x01
-// 2 to N-chance retransmit marked at curr-6 (retransmitQueue & 0x02)
-void initFontMode() {
-  if(armed || configMode || fontMode|| !safeMode()) 
-    return;
-  // queue first char for transmition.
-  retransmitQueue = 0x80;
-  fontMode = 1;
-//  setMspRequests();
-}
-
-
-void fontCharacterReceived(uint8_t cindex) {
-  if(!fontMode)
-    return;
-
-  uint8_t bit = (0x80 >> (nextCharToRequest-cindex));
-
-  // Just received a char..
-  if(retransmitQueue & bit) {
-    // this char war requested and now received for the first time
-    retransmitQueue &= ~bit;  // mark as already received
-    write_NVM(cindex);       // Write to MVRam
-  }
-}
-
-int16_t getNextCharToRequest() {
-  if(nextCharToRequest != lastCharToRequest) { // Not at last char
-    if(retransmitQueue & 0x02) {                // Missed char at curr-6. Need retransmit!
-      return nextCharToRequest-6;
-    }
-
-    if((retransmitQueue & 0x11) == 0x10) {      // Missed char at curr-3. First chance retransmit
-      retransmitQueue |= 0x01;                  // Mark first chance as used
-      return nextCharToRequest-3;
-    }
-
-    retransmitQueue = (retransmitQueue >> 1) | 0x80; // Add next to queue
-    return nextCharToRequest++;                      // Notice post-increment!
-  }
-
-  uint8_t temp1 = retransmitQueue & ~0x01; 
-  uint8_t temp2 = nextCharToRequest - 6; 
-
-  if(temp1 == 0) {
-    fontMode = 0;                            // Exit font mode
-//  setMspRequests();
-    return -1;
-  }
-
-  // Already at last char... check for missed characters.
-  while(!(temp1 & 0x03)) {
-    temp1 >>= 1;
-    temp2++;
-  }
-
-  return temp2;
-}
-
-
 //------------------------------------------------------------------------
 // MISC
 
@@ -656,86 +530,6 @@ void resetFunc(void)
 {
   asm volatile ("  jmp 0"); 
 } 
-
-void setMspRequests() {
-  if(fontMode) {
-    modeMSPRequests = REQ_MSP_FONT;
-  }
-  else if(configMode) {
-    modeMSPRequests = 
-      REQ_MSP_IDENT|
-      REQ_MSP_STATUS|
-      REQ_MSP_RAW_GPS|
-      REQ_MSP_ATTITUDE|
-      REQ_MSP_RAW_IMU|
-      REQ_MSP_ALTITUDE|
-      REQ_MSP_RC_TUNING|
-      REQ_MSP_PID_CONTROLLER|
-      REQ_MSP_PID|
-      REQ_MSP_LOOP_TIME|
-#ifdef CORRECT_MSP_BF1
-      REQ_MSP_CONFIG|
-#endif
-#ifdef DEBUGMW
-      REQ_MSP_DEBUG|
-#endif
-#ifdef SPORT
-      REQ_MSP_CELLS|
-#endif
-#ifdef HAS_ALARMS
-      REQ_MSP_ALARMS|
-#endif
-      REQ_MSP_RC;
-  }
-  else {
-//wtf:?? try deleting next 4 lines and what happens to memory. is it local vs global in some way?
-//    MwSensorPresent |=GPSSENSOR;
-//    MwSensorPresent |=BAROMETER;
-//    MwSensorPresent |=MAGNETOMETER;
-//    MwSensorPresent |=ACCELEROMETER;
-
-    modeMSPRequests = 
-      REQ_MSP_STATUS|
-      REQ_MSP_RC|
-     #ifdef DEBUGMW
-      REQ_MSP_DEBUG|
-     #endif
-     #ifdef SPORT      
-      REQ_MSP_CELLS|
-     #endif
-     #ifdef HAS_ALARMS
-      REQ_MSP_ALARMS|
-     #endif
-      REQ_MSP_ATTITUDE;
-    if(MwSensorPresent&BAROMETER){ 
-      modeMSPRequests |= REQ_MSP_ALTITUDE;
-    }
-    if(flags.ident!=1){
-      modeMSPRequests |= REQ_MSP_IDENT;
-    }
-    if(MwSensorPresent&GPSSENSOR) 
-      modeMSPRequests |= REQ_MSP_RAW_GPS| REQ_MSP_COMP_GPS;
-    if(mode.armed == 0)
-      modeMSPRequests |=REQ_MSP_BOX;
-#if defined MULTIWII_V24
-    if(MwSensorActive&mode.gpsmission)
-    modeMSPRequests |= REQ_MSP_NAV_STATUS;
-#endif
-  }
- 
-  if(Settings[S_MAINVOLTAGE_VBAT] ||
-    Settings[S_MWRSSI]) {
-    modeMSPRequests |= REQ_MSP_ANALOG;
-    
-#ifdef USE_FC_VOLTS_CONFIG
-    modeMSPRequests |= REQ_MSP_MISC;
-#endif
-
-  }
-
-  queuedMSPRequests &= modeMSPRequests;   // so we do not send requests that are not needed.
-}
-
 
 void calculateTrip(void)
 {
@@ -748,96 +542,6 @@ void calculateTrip(void)
   }
   trip = (uint32_t) tripSum;
 }
-
-
-void writeEEPROM(void) // OSD will only change 8 bit values. GUI changes directly
-{
-  for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
-    EEPROM.write(en,Settings[en]);
-  } 
-  for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
-    uint16_t pos=EEPROM_SETTINGS+(en*2);
-    EEPROM.write(pos,Settings16[en]&0xFF);
-    EEPROM.write(pos+1,Settings16[en]>>8);
-  } 
-  EEPROM.write(0,MWOSDVER);
-}
-
-
-void readEEPROM(void)
-{
-  for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
-     Settings[en] = EEPROM.read(en);
-  }
-  #ifdef AUTOCELL
-  Settings[S_BATCELLS]=1;
-  #endif
-
-  for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
-     uint16_t pos=(en*2)+EEPROM_SETTINGS;
-     Settings16[en] = EEPROM.read(pos);
-     uint16_t xx = EEPROM.read(pos+1);
-     Settings16[en] = Settings16[en]+(xx<<8);
-  }
-
-  readEEPROM_screenlayout();
-}
-
-
-void readEEPROM_screenlayout(void)
-{
-
-  uint16_t EEPROMscreenoffset=EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(screenlayout*POSITIONS_SETTINGS*2);
-  for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
-    uint16_t pos=(en*2)+EEPROMscreenoffset;
-    screenPosition[en] = EEPROM.read(pos);
-    uint16_t xx=(uint16_t)EEPROM.read(pos+1)<<8;
-    screenPosition[en] = screenPosition[en] + xx;
-
-    if(Settings[S_VIDEOSIGNALTYPE]){
-      uint16_t x = screenPosition[en]&0x1FF; 
-      if (x>LINE06) screenPosition[en] = screenPosition[en] + LINE;
-      if (x>LINE09) screenPosition[en] = screenPosition[en] + LINE;
-    }
-#ifdef SHIFTDOWN
-    if ((screenPosition[en]&0x1FF)<LINE04) screenPosition[en] = screenPosition[en] + LINE;
-#endif
-  }
-}
-
-
-void checkEEPROM(void)
-{
-  uint8_t EEPROM_Loaded = EEPROM.read(0);
-  if (EEPROM_Loaded!=MWOSDVER){
-    for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
-      EEPROM.write(en,EEPROM_DEFAULT[en]);
-    }
-    for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
-      uint16_t pos=EEPROM_SETTINGS+(en*2);
-      EEPROM.write(pos,EEPROM16_DEFAULT[en]&0xFF);
-      EEPROM.write(pos+1,EEPROM16_DEFAULT[en]>>8);
-    }
-    for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
-      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(en*2),SCREENLAYOUT_DEFAULT[en]&0xFF);
-      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
-      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*2)+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]&0xFF);
-      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*2)+1+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]>>8);
-      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*4)+(en*2),SCREENLAYOUT_DEFAULT[en]&0xFF);
-      EEPROM.write(EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*4)+1+(en*2),SCREENLAYOUT_DEFAULT[en]>>8);
-    }
-/*
-    for(uint8_t osd_switch_pos=0;osd_switch_pos<3;osd_switch_pos++){
-      for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
-        EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*osd_switch_pos)+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]&0xFF);
-        EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*osd_switch_pos)+1+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]>>8);
-      }
-    }    
-*/
-  }
-}
-
-
 
 void gpsdistancefix(void){
   int8_t speedband;
@@ -856,173 +560,6 @@ void gpsdistancefix(void){
   }
   GPS_distanceToHome=(speedcorrection*65535) + GPS_distanceToHome;
 } 
-
-
-void ProcessSensors(void) {
-  /*
-    special note about filter: last row of array = averaged reading
-  */ 
-//-------------- ADC and PWM RSSI sensor read into filter array
-  static uint8_t sensorindex;
-  for (uint8_t sensor=0;sensor<SENSORTOTAL;sensor++) {
-    uint16_t sensortemp;
-    sensortemp = analogRead(sensorpinarray[sensor]);
-    
-    if (sensor ==0) { 
-      if (Settings[S_MAINVOLTAGE_VBAT]){
-        sensortemp=MwVBat;
-      }
-    }
-    
-    if (sensor ==4) { 
-      if (Settings[S_PWMRSSI]){
-#if defined RCRSSI
-//        sensortemp = constrain(MwRcData[RCRSSI],1000,2000)>>1;
-        sensortemp = MwRcData[RCRSSI]>>1;
-// #elif defined FASTPWMRSSI
-//        sensortemp = FastpulseIn(PWMRSSIPIN, HIGH,1024);
-#elif defined INTPWMRSSI
-        sensortemp = pwmRSSI>>1;
-#else
-        sensortemp = pulseIn(PWMRSSIPIN, HIGH,18000)>>1;        
-#endif
-        if (sensortemp==0) { // timed out - use previous
-          sensortemp=sensorfilter[sensor][sensorindex];
-        }
-      }
-      if(Settings[S_MWRSSI]) {
-        sensortemp = MwRssi;
-      }
-    }
-#if defined STAGE2FILTER // Use averaged change    
-    sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
-    sensorfilter[sensor][sensorindex] = (sensorfilter[sensor][sensorindex] + sensortemp)>>1;
-#elif defined SMOOTHFILTER // Shiki variable constraint probability trend change filter. Smooth filtering of small changes, but react fast to consistent changes
-    #define FILTERMAX 128 //maximum change permitted each iteration 
-    uint8_t filterdir;
-    static uint8_t oldfilterdir[SENSORTOTAL];
-    int16_t sensoraverage=sensorfilter[sensor][SENSORFILTERSIZE]>>3;
-    sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
-    if (sensorfilter[sensor][SENSORFILTERSIZE+1]<1) sensorfilter[sensor][SENSORFILTERSIZE+1]=1;
-
-    if (sensortemp != sensoraverage ){
-      // determine direction of change
-      if (sensortemp > sensoraverage ) {  //increasing
-        filterdir=1;
-      }
-      else if (sensortemp < sensoraverage ) {  //increasing
-        filterdir=0;
-      }
-      // compare to previous direction of change
-      if (filterdir!=oldfilterdir[sensor]){ // direction changed => lost trust in value - reset value truth probability to lowest
-        sensorfilter[sensor][SENSORFILTERSIZE+1] = 1; 
-      }
-      else { // direction same => increase trust that change is valid - increase value truth probability
-        sensorfilter[sensor][SENSORFILTERSIZE+1]=sensorfilter[sensor][SENSORFILTERSIZE+1] <<1;
-      }
-      // set maximum trust permitted per sensor read
-      if (sensorfilter[sensor][SENSORFILTERSIZE+1] > FILTERMAX) {
-        sensorfilter[sensor][SENSORFILTERSIZE+1] = FILTERMAX;
-      }
-      // set constrained value or if within limits, start to narrow filter 
-      if (sensortemp > sensoraverage+sensorfilter[sensor][SENSORFILTERSIZE+1]) { 
-        sensorfilter[sensor][sensorindex] = sensoraverage+sensorfilter[sensor][SENSORFILTERSIZE+1]; 
-      }  
-      else if (sensortemp < sensoraverage-sensorfilter[sensor][SENSORFILTERSIZE+1]){
-        sensorfilter[sensor][sensorindex] = sensoraverage-sensorfilter[sensor][SENSORFILTERSIZE+1]; 
-      }
-      // as within limits, start to narrow filter 
-      else { 
-        sensorfilter[sensor][sensorindex] = sensortemp; 
-        sensorfilter[sensor][SENSORFILTERSIZE+1]=sensorfilter[sensor][SENSORFILTERSIZE+1] >>2;
-      }
-      oldfilterdir[sensor]=filterdir;
-    }
-    // no change, reset filter 
-    else {
-      sensorfilter[sensor][sensorindex] = sensortemp; 
-      sensorfilter[sensor][SENSORFILTERSIZE+1]=1;  
-    }    
-#else // Use a basic averaging filter
-    sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
-    sensorfilter[sensor][sensorindex] = sensortemp;
-#endif
-    sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] + sensorfilter[sensor][sensorindex];
-  } 
-
-//-------------- Voltage
-  if (!Settings[S_MAINVOLTAGE_VBAT]){ // not MWII
-    uint16_t voltageRaw = sensorfilter[0][SENSORFILTERSIZE];
-    if (!Settings[S_VREFERENCE]){
-      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (DIVIDER1v1);  
-    }
-    else {
-      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (DIVIDER5v);     
-    }
-  }
-  else{
-      voltage=sensorfilter[0][SENSORFILTERSIZE]>>3;
-  }
-
-  vidvoltageWarning = Settings[S_VIDVOLTAGEMIN];
-  uint16_t vidvoltageRaw = sensorfilter[1][SENSORFILTERSIZE];
-    if (!Settings[S_VREFERENCE]){
-      vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER1v1);
-    }
-    else {
-      vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER5v);
-    }
-
-//-------------- Temperature
-#ifdef TEMPSENSOR
-    temperature=sensorfilter[3][SENSORFILTERSIZE]>>3-TEMPZERO;
-    temperature = map (temperature, TEMPZERO, 1024, 0 , TEMPMAX);
-#endif
-
-//-------------- Current
-  
-  if(!Settings[S_MWAMPERAGE]) {
-    if (!Settings[S_AMPERAGE_VIRTUAL]) { // Analogue
-      amperage = sensorfilter[2][SENSORFILTERSIZE]>>3;
-      amperage = map(amperage, Settings16[S16_AMPZERO], 1024, 0, Settings16[S16_AMPDIVIDERRATIO]);
-      if (amperage < 0) amperage=0;
-    }  
-    else {  // Virtual
-      uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],LowT,HighT);
-      Vthrottle = constrain((Vthrottle-1000)/10,0,100);
-      amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings16[S16_AMPDIVIDERRATIO]*0.01;
-      if(armed)
-        amperage += Settings16[S16_AMPZERO];
-      else 
-        amperage = Settings16[S16_AMPZERO];
-    }  
-  }
-  else{
-    amperage = MWAmperage / AMPERAGE_DIV;
-  }
-
-//-------------- RSSI
-  if (Settings[S_DISPLAYRSSI]) {           
-    rssi = sensorfilter[4][SENSORFILTERSIZE]>>3; // filter and remain 16 bit
-    if (configMode){
-      if((timer.rssiTimer==15)) {
-        Settings16[S16_RSSIMAX]=rssi; // tx on
-      }
-      if((timer.rssiTimer==1)) {
-        Settings16[S16_RSSIMIN]=rssi; // tx off
-        timer.rssiTimer=0;
-      }
-    }
-    rssi = map(rssi, Settings16[S16_RSSIMIN], Settings16[S16_RSSIMAX], 0, 100);
-    rssi=constrain(rssi,0,100);
-  }
-
-//-------------- For filter support
-  sensorindex++;                    
-  if (sensorindex >= SENSORFILTERSIZE)              
-    sensorindex = 0;                           
-}
-
 
 unsigned long FastpulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
 {
@@ -1129,12 +666,6 @@ ISR(PCINT1_vect) { //
   }
 }
 #endif //PPMOSDCONTROL
-
-void EEPROM_clear(){
-  for (int i = 0; i < 512; i++)
-    EEPROM.write(i, 0);
-}
-
 
 #if defined USE_AIRSPEED_SENSOR
 void useairspeed(){
