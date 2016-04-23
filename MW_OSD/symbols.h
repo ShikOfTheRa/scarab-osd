@@ -207,25 +207,25 @@
 #define SYM_AVG 0xB4
 
 // Heading
-const char headGraph[] MAYBE_PROGMEM = {
+const char headGraph[] PROGMEM = {
   0x1d,0x1a,0x1d,0x1c,0x1d,0x19,0x1d,0x1c,0x1d,0x1b,0x1d,0x1c,0x1d,0x18,0x1d,0x1c,0x1d,0x1a,0x1d,0x1c,0x1d,0x19,0x1d,0x1c,0x1d,0x1b,0x1d};
 
 #if defined GPSOSD
-  const char satnogps_text[] MAYBE_PROGMEM = " NO GPS ";
+  const char satnogps_text[] PROGMEM = " NO GPS ";
 #endif
-const char blank_text[] MAYBE_PROGMEM    = "";
-const char nodata_text[] MAYBE_PROGMEM    = "NO DATA";
-const char nogps_text[] MAYBE_PROGMEM     = " NO GPS";
-const char satlow_text[] MAYBE_PROGMEM    = "LOW SATS";
-const char disarmed_text[] MAYBE_PROGMEM  = "DISARMED";
-const char armed_text[] MAYBE_PROGMEM     = " ARMED";
-const char APRTHtext[] MAYBE_PROGMEM      = "AUTO RTH";
-const char APHOLDtext[] MAYBE_PROGMEM     = "AUTO HOLD";
-const char APWAYPOINTtext[] MAYBE_PROGMEM = " MISSION";
-const char lowvolts_text[] MAYBE_PROGMEM  = "LOW VOLTS";
+const char blank_text[] PROGMEM     = "";
+const char nodata_text[] PROGMEM    = "NO DATA";
+const char nogps_text[] PROGMEM     = " NO GPS";
+const char satlow_text[] PROGMEM    = "LOW SATS";
+const char disarmed_text[] PROGMEM  = "DISARMED";
+const char armed_text[] PROGMEM     = " ARMED";
+const char APRTHtext[] PROGMEM      = "AUTO RTH";
+const char APHOLDtext[] PROGMEM     = "AUTO HOLD";
+const char APWAYPOINTtext[] PROGMEM = " MISSION";
+const char lowvolts_text[] PROGMEM  = "LOW VOLTS";
 
 // For Status / warning messages
-const MAYBE_PROGMEM char * const message_item[] =
+const char * const message_item[] PROGMEM =
 {
   blank_text,  //0
   disarmed_text,  //1
@@ -242,155 +242,154 @@ const MAYBE_PROGMEM char * const message_item[] =
 
 // For Intro
 #ifdef INTRO_VERSION
-const char message0[] MAYBE_PROGMEM = INTRO_VERSION;
+const char message0[] PROGMEM = INTRO_VERSION;
 #else
-const char message0[] MAYBE_PROGMEM = MWVERS;
+const char message0[] PROGMEM = MWVERS;
 #endif
 
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
-const char messageF0[] MAYBE_PROGMEM = "DO NOT POWER OFF";
-const char messageF1[] MAYBE_PROGMEM = "SCREEN WILL GO BLANK";
-const char messageF2[] MAYBE_PROGMEM = "UPDATE COMPLETE";
+const char messageF0[] PROGMEM = "DO NOT POWER OFF";
+const char messageF1[] PROGMEM = "SCREEN WILL GO BLANK";
+const char messageF2[] PROGMEM = "UPDATE COMPLETE";
 #endif
 
-//const char message1[] MAYBE_PROGMEM = "VIDEO SIGNAL NTSC";
-//const char message2[] MAYBE_PROGMEM = "VIDEO SIGNAL PAL ";
-const char message5[]  MAYBE_PROGMEM = "FC VERSION:";
-const char message6[]  MAYBE_PROGMEM = "OPEN MENU: THRT MIDDLE";
-const char message7[]  MAYBE_PROGMEM = "+YAW RIGHT";
-const char message8[]  MAYBE_PROGMEM = "+PITCH FULL";
-const char message9[]  MAYBE_PROGMEM = "ID:";         // Call Sign on the beggining of the transmission
-const char message10[] MAYBE_PROGMEM = "TZ UTC:"; //haydent - Time Zone & DST Setting
-//const char message11[] MAYBE_PROGMEM = "MORE IN: GUI+CONFIG.H";
+//const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
+//const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
+const char message5[]  PROGMEM = "FC VERSION:";
+const char message6[]  PROGMEM = "OPEN MENU: THRT MIDDLE";
+const char message7[]  PROGMEM = "+YAW RIGHT";
+const char message8[]  PROGMEM = "+PITCH FULL";
+const char message9[]  PROGMEM = "ID:";         // Call Sign on the beggining of the transmission
+const char message10[] PROGMEM = "TZ UTC:"; //haydent - Time Zone & DST Setting
+//const char message11[] PROGMEM = "MORE IN: GUI+CONFIG.H";
 
 // For Config menu common
-const char configMsgON[]   MAYBE_PROGMEM = "ON";
-const char configMsgOFF[]  MAYBE_PROGMEM = "OFF";
-const char configMsgEXT[]  MAYBE_PROGMEM = "EXIT";
-const char configMsgSAVE[] MAYBE_PROGMEM = "SAVE+EXIT";
-const char configMsgPGS[]  MAYBE_PROGMEM = "<PAGE>";
-const char configMsgMWII[] MAYBE_PROGMEM = "USE FC";
+const char configMsgON[]   PROGMEM = "ON";
+const char configMsgOFF[]  PROGMEM = "OFF";
+const char configMsgEXT[]  PROGMEM = "EXIT";
+const char configMsgSAVE[] PROGMEM = "SAVE+EXIT";
+const char configMsgPGS[]  PROGMEM = "<PAGE>";
+const char configMsgMWII[] PROGMEM = "USE FC";
 
 // For APSTATUS
 
 // For Config pages
 //-----------------------------------------------------------Page0
-const char configMsg00[] MAYBE_PROGMEM = "STATISTICS";
-const char configMsg01[] MAYBE_PROGMEM = "FLY TIME";
-const char configMsg02[] MAYBE_PROGMEM = "TOT DISTANCE";
-const char configMsg03[] MAYBE_PROGMEM = "MAX DISTANCE";
-const char configMsg04[] MAYBE_PROGMEM = "MAX ALTITUDE";
-const char configMsg05[] MAYBE_PROGMEM = "MAX SPEED";
-const char configMsg06[] MAYBE_PROGMEM = "MAH USED";
-const char configMsg07[] MAYBE_PROGMEM = "MAX AMPS";
+const char configMsg00[] PROGMEM = "STATISTICS";
+const char configMsg01[] PROGMEM = "FLY TIME";
+const char configMsg02[] PROGMEM = "TOT DISTANCE";
+const char configMsg03[] PROGMEM = "MAX DISTANCE";
+const char configMsg04[] PROGMEM = "MAX ALTITUDE";
+const char configMsg05[] PROGMEM = "MAX SPEED";
+const char configMsg06[] PROGMEM = "MAH USED";
+const char configMsg07[] PROGMEM = "MAX AMPS";
 //-----------------------------------------------------------Page1
-const char configMsg10[] MAYBE_PROGMEM = "PID CONFIG";
-const char configMsg11[] MAYBE_PROGMEM = "ROLL";
-const char configMsg12[] MAYBE_PROGMEM = "PITCH";
-const char configMsg13[] MAYBE_PROGMEM = "YAW";
-const char configMsg14[] MAYBE_PROGMEM = "ALT";
-const char configMsg15[] MAYBE_PROGMEM = "GPS";
-const char configMsg16[] MAYBE_PROGMEM = "LEVEL";
-const char configMsg17[] MAYBE_PROGMEM = "MAG";
+const char configMsg10[] PROGMEM = "PID CONFIG";
+const char configMsg11[] PROGMEM = "ROLL";
+const char configMsg12[] PROGMEM = "PITCH";
+const char configMsg13[] PROGMEM = "YAW";
+const char configMsg14[] PROGMEM = "ALT";
+const char configMsg15[] PROGMEM = "GPS";
+const char configMsg16[] PROGMEM = "LEVEL";
+const char configMsg17[] PROGMEM = "MAG";
 //-----------------------------------------------------------Page2
-const char configMsg20[] MAYBE_PROGMEM = "RC TUNING";
-const char configMsg21[] MAYBE_PROGMEM = "RC RATE";
-const char configMsg22[] MAYBE_PROGMEM = "RC EXPO";
-const char configMsg23[] MAYBE_PROGMEM = "ROLL PITCH RATE";
-const char configMsg24[] MAYBE_PROGMEM = "YAW RATE";
-const char configMsg25[] MAYBE_PROGMEM = "TPA";
-const char configMsg26[] MAYBE_PROGMEM = "THROTTLE MID";
-const char configMsg27[] MAYBE_PROGMEM = "THROTTLE EXPO";
+const char configMsg20[] PROGMEM = "RC TUNING";
+const char configMsg21[] PROGMEM = "RC RATE";
+const char configMsg22[] PROGMEM = "RC EXPO";
+const char configMsg23[] PROGMEM = "ROLL PITCH RATE";
+const char configMsg24[] PROGMEM = "YAW RATE";
+const char configMsg25[] PROGMEM = "TPA";
+const char configMsg26[] PROGMEM = "THROTTLE MID";
+const char configMsg27[] PROGMEM = "THROTTLE EXPO";
 #if defined CORRECT_MENU_RCT1
-  const char configMsg23a[] MAYBE_PROGMEM = "ROLL RATE";
-  const char configMsg23b[] MAYBE_PROGMEM = "PITCH RATE";
+  const char configMsg23a[] PROGMEM = "ROLL RATE";
+  const char configMsg23b[] PROGMEM = "PITCH RATE";
 #endif
 #if defined CORRECT_MENU_RCT2
-  const char configMsg23a[] MAYBE_PROGMEM = "ROLL RATE";
-  const char configMsg23b[] MAYBE_PROGMEM = "PITCH RATE";
-  const char configMSg28[]  MAYBE_PROGMEM = "TPA BREAKPOINT";
+  const char configMsg23a[] PROGMEM = "ROLL RATE";
+  const char configMsg23b[] PROGMEM = "PITCH RATE";
+  const char configMSg28[]  PROGMEM = "TPA BREAKPOINT";
 #endif
 //-----------------------------------------------------------Page3
-const char configMsg30[] MAYBE_PROGMEM = "VOLTAGE";
-const char configMsg31[] MAYBE_PROGMEM = "DISPLAY MAIN VOLTS";
-const char configMsg32[] MAYBE_PROGMEM = "ADJUST VOLTS";
-const char configMsg33[] MAYBE_PROGMEM = "MAIN VOLTS ALARM";
-const char configMsg34[] MAYBE_PROGMEM = "DISPLAY VID VOLTS";
-const char configMsg35[] MAYBE_PROGMEM = "ADJUST VOLTS";
-const char configMsg36[] MAYBE_PROGMEM = "CELLS";
-const char configMsg37[] MAYBE_PROGMEM = "USE FC";
+const char configMsg30[] PROGMEM = "VOLTAGE";
+const char configMsg31[] PROGMEM = "DISPLAY MAIN VOLTS";
+const char configMsg32[] PROGMEM = "ADJUST VOLTS";
+const char configMsg33[] PROGMEM = "MAIN VOLTS ALARM";
+const char configMsg34[] PROGMEM = "DISPLAY VID VOLTS";
+const char configMsg35[] PROGMEM = "ADJUST VOLTS";
+const char configMsg36[] PROGMEM = "CELLS";
+const char configMsg37[] PROGMEM = "USE FC";
 
 //-----------------------------------------------------------Page4
-const char configMsg40[] MAYBE_PROGMEM = "RSSI";
-const char configMsg42[] MAYBE_PROGMEM = "DISPLAY RSSI";
-const char configMsg43[] MAYBE_PROGMEM = "SET RSSI";
-const char configMsg44[] MAYBE_PROGMEM = "SET RSSI MAX";
-const char configMsg45[] MAYBE_PROGMEM = "SET RSSI MIN";
-const char configMsg46[] MAYBE_PROGMEM = "USE PWM";
+const char configMsg40[] PROGMEM = "RSSI";
+const char configMsg42[] PROGMEM = "DISPLAY RSSI";
+const char configMsg43[] PROGMEM = "SET RSSI";
+const char configMsg44[] PROGMEM = "SET RSSI MAX";
+const char configMsg45[] PROGMEM = "SET RSSI MIN";
+const char configMsg46[] PROGMEM = "USE PWM";
 
 //-----------------------------------------------------------Page5
-const char configMsg50[] MAYBE_PROGMEM = "CURRENT";
-const char configMsg51[] MAYBE_PROGMEM = "DISPLAY AMPS";
-const char configMsg52[] MAYBE_PROGMEM = "DISPLAY MAH";
-const char configMsg53[] MAYBE_PROGMEM = "USE VIRTUAL SENSOR";
-const char configMsg54[] MAYBE_PROGMEM = "ADJUST AMPS";
-const char configMsg55[] MAYBE_PROGMEM = "ADJUST ZERO";
+const char configMsg50[] PROGMEM = "CURRENT";
+const char configMsg51[] PROGMEM = "DISPLAY AMPS";
+const char configMsg52[] PROGMEM = "DISPLAY MAH";
+const char configMsg53[] PROGMEM = "USE VIRTUAL SENSOR";
+const char configMsg54[] PROGMEM = "ADJUST AMPS";
+const char configMsg55[] PROGMEM = "ADJUST ZERO";
 //-----------------------------------------------------------Page6
-const char configMsg60[] MAYBE_PROGMEM = "DISPLAY";
-const char configMsg61[] MAYBE_PROGMEM = "HORIZON";
-const char configMsg62[] MAYBE_PROGMEM = "SIDE BARS";
-const char configMsg63[] MAYBE_PROGMEM = "SCROLLING BARS";
-const char configMsg64[] MAYBE_PROGMEM = "THROTTLE";
-const char configMsg65[] MAYBE_PROGMEM = "GPS COORDS";
-const char configMsg66[] MAYBE_PROGMEM = "SENSORS";
-const char configMsg67[] MAYBE_PROGMEM = "GIMBAL";
-const char configMsg68[] MAYBE_PROGMEM = "MAP MODE";
+const char configMsg60[] PROGMEM = "DISPLAY";
+const char configMsg61[] PROGMEM = "HORIZON";
+const char configMsg62[] PROGMEM = "SIDE BARS";
+const char configMsg63[] PROGMEM = "SCROLLING BARS";
+const char configMsg64[] PROGMEM = "THROTTLE";
+const char configMsg65[] PROGMEM = "GPS COORDS";
+const char configMsg66[] PROGMEM = "SENSORS";
+const char configMsg67[] PROGMEM = "GIMBAL";
+const char configMsg68[] PROGMEM = "MAP MODE";
 //-----------------------------------------------------------Page7
-const char configMsg70[]  MAYBE_PROGMEM = "ADVANCED";
-const char configMsg71[]  MAYBE_PROGMEM = "UNITS";
-const char configMsg710[] MAYBE_PROGMEM = "MET";
-const char configMsg711[] MAYBE_PROGMEM = "IMP";
-const char configMsg72[]  MAYBE_PROGMEM = "SIGNAL";
-const char configMsg720[] MAYBE_PROGMEM = "NTSC";
-const char configMsg721[] MAYBE_PROGMEM = "PAL";
-const char configMsg73[]  MAYBE_PROGMEM = "V REF";
-const char configMsg730[] MAYBE_PROGMEM = "5V";
-const char configMsg731[] MAYBE_PROGMEM = "1.1V";
-const char configMsg74[]  MAYBE_PROGMEM = "DEBUG";
-const char configMsg75[]  MAYBE_PROGMEM = "MAG CAL";
-const char configMsg76[]  MAYBE_PROGMEM = "OSD TX CH";
+const char configMsg70[]  PROGMEM = "ADVANCED";
+const char configMsg71[]  PROGMEM = "UNITS";
+const char configMsg710[] PROGMEM = "MET";
+const char configMsg711[] PROGMEM = "IMP";
+const char configMsg72[]  PROGMEM = "SIGNAL";
+const char configMsg720[] PROGMEM = "NTSC";
+const char configMsg721[] PROGMEM = "PAL";
+const char configMsg73[]  PROGMEM = "V REF";
+const char configMsg730[] PROGMEM = "5V";
+const char configMsg731[] PROGMEM = "1.1V";
+const char configMsg74[]  PROGMEM = "DEBUG";
+const char configMsg75[]  PROGMEM = "MAG CAL";
+const char configMsg76[]  PROGMEM = "OSD TX CH";
 //-----------------------------------------------------------Page8
-const char configMsg80[] MAYBE_PROGMEM = "GPS TIME";
-const char configMsg81[] MAYBE_PROGMEM = "DISPLAY";
-const char configMsg82[] MAYBE_PROGMEM = "TZ FORWARD";
-const char configMsg83[] MAYBE_PROGMEM = "TZ ADJUST";
+const char configMsg80[] PROGMEM = "GPS TIME";
+const char configMsg81[] PROGMEM = "DISPLAY";
+const char configMsg82[] PROGMEM = "TZ FORWARD";
+const char configMsg83[] PROGMEM = "TZ ADJUST";
 //-----------------------------------------------------------Page9
-const char configMsg90[] MAYBE_PROGMEM = "ALARMS";
-const char configMsg91[] MAYBE_PROGMEM = "DISTANCE X100";
-const char configMsg92[] MAYBE_PROGMEM = "ALTITUDE X10";
-const char configMsg93[] MAYBE_PROGMEM = "SPEED";
-const char configMsg94[] MAYBE_PROGMEM = "TIMER";
-const char configMsg95[] MAYBE_PROGMEM = "MAH X100";
-const char configMsg96[] MAYBE_PROGMEM = "AMPS";
+const char configMsg90[] PROGMEM = "ALARMS";
+const char configMsg91[] PROGMEM = "DISTANCE X100";
+const char configMsg92[] PROGMEM = "ALTITUDE X10";
+const char configMsg93[] PROGMEM = "SPEED";
+const char configMsg94[] PROGMEM = "TIMER";
+const char configMsg95[] PROGMEM = "MAH X100";
+const char configMsg96[] PROGMEM = "AMPS";
 //-----------------------------------------------------------Page10
-const char configMsg100[] MAYBE_PROGMEM = "ADVANCE TUNING";
-const char configMsg101[] MAYBE_PROGMEM = "PROFILE";
-const char configMsg102[] MAYBE_PROGMEM = "PID CONTROLLER";
-const char configMsg103[] MAYBE_PROGMEM = "LOOPTIME";
+const char configMsg100[] PROGMEM = "ADVANCE TUNING";
+const char configMsg101[] PROGMEM = "PROFILE";
+const char configMsg102[] PROGMEM = "PID CONTROLLER";
+const char configMsg103[] PROGMEM = "LOOPTIME";
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
-const unsigned char speedUnitAdd[2] ={
+const char speedUnitAdd[2] PROGMEM = {
   0xa5,0xa6} ; // [0][0] and [0][1] = Km/h   [1][0] and [1][1] = Mph
-const unsigned char temperatureUnitAdd[2] = {
+const char temperatureUnitAdd[2] PROGMEM = {
   0x0e,0x0d};
-
-const unsigned char MwAltitudeAdd[2]={
+const char MwAltitudeAdd[2] PROGMEM = {
   0xa7,0xa8};
-const unsigned char MwClimbRateAdd[2]={
+const char MwClimbRateAdd[2] PROGMEM = {
   0x9f,0x99};
-const unsigned char GPS_distanceToHomeAdd[2]={
+const char GPS_distanceToHomeAdd[2] PROGMEM = {
   0xbb,0xb9};
-const unsigned char MwGPSAltPositionAdd[2]={
+const char MwGPSAltPositionAdd[2] PROGMEM = {
   0xa7,0xa8};
 
 
@@ -440,30 +439,26 @@ enum Positions {
   POSITIONS_SETTINGS
 };
 
-// $$$: share between eeprom and screen
-static uint16_t screenPosition[POSITIONS_SETTINGS];
-
 // Menu selections
-const MAYBE_PROGMEM char * const menu_choice_unit[] =
+const char * const menu_choice_unit[] PROGMEM =
 {
   configMsg710,
   configMsg711,
 };
 // Menu selections
-const MAYBE_PROGMEM char * const menu_choice_video[] =
+const char * const menu_choice_video[] PROGMEM =
 {
   configMsg720,
   configMsg721,
 };// Menu selections
-const MAYBE_PROGMEM char * const menu_choice_ref[] =
+const char * const menu_choice_ref[] PROGMEM =
 {
   configMsg731,
   configMsg730,
 };
 
 // Menu
-//MAYBE_PROGMEM const char *menu_stats_item[] =
-const MAYBE_PROGMEM char * const menu_stats_item[] =
+const char * const menu_stats_item[] PROGMEM =
 {
   configMsg01,
   configMsg02,
@@ -474,7 +469,7 @@ const MAYBE_PROGMEM char * const menu_stats_item[] =
   configMsg07,
 };
 
-const MAYBE_PROGMEM char * const menu_pid[] =
+const char * const menu_pid[] PROGMEM =
 {
   configMsg11,
   configMsg12,
@@ -485,7 +480,7 @@ const MAYBE_PROGMEM char * const menu_pid[] =
   configMsg17,
 };
 
-const MAYBE_PROGMEM char * const menu_rc[] =
+const char * const menu_rc[] PROGMEM =
 {
   #if defined CORRECT_MENU_RCT2
     configMsg21,
@@ -518,7 +513,7 @@ const MAYBE_PROGMEM char * const menu_rc[] =
 
 };
 
-const MAYBE_PROGMEM char * const menu_bat[] =
+const char * const menu_bat[] PROGMEM =
 {
   configMsg31,
   configMsg32,
@@ -529,7 +524,7 @@ const MAYBE_PROGMEM char * const menu_bat[] =
   configMsgMWII,
 };
 
-const MAYBE_PROGMEM char * const menu_rssi[] =
+const char * const menu_rssi[] PROGMEM =
 {
   configMsg42,
   configMsg43,
@@ -539,7 +534,7 @@ const MAYBE_PROGMEM char * const menu_rssi[] =
   configMsg45,
 };
 
-const MAYBE_PROGMEM char * const menu_amps[] =
+const char * const menu_amps[] PROGMEM =
 {
   configMsg51,
   configMsg52,
@@ -548,7 +543,7 @@ const MAYBE_PROGMEM char * const menu_amps[] =
   configMsg55,
 };
 
-const MAYBE_PROGMEM char * const menu_display[] =
+const char * const menu_display[] PROGMEM =
 {
   configMsg61,
   configMsg62,
@@ -560,7 +555,7 @@ const MAYBE_PROGMEM char * const menu_display[] =
   configMsg68,
 };
 
-const MAYBE_PROGMEM char * const menu_advanced[] =
+const char * const menu_advanced[] PROGMEM =
 {
   configMsg71,
   configMsg72,
@@ -569,14 +564,14 @@ const MAYBE_PROGMEM char * const menu_advanced[] =
   configMsg75,
   configMsg76,};
 
-const MAYBE_PROGMEM char * const menu_gps_time[] =
+const char * const menu_gps_time[] PROGMEM =
 {
   configMsg81,
   configMsg82,
   configMsg83,
 };
 
-const MAYBE_PROGMEM char * const menu_alarm_item[] =
+const char * const menu_alarm_item[] PROGMEM =
 {
   configMsg91,
   configMsg92,
@@ -586,14 +581,14 @@ const MAYBE_PROGMEM char * const menu_alarm_item[] =
   configMsg96,
 };
 
-const MAYBE_PROGMEM char * const menu_profile[] =
+const char * const menu_profile[] PROGMEM =
 {
   configMsg101,
   configMsg102,
   configMsg103,
 };
 
-const MAYBE_PROGMEM char * const menutitle_item[] =
+const char * const menutitle_item[] PROGMEM =
 {
 #ifdef MENU_STAT
   configMsg00,
@@ -630,7 +625,7 @@ const MAYBE_PROGMEM char * const menutitle_item[] =
 #endif
 };
 
-const MAYBE_PROGMEM char * const menu_on_off[] =
+const char * const menu_on_off[] PROGMEM =
 {
   configMsgOFF,
   configMsgON,
