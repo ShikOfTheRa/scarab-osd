@@ -56,11 +56,15 @@ help:
 	@echo "   Here is a summary of the available targets:"
 	@echo
 	@echo "   [Tool Installers]"
-	@echo "     arduino_builder_install      - Install the arduino_builder toolchain"
-	@echo "     uncrustify_install           - Install the uncrustify code formatter"
+	@echo "     arduino_builder_install        - Install the arduino_builder toolchain"
+	@echo "     uncrustify_install             - Install the uncrustify code formatter"
 	@echo
 	@echo "   [Firmware]"
-	@echo "     arduino                      - Build firmware for the arduino based MinimOsd"
+	@echo "     arduino                        - Build firmware for the arduino based MinimOsd"
+	@echo
+	@echo "   [Firmware Debugging]"
+	@echo "     arduino-size-details           - Debug size issues by symbol name"
+	@echo "     arduino-size-section-details   - Debug size issues by section, set SIZE_SECTION=.bss or whatever"
 	@echo
 	@echo "   Hint: Add V=1 to your command line to see verbose build output."
 	@echo
@@ -97,10 +101,16 @@ arduino-size:
 .PHONY: arduino-size-details
 TOP_N := 10
 arduino-size-details:
+	@echo "size is the 3rd column"
 	@echo "OBJECT"
 	$(V1) SIZE_DETAILS=$(ARDUINO_TOOLS_BIN)/avr-readelf -sW $(BUILD_DIR)/$(MAIN_INO).elf | awk '$$4 == "OBJECT" { print }' | sort -k 3 -n -r | head -n$(TOP_N)
 	@echo "FUNC"
 	$(V1) SIZE_DETAILS=$(ARDUINO_TOOLS_BIN)/avr-readelf -sW $(BUILD_DIR)/$(MAIN_INO).elf | awk '$$4 == "FUNC" { print }' | sort -k 3 -n -r | head -n$(TOP_N)
+
+.PHONY: arduino-size-section-details
+SIZE_SECTION := .bss
+arduino-size-section-details:
+	$(V1) SIZE_SECTION_DETAILS=$(ARDUINO_TOOLS_BIN)/avr-objdump -x $(BUILD_DIR)/$(MAIN_INO).elf | grep '$(SIZE_SECTION)'
 
 all: arduino arduino-size
 
