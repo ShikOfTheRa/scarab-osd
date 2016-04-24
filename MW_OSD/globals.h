@@ -285,7 +285,7 @@ static uint16_t Settings16[EEPROM16_SETTINGS];
 
 
 // For Settings Defaults
-static uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
+const uint8_t EEPROM_DEFAULT[] PROGMEM = {
 MWOSDVER,   // used for check              0
 0,   // S_UNUSED_5                  1
 0, // S_VIDVOLTAGEMIN             2
@@ -365,7 +365,7 @@ MWOSDVER,   // used for check              0
 
 };
 
-static uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
+const uint16_t EEPROM16_DEFAULT[] PROGMEM = {
   0,// S16_AMPMAX,
   0,// S16_AMPZERO,
   150,// S16_AMPDIVIDERRATIO,
@@ -375,7 +375,8 @@ static uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
   600,// S16_SPARE2,
 
 };
-static uint16_t SCREENLAYOUT_DEFAULT[EEPROM_SETTINGS] = {
+
+const uint16_t SCREENLAYOUT_DEFAULT[] PROGMEM = {
 
 (LINE02+2)|DISPLAY_ALWAYS,  // GPS_numSatPosition
 (LINE02+22)|DISPLAY_ALWAYS,   // GPS_directionToHomePosition
@@ -422,7 +423,7 @@ static uint16_t SCREENLAYOUT_DEFAULT[EEPROM_SETTINGS] = {
 };
 
 
-static uint16_t SCREENLAYOUT_DEFAULT_OSDSW[EEPROM_SETTINGS] = {
+const uint16_t SCREENLAYOUT_DEFAULT_OSDSW[] PROGMEM = {
 
 (LINE02+2)|DISPLAY_NEVER,  // GPS_numSatPosition
 (LINE13+19)|DISPLAY_ALWAYS,   // GPS_directionToHomePosition
