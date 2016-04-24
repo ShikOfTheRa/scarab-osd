@@ -47,6 +47,12 @@ __asm volatile ("nop");
 // everything else
 #include "platform.h"
 
+// "globals" go here, declared extern in their headers to ensure we only get 1 copy in SRAM
+MAX7456Class MAX7456;
+ScreenClass Screen;
+EepromClass Eeprom(EEPROM);
+FontClass Font;
+
 unsigned long previous_millis_low=0;
 unsigned long previous_millis_high =0;
 unsigned long previous_millis_sync =0;

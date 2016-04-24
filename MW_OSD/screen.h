@@ -53,6 +53,6 @@ class ScreenClass
     uint16_t _screenPosition[POSITIONS_SETTINGS];
 };
 
-static ScreenClass Screen;
+extern ScreenClass Screen;
 
 #endif

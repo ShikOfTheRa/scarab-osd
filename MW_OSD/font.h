@@ -13,6 +13,6 @@ class FontClass
     uint8_t _inFontMode;
 };
 
-static FontClass Font;
+extern FontClass Font;
 
 #endif

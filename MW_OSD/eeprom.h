@@ -16,6 +16,6 @@ class EepromClass
     EEPROMClass* _EEPROM;
 };
 
-static EepromClass Eeprom(EEPROM);
+extern EepromClass Eeprom;
 
 #endif

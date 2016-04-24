@@ -156,6 +156,6 @@ class MAX7456Class
     uint8_t _max7456_reset;
 };
 
-static MAX7456Class MAX7456;
+extern MAX7456Class MAX7456;
 
 #endif
