@@ -92,6 +92,21 @@ arduino:
 		-compile \
 	  $(SRC_DIR)/$(MAIN_INO)
 
+
+HEX_FILE := $(BUILD_DIR)/$(MAIN_INO).hex
+# TODO: find this automatically
+PORT := /dev/cu.SLAB_USBtoUART
+arduino-flash: $(HEX_FILE)
+arduino-flash:
+	$(V1) FLASH_OUTPUT=$(ARDUINO_TOOLS_BIN)/avrdude \
+		-C$(ARDUINO_APP_RESOURCE_DIR)/hardware/tools/avr/etc/avrdude.conf \
+		-v \
+		-patmega328p -carduino \
+		-P$(PORT) \
+		-b57600 \
+		-D \
+		-Uflash:w:$(HEX_FILE):i
+
 .PHONY: arduino-size
 arduino-size:
 	@echo ".text + .data = FLASH"
