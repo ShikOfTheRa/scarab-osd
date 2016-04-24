@@ -90,7 +90,17 @@ arduino:
 
 .PHONY: arduino-size
 arduino-size:
+	@echo ".text + .data = FLASH"
+	@echo ".data + .bss = SRAM"
 	$(V1) SIZE=$(ARDUINO_TOOLS_BIN)/avr-size $(BUILD_DIR)/$(MAIN_INO).elf | tee -a $(SIZE_LOG)
+
+.PHONY: arduino-size-details
+TOP_N := 10
+arduino-size-details:
+	@echo "OBJECT"
+	$(V1) SIZE_DETAILS=$(ARDUINO_TOOLS_BIN)/avr-readelf -sW $(BUILD_DIR)/$(MAIN_INO).elf | awk '$$4 == "OBJECT" { print }' | sort -k 3 -n -r | head -n$(TOP_N)
+	@echo "FUNC"
+	$(V1) SIZE_DETAILS=$(ARDUINO_TOOLS_BIN)/avr-readelf -sW $(BUILD_DIR)/$(MAIN_INO).elf | awk '$$4 == "FUNC" { print }' | sort -k 3 -n -r | head -n$(TOP_N)
 
 all: arduino arduino-size
 
