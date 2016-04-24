@@ -1,6 +1,8 @@
 #ifndef __SCREEN_H
 #define __SCREEN_H
 
+#include "symbols.h"
+
 class ScreenClass
 {
   public:

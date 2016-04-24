@@ -330,6 +330,12 @@ void ScreenClass::DisplayCallsign()
 
 void ScreenClass::DisplayHorizon(int rollAngle, int pitchAngle)
 {
+  // TODO: $$$ #define guard
+  static uint8_t sidebarsdir; // speed
+  static uint8_t sidebaradir; // alt
+  static unsigned long sidebarsMillis = 0;
+  static unsigned long sidebaraMillis = 0;
+
 #ifdef DISPLAY_PR
   _screenBuffer[0]=0x50;
   int16_t xx=abs(pitchAngle/10);

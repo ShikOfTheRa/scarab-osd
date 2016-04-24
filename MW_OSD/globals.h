@@ -542,18 +542,6 @@ static uint8_t MvVBatMinCellVoltage=CELL_VOLTS_MIN;
 static uint8_t MvVBatMaxCellVoltage=CELL_VOLTS_MAX;
 static uint8_t MvVBatWarningCellVoltage=CELL_VOLTS_WARN;
 
-// For decoration
-static uint8_t SYM_AH_DECORATION_LEFT = 0x10;
-static uint8_t SYM_AH_DECORATION_RIGHT = 0x10;
-static uint8_t sym_sidebartopspeed = SYM_BLANK;
-static uint8_t sym_sidebarbottomspeed = SYM_BLANK;
-static uint8_t sym_sidebartopalt = SYM_BLANK;
-static uint8_t sym_sidebarbottomalt = SYM_BLANK;
-static uint8_t sidebarsdir; // speed
-static uint8_t sidebaradir; // alt
-static unsigned long sidebarsMillis = 0;
-static unsigned long sidebaraMillis = 0;
-
 //For Current Throttle
 static uint16_t LowT = LOWTHROTTLE;
 static uint16_t HighT = HIGHTHROTTLE;

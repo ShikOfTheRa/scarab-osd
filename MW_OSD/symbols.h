@@ -206,13 +206,24 @@
 #define SYM_MIN 0xB3
 #define SYM_AVG 0xB4
 
+// For decoration
+static uint8_t SYM_AH_DECORATION_LEFT = 0x10;
+static uint8_t SYM_AH_DECORATION_RIGHT = 0x10;
+//static uint8_t sym_sidebartopspeed = SYM_BLANK;
+//static uint8_t sym_sidebarbottomspeed = SYM_BLANK;
+//static uint8_t sym_sidebartopalt = SYM_BLANK;
+//static uint8_t sym_sidebarbottomalt = SYM_BLANK;
+
 // Heading
 const char headGraph[] PROGMEM = {
   0x1d,0x1a,0x1d,0x1c,0x1d,0x19,0x1d,0x1c,0x1d,0x1b,0x1d,0x1c,0x1d,0x18,0x1d,0x1c,0x1d,0x1a,0x1d,0x1c,0x1d,0x19,0x1d,0x1c,0x1d,0x1b,0x1d};
 
+// GPS
 #if defined GPSOSD
   const char satnogps_text[] PROGMEM = " NO GPS ";
 #endif
+
+// Status
 const char blank_text[] PROGMEM     = "";
 const char nodata_text[] PROGMEM    = "NO DATA";
 const char nogps_text[] PROGMEM     = " NO GPS";

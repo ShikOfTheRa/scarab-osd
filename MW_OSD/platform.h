@@ -28,7 +28,6 @@
 #include "gps.h"
 #include "hardware.h"
 #include "def.h"
-#include "symbols.h"
 #include "globals.h"
 #include "math.h"
 
