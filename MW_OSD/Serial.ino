@@ -419,31 +419,31 @@ void serialMSPCheck()
         len++;
       }
       else {
-        if(strncmp("ARM", boxname, len) == 0)
+        if (strncmp_P(boxname, PSTR("ARM"), len) == 0)
           mode.armed |= bit;
-        if(strncmp("ANGLE", boxname, len) == 0)
+        if (strncmp(boxname, PSTR("ANGLE"), len) == 0)
           mode.stable |= bit;
-        if(strncmp("HORIZON", boxname, len) == 0)
+        if (strncmp_P(boxname, PSTR("HORIZON"), len) == 0)
           mode.horizon |= bit;
-        if(strncmp("MAG", boxname, len) == 0)
+        if (strncmp_P(boxname, PSTR("MAG"), len) == 0)
           mode.mag |= bit;
-        if(strncmp("BARO", boxname, len) == 0)
+        if (strncmp_P(boxname, PSTR("BARO"), len) == 0)
           mode.baro |= bit;
-        if(strncmp("LLIGHTS", boxname, len) == 0)
+        if (strncmp_P(boxname, PSTR("LLIGHTS"), len) == 0)
           mode.llights |= bit;
-        if(strncmp("CAMSTAB", boxname, len) == 0)
+        if (strncmp_P(boxname, PSTR("CAMSTAB"), len) == 0)
           mode.camstab |= bit;
-        if(strncmp("AIR MODE", boxname, len) == 0)
+        if (strncmp_P(boxname, PSTR("AIR MODE"), len) == 0)
           mode.air |= bit;
-        if(strncmp("ACRO PLUS", boxname, len) == 0)
+        if (strncmp_P(boxname, PSTR("ACRO PLUS"), len) == 0)
           mode.acroplus |= bit;
-        if(strncmp("GPS HOME", boxname, len) == 0)
+        if (strncmp_P(boxname, PSTR("GPS HOME"), len) == 0)
           mode.gpshome |= bit;
-        if(strncmp("GPS HOLD", boxname, len) == 0)
+        if (strncmp_P(boxname, PSTR("GPS HOLD"), len) == 0)
           mode.gpshold |= bit;
-        if(strncmp("PASSTHRU", boxname, len) == 0)
+        if (strncmp_P(boxname, PSTR("PASSTHRU"), len) == 0)
           mode.passthru |= bit;
-        if(strncmp("OSD SW", boxname, len) == 0)
+        if (strncmp_P(boxname, PSTR("OSD SW"), len) == 0)
           mode.osd_switch |= bit;
 
         len = 0;
