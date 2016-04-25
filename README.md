@@ -23,3 +23,24 @@ MWOSD also provides support a number of other configurations:
 <a href='http://www.youtube.com/watch?feature=player_embedded&v=FCIyhbT1kK0' target='_blank'><img src='http://img.youtube.com/vi/FCIyhbT1kK0/0.jpg' width='425' height=344 /></a><br>
 <br>
 <hr />
+
+### Debugging
+
+install `simulavr` with `git clone git://git.savannah.nongnu.org/simulavr.git`
+
+run `simulavr -d atmega328 -g -f build/MW_OSD.ino.elf` to start the simulator
+
+then run
+
+`tools/arduino-app-1.6.8/Arduino.app/Contents/Java/hardware/tools/avr/bin/avr-gdb build/MW_OSD.ino.elf -symbols=build/MW_OSD.ino.elf --eval-command="target remote localhost:1212"`
+
+set a breakpoint and continue
+
+```
+(gdb) break max7456.cpp:151
+Breakpoint 1 at 0xfa0: file /Users/ntsoi/src/rc/scarab-osd/build/sketch/max7456.cpp, line 151.
+(gdb) c
+Continuing.
+```
+
+etc.
