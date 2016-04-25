@@ -247,8 +247,10 @@ void MAX7456_WriteString_P(const char *string, int Adresse)
 void MAX7456_DrawScreen()
 {
   uint16_t xx;
-  #ifdef USE_VSYNC
+
     digitalWrite(MAX7456SELECT,LOW);
+
+  #ifdef USE_VSYNC
     spi_transfer(DMM_reg);
     spi_transfer(1);
     spi_transfer(DMAH_reg);
@@ -257,10 +259,7 @@ void MAX7456_DrawScreen()
     spi_transfer(0);
     vsync_wait = 1;
     uint32_t vsynctimer=40+millis();
-
   #endif
-
-  digitalWrite(MAX7456SELECT,LOW);
 
   for(xx=0;xx<MAX_screen_size;++xx){
     #ifdef USE_VSYNC
@@ -294,6 +293,7 @@ void MAX7456_DrawScreen()
     spi_transfer(DMM_reg);
     spi_transfer(B00000000);
   #endif
+
   digitalWrite(MAX7456SELECT,HIGH);
 }
 
