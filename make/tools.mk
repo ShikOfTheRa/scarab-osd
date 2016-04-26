@@ -13,7 +13,7 @@ ARDUINO_TOOLS_BIN =: $(ARDUINO_APP_RESOURCE_DIR)/hardware/tools/avr/bin
 ifdef LINUX
 	# or linux64
 	ARDUINO_BUILDER_URL := https://github.com/arduino/arduino-builder/releases/download/$(ARDUINO_BUILDER_VERSION)/arduino-builder-$(OSFAMILY)32-$(ARDUINO_BUILDER_VERSION).tar.bz2
-	ARDUINO_APP_URL := https://downloads.arduino.cc/arduino-$(ARDUINO_APP_VERSION)-$(OSFAMILY).zip
+	ARDUINO_APP_URL := https://downloads.arduino.cc/arduino-$(ARDUINO_APP_VERSION)-$(OSFAMILY).tr.xz
 	$(error linux platform support: please set ARDUINO_APP_RESOURCE_DIR in make/tooks.mk to the directory containing the arduino hardware folder and remove this error message. see MACOSX section for an example)
 endif
 ifdef MACOSX
@@ -23,8 +23,8 @@ ifdef MACOSX
 endif
 ifdef WINDOWS
 	ARDUINO_BUILDER_URL := https://github.com/arduino/arduino-builder/releases/download/$(ARDUINO_BUILDER_VERSION)/arduino-builder-$(OSFAMILY)-$(ARDUINO_BUILDER_VERSION).zip
-	ARDUINO_APP_URL := https://downloads.arduino.cc/arduino-$(ARDUINO_APP_VERSION)-$(OSFAMILY).tgz
-	$(error windows platform support: please set ARDUINO_APP_RESOURCE_DIR in make/tooks.mk to the directory containing the arduino hardware folder. see MACOSX section for an example)
+	ARDUINO_APP_URL := https://downloads.arduino.cc/arduino-$(ARDUINO_APP_VERSION)-$(OSFAMILY).zip
+	ARDUINO_APP_RESOURCE_DIR := $(ARDUINO_APP_DIR)/arduino-$(ARDUINO_APP_VERSION)/
 endif
 
 .PHONY: arduino_app_install
