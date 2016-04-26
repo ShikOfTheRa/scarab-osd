@@ -38,6 +38,7 @@ uint8_t read8()  {
 }
 
 void mspWriteRequest(uint8_t mspCommand, uint8_t txDataSize){
+  //return;
   Serial.write('$');
   Serial.write('M');
   Serial.write('<');
@@ -144,7 +145,22 @@ void serialMSPCheck()
                     
   }
 
-#ifndef GPSOSD
+#define MSPOSD
+
+#ifdef GPSOSD
+#undef MSPOSD
+#endif
+
+#ifdef NAZA
+#undef MSPOSD
+#endif
+
+#ifdef MAVLINK
+#undef MSPOSD
+#endif
+
+#ifdef MSPOSD
+
   if (cmdMSP==MSP_IDENT)
   {
     flags.ident=1;
