@@ -158,7 +158,7 @@ void serialMSPCheck()
     MwSensorPresent = read16();
     MwSensorActive = read32();
     #ifndef MAVLINK   
-    MwSensorActive = read32();
+    // MwSensorActive = read32(); XXX This causes read32() called twice for !MAV
     #endif //MAVLINK
     #if defined FORCESENSORS
       MwSensorPresent=GPSSENSOR|BAROMETER|MAGNETOMETER|ACCELEROMETER;
