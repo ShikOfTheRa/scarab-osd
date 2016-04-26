@@ -25,6 +25,8 @@
 
 ## Enhancement requests for future releases: ##
 
+LTM support 
+
 Vortex style capacity indicator
 
 MutiWii Nav PID config
