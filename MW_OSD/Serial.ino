@@ -157,9 +157,6 @@ void serialMSPCheck()
     I2CError=read16();
     MwSensorPresent = read16();
     MwSensorActive = read32();
-    #ifndef MAVLINK   
-    MwSensorActive = read32();
-    #endif //MAVLINK
     #if defined FORCESENSORS
       MwSensorPresent=GPSSENSOR|BAROMETER|MAGNETOMETER|ACCELEROMETER;
     #endif  
