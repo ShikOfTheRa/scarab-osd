@@ -103,6 +103,72 @@
 #define REQ_MSP_PID_CONTROLLER  262144 // (1 << 18)
 #define REQ_MSP_LOOP_TIME       524288 // (1 << 19) 
 
-void setMspRequests();
+// TODO: $$$ abstract the serial bits
+#if defined MAVLINK
+  #define SERIALBUFFERSIZE 75
+#elif defined NAZA
+  #define SERIALBUFFERSIZE 75
+#elif defined GPSOSD
+  #define SERIALBUFFERSIZE 100
+#else
+  #define SERIALBUFFERSIZE 150
+#endif
+
+
+class MSPClass {
+  public:
+    MSPClass(HardwareSerial &serial);
+
+    void Receive(uint8_t loops);
+
+    void BuildRequests(void);
+    void SendRequests(void);
+    void SetRequests(void);
+
+    // writes a request to the serial buffer
+    void WriteRequest(uint8_t mspCommand, uint8_t txDataSize);
+
+    void ConfigExit(void);
+  private:
+    uint32_t read32();
+    uint16_t read16();
+    uint8_t read8();
+
+    void write8(uint8_t t);
+    void write16(uint16_t t);
+    void writeChecksum(void);
+
+    void serialMSPCheck();
+    void handleRawRC(void);
+    void serialMenuCommon(void);
+    void settingsSerialRequest(void);
+    void settingswriteSerialRequest(void);
+    void setFCProfile(void);
+
+    void configExit(void);
+    void configSave();
+
+    HardwareSerial* _serial;
+
+    uint8_t _MSPcmdsend=0;
+    uint32_t _modeMSPRequests;
+    uint32_t _queuedMSPRequests;
+
+    uint8_t _serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string
+    uint8_t _receiverIndex;
+    uint8_t _dataSize;
+    uint8_t _cmdMSP;
+    uint8_t _rcvChecksum;
+    uint8_t _readIndex;
+    int8_t _menudir;
+    uint8_t _txChecksum;
+   
+    uint16_t _eeaddress = 0;
+    uint8_t _eedata = 0;
+    uint8_t _settingsMode = 0;
+
+};
+
+extern MSPClass MSP;
 
 #endif

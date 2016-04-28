@@ -1,6 +1,9 @@
 #include "platform.h"
 
-void ProcessSensors(void) {
+// TODO: arduino only, prom / macro?
+static uint8_t sensorpinarray[]={VOLTAGEPIN,VIDVOLTAGEPIN,AMPERAGEPIN,TEMPPIN,RSSIPIN};
+
+void SensorsClass::Process(void) {
   /*
     special note about filter: last row of array = averaged reading
   */ 
@@ -163,4 +166,26 @@ void ProcessSensors(void) {
   sensorindex++;                    
   if (sensorindex >= SENSORFILTERSIZE)              
     sensorindex = 0;                           
+}
+
+void SensorsClass::Force() {
+    MwSensorPresent |=GPSSENSOR;
+    MwSensorPresent |=BAROMETER;
+    MwSensorPresent |=MAGNETOMETER;
+    MwSensorPresent |=ACCELEROMETER;
+}
+
+bool SensorsClass::IsPresent(uint8_t sensorMask) {
+  return MwSensorPresent & sensorMask;
+}
+
+bool SensorsClass::IsActive(uint8_t sensorMask) {
+  return MwSensorActive & sensorMask;
+}
+
+void SensorsClass::SetPresent(uint16_t present) {
+  MwSensorPresent = present;
+}
+void SensorsClass::SetActive(uint32_t active) {
+  MwSensorActive = active;
 }

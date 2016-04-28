@@ -177,7 +177,7 @@ void MAX7456Class::DrawScreen()
           vsync_wait=0;
         }
         else{
-          serialMSPreceive(0); // Might as well do something whilst waiting :)
+          MSP.Receive(0); // Might as well do something whilst waiting :)
         }
       }
       SPDR = _screen[xx];

@@ -145,9 +145,9 @@ uint8_t ScreenClass::fieldIsVisible(uint8_t pos)
   case DISPLAY_NEVER:
     return 0;
   case DISPLAY_COND:
-    return !!(MwSensorActive&mode.osd_switch);
+    return !!((mode.osd_switch));
   case DISPLAY_MIN_OFF:
-    return !(MwSensorActive&mode.osd_switch);
+    return !((mode.osd_switch));
   }
 */
 }
@@ -179,7 +179,7 @@ void ScreenClass::DisplayMode(void)
   }  
   uint8_t xx = 0;
   
-  if((MwSensorActive&mode.camstab)&&Settings[S_GIMBAL]){
+  if(((mode.camstab))&&Settings[S_GIMBAL]){
     _screenBuffer[2]=0;
     _screenBuffer[0]=SYM_GIMBAL;
     _screenBuffer[1]=SYM_GIMBAL1;  
@@ -188,15 +188,15 @@ void ScreenClass::DisplayMode(void)
   }
   if(Settings[S_MODESENSOR]){
     xx = 0;
-    if(MwSensorActive&mode.stable||MwSensorActive&mode.horizon){
+    if((mode.stable)||Sensors.IsActive(mode.horizon)){
       _screenBuffer[xx] = SYM_ACC;
       xx++;
     }
-    if (MwSensorActive&mode.baro){
+    if ((mode.baro)){
       _screenBuffer[xx] = SYM_BAR;
       xx++;
     }
-    if (MwSensorActive&mode.mag){
+    if ((mode.mag)){
       _screenBuffer[xx] = SYM_MAG;
       xx++;
     }
@@ -207,12 +207,12 @@ void ScreenClass::DisplayMode(void)
   }  
 
   
-  if(MwSensorActive&mode.passthru){
+  if((mode.passthru)){
     _screenBuffer[2]=0;
     _screenBuffer[0]=SYM_PASS;
     _screenBuffer[1]=SYM_PASS1;
   }
-  else if(MwSensorActive&mode.gpshome){
+  else if((mode.gpshome)){
 #ifdef APINDICATOR
     _screenBuffer[0] = SYM_GHOME;
     _screenBuffer[1] = SYM_GHOME1;
@@ -241,30 +241,30 @@ void ScreenClass::DisplayMode(void)
     _screenBuffer[8]=0;
 #endif
   }
-  else if(MwSensorActive&mode.gpshold){
+  else if((mode.gpshold)){
     _screenBuffer[2]=0;
     _screenBuffer[0] = SYM_GHOLD;
     _screenBuffer[1] = SYM_GHOLD1;
   }
 #if defined MULTIWII_V24
-  else if(MwSensorActive&mode.gpsmission){
+  else if((mode.gpsmission)){
     itoa(GPS_waypoint_step,_screenBuffer+2,10);
     _screenBuffer[4]=0;
     _screenBuffer[0] = SYM_GMISSION;
     _screenBuffer[1] = SYM_GMISSION1;  
   }
-  else if(MwSensorActive&mode.gpsland){
+  else if((mode.gpsland)){
     _screenBuffer[2]=0;
     _screenBuffer[0] = SYM_GLAND;
     _screenBuffer[1] = SYM_GLAND1;
   }
 #endif //MULTIWII_V24    
-  else if(MwSensorActive&mode.stable){
+  else if((mode.stable)){
     _screenBuffer[2]=0;
     _screenBuffer[0]=SYM_STABLE;
     _screenBuffer[1]=SYM_STABLE1;
   }
-  else if(MwSensorActive&mode.horizon){
+  else if((mode.horizon)){
     _screenBuffer[2]=0;
     _screenBuffer[0]=SYM_HORIZON;
     _screenBuffer[1]=SYM_HORIZON1;
@@ -278,7 +278,7 @@ void ScreenClass::DisplayMode(void)
     #endif
     _screenBuffer[1]=SYM_ACRO1;
 #if defined ACROPLUS
-    if((MwSensorActive)&(mode.acroplus)){
+    if((mode.acroplus)){
       _screenBuffer[1]=SYM_PLUS;
     }
 #endif //ACROPLUS
@@ -287,7 +287,7 @@ void ScreenClass::DisplayMode(void)
     if(fieldIsVisible(ModePosition)){
       MAX7456.WriteString(_screenBuffer,getPosition(ModePosition));
     #ifdef AIRMODE
-      if((MwSensorActive)&(mode.air)){
+      if(Sensors.IsActive(mode.air)){
         _screenBuffer[0]=SYM_AIR;
         _screenBuffer[1]=SYM_AIR1;
         _screenBuffer[2]=0;
@@ -303,11 +303,11 @@ void ScreenClass::DisplayMode(void)
   if(!fieldIsVisible(APstatusPosition))
     return;
   uint8_t apactive=0;
-  if (MwSensorActive&mode.gpshome)
+  if ((mode.gpshome))
     apactive=6;
-  else if (MwSensorActive&mode.gpshold)
+  else if ((mode.gpshold))
     apactive=7;
-  else if (MwSensorActive&mode.gpsmission)
+  else if ((mode.gpsmission))
     apactive=8;
   else
     return;
@@ -554,7 +554,7 @@ void ScreenClass::DisplayVoltage(void)
     return;
 
 #ifdef DISP_LOW_VOLTS_WARNING
-  if (voltage<=voltageWarning&&!armedtimer)
+  if (voltage<=voltageWarning&&!timer.armed)
     MAX7456.WriteString_P(lowvolts_text, getPosition(motorArmedPosition));
 #endif
 
@@ -646,26 +646,26 @@ void ScreenClass::DisplayTime(void)
 
   uint32_t displaytime;
   if (armed) { 
-    if(((flyTime/60)>=Settings[S_FLYTIME_ALARM])&&(timer.Blink2hz))
+    if(((Stats.flyTime/60)>=Settings[S_FLYTIME_ALARM])&&(timer.Blink2hz))
       return;
 
-    if(flyTime < 3600) {
+    if(Stats.flyTime < 3600) {
       _screenBuffer[0] = SYM_FLY_M;
-      displaytime = flyTime;
+      displaytime = Stats.flyTime;
     }
     else {
       _screenBuffer[0] = SYM_FLY_H;
-      displaytime = flyTime/60;
+      displaytime = Stats.flyTime/60;
     }
   }
   else {
-    if(onTime < 3600) {
+    if(Stats.onTime < 3600) {
       _screenBuffer[0] = SYM_ON_M;
-      displaytime = onTime;
+      displaytime = Stats.onTime;
     }
     else {
       _screenBuffer[0] = SYM_ON_H;
-      displaytime = onTime/60;
+      displaytime = Stats.onTime/60;
     }
   }
   formatTime(displaytime, _screenBuffer+1, 0);
@@ -675,8 +675,8 @@ void ScreenClass::DisplayTime(void)
 
 void ScreenClass::DisplayAmperage(void)
 {
-  if(amperage > ampMAX)
-    ampMAX = amperage;
+  if(amperage > Stats._ampMAX)
+    Stats._ampMAX = amperage;
   if(!fieldIsVisible(amperagePosition))
     return;
   ItoaPadded(amperage, _screenBuffer, 5, 4);     // 999.9 ampere max!
@@ -847,9 +847,9 @@ void ScreenClass::DisplayGPSPosition(void)
   DisplayGPSAltitude();
   if(!fieldIsVisible(MwGPSLatPositionTop))
     return;
-  if (!MwSensorActive&mode.gpshome)
+  if (!(mode.gpshome))
     return;
-  if(Settings[S_COORDINATES]|(MwSensorActive&mode.gpshome)){
+  if(Settings[S_COORDINATES]|((mode.gpshome))){
       position = getPosition(MwGPSLatPositionTop);  
       _screenBuffer[0] = SYM_LAT;
       FormatGPSCoord(GPS_latitude,_screenBuffer+1,4,'N','S');
@@ -903,8 +903,8 @@ void ScreenClass::DisplayGPSSpeed(void)
     xx = GPS_speed * 0.036;           // From MWii cm/sec to Km/h
   else
     xx = GPS_speed * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
-  if(xx > speedMAX)
-    speedMAX = xx;
+  if(xx > Stats._speedMAX)
+    Stats._speedMAX = xx;
   if(!fieldIsVisible(speedPosition))
     return;
   if((xx>Settings[S_SPEED_ALARM])&&(timer.Blink2hz))
@@ -913,7 +913,7 @@ void ScreenClass::DisplayGPSSpeed(void)
   itoa(xx,_screenBuffer+1,10);
   MAX7456.WriteString(_screenBuffer,getPosition(speedPosition));
 #ifdef SHOW_MAX_SPEED
-  itoa(speedMAX,_screenBuffer+1,10);
+  itoa(Stats._speedMAX,_screenBuffer+1,10);
   MAX7456.WriteString(_screenBuffer,getPosition(speedPosition)+LINE);
 #endif //SHOW_MAX_SPEED
 }
@@ -955,8 +955,8 @@ void ScreenClass::DisplayAltitude(void)
   else
     altitude = MwAltitude/100;         // cm to mt
 
-  if(armed && allSec>5 && altitude > altitudeMAX)
-    altitudeMAX = altitude;
+  if(armed && allSec>5 && altitude > Stats._altitudeMAX)
+    Stats._altitudeMAX = altitude;
   if(!fieldIsVisible(MwAltitudePosition))
     return;
   if(!Settings[S_BAROALT])
@@ -967,7 +967,7 @@ void ScreenClass::DisplayAltitude(void)
   itoa(altitude,_screenBuffer+1,10);
   MAX7456.WriteString(_screenBuffer,getPosition(MwAltitudePosition));
 #ifdef SHOW_MAX_ALTITUDE
-  itoa(altitudeMAX,_screenBuffer+1,10);
+  itoa(Stats._altitudeMAX,_screenBuffer+1,10);
   MAX7456.WriteString(_screenBuffer,getPosition(MwAltitudePosition)+LINE);
 #endif //SHOW_MAX_ALTITUDE
 
@@ -1003,8 +1003,8 @@ void ScreenClass::DisplayDistanceToHome(void)
     dist = GPS_distanceToHome * 3.2808;           // mt to feet
   else
     dist = GPS_distanceToHome;                    // Mt
-  if(dist > distanceMAX)
-    distanceMAX = dist;
+  if(dist > Stats._distanceMAX)
+    Stats._distanceMAX = dist;
   if(!fieldIsVisible(GPS_distanceToHomePosition))
     return;
 
@@ -1237,7 +1237,7 @@ void ScreenClass::DisplayConfigScreen(void)
 #ifdef SHORTSUMMARY
     strcpy_P(_screenBuffer, (char*)pgm_read_word(&(menu_stats_item[0])));
     MAX7456.WriteString(_screenBuffer, ROLLT);
-    formatTime(flyingTime, _screenBuffer, 1);
+    formatTime(Stats._flyingTime, _screenBuffer, 1);
     MAX7456.WriteString(_screenBuffer,ROLLD-4);
 
 #else // SHORTSUMMARY
@@ -1245,12 +1245,12 @@ void ScreenClass::DisplayConfigScreen(void)
  //     MenuBuffer[0]=rcRate8;
       xx=amperagesum/360;
       itoa(xx,_screenBuffer,10);
-      MenuBuffer[1]=trip;
-      MenuBuffer[2]=distanceMAX;
-      MenuBuffer[3]=altitudeMAX;
-      MenuBuffer[4]=speedMAX;
+      MenuBuffer[1]=Stats._trip;
+      MenuBuffer[2]=Stats._distanceMAX;
+      MenuBuffer[3]=Stats._altitudeMAX;
+      MenuBuffer[4]=Stats._speedMAX;
       MenuBuffer[5]=xx;
-      MenuBuffer[6]=ampMAX/10;
+      MenuBuffer[6]=Stats._ampMAX/10;
 
     for(uint8_t X=0; X<=6; X++) {
       strcpy_P(_screenBuffer, (char*)pgm_read_word(&(menu_stats_item[X])));
@@ -1258,7 +1258,7 @@ void ScreenClass::DisplayConfigScreen(void)
       MAX7456.WriteString(itoa(MenuBuffer[X],_screenBuffer,10),110+(30*X));
     }
 
-    formatTime(flyingTime, _screenBuffer, 1);
+    formatTime(Stats._flyingTime, _screenBuffer, 1);
     MAX7456.WriteString(_screenBuffer,ROLLD-4);
 #endif
 #ifdef HAS_ALARMS
@@ -1343,7 +1343,7 @@ void ScreenClass::DisplayConfigScreen(void)
 #ifdef MENU_VOLTAGE
   if(configPage==MENU_VOLTAGE)
   {
-    ProcessSensors();
+    Sensors.Process();
     _screenBuffer[0]=SYM_MAIN_BATT;
     ItoaPadded(voltage, _screenBuffer+1, 4, 3);
     _screenBuffer[5] = SYM_VOLT;
@@ -1800,10 +1800,10 @@ void ScreenClass::DisplayArmed(void)
 
   if(!armed){
     message_no=1;
-    armedtimer=30;
+    timer.armed=30;
   } 
 
-  if(MwSensorPresent&GPSSENSOR){
+  if(Sensors.IsPresent(GPSSENSOR)){
     #ifdef SATACTIVECHECK
     if (GPS_numSat<MINSATFIX){ // below minimum preferred value
       message_no=5;
@@ -1822,9 +1822,9 @@ void ScreenClass::DisplayArmed(void)
     message_no=3;
   }
   #endif //MSPACTIVECHECK
-  if(armedtimer&&armed){
+  if(timer.armed&&armed){
     if (timer.Blink10hz){
-      armedtimer--;
+      timer.armed--;
       message_no=2;
     }
     else{
@@ -1863,15 +1863,14 @@ void ScreenClass::DisplayForcedCrosshair()
   MAX7456.WriteChar(SYM_AH_CENTER, position);
 }
 
-// TODO: $$$ this should be in EEPROM, and return a struct or something that gets assigned to _screenPosition
-void ScreenClass::ReadLayout(EEPROMClass* EEPROM)
+void ScreenClass::ReadLayout()
 {
   // $$$ screenlayout is global
   uint16_t EEPROMscreenoffset=EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(screenlayout*POSITIONS_SETTINGS*2);
   for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
     uint16_t pos = (en*2)+EEPROMscreenoffset;
-    _screenPosition[en] = EEPROM->read(pos);
-    uint16_t xx = (uint16_t)EEPROM->read(pos+1)<<8;
+    _screenPosition[en] = Eeprom.Read(pos);
+    uint16_t xx = (uint16_t)Eeprom.Read(pos+1)<<8;
     _screenPosition[en] = _screenPosition[en] + xx;
 
     if(Settings[S_VIDEOSIGNALTYPE]){
@@ -1898,3 +1897,41 @@ void ScreenClass::DisplayAlarms()
     }
 }
 #endif
+
+void ScreenClass::UpdateLayout()
+{
+  #if defined (OSD_SWITCH_RC)                   
+    uint8_t rcswitch_ch = Eeprom.Settings[S_RCWSWITCH_CH];
+    screenlayout=0;
+    if (Eeprom.Settings[S_RCWSWITCH]){
+      #ifdef OSD_SWITCH_RSSI
+        MwRcData[rcswitch_ch]=pwmRSSI;      
+      #endif
+      if (MwRcData[rcswitch_ch] > 1600){
+        screenlayout=1;
+      }
+      else if (MwRcData[rcswitch_ch] > 1400){
+        screenlayout=2;
+      }
+    } 
+    else{
+      if (Sensors.IsActive(mode.osd_switch)){
+        screenlayout=1;
+      }
+    }
+  #else 
+    if (Sensors.IsActive(mode.osd_switch))
+      screenlayout=1;
+    else  
+      screenlayout=0;
+  #endif
+  
+#if defined (DEVELOPMENT)
+      screenlayout=0;
+#endif
+
+  if (screenlayout!=oldscreenlayout){
+    ReadLayout();
+  }
+  oldscreenlayout=screenlayout;
+}

@@ -44,3 +44,7 @@ Continuing.
 ```
 
 etc.
+
+### Optimizations
+
+to disable optimizations in the avr-gcc compiler edit `tools/arduino-app-1.6.8/Arduino.app/Contents/Java/hardware/arduino/avr/platform.txt` or your `platform.txt` in the `arduino/avr` directory and change all instances of `-Os` to `-O0` change it back when you're done.

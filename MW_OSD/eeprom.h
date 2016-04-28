@@ -7,11 +7,19 @@ class EepromClass
 {
   public:
     EepromClass(EEPROMClass &EEPROM);
-    void write(void);
-    void read(void);
-    void check(void);
-    void clear(void);
+
+    uint8_t Read(int idx);
+    void Write(int idx, uint8_t val);
+
+    void WriteSettings(void);
+    void ReadSettings(void);
+    void CheckSettings(void);
+    void ClearSettings(void);
     EEPROMClass* getEEPROM();
+
+    // TODO: encapsulation
+    uint8_t  Settings[EEPROM_SETTINGS];
+    uint16_t Settings16[EEPROM16_SETTINGS];
   private:
     EEPROMClass* _EEPROM;
 };

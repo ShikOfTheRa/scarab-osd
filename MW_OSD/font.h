@@ -11,6 +11,7 @@ class FontClass
     uint8_t inFontMode();
   private:
     uint8_t _inFontMode;
+    uint8_t retransmitQueue;
 };
 
 extern FontClass Font;

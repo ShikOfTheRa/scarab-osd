@@ -47,13 +47,18 @@ __asm volatile ("nop");
 // everything else
 #include "platform.h"
 
-// "globals" go here, declared extern in their headers to ensure we only get 1 copy in SRAM
+// Singletons go here, declared extern in their headers to ensure we only get 1 copy in SRAM
 MAX7456Class MAX7456;
 ScreenClass Screen;
 EepromClass Eeprom(EEPROM);
+SensorsClass Sensors;
+MSPClass MSP(Serial);
 FontClass Font;
+StatsClass Stats;
 
-unsigned long previous_millis_low=0;
+// Global structs / vars go here
+
+unsigned long previous_millis_low = 0;
 unsigned long previous_millis_high =0;
 unsigned long previous_millis_sync =0;
 unsigned long previous_millis_rssi =0;
@@ -62,7 +67,7 @@ unsigned long previous_millis_rssi =0;
 uint8_t fontStatus=0;
 boolean ledstatus=HIGH;
 //uint8_t fontData[54];
-//uint8_t Settings[1];
+//uint8_t Eeprom.Settings[1];
 #endif
 
 
@@ -78,9 +83,6 @@ void setup()
 //---
   Serial.flush();
 
-  // tell the serial lib about our serial port
-  serialInit(Serial);
-
   pinMode(PWMRSSIPIN, INPUT);
   pinMode(RSSIPIN, INPUT);
   pinMode(LEDPIN,OUTPUT);
@@ -90,17 +92,17 @@ void setup()
 #endif
 
 #if defined EEPROM_CLEAR
-  Eeprom.clear();
+  Eeprom.ClearSettings();
 #endif  
-  Eeprom.check();
-  Eeprom.read();
+  Eeprom.CheckSettings();
+  Eeprom.ReadSettings();
   
   #ifndef STARTUPDELAY
     #define STARTUPDELAY 500
   #endif
   delay(STARTUPDELAY);
  
-  if (Settings[S_VREFERENCE])
+  if (Eeprom.Settings[S_VREFERENCE])
     analogReference(DEFAULT);
   else
     analogReference(INTERNAL);
@@ -111,12 +113,9 @@ void setup()
   #else
   #endif
   #if defined FORCESENSORS
-    MwSensorPresent |=GPSSENSOR;
-    MwSensorPresent |=BAROMETER;
-    MwSensorPresent |=MAGNETOMETER;
-    MwSensorPresent |=ACCELEROMETER;
+    Sensors.Force()
   #endif
-  setMspRequests();
+  MSP.SetRequests();
   
   #ifdef ALWAYSARMED
     armed=1;
@@ -152,13 +151,6 @@ void loop()
 }
 #else
 
-// ampAlarming returns true if the total consumed mAh is greater than
-// the configured alarm value (which is stored as 100s of amps)
-    bool ampAlarming() {
-    int used = pMeterSum > 0 ? pMeterSum : (amperagesum / 360);
-    return used > (Settings[S_AMPER_HOUR_ALARM]*100);
-}
-
 
 //------------------------------------------------------------------------
 void loop()
@@ -174,42 +166,8 @@ void loop()
     MwRcData[THROTTLESTICK] = pwmRSSI;
   #endif //THROTTLE_RSSI
 
-  // TODO: $$$ screenlayout global -> local
-  #if defined (OSD_SWITCH_RC)                   
-    uint8_t rcswitch_ch = Settings[S_RCWSWITCH_CH];
-    screenlayout=0;
-    if (Settings[S_RCWSWITCH]){
-      #ifdef OSD_SWITCH_RSSI
-        MwRcData[rcswitch_ch]=pwmRSSI;      
-      #endif
-      if (MwRcData[rcswitch_ch] > 1600){
-        screenlayout=1;
-      }
-      else if (MwRcData[rcswitch_ch] > 1400){
-        screenlayout=2;
-      }
-    } 
-    else{
-      if (MwSensorActive&mode.osd_switch){
-        screenlayout=1;
-      }
-    }
-  #else 
-    if (MwSensorActive&mode.osd_switch)
-      screenlayout=1;
-    else  
-      screenlayout=0;
-  #endif
-  
-#if defined (DEVELOPMENT)
-      screenlayout=0;
-#endif
+  Screen.UpdateLayout();
 
-  if (screenlayout!=oldscreenlayout){
-    Screen.ReadLayout(Eeprom.getEEPROM());
-  }
-  oldscreenlayout=screenlayout;
-    
   // Blink Basic Sanity Test Led at 0.5hz
   if(timer.tenthSec>5)
     digitalWrite(LEDPIN,HIGH);
@@ -224,7 +182,7 @@ void loop()
   {
     previous_millis_sync = previous_millis_sync+sync_speed_cycle;    
     if(!Font.inFontMode())
-      mspWriteRequest(MSP_ATTITUDE,0);
+      MSP.WriteRequest(MSP_ATTITUDE,0);
   }
 #endif //MSP_SPEED_HIGH
 
@@ -242,13 +200,12 @@ void loop()
     timer.tenthSec++;
     timer.halfSec++;
     timer.Blink10hz=!timer.Blink10hz;
-    calculateTrip();
-    if (Settings[S_AMPER_HOUR]) 
-      amperagesum += amperage;
+    Stats.CalculateTrip();
+    Stats.CalculateAmps();
     #ifndef GPSOSD 
       #ifdef MSP_SPEED_MED
         if(!Font.inFontMode())
-          mspWriteRequest(MSP_ATTITUDE,0);
+          MSP.WriteRequest(MSP_ATTITUDE,0);
       #endif //MSP_SPEED_MED  
     #endif //GPSOSD
    }  // End of slow Timed Service Routine (100ms loop)
@@ -256,100 +213,18 @@ void loop()
   if((currentMillis - previous_millis_high) >= hi_speed_cycle)  // 20 Hz or 100hz in MSP high mode
   {
     previous_millis_high = previous_millis_high+hi_speed_cycle;       
-      uint8_t MSPcmdsend=0;
-      if(queuedMSPRequests == 0)
-        queuedMSPRequests = modeMSPRequests;
-      uint32_t req = queuedMSPRequests & -queuedMSPRequests;
-      queuedMSPRequests &= ~req;
-      switch(req) {
-      case REQ_MSP_IDENT:
-       MSPcmdsend = MSP_IDENT;
-        break;
-      case REQ_MSP_STATUS:
-        MSPcmdsend = MSP_STATUS;
-        break;
-      case REQ_MSP_RC:
-        MSPcmdsend = MSP_RC;
-        break;
-      case REQ_MSP_RAW_GPS:
-        MSPcmdsend = MSP_RAW_GPS;
-        break;
-      case REQ_MSP_COMP_GPS:
-        MSPcmdsend = MSP_COMP_GPS;
-        break;
-    #ifdef MSP_SPEED_LOW
-      case REQ_MSP_ATTITUDE:
-        MSPcmdsend = MSP_ATTITUDE;
-        break;
-    #endif //MSP_SPEED_LOW  
-      case REQ_MSP_ALTITUDE:
-        MSPcmdsend = MSP_ALTITUDE;
-        break;
-      case REQ_MSP_ANALOG:
-        MSPcmdsend = MSP_ANALOG;
-        break;
-      case REQ_MSP_MISC:
-        MSPcmdsend = MSP_MISC;
-        break;
-      case REQ_MSP_RC_TUNING:
-        MSPcmdsend = MSP_RC_TUNING;
-        break;
-      case REQ_MSP_PID_CONTROLLER:
-        MSPcmdsend = MSP_PID_CONTROLLER;
-        break;
-      case REQ_MSP_PID:
-        MSPcmdsend = MSP_PID;
-        break;
-      case REQ_MSP_LOOP_TIME:
-        MSPcmdsend = MSP_LOOP_TIME;
-        break;        
-      case REQ_MSP_BOX:
-#ifdef BOXNAMES
-        MSPcmdsend = MSP_BOXNAMES;
-#else
-        MSPcmdsend = MSP_BOXIDS;
-#endif
-         break;
-      case REQ_MSP_FONT:
-         MSPcmdsend = MSP_OSD;
-         break;
-#if defined DEBUGMW
-      case REQ_MSP_DEBUG:
-         MSPcmdsend = MSP_DEBUG;
-         break;
-#endif
-#if defined SPORT
-      case REQ_MSP_CELLS:
-         MSPcmdsend = MSP_CELLS;
-         break;
-#endif
-#ifdef MULTIWII_V24
-      case REQ_MSP_NAV_STATUS:
-           if(MwSensorActive&mode.gpsmission)
-         MSPcmdsend = MSP_NAV_STATUS;
-      break;
-#endif
-#ifdef CORRECT_MSP_BF1
-      case REQ_MSP_CONFIG:
-         MSPcmdsend = MSP_CONFIG;
-      break;
-#endif
-#ifdef HAS_ALARMS
-      case REQ_MSP_ALARMS:
-          MSPcmdsend = MSP_ALARMS;
-      break;
-#endif
-    }
+
+    MSP.BuildRequests();
     
     if(!Font.inFontMode()){
       #ifndef GPSOSD
-      mspWriteRequest(MSPcmdsend, 0);      
+      MSP.SendRequests();
       #endif //GPSOSD
       MAX7456.DrawScreen();
 
     }
 
-    ProcessSensors();       // using analogue sensors
+    Sensors.Process();       // using analogue sensors
 
 
 #ifndef INTRO_DELAY 
@@ -357,23 +232,23 @@ void loop()
 #endif
     if( allSec < INTRO_DELAY ){
       Screen.DisplayIntro();
-      timer.lastCallSign=onTime-CALLSIGNINTERVAL;
+      timer.lastCallSign=Stats.onTime-CALLSIGNINTERVAL;
     }  
     else
     {
       if(armed){
         previousarmedstatus=1;
         if (configMode==1)
-          configExit();
+          MSP.ConfigExit();
       }
 #ifndef HIDESUMMARY
       if(previousarmedstatus && !armed){
-        armedtimer=20;
+        timer.armed=20;
         configPage=0;
         ROW=10;
         COL=1;
         configMode=1;
-        setMspRequests();
+        MSP.SetRequests();
       }
 #else
       if(previousarmedstatus && !armed){
@@ -387,24 +262,24 @@ void loop()
       }
       else
       {
-        setMspRequests();
+        MSP.SetRequests();
 #if defined USE_AIRSPEED_SENSOR
         useairspeed();
 #endif //USE_AIRSPEED_SENSOR
-        if(MwSensorPresent&ACCELEROMETER)
+        if(Sensors.IsPresent(ACCELEROMETER))
            Screen.DisplayHorizon(MwAngle[0],MwAngle[1]);
 #if defined FORCECROSSHAIR
         Screen.DisplayForcedCrosshair();
 #endif //FORCECROSSHAIR
-        if(Settings[S_DISPLAYVOLTAGE])
+        if(Eeprom.Settings[S_DISPLAYVOLTAGE])
           Screen.DisplayVoltage();
-        if (Settings[S_VIDVOLTAGE])
+        if (Eeprom.Settings[S_VIDVOLTAGE])
           Screen.DisplayVidVoltage();
-        if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz)))
+        if(Eeprom.Settings[S_DISPLAYRSSI]&&((rssi>Eeprom.Settings[S_RSSI_ALARM])||(timer.Blink2hz)))
           Screen.DisplayRSSI();
-        if(Settings[S_AMPERAGE]&&(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz)))
+        if(Eeprom.Settings[S_AMPERAGE]&&(((amperage/10)<Eeprom.Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz)))
           Screen.DisplayAmperage();
-        if(Settings[S_AMPER_HOUR] && ((!ampAlarming()) || timer.Blink2hz))
+        if(Eeprom.Settings[S_AMPER_HOUR] && ((!Stats.IsAmpAlarming()) || timer.Blink2hz))
           Screen.DisplaypMeterSum();
         Screen.DisplayTime();
 #if defined DISPLAYWATTS
@@ -412,35 +287,35 @@ void loop()
 #endif //DISPLAYWATTS
 
 #ifdef TEMPSENSOR
-        if(((temperature<Settings[TEMPERATUREMAX])||(timer.Blink2hz))) Screen.DisplayTemperature();
+        if(((temperature<Eeprom.Settings[TEMPERATUREMAX])||(timer.Blink2hz))) Screen.DisplayTemperature();
 #endif
         Screen.DisplayArmed();
-        if (Settings[S_THROTTLEPOSITION])
+        if (Eeprom.Settings[S_THROTTLEPOSITION])
           Screen.DisplayCurrentThrottle();
 #ifdef CALLSIGNALWAYS
-        if(Settings[S_DISPLAY_CS]) Screen.DisplayCallsign(getPosition(callSignPosition)); 
+        if(Eeprom.Settings[S_DISPLAY_CS]) Screen.DisplayCallsign(getPosition(callSignPosition)); 
 #elif  FREETEXTLLIGHTS
-        if (MwSensorActive&mode.llights) Screen.DisplayCallsign(getPosition(callSignPosition)); 
+        if (Sensors.IsActive(mode.llights)) Screen.DisplayCallsign(getPosition(callSignPosition)); 
 #elif  FREETEXTGIMBAL
-        if (MwSensorActive&mode.camstab) DisplayCallsign(getPosition(callSignPosition)); 
+        if (Sensors.IsActive(mode.camstab)) DisplayCallsign(getPosition(callSignPosition)); 
 #else 
-        if ( (onTime > (timer.lastCallSign+CALLSIGNINTERVAL)))
+        if ( (Stats.onTime > (timer.lastCallSign+CALLSIGNINTERVAL)))
        {
            // Displays 4 sec every 5min (no blink during flight)
-        if ( onTime > (timer.lastCallSign+CALLSIGNINTERVAL+CALLSIGNDURATION)) timer.lastCallSign = onTime; 
-        if(Settings[S_DISPLAY_CS]) Screen.DisplayCallsign();      
+        if ( Stats.onTime > (timer.lastCallSign+CALLSIGNINTERVAL+CALLSIGNDURATION)) timer.lastCallSign = Stats.onTime; 
+        if(Eeprom.Settings[S_DISPLAY_CS]) Screen.DisplayCallsign();      
        }
 #endif
-        if(MwSensorPresent&MAGNETOMETER) {
+        if(Sensors.IsPresent(MAGNETOMETER)) {
           Screen.DisplayHeadingGraph();
           Screen.DisplayHeading();
         }
-        if(MwSensorPresent&BAROMETER) {
+        if(Sensors.IsPresent(BAROMETER)) {
           Screen.DisplayAltitude();
           Screen.DisplayClimbRate();
         }
-        if(MwSensorPresent&GPSSENSOR) 
-        if(Settings[S_DISPLAYGPS]){
+        if(Sensors.IsPresent(GPSSENSOR)) 
+        if(Eeprom.Settings[S_DISPLAYGPS]){
           Screen.DisplayNumberOfSat();
           Screen.DisplayDirectionToHome();
           Screen.DisplayDistanceToHome();
@@ -463,10 +338,12 @@ void loop()
 #ifdef I2CERROR
         Screen.DisplayI2CError();
 #endif        
-#ifdef SPORT        
-        if(MwSensorPresent)
-          Screen.DisplayCells();
-#endif
+// TODO: $$$ bug? what sensor?
+//   should be Sensors.Active(some_sensor)
+//#ifdef SPORT        
+//        if(MwSensorPresent)
+//          Screen.DisplayCells();
+//#endif
 #ifdef HAS_ALARMS
         Screen.DisplayAlarms();
 #endif
@@ -483,7 +360,7 @@ void loop()
   {
     timer.seconds+=1000;
     timer.tenthSec=0;
-    onTime++;
+    Stats.onTime++;
     #ifdef MAXSTALLDETECT
       if (!Font.inFontMode())
         MAX7456.Stalldetect();
@@ -500,33 +377,33 @@ void loop()
       timer.MSP_active--;
     }  
     if(!armed) {
-//      setMspRequests();
+//      MSP.SetRequests();
 #ifndef MAPMODENORTH
       armedangle=MwHeading;
 #endif
     }
     else {
-      flyTime++;
-      flyingTime++;
+      Stats.flyTime++;
+      Stats._flyingTime++;
       configMode=0;
-      setMspRequests();
+      MSP.SetRequests();
     }
-    allSec++;
+    timer.allSec++;
 /*
     if((timer.accCalibrationTimer==1)&&(configMode)) {
-      mspWriteRequest(MSP_ACC_CALIBRATION,0);
+      MSP.WriteRequest(MSP_ACC_CALIBRATION,0);
       timer.accCalibrationTimer=0;
     }
 */    
     if((timer.magCalibrationTimer==1)&&(configMode)) {
-      mspWriteRequest(MSP_MAG_CALIBRATION,0);
+      MSP.WriteRequest(MSP_MAG_CALIBRATION,0);
       timer.magCalibrationTimer=0;
     }
     if(timer.magCalibrationTimer>0) timer.magCalibrationTimer--;
     if(timer.rssiTimer>0) timer.rssiTimer--;
   }
-//  setMspRequests();
-  serialMSPreceive(1);
+//  MSP.SetRequests();
+  MSP.Receive(1);
 }  // End of main loop
 #endif //main loop
 
@@ -537,18 +414,6 @@ void resetFunc(void)
 {
   asm volatile ("  jmp 0"); 
 } 
-
-void calculateTrip(void)
-{
-  static float tripSum = 0; 
-  if(GPS_fix && armed && (GPS_speed>0)) {
-    if(Settings[S_UNITSYSTEM])
-      tripSum += GPS_speed *0.0032808;     //  100/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
-    else
-      tripSum += GPS_speed *0.0010;        //  100/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)      
-  }
-  trip = (uint32_t) tripSum;
-}
 
 void gpsdistancefix(void){
   int8_t speedband;
@@ -604,6 +469,7 @@ void initRSSIint() { // enable ONLY RSSI pin A3 for interrupt (bit 3 on port C)
 }
 
 
+// PWM RSSI 
 ISR(PCINT1_vect) { //
   static uint16_t PulseStart;  
   static uint8_t PulseCounter;  
@@ -673,17 +539,3 @@ ISR(PCINT1_vect) { //
   }
 }
 #endif //PPMOSDCONTROL
-
-#if defined USE_AIRSPEED_SENSOR
-void useairspeed(){
-  float airspeed_cal = AIRSPEED_CAL; //AIRSPEED_CAL; // move to GUI or config
-  uint16_t airspeedsensor = sensorfilter[3][SENSORFILTERSIZE]>>3;
-  if (airspeedsensor>(AIRSPEED_ZERO)){
-    airspeedsensor = airspeedsensor-AIRSPEED_ZERO;
-  }
-  else {
-    airspeedsensor = 0;
-  }
-  GPS_speed = 27.7777 * sqrt(airspeedsensor * airspeed_cal); // Need in cm/s for this
-}
-#endif //USE_AIRSPEED_SENSOR 

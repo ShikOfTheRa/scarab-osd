@@ -4,40 +4,40 @@
 // we're going to port this to other platforms, woohoo!
 // default to ARDUINO
 #ifndef STM32
+
+// arduino studio defines this by default
+#ifndef ARDUINO
 #define ARDUINO
+#endif
+
 #endif
 
 // TODO: review where this should go
 #define MWVERS "MW-OSD - R1.6"
 #define MWOSDVER 12      // for eeprom layout verification    was 9  
 
-// so we can skip the PROGMEM keyword on platforms that dont support it
-// empty by default
-#define MAYBE_PROGMEM
-
 // arduino specific
 #ifdef ARDUINO
 #include <avr/pgmspace.h>
 #include <EEPROM.h>
 #include "config.h"
+#include "def.h"
 #include "types.h"
-#include "serial.h"
+#include "settings.h"
 #include "eeprom.h"
 #include "spi.h"
 #include "font.h"
-#include "gps.h"
+// TODO: $$$ gps
+//#include "gps.h"
 #include "hardware.h"
-#include "def.h"
 #include "globals.h"
 #include "math.h"
-
-// we'll use the PROGMEM keyword
-#define MAYBE_PROGMEM PROGMEM
 #endif
 
 // sensor platform specific
 #include "sensors.h"
 #include "msp.h"
+#include "stats.h"
 
 // shared libs
 #include "max7456.h"

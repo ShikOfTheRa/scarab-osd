@@ -4,7 +4,15 @@ EepromClass::EepromClass(EEPROMClass &EEPROM) {
   _EEPROM = &EEPROM;
 }
 
-void EepromClass::write(void) // OSD will only change 8 bit values. GUI changes directly
+uint8_t EepromClass::Read(int idx) {
+  return _EEPROM->read(idx);
+}
+
+void EepromClass::Write(int idx, uint8_t val) {
+  _EEPROM->write(idx, val);
+}
+
+void EepromClass::WriteSettings(void) // OSD will only change 8 bit values. GUI changes directly
 {
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
     _EEPROM->write(en,Settings[en]);
@@ -18,7 +26,7 @@ void EepromClass::write(void) // OSD will only change 8 bit values. GUI changes 
 }
 
 
-void EepromClass::read(void)
+void EepromClass::ReadSettings(void)
 {
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
      Settings[en] = _EEPROM->read(en);
@@ -34,11 +42,10 @@ void EepromClass::read(void)
      Settings16[en] = Settings16[en]+(xx<<8);
   }
 
-  // TODO: $$$ move this function back to EepromClass, return a settings struct
-  Screen.ReadLayout(_EEPROM);
+  Screen.ReadLayout();
 }
 
-void EepromClass::check(void)
+void EepromClass::CheckSettings(void)
 {
   uint8_t EEPROM_Loaded = _EEPROM->read(0);
   if (EEPROM_Loaded!=MWOSDVER){
@@ -74,15 +81,9 @@ void EepromClass::check(void)
   }
 }
 
-void EepromClass::clear()
+void EepromClass::ClearSettings()
 {
   for (int i = 0; i < 512; i++) {
     _EEPROM->write(i, 0);
   }
-}
-
-// TODO: $$$ encapsulation
-EEPROMClass* EepromClass::getEEPROM()
-{
-  return _EEPROM;
 }

@@ -39,11 +39,12 @@ class ScreenClass
     void DisplayCells(void);
     void DisplayForcedCrosshair(void);
 
-    void ReadLayout(EEPROMClass* EEPROM);
+    void ReadLayout(void);
 
     void MapMode(void);
 
     void MenuconfigOnoff(uint16_t pos, uint8_t setting);
+    void UpdateLayout(void);
   private:
     uint8_t findNull(void);
     uint16_t getPosition(uint8_t pos);
@@ -51,6 +52,9 @@ class ScreenClass
 
     char _screenBuffer[20]; 
     uint16_t _screenPosition[POSITIONS_SETTINGS];
+
+    uint8_t screenlayout=0;
+    uint8_t oldscreenlayout=0;
 };
 
 extern ScreenClass Screen;
