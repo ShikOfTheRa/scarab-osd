@@ -1158,6 +1158,16 @@ const PROGMEM char * const menu_on_off[] =
 #define MAVLINK_MSG_ID_SYS_STATUS 1
 #define MAVLINK_MSG_ID_SYS_STATUS_MAGIC 124
 #define MAVLINK_MSG_ID_SYS_STATUS_LEN 31  
+#define MAVLINK_MSG_ID_REQUEST_DATA_STREAM 66
+#define MAVLINK_MSG_ID_REQUEST_DATA_STREAM_MAGIC 148
+#define MAVLINK_MSG_ID_REQUEST_DATA_STREAM_LEN 9
+
+#define MAV_DATA_STREAM_RAW_SENSORS 1
+#define MAV_DATA_STREAM_EXTENDED_STATUS 2
+#define MAV_DATA_STREAM_RC_CHANNELS 3
+#define MAV_DATA_STREAM_POSITION 6
+#define MAV_DATA_STREAM_EXTRA1 10
+#define MAV_DATA_STREAM_EXTRA2 11
 #define  LAT  0
 #define  LON  1
 
@@ -1230,15 +1240,21 @@ const PROGMEM char * const mav_mode_index[] =
 };
 #endif //FIXEDWING
 
-uint8_t  mav_message_length;
-uint8_t  mav_message_cmd;
-uint16_t mav_serial_checksum;
+// Vars
+struct {
+  uint8_t  message_cmd;
+  uint8_t  message_length;
+  uint8_t  message_sysid;
+  uint8_t  mode;
+  uint8_t  sequence;
+  uint8_t  message_component;
+  uint16_t serial_checksum;
+  uint16_t tx_checksum;
+  float    GPS_scaleLonDown;
+}mw_mav;
 int32_t  GPS_home[2];
-int16_t  GPS_altitude_home;                            
 uint8_t  GPS_fix_HOME;
-float    GPS_scaleLonDown;
-uint8_t  apm_mav_mode;
-
+int16_t  GPS_altitude_home;                            
 #endif //MAVLINK
 
 

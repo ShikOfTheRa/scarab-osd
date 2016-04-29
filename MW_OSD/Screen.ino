@@ -205,7 +205,7 @@ void displayMode(void)
   }  
 
 #ifdef MAVLINK // override MWOSD mode icons
-    strcpy_P(screenBuffer, (char*)pgm_read_word(&(mav_mode_index[apm_mav_mode])));
+    strcpy_P(screenBuffer, (char*)pgm_read_word(&(mav_mode_index[mw_mav.mode])));
 #else  
   if(MwSensorActive&mode.passthru){
     screenBuffer[2]=0;
