@@ -934,6 +934,8 @@ CreateItem(GetSetting("S_AMPERAGE_ALARM"),  5,7*17, G_Amperage);
 CreateItem(GetSetting("S_VIDVOLTAGE"),  5,0, G_VVoltage);
 CreateItem(GetSetting("S_VIDDIVIDERRATIO"),  5,1*17, G_VVoltage);
 CreateItem(GetSetting("S_VIDVOLTAGEMIN"), 5,2*17, G_VVoltage);
+  confItem[GetSetting("S_VIDVOLTAGEMIN")].setDecimalPrecision(1);
+  confItem[GetSetting("S_VIDVOLTAGEMIN")].setMultiplier(0.1);
 
 //  Temperature  --------------------------------------------------------------------
 //CreateItem(GetSetting("S_DISPLAYTEMPERATURE"),  5,0, G_Alarms);

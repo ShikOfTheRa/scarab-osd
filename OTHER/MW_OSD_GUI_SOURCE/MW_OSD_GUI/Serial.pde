@@ -207,6 +207,7 @@ void SetConfigItem(int index, int value) {
     return;
 
   if(index == GetSetting("S_VOLTAGEMIN"))confItem[index].setValue(float(value)/10);//preserve decimal
+  else if(index == GetSetting("S_VIDVOLTAGEMIN"))confItem[index].setValue(float(value)/10);//preserve decimal
   else if(index == GetSetting("S_GPSTZ"))confItem[index].setValue(float(value)/10);//preserve decimal, maybe can go elsewhere - haydent
   else confItem[index].setValue(value);
 //  if (index == CONFIGITEMS-1)
@@ -1166,6 +1167,9 @@ void MWData_Com() {
 //    confItem[GetSetting("S_AMPMAXH")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())>>8);
     for(int i = 0; i < CONFIGITEMS; i++){
       if(i == GetSetting("S_VOLTAGEMIN")){
+        EElookuptable[i]=int(confItem[i].value()*10);
+      }
+      else if(i == GetSetting("S_VIDVOLTAGEMIN")){
         EElookuptable[i]=int(confItem[i].value()*10);
       }
       else if(i == GetSetting("S_GPSTZ")){
