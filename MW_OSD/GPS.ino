@@ -179,21 +179,20 @@ void GPS_updateGGA(){
 
 
 void GPS_NewData() {
-//  GPS_SerialInitialised=0;
-//  if (GPS_active>0)
-//    GPS_active--;
-  if (GPS_fix && (GPS_numSat >= MINSATFIX)) {
-    if (GPS_fix_HOME == 0){
-      GPS_reset_home_position();
-      GPS_fix_HOME=1;
-      if (!GPS_fix_HOME) {
-        GPS_distanceToHome = 0;
-        GPS_directionToHome = 0;
-        GPS_altitude = 0 ;
-        MwAltitude = 0 ;
-      }  
-    }
+  #define GPSHOMEFIX 40
+  static uint8_t GPS_fix_HOME_validation=GPSHOMEFIX;
 
+  if (GPS_fix && (GPS_numSat >= MINSATFIX)) {
+    if (GPS_fix_HOME_validation>0){
+      GPS_fix_HOME_validation--;
+      GPS_numSat=1;
+    }
+    else{
+      if (GPS_fix_HOME == 0){
+        GPS_reset_home_position();
+        GPS_fix_HOME=1;
+      }
+      else{
     //calculate distance. bearings etc
     uint32_t dist;
     int32_t  dir;
@@ -234,7 +233,19 @@ void GPS_NewData() {
         GPS_home_timer=millis();
       }    
     }
+      }
+    }
   }
+  else{
+    GPS_fix_HOME_validation=GPSHOMEFIX;
+/*
+      GPS_distanceToHome = 0;
+      GPS_directionToHome = 0;
+      GPS_altitude = 0;
+      MwAltitude = 0;
+*/  
+  }
+
 }
 
 

@@ -29,7 +29,7 @@
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
 //#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
-//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
+#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
 //#define BETAFLIGHT                // Uncomment this if you are using BETAFLIGHT (same as CLEANFLIGHT t time of this MWOSD release)
 //#define HARAKIRI                  // Uncomment this if you are using HARAKIRI (for BOXNAMES compatibility)
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
@@ -44,7 +44,7 @@
 //#define BASEFLIGHT20150327        // Uncomment this if you are using BASEFLIGHT up to and including version Stable 2015.03.27
 //#define CLEANFLIGHT172            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.7.2
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1 
-#define APM                       // Uncomment this if you are using APM compatible FC (Requires testing)
+//#define APM                       // Uncomment this if you are using APM compatible FC (Requires testing)
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
@@ -71,9 +71,9 @@
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
 
 /********************       GPS OSD settings      *********************/
+#define GPSHOMEFIX 50               // Number of consecutive valid fixes before home will be set. 50@ 10hz = 5 seconds of valid fixes.
 //#define OSD_SWITCH_RSSI           // Enables 3 way screen switch using a TX channel via a RX channel connected to the OSD RSSI pin. Typically used for GPSOSD.
 //#define PWMTHROTTLE               // Enables throttle feature, virtual current sensor using RC throttle connected into OSD RSSI pin. Calibrate throttle using GUI RSSI cal functions 
-
 //#define PPMOSDCONTROL             // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD RSSI pin. Requires TX type to be set below. 
 //#define SERIAL_SUM_PPM_RHF        // Enable for Robe/Hitec/Futaba
 //#define SERIAL_SUM_PPM_GS         // Enable for Graupner/Spektrum    
@@ -97,7 +97,7 @@
  
 
 /********************       GPS settings      *********************/
-#define MINSATFIX 5                 // Number of sats required for a fix. 5 minimum. More = better
+#define MINSATFIX 5                 // Number of sats required for a fix. 5 minimum. More = better.
 
 
 /********************       WARNING/STATUS settings      *********************/
