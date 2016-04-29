@@ -31,13 +31,13 @@
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
 //#define BETAFLIGHT                // Uncomment this if you are using BETAFLIGHT (same as CLEANFLIGHT t time of this MWOSD release)
-//#define HARIKIRI                  // Uncomment this if you are using HARIKIRI (for BOXNAMES compatibility)
+//#define HARAKIRI                  // Uncomment this if you are using HARAKIRI (for BOXNAMES compatibility)
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
 //#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
 //#define GPSOSD_MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
-//#define NOCONTROLLER              // Uncomment this if you ahave nothing connected to the serial port - no controller or GPS module
+//#define NOCONTROLLER              // Uncomment this if you have nothing connected to the serial port - no controller or GPS module
 // old releases supported...
 //#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V21              // Uncomment this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)

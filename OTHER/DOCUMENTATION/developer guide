@@ -1,0 +1,34 @@
+MW OSD developer notes:
+
+Key principle is to maintain a codebase that anyone who is willing to learn a little to be able to tweak themselves or follow the code. To that end, it must complie in Arduino without the need of installing fully blown development environments, toolchains etc. etc. 
+
+Arduino version:
+MWOSD must be able to compile with Arduino 1.0.6.
+Newer releases ususually provide smaller optimised code. Consider a benefit.<br>
+
+Processing version:
+MWOSD GUI must be able to compile with Processing 2.0.3.
+
+Testing
+Please ensure code compiles with the following as minimum:
+MULTIWII
+CLEANFLIGHT
+GPSOSD
+Please ensure there 30 bytes free stack memeory after running with a flight controller that supports GPS. use MEMCHECK and debug3 to verify...
+
+
+
+Code style:
+It is what it is. 
+MWOSD is a mix of styles and etiquette.
+It has been built by many talented and also less talented but very enthusastic individuals.
+It is what it is far from ideal.
+Until such time that it is cleansed:
+
+Anything goes, but with the exception of....
+Terse programming style. In my experince... wankers who are not team players and think they are better than others, are not open to change, keep knowledge to themselves and hove no realisation of how others perceive them or their impact on the wider team. Not someone you would invite to a party :). Many do get to that stage and experiment with it. Thats good and cool. 
+Practically it can make it difficult for humans who are code less frequently. MWOSD reliies on thso guys a lot.
+Personally I like it - but only because it looks cool....
+
+For preference, this is preferred coding style. It is not mandatory at this stage.
+https://github.com/multiwii/baseflight/wiki/CodingStyle

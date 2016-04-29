@@ -54,7 +54,7 @@
   #define BASEFLIGHT20150627
 #endif
 
-#ifdef HARIKIRI
+#ifdef HARAKIRI
   #define BOXNAMES
   #define MULTIWII_V24
 #endif
