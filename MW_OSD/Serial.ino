@@ -388,8 +388,6 @@ void serialMSPCheck()
   }
 #endif /* HAS_ALARMS */
 
-#define BOXNAMES 1
-
 #ifdef BOXNAMES
   if(cmdMSP==MSP_BOXNAMES) {
     flags.box=1;
