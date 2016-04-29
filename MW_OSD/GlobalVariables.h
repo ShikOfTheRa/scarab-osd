@@ -1240,18 +1240,21 @@ const PROGMEM char * const mav_mode_index[] =
 };
 #endif //FIXEDWING
 
-uint8_t  mav_message_length;
-uint8_t  mav_message_cmd;
-uint16_t mav_serial_checksum;
+// Vars
+struct {
+  uint8_t  message_cmd;
+  uint8_t  message_length;
+  uint8_t  message_sysid;
+  uint8_t  mode;
+  uint8_t  sequence;
+  uint8_t  message_component;
+  uint16_t serial_checksum;
+  uint16_t tx_checksum;
+  float    GPS_scaleLonDown;
+}mw_mav;
 int32_t  GPS_home[2];
-int16_t  GPS_altitude_home;                            
 uint8_t  GPS_fix_HOME;
-float    GPS_scaleLonDown;
-uint8_t  apm_mav_mode;
-uint8_t  mav_message_sysid=0;
-uint8_t  mav_message_component=0;
-uint8_t  mav_sequence;
-uint16_t mav_tx_checksum;
+int16_t  GPS_altitude_home;                            
 #endif //MAVLINK
 
 
