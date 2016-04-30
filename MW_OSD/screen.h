@@ -3,6 +3,52 @@
 
 #include "symbols.h"
 
+enum Positions {
+  GPS_numSatPosition,
+  GPS_directionToHomePosition,
+  GPS_distanceToHomePosition,
+  speedPosition,
+  GPS_angleToHomePosition,
+  MwGPSAltPosition,
+  sensorPosition,
+  MwHeadingPosition,
+  MwHeadingGraphPosition,
+  MwAltitudePosition,
+  MwClimbRatePosition,
+  CurrentThrottlePosition,
+  flyTimePosition,
+  onTimePosition,
+  motorArmedPosition,
+  pitchAnglePosition,
+  rollAnglePosition,
+  MwGPSLatPositionTop,
+  MwGPSLonPositionTop,
+  rssiPosition,
+  temperaturePosition,
+  voltagePosition,
+  vidvoltagePosition,
+  amperagePosition,
+  pMeterSumPosition,
+  horizonPosition,
+  SideBarPosition,
+  SideBarScrollPosition,
+  SideBarHeightPosition,
+  SideBarWidthPosition,
+  gimbalPosition,
+  GPS_timePosition,
+  SportPosition,
+  ModePosition,
+  MapModePosition,
+  MapCenterPosition,
+  APstatusPosition,
+  wattPosition,
+  glidescopePosition,
+  callSignPosition,
+  debugPosition,
+
+  POSITIONS_SETTINGS
+};
+
 class ScreenClass
 {
   public:
@@ -45,6 +91,19 @@ class ScreenClass
 
     void MenuconfigOnoff(uint16_t pos, uint8_t setting);
     void UpdateLayout(void);
+
+    // Run when a loadfont mode is # defined
+    void LoadFontLoop(void);
+
+    // Config status and cursor location
+    uint8_t ROW=10;
+    uint8_t COL=3;
+    int8_t configPage=1;
+    int8_t previousconfigPage=1;
+
+    // int32_t ?...
+    uint16_t debugBuffer[4];
+
   private:
     uint8_t findNull(void);
     uint16_t getPosition(uint8_t pos);
@@ -55,6 +114,18 @@ class ScreenClass
 
     uint8_t screenlayout=0;
     uint8_t oldscreenlayout=0;
+    uint8_t oldROW=0;
+
+    // Battery
+    uint8_t _cells=0;
+
+    // For decoration
+    uint8_t SYM_AH_DECORATION_LEFT = 0x10;
+    uint8_t SYM_AH_DECORATION_RIGHT = 0x10;
+    //static uint8_t sym_sidebartopspeed = SYM_BLANK;
+    //static uint8_t sym_sidebarbottomspeed = SYM_BLANK;
+    //static uint8_t sym_sidebartopalt = SYM_BLANK;
+    //static uint8_t sym_sidebarbottomalt = SYM_BLANK;
 };
 
 extern ScreenClass Screen;

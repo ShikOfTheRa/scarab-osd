@@ -48,13 +48,15 @@ __asm volatile ("nop");
 #include "platform.h"
 
 // Singletons go here, declared extern in their headers to ensure we only get 1 copy in SRAM
-MAX7456Class MAX7456;
+// Class singletons named with a capitol name to distinguish them from struct instance names in globals.h, which are all lower case
+MAX7456Class Max;
 ScreenClass Screen;
 EepromClass Eeprom(EEPROM);
 SensorsClass Sensors;
-MSPClass MSP(Serial);
+MSPClass Msp(Serial);
 FontClass Font;
 StatsClass Stats;
+GPSClass Gps;
 
 // Global structs / vars go here
 
@@ -64,7 +66,6 @@ unsigned long previous_millis_sync =0;
 unsigned long previous_millis_rssi =0;
 
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
-uint8_t fontStatus=0;
 boolean ledstatus=HIGH;
 //uint8_t fontData[54];
 //uint8_t Eeprom.Settings[1];
@@ -107,18 +108,18 @@ void setup()
   else
     analogReference(INTERNAL);
 
-  MAX7456.Setup();
+  Max.Setup();
   #if defined GPSOSD
-    GPS_SerialInit();
+    Gps.SerialInit();
   #else
   #endif
   #if defined FORCESENSORS
     Sensors.Force()
   #endif
-  MSP.SetRequests();
+  Msp.SetRequests();
   
   #ifdef ALWAYSARMED
-    armed=1;
+    aircraft.armed=1;
   #endif //ALWAYSARMED
 
 }
@@ -127,27 +128,7 @@ void setup()
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
 void loop()
 {
-  switch(fontStatus) {
-    case 0:
-      MAX7456.WriteString_P(messageF0, 32);
-      MAX7456.DrawScreen();
-      delay(3000);
-      MAX7456.DisplayFont();  
-      MAX7456.WriteString_P(messageF1, 32);
-      MAX7456.DrawScreen();
-      fontStatus++;
-      delay(3000);      
-      break;
-    case 1:
-      MAX7456.UpdateFont();
-      MAX7456.Setup(); 
-      MAX7456.WriteString_P(messageF2, 32);
-      MAX7456.DisplayFont();  
-      MAX7456.DrawScreen();
-      fontStatus++;
-      break;
-  }
-  digitalWrite(LEDPIN,LOW);
+  Screen.LoadFontLoop();
 }
 #else
 
@@ -159,11 +140,11 @@ void loop()
     resetFunc();
   }
   #if defined (MEMCHECK) && defined (DEVELOPMENT)
-    debug[MEMCHECK] = UntouchedStack();
+    Screen.debugBuffer[MEMCHECK] = UntouchedStack();
   #endif
 
   #ifdef PWMTHROTTLE
-    MwRcData[THROTTLESTICK] = pwmRSSI;
+    MwRcData[THROTTLESTICK] = rc.pwmRSSI;
   #endif //THROTTLE_RSSI
 
   Screen.UpdateLayout();
@@ -182,7 +163,9 @@ void loop()
   {
     previous_millis_sync = previous_millis_sync+sync_speed_cycle;    
     if(!Font.inFontMode())
-      MSP.WriteRequest(MSP_ATTITUDE,0);
+    {
+      Msp.WriteRequest(MSP_ATTITUDE,0);
+    }
   }
 #endif //MSP_SPEED_HIGH
 
@@ -205,7 +188,7 @@ void loop()
     #ifndef GPSOSD 
       #ifdef MSP_SPEED_MED
         if(!Font.inFontMode())
-          MSP.WriteRequest(MSP_ATTITUDE,0);
+          Msp.WriteRequest(MSP_ATTITUDE,0);
       #endif //MSP_SPEED_MED  
     #endif //GPSOSD
    }  // End of slow Timed Service Routine (100ms loop)
@@ -214,60 +197,48 @@ void loop()
   {
     previous_millis_high = previous_millis_high+hi_speed_cycle;       
 
-    MSP.BuildRequests();
+    Msp.BuildRequests();
     
     if(!Font.inFontMode()){
       #ifndef GPSOSD
-      MSP.SendRequests();
+      Msp.SendRequests();
       #endif //GPSOSD
-      MAX7456.DrawScreen();
+      Max.DrawScreen();
 
     }
 
     Sensors.Process();       // using analogue sensors
 
 
-#ifndef INTRO_DELAY 
-#define INTRO_DELAY 8
-#endif
-    if( allSec < INTRO_DELAY ){
+    if( timer.allSec < INTRO_DELAY ){
       Screen.DisplayIntro();
       timer.lastCallSign=Stats.onTime-CALLSIGNINTERVAL;
     }  
     else
     {
-      if(armed){
-        previousarmedstatus=1;
-        if (configMode==1)
-          MSP.ConfigExit();
-      }
-#ifndef HIDESUMMARY
-      if(previousarmedstatus && !armed){
-        timer.armed=20;
-        configPage=0;
-        ROW=10;
-        COL=1;
-        configMode=1;
-        MSP.SetRequests();
+      Msp.ConfigExitIfArmed();
+#ifdef HIDESUMMARY
+      if(mwosd.previousarmedstatus && !mwosd.armed){
+        mwosd.previousarmedstatus=0;
+        Msp.configMode=0;
       }
 #else
-      if(previousarmedstatus && !armed){
-        previousarmedstatus=0;
-        configMode=0;
+      if(mwosd.previousarmedstatus && !mwosd.armed){
+        Msp.ConfigEnter();
       }
 #endif //HIDESUMMARY      
-      if(configMode)
+      if(Msp.configMode)
       {
         Screen.DisplayConfigScreen();
       }
       else
       {
-        MSP.SetRequests();
+        Msp.SetRequests();
 #if defined USE_AIRSPEED_SENSOR
         useairspeed();
 #endif //USE_AIRSPEED_SENSOR
         if(Sensors.IsPresent(ACCELEROMETER))
-           Screen.DisplayHorizon(MwAngle[0],MwAngle[1]);
+           Screen.DisplayHorizon(Msp.MwAngle[0],Msp.MwAngle[1]);
 #if defined FORCECROSSHAIR
         Screen.DisplayForcedCrosshair();
 #endif //FORCECROSSHAIR
@@ -275,9 +246,9 @@ void loop()
           Screen.DisplayVoltage();
         if (Eeprom.Settings[S_VIDVOLTAGE])
           Screen.DisplayVidVoltage();
-        if(Eeprom.Settings[S_DISPLAYRSSI]&&((rssi>Eeprom.Settings[S_RSSI_ALARM])||(timer.Blink2hz)))
+        if(Eeprom.Settings[S_DISPLAYRSSI]&&((rc.rssi>Eeprom.Settings[S_RSSI_ALARM])||(timer.Blink2hz)))
           Screen.DisplayRSSI();
-        if(Eeprom.Settings[S_AMPERAGE]&&(((amperage/10)<Eeprom.Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz)))
+        if(Eeprom.Settings[S_AMPERAGE]&&(((Stats.amperage/10)<Eeprom.Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz)))
           Screen.DisplayAmperage();
         if(Eeprom.Settings[S_AMPER_HOUR] && ((!Stats.IsAmpAlarming()) || timer.Blink2hz))
           Screen.DisplaypMeterSum();
@@ -363,47 +334,42 @@ void loop()
     Stats.onTime++;
     #ifdef MAXSTALLDETECT
       if (!Font.inFontMode())
-        MAX7456.Stalldetect();
+        Max.Stalldetect();
     #endif 
-    #ifdef GPSACTIVECHECK
-      if (timer.GPS_active==0){
-        GPS_numSat=0;
-      }
-      else {
-        timer.GPS_active--;
-      }      
+    #if defined(GPSACTIVECHECK) && defined(GPSOSD)
+      Gps.Check();
     #endif // GPSACTIVECHECK 
-    if (timer.MSP_active>0){
-      timer.MSP_active--;
-    }  
-    if(!armed) {
-//      MSP.SetRequests();
+
+    Msp.Countdown();
+
+    if(!mwosd.armed) {
+//      Msp.SetRequests();
 #ifndef MAPMODENORTH
-      armedangle=MwHeading;
+      Gps.armedangle=Gps.MwHeading;
 #endif
     }
     else {
       Stats.flyTime++;
       Stats._flyingTime++;
-      configMode=0;
-      MSP.SetRequests();
+      Msp.configMode=0;
+      Msp.SetRequests();
     }
     timer.allSec++;
 /*
-    if((timer.accCalibrationTimer==1)&&(configMode)) {
-      MSP.WriteRequest(MSP_ACC_CALIBRATION,0);
+    if((timer.accCalibrationTimer==1)&&(Msp.configMode)) {
+      Msp.WriteRequest(MSP_ACC_CALIBRATION,0);
       timer.accCalibrationTimer=0;
     }
 */    
-    if((timer.magCalibrationTimer==1)&&(configMode)) {
-      MSP.WriteRequest(MSP_MAG_CALIBRATION,0);
+    if((timer.magCalibrationTimer==1)&&(Msp.configMode)) {
+      Msp.WriteRequest(MSP_MAG_CALIBRATION,0);
       timer.magCalibrationTimer=0;
     }
     if(timer.magCalibrationTimer>0) timer.magCalibrationTimer--;
     if(timer.rssiTimer>0) timer.rssiTimer--;
   }
-//  MSP.SetRequests();
-  MSP.Receive(1);
+//  Msp.SetRequests();
+  Msp.Receive(1);
 }  // End of main loop
 #endif //main loop
 
@@ -419,8 +385,8 @@ void gpsdistancefix(void){
   int8_t speedband;
   static int8_t oldspeedband;
   static int8_t speedcorrection=0;
-  if (GPS_distanceToHome < 10000) speedband = 0;
-  else if (GPS_distanceToHome > 50000) speedband = 2;
+  if (Gps.distanceToHome < 10000) speedband = 0;
+  else if (Gps.distanceToHome > 50000) speedband = 2;
   else{
     speedband = 1;
     oldspeedband = speedband;
@@ -430,7 +396,7 @@ void gpsdistancefix(void){
     if (oldspeedband==2) speedcorrection++;
     oldspeedband = speedband;
   }
-  GPS_distanceToHome=(speedcorrection*65535) + GPS_distanceToHome;
+  Gps.distanceToHome=(speedcorrection*65535) + Gps.distanceToHome;
 } 
 
 unsigned long FastpulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
@@ -484,11 +450,11 @@ ISR(PCINT1_vect) { //
       PulseDuration = CurrentTime-PulseStart; 
       PulseCounter=0;
     #if defined FASTPWMRSSI
-      pwmRSSI = PulseDuration;
+      rc.pwmRSSI = PulseDuration;
       PCMSK1 =0;
     #else
       if ((750<PulseDuration) && (PulseDuration<2250)) {
-        pwmRSSI = PulseDuration;
+        rc.pwmRSSI = PulseDuration;
         PCMSK1 =0;
       }
     #endif 

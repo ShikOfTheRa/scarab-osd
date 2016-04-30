@@ -27,8 +27,7 @@
 #include "eeprom.h"
 #include "spi.h"
 #include "font.h"
-// TODO: $$$ gps
-//#include "gps.h"
+#include "gps.h"
 #include "hardware.h"
 #include "globals.h"
 #include "math.h"

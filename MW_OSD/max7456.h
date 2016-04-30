@@ -140,6 +140,7 @@ class MAX7456Class
     // Copy string from progmem into the screen buffer
     void WriteString_P(const char *string, uint16_t address);
 
+    uint8_t fontData[54];
   private:
     // Main screen ram for MAX7456
     char _screen[MAX_SCREEN_SIZE];
@@ -156,6 +157,6 @@ class MAX7456Class
     uint8_t _max7456_reset;
 };
 
-extern MAX7456Class MAX7456;
+extern MAX7456Class Max;
 
 #endif

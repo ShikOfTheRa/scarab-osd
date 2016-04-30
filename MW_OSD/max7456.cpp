@@ -72,29 +72,29 @@ void MAX7456Class::Setup(void)
   delay(100);
 
 
-#ifdef AUTOCAM 
+#ifdef AUTOCAM
   pinMode(MAX7456SELECT,OUTPUT);
   digitalWrite(MAX7456SELECT,LOW);
   uint8_t srdata = 0;
-  #if defined AUTOCAMWAIT 
+  #if defined AUTOCAMWAIT
     while ((B00000011 & srdata) == 0){
       spi_transfer(0xa0);
-      srdata = spi_transfer(0xFF); 
+      srdata = spi_transfer(0xFF);
       delay(100);
     }
-  #else  
+  #else
     spi_transfer(0xa0);
-    srdata = spi_transfer(0xFF); 
-  #endif //AUTOCAMWAIT  
+    srdata = spi_transfer(0xFF);
+  #endif //AUTOCAMWAIT
   if ((B00000001 & srdata) == B00000001){     //PAL
-      Settings[S_VIDEOSIGNALTYPE]=1; 
+      Settings[S_VIDEOSIGNALTYPE]=1;
   }
   else if((B00000010 & srdata) == B00000010){ //NTSC
       Settings[S_VIDEOSIGNALTYPE]=0;
   }
 #endif //AUTOCAM
-   
-#ifdef FASTPIXEL 
+
+#ifdef FASTPIXEL
   // force fast pixel timing
   Send(MAX7456ADD_OSDM, 0x00);
   // Send(MAX7456ADD_OSDM, 0xEC);
@@ -177,13 +177,13 @@ void MAX7456Class::DrawScreen()
           vsync_wait=0;
         }
         else{
-          MSP.Receive(0); // Might as well do something whilst waiting :)
+          Msp.Receive(0); // Might as well do something whilst waiting :)
         }
       }
       SPDR = _screen[xx];
       _screen[xx] = ' ';
       while (!(SPSR & (1<<SPIF)));     // Wait the end of the last SPI transmission is clear
-    #else   
+    #else
       Send(MAX7456ADD_DMAH, xx>>8);
       Send(MAX7456ADD_DMAL, xx);
       Send(MAX7456ADD_DMDI, _screen[xx]);
@@ -211,7 +211,7 @@ void MAX7456Class::WriteNvm(uint8_t char_address)
 {
   // disable display
   digitalWrite(MAX7456SELECT,LOW);
-  spi_transfer(VM0_reg); 
+  spi_transfer(VM0_reg);
   //spi_transfer(DISABLE_display);
 
   //digitalWrite(MAX7456SELECT,LOW);
@@ -232,26 +232,26 @@ void MAX7456Class::WriteNvm(uint8_t char_address)
   // transfer 54 bytes from shadow ram to NVM
   spi_transfer(MAX7456ADD_CMM);
   spi_transfer(WRITE_nvr);
-  
+
   // wait until bit 5 in the status register returns to 0 (12ms)
   while ((spi_transfer(MAX7456ADD_STAT) & STATUS_reg_nvr_busy) != 0x00);
 
  spi_transfer(VM0_reg); // turn on screen next vertical
-  //spi_transfer(ENABLE_display_vert); 
+  //spi_transfer(ENABLE_display_vert);
  spi_transfer(Settings[S_VIDEOSIGNALTYPE]?0x4c:0x0c);
-  digitalWrite(MAX7456SELECT,HIGH);  
+  digitalWrite(MAX7456SELECT,HIGH);
 }
 
 void MAX7456Class::Stalldetect(void)
 {
   uint8_t srdata;
   pinMode(MAX7456SELECT,OUTPUT);
-  digitalWrite(MAX7456SELECT,LOW);  
+  digitalWrite(MAX7456SELECT,LOW);
   spi_transfer(0x80);
-  srdata = spi_transfer(0xFF); 
+  srdata = spi_transfer(0xFF);
   digitalWrite(MAX7456SELECT,HIGH);
   if ((B00001000 & srdata) == 0)
-    Setup(); 
+    Setup();
 }
 
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
@@ -263,10 +263,10 @@ void MAX7456Class::DisplayFont()
 }
 
 void MAX7456Class::UpdateFont()
-{ 
+{
   for(uint8_t x = 0; x < 255; x++){
     for(uint8_t i = 0; i < 54; i++){
-      fontData[i] = (uint8_t)pgm_read_byte(fontdata+(64*x)+i);
+      fontData[i] = (uint8_t)pgm_read_byte(_fontdata+(64*x)+i);
     }
     WriteNvm(x);
     ledstatus=!ledstatus;

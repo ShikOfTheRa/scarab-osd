@@ -129,6 +129,42 @@ class MSPClass {
     void WriteRequest(uint8_t mspCommand, uint8_t txDataSize);
 
     void ConfigExit(void);
+    void ConfigEnter(void);
+
+    void ConfigExitIfArmed();
+    
+
+    // decrement the MSP timer
+    void Countdown(void);
+
+    // TODO: $$$ private?
+    uint8_t configMode=0;
+    // Those will hold Accelerator Angle
+    int MwAngle[2]={0,0};
+    // This hold receiver pulse signal
+    uint16_t MwRcData[8]={1500,1500,1500,1500,1500,1500,1500,1500} ;
+    uint8_t MwVersion=0;
+    uint8_t MwVBat=0;
+    int16_t MwVario=0;
+
+    uint8_t MvVBatMinCellVoltage=CELL_VOLTS_MIN;
+    uint8_t MvVBatMaxCellVoltage=CELL_VOLTS_MAX;
+    uint8_t MvVBatWarningCellVoltage=CELL_VOLTS_WARN;
+
+    uint16_t cycleTime;
+    uint16_t I2CError;
+
+    // FC
+    uint8_t PIDController;
+    uint16_t LoopTime;
+    uint8_t FCProfile;
+    uint8_t PreviousFCProfile;
+    uint8_t CurrentFCProfile;
+
+    uint8_t nextCharToRequest;
+    uint8_t lastCharToRequest;
+
+    uint16_t cell_data[6]={0,0,0,0,0,0};
   private:
     uint32_t read32();
     uint16_t read16();
@@ -150,6 +186,10 @@ class MSPClass {
 
     HardwareSerial* _serial;
 
+#if defined CORRECT_MSP_BF1
+    uint8_t _bfconfig[25];
+#endif
+
     uint8_t _MSPcmdsend=0;
     uint32_t _modeMSPRequests;
     uint32_t _queuedMSPRequests;
@@ -169,6 +209,6 @@ class MSPClass {
 
 };
 
-extern MSPClass MSP;
+extern MSPClass Msp;
 
 #endif

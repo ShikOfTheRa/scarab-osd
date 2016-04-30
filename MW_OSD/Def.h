@@ -487,7 +487,12 @@
   #define ALWAYSARMED  // starts OSD in armed mode
 #endif
 
+/********************  CONTROLLER rule definitions  **********************/
+#ifndef INTRO_DELAY
+#define INTRO_DELAY 8
+#endif
 
+// TODO: $$$ sort these out
 /********************  moved from globals.h  *********************/
 #define POS_MASK        0x01FF
 #define PAL_MASK        0x0003

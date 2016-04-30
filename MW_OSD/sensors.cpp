@@ -15,7 +15,7 @@ void SensorsClass::Process(void) {
     
     if (sensor ==0) { 
       if (Settings[S_MAINVOLTAGE_VBAT]){
-        sensortemp=MwVBat;
+        sensortemp=Msp.MwVBat;
       }
     }
     
@@ -27,7 +27,7 @@ void SensorsClass::Process(void) {
 // #elif defined FASTPWMRSSI
 //        sensortemp = FastpulseIn(PWMRSSIPIN, HIGH,1024);
 #elif defined INTPWMRSSI
-        sensortemp = pwmRSSI>>1;
+        sensortemp = rc.pwmRSSI>>1;
 #else
         sensortemp = pulseIn(PWMRSSIPIN, HIGH,18000)>>1;        
 #endif
@@ -36,7 +36,7 @@ void SensorsClass::Process(void) {
         }
       }
       if(Settings[S_MWRSSI]) {
-        sensortemp = MwRssi;
+        sensortemp = rc.MwRssi;
       }
     }
 #if defined STAGE2FILTER // Use averaged change    
@@ -128,38 +128,38 @@ void SensorsClass::Process(void) {
   
   if(!Settings[S_MWAMPERAGE]) {
     if (!Settings[S_AMPERAGE_VIRTUAL]) { // Analogue
-      amperage = sensorfilter[2][SENSORFILTERSIZE]>>3;
-      amperage = map(amperage, Settings16[S16_AMPZERO], 1024, 0, Settings16[S16_AMPDIVIDERRATIO]);
-      if (amperage < 0) amperage=0;
+      Stats.amperage = sensorfilter[2][SENSORFILTERSIZE]>>3;
+      Stats.amperage = map(Stats.amperage, Settings16[S16_AMPZERO], 1024, 0, Settings16[S16_AMPDIVIDERRATIO]);
+      if (Stats.amperage < 0) Stats.amperage=0;
     }  
     else {  // Virtual
-      uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],LowT,HighT);
+      uint32_t Vthrottle = constrain(Msp.MwRcData[THROTTLESTICK],rc.LowT,rc.HighT);
       Vthrottle = constrain((Vthrottle-1000)/10,0,100);
-      amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings16[S16_AMPDIVIDERRATIO]*0.01;
-      if(armed)
-        amperage += Settings16[S16_AMPZERO];
+      Stats.amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings16[S16_AMPDIVIDERRATIO]*0.01;
+      if(mwosd.armed)
+        Stats.amperage += Settings16[S16_AMPZERO];
       else 
-        amperage = Settings16[S16_AMPZERO];
+        Stats.amperage = Settings16[S16_AMPZERO];
     }  
   }
   else{
-    amperage = MWAmperage / AMPERAGE_DIV;
+    Stats.amperage = Stats.MWAmperage / AMPERAGE_DIV;
   }
 
 //-------------- RSSI
   if (Settings[S_DISPLAYRSSI]) {           
-    rssi = sensorfilter[4][SENSORFILTERSIZE]>>3; // filter and remain 16 bit
-    if (configMode){
+    rc.rssi = sensorfilter[4][SENSORFILTERSIZE]>>3; // filter and remain 16 bit
+    if (Msp.configMode){
       if((timer.rssiTimer==15)) {
-        Settings16[S16_RSSIMAX]=rssi; // tx on
+        Settings16[S16_RSSIMAX]=rc.rssi; // tx on
       }
       if((timer.rssiTimer==1)) {
-        Settings16[S16_RSSIMIN]=rssi; // tx off
+        Settings16[S16_RSSIMIN]=rc.rssi; // tx off
         timer.rssiTimer=0;
       }
     }
-    rssi = map(rssi, Settings16[S16_RSSIMIN], Settings16[S16_RSSIMAX], 0, 100);
-    rssi=constrain(rssi,0,100);
+    rc.rssi = map(rc.rssi, Settings16[S16_RSSIMIN], Settings16[S16_RSSIMAX], 0, 100);
+    rc.rssi=constrain(rc.rssi,0,100);
   }
 
 //-------------- For filter support

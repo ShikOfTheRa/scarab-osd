@@ -9,6 +9,7 @@ class FontClass
     void fontCharacterReceived(uint8_t cindex);
     int16_t getNextCharToRequest();
     uint8_t inFontMode();
+    uint8_t fontStatus=0;
   private:
     uint8_t _inFontMode;
     uint8_t retransmitQueue;
