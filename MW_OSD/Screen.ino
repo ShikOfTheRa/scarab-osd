@@ -61,32 +61,54 @@ char *ItoaUnPadded(int val, char *str, uint8_t bytes, uint8_t decimalpos)  {
     str[--bytes] = ' ';
   return str;
 }
-char *FormatGPSCoord(int32_t val, char *str, uint8_t p, char pos, char neg) {
-  if(val < 0) {
-    pos = neg;
-    val = -val;
-  }
 
-  uint8_t bytes = p+6;
-  val = val / 100;
- 
-  str[bytes] = 0;
-  str[--bytes] = pos;
-  for(;;) {
-    if(bytes == p) {
-      str[--bytes] = DECIMAL;
-      continue;
+
+#ifdef CROPGPSPOSITION
+  char *FormatGPSCoord(int32_t val, char *str, uint8_t p, char pos, char neg) {
+    if(val < 0) {                    //make value positive... not sure if this is needed, but why not leave it alone
+      val = -val;
+   }
+    uint8_t bytes = 0;
+    uint8_t n = 8;
+   str[n] = 0;                  //end of array = null
+   str[0] = DECIMAL;
+   for(bytes=7; bytes>=1; --bytes) {
+     str[bytes] = '0' + (val % 10);
+     val = val / 10;
+   }
+   
+   while(bytes != 0)
+      str[--bytes] = ' ';
+   return str;
+  }
+#else
+  char *FormatGPSCoord(int32_t val, char *str, uint8_t p, char pos, char neg) {
+    if(val < 0) {
+      pos = neg;
+      val = -val;
     }
-    str[--bytes] = '0' + (val % 10);
-    val = val / 10;
-    if(bytes == 0 || (bytes < 3 && val == 0))
+
+    uint8_t bytes = p+6;
+    val = val / 100;
+ 
+   str[bytes] = 0;
+   str[--bytes] = pos;
+   for(;;) {
+     if(bytes == p) {
+        str[--bytes] = DECIMAL;
+        continue;
+     }
+     str[--bytes] = '0' + (val % 10);
+     val = val / 10;
+     if(bytes == 0 || (bytes < 3 && val == 0))
       break;   }
 
-   while(bytes != 0)
-     str[--bytes] = ' ';
+    while(bytes != 0)
+      str[--bytes] = ' ';
 
-   return str;
-}
+    return str;
+  }
+#endif
 
 // Take time in Seconds and format it as 'MM:SS'
 // Alternately Take time in Minutes and format it as 'HH:MM'
@@ -834,27 +856,51 @@ void displayIntro(void)
 }
 
 
-void displayGPSPosition(void)
-{
-  uint16_t position;
-  if(!GPS_fix)
-    return;
-  displayGPSAltitude();
-  if(!fieldIsVisible(MwGPSLatPositionTop))
-    return;
-  if (!MwSensorActive&mode.gpshome)
-    return;
-  if(Settings[S_COORDINATES]|(MwSensorActive&mode.gpshome)){
+#ifdef CROPGPSPOSITION
+  void displayGPSPosition(void)     //Truglodite: Crop GPS coordinates to simply ".DDDDDDD"
+  {
+    uint16_t position;
+    if(!GPS_fix)
+      return;
+    displayGPSAltitude();
+    if(!fieldIsVisible(MwGPSLatPositionTop))
+      return;
+    if (!MwSensorActive&mode.gpshome)
+      return;
+    if(Settings[S_COORDINATES]|(MwSensorActive&mode.gpshome)){
       position = getPosition(MwGPSLatPositionTop);  
       screenBuffer[0] = SYM_LAT;
-      FormatGPSCoord(GPS_latitude,screenBuffer+1,4,'N','S');
+      FormatGPSCoord(GPS_latitude,screenBuffer,3,'N','S');    
       MAX7456_WriteString(screenBuffer, position);  
       position = getPosition(MwGPSLonPositionTop);  
       screenBuffer[0] = SYM_LON;
-      FormatGPSCoord(GPS_longitude,screenBuffer+1,4,'E','W');
+      FormatGPSCoord(GPS_longitude,screenBuffer,4,'E','W'); 
       MAX7456_WriteString(screenBuffer, position);  
+    }
   }
-}
+#else
+  void displayGPSPosition(void)
+  {
+    uint16_t position;
+    if(!GPS_fix)
+      return;
+    displayGPSAltitude();
+    if(!fieldIsVisible(MwGPSLatPositionTop))
+      return;
+    if (!MwSensorActive&mode.gpshome)
+      return;
+    if(Settings[S_COORDINATES]|(MwSensorActive&mode.gpshome)){
+        position = getPosition(MwGPSLatPositionTop);  
+        screenBuffer[0] = SYM_LAT;
+        FormatGPSCoord(GPS_latitude,screenBuffer+1,4,'N','S');
+        MAX7456_WriteString(screenBuffer, position);  
+        position = getPosition(MwGPSLonPositionTop);  
+        screenBuffer[0] = SYM_LON;
+        FormatGPSCoord(GPS_longitude,screenBuffer+1,4,'E','W');
+        MAX7456_WriteString(screenBuffer, position);  
+    }
+  }
+#endif
 
 
 void displayGPSAltitude(void){
