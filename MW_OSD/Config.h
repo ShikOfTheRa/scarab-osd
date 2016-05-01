@@ -98,7 +98,7 @@
 
 /********************       GPS settings      *********************/
 #define MINSATFIX 5                 // Number of sats required for a fix. 5 minimum. More = better.
-#define CROPGPSPOSITION             // Crop GPS coordinate display to decimals only ".DDDDDDD"
+//#define CROPGPSPOSITION             // Crop GPS coordinate display to decimals only ".DDDDDDD"
 
 
 /********************       WARNING/STATUS settings      *********************/
