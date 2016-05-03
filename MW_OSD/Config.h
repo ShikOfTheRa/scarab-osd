@@ -15,7 +15,7 @@
 // #define SWAPVOLTAGEPINS          // For boards with batt voltage appearing on vid voltage
 // #define ALTERNATEDIVIDERS        // For boards with voltage unable to be adjusted high enough
 
- 
+
 /********************       CONTROLLER SOFTWARE      *********************/
 // Choose ONLY ONE option:-
 // Note - choose carefully to ensure correct settings are written to flight controller.
@@ -31,6 +31,7 @@
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
 #define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
 //#define BETAFLIGHT                // Uncomment this if you are using BETAFLIGHT (same as CLEANFLIGHT t time of this MWOSD release)
+//#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight 
 //#define HARAKIRI                  // Uncomment this if you are using HARAKIRI (for BOXNAMES compatibility)
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
@@ -44,7 +45,7 @@
 //#define BASEFLIGHT20150327        // Uncomment this if you are using BASEFLIGHT up to and including version Stable 2015.03.27
 //#define CLEANFLIGHT172            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.7.2
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1 
-//#define APM                       // Uncomment this if you are using APM compatible FC (Requires testing)
+//#define APM                       // Uncomment this if you are using APM MAVLINK compatible FC (Requires testing)
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
@@ -94,11 +95,11 @@
 //#define PULSEINPWMRSSI            // DEPRECATED Undefine this to use legacy non interrupt PWM RSSI method (pulse width 0 - 2000ms pulse width)
 //#define FASTPWMRSSI               // Undefine this to use high PWM refresh frequency RSSI (greataer than standard 50 hz)
 //#define RCRSSI 3                  // Undefine this to use RC channel (0-7) for RSSI (this can be from the FC - or a PPM channel with GPSOSD)
- 
+
 
 /********************       GPS settings      *********************/
 #define MINSATFIX 5                 // Number of sats required for a fix. 5 minimum. More = better.
-//#define CROPGPSPOSITION             // Crop GPS coordinate display to decimals only ".DDDDDDD"
+//#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
 
 
 /********************       WARNING/STATUS settings      *********************/
@@ -271,6 +272,7 @@
 #define AUTOTHROTTLE 
 #define HIGHTHROTTLE 1900                // Maximum recognised value for throttle 
 #define LOWTHROTTLE  1100                // Minimum recognised value for throttle
+
 
 
 

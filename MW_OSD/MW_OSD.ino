@@ -380,6 +380,11 @@ void loop()
          MSPcmdsend = MSP_CONFIG;
       break;
 #endif
+#ifdef BASEFLIGHT_FW
+      case REQ_MSP_FW_CONFIG:
+         MSPcmdsend = MSP_FW_CONFIG;
+      break;
+#endif
 #ifdef HAS_ALARMS
       case REQ_MSP_ALARMS:
           MSPcmdsend = MSP_ALARMS;

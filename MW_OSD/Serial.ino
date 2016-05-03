@@ -59,6 +59,13 @@ void mspWrite16(uint16_t t){
   mspWrite8(t>>8);
 }
 
+void mspWrite32(uint32_t t){
+  mspWrite8(t);
+  mspWrite8(t>>8);
+  mspWrite8(t>>16);
+  mspWrite8(t>>24);
+}
+
 void mspWriteChecksum(){
   Serial.write(txChecksum);
 }
@@ -289,6 +296,27 @@ void serialMSPCheck()
     MwRssi = read16();
     MWAmperage = read16();
  }
+
+#ifdef FIXEDWING_BF
+  if (cmdMSP==MSP_FW_CONFIG)
+  {
+    cfg.fw_althold_dir=read8();
+    cfg.fw_gps_maxcorr=read16();
+    cfg.fw_gps_rudder=read16();
+    cfg.fw_gps_maxclimb=read16();
+    cfg.fw_gps_maxdive=read16();
+    cfg.fw_climb_throttle=read16();
+    cfg.fw_cruise_throttle=read16();
+    cfg.fw_idle_throttle=read16();
+    cfg.fw_scaler_throttle=read16();
+    cfg.fw_roll_comp=read32();
+    cfg.fw_rth_alt=read8();
+    for(uint8_t i = 0; i < 4; i++) {
+      read32();
+    }
+    modeMSPRequests &=~ REQ_MSP_FW_CONFIG;
+  }
+#endif // FIXEDWING_BF
 
 #ifdef USE_FC_VOLTS_CONFIG
   if (cmdMSP==MSP_MISC)
@@ -703,6 +731,18 @@ void serialMenuCommon()
 	  }
         #endif
 #endif
+#ifdef MENU_FIXEDWING_BF
+	    if(configPage == MENU_FIXEDWING_BF && COL == 3) {
+            if(ROW==1) cfg.fw_gps_maxcorr +=menudir;
+            if(ROW==2) cfg.fw_gps_rudder+=menudir;
+            if(ROW==3) cfg.fw_gps_maxclimb+=menudir;
+            if(ROW==4) cfg.fw_gps_maxdive+=menudir;
+            if(ROW==5) cfg.fw_climb_throttle+=menudir;
+            if(ROW==6) cfg.fw_cruise_throttle+=menudir;
+            if(ROW==7) cfg.fw_idle_throttle+=menudir;
+            if(ROW==8) cfg.fw_rth_alt+=menudir;
+	}
+#endif
 #ifdef MENU_VOLTAGE
 	if(configPage == MENU_VOLTAGE && COL == 3) {
 	  if(ROW==1) Settings[S_DISPLAYVOLTAGE]=!Settings[S_DISPLAYVOLTAGE];  
@@ -974,6 +1014,25 @@ void configSave()
   }
   mspWriteChecksum();
 #endif
+
+#if defined FIXEDWING_BF
+  mspWriteRequest(MSP_SET_FW_CONFIG,38);
+  mspWrite8(cfg.fw_althold_dir);
+  mspWrite16(cfg.fw_gps_maxcorr);
+  mspWrite16(cfg.fw_gps_rudder);
+  mspWrite16(cfg.fw_gps_maxclimb);
+  mspWrite16(cfg.fw_gps_maxdive);
+  mspWrite16(cfg.fw_climb_throttle);
+  mspWrite16(cfg.fw_cruise_throttle);
+  mspWrite16(cfg.fw_idle_throttle);
+  mspWrite16(cfg.fw_scaler_throttle);
+  mspWrite32(cfg.fw_roll_comp); // Float is Not compatible with Gui. Change to mspWrite8
+  mspWrite8(cfg.fw_rth_alt);
+  for(uint8_t i=0; i<8; i++) {
+    mspWrite16(0);
+  }
+  mspWriteChecksum();
+#endif // FIXEDWING_BF
 
   writeEEPROM();
   mspWriteRequest(MSP_EEPROM_WRITE,0);

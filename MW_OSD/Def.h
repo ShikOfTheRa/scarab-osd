@@ -54,6 +54,12 @@
   #define BASEFLIGHT20150627
 #endif
 
+#ifdef FIXEDWING_BF     //set up latest at time of release
+  // using these
+  // #define BASEFLIGHT20150627
+  // #define FIXEDWING
+#endif
+
 #ifdef HARAKIRI
   #define BOXNAMES
   #define MULTIWII_V24
@@ -89,7 +95,6 @@
   #define MENU_CURRENT  5       //CURRENT
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
-//  #define MENU_GPS_TIME  X //GPS TIME
   #define MENU_ALARMS   8       //ALARMS
   #define MENU_PROFILE  9       //PROFILE+PID CONTROLLER
   #define MAXPAGE       MENU_PROFILE
@@ -109,7 +114,6 @@
   #define MENU_CURRENT  5       //CURRENT
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
-//  #define MENU_GPS_TIME  X //GPS TIME
   #define MENU_ALARMS   8       //ALARMS
   #define MENU_PROFILE  9       //PROFILE+PID CONTROLLER
   #define MAXPAGE       MENU_PROFILE
@@ -129,9 +133,7 @@
   #define MENU_CURRENT  5       //CURRENT
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
-//  #define MENU_GPS_TIME  X //GPS TIME
   #define MENU_ALARMS   8       //ALARMS
-//  #define MENU_PROFILE 9//PROFILE+PID CONTROLLER
   #define MAXPAGE       MENU_ALARMS
 #endif
 
@@ -145,19 +147,38 @@
   #define MENU_CURRENT  5       //CURRENT
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
-//  #define MENU_GPS_TIME  X //GPS TIME
   #define MENU_ALARMS   8       //ALARMS
-//  #define MENU_PROFILE 9//PROFILE+PID CONTROLLER
   #define MAXPAGE       MENU_ALARMS
+#endif
+
+#if defined FIXEDWING_BF
+  #define FIXEDWING
+  #define AMPERAGE_DIV 10
+  #define CORRECT_MSP_BF1
+  #define CORRECT_MENU_RCT1
+  #define ENABLE_MSP_SAVE_ADVANCED
+
+  #define MENU_STAT          0       //STATISTICS
+  #define MENU_PID           1       //PID CONFIG
+  #define MENU_RC            2       //RC TUNING
+  #define MENU_FIXEDWING_BF  3       //FIXEDWING adjustments
+  #define MENU_VOLTAGE       4       //VOLTAGE
+  #define MENU_RSSI          5       //RSSI
+  #define MENU_CURRENT       6       //CURRENT
+  #define MENU_DISPLAY       7       //DISPLAY
+  #define MENU_ADVANCED      8       //ADVANCED
+  #define MENU_ALARMS        9       //ALARMS
+  #define MENU_PROFILE       10      //PROFILE+PID CONTROLLER
+  #define MAXPAGE       MENU_PROFILE
 #endif
 
 #if defined BASEFLIGHT20150627
   #define AMPERAGE_DIV 10
   #define CORRECT_MSP_BF1
-                       #define CORRECT_MENU_RCT1
+  #define CORRECT_MENU_RCT1
   #define ENABLE_MSP_SAVE_ADVANCED
 
- #define MENU_STAT  0           //STATISTICS
+  #define MENU_STAT     0       //STATISTICS
   #define MENU_PID      1       //PID CONFIG
   #define MENU_RC       2       //RC TUNING
   #define MENU_VOLTAGE  3       //VOLTAGE
@@ -165,7 +186,6 @@
   #define MENU_CURRENT  5       //CURRENT
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
-//  #define MENU_GPS_TIME  X //GPS TIME
   #define MENU_ALARMS   8       //ALARMS
   #define MENU_PROFILE  9       //PROFILE+PID CONTROLLER
   #define MAXPAGE       MENU_PROFILE
@@ -181,14 +201,13 @@
   #define MENU_CURRENT  5       //CURRENT
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
-//  #define MENU_GPS_TIME  X //GPS TIME
   #define MENU_ALARMS   8       //ALARMS
-//  #define MENU_PROFILE 9//PROFILE+PID CONTROLLER
   #define MAXPAGE MENU_ALARMS
 #endif
 
 #if defined (MULTIWII_V24)
   #define AMPERAGE_DIV  1
+
   #define MENU_STAT     0       //STATISTICS
   #define MENU_PID      1       //PID CONFIG
   #define MENU_RC       2       //RC TUNING
@@ -198,8 +217,7 @@
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
   #define MENU_GPS_TIME 8       //GPS TIME
-  #define MENU_ALARMS   9 //ALARMS
-//  #define MENU_PROFILE 10//PROFILE+PID CONTROLLER
+  #define MENU_ALARMS   9       //ALARMS
   #define MAXPAGE       MENU_ALARMS
 #endif
 
@@ -212,9 +230,7 @@
   #define MENU_CURRENT  5       //CURRENT
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
-//  #define MENU_GPS_TIME  X //GPS TIME
   #define MENU_ALARMS   8       //ALARMS
-//  #define MENU_PROFILE 9//PROFILE+PID CONTROLLER
   #define MAXPAGE       MENU_ALARMS
 #endif
 
@@ -226,11 +242,9 @@
   #define MENU_VOLTAGE  3       //VOLTAGE
   #define MENU_RSSI     4       //RSSI
   #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6 //DISPLAY
+  #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
-//  #define MENU_GPS_TIME  X //GPS TIME
   #define MENU_ALARMS   8       //ALARMS
-//  #define MENU_PROFILE 9//PROFILE+PID CONTROLLER
   #define MAXPAGE       MENU_ALARMS
 #endif
 
@@ -246,9 +260,7 @@
   #define MENU_CURRENT  5       //CURRENT
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
-//  #define MENU_GPS_TIME  X //GPS TIME
   #define MENU_ALARMS   8       //ALARMS
-//  #define MENU_PROFILE 9//PROFILE+PID CONTROLLER
   #define MAXPAGE       MENU_ALARMS
 #endif
 
@@ -274,7 +286,7 @@
   #undef  GPSACTIVECHECK
   #undef  OSD_SWITCH_RC
   #define ALWAYSARMED
-  #define MENU_STAT  0 //STATISTICS
+  #define MENU_STAT  0           //STATISTICS
   #define MAXPAGE MENU_STAT
 #endif
 
