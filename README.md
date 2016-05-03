@@ -4,11 +4,15 @@
 
 An Multipurpose Open Source OSD software with support for:
 <ul class="task-list">
-<li>MULTIWII</li>
-<li>BASEFLIGHT</li>
 <li>CLEANFLIGHT</li>
+<li>BASEFLIGHT</li>
+<li>MULTIWII</li>
+<li>DRONIN</li>
 <li>HARIKIRI</li>
-<li>FIXEDWING</li>
+<li>TAULABS</li>
+<li>iNAV</li>
+<li>DJI NAZA</li>
+<li>FIXEDWING (BF/MWII)</li>
 </ul>
 MWOSD also provides support a number of other configurations: 
 <ul class="task-list">
