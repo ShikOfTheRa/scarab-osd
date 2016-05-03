@@ -1169,8 +1169,13 @@ void displayCursor(void)
 #ifdef MENU_FIXEDWING_BF
     if(configPage==MENU_FIXEDWING_BF){
       COL=3;
-      if (ROW==8) ROW=10;
-      if (ROW==9) ROW=7;
+      if (ROW==9){
+        if (oldROW==8)
+          ROW=10;
+        else
+          ROW=8;
+      }
+      oldROW=ROW;
       cursorpos=(ROW+2)*30+10+6+6;     
       }
 #endif

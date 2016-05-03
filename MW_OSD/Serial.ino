@@ -21,6 +21,10 @@ uint8_t txChecksum;
   #include "MAVLINK.h"
 #endif 
 
+#if defined LTM
+  #include "LTM.h"
+#endif 
+
 uint32_t read32() {
   uint32_t t = read16();
   t |= (uint32_t)read16()<<16;
@@ -163,6 +167,10 @@ void serialMSPCheck()
 #endif
 
 #ifdef MAVLINK
+#undef MSPOSD
+#endif
+
+#ifdef LTM
 #undef MSPOSD
 #endif
 
@@ -871,6 +879,10 @@ void serialMSPreceive(uint8_t loops)
        serialMAVreceive(c);
     #endif //MAVLINK   
 
+    #if defined (LTM)
+       serialLTMreceive(c);
+    #endif //MAVLINK   
+    
     if (c_state == IDLE)
     {
       c_state = (c=='$') ? HEADER_START : IDLE;

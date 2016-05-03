@@ -689,6 +689,9 @@ void setMspRequests() {
 #ifdef HAS_ALARMS
       REQ_MSP_ALARMS|
 #endif
+#ifdef FIXEDWING_BF
+      REQ_MSP_FW_CONFIG|
+#endif
       REQ_MSP_RC;
   }
   else {
