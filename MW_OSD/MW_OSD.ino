@@ -397,7 +397,6 @@ void loop()
       mspWriteRequest(MSPcmdsend, 0);      
       #endif //GPSOSD
       MAX7456_DrawScreen();
-
     }
 
     ProcessSensors();       // using analogue sensors
@@ -670,7 +669,9 @@ void setMspRequests() {
       REQ_MSP_IDENT|
       REQ_MSP_STATUS|
       REQ_MSP_RAW_GPS|
+#ifdef MSP_SPEED_LOW
       REQ_MSP_ATTITUDE|
+#endif
       REQ_MSP_RAW_IMU|
       REQ_MSP_ALTITUDE|
       REQ_MSP_RC_TUNING|
@@ -713,7 +714,11 @@ void setMspRequests() {
      #ifdef HAS_ALARMS
       REQ_MSP_ALARMS|
      #endif
-      REQ_MSP_ATTITUDE;
+#ifdef MSP_SPEED_LOW
+      REQ_MSP_ATTITUDE|
+#endif
+      0; // Sigh...
+
     if(MwSensorPresent&BAROMETER){ 
       modeMSPRequests |= REQ_MSP_ALTITUDE;
     }
