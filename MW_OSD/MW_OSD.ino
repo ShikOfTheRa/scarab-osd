@@ -380,7 +380,7 @@ void loop()
          MSPcmdsend = MSP_CONFIG;
       break;
 #endif
-#ifdef BASEFLIGHT_FW
+#ifdef FIXEDWING_BF
       case REQ_MSP_FW_CONFIG:
          MSPcmdsend = MSP_FW_CONFIG;
       break;
