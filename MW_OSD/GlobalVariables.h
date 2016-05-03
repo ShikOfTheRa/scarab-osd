@@ -885,33 +885,7 @@ const char configMsg115[] PROGMEM = "THR CLIMB";
 const char configMsg116[] PROGMEM = "THR CRUISE";
 const char configMsg117[] PROGMEM = "THR IDLE";
 const char configMsg118[] PROGMEM = "RTH ALT";
-/*
-fw_gps_maxcorr = 20        // Max Roll input from GPS (For Flying wings set to >=35)
-fw_gps_maxclimb = 15      // Max Climb input
-fw_gps_maxdive = 15       // Max Dive input
-fw_gps_rudder = 15          // Max Rudder input if rudder is available
-fw_climb_throttle = 1900     //  Limits Throttle during climbs
-fw_cruise_throttle = 1500   // Suitable average throttle
-fw_idle_throttle = 1300       //  Lowest throttle during Descending
-fw_roll_comp = 100             //  How much Elevator compensates Roll in GPS modes
-fw_rth_alt = 50                   //  Min Altitude to keep during RTH. (Max 200m)
-small_angle  = 180            // Will allow the Plane to be Armed in any position.
 
-           serialize8(mcfg.fw_althold_dir);
-            // serialize8(cfg.fw_vector_thrust); // Future Gui setting?
-            serialize16(cfg.fw_gps_maxcorr);
-            serialize16(cfg.fw_gps_rudder);
-            serialize16(cfg.fw_gps_maxclimb);
-            serialize16(cfg.fw_gps_maxdive);
-            serialize16(cfg.fw_climb_throttle);
-            serialize16(cfg.fw_cruise_throttle);
-            serialize16(cfg.fw_idle_throttle);
-            serialize16(cfg.fw_scaler_throttle);
-            serialize32(cfg.fw_roll_comp); // Float is Not compatible with Gui. Change to serialize8
-            serialize8(cfg.fw_rth_alt);
-
-
-*/
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={
