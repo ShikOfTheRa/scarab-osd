@@ -7,7 +7,7 @@ An Multipurpose Open Source OSD software with support for:
 <li>CLEANFLIGHT</li>
 <li>BASEFLIGHT</li>
 <li>MULTIWII</li>
-<li>DRONIN</li>
+<li>dRonin</li>
 <li>HARIKIRI</li>
 <li>TAULABS</li>
 <li>iNAV</li>
