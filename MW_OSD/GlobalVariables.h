@@ -122,6 +122,21 @@ struct {
 }
 flags;
 
+struct {
+    uint8_t  fw_althold_dir;
+    uint16_t fw_gps_maxcorr;                    // Degrees banking Allowed by GPS.
+    int16_t  fw_gps_rudder;                     // Maximum input of Rudder Allowed by GPS.
+    int16_t  fw_gps_maxclimb;                   // Degrees climbing . To much can stall the plane.
+    int16_t  fw_gps_maxdive;                    // Degrees Diving . To much can overspeed the plane.
+    uint16_t fw_climb_throttle;                 // Max allowed throttle in GPS modes.
+    uint16_t fw_cruise_throttle;                // Throttle to set for cruisespeed.
+    uint16_t fw_idle_throttle;                  // Lowest throttleValue during Descend
+    uint16_t fw_scaler_throttle;                // Adjust to Match Power/Weight ratio of your model
+    uint8_t  fw_roll_comp;                      // Adds Elevator Based on Roll Angle
+    uint8_t  fw_rth_alt;                        // Min Altitude to keep during RTH. (Max 200m)
+}
+cfg;
+
 uint16_t debug[4];   // int32_t ?...
 int8_t menudir;
 unsigned int allSec=0;
@@ -673,6 +688,9 @@ uint16_t flyingTime=0;
 // Baseflight specific
 #define MSP_CONFIG               66    //out message         baseflight-specific settings that aren't covered elsewhere
 #define MSP_SET_CONFIG           67    //in message          baseflight-specific settings save
+// Baseflight FIXEDWING specific
+#define MSP_FW_CONFIG            123   //out message         Returns parameters specific to Flying Wing mode
+#define MSP_SET_FW_CONFIG        216   //in message          Sets parameters specific to Flying Wing mode
 
 // End of imported defines from Multiwii Serial Protocol MultiWii_shared svn r1333
 // ---------------------------------------------------------------------------------------
@@ -857,6 +875,43 @@ const char configMsg100[] PROGMEM = "ADVANCE TUNING";
 const char configMsg101[] PROGMEM = "PROFILE";
 const char configMsg102[] PROGMEM = "PID CONTROLLER";
 const char configMsg103[] PROGMEM = "LOOPTIME";
+//-----------------------------------------------------------BF FIXEDWING Page
+const char configMsg110[] PROGMEM = "FIXEDWING";
+const char configMsg111[] PROGMEM = "MAX CORRECT";
+const char configMsg112[] PROGMEM = "RUDDER";
+const char configMsg113[] PROGMEM = "MAX CLIMB";
+const char configMsg114[] PROGMEM = "MAX DIVE";
+const char configMsg115[] PROGMEM = "THR CLIMB";
+const char configMsg116[] PROGMEM = "THR CRUISE";
+const char configMsg117[] PROGMEM = "THR IDLE";
+const char configMsg118[] PROGMEM = "RTH ALT";
+/*
+fw_gps_maxcorr = 20        // Max Roll input from GPS (For Flying wings set to >=35)
+fw_gps_maxclimb = 15      // Max Climb input
+fw_gps_maxdive = 15       // Max Dive input
+fw_gps_rudder = 15          // Max Rudder input if rudder is available
+fw_climb_throttle = 1900     //  Limits Throttle during climbs
+fw_cruise_throttle = 1500   // Suitable average throttle
+fw_idle_throttle = 1300       //  Lowest throttle during Descending
+fw_roll_comp = 100             //  How much Elevator compensates Roll in GPS modes
+fw_rth_alt = 50                   //  Min Altitude to keep during RTH. (Max 200m)
+small_angle  = 180            // Will allow the Plane to be Armed in any position.
+
+           serialize8(mcfg.fw_althold_dir);
+            // serialize8(cfg.fw_vector_thrust); // Future Gui setting?
+            serialize16(cfg.fw_gps_maxcorr);
+            serialize16(cfg.fw_gps_rudder);
+            serialize16(cfg.fw_gps_maxclimb);
+            serialize16(cfg.fw_gps_maxdive);
+            serialize16(cfg.fw_climb_throttle);
+            serialize16(cfg.fw_cruise_throttle);
+            serialize16(cfg.fw_idle_throttle);
+            serialize16(cfg.fw_scaler_throttle);
+            serialize32(cfg.fw_roll_comp); // Float is Not compatible with Gui. Change to serialize8
+            serialize8(cfg.fw_rth_alt);
+
+
+*/
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={
@@ -937,12 +992,13 @@ uint16_t screenPosition[POSITIONS_SETTINGS];
 #define REQ_MSP_FONT      (1 << 12)
 #define REQ_MSP_DEBUG     (1 << 13)
 #define REQ_MSP_CELLS     (1 << 14)
-#define REQ_MSP_NAV_STATUS      32768  // (1 << 15)
-#define REQ_MSP_CONFIG          32768  // (1 << 15)
-#define REQ_MSP_MISC            65536  // (1 << 16)
-#define REQ_MSP_ALARMS          131072 // (1 << 17)
-#define REQ_MSP_PID_CONTROLLER  262144 // (1 << 18)
-#define REQ_MSP_LOOP_TIME       524288 // (1 << 19) 
+#define REQ_MSP_NAV_STATUS      32768   // (1 << 15)
+#define REQ_MSP_CONFIG          32768   // (1 << 15)
+#define REQ_MSP_MISC            65536   // (1 << 16)
+#define REQ_MSP_ALARMS          131072  // (1 << 17)
+#define REQ_MSP_PID_CONTROLLER  262144  // (1 << 18)
+#define REQ_MSP_LOOP_TIME       524288  // (1 << 19) 
+#define REQ_MSP_FW_CONFIG       1048576 // (1 << 20) 
 
 // Menu selections
 const PROGMEM char * const menu_choice_unit[] =
@@ -1094,6 +1150,18 @@ const PROGMEM char * const menu_profile[] =
   configMsg103,
 };
 
+const PROGMEM char * const menu_fixedwing_bf[] = 
+{   
+  configMsg111,
+  configMsg112,
+  configMsg113,
+  configMsg114,
+  configMsg115,
+  configMsg116,
+  configMsg117,
+  configMsg118,
+};
+
 const PROGMEM char * const menutitle_item[] = 
 {   
 #ifdef MENU_STAT
@@ -1104,6 +1172,9 @@ const PROGMEM char * const menutitle_item[] =
 #endif
 #ifdef MENU_RC
   configMsg20,
+#endif
+#ifdef MENU_FIXEDWING_BF
+  configMsg110,
 #endif
 #ifdef MENU_VOLTAGE
   configMsg30,
@@ -1180,7 +1251,7 @@ const char mav_mode_RETL[] PROGMEM   = "RETL"; //Return to Launch: auto control
 const char mav_mode_CIRC[] PROGMEM   = "CIRC"; //Circle: auto control
 const char mav_mode_ATUN[] PROGMEM   = "ATUN"; //Auto Tune: autotune the vehicle's roll and pitch gains
 const char mav_mode_GUID[] PROGMEM   = "GUID"; //Guided: auto control
-#ifdef FIXEDWING
+#ifdef FIXEDWING // within MAVLINK
 const char mav_mode_MANU[] PROGMEM   = "MANU"; //Manual
 const char mav_mode_TRNG[] PROGMEM   = "TRNG"; //Training
 const char mav_mode_FBWA[] PROGMEM   = "FBWA"; //Fly-by-wire A

@@ -1166,6 +1166,14 @@ void displayCursor(void)
   #endif
       
 #endif
+#ifdef MENU_FIXEDWING_BF
+    if(configPage==MENU_FIXEDWING_BF){
+      COL=3;
+      if (ROW==8) ROW=10;
+      if (ROW==9) ROW=7;
+      cursorpos=(ROW+2)*30+10+6+6;     
+      }
+#endif
 #ifdef MENU_VOLTAGE
     if(configPage==MENU_VOLTAGE){
       COL=3;
@@ -1376,6 +1384,24 @@ void displayConfigScreen(void)
         MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
       }
     #endif
+  }
+#endif
+#ifdef MENU_FIXEDWING_BF
+  if(configPage==MENU_FIXEDWING_BF)
+  {
+    MenuBuffer[0]=cfg.fw_gps_maxcorr;
+    MenuBuffer[1]=cfg.fw_gps_rudder;
+    MenuBuffer[2]=cfg.fw_gps_maxclimb;
+    MenuBuffer[3]=cfg.fw_gps_maxdive;
+    MenuBuffer[4]=cfg.fw_climb_throttle;
+    MenuBuffer[5]=cfg.fw_cruise_throttle;
+    MenuBuffer[6]=cfg.fw_idle_throttle;
+    MenuBuffer[7]=cfg.fw_rth_alt;
+    for(uint8_t X=0; X<=7; X++) {
+      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_fixedwing_bf[X])));
+      MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+      MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
+    }
   }
 #endif
 #ifdef MENU_VOLTAGE
