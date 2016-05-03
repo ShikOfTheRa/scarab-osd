@@ -15,7 +15,7 @@
 // #define SWAPVOLTAGEPINS          // For boards with batt voltage appearing on vid voltage
 // #define ALTERNATEDIVIDERS        // For boards with voltage unable to be adjusted high enough
 
- 
+
 /********************       CONTROLLER SOFTWARE      *********************/
 // Choose ONLY ONE option:-
 // Note - choose carefully to ensure correct settings are written to flight controller.
@@ -94,11 +94,11 @@
 //#define PULSEINPWMRSSI            // DEPRECATED Undefine this to use legacy non interrupt PWM RSSI method (pulse width 0 - 2000ms pulse width)
 //#define FASTPWMRSSI               // Undefine this to use high PWM refresh frequency RSSI (greataer than standard 50 hz)
 //#define RCRSSI 3                  // Undefine this to use RC channel (0-7) for RSSI (this can be from the FC - or a PPM channel with GPSOSD)
- 
+
 
 /********************       GPS settings      *********************/
 #define MINSATFIX 5                 // Number of sats required for a fix. 5 minimum. More = better.
-//#define CROPGPSPOSITION             // Crop GPS coordinate display to decimals only ".DDDDDDD"
+//#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
 
 
 /********************       WARNING/STATUS settings      *********************/
@@ -271,6 +271,7 @@
 #define AUTOTHROTTLE 
 #define HIGHTHROTTLE 1900                // Maximum recognised value for throttle 
 #define LOWTHROTTLE  1100                // Minimum recognised value for throttle
+
 
 
 
