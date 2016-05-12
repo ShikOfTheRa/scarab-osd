@@ -384,7 +384,57 @@ PROGMEM const uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
   600,// S16_SPARE2,
   
 };
-PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[EEPROM_SETTINGS] = {
+
+
+enum Positions {
+  GPS_numSatPosition,
+  GPS_directionToHomePosition,
+  GPS_distanceToHomePosition,
+  speedPosition,
+  GPS_angleToHomePosition,
+  MwGPSAltPosition,
+  sensorPosition,
+  MwHeadingPosition,
+  MwHeadingGraphPosition,
+  MwAltitudePosition,
+  MwClimbRatePosition,
+  CurrentThrottlePosition,
+  flyTimePosition,
+  onTimePosition,
+  motorArmedPosition,
+  pitchAnglePosition,
+  rollAnglePosition,
+  MwGPSLatPositionTop,
+  MwGPSLonPositionTop,
+  rssiPosition,
+  temperaturePosition,
+  voltagePosition,
+  vidvoltagePosition,
+  amperagePosition,
+  pMeterSumPosition,
+  horizonPosition,
+  SideBarPosition,
+  SideBarScrollPosition,
+  SideBarHeightPosition,
+  SideBarWidthPosition,
+  gimbalPosition,
+  GPS_timePosition,
+  SportPosition,
+  ModePosition,
+  MapModePosition,
+  MapCenterPosition,
+  APstatusPosition,
+  wattPosition,
+  glidescopePosition,
+  callSignPosition,
+  debugPosition,
+
+  POSITIONS_SETTINGS
+};
+
+uint16_t screenPosition[POSITIONS_SETTINGS];
+
+PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 
 (LINE02+2)|DISPLAY_ALWAYS,  // GPS_numSatPosition
 (LINE02+22)|DISPLAY_ALWAYS,   // GPS_directionToHomePosition
@@ -431,7 +481,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[EEPROM_SETTINGS] = {
 };
 
 
-PROGMEM const uint16_t SCREENLAYOUT_DEFAULT_OSDSW[EEPROM_SETTINGS] = {
+PROGMEM const uint16_t SCREENLAYOUT_DEFAULT_OSDSW[POSITIONS_SETTINGS] = {
 
 (LINE02+2)|DISPLAY_NEVER,  // GPS_numSatPosition
 (LINE13+19)|DISPLAY_ALWAYS,   // GPS_directionToHomePosition
@@ -902,54 +952,6 @@ const unsigned char GPS_distanceToHomeAdd[2]={
 const unsigned char MwGPSAltPositionAdd[2]={
   0xa7,0xa8};
 
-
-enum Positions {
-  GPS_numSatPosition,
-  GPS_directionToHomePosition,
-  GPS_distanceToHomePosition,
-  speedPosition,
-  GPS_angleToHomePosition,
-  MwGPSAltPosition,
-  sensorPosition,
-  MwHeadingPosition,
-  MwHeadingGraphPosition,
-  MwAltitudePosition,
-  MwClimbRatePosition,
-  CurrentThrottlePosition,
-  flyTimePosition,
-  onTimePosition,
-  motorArmedPosition,
-  pitchAnglePosition,
-  rollAnglePosition,
-  MwGPSLatPositionTop,
-  MwGPSLonPositionTop,
-  rssiPosition,
-  temperaturePosition,
-  voltagePosition,
-  vidvoltagePosition,
-  amperagePosition,
-  pMeterSumPosition,
-  horizonPosition,
-  SideBarPosition,
-  SideBarScrollPosition,
-  SideBarHeightPosition,
-  SideBarWidthPosition,
-  gimbalPosition,
-  GPS_timePosition,
-  SportPosition,
-  ModePosition,
-  MapModePosition,
-  MapCenterPosition,
-  APstatusPosition,
-  wattPosition,
-  glidescopePosition,
-  callSignPosition,
-  debugPosition,
-
-  POSITIONS_SETTINGS
-};
-
-uint16_t screenPosition[POSITIONS_SETTINGS];
 
 #define REQ_MSP_IDENT     (1 <<  0)
 #define REQ_MSP_STATUS    (1 <<  1)

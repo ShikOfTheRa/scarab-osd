@@ -179,12 +179,14 @@ void GPS_updateGGA(){
 
 
 void GPS_NewData() {
-  #define GPSHOMEFIX 40
   static uint8_t GPS_fix_HOME_validation=GPSHOMEFIX;
 
   if (GPS_fix && (GPS_numSat >= MINSATFIX)) {
     if (GPS_fix_HOME_validation>0){
-      GPS_fix_HOME_validation--;
+#if defined HOMESATFIX
+      if (GPS_numSat>=HOMESATFIX)
+#endif // HOMESATFIX
+        GPS_fix_HOME_validation--;
       GPS_numSat=1;
     }
     else{

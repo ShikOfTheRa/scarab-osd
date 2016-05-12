@@ -25,10 +25,14 @@ chrisinvb
 xeno010
 ohhorob
 Pawelsky (DJI decoders)
+DigitalEntity (LTM code)
+jflyper
+From now on contibutors listed here:
+https://github.com/ShikOfTheRa/scarab-osd/graphs/contributors
 
 
 Other Projects and their contributions
-Ardupilot team - some of the original code is probably from / based upon elements of ardupilot team. e.g. GPS
+Ardupilot team - some of the original code is probably from / based upon elements of ardupilot team. e.g. GPS /  MAVLINK
 Arducam-osd - also probably some code / ideas came from here in past
 MultiWii
 Please check all their excellent projects. 
@@ -47,7 +51,7 @@ www.multiwiicopter.com for providing hardware to test
 www.dtuhf.com for providing hardware to test
 www.readytoflyquads.com for providing hardawre to test
 
-Please check the above  
+Please check the above suppliers. They are supporting you too...  
 
 
 
