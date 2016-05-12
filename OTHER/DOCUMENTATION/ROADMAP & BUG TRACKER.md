@@ -13,6 +13,7 @@
 
 ## Bugfixes / Enhancements intended for 1.7: ##
 
+ * OSD    - Support for long distance - max travelled greater than 32km
  * OSD    - Voltage load sag hysterysis
  * OSD    - BUGFIX: Warning message display overwriting
  * OSD    - Support for GPS / NAV PID adjustments
