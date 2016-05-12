@@ -11,8 +11,8 @@ MWOSD GUI must be able to compile with Processing 2.0.3.
 
 Testing
 Please ensure code compiles with the following as minimum:
-MULTIWII
 CLEANFLIGHT
+FIXEDWING_BF
 GPSOSD
 Please ensure there 30 bytes free stack memeory after running with a flight controller that supports GPS. use MEMCHECK and debug3 to verify...
 
@@ -24,8 +24,8 @@ It is what it is far from ideal.
 Until such time that it is cleansed:
 
 Anything goes, but with the exception of....
-Terse programming style. In my experince... wankers who are not team players and think they are better than others, are not open to change, keep knowledge to themselves and hove no realisation of how others perceive them or their impact on the wider team. Not someone you would invite to a party :). Many do get to that stage and experiment with it. Thats good and cool. 
-Practically it can make it difficult for humans who are code less frequently. MWOSD reliies on thso guys a lot.
+Terse programming style. In my experience... wankers who are not team players and think they are better than others, are not open to change, keep knowledge to themselves and hove no realisation of how others perceive them or their impact on the wider team. Not someone you would invite to a party :). Many do get to that stage and experiment with it. Thats good and cool. 
+Practically it can make it difficult for humans who are code less frequently. MWOSD relies on those guys a lot. (Quote from our software dev mgr!)
 Personally I like it - but only because it looks cool....
 
 For preference, this is preferred coding style. It is not mandatory at this stage.
