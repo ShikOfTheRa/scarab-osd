@@ -14,7 +14,7 @@ Please ensure code compiles with the following as minimum:
 CLEANFLIGHT
 FIXEDWING_BF
 GPSOSD
-Please ensure there 30 bytes free stack memeory after running with a flight controller that supports GPS. use MEMCHECK and debug3 to verify...
+Please ensure there is a minimum of 100 bytes free stack memory after running with a flight controller that supports GPS. Use MEMCHECK and debug3 to verify...
 
 Code style:
 It is what it is. 
