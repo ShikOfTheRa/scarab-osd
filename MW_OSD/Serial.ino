@@ -1,12 +1,12 @@
  
-#if defined MAVLINK
-  #define SERIALBUFFERSIZE 75
-#elif defined NAZA
-  #define SERIALBUFFERSIZE 75
-#elif defined GPSOSD
-  #define SERIALBUFFERSIZE 100
-#else
+#if defined PROTOCOL_MAVLINK
   #define SERIALBUFFERSIZE 150
+#elif defined NAZA
+  #define SERIALBUFFERSIZE 150
+#elif defined GPSOSD
+  #define SERIALBUFFERSIZE 150
+#else
+  #define SERIALBUFFERSIZE 200
 #endif
 
 static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string
@@ -17,11 +17,11 @@ static uint8_t rcvChecksum;
 static uint8_t readIndex;
 uint8_t txChecksum;
 
-#if defined MAVLINK
+#if defined PROTOCOL_MAVLINK
   #include "MAVLINK.h"
 #endif 
 
-#if defined LTM
+#if defined PROTOCOL_LTM
   #include "LTM.h"
 #endif 
 
@@ -156,25 +156,8 @@ void serialMSPCheck()
                     
   }
 
-#define MSPOSD
 
-#ifdef GPSOSD
-#undef MSPOSD
-#endif
-
-#ifdef NAZA
-#undef MSPOSD
-#endif
-
-#ifdef MAVLINK
-#undef MSPOSD
-#endif
-
-#ifdef LTM
-#undef MSPOSD
-#endif
-
-#ifdef MSPOSD
+#ifdef PROTOCOL_MSP
 
   if (cmdMSP==MSP_IDENT)
   {
@@ -875,13 +858,13 @@ void serialMSPreceive(uint8_t loops)
       #endif //NAZA  
     #endif //GPSOSD   
 
-    #if defined (MAVLINK)
+    #if defined (PROTOCOL_MAVLINK)
        serialMAVreceive(c);
-    #endif //MAVLINK   
+    #endif //PROTOCOL_MAVLINK   
 
-    #if defined (LTM)
+    #if defined (PROTOCOL_LTM)
        serialLTMreceive(c);
-    #endif //MAVLINK   
+    #endif // PROTOCOL_LTM   
     
     if (c_state == IDLE)
     {

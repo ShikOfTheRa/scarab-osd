@@ -1185,7 +1185,7 @@ const PROGMEM char * const menu_on_off[] =
 };
 
 
-#ifdef MAVLINK
+#ifdef PROTOCOL_MAVLINK
 
 #define MAVLINK_MSG_ID_HEARTBEAT 0
 #define MAVLINK_MSG_ID_HEARTBEAT_MAGIC 50

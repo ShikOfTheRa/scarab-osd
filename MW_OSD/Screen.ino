@@ -226,7 +226,7 @@ void displayMode(void)
     }
   }  
 
-#ifdef MAVLINK // override MWOSD mode icons
+#ifdef PROTOCOL_MAVLINK // override MWOSD mode icons
     strcpy_P(screenBuffer, (char*)pgm_read_word(&(mav_mode_index[mw_mav.mode])));
 #else  
   if(MwSensorActive&mode.passthru){
@@ -305,7 +305,7 @@ void displayMode(void)
     }
 #endif //ACROPLUS
   }
-#endif //MAVLINK
+#endif //PROTOCOL_MAVLINK
   if(Settings[S_MODEICON]){
     if(fieldIsVisible(ModePosition)){
       MAX7456_WriteString(screenBuffer,getPosition(ModePosition));

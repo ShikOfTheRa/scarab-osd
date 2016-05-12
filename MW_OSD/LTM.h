@@ -1,5 +1,5 @@
 
-#ifdef LTM
+#ifdef PROTOCOL_LTM
 
 #define LIGHTTELEMETRY_START1 0x24 //$
 #define LIGHTTELEMETRY_START2 0x54 //T
@@ -229,9 +229,7 @@ void serialLTMreceive(uint8_t c) {
   }
 }
 
-
-
-#endif
+#endif // PROTOCOL_LTM
 
 
 

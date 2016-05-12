@@ -4,7 +4,7 @@
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-//#define DEBUG         // Enable/disable option to display OSD debug values 
+#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 //#define ALWAYSARMED
 //#define DEVELOPMENT   // to force layout 0, set debug default eeprombit = 1
@@ -55,7 +55,7 @@
 #endif
 
 #ifdef FIXEDWING_BF     //set up latest at time of release
-  // using these
+  // based upon these..
   // #define BASEFLIGHT20150627
   // #define FIXEDWING
 #endif
@@ -66,7 +66,7 @@
 #endif
 
 #ifdef APM     //set up latest at time of release
-//  #define MAVLINK
+  #define PROTOCOL_MAVLINK
 #endif
 
 // The unit of current varies across implementations.  There are effectively three set:
@@ -273,7 +273,7 @@
   #define MENU_ADVANCED 5       //ADVANCED
   #define MENU_ALARMS   6       //ALARMS
   #define MAXPAGE       MENU_ALARMS
-  #define MAVLINK
+  #define PROTOCOL_MAVLINK
   #define SENSORS
   #define AMPERAGE_DIV 10
   #define FORCESENSORS
@@ -368,9 +368,6 @@
 
 /********************  GPS OSD rule definitions  *********************/
 
-#define GPSOSDARMDISTANCE   20 // distance from home in meters when GPSOSD arms. Starts flight timer etc.
-#define GPSOSDHOMEDISTANCE  40 // distance from home in meters when GPSOSD is home. When speed is low it disarms and displays summary screen.
-
 #if defined PPMOSDCONTROL
   #undef OSD_SWITCH
   #undef OSD_SWITCH_RSSI
@@ -430,16 +427,12 @@
   #define GPSACTIVECHECK 5
 
   #define MENU_STAT     0       //STATISTICS
-//  #define MENU_PID  X //PID CONFIG
-//  #define MENU_RC  X //RC TUNING
   #define MENU_VOLTAGE  1       //VOLTAGE
   #define MENU_RSSI     2       //RSSI
   #define MENU_CURRENT  3       //CURRENT
   #define MENU_DISPLAY  4       //DISPLAY
   #define MENU_ADVANCED 5       //ADVANCED
-//  #define MENU_GPS_TIME  X //GPS TIME
   #define MENU_ALARMS   6       //ALARMS
-//  #define MENU_PROFILE 9//PROFILE+PID CONTROLLER
   #define MAXPAGE       MENU_ALARMS
 #endif
 
@@ -447,6 +440,34 @@
   #define OSD_SWITCH_RC
 #endif
 
+
+/********************  TELEMTERY rule definitions  *********************/
+#ifdef TELEMETRY_LTM
+#define PROTOCOL_LTM
+#endif
+
+#ifdef TELEMETRY_MAVLINK
+PROTOCOL_MAVLINK
+#endif
+
+/********************  PROTOCOL rule definitions  *********************/
+#define PROTOCOL_MSP // on by default
+
+#ifdef GPSOSD
+#undef PROTOCOL_MSP
+#endif
+
+#ifdef NAZA
+#undef PROTOCOL_MSP
+#endif
+
+#ifdef PROTOCOL_MAVLINK
+#undef PROTOCOL_MSP
+#endif
+
+#ifdef PROTOCOL_LTM
+#undef PROTOCOL_MSP
+#endif
 
 /********************  MSP speed enhancements rule definitions  *********************/
 
@@ -502,10 +523,10 @@
 #endif
 
 #ifndef BAUDRATE 
-  #ifdef MAVLINK 
+  #ifdef PROTOCOL_MAVLINK 
     #define BAUDRATE 57600
   #else
     #define BAUDRATE 115200
-  #endif // MAVLINK
+  #endif // PROTOCOL_MAVLINK
 #endif // BAUDRATE
 

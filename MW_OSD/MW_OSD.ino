@@ -67,6 +67,7 @@ uint16_t UntouchedStack(void)
 
     return count; 
 } 
+#define FORCEDEBUG
 #endif
 
 // Workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34734
