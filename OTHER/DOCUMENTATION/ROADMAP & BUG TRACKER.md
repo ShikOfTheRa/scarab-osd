@@ -8,15 +8,16 @@
  * OSD    - Support for MAVLINK/APM/PIXHAWK
  * OSD    - GPS mode home set improvement
  * GUI    - Support for MAVLINK/APM/PIXHAWK
+ * OSD    - Support for GPS / NAV PID adjustments - BF FIXEDWING
 
 ---
 
 ## Bugfixes / Enhancements intended for 1.7: ##
 
  * OSD    - Support for long distance - max travelled greater than 32km
+ * OSD    - Support for LTM
  * OSD    - Voltage load sag hysterysis
  * OSD    - BUGFIX: Warning message display overwriting
- * OSD    - Support for GPS / NAV PID adjustments
  * OSD    - Support for alternative crosshairs
  * OSD    - FC version display change
  * GUI    - Improved speed
