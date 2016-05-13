@@ -549,7 +549,7 @@ int32_t  MwAltitude=0;                         // This hold barometric value
 int32_t  old_MwAltitude=0;                     // This hold barometric value
 
 
-int MwAngle[2]={0,0};           // Those will hold Accelerator Angle
+int16_t MwAngle[2]={0,0};           // Those will hold Accelerometer Angle
 static uint16_t MwRcData[8]={   // This hold receiver pulse signal
   1500,1500,1500,1500,1500,1500,1500,1500} ;
 
