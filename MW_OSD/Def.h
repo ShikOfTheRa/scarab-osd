@@ -42,6 +42,11 @@
   #define TAULABS
 #endif
 
+#ifdef LIBREPILOT
+  #define TAULABS
+  #define USE_MSP_PIDNAMES
+#endif
+
 #ifdef CLEANFLIGHT    //set up latest at time of release
   #define CLEANFLIGHT190
 #endif
