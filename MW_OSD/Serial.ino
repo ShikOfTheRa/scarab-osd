@@ -386,7 +386,43 @@ void serialMSPCheck()
       modeMSPRequests &=~ REQ_MSP_RC_TUNING;
     #endif
   }
+#ifdef USE_MSP_PIDNAMES
+  if (cmdMSP==MSP_PIDNAMES)
+  {
+      // parse buffer and fill menu_pid[]. We need to receive all bytes, but store only ones that we need
+      
+      uint8_t pn_index = 0, avail = (PIDNAME_BUFSIZE - 1), c;
+      uint8_t *out = (uint8_t *)menu_pid;
 
+      for(uint8_t i = 0; i<dataSize; i++) {
+        c = read8();
+
+        if((pn_index != 5) && (pn_index != 6) && (pn_index <= 8)) // 5, 6 and >8 are skipped
+        {
+          if(c == ';')
+          {
+             *out = 0;
+
+              out += avail + 1;
+              
+              avail = PIDNAME_BUFSIZE - 1;
+          }
+          else if(avail > 0)
+          {
+             *out++ = c;
+             --avail;
+          }
+        }
+
+        if(c == ';')
+        {
+           ++pn_index;
+        }
+      
+      }
+      modeMSPRequests &= ~REQ_MSP_PIDNAMES;
+  }
+#endif
   if (cmdMSP==MSP_PID)
   {
     for(uint8_t i=0; i<PIDITEMS; i++) {

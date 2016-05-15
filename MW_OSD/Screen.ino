@@ -1322,9 +1322,14 @@ void displayConfigScreen(void)
 #ifdef MENU_PID
   if(configPage==MENU_PID)
   {
+
     for(uint8_t X=0; X<=6; X++) {
+#ifdef USE_MSP_PIDNAMES
+      MAX7456_WriteString(menu_pid[X], ROLLT+ (X*30));
+#else
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_pid[X])));
       MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+#endif
     }
    
     for(uint8_t Y=0; Y<=8; Y++) {      
