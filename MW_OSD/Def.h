@@ -285,7 +285,7 @@
   #undef  SATACTIVECHECK
   #undef  GPSACTIVECHECK
   #undef  OSD_SWITCH_RC
-  #define ALWAYSARMED
+  #define HIDEARMEDSTATUS
   #define MENU_STAT  0           //STATISTICS
   #define MAXPAGE MENU_STAT
 #endif
