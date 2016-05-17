@@ -41,6 +41,11 @@ uint8_t read8()  {
   return serialBuffer[readIndex++];
 }
 
+#define skip8() {readIndex++;}
+#define skip16() {readIndex+=2;}
+#define skip32() {readIndex+=4;}
+#define skipn(n) {readIndex+=n;}
+
 void mspWriteRequest(uint8_t mspCommand, uint8_t txDataSize){
   //return;
   Serial.write('$');
@@ -312,25 +317,29 @@ void serialMSPCheck()
 #ifdef USE_FC_VOLTS_CONFIG
   if (cmdMSP==MSP_MISC)
   {
-    read16(); //ignore: midrc
+    // Multiple skip8/skip16 (readIndex increments) seems to be
+    // collapsed into single addition by the compiler.
 
-    read16(); //ignore: minthrottle
-    read16(); //ignore: maxthrottle
-    read16(); //ignore: mincommand
+    skip16(); //ignore: midrc
 
-    read16(); //ignore: failsafe_throttle
+    skip16(); //ignore: minthrottle
+    skip16(); //ignore: maxthrottle
+    skip16(); //ignore: mincommand
+
+    skip16(); //ignore: failsafe_throttle
     
-    read8(); //ignore: gps_type
-    read8(); //ignore: gps_baudrate
-    read8(); //ignore: gps_ubx_sbas
+    skip8(); //ignore: gps_type
+    skip8(); //ignore: gps_baudrate
+    skip8(); //ignore: gps_ubx_sbas
 
-    read8(); //ignore: multiwiiCurrentMeterOutput
-    read8(); //ignore: rssi_channel
-    read8(); //ignore: 0
+    skip8(); //ignore: multiwiiCurrentMeterOutput
+    skip8(); //ignore: rssi_channel
+    skip8(); //ignore: 0
 
-    read16(); //ignore: mag_declination
+    skip16(); //ignore: mag_declination
 
-    read8(); //ignore: vbatscale
+    skip8(); //ignore: vbatscale
+
     MvVBatMinCellVoltage = read8(); //vbatmincellvoltage
     MvVBatMaxCellVoltage = read8(); //vbatmaxcellvoltage
     MvVBatWarningCellVoltage = read8(); //vbatwarningcellvoltage
@@ -695,174 +704,231 @@ void handleRawRC() {
   }
 }
 
+// Some cute macros to use use within the switch-case to make code look clean
+// Note that it has a break, and it is enclosed in a braces.
+// It may be clever to omit the trailing semi-colon in use to signify that
+// the line is special.
+
+#define ReverseSetting(name) {Settings[name] = !Settings[name]; break;}
+#define ModifySetting(name) {Settings[name] += menudir; break;}
+#define ModifySetting16(name) {Settings16[name] += menudir; break;}
+
 void serialMenuCommon()
-  {
-    if((ROW==10)&&(COL==3)) {
-      if (menudir>1){
-        menudir=1;
-      }
-      if (menudir<-1){
-        menudir=-1;
-      }
-//      constrain(menudir,-1,1);
-      configPage=configPage+menudir;
+{
+  if((ROW==10)&&(COL==3)) {
+    if (menudir > 1){
+      menudir = 1;
     }
-    if(configPage<MINPAGE) configPage = MAXPAGE;
-    if(configPage>MAXPAGE) configPage = MINPAGE;
+    if (menudir < -1){
+      menudir = -1;
+    }
+//      constrain(menudir,-1,1);
+    configPage += menudir;
+  }
+
+  if(configPage < MINPAGE) configPage = MAXPAGE;
+  if(configPage > MAXPAGE) configPage = MINPAGE;
+
 #ifdef MENU_PID
-	if(configPage == MENU_PID) {
-	  if(ROW >= 1 && ROW <= 7) {
-            uint8_t MODROW=ROW-1;
-            if (ROW>5){
-              MODROW=ROW+1;
-            }
-  	    if(COL==1) P8[MODROW]=P8[MODROW]+menudir;
-	    if(COL==2) I8[MODROW]=I8[MODROW]+menudir;
-	    if(COL==3) D8[MODROW]=D8[MODROW]+menudir;
-	  }
-	}
+  if(configPage == MENU_PID) {
+    if(ROW >= 1 && ROW <= 7) {
+      uint8_t MODROW = ROW - 1;
+      if (ROW > 5) {
+        MODROW = ROW + 1;
+      }
+      switch(COL) {
+      case 1: P8[MODROW] += menudir; break;
+      case 2: I8[MODROW] += menudir; break;
+      case 3: D8[MODROW] += menudir; break;
+      }
+    }
+  }
 #endif
+
 #ifdef MENU_RC
-        #if defined CORRECT_MENU_RCT2
-          if(configPage == MENU_RC && COL == 3) {
-	    if(ROW==1) rcRate8=rcRate8+menudir;
-	    if(ROW==2) rcExpo8=rcExpo8+menudir;
-	    if(ROW==3) rollRate=rollRate+menudir;
-	    if(ROW==4) PitchRate=PitchRate+menudir;
-	    if(ROW==5) yawRate=yawRate+menudir;
-	    if(ROW==6) dynThrPID=dynThrPID+menudir;
-	    if(ROW==7) thrMid8=thrMid8+menudir;
-	    if(ROW==8) thrExpo8=thrExpo8+menudir;
-	    if(ROW==9) tpa_breakpoint16=tpa_breakpoint16+menudir;
-          }
-        #elif defined CORRECT_MENU_RCT1
-          if(configPage == MENU_RC && COL == 3) {
-	    if(ROW==1) rcRate8=rcRate8+menudir;
-	    if(ROW==2) rcExpo8=rcExpo8+menudir;
-	    if(ROW==3) rollRate=rollRate+menudir;
-	    if(ROW==4) PitchRate=PitchRate+menudir;
-	    if(ROW==5) yawRate=yawRate+menudir;
-	    if(ROW==6) dynThrPID=dynThrPID+menudir;
-	    if(ROW==7) thrMid8=thrMid8+menudir;
-	    if(ROW==8) thrExpo8=thrExpo8+menudir;
-         }
-        #else
-          if(configPage == MENU_RC && COL == 3) {
-	    if(ROW==1) rcRate8=rcRate8+menudir;
-	    if(ROW==2) rcExpo8=rcExpo8+menudir;
-	    if(ROW==3) rollPitchRate=rollPitchRate+menudir;
-	    if(ROW==4) yawRate=yawRate+menudir;
-	    if(ROW==5) dynThrPID=dynThrPID+menudir;
-	    if(ROW==6) thrMid8=thrMid8+menudir;
-	    if(ROW==7) thrExpo8=thrExpo8+menudir;
-	  }
-        #endif
+  #if defined CORRECT_MENU_RCT2
+    if (configPage == MENU_RC && COL == 3) {
+      switch(ROW) {
+      case 1: rcRate8 += menudir; break;
+      case 2: rcExpo8 += menudir; break;
+      case 3: rollRate += menudir; break;
+      case 4: PitchRate += menudir; break;
+      case 5: yawRate += menudir; break;
+      case 6: dynThrPID += menudir; break;
+      case 7: thrMid8 += menudir; break;
+      case 8: thrExpo8 += menudir; break;
+      case 9: tpa_breakpoint16 += menudir; break;
+      }
+    }
+  #elif defined CORRECT_MENU_RCT1
+    if (configPage == MENU_RC && COL == 3) {
+      switch(ROW) {
+      case 1: rcRate8 += menudir; break;
+      case 2: rcExpo8 += menudir; break;
+      case 3: rollRate += menudir; break;
+      case 4: PitchRate += menudir; break;
+      case 5: yawRate += menudir; break;
+      case 6: dynThrPID += menudir; break;
+      case 7: thrMid8 += menudir; break;
+      case 8: thrExpo8 += menudir; break;
+      }
+    }
+  #else
+    if (configPage == MENU_RC && COL == 3) {
+      switch(ROW) {
+      case 1: rcRate8 += menudir; break;
+      case 2: rcExpo8 += menudir; break;
+      case 3: rollPitchRate += menudir; break;
+      case 4: yawRate += menudir; break;
+      case 5: dynThrPID += menudir; break;
+      case 6: thrMid8 += menudir; break;
+      case 7: thrExpo8 += menudir; break;
+      }
+    }
+  #endif
 #endif
+
 #ifdef MENU_FIXEDWING_BF
-	    if(configPage == MENU_FIXEDWING_BF && COL == 3) {
-            if(ROW==1) cfg.fw_gps_maxcorr +=menudir;
-            if(ROW==2) cfg.fw_gps_rudder+=menudir;
-            if(ROW==3) cfg.fw_gps_maxclimb+=menudir;
-            if(ROW==4) cfg.fw_gps_maxdive+=menudir;
-            if(ROW==5) cfg.fw_climb_throttle+=menudir;
-            if(ROW==6) cfg.fw_cruise_throttle+=menudir;
-            if(ROW==7) cfg.fw_idle_throttle+=menudir;
-            if(ROW==8) cfg.fw_rth_alt+=menudir;
-	}
+  if (configPage == MENU_FIXEDWING_BF && COL == 3) {
+    switch(ROW) {
+    case 1: cfg.fw_gps_maxcorr += menudir; break;
+    case 2: cfg.fw_gps_rudder += menudir; break;
+    case 3: cfg.fw_gps_maxclimb += menudir; break;
+    case 4: cfg.fw_gps_maxdive += menudir; break;
+    case 5: cfg.fw_climb_throttle += menudir; break;
+    case 6: cfg.fw_cruise_throttle += menudir; break;
+    case 7: cfg.fw_idle_throttle += menudir; break;
+    case 8: cfg.fw_rth_alt += menudir; break;
+    }
+  }
 #endif
+
 #ifdef MENU_VOLTAGE
-	if(configPage == MENU_VOLTAGE && COL == 3) {
-	  if(ROW==1) Settings[S_DISPLAYVOLTAGE]=!Settings[S_DISPLAYVOLTAGE];  
-	  if(ROW==2) Settings[S_DIVIDERRATIO]=Settings[S_DIVIDERRATIO]+menudir;
-	  if(ROW==3) Settings[S_VOLTAGEMIN]=Settings[S_VOLTAGEMIN]+menudir;
-	  if(ROW==4) Settings[S_VIDVOLTAGE]=!Settings[S_VIDVOLTAGE];
-	  if(ROW==5) Settings[S_VIDDIVIDERRATIO]=Settings[S_VIDDIVIDERRATIO]+menudir;
-	  if(ROW==6) Settings[S_BATCELLS]=Settings[S_BATCELLS]+menudir;
-	  if(ROW==7) Settings[S_MAINVOLTAGE_VBAT]=!Settings[S_MAINVOLTAGE_VBAT];
-	}
+  if (configPage == MENU_VOLTAGE && COL == 3) {
+    switch(ROW) {
+    case 1: ReverseSetting(S_DISPLAYVOLTAGE)
+    case 2: ModifySetting(S_DIVIDERRATIO)
+    case 3: ModifySetting(S_VOLTAGEMIN)
+    case 4: ReverseSetting(S_VIDVOLTAGE)
+    case 5: ModifySetting(S_VIDDIVIDERRATIO)
+    case 6: ModifySetting(S_BATCELLS)
+    case 7: ReverseSetting(S_MAINVOLTAGE_VBAT)
+    }
+  }
 #endif
+
 #ifdef MENU_RSSI
-	if(configPage == MENU_RSSI && COL == 3) {
-	  if(ROW==1) Settings[S_DISPLAYRSSI]=!Settings[S_DISPLAYRSSI];
-	  if(ROW==2) timer.rssiTimer=15; // 15 secs to turn off tx anwait to read min RSSI
-	  if(ROW==3) Settings[S_MWRSSI]=!Settings[S_MWRSSI];
-	  if(ROW==4) Settings[S_PWMRSSI]=!Settings[S_PWMRSSI];
-	  if(ROW==5) Settings16[S16_RSSIMAX]=Settings16[S16_RSSIMAX]+menudir;
-	  if(ROW==6) Settings16[S16_RSSIMIN]=Settings16[S16_RSSIMIN]+menudir;
-	}
+  if (configPage == MENU_RSSI && COL == 3) {
+    switch(ROW) {
+    case 1: ReverseSetting(S_DISPLAYRSSI)
+    case 2: timer.rssiTimer=15; break; // 15 secs to turn off tx anwait to read min RSSI
+    case 3: ReverseSetting(S_MWRSSI)
+    case 4: ReverseSetting(S_PWMRSSI)
+    case 5: ModifySetting16(S16_RSSIMAX)
+    case 6: ModifySetting16(S16_RSSIMIN)
+    }
+  }
 #endif
+
 #ifdef MENU_CURRENT
-	if(configPage == MENU_CURRENT && COL == 3) {
-	  if(ROW==1) Settings[S_AMPERAGE]=!Settings[S_AMPERAGE];
-	  if(ROW==2) Settings[S_AMPER_HOUR]=!Settings[S_AMPER_HOUR];
-	  if(ROW==3) Settings[S_AMPERAGE_VIRTUAL]=!Settings[S_AMPERAGE_VIRTUAL];
-	  if(ROW==4) Settings16[S16_AMPDIVIDERRATIO]=Settings16[S16_AMPDIVIDERRATIO]+menudir;
-	  if(ROW==5) Settings16[S16_AMPZERO]=Settings16[S16_AMPZERO]+menudir;
-	}
+  if (configPage == MENU_CURRENT && COL == 3) {
+    switch(ROW) {
+    case 1: ReverseSetting(S_AMPERAGE)
+    case 2: ReverseSetting(S_AMPER_HOUR)
+    case 3: ReverseSetting(S_AMPERAGE_VIRTUAL)
+    case 4: ModifySetting16(S16_AMPDIVIDERRATIO)
+    case 5: ModifySetting16(S16_AMPZERO)
+    }
+  }
 #endif
+
 #ifdef MENU_DISPLAY
-	if(configPage == MENU_DISPLAY && COL == 3) {
-	  if(ROW==1) Settings[S_DISPLAY_HORIZON_BR]=!Settings[S_DISPLAY_HORIZON_BR];
-	  if(ROW==2) Settings[S_WITHDECORATION]=!Settings[S_WITHDECORATION];
-	  if(ROW==3) Settings[S_SCROLLING]=!Settings[S_SCROLLING];
-	  if(ROW==4) Settings[S_THROTTLEPOSITION]=!Settings[S_THROTTLEPOSITION];
-	  if(ROW==5) Settings[S_COORDINATES]=!Settings[S_COORDINATES];
-	  if(ROW==6) Settings[S_MODESENSOR]=!Settings[S_MODESENSOR];
-	  if(ROW==7) Settings[S_GIMBAL]=!Settings[S_GIMBAL];
-	  if(ROW==8) Settings[S_MAPMODE]=Settings[S_MAPMODE]+menudir;
-	}
+  if (configPage == MENU_DISPLAY && COL == 3) {
+    switch(ROW) {
+    case 1: ReverseSetting(S_DISPLAY_HORIZON_BR)
+    case 2: ReverseSetting(S_WITHDECORATION)
+    case 3: ReverseSetting(S_SCROLLING)
+    case 4: ReverseSetting(S_THROTTLEPOSITION)
+    case 5: ReverseSetting(S_COORDINATES)
+    case 6: ReverseSetting(S_MODESENSOR)
+    case 7: ReverseSetting(S_GIMBAL)
+    case 8: ModifySetting(S_MAPMODE)
+    }
+  }
 #endif
+
 #ifdef MENU_ADVANCED
-	if(configPage == MENU_ADVANCED && COL == 3) {
-	  if(ROW==1) Settings[S_UNITSYSTEM]=!Settings[S_UNITSYSTEM];
-	  if(ROW==2) {
-	    Settings[S_VIDEOSIGNALTYPE]=!Settings[S_VIDEOSIGNALTYPE];
-	    MAX7456Setup();
-	    }
-	  if(ROW==3) Settings[S_VREFERENCE]=!Settings[S_VREFERENCE];
-	  if(ROW==4) Settings[S_DEBUG]=!Settings[S_DEBUG];
-	  if(ROW==5) timer.magCalibrationTimer=CALIBRATION_DELAY;
-	  if(ROW==6) Settings[S_RCWSWITCH_CH]=Settings[S_RCWSWITCH_CH]+menudir;	}
+  if (configPage == MENU_ADVANCED && COL == 3) {
+    switch(ROW) {
+    case 1: ReverseSetting(S_UNITSYSTEM)
+    case 2:
+      Settings[S_VIDEOSIGNALTYPE]=!Settings[S_VIDEOSIGNALTYPE];
+      MAX7456Setup();
+      break;
+    case 3: ReverseSetting(S_VREFERENCE)
+    case 4: ReverseSetting(S_DEBUG)
+    case 5: timer.magCalibrationTimer=CALIBRATION_DELAY; break;
+    case 6: ModifySetting(S_RCWSWITCH_CH)
+    }
+  }
 #endif
+
 #ifdef MENU_GPS_TIME
-	if(configPage == MENU_GPS_TIME && COL == 3) {
-	  if(ROW==1) Settings[S_GPSTIME]=!Settings[S_GPSTIME];
-	  if(ROW==2) Settings[S_GPSTZAHEAD]=!Settings[S_GPSTZAHEAD];
-	  if(ROW==3) if((menudir == 1 && Settings[S_GPSTZ] < 130) || (menudir == -1 && Settings[S_GPSTZ] > 0))Settings[S_GPSTZ]=Settings[S_GPSTZ]+menudir*5;
-	}
+  if (configPage == MENU_GPS_TIME && COL == 3) {
+    switch(ROW) {
+    case 1: ReverseSetting(S_GPSTIME);
+    case 2: ReverseSetting(S_GPSTZAHEAD);
+    case 3:
+      if (   (menudir == 1 && Settings[S_GPSTZ] < 130)
+          || (menudir == -1 && Settings[S_GPSTZ] > 0))
+        Settings[S_GPSTZ] = Settings[S_GPSTZ] + menudir * 5;
+      break;
+    }
+  }
 #endif
+
 #ifdef MENU_ALARMS
-	if(configPage == MENU_ALARMS && COL == 3) {
-	  if(ROW==1) Settings[S_DISTANCE_ALARM]=Settings[S_DISTANCE_ALARM]+menudir;
-	  if(ROW==2) Settings[S_ALTITUDE_ALARM]=Settings[S_ALTITUDE_ALARM]+menudir;
-	  if(ROW==3) Settings[S_SPEED_ALARM]=Settings[S_SPEED_ALARM]+menudir;
-	  if(ROW==4) Settings[S_FLYTIME_ALARM]=Settings[S_FLYTIME_ALARM]+menudir;
-	  if(ROW==5) Settings[S_AMPER_HOUR_ALARM]=Settings[S_AMPER_HOUR_ALARM]+menudir;
-	  if(ROW==6) Settings[S_AMPERAGE_ALARM]=Settings[S_AMPERAGE_ALARM]+menudir;
-	}
+  if (configPage == MENU_ALARMS && COL == 3) {
+    switch(ROW) {
+    case 1: ModifySetting(S_DISTANCE_ALARM)
+    case 2: ModifySetting(S_ALTITUDE_ALARM)
+    case 3: ModifySetting(S_SPEED_ALARM)
+    case 4: ModifySetting(S_FLYTIME_ALARM)
+    case 5: ModifySetting(S_AMPER_HOUR_ALARM)
+    case 6: ModifySetting(S_AMPERAGE_ALARM)
+    }
+  }
 #endif
+
 #ifdef MENU_PROFILE
-	if(configPage == MENU_PROFILE && COL == 3) {
-	  if(ROW==1) FCProfile=FCProfile+menudir;
-	  if(ROW==2) PIDController=PIDController+menudir;
-        #ifdef CORRECTLOOPTIME
-	  if(ROW==3) LoopTime=LoopTime+menudir;
-        #endif
-	};
+  if (configPage == MENU_PROFILE && COL == 3) {
+    switch(ROW) {
+    case 1: FCProfile += menudir; break;
+    case 2: PIDController += +menudir; break;
+  #ifdef CORRECTLOOPTIME
+    case 3: LoopTime += menudir; break;
+  #endif
+    }
+  }
+
   #ifdef ENABLE_MSP_SAVE_ADVANCED
-        if (FCProfile>2)
-          FCProfile=0;
-        if (FCProfile!=PreviousFCProfile){
-          setFCProfile();
-          PreviousFCProfile=FCProfile;
-        }        
+  if (FCProfile > 2)
+    FCProfile=0;
+
+  if (FCProfile != PreviousFCProfile){
+    setFCProfile();
+    PreviousFCProfile = FCProfile;
+  }        
   #endif
 #endif  
-	if(ROW==10) {
-          previousconfigPage=configPage;
-	  if(COL==1) configExit();
-	  if(COL==2) configSave();
-        }
+
+  if (ROW == 10) {
+    previousconfigPage = configPage;
+    switch(COL) {
+    case 1: configExit(); break;
+    case 2: configSave(); break;
+    }
+  }
 }
 
 void serialMSPreceive(uint8_t loops)
