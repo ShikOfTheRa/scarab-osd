@@ -1,12 +1,12 @@
  
-#if defined MAVLINK
-  #define SERIALBUFFERSIZE 75
-#elif defined NAZA
-  #define SERIALBUFFERSIZE 75
-#elif defined GPSOSD
-  #define SERIALBUFFERSIZE 100
-#else
+#if defined PROTOCOL_MAVLINK
   #define SERIALBUFFERSIZE 150
+#elif defined NAZA
+  #define SERIALBUFFERSIZE 150
+#elif defined GPSOSD
+  #define SERIALBUFFERSIZE 150
+#else
+  #define SERIALBUFFERSIZE 200
 #endif
 
 static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string
@@ -17,11 +17,11 @@ static uint8_t rcvChecksum;
 static uint8_t readIndex;
 uint8_t txChecksum;
 
-#if defined MAVLINK
+#if defined PROTOCOL_MAVLINK
   #include "MAVLINK.h"
 #endif 
 
-#if defined LTM
+#if defined PROTOCOL_LTM
   #include "LTM.h"
 #endif 
 
@@ -156,25 +156,8 @@ void serialMSPCheck()
                     
   }
 
-#define MSPOSD
 
-#ifdef GPSOSD
-#undef MSPOSD
-#endif
-
-#ifdef NAZA
-#undef MSPOSD
-#endif
-
-#ifdef MAVLINK
-#undef MSPOSD
-#endif
-
-#ifdef LTM
-#undef MSPOSD
-#endif
-
-#ifdef MSPOSD
+#ifdef PROTOCOL_MSP
 
   if (cmdMSP==MSP_IDENT)
   {
@@ -403,7 +386,43 @@ void serialMSPCheck()
       modeMSPRequests &=~ REQ_MSP_RC_TUNING;
     #endif
   }
+#ifdef USE_MSP_PIDNAMES
+  if (cmdMSP==MSP_PIDNAMES)
+  {
+      // parse buffer and fill menu_pid[]. We need to receive all bytes, but store only ones that we need
+      
+      uint8_t pn_index = 0, avail = (PIDNAME_BUFSIZE - 1), c;
+      uint8_t *out = (uint8_t *)menu_pid;
 
+      for(uint8_t i = 0; i<dataSize; i++) {
+        c = read8();
+
+        if((pn_index != 5) && (pn_index != 6) && (pn_index <= 8)) // 5, 6 and >8 are skipped
+        {
+          if(c == ';')
+          {
+             *out = 0;
+
+              out += avail + 1;
+              
+              avail = PIDNAME_BUFSIZE - 1;
+          }
+          else if(avail > 0)
+          {
+             *out++ = c;
+             --avail;
+          }
+        }
+
+        if(c == ';')
+        {
+           ++pn_index;
+        }
+      
+      }
+      modeMSPRequests &= ~REQ_MSP_PIDNAMES;
+  }
+#endif
   if (cmdMSP==MSP_PID)
   {
     for(uint8_t i=0; i<PIDITEMS; i++) {
@@ -875,13 +894,13 @@ void serialMSPreceive(uint8_t loops)
       #endif //NAZA  
     #endif //GPSOSD   
 
-    #if defined (MAVLINK)
+    #if defined (PROTOCOL_MAVLINK)
        serialMAVreceive(c);
-    #endif //MAVLINK   
+    #endif //PROTOCOL_MAVLINK   
 
-    #if defined (LTM)
+    #if defined (PROTOCOL_LTM)
        serialLTMreceive(c);
-    #endif //MAVLINK   
+    #endif // PROTOCOL_LTM   
     
     if (c_state == IDLE)
     {

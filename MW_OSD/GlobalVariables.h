@@ -549,7 +549,7 @@ int32_t  MwAltitude=0;                         // This hold barometric value
 int32_t  old_MwAltitude=0;                     // This hold barometric value
 
 
-int MwAngle[2]={0,0};           // Those will hold Accelerator Angle
+int16_t MwAngle[2]={0,0};           // Those will hold Accelerometer Angle
 static uint16_t MwRcData[8]={   // This hold receiver pulse signal
   1500,1500,1500,1500,1500,1500,1500,1500} ;
 
@@ -833,6 +833,8 @@ const char configMsg06[] PROGMEM = "MAH USED";
 const char configMsg07[] PROGMEM = "MAX AMPS";
 //-----------------------------------------------------------Page1
 const char configMsg10[] PROGMEM = "PID CONFIG";
+
+#ifndef USE_MSP_PIDNAMES
 const char configMsg11[] PROGMEM = "ROLL";
 const char configMsg12[] PROGMEM = "PITCH";
 const char configMsg13[] PROGMEM = "YAW";
@@ -840,6 +842,8 @@ const char configMsg14[] PROGMEM = "ALT";
 const char configMsg15[] PROGMEM = "GPS";
 const char configMsg16[] PROGMEM = "LEVEL";
 const char configMsg17[] PROGMEM = "MAG";
+#endif /* !USE_MSP_PIDNAMES */
+
 //-----------------------------------------------------------Page2
 const char configMsg20[] PROGMEM = "RC TUNING";
 const char configMsg21[] PROGMEM = "RC RATE";
@@ -975,6 +979,7 @@ const unsigned char MwGPSAltPositionAdd[2]={
 #define REQ_MSP_PID_CONTROLLER  262144  // (1 << 18)
 #define REQ_MSP_LOOP_TIME       524288  // (1 << 19) 
 #define REQ_MSP_FW_CONFIG       1048576 // (1 << 20) 
+#define REQ_MSP_PIDNAMES (1L<<21)
 
 // Menu selections
 const PROGMEM char * const menu_choice_unit[] =
@@ -1007,6 +1012,14 @@ const PROGMEM char * const menu_stats_item[] =
   configMsg07,
 };
 
+#ifdef USE_MSP_PIDNAMES
+
+#define PIDNAME_BUFSIZE  8
+#define PIDNAME_NUMITEMS 7
+
+char menu_pid[PIDNAME_NUMITEMS][PIDNAME_BUFSIZE];
+
+#else /* USE_MSP_PIDNAMES */
 const PROGMEM char * const menu_pid[] = 
 {   
   configMsg11,
@@ -1017,6 +1030,7 @@ const PROGMEM char * const menu_pid[] =
   configMsg16,
   configMsg17,
 };
+#endif
 
 const PROGMEM char * const menu_rc[] = 
 {   
@@ -1185,7 +1199,7 @@ const PROGMEM char * const menu_on_off[] =
 };
 
 
-#ifdef MAVLINK
+#ifdef PROTOCOL_MAVLINK
 
 #define MAVLINK_MSG_ID_HEARTBEAT 0
 #define MAVLINK_MSG_ID_HEARTBEAT_MAGIC 50

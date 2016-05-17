@@ -67,6 +67,7 @@ uint16_t UntouchedStack(void)
 
     return count; 
 } 
+#define FORCEDEBUG
 #endif
 
 // Workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34734
@@ -346,6 +347,11 @@ void loop()
       case REQ_MSP_PID:
         MSPcmdsend = MSP_PID;
         break;
+#ifdef USE_MSP_PIDNAMES
+      case REQ_MSP_PIDNAMES:
+        MSPcmdsend = MSP_PIDNAMES;
+        break;
+#endif
       case REQ_MSP_LOOP_TIME:
         MSPcmdsend = MSP_LOOP_TIME;
         break;        
@@ -676,6 +682,9 @@ void setMspRequests() {
       REQ_MSP_ALTITUDE|
       REQ_MSP_RC_TUNING|
       REQ_MSP_PID_CONTROLLER|
+#ifdef USE_MSP_PIDNAMES
+      REQ_MSP_PIDNAMES|
+#endif
       REQ_MSP_PID|
       REQ_MSP_LOOP_TIME|
 #ifdef CORRECT_MSP_BF1

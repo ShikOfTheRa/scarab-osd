@@ -96,6 +96,7 @@ int GPSstartlat =  43094861;  //10 000 000 = 4.3
 int GPSstartlon = -71889706; //=7.1
 
 int MSP_sendOrder =0;
+int LTM_sendOrder =0;
 PImage img_Clear,GUIBackground,OSDBackground,DONATEimage,RadioPot;
 
 int readcounter=0;
@@ -1447,6 +1448,7 @@ void draw() {
         }     
 
         process_mav_send(); //        if ((int(SimControlToggle.getValue())!=0)&&(Simtype==2)) {
+        process_ltm_send(); //        if ((int(SimControlToggle.getValue())!=0)&&(Simtype==3)) {
 
       }
     } // End !FontMode

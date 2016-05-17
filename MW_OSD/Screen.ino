@@ -226,7 +226,7 @@ void displayMode(void)
     }
   }  
 
-#ifdef MAVLINK // override MWOSD mode icons
+#ifdef PROTOCOL_MAVLINK // override MWOSD mode icons
     strcpy_P(screenBuffer, (char*)pgm_read_word(&(mav_mode_index[mw_mav.mode])));
 #else  
   if(MwSensorActive&mode.passthru){
@@ -305,7 +305,7 @@ void displayMode(void)
     }
 #endif //ACROPLUS
   }
-#endif //MAVLINK
+#endif //PROTOCOL_MAVLINK
   if(Settings[S_MODEICON]){
     if(fieldIsVisible(ModePosition)){
       MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
@@ -1322,9 +1322,14 @@ void displayConfigScreen(void)
 #ifdef MENU_PID
   if(configPage==MENU_PID)
   {
+
     for(uint8_t X=0; X<=6; X++) {
+#ifdef USE_MSP_PIDNAMES
+      MAX7456_WriteString(menu_pid[X], ROLLT+ (X*30));
+#else
       strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_pid[X])));
       MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+#endif
     }
    
     for(uint8_t Y=0; Y<=8; Y++) {      

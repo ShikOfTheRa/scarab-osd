@@ -3,8 +3,8 @@
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
-#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware
-//#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
+//#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware
+#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
 //#define RTFQV1                    // Uncomment this if using standard RTFQ/Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
 //#define RTFQMICRO                 // Uncomment this if using micro RTFQ/Witespy Micro Minim OSD, select this to correct for swapped bat1/bat 2.  
 //#define RUSHDUINO                 // Uncomment this if using Rushduino
@@ -27,15 +27,16 @@
 // latest release...
 //#define MULTIWII                  // Uncomment this if you are using latest MULTIWII version from repository (2.4 at time of this MWOSD release)
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
+#define LIBREPILOT                 // Uncomment this if you are using the latest LibrePilot MSP Module
 //#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
 //#define BETAFLIGHT                // Uncomment this if you are using BETAFLIGHT (same as CLEANFLIGHT t time of this MWOSD release)
-//#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight 
+#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight 
 //#define HARAKIRI                  // Uncomment this if you are using HARAKIRI (for BOXNAMES compatibility)
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+//#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
 //#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
 //#define GPSOSD_MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
 //#define NOCONTROLLER              // Uncomment this if you have nothing connected to the serial port - no controller or GPS module
@@ -46,12 +47,16 @@
 //#define CLEANFLIGHT172            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.7.2
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1 
 //#define APM                       // Uncomment this if you are using APM MAVLINK compatible FC (Requires testing)
-//#define TELEMETRY_LTM             // Uncomment this if you are using an LTM telemetry feed (DO not use - under development)
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
 #define ROTORCRAFT                  // Default for multirotors etc. 
 //#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight 
+
+/********************       TELEMETRY settings      *********************/
+//Select ONLY if you are sure your OSD is connected to a telemetry feed:
+//#define TELEMETRY_LTM             // Uncomment this if you are using a LTM telemetry feed (under development)
+//#define TELEMETRY_MAVLINK         // Uncomment this if you are using a MAVLINK telemetry feed (under development)
 
 
 
@@ -72,9 +77,21 @@
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
 
+/********************       FEATURES      *********************/
+// Disable features if you require memory for other features
+// Further configuration may be require elsewhere in config.h + option enabled on GUI
+//#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
+#define HORIZON         // Enable/disable HORIZON indicator
+#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
+//#define GPSTIME       // Enable/disable GPS Time functions
+//#define SPORT         // Enable/disable FRSKY S.PORT cell code
+
+
 /********************       GPS OSD settings      *********************/
 #define GPSHOMEFIX 50               // Number of consecutive valid fixes before home will be set. 50@ 10hz = 5 seconds of valid fixes.
 #define HOMESATFIX 6                // Minimum number of sats required when setting initial home location. 
+#define GPSOSDARMDISTANCE 20        // distance from home in meters when GPSOSD arms. Starts flight timer etc.
+#define GPSOSDHOMEDISTANCE 40       // distance from home in meters when GPSOSD is home. When speed is low it disarms and displays summary screen.
 //#define OSD_SWITCH_RSSI           // Enables 3 way screen switch using a TX channel via a RX channel connected to the OSD RSSI pin. Typically used for GPSOSD.
 //#define PWMTHROTTLE               // Enables throttle feature, virtual current sensor using RC throttle connected into OSD RSSI pin. Calibrate throttle using GUI RSSI cal functions 
 //#define PPMOSDCONTROL             // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD RSSI pin. Requires TX type to be set below. 
@@ -101,7 +118,6 @@
 
 /********************       GPS settings      *********************/
 #define MINSATFIX 5                 // Number of sats required for a fix. 5 minimum. More = better.
-//#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
 
 
 /********************       WARNING/STATUS settings      *********************/
@@ -149,7 +165,7 @@
 
 
 /********************       STARTUP settings      *********************/
-//#define INTRO_VERSION               "MWOSD - DEV 1.6.0.0" // Call the OSD something else if you prefer. KVOSD is not permitted - LOL. 
+//#define INTRO_VERSION               "MWOSD - DEV 1.6.0.0" // Call the OSD something else if you prefer. 
 //#define INTRO_CALLSIGN            // Enable to display callsign at startup
 //#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
 //#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 8 
@@ -164,16 +180,6 @@
 
 /********************       MAP MODE Settings       *********************/
 //#define MAPMODENORTH              // Enable to use North as MAP reference in MODE 1 instead of take off direction (Default = disable) 
-
-
-/********************       FEATURES      *********************/
-// Disable features if you require memory for other features
-// Further configuration may be require elsewhere in config.h + option enabled on GUI
-//#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
-#define HORIZON         // Enable/disable HORIZON indicator
-#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
-//#define GPSTIME       // Enable/disable GPS Time functions
-//#define SPORT         // Enable/disable FRSKY S.PORT cell code
 
 
 /********************       Display Settings         ************************/
@@ -205,6 +211,7 @@
 //#define DISPLAYWATTS              // Enable this to display Watts (if selected in layouts)
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft
 #define AIRMODE 30                  // Enable this to display BETAFLIGHT airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
+//#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
 
 /********************   TRANSMITTER MODE for STICK MENU     *********************/
 //#define MODE1                     // Enable this if wish to use cursor controls on same stick - for MODE 1 TX users

@@ -102,6 +102,9 @@
 //uint8_t DISABLE_display;
 uint16_t MAX_screen_size;
 
+// Goods for tidiness
+#define VIDEO_MODE (Settings[S_VIDEOSIGNALTYPE] ? VIDEO_MODE_PAL : VIDEO_MODE_NTSC)
+
 //////////////////////////////////////////////////////////////
 uint8_t spi_transfer(uint8_t data)
 {
@@ -135,6 +138,7 @@ void MAX7456Setup(void)
   // SPCR = 01010000
   //interrupt disabled,spi enabled,msb 1st,master,clk low when idle,
   //sample on leading edge of clk,system clock/4 rate (4 meg)
+  //SPI2X will double the rate (8 meg)
 
   SPCR = (1<<SPE)|(1<<MSTR);
   SPSR = (1<<SPI2X);
@@ -199,14 +203,8 @@ void MAX7456Setup(void)
   }
 
   // make sure the Max7456 is enabled
-  spi_transfer(VM0_reg);
+  MAX7456_Send(VM0_reg, OSD_ENABLE|VIDEO_MODE);
 
-  if (Settings[S_VIDEOSIGNALTYPE]){
-    spi_transfer(OSD_ENABLE|VIDEO_MODE_PAL);
-  }
-  else{
-    spi_transfer(OSD_ENABLE|VIDEO_MODE_NTSC);
-  }
   digitalWrite(MAX7456SELECT,HIGH);
   delay(100);
 # ifdef USE_VSYNC
@@ -219,22 +217,18 @@ void MAX7456Setup(void)
 // Copy string from ram into screen buffer
 void MAX7456_WriteString(const char *string, int Adresse)
 {
-  uint8_t xx;
-  for(xx=0;string[xx]!=0;)
-  {
-    screen[Adresse++] = string[xx++];
-  }
+  char *screenp = &screen[Adresse];
+  while (*string)
+    *screenp++ = *string++;
 }
 
 // Copy string from progmem into the screen buffer
 void MAX7456_WriteString_P(const char *string, int Adresse)
 {
-  uint8_t xx = 0;
   char c;
-  while((c = (char)pgm_read_byte(&string[xx++])) != 0)
-  {
-    screen[Adresse++] = c;
-  }
+  char *screenp = &screen[Adresse];
+  while((c = (char)pgm_read_byte(string++)) != 0)
+    *screenp++ = c;
 }
 
 #ifdef USE_VSYNC
@@ -251,12 +245,9 @@ void MAX7456_DrawScreen()
     digitalWrite(MAX7456SELECT,LOW);
 
   #ifdef USE_VSYNC
-    spi_transfer(DMM_reg);
-    spi_transfer(1);
-    spi_transfer(DMAH_reg);
-    spi_transfer(0);
-    spi_transfer(DMAL_reg);
-    spi_transfer(0);
+    MAX7456_Send(DMM_reg, 1);
+    MAX7456_Send(DMAH_reg, 0);
+    MAX7456_Send(DMAL_reg, 0);
     vsync_wait = 1;
     uint32_t vsynctimer=40+millis();
   #endif
@@ -288,10 +279,8 @@ void MAX7456_DrawScreen()
     #endif
   }
   #ifdef USE_VSYNC
-    spi_transfer(DMDI_reg);
-    spi_transfer(END_string);
-    spi_transfer(DMM_reg);
-    spi_transfer(B00000000);
+    MAX7456_Send(DMDI_reg, END_string);
+    MAX7456_Send(DMM_reg, B00000000);
   #endif
 
   digitalWrite(MAX7456SELECT,HIGH);
@@ -326,6 +315,7 @@ void write_NVM(uint8_t char_address)
 #ifdef WRITE_TO_MAX7456
   // disable display
    digitalWrite(MAX7456SELECT,LOW);
+# ifdef notdef // Some kind of timing adjustment experiment? Keep it for future resurrection.
   spi_transfer(VM0_reg); 
   //spi_transfer(DISABLE_display);
 
@@ -333,29 +323,26 @@ void write_NVM(uint8_t char_address)
   
   //digitalWrite(MAX7456SELECT,LOW);
   //spi_transfer(VM0_reg);
-  spi_transfer(Settings[S_VIDEOSIGNALTYPE]?0x40:0);
+  spi_transfer(VIDEO_MODE);
+# else // notdef
+  MAX7456_Send(VM0_reg, VIDEO_MODE);
+# endif // notdef
 
-  spi_transfer(MAX7456ADD_CMAH); // set start address high
-  spi_transfer(char_address);
+  MAX7456_Send(MAX7456ADD_CMAH, char_address); // set start address high
 
   for(uint8_t x = 0; x < NVM_ram_size; x++) // write out 54 bytes of character to shadow ram
   {
-    spi_transfer(MAX7456ADD_CMAL); // set start address low
-    spi_transfer(x);
-    spi_transfer(MAX7456ADD_CMDI);
-    spi_transfer(fontData[x]);
+    MAX7456_Send(MAX7456ADD_CMAL, x); // set start address low
+    MAX7456_Send(MAX7456ADD_CMDI, fontData[x]);
   }
 
   // transfer 54 bytes from shadow ram to NVM
-  spi_transfer(MAX7456ADD_CMM);
-  spi_transfer(WRITE_nvr);
+  MAX7456_Send(MAX7456ADD_CMM, WRITE_nvr);
   
   // wait until bit 5 in the status register returns to 0 (12ms)
   while ((spi_transfer(MAX7456ADD_STAT) & STATUS_reg_nvr_busy) != 0x00);
 
- spi_transfer(VM0_reg); // turn on screen next vertical
-  //spi_transfer(ENABLE_display_vert); 
- spi_transfer(Settings[S_VIDEOSIGNALTYPE]?0x4c:0x0c);
+  MAX7456_Send(VM0_reg, OSD_ENABLE|VERTICAL_SYNC_NEXT_VSYNC|VIDEO_MODE); // turn on screen next vertical
   digitalWrite(MAX7456SELECT,HIGH);  
 #else
   delay(12);
@@ -399,4 +386,3 @@ void updateFont()
   }
 }
 #endif
-
