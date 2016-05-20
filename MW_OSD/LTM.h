@@ -1,38 +1,8 @@
 
-#ifdef PROTOCOL_LTM
-
-#define LIGHTTELEMETRY_START1 0x24 //$
-#define LIGHTTELEMETRY_START2 0x54 //T
-#define LIGHTTELEMETRY_GFRAME 0x47 //G GPS + Baro altitude data ( Lat, Lon, Speed, Alt, Sats, Sat fix)
-#define LIGHTTELEMETRY_AFRAME 0x41 //A Attitude data ( Roll,Pitch, Heading )
-#define LIGHTTELEMETRY_SFRAME 0x53 //S Sensors/Status data ( VBat, Consumed current, Rssi, Airspeed, Arm status, Failsafe status, Flight mode )
-#define LIGHTTELEMETRY_OFRAME 0x4F  //O OSD additionals data ( home pos, home alt, direction to home )
-#define LIGHTTELEMETRY_GFRAMELENGTH 18
-#define LIGHTTELEMETRY_AFRAMELENGTH 10
-#define LIGHTTELEMETRY_SFRAMELENGTH 11
-#define LIGHTTELEMETRY_OFRAMELENGTH 18
-static uint8_t LTMserialBuffer[LIGHTTELEMETRY_GFRAMELENGTH - 4];
-static uint8_t LTMreceiverIndex;
-static uint8_t LTMcmd;
-static uint8_t LTMrcvChecksum;
-static uint8_t LTMreadIndex;
-static uint8_t LTMframelength;
-static uint8_t LTMpassed = 0;
-static uint8_t crlf_count = 0;
-
-#define  LAT  0
-#define  LON  1
-
 uint8_t  GPS_fix_HOME=0;
-uint16_t GPS_altitude_home;                            
-float    GPS_scaleLonDown;
-//static   uint8_t LTM_ok = 0;
-static   uint32_t lastLTMpacket;
-int32_t  GPS_home[2];
-
 
 uint8_t ltmread_u8()  {
-  return LTMserialBuffer[LTMreadIndex++];
+  return LTMserialBuffer[mw_ltm.LTMreadIndex++];
 }
 
 uint16_t ltmread_u16() {
@@ -49,12 +19,12 @@ uint32_t ltmread_u32() {
 
 void GPS_calc_longitude_scaling(int32_t lat) {
   float rads       = (abs((float)lat) / 10000000.0) * 0.0174532925;
-  GPS_scaleLonDown = cos(rads);
+  mw_ltm.GPS_scaleLonDown = cos(rads);
 }
 
 void GPS_distance_cm_bearing(int32_t* lat1, int32_t* lon1, int32_t* lat2, int32_t* lon2,uint32_t* dist, int32_t* bearing) {
   float dLat = *lat2 - *lat1;                                 // difference of latitude in 1/10 000 000 degrees
-  float dLon = (float)(*lon2 - *lon1) * GPS_scaleLonDown;
+  float dLon = (float)(*lon2 - *lon1) * mw_ltm.GPS_scaleLonDown;
   *dist = sqrt(sq(dLat) + sq(dLon)) * 1.113195;
 
   *bearing = 9000.0f + atan2(-dLat, dLon) * 5729.57795f;      //Convert the output radians to 100xdeg
@@ -65,22 +35,42 @@ void GPS_reset_home_position() {
   if (GPS_fix && GPS_numSat >= MINSATFIX) {
     GPS_home[LAT] = GPS_latitude;
     GPS_home[LON] = GPS_longitude;
-    GPS_altitude_home = GPS_altitude;
+    mw_ltm.GPS_altitude_home = GPS_altitude;
     GPS_calc_longitude_scaling(GPS_latitude);  //need an initial value for distance and bearing calc
     GPS_fix_HOME = 1;
   }
 }
 
+uint16_t calculateCurrentFromConsumedCapacity(uint16_t mahUsed)
+{
+  static unsigned long previous_millis = 0;
+  static uint16_t previous_mahUsed = 0;
+  static uint16_t calculatedCurrent = 0;
 
-// --------------------------------------------------------------------------------------
-// Decoded received commands
+  unsigned long current_millis = millis();
+
+  if ((current_millis - previous_millis) > 5000 || (previous_mahUsed > mahUsed)) {
+    // Stalled or invalid telemetry. Reset statistics
+    calculatedCurrent = 0;
+    previous_mahUsed = mahUsed;
+    previous_millis = current_millis;
+  }
+  else if ((current_millis - previous_millis) > 500 && (previous_mahUsed < mahUsed)) {
+    calculatedCurrent = (mahUsed - previous_mahUsed) / (current_millis - previous_millis);
+    previous_mahUsed = mahUsed;
+    previous_millis = current_millis;
+  }
+  return calculatedCurrent;
+}
+
 void ltm_check() {
+  mw_ltm.LTMreadIndex=0;
   static uint8_t GPS_fix_HOME_validation=GPSHOMEFIX;
   uint32_t dummy;
 #ifdef MSPACTIVECHECK
-  timer.MSP_active=MSPACTIVECHECK; // getting something on serial port
+  timer.MSP_active=MSPACTIVECHECK;             // getting something on serial port
 #endif
-  if (LTMcmd == LIGHTTELEMETRY_GFRAME)
+  if (mw_ltm.LTMcmd == LIGHTTELEMETRY_GFRAME)
   {
 #ifdef GPSACTIVECHECK
     timer.GPS_active=GPSACTIVECHECK;
@@ -88,22 +78,17 @@ void ltm_check() {
     GPS_latitude = (int32_t)ltmread_u32();
     GPS_longitude = (int32_t)ltmread_u32();
     GPS_speed = ltmread_u8() * 100;            // LTM gives m/s, we expect cm/s
-    GPS_altitude = ((int32_t)ltmread_u32());      // altitude from cm to m.
-
-
+    GPS_altitude = ((int32_t)ltmread_u32());   // altitude from cm to m.
     if (GPS_fix_HOME == 0){
       GPS_reset_home_position();
     }
-    GPS_altitude=GPS_altitude - GPS_altitude_home;
+    GPS_altitude=GPS_altitude - mw_ltm.GPS_altitude_home;
     MwAltitude = (int32_t) GPS_altitude *100;       // m--cm gps to baro
-
     uint8_t ltm_satsfix = ltmread_u8();
-
     GPS_numSat = (ltm_satsfix >> 2) & 0xFF;
     GPS_fix    = ((ltm_satsfix & 0b00000011) <= 1) ? 0 : 1;
-
-    // hpdate home distance and bearing
-    if ((GPS_fix>2) && (GPS_numSat >= MINSATFIX)) {
+    // ipdate home distance and bearing
+    if ((GPS_fix>0) && (GPS_numSat >= MINSATFIX)) {
       uint32_t dist;
       int32_t  dir;
       GPS_distance_cm_bearing(&GPS_latitude,&GPS_longitude,&GPS_home[LAT],&GPS_home[LON],&dist,&dir);
@@ -112,10 +97,10 @@ void ltm_check() {
     } 
   }
 
-  if (LTMcmd == LIGHTTELEMETRY_AFRAME)
+  if (mw_ltm.LTMcmd == LIGHTTELEMETRY_AFRAME)
   {
-    MwAngle[0]=(int16_t)ltmread_u16();
-    MwAngle[1]=(int16_t)ltmread_u16();
+    MwAngle[0]=(int16_t)10*ltmread_u16();
+    MwAngle[1]=(int16_t)10*ltmread_u16();
     MwHeading = (int16_t)ltmread_u16();
 #if defined(USEGPSHEADING)
     MwHeading = GPS_ground_course/10;
@@ -123,24 +108,28 @@ void ltm_check() {
 #ifdef HEADINGCORRECT
     if (MwHeading >= 180) MwHeading -= 360;
 #endif
-  }
-  if (LTMcmd == LIGHTTELEMETRY_SFRAME)
-  {
-    MwVBat = ltmread_u16();
-    dummy  = ltmread_u16(); //uavData.batUsedCapacity
-    MwRssi = ltmread_u8();
-    dummy  = ltmread_u8();
 
+  }
+  if (mw_ltm.LTMcmd == LIGHTTELEMETRY_SFRAME)
+  {
+    MwVBat     = ltmread_u16();
+    dummy = ltmread_u16();
+    if (Settings[S_MWAMPERAGE]){ 
+      amperagesum = 360*dummy;
+      MWAmperage = 10*calculateCurrentFromConsumedCapacity(dummy);
+    }
+    MwRssi     = ltmread_u8();
+    dummy      = ltmread_u8();
     uint8_t ltm_armfsmode = ltmread_u8();
     armed = (ltm_armfsmode & 0b00000001) ? 1 : 0;
+#ifndef SETHOMEARMED
+    if (!armed) GPS_fix_HOME = 0;
+#endif
     dummy = (ltm_armfsmode >> 1) & 0b00000001; // uavData.isFailsafe
-    dummy = (ltm_armfsmode >> 2) & 0b00111111; // uavData.flightMode
-
-    // uavData.batCellVoltage = detectBatteryCellVoltage(uavData.batVoltage);  // LTM does not have this info, calculate ourselves
-    // uavData.batCurrent = calculateCurrentFromConsumedCapacity(uavData.batUsedCapacity);
+    mw_ltm.mode = (ltm_armfsmode >> 2) & 0b00111111; // uavData.flightMode
   }
 
-  if (LTMcmd == LIGHTTELEMETRY_OFRAME)
+  if (mw_ltm.LTMcmd == LIGHTTELEMETRY_OFRAME)
   {
 
     if (GPS_fix && (GPS_numSat >= MINSATFIX)) {
@@ -155,81 +144,71 @@ void ltm_check() {
           GPS_fix_HOME=1;
         }
       }
-
-      //    dummy = (int32_t)(ltmread_u32()) / 100.0f; // altitude from cm to m.
-      //    dummy = ltmread_u8();
-      //    dummy = ltmread_u8();
     }
   }
 }
 
 void serialLTMreceive(uint8_t c) {
-
   static enum _serial_state {
-    IDLE,
-    HEADER_START1,
-    HEADER_START2,
-    HEADER_MSGTYPE,
-    HEADER_DATA
+    LTM_IDLE,
+    LTM_HEADER_START1,
+    LTM_HEADER_START2,
+    LTM_HEADER_MSGTYPE,
+    LTM_HEADER_DATA
   }
-  c_state = IDLE;
+  c_state = LTM_IDLE;
 
-  //    uavData.flagTelemetryOk = ((millis() - lastLTMpacket) < 500) ? 1 : 0;
-
-  if (c_state == IDLE) {
-    c_state = (c == '$') ? HEADER_START1 : IDLE;
-    //Serial.println("header $" );
+  if (c_state == LTM_IDLE) {
+    c_state = (c == '$') ? LTM_HEADER_START1 : LTM_IDLE;
   }
-  else if (c_state == HEADER_START1) {
-    c_state = (c == 'T') ? HEADER_START2 : IDLE;
-    //Serial.println("header T" );
+  else if (c_state == LTM_HEADER_START1) {
+    c_state = (c == 'T') ? LTM_HEADER_START2 : LTM_IDLE;
   }
-  else if (c_state == HEADER_START2) {
+  else if (c_state == LTM_HEADER_START2) {
     switch (c) {
-    case 'G':
-      LTMframelength = LIGHTTELEMETRY_GFRAMELENGTH;
-      c_state = HEADER_MSGTYPE;
+    case 'G': //G
+      mw_ltm.LTMframelength = LIGHTTELEMETRY_GFRAMELENGTH;
+      c_state = LTM_HEADER_MSGTYPE;
       break;
-    case 'A':
-      LTMframelength = LIGHTTELEMETRY_AFRAMELENGTH;
-      c_state = HEADER_MSGTYPE;
+    case 'A': //A
+      mw_ltm.LTMframelength = LIGHTTELEMETRY_AFRAMELENGTH;
+      c_state = LTM_HEADER_MSGTYPE;
       break;
-    case 'S':
-      LTMframelength = LIGHTTELEMETRY_SFRAMELENGTH;
-      c_state = HEADER_MSGTYPE;
+    case 'S': //S
+      mw_ltm.LTMframelength = LIGHTTELEMETRY_SFRAMELENGTH;
+      c_state = LTM_HEADER_MSGTYPE;
       break;
-    case 'O':
-      LTMframelength = LIGHTTELEMETRY_OFRAMELENGTH;
-      c_state = HEADER_MSGTYPE;
+    case 'O': //O
+      mw_ltm.LTMframelength = LIGHTTELEMETRY_OFRAMELENGTH;
+      c_state = LTM_HEADER_MSGTYPE;
       break;
     default:
-      c_state = IDLE;
+      c_state = LTM_IDLE;
     }
-    LTMcmd = c;
-    LTMreceiverIndex = 0;
+    mw_ltm.LTMcmd = c;
+    mw_ltm.LTMreceiverIndex = 0;
   }
-  else if (c_state == HEADER_MSGTYPE) {
-    if (LTMreceiverIndex == 0) {
-      LTMrcvChecksum = c;
+  else if (c_state == LTM_HEADER_MSGTYPE) {
+    if (mw_ltm.LTMreceiverIndex == 0) {
+      mw_ltm.LTMrcvChecksum = c;
     }
     else {
-      LTMrcvChecksum ^= c;
+      mw_ltm.LTMrcvChecksum ^= c;
     }
-    if (LTMreceiverIndex == LTMframelength - 4) { // received checksum byte
-      if (LTMrcvChecksum == 0) {
+    if (mw_ltm.LTMreceiverIndex == mw_ltm.LTMframelength - 4) { // received checksum byte
+      if (mw_ltm.LTMrcvChecksum == 0) {
         ltm_check();
-        c_state = IDLE;
+        c_state = LTM_IDLE;
       }
       else {                                                   // wrong checksum, drop packet
-        c_state = IDLE;
-
+        c_state = LTM_IDLE;
       }
     }
-    else LTMserialBuffer[LTMreceiverIndex++] = c;
+    else LTMserialBuffer[mw_ltm.LTMreceiverIndex++] = c;
   }
 }
 
-#endif // PROTOCOL_LTM
+
 
 
 

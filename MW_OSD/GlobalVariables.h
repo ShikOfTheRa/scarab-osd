@@ -1,3 +1,4 @@
+
 #define POS_MASK        0x01FF
 #define PAL_MASK        0x0003
 #define PAL_SHFT             9
@@ -99,7 +100,7 @@
 #endif
 
 //General use variables
-struct {
+struct  __timer {
   uint8_t tenthSec;
   uint8_t halfSec;
   uint8_t Blink2hz;                          // This is turing on and off at 2hz
@@ -115,14 +116,14 @@ struct {
 }
 timer;
 
-struct {
+struct __flags {
   uint8_t ident;
   uint8_t box;
   uint8_t reset;
 }
 flags;
 
-struct {
+struct __cfg {
     uint8_t  fw_althold_dir;
     uint16_t fw_gps_maxcorr;                    // Degrees banking Allowed by GPS.
     int16_t  fw_gps_rudder;                     // Maximum input of Rudder Allowed by GPS.
@@ -172,7 +173,7 @@ uint8_t settingsMode=0;
 uint32_t MSP_OSD_timer=0;
 
 // Mode bits
-struct {
+struct __mode {
   uint8_t armed;
   uint8_t stable;
   uint8_t horizon;
@@ -1302,7 +1303,7 @@ const PROGMEM char * const mav_mode_index[] =
 #endif //FIXEDWING
 
 // Vars
-struct {
+struct __mw_mav {
   uint8_t  message_cmd;
   uint8_t  message_length;
   uint8_t  message_sysid;
@@ -1313,9 +1314,84 @@ struct {
   uint16_t tx_checksum;
   float    GPS_scaleLonDown;
 }mw_mav;
+
 int32_t  GPS_home[2];
 uint8_t  GPS_fix_HOME;
 int16_t  GPS_altitude_home;                            
 #endif //MAVLINK
 
 
+#ifdef PROTOCOL_LTM
+
+#define LIGHTTELEMETRY_START1 0x24 //$
+#define LIGHTTELEMETRY_START2 0x54 //T
+#define LIGHTTELEMETRY_GFRAME 0x47 //G GPS + Baro altitude data ( Lat, Lon, Speed, Alt, Sats, Sat fix)
+#define LIGHTTELEMETRY_AFRAME 0x41 //A Attitude data ( Roll,Pitch, Heading )
+#define LIGHTTELEMETRY_SFRAME 0x53 //S Sensors/Status data ( VBat, Consumed current, Rssi, Airspeed, Arm status, Failsafe status, Flight mode )
+#define LIGHTTELEMETRY_OFRAME 0x4F  //O OSD additionals data ( home pos, home alt, direction to home )
+#define LIGHTTELEMETRY_GFRAMELENGTH 18
+#define LIGHTTELEMETRY_AFRAMELENGTH 10
+#define LIGHTTELEMETRY_SFRAMELENGTH 11
+#define LIGHTTELEMETRY_OFRAMELENGTH 18
+#define  LAT  0
+#define  LON  1
+
+int32_t  GPS_home[2];
+uint8_t LTMserialBuffer[LIGHTTELEMETRY_GFRAMELENGTH - 4];
+
+
+const char ltm_mode_MANU[] PROGMEM   = "MANU"; //Manual
+const char ltm_mode_RATE[] PROGMEM   = "RATE"; //Rate
+const char ltm_mode_ACRO[] PROGMEM   = "ACRO"; //Acrobatic: rate control
+const char ltm_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
+const char ltm_mode_HOZN[] PROGMEM   = "HOZN"; //Horizon
+const char ltm_mode_HOLD[] PROGMEM   = "HOLD"; //Hold
+const char ltm_mode_HEAD[] PROGMEM   = "HEAD"; //Head
+const char ltm_mode_WAYP[] PROGMEM   = "WAYP"; //Waypoint
+const char ltm_mode_RTH[]  PROGMEM   = "RTH "; //Return to Launch: auto control
+const char ltm_mode_FOLL[] PROGMEM   = "FOLL"; //Follow me
+const char ltm_mode_CIRC[] PROGMEM   = "CIRC"; //Circle: auto control
+const char ltm_mode_FBWA[] PROGMEM   = "FBWA"; //Fly-by-wire A
+const char ltm_mode_FBWB[] PROGMEM   = "FBWB"; //Fly-by-wire B
+const char ltm_mode_CRUI[] PROGMEM   = "CRUI"; //Cruise
+const char ltm_mode_LAND[] PROGMEM   = "LAND"; //Land
+const char ltm_mode_LTM[]  PROGMEM   = "LTM "; //Unknown LTM mode
+
+const PROGMEM char * const ltm_mode_index[] = 
+{   
+ ltm_mode_MANU, //0
+ ltm_mode_RATE,
+ ltm_mode_STAB,
+ ltm_mode_HOZN,
+ ltm_mode_ACRO,
+ ltm_mode_STAB,
+ ltm_mode_STAB,
+ ltm_mode_STAB,
+ ltm_mode_HOLD, 
+ ltm_mode_HOLD, 
+ ltm_mode_WAYP,
+ ltm_mode_HEAD,
+ ltm_mode_CIRC,
+ ltm_mode_RTH , 
+ ltm_mode_FOLL, 
+ ltm_mode_LAND,
+ ltm_mode_FBWA,
+ ltm_mode_FBWB, 
+ ltm_mode_CRUI, 
+ ltm_mode_LTM , 
+};
+
+// Vars
+struct __mw_ltm {
+  uint8_t mode;
+  uint8_t LTMreceiverIndex;
+  uint8_t LTMcmd;
+  uint8_t LTMrcvChecksum;
+  uint8_t LTMreadIndex;
+  uint8_t LTMframelength;
+  uint16_t GPS_altitude_home;
+  uint16_t batUsedCapacity;  
+  float    GPS_scaleLonDown;  
+}mw_ltm;
+
+#endif // PROTOCOL_LTM

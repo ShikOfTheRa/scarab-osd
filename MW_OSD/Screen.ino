@@ -228,6 +228,8 @@ void displayMode(void)
 
 #ifdef PROTOCOL_MAVLINK // override MWOSD mode icons
     strcpy_P(screenBuffer, (char*)pgm_read_word(&(mav_mode_index[mw_mav.mode])));
+#elif defined PROTOCOL_LTM // override MWOSD mode icons
+    strcpy_P(screenBuffer, (char*)pgm_read_word(&(ltm_mode_index[mw_ltm.mode])));
 #else  
   if(MwSensorActive&mode.passthru){
     screenBuffer[2]=0;
@@ -554,8 +556,8 @@ void displayVoltage(void)
   if (Settings[S_SHOWBATLEVELEVOLUTION])
   {
     uint8_t battev = 0;
-    int batevlow  = cells * MvVBatMinCellVoltage;
-    int batevhigh = cells * MvVBatMaxCellVoltage;
+    uint16_t batevlow  = cells * MvVBatMinCellVoltage;
+    uint16_t batevhigh = cells * MvVBatMaxCellVoltage;
     battev = constrain(voltage, batevlow, batevhigh-2);
     battev = map(battev, batevlow, batevhigh-1, 0, 7);   
     screenBuffer[0]=(SYM_BATT_EMPTY)-battev;
@@ -628,10 +630,8 @@ void displayCurrentThrottle(void)
     HighT=HIGHTHROTTLE;
     LowT=LOWTHROTTLE;
   #endif
-    
+   
   
-  uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],1000,2000);
-
 #ifndef FIXEDWING   
   if(!armed) {
     screenBuffer[0+THROTTLESPACE]=' ';
