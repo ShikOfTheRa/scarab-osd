@@ -17,7 +17,7 @@ All credit and full acknowledgement to the incredible work and hours from the ma
 Jean Gabriel Maurice. He started the revolution. He was the first....<br>
 
 
-Other Projects and their contributions
+Other Projects and their contributions:
 Ardupilot team - some of the original code is probably from / based upon elements of ardupilot team. e.g. GPS
 Arducam-osd - also probably some code / ideas came from here in past
 MultiWii
@@ -63,5 +63,20 @@ Pawelsky (DJI decoders)<br>
 Supersopp<br>
 Basdelfos<br>
 Nathantsoi<br>
+KipK (LTM)<br>
+
+From now on contibutors listed here:
+https://github.com/ShikOfTheRa/scarab-osd/graphs/contributors
+
+Also special thanks:
+Alex Dubus - AlexinParis - For MultiWii and inspiration!
+www.multiwiicopter.com       - for providing hardware to test
+www.dtuhf.com                - for providing hardware to test
+www.readytoflyquads.com      - for providing hardware to test
+www.multirotormania.com      - for providing hardware to test
+Please check the above suppliers. They are supporting you too...  
 
 
+
+
+Please report any missing names and aplogies if not already included...
