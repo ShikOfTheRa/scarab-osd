@@ -353,35 +353,35 @@
 
 
 /********************  OSD HARDWARE rule definitions  *********************/
-#ifdef RUSHDUINO                     
-    # define MAX7456SELECT 10        // ss 
+#ifdef RUSHDUINO
+    # define MAX7456SELECT 10        // ss
     # define MAX7456RESET  9         // RESET
-#else                                  
+#else
     # define MAX7456SELECT 6         // ss
     # define MAX7456RESET  10        // RESET
 #endif
 
-#ifdef WITESPYV1                     
+#ifdef RTFQV1
     #define SWAPVOLTAGEPINS
     #define ALTERNATEDIVIDERS
 #endif
 
-#ifdef WITESPYMICRO                     
+#ifdef RTFQMICRO
     #define SWAPVOLTAGEPINS
 #endif
 
-#ifdef SWAPVOLTAGEPINS                     
+#ifdef SWAPVOLTAGEPINS
     #define VOLTAGEPIN    A2
     #define VIDVOLTAGEPIN A0
-#else                                  
+#else
     #define VOLTAGEPIN    A0
     #define VIDVOLTAGEPIN A2
 #endif
 
-#ifdef ALTERNATEDIVIDERS                     
-    #define DIVIDER1v1      0.0002      // Voltage divider for 1.1v reference. 
-    #define DIVIDER5v       0.0008      // Voltage divider for 5v reference. 
-#else                                  
+#ifdef ALTERNATEDIVIDERS
+    #define DIVIDER1v1      0.0002      // Voltage divider for 1.1v reference.
+    #define DIVIDER5v       0.0008      // Voltage divider for 5v reference.
+#else
     #define DIVIDER1v1      0.0001      // Voltage divider for 1.1v reference. Use 0.0001 default unless advised otherwise.
     #define DIVIDER5v       0.0005      // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
 #endif

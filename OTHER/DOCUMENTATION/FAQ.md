@@ -61,8 +61,8 @@
 9 My voltage doesn't change during flight
  * Check you have selected teh correct board in OSD HARDWARE settings
  * Check you have selected the correct battery option - FC if using FC connection
- * If using a micro board, you probably have to select WITESPYMICRO
- * If using a full size witespy board you may have to select WITESPY in config.h
+ * If using a micro board, you probably have to select RTFQMICRO
+ * If using a full size witespy board you may have to select RTFQV1 in config.h
  * Ensure you are connected to the correct vbat pin some are reversed bat1 / bat2
  * Enable SWAPVOLTAGEPINS if you don't want to swap physical wires.
 
