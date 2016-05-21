@@ -25,6 +25,10 @@ uint8_t txChecksum;
   #include "LTM.h"
 #endif 
 
+#if defined PROTOCOL_KISS
+  #include "KISS.h"
+#endif 
+
 uint32_t read32() {
   uint32_t t = read16();
   t |= (uint32_t)read16()<<16;
@@ -902,6 +906,10 @@ void serialMSPreceive(uint8_t loops)
        serialLTMreceive(c);
     #endif // PROTOCOL_LTM   
     
+    #if defined (PROTOCOL_KISS)
+       serialKISSreceive(c);
+    #endif // PROTOCOL_KISS   
+
     if (c_state == IDLE)
     {
       c_state = (c=='$') ? HEADER_START : IDLE;

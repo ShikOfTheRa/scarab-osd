@@ -72,7 +72,9 @@
 #endif
 
 #ifdef APM     //set up latest at time of release
-  #define PROTOCOL_MAVLINK
+#endif
+
+#ifdef KISS     //set up latest at time of release
 #endif
 
 // The unit of current varies across implementations.  There are effectively three set:
@@ -284,6 +286,20 @@
   #define AMPERAGE_DIV 10
 #endif
 
+#if defined(KISS)
+  #define MENU_STAT     0       //STATISTICS
+  #define MENU_VOLTAGE  1       //VOLTAGE
+  #define MENU_RSSI     2       //RSSI
+  #define MENU_CURRENT  3       //CURRENT
+  #define MENU_DISPLAY  4       //DISPLAY
+  #define MENU_ADVANCED 5       //ADVANCED
+  #define MENU_ALARMS   6       //ALARMS
+  #define MAXPAGE       MENU_ALARMS
+  #define PROTOCOL_KISS
+  #define SENSORS
+  #define AMPERAGE_DIV 10
+#endif
+
 #ifdef NOCONTROLLER
   #undef  INTRO_MENU
   #undef  MSPACTIVECHECK
@@ -477,6 +493,11 @@ PROTOCOL_MAVLINK
 #define FORCESENSORS
 #endif
 
+#ifdef PROTOCOL_KISS
+#undef  PROTOCOL_MSP
+#define FORCESENSORS
+#endif
+
 #ifdef FORCE_MSP
 #define PROTOCOL_MSP
 #endif
@@ -515,6 +536,11 @@ PROTOCOL_MAVLINK
   #define PITCHSTICK       0
   #define YAWSTICK         3
   #define THROTTLESTICK    2
+#elif defined KISS
+  #define ROLLSTICK        1
+  #define PITCHSTICK       2
+  #define YAWSTICK         3
+  #define THROTTLESTICK    0
 #else
   // RX CHANEL IN MwRcData table
   #define ROLLSTICK        0
