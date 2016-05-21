@@ -1,7 +1,7 @@
 # How to install MW OSD firmware to your OSD hardware 
 
 ## Preparation 
-* Download the [MW OSD software pack](https://github.com/ShikOfTheRa/scarab-osd/blob/master/DOCUMENTATION/Downloads.md) of your choice.
+* Download the [MW OSD software pack](https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Downloads.md) of your choice.
 * Download the [Arduino flavor](http://arduino.cc/en/Main/Software) that matches your system.
 * Have an FTDI breakout board (which usually connects to a USB port) with the proper headers to connect to your OSD hardware.
 
