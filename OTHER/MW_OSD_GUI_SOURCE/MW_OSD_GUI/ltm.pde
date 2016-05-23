@@ -1,6 +1,6 @@
 
 void process_ltm_send(){
-  syncmav();
+//  syncmav();
   if ((int(SimControlToggle.getValue())!=0)&&(Simtype==3)) {
 //    if (init_com==1)SendCommandMAVLINK(MAVLINK_MSG_ID_HEARTBEAT);
     LTM_sendOrder++;

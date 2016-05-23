@@ -1,3 +1,4 @@
+#define KISSFRAMEINIT 5
 #define KISSFRAMELENGTH 154
 uint8_t KISSserialBuffer[KISSFRAMELENGTH];
 
@@ -100,36 +101,41 @@ void kiss_sync() {
   if (Settings[S_MWAMPERAGE]){ 
     uint16_t dummy=kissread_u16(148);
     amperagesum = 360*dummy;
-    MWAmperage = 10*calculateCurrentFromConsumedCapacity(dummy);
+    MWAmperage = 10*calculateCurrentFromConsumedCapacity(amperagesum);
   }
 }
 
 void serialKISSreceive(uint8_t c) {
   static enum _serial_state {
     KISS_IDLE,
-    KISS_HEADER_START,
+    KISS_HEADER_INIT,
     KISS_HEADER_SIZE,
     KISS_HEADER_PAYLOAD,
   }
   c_state = KISS_IDLE;
 
   if (c_state == KISS_IDLE) {
-    c_state = (c == 5) ? KISS_HEADER_START : KISS_IDLE;
+    Kvar.index=0;
+    c_state = (c == KISSFRAMEINIT) ? KISS_HEADER_INIT : KISS_IDLE;
   }
-  else if (c_state == KISS_HEADER_START) {
-    c_state = (c == KISSFRAMELENGTH) ? KISS_HEADER_SIZE : KISS_HEADER_START;
-    Kvar.index = 0;
+  else if (c_state == KISS_HEADER_INIT) {
+ debug[0]++;
+    c_state = (c == KISSFRAMELENGTH) ? KISS_HEADER_SIZE : KISS_IDLE;
   }
   else if (c_state == KISS_HEADER_SIZE) {
-    if (Kvar.index == Kvar.framelength) {
+ debug[1]++;
+    if (Kvar.index == KISSFRAMELENGTH) {
       c_state = KISS_HEADER_PAYLOAD;
     }
     else {
-      KISSserialBuffer[Kvar.index++] = c;
+      KISSserialBuffer[Kvar.index] = c;
+      Kvar.index++;
     }
   }
   else if (c_state == KISS_HEADER_PAYLOAD) {
+ debug[2]++;
     kiss_sync();
+    c_state = KISS_IDLE;
   }
   else {
     c_state = KISS_IDLE;

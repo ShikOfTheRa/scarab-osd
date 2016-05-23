@@ -212,7 +212,7 @@ int loop10hz=0;
 // XML config editorvariables
 int hudeditposition=0;
 
-
+int[] kisstable;
 int[] SimPosn;
 int[][] ConfigLayout;
 int[] EElookuptable= new int[512];
@@ -1456,6 +1456,7 @@ void draw() {
 
         process_mav_send(); //        if ((int(SimControlToggle.getValue())!=0)&&(Simtype==2)) {
         process_ltm_send(); //        if ((int(SimControlToggle.getValue())!=0)&&(Simtype==3)) {
+        process_kiss_send(); //        if ((int(SimControlToggle.getValue())!=0)&&(Simtype==4)) {
 
       }
     } // End !FontMode
@@ -2464,6 +2465,8 @@ void initxml(){
     CONFIGHUDEN[hud][hudindex] = enabled;      
   }
   SimPosn = new int[hudoptions];
+    kisstable = new int[KISSFRAMELENGTH];
+
   ConfigLayout= new int[4][hudoptions];
   ConfigRanges[GetSetting("S_HUDSW0")] = hudsavailable-1;
   ConfigRanges[GetSetting("S_HUDSW1")] = hudsavailable-1;
