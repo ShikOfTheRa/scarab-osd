@@ -230,6 +230,8 @@ void displayMode(void)
     strcpy_P(screenBuffer, (char*)pgm_read_word(&(mav_mode_index[mw_mav.mode])));
 #elif defined PROTOCOL_LTM // override MWOSD mode icons
     strcpy_P(screenBuffer, (char*)pgm_read_word(&(ltm_mode_index[mw_ltm.mode])));
+#elif defined PROTOCOL_KISS// override MWOSD mode icons
+//    strcpy_P(screenBuffer, (char*)pgm_read_word(&(KISS_mode_index[Kvar.mode])));
 #else  
   if(MwSensorActive&mode.passthru){
     screenBuffer[2]=0;

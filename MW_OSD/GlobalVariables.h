@@ -1395,3 +1395,23 @@ struct __mw_ltm {
 }mw_ltm;
 
 #endif // PROTOCOL_LTM
+
+#ifdef PROTOCOL_KISS
+
+#define KISSFRAMEINIT 5
+#define KISSFRAMELENGTH 154
+uint8_t KISSserialBuffer[KISSFRAMELENGTH];
+
+// Vars
+struct __xKISS {
+  uint8_t mode;
+  uint8_t index;
+  uint8_t cmd;
+  uint8_t rcvChecksum;
+  uint8_t readIndex;
+  uint8_t framelength;
+}
+Kvar;
+
+#endif // PROTOCOL_KISS
+

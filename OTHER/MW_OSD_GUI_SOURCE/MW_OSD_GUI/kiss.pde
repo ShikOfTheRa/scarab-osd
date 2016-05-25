@@ -44,8 +44,22 @@ void synckiss(){
   kisstable[18]=int(sVBat * 100);
 
 // throttle
-  kisstable[0]=int(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,100))>>8;
-  kisstable[1]=int(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,100));
+  for (int i=0; i<(8); i++) { 
+    kisstable[i*2]=0;
+    kisstable[1+(i*2)]=0;
+  }
+  kisstable[0]=int(map(Throttle_Yaw.arrayValue()[1],1000,2000,-500,500))>>8;
+  kisstable[1]=int(map(Throttle_Yaw.arrayValue()[1],1000,2000,-500,500));    
+
+  kisstable[2]=int(map(Pitch_Roll.arrayValue()[0],1000,2000,-500,500))>>8;
+  kisstable[3]=int(map(Pitch_Roll.arrayValue()[0],1000,2000,-500,500));
+
+  kisstable[4]=int(map(Pitch_Roll.arrayValue()[1],1000,2000,-500,500))>>8;
+  kisstable[5]=int(map(Pitch_Roll.arrayValue()[1],1000,2000,-500,500));
+
+  kisstable[6]=int(map(Throttle_Yaw.arrayValue()[0],1000,2000,-500,500))>>8;
+  kisstable[7]=int(map(Throttle_Yaw.arrayValue()[0],1000,2000,-500,500));    
+
 
 // pitch roll
   kisstable[31]=int(MW_Pitch_Roll.arrayValue()[0])>>8;
@@ -65,7 +79,7 @@ void process_kiss_send(){
     g_serial.write(KISSFRAMELENGTH);
     for (int i=0; i<(KISSFRAMELENGTH); i++) { 
       g_serial.write((kisstable[i]&0xFF));
-      println(i+":"+(kisstable[i]&0xFF));
+//      println(i+":"+(kisstable[i]&0xFF));
     }
     g_serial.write(KISSCHECKSUM);
 

@@ -160,7 +160,7 @@ void setup()
     GPS_SerialInit();
   #else
   #endif
-#if defined KISS
+#if defined FORECSENSORACC
     MwSensorPresent |=ACCELEROMETER;
 #endif
 #if defined FORCESENSORS
@@ -227,7 +227,12 @@ void loop()
     MwRcData[THROTTLESTICK] = pwmRSSI;
   #endif //THROTTLE_RSSI
 
-  #if defined (OSD_SWITCH_RC)                   
+  #if defined (KISS)      
+    if (Kvar.mode==1)
+      screenlayout=1;
+    else
+      screenlayout=0; 
+  #elif defined (OSD_SWITCH_RC)                   
     uint8_t rcswitch_ch = Settings[S_RCWSWITCH_CH];
     screenlayout=0;
     if (Settings[S_RCWSWITCH]){
@@ -298,7 +303,9 @@ void loop()
     timer.Blink10hz=!timer.Blink10hz;
     calculateTrip();
     if (Settings[S_AMPER_HOUR]) 
+    #ifndef KISS
       amperagesum += amperage;
+    #endif    
     #ifndef GPSOSD 
       #ifdef MSP_SPEED_MED
         if(!fontMode){

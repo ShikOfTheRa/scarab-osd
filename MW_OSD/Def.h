@@ -282,7 +282,6 @@
   #define MENU_ALARMS   6       //ALARMS
   #define MAXPAGE       MENU_ALARMS
   #define PROTOCOL_MAVLINK
-  #define SENSORS
   #define AMPERAGE_DIV 10
 #endif
 
@@ -296,7 +295,6 @@
   #define MENU_ALARMS   6       //ALARMS
   #define MAXPAGE       MENU_ALARMS
   #define PROTOCOL_KISS
-  #define SENSORS
   #define AMPERAGE_DIV 10
 #endif
 
@@ -495,7 +493,7 @@ PROTOCOL_MAVLINK
 
 #ifdef PROTOCOL_KISS
 #undef  PROTOCOL_MSP
-#define FORCESENSORS
+#define FORECSENSORACC
 #endif
 
 #ifdef FORCE_MSP
