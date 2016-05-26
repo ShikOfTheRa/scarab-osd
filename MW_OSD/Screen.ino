@@ -1863,8 +1863,10 @@ void Menuconfig_onoff(uint16_t pos, uint8_t setting){
 
 void displayArmed(void)
 {
-  if(!fieldIsVisible(motorArmedPosition))
+  if(!fieldIsVisible(motorArmedPosition)){
+    armedtimer=0;
     return;  
+  }
   uint8_t message_no = 0;
 
 #ifdef HAS_ALARMS
