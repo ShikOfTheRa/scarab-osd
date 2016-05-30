@@ -4,11 +4,12 @@
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-#define DEBUG         // Enable/disable option to display OSD debug values 
+//#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 //#define ALWAYSARMED
 //#define DEVELOPMENT   // to force layout 0, set debug default eeprombit = 1
-//#define FORCEDEBUG    // to debug display
+//#define FORCEDEBUG    // to force debug display
+//#define FORCESENSORS
 
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
@@ -281,7 +282,6 @@
   #define PROTOCOL_MAVLINK
   #define SENSORS
   #define AMPERAGE_DIV 10
-  #define FORCESENSORS
 #endif
 
 #ifdef NOCONTROLLER
@@ -290,7 +290,7 @@
   #undef  SATACTIVECHECK
   #undef  GPSACTIVECHECK
   #undef  OSD_SWITCH_RC
-  #define ALWAYSARMED
+  #define HIDEARMEDSTATUS
   #define MENU_STAT  0           //STATISTICS
   #define MAXPAGE MENU_STAT
 #endif
@@ -337,35 +337,35 @@
 
 
 /********************  OSD HARDWARE rule definitions  *********************/
-#ifdef RUSHDUINO                     
-    # define MAX7456SELECT 10        // ss 
+#ifdef RUSHDUINO
+    # define MAX7456SELECT 10        // ss
     # define MAX7456RESET  9         // RESET
-#else                                  
+#else
     # define MAX7456SELECT 6         // ss
     # define MAX7456RESET  10        // RESET
 #endif
 
-#ifdef WITESPYV1                     
+#ifdef RTFQV1
     #define SWAPVOLTAGEPINS
     #define ALTERNATEDIVIDERS
 #endif
 
-#ifdef WITESPYMICRO                     
+#ifdef RTFQMICRO
     #define SWAPVOLTAGEPINS
 #endif
 
-#ifdef SWAPVOLTAGEPINS                     
+#ifdef SWAPVOLTAGEPINS
     #define VOLTAGEPIN    A2
     #define VIDVOLTAGEPIN A0
-#else                                  
+#else
     #define VOLTAGEPIN    A0
     #define VIDVOLTAGEPIN A2
 #endif
 
-#ifdef ALTERNATEDIVIDERS                     
-    #define DIVIDER1v1      0.0002      // Voltage divider for 1.1v reference. 
-    #define DIVIDER5v       0.0008      // Voltage divider for 5v reference. 
-#else                                  
+#ifdef ALTERNATEDIVIDERS
+    #define DIVIDER1v1      0.0002      // Voltage divider for 1.1v reference.
+    #define DIVIDER5v       0.0008      // Voltage divider for 5v reference.
+#else
     #define DIVIDER1v1      0.0001      // Voltage divider for 1.1v reference. Use 0.0001 default unless advised otherwise.
     #define DIVIDER5v       0.0005      // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
 #endif
@@ -427,7 +427,6 @@
   #undef  INTRO_MENU
   #undef  MSPACTIVECHECK
   #undef  OSD_SWITCH_RC
-  #define FORCESENSORS
   #define HIDEARMEDSTATUS
   #define GPSACTIVECHECK 5
 
@@ -459,20 +458,29 @@ PROTOCOL_MAVLINK
 #define PROTOCOL_MSP // on by default
 
 #ifdef GPSOSD
-#undef PROTOCOL_MSP
+#undef  PROTOCOL_MSP
+#define FORCESENSORS
 #endif
 
-#ifdef NAZA
-#undef PROTOCOL_MSP
+#ifdef  NAZA
+#undef  PROTOCOL_MSP
+#define FORCESENSORS
 #endif
 
 #ifdef PROTOCOL_MAVLINK
-#undef PROTOCOL_MSP
+#undef  PROTOCOL_MSP
+#define FORCESENSORS
 #endif
 
 #ifdef PROTOCOL_LTM
-#undef PROTOCOL_MSP
+#undef  PROTOCOL_MSP
+#define FORCESENSORS
 #endif
+
+#ifdef FORCE_MSP
+#define PROTOCOL_MSP
+#endif
+
 
 /********************  MSP speed enhancements rule definitions  *********************/
 
