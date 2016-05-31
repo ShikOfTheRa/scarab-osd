@@ -362,6 +362,11 @@
     #define VIDVOLTAGEPIN A2
 #endif
 
+#ifdef KYLIN250PDB
+    #undef VOLTAGEPIN
+    #define VOLTAGEPIN    A6
+#endif
+
 #ifdef ALTERNATEDIVIDERS
     #define DIVIDER1v1      0.0002      // Voltage divider for 1.1v reference.
     #define DIVIDER5v       0.0008      // Voltage divider for 5v reference.
