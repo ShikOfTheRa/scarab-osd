@@ -138,6 +138,15 @@ struct __cfg {
 }
 cfg;
 
+#ifdef MENU_SERVO  
+#define MAX_SERVOS 8
+struct __servo {
+    uint16_t settings[5][MAX_SERVOS];
+}
+servo;
+#endif //MENU_SERVO  
+
+
 uint16_t debug[4];   // int32_t ?...
 int8_t menudir;
 unsigned int allSec=0;
@@ -702,6 +711,7 @@ uint16_t flyingTime=0;
 #define MSP_BOXNAMES             116   //out message         the aux switch names
 #define MSP_PIDNAMES             117   //out message         the PID names
 #define MSP_BOXIDS               119   //out message         get the permanent IDs associated to BOXes
+#define MSP_SERVO_CONF           120    //out message         Servo settings
 #define MSP_NAV_STATUS           121   //out message	     Returns navigation status
 
 #define MSP_CELLS                130   //out message         FrSky SPort Telemtry
@@ -718,6 +728,7 @@ uint16_t flyingTime=0;
 #define MSP_SET_WP               209   //in message          sets a given WP (WP#,lat, lon, alt, flags)
 #define MSP_SELECT_SETTING       210   //in message          Select Setting Number (0-2)
 #define MSP_SET_HEAD             211   //in message          define a new heading hold direction
+#define MSP_SET_SERVO_CONF       212    //in message          Servo settings
 
 #define MSP_BIND                 240   //in message          no param
 
@@ -940,6 +951,16 @@ const char configMsg115[] PROGMEM = "THR CLIMB";
 const char configMsg116[] PROGMEM = "THR CRUISE";
 const char configMsg117[] PROGMEM = "THR IDLE";
 const char configMsg118[] PROGMEM = "RTH ALT";
+//-----------------------------------------------------------SERVO Page
+const char configMsg120[] PROGMEM = "SERVOS";
+const char configMsg121[] PROGMEM = "S0";
+const char configMsg122[] PROGMEM = "S1";
+const char configMsg123[] PROGMEM = "S2";
+const char configMsg124[] PROGMEM = "S3";
+const char configMsg125[] PROGMEM = "S4";
+const char configMsg126[] PROGMEM = "S5";
+const char configMsg127[] PROGMEM = "S6";
+const char configMsg128[] PROGMEM = "S7";
 
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
@@ -973,14 +994,15 @@ const unsigned char MwGPSAltPositionAdd[2]={
 #define REQ_MSP_FONT      (1 << 12)
 #define REQ_MSP_DEBUG     (1 << 13)
 #define REQ_MSP_CELLS     (1 << 14)
-#define REQ_MSP_NAV_STATUS      32768   // (1 << 15)
-#define REQ_MSP_CONFIG          32768   // (1 << 15)
-#define REQ_MSP_MISC            65536   // (1 << 16)
-#define REQ_MSP_ALARMS          131072  // (1 << 17)
-#define REQ_MSP_PID_CONTROLLER  262144  // (1 << 18)
-#define REQ_MSP_LOOP_TIME       524288  // (1 << 19) 
-#define REQ_MSP_FW_CONFIG       1048576 // (1 << 20) 
-#define REQ_MSP_PIDNAMES (1L<<21)
+#define REQ_MSP_NAV_STATUS     (1L<<15)
+#define REQ_MSP_CONFIG         (1L<<15)
+#define REQ_MSP_MISC           (1L<<16)
+#define REQ_MSP_ALARMS         (1L<<17)
+#define REQ_MSP_PID_CONTROLLER (1L<<18)
+#define REQ_MSP_LOOP_TIME      (1L<<19) 
+#define REQ_MSP_FW_CONFIG      (1L<<20) 
+#define REQ_MSP_PIDNAMES       (1L<<21)
+#define REQ_MSP_SERVO_CONF     (1L<<22)
 
 // Menu selections
 const PROGMEM char * const menu_choice_unit[] =
@@ -1153,6 +1175,18 @@ const PROGMEM char * const menu_fixedwing_bf[] =
   configMsg118,
 };
 
+const PROGMEM char * const menu_servo[] = 
+{   
+  configMsg121,
+  configMsg122,
+  configMsg123,
+  configMsg124,
+  configMsg125,
+  configMsg126,
+  configMsg127,
+  configMsg128,
+};
+
 const PROGMEM char * const menutitle_item[] = 
 {   
 #ifdef MENU_STAT
@@ -1164,7 +1198,10 @@ const PROGMEM char * const menutitle_item[] =
 #ifdef MENU_RC
   configMsg20,
 #endif
-#ifdef MENU_FIXEDWING_BF
+#ifdef MENU_SERVO
+  configMsg120,
+#endif
+#ifdef MENU_FIXEDWING
   configMsg110,
 #endif
 #ifdef MENU_VOLTAGE

@@ -297,7 +297,22 @@ void serialMSPCheck()
     MWAmperage = read16();
  }
 
-#ifdef FIXEDWING_BF
+#ifdef MENU_SERVO  
+  if (cmdMSP==MSP_SERVO_CONF)
+  {
+    for (uint8_t i = 0; i < MAX_SERVOS; i++) {
+      for (uint8_t ii = 0; ii < 4; ii++) {
+        if (ii==3)
+          servo.settings[ii][i] =read8();
+        else
+          servo.settings[ii][i] =read16();
+      }
+   }
+   modeMSPRequests &=~ REQ_MSP_SERVO_CONF;
+ }
+#endif //MENU_SERVO   
+
+#ifdef MENU_FIXEDWING
   if (cmdMSP==MSP_FW_CONFIG)
   {
     cfg.fw_althold_dir=read8();
@@ -316,7 +331,7 @@ void serialMSPCheck()
     }
     modeMSPRequests &=~ REQ_MSP_FW_CONFIG;
   }
-#endif // FIXEDWING_BF
+#endif // MENU_FIXEDWING
 
 #ifdef USE_FC_VOLTS_CONFIG
   if (cmdMSP==MSP_MISC)
@@ -749,6 +764,22 @@ void serialMenuCommon()
   }
 #endif
 
+#ifdef MENU_SERVO
+  if(configPage == MENU_SERVO) {
+    if(ROW >= 1 && ROW <= 7) {
+      uint8_t MODROW = ROW - 1;
+      if (ROW > 5) {
+        MODROW = ROW + 1;
+      }
+      switch(COL) {
+      case 1: servo.settings[0][MODROW]+= menudir; break;
+      case 2: servo.settings[1][MODROW]+= menudir; break;
+      case 3: servo.settings[2][MODROW]+= menudir; break;
+      }
+    }
+  }
+#endif
+
 #ifdef MENU_RC
   #if defined CORRECT_MENU_RCT2
     if (configPage == MENU_RC && COL == 3) {
@@ -792,8 +823,8 @@ void serialMenuCommon()
   #endif
 #endif
 
-#ifdef MENU_FIXEDWING_BF
-  if (configPage == MENU_FIXEDWING_BF && COL == 3) {
+#ifdef MENU_FIXEDWING
+  if (configPage == MENU_FIXEDWING && COL == 3) {
     switch(ROW) {
     case 1: cfg.fw_gps_maxcorr += menudir; break;
     case 2: cfg.fw_gps_rudder += menudir; break;
@@ -1120,7 +1151,7 @@ void configSave()
   mspWriteChecksum();
 #endif
 
-#if defined FIXEDWING_BF
+#if defined MENU_FIXEDWING
   mspWriteRequest(MSP_SET_FW_CONFIG,38);
   mspWrite8(cfg.fw_althold_dir);
   mspWrite16(cfg.fw_gps_maxcorr);
@@ -1136,8 +1167,21 @@ void configSave()
   for(uint8_t i=0; i<8; i++) {
     mspWrite16(0);
   }
+  mspWriteChecksum();  
+#endif // MENU_FIXEDWING
+
+#ifdef MENU_SERVO  
+  mspWriteRequest(MSP_SET_SERVO_CONF,(9*MAX_SERVOS));
+    for (uint8_t i = 0; i < MAX_SERVOS; i++) {
+      for (uint8_t ii = 0; ii < 4; ii++) {
+        if (ii==3)
+          mspWrite8(servo.settings[ii][i]);
+        else
+          mspWrite8(servo.settings[ii][i]);
+      }
+   }
   mspWriteChecksum();
-#endif // FIXEDWING_BF
+#endif
 
   writeEEPROM();
   mspWriteRequest(MSP_EEPROM_WRITE,0);
