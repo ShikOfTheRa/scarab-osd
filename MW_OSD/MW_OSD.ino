@@ -709,6 +709,9 @@ void setMspRequests() {
 #ifdef HAS_ALARMS
       REQ_MSP_ALARMS|
 #endif
+#ifdef MENU_SERVO
+      REQ_MSP_SERVO_CONF|
+#endif
 #ifdef MENU_FIXEDWING
       REQ_MSP_FW_CONFIG|
 #endif

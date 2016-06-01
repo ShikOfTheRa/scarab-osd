@@ -1405,8 +1405,8 @@ void displayConfigScreen(void)
 #ifdef MENU_SERVO
   if(configPage==MENU_SERVO)
   {
-    MAX7456_WriteString("MAX",67);
-    MAX7456_WriteString("MIN",67+7);
+    MAX7456_WriteString("MIN",67);
+    MAX7456_WriteString("MAX",67+7);
     MAX7456_WriteString("MID",67+7+7);
     for(uint8_t X=0; X<8; X++) {
       MAX7456_WriteString_P(PGMSTR(&(menu_servo[X])),93+(X*30));
