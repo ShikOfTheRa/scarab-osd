@@ -51,7 +51,7 @@ void kiss_sync() {
     // calculate amperage using ESC sum method...    
     MWAmperage=0;    
     for(uint8_t i=0; i<6; i++) {
-      MWAmperage+=kissread_u16(85+(i*10));
+      MWAmperage+=kissread_u16(87+(i*10));
     }  
     MWAmperage/=10;   
     amperagesum = 360* kissread_u16(150);
