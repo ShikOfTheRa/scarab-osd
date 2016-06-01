@@ -28,7 +28,7 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
-//#define MEMCHECK 3  // to enable memory checking and set debug[x] value. Requires DEVELOPMENT to be enabled
+#define MEMCHECK 3  // to enable memory checking and set debug[x] value. Requires DEVELOPMENT to be enabled
 #if 1
 __asm volatile ("nop");
 #endif
@@ -352,6 +352,11 @@ void loop()
       case REQ_MSP_PID:
         MSPcmdsend = MSP_PID;
         break;
+#ifdef MENU_SERVO  
+      case REQ_MSP_SERVO_CONF:
+        MSPcmdsend = MSP_SERVO_CONF;
+        break;
+#endif        
 #ifdef USE_MSP_PIDNAMES
       case REQ_MSP_PIDNAMES:
         MSPcmdsend = MSP_PIDNAMES;
@@ -391,7 +396,7 @@ void loop()
          MSPcmdsend = MSP_CONFIG;
       break;
 #endif
-#ifdef FIXEDWING_BF
+#ifdef MENU_FIXEDWING
       case REQ_MSP_FW_CONFIG:
          MSPcmdsend = MSP_FW_CONFIG;
       break;
@@ -704,7 +709,7 @@ void setMspRequests() {
 #ifdef HAS_ALARMS
       REQ_MSP_ALARMS|
 #endif
-#ifdef FIXEDWING_BF
+#ifdef MENU_FIXEDWING
       REQ_MSP_FW_CONFIG|
 #endif
       REQ_MSP_RC;

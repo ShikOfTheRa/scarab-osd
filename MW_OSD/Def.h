@@ -66,6 +66,12 @@
   // #define FIXEDWING
 #endif
 
+#ifdef FIXEDWING_BF_SERVO //set up latest at time of release
+  // based upon these..
+  // #define BASEFLIGHT20150627
+  // #define FIXEDWING
+#endif
+
 #ifdef HARAKIRI
   #define BOXNAMES
   #define MULTIWII_V24
@@ -167,7 +173,7 @@
   #define MENU_STAT          0       //STATISTICS
   #define MENU_PID           1       //PID CONFIG
   #define MENU_RC            2       //RC TUNING
-  #define MENU_FIXEDWING_BF  3       //FIXEDWING adjustments
+  #define MENU_FIXEDWING     3       //FIXEDWING adjustments
   #define MENU_VOLTAGE       4       //VOLTAGE
   #define MENU_RSSI          5       //RSSI
   #define MENU_CURRENT       6       //CURRENT
@@ -175,6 +181,28 @@
   #define MENU_ADVANCED      8       //ADVANCED
   #define MENU_ALARMS        9       //ALARMS
   #define MENU_PROFILE       10      //PROFILE+PID CONTROLLER
+  #define MAXPAGE       MENU_PROFILE
+#endif
+
+#if defined FIXEDWING_BF_SERVO
+  #define FIXEDWING
+  #define AMPERAGE_DIV 10
+  #define CORRECT_MSP_BF1
+  #define CORRECT_MENU_RCT1
+  #define ENABLE_MSP_SAVE_ADVANCED
+
+  #define MENU_STAT          0       //STATISTICS
+  #define MENU_PID           1       //PID CONFIG
+  #define MENU_RC            2       //RC TUNING
+  #define MENU_SERVO         3       //SERVO
+  #define MENU_FIXEDWING     4       //FIXEDWING adjustments
+  #define MENU_VOLTAGE       5       //VOLTAGE
+  #define MENU_RSSI          6       //RSSI
+  #define MENU_CURRENT       7       //CURRENT
+  #define MENU_DISPLAY       8       //DISPLAY
+  #define MENU_ADVANCED      9       //ADVANCED
+  #define MENU_ALARMS        10       //ALARMS
+  #define MENU_PROFILE       11      //PROFILE+PID CONTROLLER
   #define MAXPAGE       MENU_PROFILE
 #endif
 
