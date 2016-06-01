@@ -338,10 +338,9 @@ void displayMode(void)
     apactive=8;
   else
     return;
-  strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[apactive])));
-  MAX7456_WriteString(screenBuffer, getPosition(APstatusPosition));
-#endif
 
+  MAX7456_WriteString_P(PGMSTR(&(message_item[apactive])),getPosition(APstatusPosition));
+#endif
 }
 
 
@@ -1271,8 +1270,7 @@ void displayCursor(void)
 void displayConfigScreen(void)
 {
   int16_t MenuBuffer[10];
-  strcpy_P(screenBuffer, (char*)pgm_read_word(&(menutitle_item[configPage])));
-  MAX7456_WriteString(screenBuffer, 35);
+  MAX7456_WriteString_P(PGMSTR(&(menutitle_item[configPage])),35);
   #ifdef MENU_PROFILE
 //   MAX7456_WriteString(itoa(FCProfile,screenBuffer,10),50); // Display Profile number
   #endif 
@@ -1288,8 +1286,7 @@ void displayConfigScreen(void)
 //    MAX7456_WriteString_P(configMsg00, 35);
 
 #ifdef SHORTSUMMARY
-    strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_stats_item[0])));
-    MAX7456_WriteString(screenBuffer, ROLLT);
+    MAX7456_WriteString_P(PGMSTR(&(menu_stats_item[0])), ROLLT);
     formatTime(flyingTime, screenBuffer, 1);
     MAX7456_WriteString(screenBuffer,ROLLD-4);
 
@@ -1306,8 +1303,7 @@ void displayConfigScreen(void)
       MenuBuffer[6]=ampMAX/10;
 
     for(uint8_t X=0; X<=6; X++) {
-      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_stats_item[X])));
-      MAX7456_WriteString(screenBuffer, ROLLT + (X*30));
+      MAX7456_WriteString_P(PGMSTR(&(menu_stats_item[X])), ROLLT+(X*30));
       MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),110+(30*X));
     }
 
@@ -1327,10 +1323,9 @@ void displayConfigScreen(void)
 
     for(uint8_t X=0; X<=6; X++) {
 #ifdef USE_MSP_PIDNAMES
-      MAX7456_WriteString(menu_pid[X], ROLLT+ (X*30));
+      MAX7456_WriteString(menu_pid[X], ROLLT+(X*30));
 #else
-      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_pid[X])));
-      MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+      MAX7456_WriteString_P(PGMSTR(&(menu_pid[X])),ROLLT+(X*30));
 #endif
     }
    
@@ -1364,8 +1359,7 @@ void displayConfigScreen(void)
       MenuBuffer[7]=thrExpo8;
       MenuBuffer[8]=tpa_breakpoint16;
        for(uint8_t X=0; X<=8; X++) {
-        strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rc[X])));
-        MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+        MAX7456_WriteString_P(PGMSTR(&(menu_rc[X])),ROLLT+(X*30));
         MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
       }
     #elif defined CORRECT_MENU_RCT1
@@ -1378,8 +1372,7 @@ void displayConfigScreen(void)
       MenuBuffer[6]=thrMid8;
       MenuBuffer[7]=thrExpo8;
        for(uint8_t X=0; X<=7; X++) {
-        strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rc[X])));
-        MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+        MAX7456_WriteString_P(PGMSTR(&(menu_rc[X])),ROLLT+(X*30));
         MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
       }
     #else
@@ -1391,8 +1384,7 @@ void displayConfigScreen(void)
       MenuBuffer[5]=thrMid8;
       MenuBuffer[6]=thrExpo8;
      for(uint8_t X=0; X<=6; X++) {
-        strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rc[X])));
-        MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+        MAX7456_WriteString_P(PGMSTR(&(menu_rc[X])),ROLLT+(X*30));
         MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
       }
     #endif
@@ -1410,8 +1402,7 @@ void displayConfigScreen(void)
     MenuBuffer[6]=cfg.fw_idle_throttle;
     MenuBuffer[7]=cfg.fw_rth_alt;
     for(uint8_t X=0; X<=7; X++) {
-      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_fixedwing_bf[X])));
-      MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+      MAX7456_WriteString_P(PGMSTR(&(menu_fixedwing_bf[X])),ROLLT+(X*30));
       MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
     }
   }
@@ -1433,8 +1424,7 @@ void displayConfigScreen(void)
     MAX7456_WriteString(screenBuffer,ROLLI-LINE-LINE-3);
 
     for(uint8_t X=0; X<=6; X++) {
-      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_bat[X])));
-      MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+      MAX7456_WriteString_P(PGMSTR(&(menu_bat[X])),ROLLT+(X*30));
     }
     MAX7456_WriteString(itoa(Settings[S_VIDVOLTAGE],screenBuffer,10),ALTD);
     Menuconfig_onoff(ROLLD,S_DISPLAYVOLTAGE);
@@ -1455,8 +1445,7 @@ void displayConfigScreen(void)
     screenBuffer[xx] = 0;
     MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE);
     for(uint8_t X=0; X<=5; X++) {
-      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_rssi[X])));
-      MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+      MAX7456_WriteString_P(PGMSTR(&(menu_rssi[X])),ROLLT+(X*30));
     }
     Menuconfig_onoff(ROLLD,S_DISPLAYRSSI);
     if(timer.rssiTimer>0) {
@@ -1480,8 +1469,7 @@ void displayConfigScreen(void)
     MAX7456_WriteString(screenBuffer,ROLLD-LINE-LINE-1);
 
     for(uint8_t X=0; X<=4; X++) {
-      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_amps[X])));
-      MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+      MAX7456_WriteString_P(PGMSTR(&(menu_amps[X])),ROLLT+(X*30));
     }
     Menuconfig_onoff(ROLLD,S_AMPERAGE);
     Menuconfig_onoff(PITCHD,S_AMPER_HOUR);
@@ -1494,8 +1482,7 @@ void displayConfigScreen(void)
   if(configPage==MENU_DISPLAY)
   {
     for(uint8_t X=0; X<=7; X++) {
-      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_display[X])));
-      MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+      MAX7456_WriteString_P(PGMSTR(&(menu_display[X])),ROLLT+(X*30));
     }    
     Menuconfig_onoff(ROLLD,S_DISPLAY_HORIZON_BR);
     Menuconfig_onoff(PITCHD,S_WITHDECORATION);
@@ -1511,8 +1498,7 @@ void displayConfigScreen(void)
   if(configPage==MENU_ADVANCED)
   {
     for(uint8_t X=0; X<=5; X++) {
-      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_advanced[X])));
-      MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+      MAX7456_WriteString_P(PGMSTR(&(menu_advanced[X])),ROLLT+(X*30));
     }
 
 //  strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[apactive])));
@@ -1558,8 +1544,7 @@ void displayConfigScreen(void)
   if(configPage==MENU_GPS_TIME)
   {
     for(uint8_t X=0; X<=2; X++) {
-      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_gps_time[X])));
-      MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+      MAX7456_WriteString_P(PGMSTR(&(menu_gps_time[X])),ROLLT+(X*30));
     }
   Menuconfig_onoff(ROLLD,S_GPSTIME);    
   Menuconfig_onoff(PITCHD,S_GPSTZAHEAD);    
@@ -1575,8 +1560,7 @@ void displayConfigScreen(void)
       MenuBuffer[4]=Settings[S_AMPER_HOUR_ALARM];
       MenuBuffer[5]=Settings[S_AMPERAGE_ALARM];
       for(uint8_t X=0; X<=5; X++) {
-        strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_alarm_item[X])));
-        MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+        MAX7456_WriteString_P(PGMSTR(&(menu_alarm_item[X])),ROLLT+(X*30));
         MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
       }
     }
@@ -1592,8 +1576,7 @@ void displayConfigScreen(void)
       MenuBuffer[1]=PIDController;
       MenuBuffer[2]=LoopTime;
       for(uint8_t X=0; X<=MENU10MAX; X++) {
-        strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_profile[X])));
-        MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+        MAX7456_WriteString_P(PGMSTR(&(menu_profile[X])), ROLLT+(X*30));
         MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
       }
     }
@@ -1857,8 +1840,7 @@ void displayfwglidescope(void){
 #endif //USEGLIDESCOPE
 
 void Menuconfig_onoff(uint16_t pos, uint8_t setting){
-    strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_on_off[(Settings[setting])])));
-    MAX7456_WriteString(screenBuffer, pos);
+    MAX7456_WriteString_P(PGMSTR(&(menu_on_off[(Settings[setting])])), pos);
 }
 
 void displayArmed(void)
@@ -1927,9 +1909,8 @@ void displayArmed(void)
   }
   #endif //HIDEARMEDSTATUS
 
-  strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[message_no])));
   if (message_no>0){
-    MAX7456_WriteString(screenBuffer, getPosition(motorArmedPosition));
+    MAX7456_WriteString_P(PGMSTR(&(message_item[message_no])), getPosition(motorArmedPosition));
   }
 }
 

@@ -376,10 +376,22 @@
     #define VIDVOLTAGEPIN A2
 #endif
 
+<<<<<<< HEAD
 #ifdef ALTERNATEDIVIDERS                     
     #define DIVIDER1v1      0.0002      // Voltage divider for 1.1v reference. 
     #define DIVIDER5v       0.0008      // Voltage divider for 5v reference. 
 #else                                  
+=======
+#ifdef KYLIN250PDB
+    #undef VOLTAGEPIN
+    #define VOLTAGEPIN    A6
+#endif
+
+#ifdef ALTERNATEDIVIDERS
+    #define DIVIDER1v1      0.0002      // Voltage divider for 1.1v reference.
+    #define DIVIDER5v       0.0008      // Voltage divider for 5v reference.
+#else
+>>>>>>> refs/remotes/origin/master
     #define DIVIDER1v1      0.0001      // Voltage divider for 1.1v reference. Use 0.0001 default unless advised otherwise.
     #define DIVIDER5v       0.0005      // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
 #endif
