@@ -38,13 +38,22 @@ void kiss_sync() {
   MwAngle[0]=(int16_t)kissread_u16(31)/10;
   MwAngle[1]=(int16_t)kissread_u16(33)/10;
   Kvar.mode = kissread_u8(65); 
-  for(uint8_t i=0; i<8; i++) {
-    MwRcData[i]=1500+kissread_u16(i*2);
+  MwRcData[0]=1000+(int16_t)kissread_u16(0);
+  for(uint8_t i=1; i<8; i++) {
+    MwRcData[i]=1500+(int16_t)kissread_u16(i*2);
   } 
   handleRawRC();
   if (Settings[S_MWAMPERAGE]){ 
-    uint16_t dummy=kissread_u16(148);
-    MWAmperage = 10*calculateCurrentFromConsumedCapacity(dummy);
+    // calculate amperage using capacity method...
+    // uint16_t dummy=kissread_u16(148);
+    // MWAmperage = 10*calculateCurrentFromConsumedCapacity(dummy);
+
+    // calculate amperage using ESC sum method...    
+    MWAmperage=0;    
+    for(uint8_t i=0; i<6; i++) {
+      MWAmperage+=kissread_u16(85+(i*10));
+    }  
+    MWAmperage/=10;   
     amperagesum = 360* kissread_u16(150);
   }
 }
