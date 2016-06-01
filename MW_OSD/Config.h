@@ -30,12 +30,13 @@
 //#define LIBREPILOT                 // Uncomment this if you are using the latest LibrePilot MSP Module
 //#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
-//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
+#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
 //#define BETAFLIGHT                // Uncomment this if you are using BETAFLIGHT (same as CLEANFLIGHT t time of this MWOSD release)
 //#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight 
+//#define FIXEDWING_BF_SERVO          // Uncomment this if you are using fixed wing Baseflight and want Servo adjust menu capability
 //#define HARAKIRI                  // Uncomment this if you are using HARAKIRI (for BOXNAMES compatibility)
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
-#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
+//#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
 //#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
 //#define GPSOSD_MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
@@ -80,7 +81,7 @@
 /********************       FEATURES      *********************/
 // Disable features if you require memory for other features
 // Further configuration may be require elsewhere in config.h + option enabled on GUI
-//#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
+#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
 #define HORIZON         // Enable/disable HORIZON indicator
 #define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
 //#define GPSTIME       // Enable/disable GPS Time functions

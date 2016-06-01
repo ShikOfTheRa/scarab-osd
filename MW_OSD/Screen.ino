@@ -1165,8 +1165,22 @@ void displayCursor(void)
   #endif
       
 #endif
-#ifdef MENU_FIXEDWING_BF
-    if(configPage==MENU_FIXEDWING_BF){
+#ifdef MENU_SERVO
+    if(configPage==MENU_SERVO){
+      if (ROW==9){
+        if (oldROW==8)
+          ROW=10;
+        else
+          ROW=8;
+      }
+      oldROW=ROW;
+      if(COL==1) cursorpos=(ROW+2)*30+6;
+      if(COL==2) cursorpos=(ROW+2)*30+6+7;
+      if(COL==3) cursorpos=(ROW+2)*30+6+7+7;
+     }
+#endif
+#ifdef MENU_FIXEDWING
+    if(configPage==MENU_FIXEDWING){
       COL=3;
       if (ROW==9){
         if (oldROW==8)
@@ -1388,8 +1402,22 @@ void displayConfigScreen(void)
     #endif
   }
 #endif
-#ifdef MENU_FIXEDWING_BF
-  if(configPage==MENU_FIXEDWING_BF)
+#ifdef MENU_SERVO
+  if(configPage==MENU_SERVO)
+  {
+    MAX7456_WriteString("MAX",67);
+    MAX7456_WriteString("MIN",67+7);
+    MAX7456_WriteString("MID",67+7+7);
+    for(uint8_t X=0; X<8; X++) {
+      MAX7456_WriteString_P(PGMSTR(&(menu_servo[X])),93+(X*30));
+      for(uint8_t YY=0; YY<3; YY++) {      
+        MAX7456_WriteString(itoa(servo.settings[YY][X],screenBuffer,10),97+(X*30)+(YY*7));
+      }
+    }
+  }
+#endif
+#ifdef MENU_FIXEDWING
+  if(configPage==MENU_FIXEDWING)
   {
     MenuBuffer[0]=cfg.fw_gps_maxcorr;
     MenuBuffer[1]=cfg.fw_gps_rudder;
