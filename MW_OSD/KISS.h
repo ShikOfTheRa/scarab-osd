@@ -54,7 +54,7 @@ void kiss_sync() {
       MWAmperage+=kissread_u16(87+(i*10));
     }  
     MWAmperage/=10;   
-    amperagesum = 360* kissread_u16(150);
+    amperagesum = 360* kissread_u16(148);
   }
 }
 
