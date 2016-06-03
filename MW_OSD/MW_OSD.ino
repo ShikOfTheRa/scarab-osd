@@ -28,7 +28,7 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
-#define MEMCHECK 3  // to enable memory checking and set debug[x] value. Requires DEVELOPMENT to be enabled
+//#define MEMCHECK 3  // to enable memory checking and set debug[x] value. Requires DEVELOPMENT to be enabled
 #if 1
 __asm volatile ("nop");
 #endif

@@ -4,6 +4,9 @@ final int
   KISSCHECKSUM=99
 ;
 
+int KISScksum=0;
+
+
 void serialize8kiss(int val) {
   try{
     g_serial.write(val);
@@ -70,18 +73,30 @@ void synckiss(){
 // Amperage
   kisstable[148]=millis()>>17;
   kisstable[149]=millis()>>9;
+
+  kisstable[87]=int(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000))>>8;
+  kisstable[88]=int(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000));    
+  kisstable[97]=int(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000))>>8;
+  kisstable[98]=int(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000));    
+  kisstable[107]=int(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000))>>8;
+  kisstable[108]=int(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000));    
+  kisstable[117]=int(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000))>>8;
+  kisstable[118]=int(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000));    
+
 }
 
 void process_kiss_send(){
   synckiss();
   if ((int(SimControlToggle.getValue())!=0)&&(Simtype==4)) {
+    KISScksum=0;
     g_serial.write(KISSFRAMEINIT);
     g_serial.write(KISSFRAMELENGTH);
     for (int i=0; i<(KISSFRAMELENGTH); i++) { 
       g_serial.write((kisstable[i]&0xFF));
-//      println(i+":"+(kisstable[i]&0xFF));
+      KISScksum=KISScksum+(kisstable[i]&0xFF);
     }
-    g_serial.write(KISSCHECKSUM);
+    g_serial.write((KISScksum/KISSFRAMELENGTH)&0xFF);
+    println("ck:"+((KISScksum/KISSFRAMELENGTH)&0xFF));
 
   }
   PortWrite = !PortWrite; // toggle TX LED every other    

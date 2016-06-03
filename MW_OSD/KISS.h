@@ -10,6 +10,10 @@ uint16_t kissread_u16(uint8_t index) {
   return t;
 }
 
+uint32_t ESC_filter(uint32_t oldVal, uint32_t newVal){
+  return (uint32_t)((uint32_t)((uint32_t)((uint32_t)oldVal*ESC_FILTER)+(uint32_t)newVal))/(ESC_FILTER+1);
+}
+
 uint16_t calculateCurrentFromConsumedCapacity(uint16_t mahUsed)
 {
   static unsigned long previous_millis = 0;
@@ -43,6 +47,9 @@ void kiss_sync() {
     MwRcData[i]=1500+(int16_t)kissread_u16(i*2);
   } 
   handleRawRC();
+
+  static uint32_t filtereddata[6];
+
   if (Settings[S_MWAMPERAGE]){ 
     // calculate amperage using capacity method...
     // uint16_t dummy=kissread_u16(148);
@@ -51,9 +58,10 @@ void kiss_sync() {
     // calculate amperage using ESC sum method...    
     MWAmperage=0;    
     for(uint8_t i=0; i<6; i++) {
-      MWAmperage+=kissread_u16(87+(i*10));
-    }  
-    MWAmperage/=10;   
+      filtereddata[i] = ESC_filter((uint32_t)filtereddata[i],(uint32_t)((KISSserialBuffer[87+(i*10)]<<8) | KISSserialBuffer[88+(i*10)])<<4);
+      MWAmperage     += filtereddata[i]>>4;
+    }
+//    MWAmperage/=10;   
     amperagesum = 360* kissread_u16(148);
   }
 }
@@ -63,33 +71,37 @@ void serialKISSreceive(uint8_t c) {
     KISS_IDLE,
     KISS_HEADER_INIT,
     KISS_HEADER_SIZE,
-    KISS_HEADER_PAYLOAD,
+    KISS_PAYLOAD,
   }
   c_state = KISS_IDLE;
 
   if (c_state == KISS_IDLE) {
     Kvar.index=0;
+    Kvar.cksumtmp=0;
     c_state = (c == KISSFRAMEINIT) ? KISS_HEADER_INIT : KISS_IDLE;
   }
   else if (c_state == KISS_HEADER_INIT) {
-    c_state = (c == KISSFRAMELENGTH) ? KISS_HEADER_SIZE : KISS_IDLE;
+    Kvar.framelength=c;
+    c_state = KISS_HEADER_SIZE;
   }
   else if (c_state == KISS_HEADER_SIZE) {
-    if (Kvar.index == KISSFRAMELENGTH) {
-      c_state = KISS_HEADER_PAYLOAD;
-    }
-    else {
-      KISSserialBuffer[Kvar.index] = c;
-      Kvar.index++;
+    KISSserialBuffer[Kvar.index] = c;
+    Kvar.cksumtmp+=c;
+    Kvar.index++;
+    if (Kvar.index == Kvar.framelength) {
+      c_state = KISS_PAYLOAD;
     }
   }
-  else if (c_state == KISS_HEADER_PAYLOAD) {
-    kiss_sync();
-    c_state = KISS_IDLE;
+  else if (c_state == KISS_PAYLOAD) {
+    if ((Kvar.cksumtmp/Kvar.framelength)==c){
+      kiss_sync();
+    }
+    c_state = KISS_IDLE; // Go straight to idle to avoid missing every other packet
   }
   else {
     c_state = KISS_IDLE;
   }
 }
+
 
 
