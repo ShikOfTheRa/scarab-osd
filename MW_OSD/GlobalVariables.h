@@ -799,29 +799,59 @@ const PROGMEM char * const message_item[] =
   lowvolts_text,
 };
 
-
-// For Intro
-#ifdef INTRO_VERSION
-const char message0[] PROGMEM = INTRO_VERSION;
-#else
-const char message0[] PROGMEM = MWVERS;
-#endif
-
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
 const char messageF0[] PROGMEM = "DO NOT POWER OFF";
 const char messageF1[] PROGMEM = "SCREEN WILL GO BLANK";
 const char messageF2[] PROGMEM = "UPDATE COMPLETE";
 #endif
 
-//const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
-//const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
-const char message5[]  PROGMEM = "FC VERSION:";
-const char message6[]  PROGMEM = "OPEN MENU: THRT MIDDLE";
-const char message7[]  PROGMEM = "+YAW RIGHT";
-const char message8[]  PROGMEM = "+PITCH FULL";
-const char message9[]  PROGMEM = "ID:";         // Call Sign on the beggining of the transmission   
-const char message10[] PROGMEM = "TZ UTC:"; //haydent - Time Zone & DST Setting
-//const char message11[] PROGMEM = "MORE IN: GUI+CONFIG.H"; 
+// For Intro
+#ifdef INTRO_VERSION
+const char introtext0[] PROGMEM = INTRO_VERSION;
+#else
+const char introtext0[] PROGMEM = MWVERS;
+#endif
+const char introtext1[]  PROGMEM = "MENU:THRT MIDDLE";
+const char introtext2[]  PROGMEM = "    +YAW RIGHT";
+const char introtext3[]  PROGMEM = "    +PITCH FULL";
+const char introtext4[]  PROGMEM = "ID:";
+const char introtext5[]  PROGMEM = "SI:";
+const char introtextblank[]  PROGMEM = "";
+
+// Intro
+const PROGMEM char * const intro_item[] =
+{   
+  introtext0,
+  introtextblank,
+#ifdef INTRO_MENU
+  introtext1,
+  introtext2,
+  introtext3,
+#else
+  introtextblank,
+  introtextblank,
+  introtextblank,
+#endif
+  introtextblank,
+#ifdef INTRO_CALLSIGN
+  introtext4,
+#else
+  introtextblank,
+#endif
+#ifdef INTRO_SIGNALTYPE
+  introtext5,
+#else
+  introtextblank,
+#endif
+};
+
+const char signaltext0[]  PROGMEM = "NTSC";
+const char signaltext1[]  PROGMEM = "PAL";
+const PROGMEM char * const signal_type[] =
+{   
+  signaltext0,
+  signaltext1,
+};
 
 // For Config menu common
 const char configMsgON[]   PROGMEM = "ON";

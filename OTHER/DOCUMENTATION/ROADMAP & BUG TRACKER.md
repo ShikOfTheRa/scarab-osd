@@ -6,20 +6,29 @@
 
 ## Bugfixes / Enhancements completed for next release (1.7): ##
  * OSD    - Support for MAVLINK/APM/PIXHAWK
- * OSD    - GPS mode home set improvement
- * GUI    - Support for MAVLINK/APM/PIXHAWK
+ * OSD    - GPS OSD mode home set improvement - higher sat counts and consecutive valid fix required.
+ * OSD    - Support for LTM protocol OSD
+ * OSD    - Support for KISS OSD
  * OSD    - Support for GPS / NAV PID adjustments - BF FIXEDWING
+ * OSD    - Support for servo adjustments - BF FIXEDWING
+ * OSD    - Legacy FC version display removed
+ * OSD    - Option - display signal type at startup
+ * OSD    - Additional hardware support - kylin 250
+ * GUI    - Support for LTM,MAVLINK,KISS protocol
+ * GUI    - Option to disable simulator graphics for improved speed
+ * GUI    - Video volts shown in decimal format
+ * BUG    - Armed timer bugfix
+ * CODE   - Quality improvements - tidying 
+ * CODE   - Memory improvements - significant memory savings 
 
 ---
 
 ## Bugfixes / Enhancements intended for 1.7: ##
 
  * OSD    - Support for long distance - max travelled greater than 32km
- * OSD    - Support for LTM
  * OSD    - Voltage load sag hysterysis
  * OSD    - BUGFIX: Warning message display overwriting
  * OSD    - Support for alternative crosshairs
- * OSD    - FC version display change
  * GUI    - Improved speed
 
 ---

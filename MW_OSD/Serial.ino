@@ -301,7 +301,7 @@ void serialMSPCheck()
   if (cmdMSP==MSP_SERVO_CONF)
   {
     for (uint8_t i = 0; i < MAX_SERVOS; i++) {
-      for (uint8_t ii = 0; ii < 4; ii++) {
+      for (uint8_t ii = 0; ii < 5; ii++) {
         if (ii==3)
           servo.settings[ii][i] =read8();
         else
@@ -766,16 +766,10 @@ void serialMenuCommon()
 
 #ifdef MENU_SERVO
   if(configPage == MENU_SERVO) {
-    if(ROW >= 1 && ROW <= 7) {
-      uint8_t MODROW = ROW - 1;
-      if (ROW > 5) {
-        MODROW = ROW + 1;
-      }
-      switch(COL) {
-      case 1: servo.settings[0][MODROW]+= menudir; break;
-      case 2: servo.settings[1][MODROW]+= menudir; break;
-      case 3: servo.settings[2][MODROW]+= menudir; break;
-      }
+    switch(COL) {
+      case 1: servo.settings[0][ROW-1]+= menudir; break;
+      case 2: servo.settings[1][ROW-1]+= menudir; break;
+      case 3: servo.settings[2][ROW-1]+= menudir; break;
     }
   }
 #endif
@@ -1173,11 +1167,11 @@ void configSave()
 #ifdef MENU_SERVO  
   mspWriteRequest(MSP_SET_SERVO_CONF,(9*MAX_SERVOS));
     for (uint8_t i = 0; i < MAX_SERVOS; i++) {
-      for (uint8_t ii = 0; ii < 4; ii++) {
+      for (uint8_t ii = 0; ii < 5; ii++) {
         if (ii==3)
-          mspWrite8(servo.settings[ii][i]);
+          mspWrite8(servo.settings[ii][i]&0xFF);
         else
-          mspWrite8(servo.settings[ii][i]);
+          mspWrite16(servo.settings[ii][i]);
       }
    }
   mspWriteChecksum();
