@@ -799,6 +799,23 @@ const PROGMEM char * const message_item[] =
   lowvolts_text,
 };
 
+const PROGMEM char * const alarm_text[] =
+{   
+  blank_text,     //0
+  disarmed_text,  //1
+  armed_text,     //2
+  nodata_text,
+  nogps_text,
+  satlow_text,
+  lowvolts_text,
+};
+
+struct __alarms {
+  uint8_t active;
+  uint8_t  queue;
+  uint8_t  alarm;
+}alarms;
+
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
 const char messageF0[] PROGMEM = "DO NOT POWER OFF";
 const char messageF1[] PROGMEM = "SCREEN WILL GO BLANK";

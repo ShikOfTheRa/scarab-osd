@@ -1944,3 +1944,19 @@ void displayAlarms() {
 }
 #endif
 
+void showAlarms() {
+  if (alarms.queue>0){
+    while (!alarms.queue&(1>>alarms.alarm)){
+    alarms.alarm++;
+    }
+    //alarmno = alarm.alarm;
+    alarms.alarm++;    
+  }
+  else{
+    alarms.queue=alarms.active;
+    alarms.alarm=0;
+  }
+  if (voltage<=voltageWarning&&!armedtimer)
+    MAX7456_WriteString_P(lowvolts_text, getPosition(motorArmedPosition));
+}
+
