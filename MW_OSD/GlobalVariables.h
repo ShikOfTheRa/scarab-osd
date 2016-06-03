@@ -371,12 +371,12 @@ DEBUGDEF,   // DEBUG                       37e
 100, // S_ALTITUDE_ALARM,
 100, // S_SPEED_ALARM,
 30,  // S_FLYTIME_ALARM
-0x53,   // S_CS0,
-0x48,   // S_CS1,
-0x49,   // S_CS2,
-0x4B,   // S_CS3,
-0x49,   // S_CS4,
-0x20,   // S_CS5,
+0x4D,   // S_CS0,
+0x57,   // S_CS1,
+0x4F,   // S_CS2,
+0x53,   // S_CS3,
+0x44,   // S_CS4,
+0x00,   // S_CS5,
 0x20,   // S_CS6,
 0x20,   // S_CS7,
 0x20,   // S_CS8,
@@ -862,8 +862,13 @@ const PROGMEM char * const intro_item[] =
 #endif
 };
 
+#ifdef AUTOCAM 
+const char signaltext0[]  PROGMEM = "AUTO-NTSC";
+const char signaltext1[]  PROGMEM = "AUTO-PAL";
+#else
 const char signaltext0[]  PROGMEM = "NTSC";
 const char signaltext1[]  PROGMEM = "PAL";
+#endif
 const PROGMEM char * const signal_type[] =
 {   
   signaltext0,

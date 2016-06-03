@@ -387,12 +387,12 @@
     # define MAX7456RESET  10        // RESET
 #endif
 
-#ifdef WITESPYV1                     
+#ifdef RTFQV1                     
     #define SWAPVOLTAGEPINS
     #define ALTERNATEDIVIDERS
 #endif
 
-#ifdef WITESPYMICRO                     
+#ifdef RTFQMICRO                     
     #define SWAPVOLTAGEPINS
 #endif
 
