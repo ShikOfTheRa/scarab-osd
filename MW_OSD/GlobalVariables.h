@@ -1482,6 +1482,15 @@ struct __mw_ltm {
 
 #ifdef PROTOCOL_KISS
 
+const char KISS_mode_ACRO[] PROGMEM   = "ACRO"; //Acrobatic: rate control
+const char KISS_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
+
+const PROGMEM char * const KISS_mode_index[] = 
+{   
+ KISS_mode_ACRO,
+ KISS_mode_STAB, 
+};
+
 #define ESC_FILTER 10
 #define KISSFRAMEINIT 5
 #define KISSFRAMELENGTH 165 // max frame size
