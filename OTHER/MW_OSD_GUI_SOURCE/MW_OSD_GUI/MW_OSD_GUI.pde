@@ -172,6 +172,7 @@ boolean PortRead = false;
 boolean PortWrite = false;
 int PortReadtimer = 0;
 //int ReadConfig = 0;
+int DisplayMillis = 0;
 int ReadMillis = 0;
 int WriteConfig = 0;
 int WriteMillis = 0;
@@ -205,11 +206,13 @@ int processingtxtval = 0;
 int oldseconds=0;
 int framerate=0;
 String frameratetxt="";
+int loop1hz=0;
+int loop10hz=0;
 
 // XML config editorvariables
 int hudeditposition=0;
 
-
+int[] kisstable;
 int[] SimPosn;
 int[][] ConfigLayout;
 int[] EElookuptable= new int[512];
@@ -226,6 +229,8 @@ String OSname = System.getProperty("os.name");
 String LoadPercent = "";
 String CallSign = "";
 String Title;
+
+// gui configuration
 int Passthroughcomm;
 int AutoSimulator=0;
 int AutoDebugGUI=1;
@@ -668,7 +673,8 @@ color yellow_ = color(200, 200, 20),
       donateback_ = color(180, 100, 0),
       donatefront_ = color(50, 50, 255),
       osdcontr_ = color(50, 50, 50),
-      calibrate_ = color(50, 50, 255)
+      calibrate_ = color(50, 50, 255),
+      background_ = color(50, 50, 50)
       ;
 //Colors--------------------------------------------------------------------------------------------------------------------
 
@@ -1215,12 +1221,14 @@ void MakePorts(){
 
 void draw() {
 
-     MWData_Com(); 
-//  debug[0]=WriteLayouts;
-//  debug[1]=OSD_S_HUDSW0;
-//  debug[2]=OSD_S_HUDSW1;
-//  debug[3]=OSD_S_HUDSW2;
-// Initial setup
+  MWData_Com(); 
+  if (millis()>loop1hz){
+    loop1hz=millis()+1000;
+  }
+    if (millis()>loop10hz){
+    loop10hz=millis()+100;
+  }
+
   int seconds = second();
   time=millis();
   progresstxt="";
@@ -1322,7 +1330,6 @@ void draw() {
     eeindexmessage.setValue(eeindextxt);
     processingmessage.setValue(processingtxt);
     
-// txtlblconfItem[0].setValue(""); huh?
 
 // Layout editor
   txtlblLayoutTxt.setValue(" : "+ CONFIGHUDTEXT[hudeditposition]);
@@ -1449,6 +1456,7 @@ void draw() {
 
         process_mav_send(); //        if ((int(SimControlToggle.getValue())!=0)&&(Simtype==2)) {
         process_ltm_send(); //        if ((int(SimControlToggle.getValue())!=0)&&(Simtype==3)) {
+        process_kiss_send(); //        if ((int(SimControlToggle.getValue())!=0)&&(Simtype==4)) {
 
       }
     } // End !FontMode
@@ -1465,7 +1473,7 @@ void draw() {
     
   MakePorts();  
   
-  background(80);
+  background(background_);
   // ------------------------------------------------------------------------
   // Draw background control boxes
   // ------------------------------------------------------------------------
@@ -1510,21 +1518,14 @@ void draw() {
  }
    
   }
-  
-      
-    if (int(confItem[GetSetting("S_DISPLAYRSSI")].value()) > 0)    ShowRSSI(); 
-
-
-  if(confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() > 0) displayHorizon(int(MW_Pitch_Roll.arrayValue()[0])*10,int(MW_Pitch_Roll.arrayValue()[1])*10*-1);
+ 
+ if(SimDisplayToggle.getValue()!=0){     
   SimulateTimer();
   CalcAlt_Vario(); 
 
   ShowCurrentThrottlePosition();
-  if (int(confItem[GetSetting("S_DISPLAYRSSI")].value()) > 0)    ShowRSSI(); 
-  if (int(confItem[GetSetting("S_DISPLAYVOLTAGE")].value()) > 0) ShowVolts(sVBat);
-
+  ShowVolts(sVBat);
   ShowVideoVolts(sVBat);    
- 
   displaySensors();
   displayMode();
   ShowAmps();
@@ -1541,25 +1542,24 @@ void draw() {
   ShowDebug();
   ShowSideBarArrows();
   ShowAPstatus();
+  ShowRSSI(); 
+  ShowMapMode();  
+  ShowSPort();
 
   if(confItem[GetSetting("S_DISPLAYGPS")].value() > 0) {
-  ShowGPSAltitude();
-  ShowDistance();
-  ShowLatLon();
-  ShowSats();   
-  ShowSpeed();
-  ShowDirection();
+    ShowGPSAltitude();
+    ShowDistance();
+    ShowLatLon();
+    ShowSats();   
+    ShowSpeed();
+    ShowDirection();
+  }
+  if(confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() > 0) displayHorizon(int(MW_Pitch_Roll.arrayValue()[0])*10,int(MW_Pitch_Roll.arrayValue()[1])*10*-1);
  }
  
- 
-  ShowMapMode();
-    
   MatchConfigs();
   MakePorts();
-  
-  ShowSPort();
- 
-  
+    
   if ((ClosePort ==true)&& (PortWrite == false)){ //&& (init_com==1)
     ClosePort();
   }
@@ -2465,6 +2465,8 @@ void initxml(){
     CONFIGHUDEN[hud][hudindex] = enabled;      
   }
   SimPosn = new int[hudoptions];
+    kisstable = new int[KISSFRAMELENGTH];
+
   ConfigLayout= new int[4][hudoptions];
   ConfigRanges[GetSetting("S_HUDSW0")] = hudsavailable-1;
   ConfigRanges[GetSetting("S_HUDSW1")] = hudsavailable-1;
@@ -2577,6 +2579,10 @@ void coloriseswitches(){
     SimControlToggle.setColorActive(switches_);
   else
     SimControlToggle.setColorActive(red_);
+  if (int(SimDisplayToggle.getValue())==1)
+    SimDisplayToggle.setColorActive(switches_);
+  else
+    SimDisplayToggle.setColorActive(red_);
   if (int(DEBUGGUI.getValue())==1)
     DEBUGGUI.setColorActive(switches_);
   else

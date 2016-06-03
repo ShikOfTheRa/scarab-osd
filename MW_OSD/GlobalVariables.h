@@ -1479,3 +1479,24 @@ struct __mw_ltm {
 }mw_ltm;
 
 #endif // PROTOCOL_LTM
+
+#ifdef PROTOCOL_KISS
+
+#define ESC_FILTER 10
+#define KISSFRAMEINIT 5
+#define KISSFRAMELENGTH 165 // max frame size
+uint8_t KISSserialBuffer[KISSFRAMELENGTH];
+
+// Vars
+struct __Kvar {
+  uint8_t mode;
+  uint8_t index;
+  uint8_t payloadlength;
+  uint8_t readIndex;
+  uint8_t framelength;
+  uint16_t cksumtmp;
+}
+Kvar;
+
+#endif // PROTOCOL_KISS
+

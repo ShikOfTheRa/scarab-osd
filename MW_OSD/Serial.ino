@@ -2,11 +2,11 @@
 #if defined PROTOCOL_MAVLINK
   #define SERIALBUFFERSIZE 150
 #elif defined NAZA
-  #define SERIALBUFFERSIZE 150
+  #define SERIALBUFFERSIZE 250
 #elif defined GPSOSD
-  #define SERIALBUFFERSIZE 150
+  #define SERIALBUFFERSIZE 250
 #else
-  #define SERIALBUFFERSIZE 200
+  #define SERIALBUFFERSIZE 150
 #endif
 
 static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string
@@ -23,6 +23,10 @@ uint8_t txChecksum;
 
 #if defined PROTOCOL_LTM
   #include "LTM.h"
+#endif 
+
+#if defined PROTOCOL_KISS
+  #include "KISS.h"
 #endif 
 
 uint32_t read32() {
@@ -993,6 +997,10 @@ void serialMSPreceive(uint8_t loops)
        serialLTMreceive(c);
     #endif // PROTOCOL_LTM   
     
+    #if defined (PROTOCOL_KISS)
+       serialKISSreceive(c);
+    #endif // PROTOCOL_KISS   
+
     if (c_state == IDLE)
     {
       c_state = (c=='$') ? HEADER_START : IDLE;

@@ -56,7 +56,7 @@ uint16_t calculateCurrentFromConsumedCapacity(uint16_t mahUsed)
     previous_millis = current_millis;
   }
   else if ((current_millis - previous_millis) > 500 && (previous_mahUsed < mahUsed)) {
-    calculatedCurrent = (mahUsed - previous_mahUsed) / (current_millis - previous_millis);
+    calculatedCurrent = (mahUsed - previous_mahUsed) *2*360;
     previous_mahUsed = mahUsed;
     previous_millis = current_millis;
   }

@@ -4,7 +4,7 @@
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-//#define DEBUG         // Enable/disable option to display OSD debug values 
+#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 //#define ALWAYSARMED
 //#define DEVELOPMENT   // to force layout 0, set debug default eeprombit = 1
@@ -78,7 +78,9 @@
 #endif
 
 #ifdef APM     //set up latest at time of release
-  #define PROTOCOL_MAVLINK
+#endif
+
+#ifdef KISS     //set up latest at time of release
 #endif
 
 // The unit of current varies across implementations.  There are effectively three set:
@@ -308,7 +310,19 @@
   #define MENU_ALARMS   6       //ALARMS
   #define MAXPAGE       MENU_ALARMS
   #define PROTOCOL_MAVLINK
-  #define SENSORS
+  #define AMPERAGE_DIV 10
+#endif
+
+#if defined(KISS)
+  #define MENU_STAT     0       //STATISTICS
+  #define MENU_VOLTAGE  1       //VOLTAGE
+  #define MENU_RSSI     2       //RSSI
+  #define MENU_CURRENT  3       //CURRENT
+  #define MENU_DISPLAY  4       //DISPLAY
+  #define MENU_ADVANCED 5       //ADVANCED
+  #define MENU_ALARMS   6       //ALARMS
+  #define MAXPAGE       MENU_ALARMS
+  #define PROTOCOL_KISS
   #define AMPERAGE_DIV 10
 #endif
 
@@ -365,27 +379,27 @@
 
 
 /********************  OSD HARDWARE rule definitions  *********************/
-#ifdef RUSHDUINO
-    # define MAX7456SELECT 10        // ss
+#ifdef RUSHDUINO                     
+    # define MAX7456SELECT 10        // ss 
     # define MAX7456RESET  9         // RESET
-#else
+#else                                  
     # define MAX7456SELECT 6         // ss
     # define MAX7456RESET  10        // RESET
 #endif
 
-#ifdef RTFQV1
+#ifdef WITESPYV1                     
     #define SWAPVOLTAGEPINS
     #define ALTERNATEDIVIDERS
 #endif
 
-#ifdef RTFQMICRO
+#ifdef WITESPYMICRO                     
     #define SWAPVOLTAGEPINS
 #endif
 
-#ifdef SWAPVOLTAGEPINS
+#ifdef SWAPVOLTAGEPINS                     
     #define VOLTAGEPIN    A2
     #define VIDVOLTAGEPIN A0
-#else
+#else                                  
     #define VOLTAGEPIN    A0
     #define VIDVOLTAGEPIN A2
 #endif
@@ -510,6 +524,11 @@ PROTOCOL_MAVLINK
 #define FORCESENSORS
 #endif
 
+#ifdef PROTOCOL_KISS
+#undef  PROTOCOL_MSP
+#define FORECSENSORACC
+#endif
+
 #ifdef FORCE_MSP
 #define PROTOCOL_MSP
 #endif
@@ -548,6 +567,11 @@ PROTOCOL_MAVLINK
   #define PITCHSTICK       0
   #define YAWSTICK         3
   #define THROTTLESTICK    2
+#elif defined KISS
+  #define ROLLSTICK        1
+  #define PITCHSTICK       2
+  #define YAWSTICK         3
+  #define THROTTLESTICK    0
 #else
   // RX CHANEL IN MwRcData table
   #define ROLLSTICK        0
