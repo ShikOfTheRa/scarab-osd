@@ -122,6 +122,7 @@
 
   #define MENU_STAT     0       //STATISTICS
   #define MENU_PID      1       //PID CONFIG
+    #define MENU_PID_VEL
   #define MENU_RC       2       //RC TUNING
   #define MENU_VOLTAGE  3       //VOLTAGE
   #define MENU_RSSI     4       //RSSI

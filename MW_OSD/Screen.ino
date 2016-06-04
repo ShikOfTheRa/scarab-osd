@@ -1106,11 +1106,19 @@ void displayCursor(void)
   {
 #ifdef MENU_PID
     if(configPage==MENU_PID){
+#ifdef MENU_PID_VEL
+      if (ROW==9) {
+        if (oldROW==8)
+          ROW=10;
+        else
+          ROW=8;
+      }
+      oldROW=ROW;
+#else
       if (ROW==8) ROW=10;
       if (ROW==9) ROW=7;
-      if(COL==1) cursorpos=(ROW+2)*30+10;
-      if(COL==2) cursorpos=(ROW+2)*30+10+6;
-      if(COL==3) cursorpos=(ROW+2)*30+10+6+6;
+#endif
+      cursorpos = (ROW+2)*30+10+(COL-1)*6;
     }
 #endif
 #ifdef MENU_RC
@@ -1310,15 +1318,25 @@ void displayConfigScreen(void)
   if(configPage==MENU_PID)
   {
 
-    for(uint8_t X=0; X<=6; X++) {
+#ifdef MENU_PID_VEL
+    for(uint8_t X=0; X<=7; X++)
+#else
+    for(uint8_t X=0; X<=6; X++)
+#endif
+    {
 #ifdef USE_MSP_PIDNAMES
       MAX7456_WriteString(menu_pid[X], ROLLT+(X*30));
 #else
       MAX7456_WriteString_P(PGMSTR(&(menu_pid[X])),ROLLT+(X*30));
 #endif
     }
-
-    for(uint8_t Y=0; Y<=8; Y++) {      
+   
+#ifdef MENU_PID_VEL
+    for(uint8_t Y=0; Y<=9; Y++)
+#else
+    for(uint8_t Y=0; Y<=8; Y++)
+#endif
+    {
       if (Y==5) Y=7;
       uint8_t X=Y;
       if (Y>6){

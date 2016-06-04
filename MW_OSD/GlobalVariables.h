@@ -906,6 +906,9 @@ const char configMsg14[] PROGMEM = "ALT";
 const char configMsg15[] PROGMEM = "GPS";
 const char configMsg16[] PROGMEM = "LEVEL";
 const char configMsg17[] PROGMEM = "MAG";
+#ifdef MENU_PID_VEL
+const char configMsg18[] PROGMEM = "Z_VEL";
+#endif
 #endif /* !USE_MSP_PIDNAMES */
 
 //-----------------------------------------------------------Page2
@@ -1090,7 +1093,11 @@ const PROGMEM char * const menu_stats_item[] =
 #ifdef USE_MSP_PIDNAMES
 
 #define PIDNAME_BUFSIZE  8
+#ifdef MENU_PID_VEL
+#define PIDNAME_NUMITEMS 8
+#else
 #define PIDNAME_NUMITEMS 7
+#endif
 
 char menu_pid[PIDNAME_NUMITEMS][PIDNAME_BUFSIZE];
 
@@ -1104,6 +1111,9 @@ const PROGMEM char * const menu_pid[] =
   configMsg15,
   configMsg16,
   configMsg17,
+#ifdef MENU_PID_VEL
+  configMsg18,
+#endif
 };
 #endif
 

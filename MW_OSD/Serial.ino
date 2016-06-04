@@ -425,7 +425,11 @@ void serialMSPCheck()
       for(uint8_t i = 0; i<dataSize; i++) {
         c = read8();
 
+#ifdef MENU_PID_VEL
+        if((pn_index != 5) && (pn_index != 6) && (pn_index <= 9)) // 5, 6 and >9 are skipped
+#else
         if((pn_index != 5) && (pn_index != 6) && (pn_index <= 8)) // 5, 6 and >8 are skipped
+#endif
         {
           if(c == ';')
           {
@@ -750,7 +754,11 @@ void serialMenuCommon()
 
 #ifdef MENU_PID
   if(configPage == MENU_PID) {
+#ifdef MENU_PID_VEL
+    if(ROW >= 1 && ROW <= 8) {
+#else
     if(ROW >= 1 && ROW <= 7) {
+#endif
       uint8_t MODROW = ROW - 1;
       if (ROW > 5) {
         MODROW = ROW + 1;
