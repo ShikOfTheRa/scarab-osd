@@ -138,6 +138,15 @@ struct __cfg {
 }
 cfg;
 
+#ifdef MENU_SERVO  
+#define MAX_SERVOS 8
+struct __servo {
+    uint16_t settings[5][MAX_SERVOS];
+}
+servo;
+#endif //MENU_SERVO  
+
+
 uint16_t debug[4];   // int32_t ?...
 int8_t menudir;
 unsigned int allSec=0;
@@ -362,12 +371,12 @@ DEBUGDEF,   // DEBUG                       37e
 100, // S_ALTITUDE_ALARM,
 100, // S_SPEED_ALARM,
 30,  // S_FLYTIME_ALARM
-0x53,   // S_CS0,
-0x48,   // S_CS1,
-0x49,   // S_CS2,
-0x4B,   // S_CS3,
-0x49,   // S_CS4,
-0x20,   // S_CS5,
+0x4D,   // S_CS0,
+0x57,   // S_CS1,
+0x4F,   // S_CS2,
+0x53,   // S_CS3,
+0x44,   // S_CS4,
+0x00,   // S_CS5,
 0x20,   // S_CS6,
 0x20,   // S_CS7,
 0x20,   // S_CS8,
@@ -702,6 +711,7 @@ uint16_t flyingTime=0;
 #define MSP_BOXNAMES             116   //out message         the aux switch names
 #define MSP_PIDNAMES             117   //out message         the PID names
 #define MSP_BOXIDS               119   //out message         get the permanent IDs associated to BOXes
+#define MSP_SERVO_CONF           120    //out message         Servo settings
 #define MSP_NAV_STATUS           121   //out message	     Returns navigation status
 
 #define MSP_CELLS                130   //out message         FrSky SPort Telemtry
@@ -718,6 +728,7 @@ uint16_t flyingTime=0;
 #define MSP_SET_WP               209   //in message          sets a given WP (WP#,lat, lon, alt, flags)
 #define MSP_SELECT_SETTING       210   //in message          Select Setting Number (0-2)
 #define MSP_SET_HEAD             211   //in message          define a new heading hold direction
+#define MSP_SET_SERVO_CONF       212    //in message          Servo settings
 
 #define MSP_BIND                 240   //in message          no param
 
@@ -788,13 +799,22 @@ const PROGMEM char * const message_item[] =
   lowvolts_text,
 };
 
+const PROGMEM char * const alarm_text[] =
+{   
+  blank_text,     //0
+  disarmed_text,  //1
+  armed_text,     //2
+  nodata_text,
+  nogps_text,
+  satlow_text,
+  lowvolts_text,
+};
 
-// For Intro
-#ifdef INTRO_VERSION
-const char message0[] PROGMEM = INTRO_VERSION;
-#else
-const char message0[] PROGMEM = MWVERS;
-#endif
+struct __alarms {
+  uint8_t active;
+  uint8_t  queue;
+  uint8_t  alarm;
+}alarms;
 
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
 const char messageF0[] PROGMEM = "DO NOT POWER OFF";
@@ -802,15 +822,58 @@ const char messageF1[] PROGMEM = "SCREEN WILL GO BLANK";
 const char messageF2[] PROGMEM = "UPDATE COMPLETE";
 #endif
 
-//const char message1[] PROGMEM = "VIDEO SIGNAL NTSC";
-//const char message2[] PROGMEM = "VIDEO SIGNAL PAL ";
-const char message5[]  PROGMEM = "FC VERSION:";
-const char message6[]  PROGMEM = "OPEN MENU: THRT MIDDLE";
-const char message7[]  PROGMEM = "+YAW RIGHT";
-const char message8[]  PROGMEM = "+PITCH FULL";
-const char message9[]  PROGMEM = "ID:";         // Call Sign on the beggining of the transmission   
-const char message10[] PROGMEM = "TZ UTC:"; //haydent - Time Zone & DST Setting
-//const char message11[] PROGMEM = "MORE IN: GUI+CONFIG.H"; 
+// For Intro
+#ifdef INTRO_VERSION
+const char introtext0[] PROGMEM = INTRO_VERSION;
+#else
+const char introtext0[] PROGMEM = MWVERS;
+#endif
+const char introtext1[]  PROGMEM = "MENU:THRT MIDDLE";
+const char introtext2[]  PROGMEM = "    +YAW RIGHT";
+const char introtext3[]  PROGMEM = "    +PITCH FULL";
+const char introtext4[]  PROGMEM = "ID:";
+const char introtext5[]  PROGMEM = "SI:";
+const char introtextblank[]  PROGMEM = "";
+
+// Intro
+const PROGMEM char * const intro_item[] =
+{   
+  introtext0,
+  introtextblank,
+#ifdef INTRO_MENU
+  introtext1,
+  introtext2,
+  introtext3,
+#else
+  introtextblank,
+  introtextblank,
+  introtextblank,
+#endif
+  introtextblank,
+#ifdef INTRO_CALLSIGN
+  introtext4,
+#else
+  introtextblank,
+#endif
+#ifdef INTRO_SIGNALTYPE
+  introtext5,
+#else
+  introtextblank,
+#endif
+};
+
+#ifdef AUTOCAM 
+const char signaltext0[]  PROGMEM = "AUTO-NTSC";
+const char signaltext1[]  PROGMEM = "AUTO-PAL";
+#else
+const char signaltext0[]  PROGMEM = "NTSC";
+const char signaltext1[]  PROGMEM = "PAL";
+#endif
+const PROGMEM char * const signal_type[] =
+{   
+  signaltext0,
+  signaltext1,
+};
 
 // For Config menu common
 const char configMsgON[]   PROGMEM = "ON";
@@ -940,6 +1003,16 @@ const char configMsg115[] PROGMEM = "THR CLIMB";
 const char configMsg116[] PROGMEM = "THR CRUISE";
 const char configMsg117[] PROGMEM = "THR IDLE";
 const char configMsg118[] PROGMEM = "RTH ALT";
+//-----------------------------------------------------------SERVO Page
+const char configMsg120[] PROGMEM = "SERVOS";
+const char configMsg121[] PROGMEM = "S0";
+const char configMsg122[] PROGMEM = "S1";
+const char configMsg123[] PROGMEM = "S2";
+const char configMsg124[] PROGMEM = "S3";
+const char configMsg125[] PROGMEM = "S4";
+const char configMsg126[] PROGMEM = "S5";
+const char configMsg127[] PROGMEM = "S6";
+const char configMsg128[] PROGMEM = "S7";
 
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
@@ -973,14 +1046,15 @@ const unsigned char MwGPSAltPositionAdd[2]={
 #define REQ_MSP_FONT      (1 << 12)
 #define REQ_MSP_DEBUG     (1 << 13)
 #define REQ_MSP_CELLS     (1 << 14)
-#define REQ_MSP_NAV_STATUS      32768   // (1 << 15)
-#define REQ_MSP_CONFIG          32768   // (1 << 15)
-#define REQ_MSP_MISC            65536   // (1 << 16)
-#define REQ_MSP_ALARMS          131072  // (1 << 17)
-#define REQ_MSP_PID_CONTROLLER  262144  // (1 << 18)
-#define REQ_MSP_LOOP_TIME       524288  // (1 << 19) 
-#define REQ_MSP_FW_CONFIG       1048576 // (1 << 20) 
-#define REQ_MSP_PIDNAMES (1L<<21)
+#define REQ_MSP_NAV_STATUS     (1L<<15)
+#define REQ_MSP_CONFIG         (1L<<15)
+#define REQ_MSP_MISC           (1L<<16)
+#define REQ_MSP_ALARMS         (1L<<17)
+#define REQ_MSP_PID_CONTROLLER (1L<<18)
+#define REQ_MSP_LOOP_TIME      (1L<<19) 
+#define REQ_MSP_FW_CONFIG      (1L<<20) 
+#define REQ_MSP_PIDNAMES       (1L<<21)
+#define REQ_MSP_SERVO_CONF     (1L<<22)
 
 // Menu selections
 const PROGMEM char * const menu_choice_unit[] =
@@ -1153,6 +1227,18 @@ const PROGMEM char * const menu_fixedwing_bf[] =
   configMsg118,
 };
 
+const PROGMEM char * const menu_servo[] = 
+{   
+  configMsg121,
+  configMsg122,
+  configMsg123,
+  configMsg124,
+  configMsg125,
+  configMsg126,
+  configMsg127,
+  configMsg128,
+};
+
 const PROGMEM char * const menutitle_item[] = 
 {   
 #ifdef MENU_STAT
@@ -1164,7 +1250,10 @@ const PROGMEM char * const menutitle_item[] =
 #ifdef MENU_RC
   configMsg20,
 #endif
-#ifdef MENU_FIXEDWING_BF
+#ifdef MENU_SERVO
+  configMsg120,
+#endif
+#ifdef MENU_FIXEDWING
   configMsg110,
 #endif
 #ifdef MENU_VOLTAGE
@@ -1395,3 +1484,33 @@ struct __mw_ltm {
 }mw_ltm;
 
 #endif // PROTOCOL_LTM
+
+#ifdef PROTOCOL_KISS
+
+const char KISS_mode_ACRO[] PROGMEM   = "ACRO"; //Acrobatic: rate control
+const char KISS_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
+
+const PROGMEM char * const KISS_mode_index[] = 
+{   
+ KISS_mode_ACRO,
+ KISS_mode_STAB, 
+};
+
+#define ESC_FILTER 10
+#define KISSFRAMEINIT 5
+#define KISSFRAMELENGTH 165 // max frame size
+uint8_t KISSserialBuffer[KISSFRAMELENGTH];
+
+// Vars
+struct __Kvar {
+  uint8_t mode;
+  uint8_t index;
+  uint8_t payloadlength;
+  uint8_t readIndex;
+  uint8_t framelength;
+  uint16_t cksumtmp;
+}
+Kvar;
+
+#endif // PROTOCOL_KISS
+

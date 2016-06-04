@@ -30,12 +30,15 @@
 //#define LIBREPILOT                 // Uncomment this if you are using the latest LibrePilot MSP Module
 //#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
-//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
+#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
 //#define BETAFLIGHT                // Uncomment this if you are using BETAFLIGHT (same as CLEANFLIGHT t time of this MWOSD release)
 //#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight 
+//#define FIXEDWING_BF_SERVO        // Uncomment this if you are using fixed wing Baseflight with additional SERVO adjustment menu.
 //#define HARAKIRI                  // Uncomment this if you are using HARAKIRI (for BOXNAMES compatibility)
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
-#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
+//#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
+//#define KISS                      // Uncomment this if you are using KISS FC (Requires testing)
+//#define APM                       // Uncomment this if you are using APM MAVLINK compatible FC (Requires testing)
 //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
 //#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
 //#define GPSOSD_MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
@@ -46,7 +49,6 @@
 //#define BASEFLIGHT20150327        // Uncomment this if you are using BASEFLIGHT up to and including version Stable 2015.03.27
 //#define CLEANFLIGHT172            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.7.2
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1 
-//#define APM                       // Uncomment this if you are using APM MAVLINK compatible FC (Requires testing)
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
@@ -80,7 +82,7 @@
 /********************       FEATURES      *********************/
 // Disable features if you require memory for other features
 // Further configuration may be require elsewhere in config.h + option enabled on GUI
-//#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
+#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
 #define HORIZON         // Enable/disable HORIZON indicator
 #define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
 //#define GPSTIME       // Enable/disable GPS Time functions
@@ -166,10 +168,10 @@
 
 /********************       STARTUP settings      *********************/
 //#define INTRO_VERSION               "MWOSD - DEV 1.6.0.0" // Call the OSD something else if you prefer. 
-//#define INTRO_CALLSIGN            // Enable to display callsign at startup
-//#define INTRO_TIMEZONE            // Enable to display timezone at startup - if GPS TIME is enabled
-//#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 8 
 #define INTRO_MENU                  // Enable to display TX stick MENU 
+#define INTRO_CALLSIGN            // Enable to display callsign at startup
+#define INTRO_SIGNALTYPE          // Enable to display video type at startup
+//#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 8 
 //#define STARTUPDELAY 2000         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
 
@@ -184,7 +186,7 @@
 
 /********************       Display Settings         ************************/
 #define MAXSTALLDETECT              // Enable to attempt to detect MAX chip stall from bad power. Attempts to restart.
-//#define AUTOCAM                   // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
+#define AUTOCAM                   // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
 //#define AUTOCAMWAIT               // **UNTESTED** - Use with AUTOCAM - waits until camera is ready - i.e. if power up cameras after FC. 
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
 #define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 

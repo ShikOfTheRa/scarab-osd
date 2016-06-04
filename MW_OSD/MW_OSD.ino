@@ -163,7 +163,10 @@ void setup()
     GPS_SerialInit();
   #else
   #endif
-  #if defined FORCESENSORS
+#if defined FORECSENSORACC
+    MwSensorPresent |=ACCELEROMETER;
+#endif
+#if defined FORCESENSORS
     MwSensorPresent |=GPSSENSOR;
     MwSensorPresent |=BAROMETER;
     MwSensorPresent |=MAGNETOMETER;
@@ -227,7 +230,12 @@ void loop()
     MwRcData[THROTTLESTICK] = pwmRSSI;
   #endif //THROTTLE_RSSI
 
-  #if defined (OSD_SWITCH_RC)                   
+  #if defined (KISS)      
+    if (Kvar.mode==1)
+      screenlayout=1;
+    else
+      screenlayout=0; 
+  #elif defined (OSD_SWITCH_RC)                   
     uint8_t rcswitch_ch = Settings[S_RCWSWITCH_CH];
     screenlayout=0;
     if (Settings[S_RCWSWITCH]){
@@ -276,7 +284,9 @@ void loop()
   {
     previous_millis_sync = previous_millis_sync+sync_speed_cycle;    
     if(!fontMode)
-      mspWriteRequest(MSP_ATTITUDE,0);
+       #ifndef KISS
+       mspWriteRequest(MSP_ATTITUDE,0);
+       #endif
   }
 #endif //MSP_SPEED_HIGH
 
@@ -296,11 +306,16 @@ void loop()
     timer.Blink10hz=!timer.Blink10hz;
     calculateTrip();
     if (Settings[S_AMPER_HOUR]) 
+    #ifndef KISS
       amperagesum += amperage;
+    #endif    
     #ifndef GPSOSD 
       #ifdef MSP_SPEED_MED
-        if(!fontMode)
+        if(!fontMode){
+          #ifndef KISS
           mspWriteRequest(MSP_ATTITUDE,0);
+          #endif // KISS
+        }
       #endif //MSP_SPEED_MED  
     #endif //GPSOSD
    }  // End of slow Timed Service Routine (100ms loop)
@@ -352,6 +367,11 @@ void loop()
       case REQ_MSP_PID:
         MSPcmdsend = MSP_PID;
         break;
+#ifdef MENU_SERVO  
+      case REQ_MSP_SERVO_CONF:
+        MSPcmdsend = MSP_SERVO_CONF;
+        break;
+#endif        
 #ifdef USE_MSP_PIDNAMES
       case REQ_MSP_PIDNAMES:
         MSPcmdsend = MSP_PIDNAMES;
@@ -391,7 +411,7 @@ void loop()
          MSPcmdsend = MSP_CONFIG;
       break;
 #endif
-#ifdef FIXEDWING_BF
+#ifdef MENU_FIXEDWING
       case REQ_MSP_FW_CONFIG:
          MSPcmdsend = MSP_FW_CONFIG;
       break;
@@ -405,7 +425,11 @@ void loop()
     
     if(!fontMode){
       #ifndef GPSOSD
-      mspWriteRequest(MSPcmdsend, 0);      
+      #ifdef KISS
+       Serial.write(0x20);
+      #else     
+       mspWriteRequest(MSPcmdsend, 0); 
+       #endif // KISS
       #endif //GPSOSD
       MAX7456_DrawScreen();
     }
@@ -704,7 +728,10 @@ void setMspRequests() {
 #ifdef HAS_ALARMS
       REQ_MSP_ALARMS|
 #endif
-#ifdef FIXEDWING_BF
+#ifdef MENU_SERVO
+      REQ_MSP_SERVO_CONF|
+#endif
+#ifdef MENU_FIXEDWING
       REQ_MSP_FW_CONFIG|
 #endif
       REQ_MSP_RC;
