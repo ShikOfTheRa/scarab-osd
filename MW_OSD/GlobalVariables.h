@@ -101,18 +101,19 @@
 
 //General use variables
 struct  __timer {
-  uint8_t tenthSec;
-  uint8_t halfSec;
-  uint8_t Blink2hz;                          // This is turing on and off at 2hz
-  uint8_t Blink10hz;                         // This is turing on and off at 10hz
-  uint16_t lastCallSign;                          // Callsign_timer
-  uint8_t rssiTimer;
+  uint8_t  tenthSec;
+  uint8_t  halfSec;
+  uint8_t  Blink2hz;                          // This is turing on and off at 2hz
+  uint8_t  Blink10hz;                         // This is turing on and off at 10hz
+  uint16_t lastCallSign;                      // Callsign_timer
+  uint8_t  rssiTimer;
 //  uint8_t accCalibrationTimer;
-  uint8_t magCalibrationTimer;
+  uint8_t  magCalibrationTimer;
   uint32_t fwAltitudeTimer;
   uint32_t seconds;
-  uint8_t MSP_active;
-  uint8_t GPS_active;
+  uint8_t  MSP_active;
+  uint8_t  GPS_active;
+  uint32_t alarms;                            // Alarm length timer
 }
 timer;
 
@@ -773,16 +774,16 @@ uint16_t flyingTime=0;
 // End private MSP for use with the GUI
 
 
-const char blank_text[] PROGMEM    = "";
-const char nodata_text[] PROGMEM    = "NO DATA";
-const char nogps_text[] PROGMEM     = " NO GPS";
-const char satlow_text[] PROGMEM    = "LOW SATS";
-const char disarmed_text[] PROGMEM  = "DISARMED";
-const char armed_text[] PROGMEM     = " ARMED";
-const char APRTHtext[] PROGMEM      = "AUTO RTH";
-const char APHOLDtext[] PROGMEM     = "AUTO HOLD";
+const char blank_text[]     PROGMEM = "";
+const char nodata_text[]    PROGMEM = "NO DATA";
+const char nogps_text[]     PROGMEM = " NO GPS";
+const char satlow_text[]    PROGMEM = "LOW SATS";
+const char disarmed_text[]  PROGMEM = "DISARMED";
+const char armed_text[]     PROGMEM = " ARMED";
+const char APRTHtext[]      PROGMEM = "AUTO RTH";
+const char APHOLDtext[]     PROGMEM = "AUTO HOLD";
 const char APWAYPOINTtext[] PROGMEM = " MISSION";
-const char lowvolts_text[] PROGMEM  = "LOW VOLTS";
+const char lowvolts_text[]  PROGMEM = "LOW VOLTS";
 
 // For Status / warning messages
 const PROGMEM char * const message_item[] =
@@ -813,6 +814,7 @@ const PROGMEM char * const alarm_text[] =
 struct __alarms {
   uint8_t active;
   uint8_t  queue;
+  uint8_t  index;
   uint8_t  alarm;
 }alarms;
 
@@ -906,6 +908,9 @@ const char configMsg14[] PROGMEM = "ALT";
 const char configMsg15[] PROGMEM = "GPS";
 const char configMsg16[] PROGMEM = "LEVEL";
 const char configMsg17[] PROGMEM = "MAG";
+#ifdef MENU_PID_VEL
+const char configMsg18[] PROGMEM = "Z_VEL";
+#endif
 #endif /* !USE_MSP_PIDNAMES */
 
 //-----------------------------------------------------------Page2
@@ -1090,7 +1095,11 @@ const PROGMEM char * const menu_stats_item[] =
 #ifdef USE_MSP_PIDNAMES
 
 #define PIDNAME_BUFSIZE  8
+#ifdef MENU_PID_VEL
+#define PIDNAME_NUMITEMS 8
+#else
 #define PIDNAME_NUMITEMS 7
+#endif
 
 char menu_pid[PIDNAME_NUMITEMS][PIDNAME_BUFSIZE];
 
@@ -1104,6 +1113,9 @@ const PROGMEM char * const menu_pid[] =
   configMsg15,
   configMsg16,
   configMsg17,
+#ifdef MENU_PID_VEL
+  configMsg18,
+#endif
 };
 #endif
 
@@ -1487,7 +1499,7 @@ struct __mw_ltm {
 
 #ifdef PROTOCOL_KISS
 
-const char KISS_mode_ACRO[] PROGMEM   = "ACRO"; //Acrobatic: rate control
+const char KISS_mode_ACRO[] PROGMEM   = ""; //Acrobatic: rate control
 const char KISS_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
 
 const PROGMEM char * const KISS_mode_index[] = 

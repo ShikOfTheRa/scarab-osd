@@ -42,6 +42,7 @@ void kiss_sync() {
   MwAngle[0]=(int16_t)kissread_u16(31)/10;
   MwAngle[1]=(int16_t)kissread_u16(33)/10;
   Kvar.mode = kissread_u8(65); 
+  (Kvar.mode>1) ? 1 : 0;
   MwRcData[0]=1000+(int16_t)kissread_u16(0);
   for(uint8_t i=1; i<8; i++) {
     MwRcData[i]=1500+(int16_t)kissread_u16(i*2);
@@ -62,7 +63,7 @@ void kiss_sync() {
       MWAmperage     += filtereddata[i]>>4;
     }
 //    MWAmperage/=10;   
-    amperagesum = 360* kissread_u16(148);
+    amperagesum = (uint32_t)360* kissread_u16(148);
   }
 }
 
