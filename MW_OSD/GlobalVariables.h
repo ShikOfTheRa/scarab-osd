@@ -121,6 +121,7 @@ struct __flags {
   uint8_t ident;
   uint8_t box;
   uint8_t reset;
+  uint8_t signaltype;
 }
 flags;
 
@@ -785,19 +786,13 @@ const char APHOLDtext[]     PROGMEM = "AUTO HOLD";
 const char APWAYPOINTtext[] PROGMEM = " MISSION";
 const char lowvolts_text[]  PROGMEM = "LOW VOLTS";
 
-// For Status / warning messages
-const PROGMEM char * const message_item[] =
+// For Alarm / Message text
+const PROGMEM char * const message_text[] =
 {   
-  blank_text,  //0
-  disarmed_text,  //1
-  armed_text,     //2
-  nodata_text,
-  nogps_text,
-  satlow_text,
-  APRTHtext,
-  APHOLDtext,
+  blank_text,     //0
+  APRTHtext,      //1
+  APHOLDtext,     //2
   APWAYPOINTtext,
-  lowvolts_text,
 };
 
 const PROGMEM char * const alarm_text[] =
@@ -865,16 +860,19 @@ const PROGMEM char * const intro_item[] =
 };
 
 #ifdef AUTOCAM 
-const char signaltext0[]  PROGMEM = "AUTO-NTSC";
-const char signaltext1[]  PROGMEM = "AUTO-PAL";
+const char signaltext0[]  PROGMEM = "NTSC-AUTO";
+const char signaltext1[]  PROGMEM = "PAL-AUTO";
+const char signaltext2[]  PROGMEM = "NOT DETECTED";
 #else
 const char signaltext0[]  PROGMEM = "NTSC";
 const char signaltext1[]  PROGMEM = "PAL";
+const char signaltext1[]  PROGMEM = "";
 #endif
 const PROGMEM char * const signal_type[] =
 {   
   signaltext0,
   signaltext1,
+  signaltext2,
 };
 
 // For Config menu common

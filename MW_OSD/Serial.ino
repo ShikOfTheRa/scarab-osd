@@ -29,6 +29,10 @@ uint8_t txChecksum;
   #include "KISS.h"
 #endif 
 
+#if defined PROTOCOL_SKYTRACK
+  #include "SKYTRACK.h"
+#endif 
+
 uint32_t read32() {
   uint32_t t = read16();
   t |= (uint32_t)read16()<<16;
@@ -88,8 +92,8 @@ void mspWriteChecksum(){
 void serialMSPCheck()
 {
   readIndex = 0;
-  #ifdef MSPACTIVECHECK
-    timer.MSP_active=MSPACTIVECHECK; // getting something on serial port
+  #ifdef ALARM_MSP
+    timer.MSP_active=ALARM_MSP; // getting something on serial port
   #endif
 
   if (cmdMSP == MSP_OSD) {
@@ -200,9 +204,9 @@ void serialMSPCheck()
 
   if (cmdMSP==MSP_RAW_GPS)
   {
-    #ifdef GPSACTIVECHECK
-     timer.GPS_active=GPSACTIVECHECK;
-    #endif //GPSACTIVECHECK
+    #ifdef ALARM_GPS
+     timer.GPS_active=ALARM_GPS;
+    #endif //ALARM_GPS
     uint8_t GPS_fix_temp=read8();
     if (GPS_fix_temp){
       GPS_fix=1;

@@ -34,8 +34,8 @@ uint16_t calculateCurrentFromConsumedCapacity(uint16_t mahUsed)
 }
 
 void kiss_sync() {
-#ifdef MSPACTIVECHECK
-  timer.MSP_active=MSPACTIVECHECK;             // getting something on serial port
+#ifdef ALARM_MSP
+  timer.MSP_active=ALARM_MSP;             // getting something on serial port
 #endif
   armed = kissread_u8(16);
   MwVBat = kissread_u16(17)/10;
