@@ -3,8 +3,8 @@
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
-//#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware
-#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
+#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware
+//#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
 //#define RTFQV1                    // Uncomment this if using standard RTFQ/Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
 //#define RTFQMICRO                 // Uncomment this if using micro RTFQ/Witespy Micro Minim OSD, select this to correct for swapped bat1/bat 2.  
 //#define RUSHDUINO                 // Uncomment this if using Rushduino
@@ -31,14 +31,15 @@
 //#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
 #define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
-//#define BETAFLIGHT                // Uncomment this if you are using BETAFLIGHT (same as CLEANFLIGHT t time of this MWOSD release)
+//#define BETAFLIGHT                // Uncomment this if you are using BETAFLIGHT (same as CLEANFLIGHT at time of this MWOSD release)
 //#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight 
 //#define FIXEDWING_BF_SERVO        // Uncomment this if you are using fixed wing Baseflight with additional SERVO adjustment menu.
 //#define HARAKIRI                  // Uncomment this if you are using HARAKIRI (for BOXNAMES compatibility)
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-//#define KISS                      // Uncomment this if you are using KISS FC (Requires testing)
+//#define KISS                      // Uncomment this if you are using KISS FC
 //#define APM                       // Uncomment this if you are using APM MAVLINK compatible FC (Requires testing)
+//#define SKYTRACK                  // Under development
 //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
 //#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
 //#define GPSOSD_MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
@@ -59,6 +60,7 @@
 //Select ONLY if you are sure your OSD is connected to a telemetry feed:
 //#define TELEMETRY_LTM             // Uncomment this if you are using a LTM telemetry feed (under development)
 //#define TELEMETRY_MAVLINK         // Uncomment this if you are using a MAVLINK telemetry feed (under development)
+//#define TELEMETRY_SKYTRACK        // Under development
 //#define SETHOMEARMED              // Uncomment this to disable reset home position when arming. Use if FC armed data is sent via LTM
 //#define FORCE_MSP                 // Uncomment to enable use of MSP as well as telemetry. Uses more memory 
 
@@ -122,11 +124,11 @@
 #define MINSATFIX 5                 // Number of sats required for a fix. 5 minimum. More = better.
 
 
-/********************       WARNING/STATUS settings      *********************/
-#define SATACTIVECHECK              // Alerts if sats below MINSATFIX - in addition to flashing sat indicator
-#define GPSACTIVECHECK 5            // Alerts if no GPS data for more than x secs. Sets GPS sats to zero
-#define MSPACTIVECHECK 3            // Alerts if no Flight controller data for more than x secs. 
-#define DISP_LOW_VOLTS_WARNING      // Alerts with additional text warning if low voltage
+/********************       ALARM/STATUS settings      *********************/
+#define ALARM_VOLTAGE               // Text alerts if voltage below voltage alarm - in addition to flashing voltage indicator
+#define ALARM_SATS                  // Text alerts if sats below MINSATFIX - in addition to flashing sat indicator
+#define ALARM_GPS 5                 // Text alerts if no GPS data for more than x secs. Sets GPS sats to zero
+#define ALARM_MSP 3                 // Text alerts if no Flight controller data for more than x secs. 
 #define FORCE_DISP_LOW_VOLTS        // Enable display low voltage warning override for screen layouts where its disabled
 //#define FORCE_DISP_LOW_VID_VOLTS  // Enable display low VIDEO voltage warning override for screen layouts where its disabled
 
@@ -164,7 +166,6 @@
 //#define CALLSIGNALWAYS           // Alternative option - enable to permanently display callsign.
 //#define FREETEXTLLIGHTS          // Alternative option - enable to display freetext (or callsign) when LLIGHTS Switch active on TX.
 //#define FREETEXTGIMBAL           // Alternative option - enable to display freetext (or callsign) when GIMBAL Switch active on TX.
-
 
 /********************       STARTUP settings      *********************/
 //#define INTRO_VERSION               "MWOSD - DEV 1.6.0.0" // Call the OSD something else if you prefer. 

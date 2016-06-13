@@ -152,7 +152,6 @@ void MAX7456Setup(void)
   MAX7456_Send(VM0_reg, MAX7456_reset);
   delay(100);
 
-
 #ifdef AUTOCAM 
   pinMode(MAX7456SELECT,OUTPUT);
   digitalWrite(MAX7456SELECT,LOW);
@@ -173,6 +172,11 @@ void MAX7456Setup(void)
   else if((B00000010 & srdata) == B00000010){ //NTSC
       Settings[S_VIDEOSIGNALTYPE]=0;
   }
+  else{
+    flags.signaltype = 2; // NOT DETECTED
+  }
+#else
+  flags.signaltype = Settings[S_VIDEOSIGNALTYPE];
 #endif //AUTOCAM
    
 #ifdef FASTPIXEL 

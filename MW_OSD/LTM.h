@@ -67,14 +67,14 @@ void ltm_check() {
   mw_ltm.LTMreadIndex=0;
   static uint8_t GPS_fix_HOME_validation=GPSHOMEFIX;
   uint32_t dummy;
-#ifdef MSPACTIVECHECK
-  timer.MSP_active=MSPACTIVECHECK;             // getting something on serial port
+#ifdef ALARM_MSP
+  timer.MSP_active=ALARM_MSP;             // getting something on serial port
 #endif
   if (mw_ltm.LTMcmd == LIGHTTELEMETRY_GFRAME)
   {
-#ifdef GPSACTIVECHECK
-    timer.GPS_active=GPSACTIVECHECK;
-#endif //GPSACTIVECHECK
+#ifdef ALARM_GPS
+    timer.GPS_active=ALARM_GPS;
+#endif //ALARM_GPS
     GPS_latitude = (int32_t)ltmread_u32();
     GPS_longitude = (int32_t)ltmread_u32();
     GPS_speed = ltmread_u8() * 100;            // LTM gives m/s, we expect cm/s

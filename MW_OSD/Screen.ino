@@ -334,15 +334,15 @@ void displayMode(void)
     return;
   uint8_t apactive=0;
   if (MwSensorActive&mode.gpshome)
-    apactive=6;
+    apactive=1;
   else if (MwSensorActive&mode.gpshold)
-    apactive=7;
+    apactive=2;
   else if (MwSensorActive&mode.gpsmission)
-    apactive=8;
+    apactive=3;
   else
     return;
 
-  MAX7456_WriteString_P(PGMSTR(&(message_item[apactive])),getPosition(APstatusPosition));
+  MAX7456_WriteString_P(PGMSTR(&(message_text[apactive])),getPosition(APstatusPosition));
 #endif
 }
 
@@ -575,11 +575,6 @@ void displayVoltage(void)
 
   if ((voltage<voltageWarning)&&(timer.Blink2hz))
     return;
-
-#ifdef DISP_LOW_VOLTS_WARNING
-  if (voltage<=voltageWarning&&!armedtimer)
-    MAX7456_WriteString_P(lowvolts_text, getPosition(motorArmedPosition));
-#endif
 
 #ifdef FORCE_DISP_LOW_VOLTS
   if(fieldIsVisible(voltagePosition)||(voltage<=voltageWarning)) 
@@ -821,12 +816,11 @@ void displayIntro(void)
   displayCallsign(64+(30*6)+4);
 #endif
 #ifdef INTRO_SIGNALTYPE
-  MAX7456_WriteString_P(PGMSTR(&(signal_type[Settings[S_VIDEOSIGNALTYPE]])), 64+(30*7)+4);
+  MAX7456_WriteString_P(PGMSTR(&(signal_type[flags.signaltype])), 64+(30*7)+4);
 #endif
 #ifdef HAS_ALARMS
   if (alarmState != ALARM_OK) {
-    line += LINE;
-    MAX7456_WriteString((const char*)alarmMsg, 64+(30*9));
+    MAX7456_WriteString((const char*)alarmMsg, 64+(30*9)+4);
   }
 #endif
 }
@@ -1840,6 +1834,7 @@ void mapmode(void) {
 #endif
 }
 
+
 #ifdef USEGLIDESCOPE
 void displayfwglidescope(void){
   if(!fieldIsVisible(glidescopePosition))
@@ -1864,17 +1859,17 @@ void displayfwglidescope(void){
 }
 #endif //USEGLIDESCOPE
 
+
 void Menuconfig_onoff(uint16_t pos, uint8_t setting){
   MAX7456_WriteString_P(PGMSTR(&(menu_on_off[(Settings[setting])])), pos);
 }
 
+
 void displayArmed(void)
 {
   if(!fieldIsVisible(motorArmedPosition)){
-    armedtimer=0;
     return;  
   }
-  uint8_t message_no = 0;
 
 #ifdef HAS_ALARMS
   if (alarmState != ALARM_OK) {
@@ -1884,64 +1879,76 @@ void displayArmed(void)
 #endif
 
   if(!armed){
-    message_no=1;
+    alarms.active|=(1<<1);
     armedtimer=30;
-  } 
+  }
+  else{
+    if (armedtimer>0){
+      if (timer.Blink10hz)
+        return;
+      alarms.active|=(1<<2);
+      armedtimer--;
+    } 
+    else{
+      alarms.active|=B00000001;
+    }
+  }
+
+#ifdef ALARM_VOLTAGE
+    if (voltage<=voltageWarning)
+      alarms.active|=(1<<6);
+#endif
 
   if(MwSensorPresent&GPSSENSOR){
-#ifdef SATACTIVECHECK
+
+#ifdef ALARM_SATS
     if (GPS_numSat<MINSATFIX){ // below minimum preferred value
-      message_no=5;
+      alarms.active|=(1<<5);
     }
-#endif //SATACTIVECHECK
+#endif //ALARM_GPS
 
-#ifdef GPSACTIVECHECK
+#ifdef ALARM_GPS
     if(timer.GPS_active==0){
-      message_no=4;
+      alarms.active|=(1<<4);
     }
-#endif //GPSACTIVECHECK
-  }
-
-#ifdef MSPACTIVECHECK
+#endif //ALARM_GPS
+  
+#ifdef ALARM_MSP
   if(timer.MSP_active==0){
-    message_no=3;
+    alarms.active|=(1<<3);
+    alarms.active&=B11001111; // No need for sats/gps warning
   }
-#endif //MSPACTIVECHECK
-  if(armedtimer&&armed){
-    if (timer.Blink10hz){
-      armedtimer--;
-      message_no=2;
-    }
-    else{
-      message_no=0;
-    }
-  }
-
-  if(message_no>2){
-    if(!armed&&timer.Blink2hz){
-      message_no=1;
-    }
-    else if(!armed){
-    }
-    else if(timer.Blink2hz){
-      return;
-    }
+#endif //ALARM_MSP
   }
 
 #ifdef HIDEARMEDSTATUS
-  if(message_no<3){
-    return;
-  }
+    alarms.active&=B11111000;
 #endif //HIDEARMEDSTATUS
 
-  if (message_no>0){
-    MAX7456_WriteString_P(PGMSTR(&(message_item[message_no])), getPosition(motorArmedPosition));
+
+  if(alarms.queue == 0)
+    alarms.queue = alarms.active;
+  uint8_t queueindex = alarms.queue & -alarms.queue;
+  if (millis()>500+timer.alarms){
+    if(alarms.queue > 0)
+     alarms.queue &= ~queueindex;
+    timer.alarms=millis();
+  }
+         
+  uint8_t queueindexbit;
+  for (uint8_t i = 0; i < 7; i++) {
+      if  (queueindex & (1<<i))
+        queueindexbit=i;
+   }  
+  if (alarms.active>1){
+    MAX7456_WriteString_P(PGMSTR(&(alarm_text[queueindexbit])), getPosition(motorArmedPosition));
   }
 }
 
+
 void displayForcedCrosshair(){
   uint16_t position = getPosition(horizonPosition);
-  screen[position-1] = SYM_AH_CENTER_LINE;
+  screen[position-1] = SYM_AH_CENTER_LINE; 
   screen[position+1] = SYM_AH_CENTER_LINE_RIGHT;
   screen[position] =   SYM_AH_CENTER;
 }
@@ -1959,18 +1966,6 @@ void displayAlarms() {
 #endif
 
 void showAlarms() {
-  if (alarms.queue>0){
-    while (!alarms.queue&(1>>alarms.alarm)){
-    alarms.alarm++;
-    }
-    //alarmno = alarm.alarm;
-    alarms.alarm++;    
-  }
-  else{
-    alarms.queue=alarms.active;
-    alarms.alarm=0;
-  }
-  if (voltage<=voltageWarning&&!armedtimer)
-    MAX7456_WriteString_P(lowvolts_text, getPosition(motorArmedPosition));
+
 }
 

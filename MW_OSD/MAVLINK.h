@@ -113,9 +113,9 @@ void request_mavlink_rates(){
 
 
 void serialMAVCheck(){
-#ifdef MSPACTIVECHECK
-  timer.MSP_active=MSPACTIVECHECK; // getting valid MAV on serial port
-#endif //MSPACTIVECHECK
+#ifdef ALARM_MSP
+  timer.MSP_active=ALARM_MSP; // getting valid MAV on serial port
+#endif //ALARM_MSP
   int16_t MwHeading360;
   uint8_t apm_mav_type=0;
   uint8_t osd_mode=serialbufferint(0);
@@ -168,9 +168,9 @@ void serialMAVCheck(){
     MwAngle[1]=(int16_t)(serialbufferfloat(8)*57296/10);     // rad-->0.1deg
     break;
   case MAVLINK_MSG_ID_GPS_RAW_INT:
-#ifdef GPSACTIVECHECK
-    timer.GPS_active=GPSACTIVECHECK;
-#endif //GPSACTIVECHECK
+#ifdef ALARM_GPS
+    timer.GPS_active=ALARM_GPS;
+#endif //ALARM_GPS
     GPS_numSat=serialBuffer[29];                                                                         
     GPS_fix=serialBuffer[28];                                                                            
     GPS_ground_course = (serialBuffer[26]|(serialBuffer[27]<<8))/10;

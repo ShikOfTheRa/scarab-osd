@@ -219,6 +219,7 @@ void loop()
 //------------------------------------------------------------------------
 void loop()
 {
+  alarms.active=0;
   if (flags.reset){
     resetFunc();
   }
@@ -453,7 +454,6 @@ void loop()
       }
 #ifndef HIDESUMMARY
       if(previousarmedstatus && !armed){
-        armedtimer=20;
         configPage=0;
         ROW=10;
         COL=1;
@@ -573,14 +573,14 @@ void loop()
       if (!fontMode)
         MAX7456Stalldetect();
     #endif 
-    #ifdef GPSACTIVECHECK
+    #ifdef ALARM_GPS
       if (timer.GPS_active==0){
         GPS_numSat=0;
       }
       else {
         timer.GPS_active--;
       }      
-    #endif // GPSACTIVECHECK 
+    #endif // ALARM_GPS 
     if (timer.MSP_active>0){
       timer.MSP_active--;
     }  
