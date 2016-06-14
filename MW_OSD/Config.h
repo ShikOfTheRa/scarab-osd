@@ -56,14 +56,6 @@
 #define ROTORCRAFT                  // Default for multirotors etc. 
 //#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight 
 
-/********************       TELEMETRY settings      *********************/
-//Select ONLY if you are sure your OSD is connected to a telemetry feed:
-//#define TELEMETRY_LTM             // Uncomment this if you are using a LTM telemetry feed (under development)
-//#define TELEMETRY_MAVLINK         // Uncomment this if you are using a MAVLINK telemetry feed (under development)
-//#define TELEMETRY_SKYTRACK        // Under development
-//#define SETHOMEARMED              // Uncomment this to disable reset home position when arming. Use if FC armed data is sent via LTM
-//#define FORCE_MSP                 // Uncomment to enable use of MSP as well as telemetry. Uses more memory 
-
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
 // Ignore this section unless you know you need to use it !!
@@ -89,6 +81,15 @@
 #define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
 //#define GPSTIME       // Enable/disable GPS Time functions
 //#define SPORT         // Enable/disable FRSKY S.PORT cell code
+
+
+/********************       TELEMETRY settings      *********************/
+//Select ONLY if you are sure your OSD is connected to a telemetry feed:
+//#define TELEMETRY_LTM             // Uncomment this if you are using a LTM telemetry feed (under development)
+//#define TELEMETRY_MAVLINK         // Uncomment this if you are using a MAVLINK telemetry feed (under development)
+//#define TELEMETRY_SKYTRACK        // Under development
+//#define SETHOMEARMED              // Uncomment this to disable reset home position when arming. Use if FC armed data is sent via LTM
+//#define FORCE_MSP                 // Uncomment to enable use of MSP as well as telemetry. Uses more memory 
 
 
 /********************       GPS OSD settings      *********************/
@@ -150,8 +151,10 @@
 //#define BAUDRATE 19200
 //#define BAUDRATE 9600
 
+
 /******************** Mavlink settings *********************/
 #define MAVLINKREQ                // Enable this for mavlink systems where the Mavlink data requires requesting. 
+
 
 /******************** Serial MSP speed settings *********************/
 // Choose ONLY ONE option: increases speeds of serial update - but with impact to flight controller 
@@ -168,7 +171,7 @@
 //#define FREETEXTGIMBAL           // Alternative option - enable to display freetext (or callsign) when GIMBAL Switch active on TX.
 
 /********************       STARTUP settings      *********************/
-//#define INTRO_VERSION               "MWOSD - DEV 1.6.0.0" // Call the OSD something else if you prefer. 
+#define INTRO_VERSION               "MWOSD - DEV 1.6.1.0" // Call the OSD something else if you prefer. 
 #define INTRO_MENU                  // Enable to display TX stick MENU 
 #define INTRO_CALLSIGN            // Enable to display callsign at startup
 #define INTRO_SIGNALTYPE          // Enable to display video type at startup
@@ -187,7 +190,7 @@
 
 /********************       Display Settings         ************************/
 #define MAXSTALLDETECT              // Enable to attempt to detect MAX chip stall from bad power. Attempts to restart.
-#define AUTOCAM                   // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
+//#define AUTOCAM                   // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
 //#define AUTOCAMWAIT               // **UNTESTED** - Use with AUTOCAM - waits until camera is ready - i.e. if power up cameras after FC. 
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
 #define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 

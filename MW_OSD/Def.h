@@ -346,6 +346,8 @@
   #undef  ALARM_MSP
   #undef  ALARM_SATS
   #undef  ALARM_GPS
+  #undef  OSD_SWITCH_RC
+  #define MENU_STAT  0           //STATISTICS
   #define MAXPAGE MENU_STAT
   #define PROTOCOL_SKYTRACK
 #endif
