@@ -866,7 +866,7 @@ const char signaltext2[]  PROGMEM = "NOT DETECTED";
 #else
 const char signaltext0[]  PROGMEM = "NTSC";
 const char signaltext1[]  PROGMEM = "PAL";
-const char signaltext1[]  PROGMEM = "";
+const char signaltext2[]  PROGMEM = "";
 #endif
 const PROGMEM char * const signal_type[] =
 {   

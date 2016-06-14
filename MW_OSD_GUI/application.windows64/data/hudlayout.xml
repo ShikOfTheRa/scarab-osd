@@ -97,7 +97,7 @@
   <LAYOUT desc="Call Sign" enabled="1" hud="0" hudname="Shiki" value="280"/>
   <LAYOUT desc="Debug" enabled="1" hud="0" hudname="Shiki" value="220"/>
   <LAYOUT desc="Sat indicator" enabled="0" hud="1" hudname="Minimal" value="32"/>
-  <LAYOUT desc="Direction to home" enabled="1" hud="1" hudname="Minimal" value="379"/>
+  <LAYOUT desc="Direction to home" enabled="1" hud="1" hudname="Minimal" value="380"/>
   <LAYOUT desc="Distance" enabled="0" hud="1" hudname="Minimal" value="42"/>
   <LAYOUT desc="Speed" enabled="0" hud="1" hudname="Minimal" value="33"/>
   <LAYOUT desc="Angle to home" enabled="0" hud="1" hudname="Minimal" value="144"/>
@@ -119,8 +119,8 @@
   <LAYOUT desc="Temperature" enabled="0" hud="1" hudname="Minimal" value="212"/>
   <LAYOUT desc="Voltage - main" enabled="1" hud="1" hudname="Minimal" value="363"/>
   <LAYOUT desc="Voltage - video" enabled="0" hud="1" hudname="Minimal" value="303"/>
-  <LAYOUT desc="Amps" enabled="0" hud="1" hudname="Minimal" value="373"/>
-  <LAYOUT desc="mAh" enabled="0" hud="1" hudname="Minimal" value="383"/>
+  <LAYOUT desc="Amps" enabled="1" hud="1" hudname="Minimal" value="374"/>
+  <LAYOUT desc="mAh" enabled="1" hud="1" hudname="Minimal" value="369"/>
   <LAYOUT desc="AHI-horizon" enabled="0" hud="1" hudname="Minimal" value="194"/>
   <LAYOUT desc="AHI-sidebars" enabled="0" hud="1" hudname="Minimal" value="187"/>
   <LAYOUT desc="AHI-change icon" enabled="0" hud="1" hudname="Minimal" value="187"/>
@@ -192,7 +192,7 @@
   <LAYOUT desc="Throttle" enabled="0" hud="3" hudname="Blank screen" value="352"/>
   <LAYOUT desc="Unused" enabled="0" hud="3" hudname="Blank screen" value="382"/>
   <LAYOUT desc="Timer" enabled="0" hud="3" hudname="Blank screen" value="382"/>
-  <LAYOUT desc="Armed Status" enabled="0" hud="3" hudname="Blank screen" value="311"/>
+  <LAYOUT desc="Armed Status" enabled="1" hud="3" hudname="Blank screen" value="311"/>
   <LAYOUT desc="Pitch Angle" enabled="0" hud="3" hudname="Blank screen" value="272"/>
   <LAYOUT desc="Roll Angle" enabled="0" hud="3" hudname="Blank screen" value="285"/>
   <LAYOUT desc="Latitude" enabled="0" hud="3" hudname="Blank screen" value="2"/>
