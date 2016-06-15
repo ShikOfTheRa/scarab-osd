@@ -14,6 +14,7 @@
  * OSD    - Legacy FC version display removed
  * OSD    - Option - display signal type at startup
  * OSD    - Additional hardware support - kylin 250
+ * OSD    - Support for long distance - max travelled greater than 32km
  * GUI    - Support for LTM,MAVLINK,KISS protocol
  * GUI    - Option to disable simulator graphics for improved speed
  * GUI    - Video volts shown in decimal format
@@ -26,7 +27,6 @@
 
 ## Bugfixes / Enhancements intended for 1.7: ##
 
- * OSD    - Support for long distance - max travelled greater than 32km
  * OSD    - Voltage load sag hysterysis
  * OSD    - Support for alternative crosshairs
  * GUI    - Improved speed
