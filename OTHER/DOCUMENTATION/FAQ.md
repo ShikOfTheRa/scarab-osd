@@ -15,11 +15,12 @@
   * If using 3 way switch try different position
   * If using FRSKY or other high frequency RSSI, unplug until resolved.
   * Some stups require a consistent ground between camera and OSD video output
+  * Check camera compatility documentation
 
 ---
 
 3 Lines on my display are very feint and flickering at all times
-  * This is usually a compatibility issue with the camera. See note at end of the FAQ
+  * This is usually a compatibility issue with the camera. Check camera compatility documentation
   * Use a large font file such as the one from ABL
   * Try increasing brightness and enabling fastpixel in config.h
   * if your camera is hi res (650TVL+) change camera CRT/LCD setting to LCD
@@ -215,10 +216,6 @@ HARAKIRI USERS - ensure protocol set as follows:
 ---
 
 COMPATIBILITY ISSUES
-Cameras with known compatibility issues with MAX7456 chip
-Either no OSD test displayed or more likely feint / flickering text
-Cameras based upon the Nextchip 2090 seem to be the only ones affected. Nextchip 2040 work OK
-  * Runcam sky - http://shop.runcam.com/runcam-sky/
-  * Eachine CCD 700TVL - http://www.banggood.com/Eachine-CCD-700TVL-148-Degree-Lens-FPV-Camera-p-977401.html
+Chack camera compatibility document
  
 
