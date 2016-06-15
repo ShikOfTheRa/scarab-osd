@@ -366,6 +366,7 @@
 
 /********************  FIXEDWING definitions  *********************/
 #ifdef FIXEDWING                     
+  #define LONG_RANGE_DISPLAY
   #define USEGPSHEADING
   #define USEGPSALTITUDE
   #if defined USEMAGHEADING 

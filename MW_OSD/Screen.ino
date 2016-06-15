@@ -161,18 +161,6 @@ uint8_t fieldIsVisible(uint8_t pos) {
     return 1;
   else
     return 0;  
-  /*
-  switch(val & DISPLAY_MASK) {
-   case DISPLAY_ALWAYS:
-   return 1;
-   case DISPLAY_NEVER:
-   return 0;
-   case DISPLAY_COND:
-   return !!(MwSensorActive&mode.osd_switch);
-   case DISPLAY_MIN_OFF:
-   return !(MwSensorActive&mode.osd_switch);
-   }
-   */
 }
 
 
@@ -877,15 +865,14 @@ void displayGPSAltitude(void){
   if(Settings[S_GPSALTITUDE]){
     if(!fieldIsVisible(MwGPSAltPosition))
       return;
-    screenBuffer[0] = MwGPSAltPositionAdd[Settings[S_UNITSYSTEM]];
-    uint16_t xx;
+    int32_t xx;
     if(Settings[S_UNITSYSTEM])
       xx = GPS_altitude * 3.2808; // Mt to Feet
     else
       xx = GPS_altitude;          // Mt
     if(((xx/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
       return;
-    itoa(xx,screenBuffer+1,10);
+    formatDistance(xx,1,0);
     MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
   }
 }
@@ -974,11 +961,10 @@ void displayAltitude(void)
     return;
   if(((altitude/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
     return;   
-  screenBuffer[0]=MwAltitudeAdd[Settings[S_UNITSYSTEM]];
-  itoa(altitude,screenBuffer+1,10);
+  formatDistance(altitude,1,0);
   MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition));
 #ifdef SHOW_MAX_ALTITUDE
-  itoa(altitudeMAX,screenBuffer+1,10);
+  formatDistance(altitude,1,0);
   MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+LINE);
 #endif //SHOW_MAX_ALTITUDE
 
@@ -1022,33 +1008,7 @@ void displayDistanceToHome(void)
   if(((dist/100)>=Settings[S_DISTANCE_ALARM])&&(timer.Blink2hz))
     return;
 
-  screenBuffer[0] = GPS_distanceToHomeAdd[Settings[S_UNITSYSTEM]];
-  itoa(dist, screenBuffer+1, 10);
-
-#if defined LONG_RANGE_DISPLAY // Change to decimal KM / Miles    
-  if (dist>9999){
-
-    if(Settings[S_UNITSYSTEM]){
-      dist = int(GPS_distanceToHome * 0.0062137);           // mt to miles*10
-    }
-    else{
-      dist = dist=dist/100;
-    }
-    itoa(dist, screenBuffer+1, 10);
-    uint8_t xx = FindNull();
-    //    if (xx==2){ // if want to limit distance to 999 or less instead of 9999. This adds a leading 0 for improved display
-    //      screenBuffer[2]=screenBuffer[1];
-    //      screenBuffer[1]=0x30;
-    //      xx++;
-    //    }
-    screenBuffer[xx]=screenBuffer[xx-1];
-    screenBuffer[xx-1] = DECIMAL;
-    xx++;
-    screenBuffer[xx] = 0;
-  }
-#endif // LONG_RANGE_DISPLAY
-
-  screenBuffer[0] = GPS_distanceToHomeAdd[Settings[S_UNITSYSTEM]];
+  formatDistance(dist,1,2);
   MAX7456_WriteString(screenBuffer,getPosition(GPS_distanceToHomePosition));
 }
 
@@ -1273,29 +1233,38 @@ void displayConfigScreen(void)
 
   if(configPage==MENU_STAT)
   {
-    int xx;
-    //    MAX7456_WriteString_P(configMsg00, 35);
 
 #ifdef SHORTSUMMARY
     MAX7456_WriteString_P(PGMSTR(&(menu_stats_item[0])), ROLLT);
     formatTime(flyingTime, screenBuffer, 1);
     MAX7456_WriteString(screenBuffer,ROLLD-4);
-
 #else // SHORTSUMMARY
-
-    //     MenuBuffer[0]=rcRate8;
-    xx=amperagesum/360;
-    itoa(xx,screenBuffer,10);
     MenuBuffer[1]=trip;
     MenuBuffer[2]=distanceMAX;
     MenuBuffer[3]=altitudeMAX;
     MenuBuffer[4]=speedMAX;
-    MenuBuffer[5]=xx;
+    MenuBuffer[5]=amperagesum/360;
     MenuBuffer[6]=ampMAX/10;
 
     for(uint8_t X=0; X<=6; X++) {
       MAX7456_WriteString_P(PGMSTR(&(menu_stats_item[X])), ROLLT+(X*30));
+#ifdef LONG_RANGE_DISPLAY
+      if ((X==1)){
+        formatDistance(trip,0,2);
+      }
+      else if ((X==2) &&(distanceMAX>9999)){
+        formatDistance(distanceMAX,0,2);
+      }
+      else if ((X==3) &&(distanceMAX>9999)){
+        formatDistance(distanceMAX,0,2);
+      }
+      else{
+        itoa(MenuBuffer[X],screenBuffer,10);
+      }
+      MAX7456_WriteString(screenBuffer,110+(30*X));
+#else
       MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),110+(30*X));
+#endif    
     }
 
     formatTime(flyingTime, screenBuffer, 1);
@@ -1538,15 +1507,6 @@ void displayConfigScreen(void)
     else {
       MAX7456_WriteString_P(configMsg731, YAWD);
     }
-
-    /*
-  strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[Settings[S_UNITSYSTEM]])));
-     MAX7456_WriteString(screenBuffer, ROLLD);
-     strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[Settings[S_VIDEOSIGNALTYPE]])));
-     MAX7456_WriteString(screenBuffer, PITCHD);
-     strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[Settings[S_VREFERENCE]])));
-     MAX7456_WriteString(screenBuffer, YAWD);
-     */
     Menuconfig_onoff(ALTD,S_DEBUG);    
     if(timer.magCalibrationTimer>0)
       MAX7456_WriteString(itoa(timer.magCalibrationTimer,screenBuffer,10),VELD);
@@ -1965,7 +1925,36 @@ void displayAlarms() {
 }
 #endif
 
-void showAlarms() {
 
+void formatDistance(int32_t d2f, uint8_t units, uint8_t type ) {
+  // d2f = integer to format into string
+  // type 0=alt, 2=dist , 4=LD alt, 6=LD dist
+  // units 0=none, 1 show units symbol
+  int32_t tmp;
+#ifdef LONG_RANGE_DISPLAY  
+  if (d2f>9999){
+    if(Settings[S_UNITSYSTEM]){
+      tmp = ((d2f) + (d2f%5280))/528;
+    }
+    else{
+      tmp = d2f/100;
+    }
+    itoa(tmp, screenBuffer+units, 10);
+    uint8_t xx = FindNull();
+    screenBuffer[xx]=screenBuffer[xx-1];
+    screenBuffer[xx-1] = DECIMAL;
+    xx++;
+    screenBuffer[xx] = 0;
+    type = (type==2) ? type=6 : type=4 ; //           
+  }
+  else{
+    itoa(d2f, screenBuffer+units, 10);
+  }
+#else
+    itoa(d2f, screenBuffer+units, 10);
+#endif  
+  if (units==1){
+    screenBuffer[0] = UnitsIcon[Settings[S_UNITSYSTEM]+type];
+  }
 }
 

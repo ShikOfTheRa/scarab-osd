@@ -1,22 +1,23 @@
-// Vars
 struct __SL {
-  uint8_t index;
-  uint8_t checksum;
-  uint8_t SLserialBuffer[0x20];
+  uint8_t  index;
+  uint8_t  checksum;
+  uint8_t  SLserialBuffer[0x20];
+  uint32_t 
 }
 SL;
-
 
 
 uint8_t SLread_u8(uint8_t val)  {
   return SL.SLserialBuffer[val];
 }
 
+
 uint16_t SLread_u16(uint8_t val) {
   uint16_t t = SLread_u8(val++);
   t |= (uint16_t)SLread_u8(val) << 8;
   return t;
 }
+
 
 uint32_t SLread_u32(uint8_t val) {
   uint32_t t = SLread_u16(val);
@@ -77,6 +78,7 @@ void serialSLreceive(uint8_t c) {
     c_state = (c == 0) ? SL_FLAG : SL_IDLE;
   }
   else if (c_state == SL_FLAG) {
+    SL.checksum=1;  /DEVVVVVVVVVVVVVVVV
     if (SL.checksum)
       SL_sync();
     c_state = SL_IDLE;
@@ -94,7 +96,7 @@ void DrawSkytrack() {
     screen[xx] = ' ';
   }
 
-  if (1) { // uh oh - seems like no data...
+  if (1) { // uh oh - seems like we no data display last known co-ordianates...
     screenBuffer[0] = SYM_LAT;
     FormatGPSCoord(GPS_latitude, screenBuffer + 1, 4, 'N', 'S');
     MAX7456_WriteString(screenBuffer, SL_LAT_POS);

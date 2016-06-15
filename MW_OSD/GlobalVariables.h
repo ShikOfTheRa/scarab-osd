@@ -583,8 +583,8 @@ uint8_t GPS_fix=0;
 uint8_t GPS_frame_timer=0;
 int32_t GPS_latitude;
 int32_t GPS_longitude;
-int16_t GPS_altitude;
-int16_t GPS_home_altitude;
+int32_t GPS_altitude;
+int32_t GPS_home_altitude;
 int16_t previousfwaltitude=0;
 int16_t interimfwaltitude=0;
 uint16_t GPS_speed;
@@ -1020,19 +1020,13 @@ const char configMsg128[] PROGMEM = "S7";
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={
-  0xa5,0xa6} ; // [0][0] and [0][1] = Km/h   [1][0] and [1][1] = Mph
-const unsigned char temperatureUnitAdd[2] = {
-  0x0e,0x0d};
+  SYM_KMH,SYM_MPH} ; // [0][0] and [0][1] = Km/h   [1][0] and [1][1] = Mph
 
-const unsigned char MwAltitudeAdd[2]={
-  0xa7,0xa8};
-const unsigned char MwClimbRateAdd[2]={
-  0x9f,0x99};
-const unsigned char GPS_distanceToHomeAdd[2]={
-  0xbb,0xb9};
-const unsigned char MwGPSAltPositionAdd[2]={
-  0xa7,0xa8};
+const unsigned char temperatureUnitAdd[2] ={
+  SYM_TEMP_C,SYM_TEMP_F};
 
+const unsigned char UnitsIcon[8]={
+  SYM_ALTM,SYM_ALTFT,SYM_DISTHOME_M,SYM_DISTHOME_FT,SYM_ALTKM,SYM_ALTMI,SYM_DISTHOME_KM,SYM_DISTHOME_MI};
 
 #define REQ_MSP_IDENT     (1 <<  0)
 #define REQ_MSP_STATUS    (1 <<  1)
