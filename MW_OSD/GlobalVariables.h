@@ -1493,11 +1493,13 @@ struct __mw_ltm {
 
 const char KISS_mode_ACRO[] PROGMEM   = ""; //Acrobatic: rate control
 const char KISS_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
+const char KISS_mode_3D[]   PROGMEM   = "3D"; //Stabilize: hold level position
 
 const PROGMEM char * const KISS_mode_index[] = 
 {   
  KISS_mode_ACRO,
  KISS_mode_STAB, 
+ KISS_mode_3D, 
 };
 
 #define ESC_FILTER 10

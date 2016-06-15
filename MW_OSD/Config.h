@@ -33,11 +33,11 @@
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
 //#define BETAFLIGHT                // Uncomment this if you are using BETAFLIGHT (same as CLEANFLIGHT at time of this MWOSD release)
 //#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight 
-#define FIXEDWING_BF_SERVO        // Uncomment this if you are using fixed wing Baseflight with additional SERVO adjustment menu.
+//#define FIXEDWING_BF_SERVO        // Uncomment this if you are using fixed wing Baseflight with additional SERVO adjustment menu.
 //#define HARAKIRI                  // Uncomment this if you are using HARAKIRI (for BOXNAMES compatibility)
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-//#define KISS                      // Uncomment this if you are using KISS FC
+#define KISS                      // Uncomment this if you are using KISS FC
 //#define APM                       // Uncomment this if you are using APM MAVLINK compatible FC (Requires testing)
 //#define SKYTRACK                  // Under development
 //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD

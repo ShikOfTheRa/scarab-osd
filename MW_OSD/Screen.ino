@@ -300,7 +300,7 @@ void displayMode(void)
     }
 #endif //ACROPLUS
   }
-#endif //PROTOCOL_MAVLINK
+#endif //PROTOCOL_MAVLINK/KISS/LTM
   if(Settings[S_MODEICON]){
     if(fieldIsVisible(ModePosition)){
       MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
