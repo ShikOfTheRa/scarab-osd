@@ -357,6 +357,19 @@ void MAX7456Stalldetect(void){
   uint8_t srdata;
   pinMode(MAX7456SELECT,OUTPUT);
   digitalWrite(MAX7456SELECT,LOW);  
+
+#ifdef AUTOCAM
+  spi_transfer(MAX7456ADD_STAT);
+  srdata = spi_transfer(0xFF);
+
+  if (((srdata & 1) && Settings[S_VIDEOSIGNALTYPE] == 0)
+    ||((srdata & 2) && Settings[S_VIDEOSIGNALTYPE] == 1)) {
+    // digitalWrite(MAX7456SELECT, HIGH); // Will get de-selected in setup().
+    MAX7456Setup();
+    return;
+  }
+#endif
+
   spi_transfer(0x80);
   srdata = spi_transfer(0xFF); 
   digitalWrite(MAX7456SELECT,HIGH);
