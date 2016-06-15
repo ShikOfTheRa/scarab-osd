@@ -355,7 +355,7 @@ void write_NVM(uint8_t char_address)
 
 void MAX7456Stalldetect(void){
   uint8_t srdata;
-  pinMode(MAX7456SELECT,OUTPUT);
+  // pinMode(MAX7456SELECT,OUTPUT);
   digitalWrite(MAX7456SELECT,LOW);  
 
 #ifdef AUTOCAM
