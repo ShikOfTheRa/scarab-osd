@@ -121,6 +121,7 @@ struct __flags {
   uint8_t ident;
   uint8_t box;
   uint8_t reset;
+  uint8_t signaltype;
 }
 flags;
 
@@ -582,8 +583,8 @@ uint8_t GPS_fix=0;
 uint8_t GPS_frame_timer=0;
 int32_t GPS_latitude;
 int32_t GPS_longitude;
-int16_t GPS_altitude;
-int16_t GPS_home_altitude;
+int32_t GPS_altitude;
+int32_t GPS_home_altitude;
 int16_t previousfwaltitude=0;
 int16_t interimfwaltitude=0;
 uint16_t GPS_speed;
@@ -785,19 +786,13 @@ const char APHOLDtext[]     PROGMEM = "AUTO HOLD";
 const char APWAYPOINTtext[] PROGMEM = " MISSION";
 const char lowvolts_text[]  PROGMEM = "LOW VOLTS";
 
-// For Status / warning messages
-const PROGMEM char * const message_item[] =
+// For Alarm / Message text
+const PROGMEM char * const message_text[] =
 {   
-  blank_text,  //0
-  disarmed_text,  //1
-  armed_text,     //2
-  nodata_text,
-  nogps_text,
-  satlow_text,
-  APRTHtext,
-  APHOLDtext,
+  blank_text,     //0
+  APRTHtext,      //1
+  APHOLDtext,     //2
   APWAYPOINTtext,
-  lowvolts_text,
 };
 
 const PROGMEM char * const alarm_text[] =
@@ -865,16 +860,19 @@ const PROGMEM char * const intro_item[] =
 };
 
 #ifdef AUTOCAM 
-const char signaltext0[]  PROGMEM = "AUTO-NTSC";
-const char signaltext1[]  PROGMEM = "AUTO-PAL";
+const char signaltext0[]  PROGMEM = "NTSC-AUTO";
+const char signaltext1[]  PROGMEM = "PAL-AUTO";
+const char signaltext2[]  PROGMEM = "NOT DETECTED";
 #else
 const char signaltext0[]  PROGMEM = "NTSC";
 const char signaltext1[]  PROGMEM = "PAL";
+const char signaltext2[]  PROGMEM = "";
 #endif
 const PROGMEM char * const signal_type[] =
 {   
   signaltext0,
   signaltext1,
+  signaltext2,
 };
 
 // For Config menu common
@@ -1022,19 +1020,13 @@ const char configMsg128[] PROGMEM = "S7";
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={
-  0xa5,0xa6} ; // [0][0] and [0][1] = Km/h   [1][0] and [1][1] = Mph
-const unsigned char temperatureUnitAdd[2] = {
-  0x0e,0x0d};
+  SYM_KMH,SYM_MPH} ; // [0][0] and [0][1] = Km/h   [1][0] and [1][1] = Mph
 
-const unsigned char MwAltitudeAdd[2]={
-  0xa7,0xa8};
-const unsigned char MwClimbRateAdd[2]={
-  0x9f,0x99};
-const unsigned char GPS_distanceToHomeAdd[2]={
-  0xbb,0xb9};
-const unsigned char MwGPSAltPositionAdd[2]={
-  0xa7,0xa8};
+const unsigned char temperatureUnitAdd[2] ={
+  SYM_TEMP_C,SYM_TEMP_F};
 
+const unsigned char UnitsIcon[8]={
+  SYM_ALTM,SYM_ALTFT,SYM_DISTHOME_M,SYM_DISTHOME_FT,SYM_ALTKM,SYM_ALTMI,SYM_DISTHOME_KM,SYM_DISTHOME_MI};
 
 #define REQ_MSP_IDENT     (1 <<  0)
 #define REQ_MSP_STATUS    (1 <<  1)
@@ -1501,11 +1493,13 @@ struct __mw_ltm {
 
 const char KISS_mode_ACRO[] PROGMEM   = ""; //Acrobatic: rate control
 const char KISS_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
+const char KISS_mode_3D[]   PROGMEM   = "3D"; //Stabilize: hold level position
 
 const PROGMEM char * const KISS_mode_index[] = 
 {   
  KISS_mode_ACRO,
  KISS_mode_STAB, 
+ KISS_mode_3D, 
 };
 
 #define ESC_FILTER 10

@@ -988,8 +988,12 @@ void MWData_Com() {
   int c = 0;
   
   //System.out.println("MWData_Com");  
-    
-    while (g_serial.available()>0) {
+    int serialprocess=50; // max chars processed to help with PC's that processs serial slowly
+    if (g_serial.available()==0){
+      serialprocess=0;
+    }
+    while (serialprocess>0) {
+      serialprocess--;
 //    while (g_serial.available()>0 && (toggleMSP_Data == true)) {
     try{
       c = (g_serial.read());

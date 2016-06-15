@@ -77,10 +77,13 @@
   #define MULTIWII_V24
 #endif
 
-#ifdef APM     //set up latest at time of release
+#ifdef APM       //set up latest at time of release
 #endif
 
-#ifdef KISS     //set up latest at time of release
+#ifdef KISS      //set up latest at time of release
+#endif
+
+#ifdef SKYTRACK  //set up latest at time of release
 #endif
 
 // The unit of current varies across implementations.  There are effectively three set:
@@ -329,13 +332,24 @@
 
 #ifdef NOCONTROLLER
   #undef  INTRO_MENU
-  #undef  MSPACTIVECHECK
-  #undef  SATACTIVECHECK
-  #undef  GPSACTIVECHECK
+  #undef  ALARM_MSP
+  #undef  ALARM_SATS
+  #undef  ALARM_GPS
   #undef  OSD_SWITCH_RC
   #define HIDEARMEDSTATUS
   #define MENU_STAT  0           //STATISTICS
   #define MAXPAGE MENU_STAT
+#endif
+
+#ifdef SKYTRACK
+  #undef  INTRO_MENU
+  #undef  ALARM_MSP
+  #undef  ALARM_SATS
+  #undef  ALARM_GPS
+  #undef  OSD_SWITCH_RC
+  #define MENU_STAT  0           //STATISTICS
+  #define MAXPAGE MENU_STAT
+  #define PROTOCOL_SKYTRACK
 #endif
 
 #ifdef HAS_ALARMS
@@ -352,6 +366,7 @@
 
 /********************  FIXEDWING definitions  *********************/
 #ifdef FIXEDWING                     
+  #define LONG_RANGE_DISPLAY
   #define USEGPSHEADING
   #define USEGPSALTITUDE
   #if defined USEMAGHEADING 
@@ -473,10 +488,10 @@
 
 #if defined GPSOSD
   #undef  INTRO_MENU
-  #undef  MSPACTIVECHECK
+  #undef  ALARM_MSP
   #undef  OSD_SWITCH_RC
   #define HIDEARMEDSTATUS
-  #define GPSACTIVECHECK 5
+  #define ALARM_GPS 5
 
   #define MENU_STAT     0       //STATISTICS
   #define MENU_VOLTAGE  1       //VOLTAGE
@@ -499,7 +514,11 @@
 #endif
 
 #ifdef TELEMETRY_MAVLINK
-PROTOCOL_MAVLINK
+#define PROTOCOL_MAVLINK
+#endif
+
+#ifdef TELEMETRY_SKYTRACK
+#define PROTOCOL_SKYTRACK
 #endif
 
 /********************  PROTOCOL rule definitions  *********************/

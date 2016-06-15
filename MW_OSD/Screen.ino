@@ -161,18 +161,6 @@ uint8_t fieldIsVisible(uint8_t pos) {
     return 1;
   else
     return 0;  
-  /*
-  switch(val & DISPLAY_MASK) {
-   case DISPLAY_ALWAYS:
-   return 1;
-   case DISPLAY_NEVER:
-   return 0;
-   case DISPLAY_COND:
-   return !!(MwSensorActive&mode.osd_switch);
-   case DISPLAY_MIN_OFF:
-   return !(MwSensorActive&mode.osd_switch);
-   }
-   */
 }
 
 
@@ -312,7 +300,7 @@ void displayMode(void)
     }
 #endif //ACROPLUS
   }
-#endif //PROTOCOL_MAVLINK
+#endif //PROTOCOL_MAVLINK/KISS/LTM
   if(Settings[S_MODEICON]){
     if(fieldIsVisible(ModePosition)){
       MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
@@ -334,15 +322,15 @@ void displayMode(void)
     return;
   uint8_t apactive=0;
   if (MwSensorActive&mode.gpshome)
-    apactive=6;
+    apactive=1;
   else if (MwSensorActive&mode.gpshold)
-    apactive=7;
+    apactive=2;
   else if (MwSensorActive&mode.gpsmission)
-    apactive=8;
+    apactive=3;
   else
     return;
 
-  MAX7456_WriteString_P(PGMSTR(&(message_item[apactive])),getPosition(APstatusPosition));
+  MAX7456_WriteString_P(PGMSTR(&(message_text[apactive])),getPosition(APstatusPosition));
 #endif
 }
 
@@ -575,11 +563,6 @@ void displayVoltage(void)
 
   if ((voltage<voltageWarning)&&(timer.Blink2hz))
     return;
-
-#ifdef DISP_LOW_VOLTS_WARNING
-  if (voltage<=voltageWarning&&!armedtimer)
-    MAX7456_WriteString_P(lowvolts_text, getPosition(motorArmedPosition));
-#endif
 
 #ifdef FORCE_DISP_LOW_VOLTS
   if(fieldIsVisible(voltagePosition)||(voltage<=voltageWarning)) 
@@ -821,12 +804,11 @@ void displayIntro(void)
   displayCallsign(64+(30*6)+4);
 #endif
 #ifdef INTRO_SIGNALTYPE
-  MAX7456_WriteString_P(PGMSTR(&(signal_type[Settings[S_VIDEOSIGNALTYPE]])), 64+(30*7)+4);
+  MAX7456_WriteString_P(PGMSTR(&(signal_type[flags.signaltype])), 64+(30*7)+4);
 #endif
 #ifdef HAS_ALARMS
   if (alarmState != ALARM_OK) {
-    line += LINE;
-    MAX7456_WriteString((const char*)alarmMsg, 64+(30*9));
+    MAX7456_WriteString((const char*)alarmMsg, 64+(30*9)+4);
   }
 #endif
 }
@@ -883,15 +865,14 @@ void displayGPSAltitude(void){
   if(Settings[S_GPSALTITUDE]){
     if(!fieldIsVisible(MwGPSAltPosition))
       return;
-    screenBuffer[0] = MwGPSAltPositionAdd[Settings[S_UNITSYSTEM]];
-    uint16_t xx;
+    int32_t xx;
     if(Settings[S_UNITSYSTEM])
       xx = GPS_altitude * 3.2808; // Mt to Feet
     else
       xx = GPS_altitude;          // Mt
     if(((xx/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
       return;
-    itoa(xx,screenBuffer+1,10);
+    formatDistance(xx,1,0);
     MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
   }
 }
@@ -980,11 +961,10 @@ void displayAltitude(void)
     return;
   if(((altitude/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
     return;   
-  screenBuffer[0]=MwAltitudeAdd[Settings[S_UNITSYSTEM]];
-  itoa(altitude,screenBuffer+1,10);
+  formatDistance(altitude,1,0);
   MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition));
 #ifdef SHOW_MAX_ALTITUDE
-  itoa(altitudeMAX,screenBuffer+1,10);
+  formatDistance(altitude,1,0);
   MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+LINE);
 #endif //SHOW_MAX_ALTITUDE
 
@@ -1028,33 +1008,7 @@ void displayDistanceToHome(void)
   if(((dist/100)>=Settings[S_DISTANCE_ALARM])&&(timer.Blink2hz))
     return;
 
-  screenBuffer[0] = GPS_distanceToHomeAdd[Settings[S_UNITSYSTEM]];
-  itoa(dist, screenBuffer+1, 10);
-
-#if defined LONG_RANGE_DISPLAY // Change to decimal KM / Miles    
-  if (dist>9999){
-
-    if(Settings[S_UNITSYSTEM]){
-      dist = int(GPS_distanceToHome * 0.0062137);           // mt to miles*10
-    }
-    else{
-      dist = dist=dist/100;
-    }
-    itoa(dist, screenBuffer+1, 10);
-    uint8_t xx = FindNull();
-    //    if (xx==2){ // if want to limit distance to 999 or less instead of 9999. This adds a leading 0 for improved display
-    //      screenBuffer[2]=screenBuffer[1];
-    //      screenBuffer[1]=0x30;
-    //      xx++;
-    //    }
-    screenBuffer[xx]=screenBuffer[xx-1];
-    screenBuffer[xx-1] = DECIMAL;
-    xx++;
-    screenBuffer[xx] = 0;
-  }
-#endif // LONG_RANGE_DISPLAY
-
-  screenBuffer[0] = GPS_distanceToHomeAdd[Settings[S_UNITSYSTEM]];
+  formatDistance(dist,1,2);
   MAX7456_WriteString(screenBuffer,getPosition(GPS_distanceToHomePosition));
 }
 
@@ -1279,29 +1233,38 @@ void displayConfigScreen(void)
 
   if(configPage==MENU_STAT)
   {
-    int xx;
-    //    MAX7456_WriteString_P(configMsg00, 35);
 
 #ifdef SHORTSUMMARY
     MAX7456_WriteString_P(PGMSTR(&(menu_stats_item[0])), ROLLT);
     formatTime(flyingTime, screenBuffer, 1);
     MAX7456_WriteString(screenBuffer,ROLLD-4);
-
 #else // SHORTSUMMARY
-
-    //     MenuBuffer[0]=rcRate8;
-    xx=amperagesum/360;
-    itoa(xx,screenBuffer,10);
     MenuBuffer[1]=trip;
     MenuBuffer[2]=distanceMAX;
     MenuBuffer[3]=altitudeMAX;
     MenuBuffer[4]=speedMAX;
-    MenuBuffer[5]=xx;
+    MenuBuffer[5]=amperagesum/360;
     MenuBuffer[6]=ampMAX/10;
 
     for(uint8_t X=0; X<=6; X++) {
       MAX7456_WriteString_P(PGMSTR(&(menu_stats_item[X])), ROLLT+(X*30));
+#ifdef LONG_RANGE_DISPLAY
+      if ((X==1)){
+        formatDistance(trip,0,2);
+      }
+      else if ((X==2) &&(distanceMAX>9999)){
+        formatDistance(distanceMAX,0,2);
+      }
+      else if ((X==3) &&(distanceMAX>9999)){
+        formatDistance(distanceMAX,0,2);
+      }
+      else{
+        itoa(MenuBuffer[X],screenBuffer,10);
+      }
+      MAX7456_WriteString(screenBuffer,110+(30*X));
+#else
       MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),110+(30*X));
+#endif    
     }
 
     formatTime(flyingTime, screenBuffer, 1);
@@ -1544,15 +1507,6 @@ void displayConfigScreen(void)
     else {
       MAX7456_WriteString_P(configMsg731, YAWD);
     }
-
-    /*
-  strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[Settings[S_UNITSYSTEM]])));
-     MAX7456_WriteString(screenBuffer, ROLLD);
-     strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[Settings[S_VIDEOSIGNALTYPE]])));
-     MAX7456_WriteString(screenBuffer, PITCHD);
-     strcpy_P(screenBuffer, (char*)pgm_read_word(&(message_item[Settings[S_VREFERENCE]])));
-     MAX7456_WriteString(screenBuffer, YAWD);
-     */
     Menuconfig_onoff(ALTD,S_DEBUG);    
     if(timer.magCalibrationTimer>0)
       MAX7456_WriteString(itoa(timer.magCalibrationTimer,screenBuffer,10),VELD);
@@ -1840,6 +1794,7 @@ void mapmode(void) {
 #endif
 }
 
+
 #ifdef USEGLIDESCOPE
 void displayfwglidescope(void){
   if(!fieldIsVisible(glidescopePosition))
@@ -1864,17 +1819,17 @@ void displayfwglidescope(void){
 }
 #endif //USEGLIDESCOPE
 
+
 void Menuconfig_onoff(uint16_t pos, uint8_t setting){
   MAX7456_WriteString_P(PGMSTR(&(menu_on_off[(Settings[setting])])), pos);
 }
 
+
 void displayArmed(void)
 {
   if(!fieldIsVisible(motorArmedPosition)){
-    armedtimer=0;
     return;  
   }
-  uint8_t message_no = 0;
 
 #ifdef HAS_ALARMS
   if (alarmState != ALARM_OK) {
@@ -1884,64 +1839,76 @@ void displayArmed(void)
 #endif
 
   if(!armed){
-    message_no=1;
+    alarms.active|=(1<<1);
     armedtimer=30;
-  } 
+  }
+  else{
+    if (armedtimer>0){
+      if (timer.Blink10hz)
+        return;
+      alarms.active|=(1<<2);
+      armedtimer--;
+    } 
+    else{
+      alarms.active|=B00000001;
+    }
+  }
+
+#ifdef ALARM_VOLTAGE
+    if (voltage<=voltageWarning)
+      alarms.active|=(1<<6);
+#endif
 
   if(MwSensorPresent&GPSSENSOR){
-#ifdef SATACTIVECHECK
+
+#ifdef ALARM_SATS
     if (GPS_numSat<MINSATFIX){ // below minimum preferred value
-      message_no=5;
+      alarms.active|=(1<<5);
     }
-#endif //SATACTIVECHECK
+#endif //ALARM_GPS
 
-#ifdef GPSACTIVECHECK
+#ifdef ALARM_GPS
     if(timer.GPS_active==0){
-      message_no=4;
+      alarms.active|=(1<<4);
     }
-#endif //GPSACTIVECHECK
-  }
-
-#ifdef MSPACTIVECHECK
+#endif //ALARM_GPS
+  
+#ifdef ALARM_MSP
   if(timer.MSP_active==0){
-    message_no=3;
+    alarms.active|=(1<<3);
+    alarms.active&=B11001111; // No need for sats/gps warning
   }
-#endif //MSPACTIVECHECK
-  if(armedtimer&&armed){
-    if (timer.Blink10hz){
-      armedtimer--;
-      message_no=2;
-    }
-    else{
-      message_no=0;
-    }
-  }
-
-  if(message_no>2){
-    if(!armed&&timer.Blink2hz){
-      message_no=1;
-    }
-    else if(!armed){
-    }
-    else if(timer.Blink2hz){
-      return;
-    }
+#endif //ALARM_MSP
   }
 
 #ifdef HIDEARMEDSTATUS
-  if(message_no<3){
-    return;
-  }
+    alarms.active&=B11111000;
 #endif //HIDEARMEDSTATUS
 
-  if (message_no>0){
-    MAX7456_WriteString_P(PGMSTR(&(message_item[message_no])), getPosition(motorArmedPosition));
+
+  if(alarms.queue == 0)
+    alarms.queue = alarms.active;
+  uint8_t queueindex = alarms.queue & -alarms.queue;
+  if (millis()>500+timer.alarms){
+    if(alarms.queue > 0)
+     alarms.queue &= ~queueindex;
+    timer.alarms=millis();
+  }
+         
+  uint8_t queueindexbit;
+  for (uint8_t i = 0; i < 7; i++) {
+      if  (queueindex & (1<<i))
+        queueindexbit=i;
+   }  
+  if (alarms.active>1){
+    MAX7456_WriteString_P(PGMSTR(&(alarm_text[queueindexbit])), getPosition(motorArmedPosition));
   }
 }
 
+
 void displayForcedCrosshair(){
   uint16_t position = getPosition(horizonPosition);
-  screen[position-1] = SYM_AH_CENTER_LINE;
+  screen[position-1] = SYM_AH_CENTER_LINE; 
   screen[position+1] = SYM_AH_CENTER_LINE_RIGHT;
   screen[position] =   SYM_AH_CENTER;
 }
@@ -1958,19 +1925,36 @@ void displayAlarms() {
 }
 #endif
 
-void showAlarms() {
-  if (alarms.queue>0){
-    while (!alarms.queue&(1>>alarms.alarm)){
-    alarms.alarm++;
+
+void formatDistance(int32_t d2f, uint8_t units, uint8_t type ) {
+  // d2f = integer to format into string
+  // type 0=alt, 2=dist , 4=LD alt, 6=LD dist
+  // units 0=none, 1 show units symbol
+  int32_t tmp;
+#ifdef LONG_RANGE_DISPLAY  
+  if (d2f>9999){
+    if(Settings[S_UNITSYSTEM]){
+      tmp = ((d2f) + (d2f%5280))/528;
     }
-    //alarmno = alarm.alarm;
-    alarms.alarm++;    
+    else{
+      tmp = d2f/100;
+    }
+    itoa(tmp, screenBuffer+units, 10);
+    uint8_t xx = FindNull();
+    screenBuffer[xx]=screenBuffer[xx-1];
+    screenBuffer[xx-1] = DECIMAL;
+    xx++;
+    screenBuffer[xx] = 0;
+    type = (type==2) ? type=6 : type=4 ; //           
   }
   else{
-    alarms.queue=alarms.active;
-    alarms.alarm=0;
+    itoa(d2f, screenBuffer+units, 10);
   }
-  if (voltage<=voltageWarning&&!armedtimer)
-    MAX7456_WriteString_P(lowvolts_text, getPosition(motorArmedPosition));
+#else
+    itoa(d2f, screenBuffer+units, 10);
+#endif  
+  if (units==1){
+    screenBuffer[0] = UnitsIcon[Settings[S_UNITSYSTEM]+type];
+  }
 }
 

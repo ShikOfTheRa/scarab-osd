@@ -34,15 +34,15 @@ uint16_t calculateCurrentFromConsumedCapacity(uint16_t mahUsed)
 }
 
 void kiss_sync() {
-#ifdef MSPACTIVECHECK
-  timer.MSP_active=MSPACTIVECHECK;             // getting something on serial port
+#ifdef ALARM_MSP
+  timer.MSP_active=ALARM_MSP;             // getting something on serial port
 #endif
   armed = kissread_u8(16);
   MwVBat = kissread_u16(17)/10;
   MwAngle[0]=(int16_t)kissread_u16(31)/10;
   MwAngle[1]=(int16_t)kissread_u16(33)/10;
   Kvar.mode = kissread_u8(65); 
-  (Kvar.mode>1) ? 1 : 0;
+  Kvar.mode = (Kvar.mode>2) ? 0 : Kvar.mode;
   MwRcData[0]=1000+(int16_t)kissread_u16(0);
   for(uint8_t i=1; i<8; i++) {
     MwRcData[i]=1500+(int16_t)kissread_u16(i*2);

@@ -14,10 +14,12 @@
  * OSD    - Legacy FC version display removed
  * OSD    - Option - display signal type at startup
  * OSD    - Additional hardware support - kylin 250
+ * OSD    - Support for long distance - max travelled greater than 32km
  * GUI    - Support for LTM,MAVLINK,KISS protocol
  * GUI    - Option to disable simulator graphics for improved speed
  * GUI    - Video volts shown in decimal format
  * BUG    - Armed timer bugfix
+ * BUG    - Warning message display overwriting
  * CODE   - Quality improvements - tidying 
  * CODE   - Memory improvements - significant memory savings 
 
@@ -25,9 +27,7 @@
 
 ## Bugfixes / Enhancements intended for 1.7: ##
 
- * OSD    - Support for long distance - max travelled greater than 32km
  * OSD    - Voltage load sag hysterysis
- * OSD    - BUGFIX: Warning message display overwriting
  * OSD    - Support for alternative crosshairs
  * GUI    - Improved speed
 
@@ -49,11 +49,7 @@ Migrate controller/aircraft choice to GUI
 
 Power consumtion W/Hr and W/Km / Efficiency similar to other OSD
 
-Support for KISS OSD
-
 Support for displaying PID RPW values for in flight tuning
-
-Improvements to PAL/NTSC autodetect / config change.
 
 Review throttle autoscaling
 
@@ -82,8 +78,6 @@ Descriptive chracter font for for heading / angle to home
 Impelement more descriptive "help" text within confih.h
 
 Migrate GUI to chrome
-
-Improve ARMED/DIARMED message
 
 Improve icon buttons
 

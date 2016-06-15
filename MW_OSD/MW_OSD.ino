@@ -81,7 +81,7 @@ uint16_t UntouchedStack(void)
 
 //------------------------------------------------------------------------
 #define MWVERS "MW-OSD - R1.6"  
-#define MWOSDVER 12      // for eeprom layout verification    was 9  
+#define MWOSDVER 13      // for eeprom layout verification
 #include <avr/pgmspace.h>
 #undef PROGMEM
 #define PROGMEM __attribute__(( section(".progmem.data") ))
@@ -187,7 +187,7 @@ void loop()
   switch(fontStatus) {
     case 0:
       MAX7456_WriteString_P(messageF0, 32);
-      MAX7456_DrawScreen();
+      MAX7456_DrawScreen();      
       delay(3000);
       displayFont();  
       MAX7456_WriteString_P(messageF1, 32);
@@ -219,6 +219,7 @@ void loop()
 //------------------------------------------------------------------------
 void loop()
 {
+  alarms.active=0;
   if (flags.reset){
     resetFunc();
   }
@@ -425,13 +426,16 @@ void loop()
     
     if(!fontMode){
       #ifndef GPSOSD
-      #ifdef KISS
+       #ifdef KISS
        Serial.write(0x20);
-      #else     
+       #else     
        mspWriteRequest(MSPcmdsend, 0); 
        #endif // KISS
       #endif //GPSOSD
-      MAX7456_DrawScreen();
+      #ifdef SKYTRACK
+//       DrawSkytrack();
+      #endif
+     MAX7456_DrawScreen();
     }
 
     ProcessSensors();       // using analogue sensors
@@ -453,7 +457,6 @@ void loop()
       }
 #ifndef HIDESUMMARY
       if(previousarmedstatus && !armed){
-        armedtimer=20;
         configPage=0;
         ROW=10;
         COL=1;
@@ -573,14 +576,14 @@ void loop()
       if (!fontMode)
         MAX7456Stalldetect();
     #endif 
-    #ifdef GPSACTIVECHECK
+    #ifdef ALARM_GPS
       if (timer.GPS_active==0){
         GPS_numSat=0;
       }
       else {
         timer.GPS_active--;
       }      
-    #endif // GPSACTIVECHECK 
+    #endif // ALARM_GPS 
     if (timer.MSP_active>0){
       timer.MSP_active--;
     }  
