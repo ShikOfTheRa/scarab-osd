@@ -108,6 +108,8 @@
 
 /********************       FILTER settings      *********************/
 //Choose ONLY ONE option to enable filtered smoother readings of voltage / current / RSSI :
+#define FILTER_AVG                // Enable standard averaging filter  
+//#define FILTER_HYSTERYSIS 2       // Alternative filter with hysteris to provide smoother changes. Higher number = more filtering. Max 4  
 
 /********************       RSSI settings (PWM/PPM)      *********************/
 //Choose ONLY ONE option: 
