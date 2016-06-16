@@ -523,9 +523,9 @@ void displayHorizon(int rollAngle, int pitchAngle)
 
 void displayVoltage(void)
 {
-  if (Settings[S_MAINVOLTAGE_VBAT]){
-    voltage=MwVBat;
-  }
+//  if (Settings[S_MAINVOLTAGE_VBAT]){
+//    voltage=MwVBat;
+//  }
 
 #ifdef AUTOCELL
   uint8_t tcells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
