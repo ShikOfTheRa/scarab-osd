@@ -930,30 +930,27 @@ void ProcessSensors(void) {
   /*
     special note about filter: last row of array = averaged reading
   */ 
-//-------------- ADC and PWM RSSI sensor read into filter array
+//-------------- ADC sensor / PWM RSSI / FC data read into filter array
   static uint8_t sensorindex;
+  uint16_t sensortemp;
   for (uint8_t sensor=0;sensor<SENSORTOTAL;sensor++) {
-    uint16_t sensortemp;
     sensortemp = analogRead(sensorpinarray[sensor]);
-    
+    //--- override with FC voltage data if enabled
     if (sensor ==0) { 
       if (Settings[S_MAINVOLTAGE_VBAT]){
         sensortemp=MwVBat;
       }
     }
-    
+    //--- override with PWM, FC RC CH or FC RSSI data if enabled    
     if (sensor ==4) { 
       if (Settings[S_PWMRSSI]){
-#if defined RCRSSI
-//        sensortemp = constrain(MwRcData[RCRSSI],1000,2000)>>1;
+      #if defined RCRSSI
         sensortemp = MwRcData[RCRSSI]>>1;
-// #elif defined FASTPWMRSSI
-//        sensortemp = FastpulseIn(PWMRSSIPIN, HIGH,1024);
-#elif defined INTPWMRSSI
+      #elif defined INTPWMRSSI
         sensortemp = pwmRSSI>>1;
-#else
+      #else
         sensortemp = pulseIn(PWMRSSIPIN, HIGH,18000)>>1;        
-#endif
+      #endif
         if (sensortemp==0) { // timed out - use previous
           sensortemp=sensorfilter[sensor][sensorindex];
         }
@@ -962,60 +959,27 @@ void ProcessSensors(void) {
         sensortemp = MwRssi;
       }
     }
-#if defined STAGE2FILTER // Use averaged change    
+    //--- Apply filtering    
+#if defined FILTER_HYSTERYSIS  // Hysteris incremental averaged change    
+      static uint16_t shfilter[SENSORTOTAL];
+      int16_t diff = (sensortemp<<FILTER_HYSTERYSIS)-shfilter[sensor];
+      if (abs(diff)>(FHBANDWIDTH<<FILTER_HYSTERYSIS)){
+        shfilter[sensor]=sensortemp<<FILTER_HYSTERYSIS;        
+      }
+      else if (diff>0){
+        shfilter[sensor]++;
+      }
+      else if (diff<0){
+        shfilter[sensor]--;
+      }
+      sensorfilter[sensor][SENSORFILTERSIZE]=(shfilter[sensor]>>FILTER_HYSTERYSIS<<3);
+#elif defined FILTER_AVG   // Use averaged change    
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
     sensorfilter[sensor][sensorindex] = (sensorfilter[sensor][sensorindex] + sensortemp)>>1;
-#elif defined SMOOTHFILTER // Shiki variable constraint probability trend change filter. Smooth filtering of small changes, but react fast to consistent changes
-    #define FILTERMAX 128 //maximum change permitted each iteration 
-    uint8_t filterdir;
-    static uint8_t oldfilterdir[SENSORTOTAL];
-    int16_t sensoraverage=sensorfilter[sensor][SENSORFILTERSIZE]>>3;
-    sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
-    if (sensorfilter[sensor][SENSORFILTERSIZE+1]<1) sensorfilter[sensor][SENSORFILTERSIZE+1]=1;
-
-    if (sensortemp != sensoraverage ){
-      // determine direction of change
-      if (sensortemp > sensoraverage ) {  //increasing
-        filterdir=1;
-      }
-      else if (sensortemp < sensoraverage ) {  //increasing
-        filterdir=0;
-      }
-      // compare to previous direction of change
-      if (filterdir!=oldfilterdir[sensor]){ // direction changed => lost trust in value - reset value truth probability to lowest
-        sensorfilter[sensor][SENSORFILTERSIZE+1] = 1; 
-      }
-      else { // direction same => increase trust that change is valid - increase value truth probability
-        sensorfilter[sensor][SENSORFILTERSIZE+1]=sensorfilter[sensor][SENSORFILTERSIZE+1] <<1;
-      }
-      // set maximum trust permitted per sensor read
-      if (sensorfilter[sensor][SENSORFILTERSIZE+1] > FILTERMAX) {
-        sensorfilter[sensor][SENSORFILTERSIZE+1] = FILTERMAX;
-      }
-      // set constrained value or if within limits, start to narrow filter 
-      if (sensortemp > sensoraverage+sensorfilter[sensor][SENSORFILTERSIZE+1]) { 
-        sensorfilter[sensor][sensorindex] = sensoraverage+sensorfilter[sensor][SENSORFILTERSIZE+1]; 
-      }  
-      else if (sensortemp < sensoraverage-sensorfilter[sensor][SENSORFILTERSIZE+1]){
-        sensorfilter[sensor][sensorindex] = sensoraverage-sensorfilter[sensor][SENSORFILTERSIZE+1]; 
-      }
-      // as within limits, start to narrow filter 
-      else { 
-        sensorfilter[sensor][sensorindex] = sensortemp; 
-        sensorfilter[sensor][SENSORFILTERSIZE+1]=sensorfilter[sensor][SENSORFILTERSIZE+1] >>2;
-      }
-      oldfilterdir[sensor]=filterdir;
-    }
-    // no change, reset filter 
-    else {
-      sensorfilter[sensor][sensorindex] = sensortemp; 
-      sensorfilter[sensor][SENSORFILTERSIZE+1]=1;  
-    }    
-#else // Use a basic averaging filter
-    sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];         
-    sensorfilter[sensor][sensorindex] = sensortemp;
-#endif
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] + sensorfilter[sensor][sensorindex];
+#else                      // No filtering
+    sensorfilter[sensor][SENSORFILTERSIZE] = sensortemp<<3;
+#endif
   } 
 
 //-------------- Voltage

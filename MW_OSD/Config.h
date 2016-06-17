@@ -30,14 +30,14 @@
 //#define LIBREPILOT                 // Uncomment this if you are using the latest LibrePilot MSP Module
 //#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
-//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
+#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
 //#define BETAFLIGHT                // Uncomment this if you are using BETAFLIGHT (same as CLEANFLIGHT at time of this MWOSD release)
 //#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight 
 //#define FIXEDWING_BF_SERVO        // Uncomment this if you are using fixed wing Baseflight with additional SERVO adjustment menu.
 //#define HARAKIRI                  // Uncomment this if you are using HARAKIRI (for BOXNAMES compatibility)
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-#define KISS                      // Uncomment this if you are using KISS FC
+//#define KISS                      // Uncomment this if you are using KISS FC
 //#define APM                       // Uncomment this if you are using APM MAVLINK compatible FC (Requires testing)
 //#define SKYTRACK                  // Under development
 //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
@@ -107,17 +107,15 @@
 
 
 /********************       FILTER settings      *********************/
-//Choose ONLY ONE option:
-#define STAGE2FILTER                // Enable for smoother readings of voltage / current / RSSI. 
-//#define SMOOTHFILTER              // Enable for smoothest readings of voltage / current / RSSI. Uses more memory. Prototype
-
+//Choose ONLY ONE option to enable filtered smoother readings of voltage / current / RSSI :
+#define FILTER_AVG                // Enable standard averaging filter  
+//#define FILTER_HYSTERYSIS 2       // Alternative filter with hysteris to provide smoother changes. Higher number = more filtering. Max 4  
 
 /********************       RSSI settings (PWM/PPM)      *********************/
 //Choose ONLY ONE option: 
 //Note all require PWM RSSI to be enabled on GUI
 #define INTPWMRSSI                  // Undefine this to use new interrupt PWM RSSI method (standard PWM 0-2000ms pulse width)
 //#define PULSEINPWMRSSI            // DEPRECATED Undefine this to use legacy non interrupt PWM RSSI method (pulse width 0 - 2000ms pulse width)
-//#define FASTPWMRSSI               // Undefine this to use high PWM refresh frequency RSSI (greataer than standard 50 hz)
 //#define RCRSSI 3                  // Undefine this to use RC channel (0-7) for RSSI (this can be from the FC - or a PPM channel with GPSOSD)
 
 

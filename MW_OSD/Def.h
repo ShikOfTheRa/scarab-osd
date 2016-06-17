@@ -4,7 +4,7 @@
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-#define DEBUG         // Enable/disable option to display OSD debug values 
+//#define DEBUG         // Enable/disable option to display OSD debug values 
 //#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 //#define ALWAYSARMED
 //#define DEVELOPMENT   // to force layout 0, set debug default eeprombit = 1

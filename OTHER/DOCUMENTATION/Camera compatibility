@@ -1,0 +1,20 @@
+CAMERA COMPATIBILITY ISSUES
+
+Known issues are as follows:
+ 1 No display - SEE BELOW
+ 2 feint flickering lines - SEE FAQ
+ 3 white glow effect - SEE FAQ
+
+
+KNOWN PROBLEM CAMERAS
+Cameras with known compatibility issues with MAX7456 chip
+Either no OSD test displayed or more likely feint / flickering text
+Cameras based upon the Nextchip 2090 seem to be the only ones affected. Nextchip 2040 work OK
+  * Runcam sky - http://shop.runcam.com/runcam-sky/
+  * Eachine CCD 700TVL - http://www.banggood.com/Eachine-CCD-700TVL-148-Degree-Lens-FPV-Camera-p-977401.html
+ 
+KNOWN GOOD CAMERAS
+Cameras with known compatibility issues with MAX7456 chip
+  * Runcam sky plus - http://shop.runcam.com/runcam-skyplus/
+  * Runcam swift    - http://shop.runcam.com/runcam-swift/
+  
