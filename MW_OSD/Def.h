@@ -395,12 +395,22 @@
 
 
 /********************  OSD HARDWARE rule definitions  *********************/
-#ifdef RUSHDUINO                     
-    # define MAX7456SELECT 10        // ss 
-    # define MAX7456RESET  9         // RESET
+#ifdef RUSHDUINO // Example for Arduino guys                     
+    # define DATAOUT          11 // MOSI
+    # define DATAIN           12 // MISO
+    # define SPICLOCK         13 // sck
+    # define VSYNC             2 // INT0
+    # define MAX7456RESET      9 // RESET
+    # define MAX7456SELECT    10 // CHIP SELECT 
+    # define SETHARDWAREPORTS pinMode(MAX7456RESET,OUTPUT);pinMode(MAX7456SELECT,OUTPUT);pinMode(DATAOUT, OUTPUT);pinMode(DATAIN, INPUT);pinMode(SPICLOCK,OUTPUT);pinMode(VSYNC, INPUT);
+    # define MAX7456HWRESET   digitalWrite(MAX7456RESET,LOW);delay(100);digitalWrite(MAX7456RESET,HIGH);
+    # define MAX7456ENABLE    digitalWrite(MAX7456SELECT,LOW); 
+    # define MAX7456DISABLE   digitalWrite(MAX7456SELECT,HIGH); 
 #else                                  
-    # define MAX7456SELECT 6         // ss
-    # define MAX7456RESET  10        // RESET
+    # define MAX7456ENABLE    PORTD&=B10111111; 
+    # define MAX7456DISABLE   PORTD|=B01000000; 
+    # define SETHARDWAREPORTS DDRB|=B00101100;DDRB&=B11101111;DDRD|=B01000000;DDRD&=B11111101;
+    # define MAX7456HWRESET   PORTB&=B11111011;delay(100);PORTB|=B00000100;
 #endif
 
 #ifdef RTFQV1                     
