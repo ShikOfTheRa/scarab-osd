@@ -1,16 +1,13 @@
-#define DATAOUT 11              // MOSI
-#define DATAIN  12              // MISO
-#define SPICLOCK  13            // sck
-#define VSYNC 2                 // INT0
-
-#ifndef WHITEBRIGHTNESS
-  #define WHITEBRIGHTNESS 0x01
-#endif
-#ifndef BLACKBRIGHTNESS
-  #define BLACKBRIGHTNESS 0x00
+#if defined WHITEBRIGHTNESS | defined BLACKBRIGHTNESS
+  #ifndef WHITEBRIGHTNESS
+    #define WHITEBRIGHTNESS 0x01
+  #endif
+  #ifndef BLACKBRIGHTNESS
+    #define BLACKBRIGHTNESS 0x00
+  #endif
+  #define BWBRIGHTNESS ((BLACKBRIGHTNESS << 2) | WHITEBRIGHTNESS)
 #endif
 
-#define BWBRIGHTNESS ((BLACKBRIGHTNESS << 2) | WHITEBRIGHTNESS)
 
 //MAX7456 opcodes
 #define DMM_reg   0x04
@@ -118,23 +115,15 @@ uint8_t spi_transfer(uint8_t data)
 
 void MAX7456Setup(void)
 {
-  uint8_t MAX7456_reset=0x02;
+  uint8_t MAX7456_reset=0x0C;
   uint8_t MAX_screen_rows;
 
-  pinMode(MAX7456RESET,OUTPUT);
-  digitalWrite(MAX7456RESET,LOW); //force reset
-  delay(100);
-  digitalWrite(MAX7456RESET,HIGH); //hard enable
-  delay(100);
-
-  pinMode(MAX7456SELECT,OUTPUT);
-  digitalWrite(MAX7456SELECT,HIGH); //disable device
-
-  pinMode(DATAOUT, OUTPUT);
-  pinMode(DATAIN, INPUT);
-  pinMode(SPICLOCK,OUTPUT);
-  pinMode(VSYNC, INPUT);
-
+  // Set hardware as per def.h
+  cli();
+  SETHARDWAREPORTS
+  MAX7456HWRESET
+  MAX7456DISABLE
+  
   // SPCR = 01010000
   //interrupt disabled,spi enabled,msb 1st,master,clk low when idle,
   //sample on leading edge of clk,system clock/4 rate (4 meg)
@@ -145,17 +134,11 @@ void MAX7456Setup(void)
   uint8_t spi_junk;
   spi_junk=SPSR;
   spi_junk=SPDR;
-  delay(100);
+  delay(10);
+  MAX7456ENABLE
 
-  // force soft reset on Max7456
-  digitalWrite(MAX7456SELECT,LOW);
-  MAX7456_Send(VM0_reg, MAX7456_reset);
-  delay(100);
 
 #ifdef AUTOCAM 
-  pinMode(MAX7456SELECT,OUTPUT);
-  digitalWrite(MAX7456SELECT,LOW);
-
   uint8_t srdata;
   spi_transfer(0xa0);
   srdata = spi_transfer(0xFF); 
@@ -167,50 +150,43 @@ void MAX7456Setup(void)
       Settings[S_VIDEOSIGNALTYPE]=0;
   }
   else{
-    flags.signaltype = 2; // NOT DETECTED
+    flags.signaltype = 2;                     // NOT DETECTED
   }
 #else
   flags.signaltype = Settings[S_VIDEOSIGNALTYPE];
 #endif //AUTOCAM
-   
-#ifdef FASTPIXEL 
-  // force fast pixel timing
-  MAX7456_Send(MAX7456ADD_OSDM, 0x00);
-  // MAX7456_Send(MAX7456ADD_OSDM, 0xEC);
-  // uint8_t srdata = spi_transfer(0xFF); //get data byte
-  // srdata = srdata & 0xEF;
-  // MAX7456_Send(0x6c, srdata);
-  delay(100);
-#endif
 
   if(Settings[S_VIDEOSIGNALTYPE]) {   // PAL
-    MAX7456_reset = 0x42;
+    MAX7456_reset = 0x4C;
     MAX_screen_size = 480;
     MAX_screen_rows = 16;
   }
   else {                              // NTSC
-    MAX7456_reset = 0x02;
     MAX_screen_size = 390;
     MAX_screen_rows = 13;
   }
 
-  // set all rows to same charactor black/white level
+  // Set up the Max chip. Enable display + set standard.
+  MAX7456_Send(VM0_reg, MAX7456_reset);
+   
+#ifdef FASTPIXEL // force fast pixel timing helps with ghosting for some cams
+  MAX7456_Send(MAX7456ADD_OSDM, 0x00);
+#endif
+
+#ifdef BWBRIGHTNESS // change charactor black/white level brightess from default 
   uint8_t x;
   for(x = 0; x < MAX_screen_rows; x++) {
     MAX7456_Send(MAX7456ADD_RB0+x, BWBRIGHTNESS);
   }
+#endif
 
-  // make sure the Max7456 is enabled
-  MAX7456_Send(VM0_reg, OSD_ENABLE|VIDEO_MODE);
-
-  digitalWrite(MAX7456SELECT,HIGH);
-  delay(100);
 # ifdef USE_VSYNC
   EIMSK |= (1 << INT0);  // enable interuppt
   EICRA |= (1 << ISC01); // interrupt at the falling edge
   sei();
 #endif
 }
+
 
 // Copy string from ram into screen buffer
 void MAX7456_WriteString(const char *string, int Adresse)
@@ -240,7 +216,7 @@ void MAX7456_DrawScreen()
 {
   uint16_t xx;
 
-    digitalWrite(MAX7456SELECT,LOW);
+    MAX7456ENABLE
 
   #ifdef USE_VSYNC
     MAX7456_Send(DMM_reg, 1);
@@ -281,7 +257,7 @@ void MAX7456_DrawScreen()
     MAX7456_Send(DMM_reg, B00000000);
   #endif
 
-  digitalWrite(MAX7456SELECT,HIGH);
+  MAX7456DISABLE
 }
 
 
@@ -304,7 +280,7 @@ void MAX7456_Send(uint8_t add, uint8_t data)
 // with NTSC
 #define ENABLE_display 0x08
 #define ENABLE_display_vert 0x0c
-#define MAX7456_reset 0x02
+//#define MAX7456_reset 0x02
 #define DISABLE_display 0x00
 #define STATUS_reg_nvr_busy 0x20
 
@@ -312,14 +288,14 @@ void write_NVM(uint8_t char_address)
 {
 #ifdef WRITE_TO_MAX7456
   // disable display
-   digitalWrite(MAX7456SELECT,LOW);
+   MAX7456ENABLE
 # ifdef notdef // Some kind of timing adjustment experiment? Keep it for future resurrection.
   spi_transfer(VM0_reg); 
   //spi_transfer(DISABLE_display);
 
   
   
-  //digitalWrite(MAX7456SELECT,LOW);
+  //MAX7456ENABLE
   //spi_transfer(VM0_reg);
   spi_transfer(VIDEO_MODE);
 # else // notdef
@@ -341,7 +317,7 @@ void write_NVM(uint8_t char_address)
   while ((spi_transfer(MAX7456ADD_STAT) & STATUS_reg_nvr_busy) != 0x00);
 
   MAX7456_Send(VM0_reg, OSD_ENABLE|VERTICAL_SYNC_NEXT_VSYNC|VIDEO_MODE); // turn on screen next vertical
-  digitalWrite(MAX7456SELECT,HIGH);  
+  MAX7456DISABLE  
 #else
   delay(12);
 #endif
@@ -349,8 +325,7 @@ void write_NVM(uint8_t char_address)
 
 void MAX7456Stalldetect(void){
   uint8_t srdata;
-  // pinMode(MAX7456SELECT,OUTPUT);
-  digitalWrite(MAX7456SELECT,LOW);  
+  MAX7456ENABLE  
 
 #ifdef AUTOCAM
   spi_transfer(MAX7456ADD_STAT);
@@ -366,7 +341,7 @@ void MAX7456Stalldetect(void){
 
   spi_transfer(0x80);
   srdata = spi_transfer(0xFF); 
-  digitalWrite(MAX7456SELECT,HIGH);
+  
   if ((B00001000 & srdata) == 0)
     MAX7456Setup(); 
 }
