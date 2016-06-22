@@ -140,7 +140,7 @@ void MAX7456Setup(void)
 
 #ifdef AUTOCAM 
   uint8_t srdata;
-  spi_transfer(0xa0);
+  spi_transfer(MAX7456ADD_STAT);
   srdata = spi_transfer(0xFF); 
 
   if ((B00000001 & srdata) == B00000001){     //PAL
@@ -324,16 +324,15 @@ void write_NVM(uint8_t char_address)
 }
 
 void MAX7456Stalldetect(void){
+  static uint8_t MAX7456signaltype;
   uint8_t srdata;
-  MAX7456ENABLE  
 
 #ifdef AUTOCAM
   spi_transfer(MAX7456ADD_STAT);
   srdata = spi_transfer(0xFF);
-
-  if (((srdata & 1) && Settings[S_VIDEOSIGNALTYPE] == 0)
-    ||((srdata & 2) && Settings[S_VIDEOSIGNALTYPE] == 1)) {
-    // digitalWrite(MAX7456SELECT, HIGH); // Will get de-selected in setup().
+  srdata &= B00000011;
+  if (MAX7456signaltype!=srdata) {
+    MAX7456signaltype = srdata & B00000011;
     MAX7456Setup();
     return;
   }
