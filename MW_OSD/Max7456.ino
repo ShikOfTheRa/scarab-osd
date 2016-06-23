@@ -142,20 +142,21 @@ void MAX7456Setup(void)
   uint8_t srdata;
   spi_transfer(MAX7456ADD_STAT);
   srdata = spi_transfer(0xFF); 
-
-  if ((B00000001 & srdata) == B00000001){     //PAL
-      Settings[S_VIDEOSIGNALTYPE]=1; 
+  srdata &= B00000011;
+  if (srdata == B00000001){      // PAL
+    Settings[S_VIDEOSIGNALTYPE]=1; 
+    flags.signaltype = 1;
   }
-  else if((B00000010 & srdata) == B00000010){ //NTSC
-      Settings[S_VIDEOSIGNALTYPE]=0;
+  else if (srdata == B00000010){ // NTSC
+    Settings[S_VIDEOSIGNALTYPE]=0;
+    flags.signaltype = 0;
   }
   else{
-    flags.signaltype = 2;                     // NOT DETECTED
+    flags.signaltype = 2 + Settings[S_VIDEOSIGNALTYPE]; // NOT DETECTED    
   }
 #else
   flags.signaltype = Settings[S_VIDEOSIGNALTYPE];
 #endif //AUTOCAM
-
   if(Settings[S_VIDEOSIGNALTYPE]) {   // PAL
     MAX7456_reset = 0x4C;
     MAX_screen_size = 480;
@@ -179,6 +180,7 @@ void MAX7456Setup(void)
     MAX7456_Send(MAX7456ADD_RB0+x, BWBRIGHTNESS);
   }
 #endif
+  MAX7456DISABLE
 
 # ifdef USE_VSYNC
   EIMSK |= (1 << INT0);  // enable interuppt
@@ -288,19 +290,8 @@ void write_NVM(uint8_t char_address)
 {
 #ifdef WRITE_TO_MAX7456
   // disable display
-   MAX7456ENABLE
-# ifdef notdef // Some kind of timing adjustment experiment? Keep it for future resurrection.
-  spi_transfer(VM0_reg); 
-  //spi_transfer(DISABLE_display);
-
-  
-  
-  //MAX7456ENABLE
-  //spi_transfer(VM0_reg);
-  spi_transfer(VIDEO_MODE);
-# else // notdef
+  MAX7456ENABLE
   MAX7456_Send(VM0_reg, VIDEO_MODE);
-# endif // notdef
 
   MAX7456_Send(MAX7456ADD_CMAH, char_address); // set start address high
 
@@ -326,6 +317,7 @@ void write_NVM(uint8_t char_address)
 void MAX7456Stalldetect(void){
   static uint8_t MAX7456signaltype;
   uint8_t srdata;
+  MAX7456ENABLE
 
 #ifdef AUTOCAM
   spi_transfer(MAX7456ADD_STAT);
