@@ -187,6 +187,7 @@ void MAX7456Setup(void)
   EICRA |= (1 << ISC01); // interrupt at the falling edge
   sei();
 #endif
+  readEEPROM_screenlayout();
 }
 
 
