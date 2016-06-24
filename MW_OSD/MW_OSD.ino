@@ -450,7 +450,7 @@ void loop()
     }  
     else
     {
-      if(armed){
+    if(armed){
         previousarmedstatus=1;
         if (configMode==1)
           configExit();
