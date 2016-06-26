@@ -862,19 +862,22 @@ const PROGMEM char * const intro_item[] =
 };
 
 #ifdef AUTOCAM 
-const char signaltext0[]  PROGMEM = "NTSC-AUTO";
-const char signaltext1[]  PROGMEM = "PAL-AUTO";
-const char signaltext2[]  PROGMEM = "NOT DETECTED";
+const char signaltext0[]  PROGMEM = "AUTO-NTSC";
+const char signaltext1[]  PROGMEM = "AUTO-PAL";
+const char signaltext2[]  PROGMEM = "NOT DETECTED-NTSC";
+const char signaltext3[]  PROGMEM = "NOT DETECTED-PAL";
 #else
 const char signaltext0[]  PROGMEM = "NTSC";
 const char signaltext1[]  PROGMEM = "PAL";
 const char signaltext2[]  PROGMEM = "";
+const char signaltext3[]  PROGMEM = "";
 #endif
 const PROGMEM char * const signal_type[] =
 {   
   signaltext0,
   signaltext1,
   signaltext2,
+  signaltext3,
 };
 
 // For Config menu common
