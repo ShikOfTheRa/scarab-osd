@@ -572,10 +572,10 @@ void loop()
     timer.seconds+=1000;
     timer.tenthSec=0;
     onTime++;
-    #ifdef MAXSTALLDETECT
+    #if defined(AUTOCAM) || defined(MAXSTALLDETECT)
       if (!fontMode)
-        MAX7456Stalldetect();
-    #endif 
+        MAX7456CheckStatus();
+    #endif
     #ifdef ALARM_GPS
       if (timer.GPS_active==0){
         GPS_numSat=0;
