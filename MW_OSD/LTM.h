@@ -99,8 +99,8 @@ void ltm_check() {
 
   if (mw_ltm.LTMcmd == LIGHTTELEMETRY_AFRAME)
   {
-    MwAngle[0]=(int16_t)10*ltmread_u16();
     MwAngle[1]=(int16_t)10*ltmread_u16();
+    MwAngle[0]=(int16_t)10*ltmread_u16();
     MwHeading = (int16_t)ltmread_u16();
 #if defined(USEGPSHEADING)
     MwHeading = GPS_ground_course/10;
@@ -112,14 +112,14 @@ void ltm_check() {
   }
   if (mw_ltm.LTMcmd == LIGHTTELEMETRY_SFRAME)
   {
-    MwVBat     = ltmread_u16();
+    MwVBat = ltmread_u16()/100;
     dummy = ltmread_u16();
     if (Settings[S_MWAMPERAGE]){ 
       amperagesum = 360*dummy;
-      MWAmperage = 10*calculateCurrentFromConsumedCapacity(dummy);
+      MWAmperage  = 10*calculateCurrentFromConsumedCapacity(dummy);
     }
-    MwRssi     = ltmread_u8();
-    dummy      = ltmread_u8();
+    MwRssi = ltmread_u8();
+    dummy = ltmread_u8();
     uint8_t ltm_armfsmode = ltmread_u8();
     armed = (ltm_armfsmode & 0b00000001) ? 1 : 0;
 #ifndef SETHOMEARMED
@@ -127,6 +127,7 @@ void ltm_check() {
 #endif
     dummy = (ltm_armfsmode >> 1) & 0b00000001; // uavData.isFailsafe
     mw_ltm.mode = (ltm_armfsmode >> 2) & 0b00111111; // uavData.flightMode
+    mw_ltm.mode = (mw_ltm.mode>15) ? 15 : mw_ltm.mode;
   }
 
   if (mw_ltm.LTMcmd == LIGHTTELEMETRY_OFRAME)

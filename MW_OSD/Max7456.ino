@@ -315,7 +315,8 @@ void write_NVM(uint8_t char_address)
 #endif
 }
 
-void MAX7456Stalldetect(void){
+#if defined(AUTOCAM) || defined(MAXSTALLDETECT)
+void MAX7456CheckStatus(void){
   static uint8_t MAX7456signaltype;
   uint8_t srdata;
   MAX7456ENABLE
@@ -331,12 +332,15 @@ void MAX7456Stalldetect(void){
   }
 #endif
 
+#ifdef MAXSTALLDETECT
   spi_transfer(0x80);
   srdata = spi_transfer(0xFF); 
   
   if ((B00001000 & srdata) == 0)
     MAX7456Setup(); 
+#endif
 }
+#endif
 
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
 void displayFont()
