@@ -102,6 +102,10 @@ uint16_t UntouchedStack(void)
   #include "fontB.h"
 #endif
 
+#ifdef I2C_SUPPORT
+#include "WireUB.h"
+#endif
+
 char screen[480];      // Main screen ram for MAX7456
 char screenBuffer[20]; 
 uint32_t modeMSPRequests;
@@ -133,6 +137,16 @@ void setup()
   UCSR0A  |= (1<<U2X0); UBRR0H = h; UBRR0L = l; 
 //---
   Serial.flush();
+
+#ifdef I2C_SUPPORT
+  // I2C initialization
+  //WireUB.begin(I2C_ADDR, I2C_IRQPIN);
+  WireUB.begin(I2C_ADDR, -1);
+  TWBR=2; // Probably has no effect.
+  // Compute rx queue timeout in microseconds
+  //   = 3 character time at current bps (10bits/char)
+  WireUB.setWriteTimo((1000000UL) / (I2C_BREQUIV/10) * 3);
+#endif
 
   pinMode(PWMRSSIPIN, INPUT);
   pinMode(RSSIPIN, INPUT);
@@ -695,6 +709,9 @@ int16_t getNextCharToRequest() {
 
 void resetFunc(void)
 {
+#ifdef I2C_SUPPORT
+  WireUB.end();
+#endif
   asm volatile ("  jmp 0"); 
 } 
 
