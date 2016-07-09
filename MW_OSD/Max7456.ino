@@ -119,7 +119,6 @@ void MAX7456Setup(void)
   uint8_t MAX_screen_rows;
 
   // Set hardware as per def.h
-  cli();
   SETHARDWAREPORTS
   MAX7456HWRESET
   MAX7456DISABLE
@@ -183,6 +182,7 @@ void MAX7456Setup(void)
   MAX7456DISABLE
 
 # ifdef USE_VSYNC
+  cli();
   EIMSK |= (1 << INT0);  // enable interuppt
   EICRA |= (1 << ISC01); // interrupt at the falling edge
   sei();
