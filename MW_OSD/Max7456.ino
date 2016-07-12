@@ -182,10 +182,10 @@ void MAX7456Setup(void)
   MAX7456DISABLE
 
 # ifdef USE_VSYNC
-  cli();
-  EIMSK |= (1 << INT0);  // enable interuppt
-  EICRA |= (1 << ISC01); // interrupt at the falling edge
-  sei();
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+    EIMSK |= (1 << INT0);  // enable interuppt
+    EICRA |= (1 << ISC01); // interrupt at the falling edge
+  }
 #endif
   readEEPROM_screenlayout();
 }

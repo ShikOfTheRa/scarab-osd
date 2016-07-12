@@ -86,6 +86,7 @@ uint16_t UntouchedStack(void)
 #undef PROGMEM
 #define PROGMEM __attribute__(( section(".progmem.data") ))
 #include <EEPROM.h>
+#include <util/atomic.h> // For ATOMIC_BLOCK
 #include "Config.h"
 #include "Def.h"
 #include "symbols.h"
