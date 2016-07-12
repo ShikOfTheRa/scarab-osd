@@ -99,6 +99,10 @@
 //uint8_t DISABLE_display;
 uint16_t MAX_screen_size;
 
+#ifdef AUTOCAM
+uint8_t detectedCamType = 0;
+#endif
+
 // Goods for tidiness
 #define VIDEO_MODE (Settings[S_VIDEOSIGNALTYPE] ? VIDEO_MODE_PAL : VIDEO_MODE_NTSC)
 
@@ -119,10 +123,9 @@ void MAX7456Setup(void)
   uint8_t MAX_screen_rows;
 
   // Set hardware as per def.h
-  cli();
-  SETHARDWAREPORTS
-  MAX7456HWRESET
+
   MAX7456DISABLE
+  MAX7456HWRESET
   
   // SPCR = 01010000
   //interrupt disabled,spi enabled,msb 1st,master,clk low when idle,
@@ -134,11 +137,12 @@ void MAX7456Setup(void)
   uint8_t spi_junk;
   spi_junk=SPSR;
   spi_junk=SPDR;
+
   delay(10);
   MAX7456ENABLE
 
-
 #ifdef AUTOCAM 
+  delay(1000/25); // Extra delay for VIN sync detection
   uint8_t srdata;
   spi_transfer(MAX7456ADD_STAT);
   srdata = spi_transfer(0xFF); 
@@ -154,6 +158,7 @@ void MAX7456Setup(void)
   else{
     flags.signaltype = 2 + Settings[S_VIDEOSIGNALTYPE]; // NOT DETECTED    
   }
+  detectedCamType = srdata;
 #else
   flags.signaltype = Settings[S_VIDEOSIGNALTYPE];
 #endif //AUTOCAM
@@ -183,6 +188,7 @@ void MAX7456Setup(void)
   MAX7456DISABLE
 
 # ifdef USE_VSYNC
+  cli();
   EIMSK |= (1 << INT0);  // enable interuppt
   EICRA |= (1 << ISC01); // interrupt at the falling edge
   sei();
@@ -317,28 +323,31 @@ void write_NVM(uint8_t char_address)
 
 #if defined(AUTOCAM) || defined(MAXSTALLDETECT)
 void MAX7456CheckStatus(void){
-  static uint8_t MAX7456signaltype;
   uint8_t srdata;
+
   MAX7456ENABLE
 
-#ifdef AUTOCAM
   spi_transfer(MAX7456ADD_STAT);
   srdata = spi_transfer(0xFF);
-  srdata &= B00000011;
-  if (MAX7456signaltype!=srdata) {
-    MAX7456signaltype = srdata & B00000011;
+
+#ifdef AUTOCAM
+  if (detectedCamType != (srdata & B00000011)) {
     MAX7456Setup();
     return;
   }
 #endif
 
-#ifdef MAXSTALLDETECT
   spi_transfer(0x80);
-  srdata = spi_transfer(0xFF); 
-  
-  if ((B00001000 & srdata) == 0)
+  srdata = spi_transfer(0xFF);
+
+#ifdef MAXSTALLDETECT
+  if ((B00001000 & srdata) == 0) {
     MAX7456Setup(); 
+    return;
+  }
 #endif
+
+  MAX7456DISABLE
 }
 #endif
 
