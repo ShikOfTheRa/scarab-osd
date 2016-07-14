@@ -41,9 +41,11 @@ class TwoWireUB : public Stream
     static uint8_t dnBufferHead;
     static uint8_t dnBufferTail;
 
+#if 0
     static uint8_t upBuffer[];
     static uint8_t upBufferIndex;
     static uint8_t upBufferLength;
+#endif
 
     static uint8_t transmitting;
 
