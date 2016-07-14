@@ -47,9 +47,11 @@ uint8_t TwoWireUB::dnBufferTail = 0;
 #define DNBUFLEN ((dnBufferHead - dnBufferTail) & (DN_BUFFER_LENGTH - 1))
 #define DNBUFROOM (DN_BUFFER_LENGTH - DNBUFLEN - 1)
 
+#if 0
 uint8_t TwoWireUB::upBuffer[UP_BUFFER_LENGTH];
 uint8_t TwoWireUB::upBufferIndex = 0;
 uint8_t TwoWireUB::upBufferLength = 0;
+#endif
 
 uint8_t TwoWireUB::transmitting = 0;
 void (*TwoWireUB::user_onRequest)(void);
@@ -85,8 +87,10 @@ void TwoWireUB::begin(void)
   dnBufferHead = 0;
   dnBufferTail = 0;
 
+#if 0
   upBufferIndex = 0;
   upBufferLength = 0;
+#endif
 
   if (irqpin >= 0)
     ACTIVELOW_INIT(irqpin);
