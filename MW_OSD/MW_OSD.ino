@@ -138,6 +138,8 @@ void setup()
   pinMode(RSSIPIN, INPUT);
   pinMode(LEDPIN,OUTPUT);
 
+  MAX7456SETHWPORTS
+
 #if defined (INTPWMRSSI) || defined (PPMOSDCONTROL)
   initRSSIint();
 #endif
