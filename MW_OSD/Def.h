@@ -403,7 +403,7 @@
     # define MAX7456RESET      9 // RESET
     # define MAX7456SELECT    10 // CHIP SELECT 
     # define SETHARDWAREPORTS pinMode(MAX7456RESET,OUTPUT);pinMode(MAX7456SELECT,OUTPUT);pinMode(DATAOUT, OUTPUT);pinMode(DATAIN, INPUT);pinMode(SPICLOCK,OUTPUT);pinMode(VSYNC, INPUT);
-    # define MAX7456HWRESET   digitalWrite(MAX7456RESET,LOW);delay(100);digitalWrite(MAX7456RESET,HIGH);
+    # define MAX7456HWRESET   digitalWrite(MAX7456RESET,LOW);delay(60);digitalWrite(MAX7456RESET,HIGH);delay(40);
     # define MAX7456ENABLE    digitalWrite(MAX7456SELECT,LOW); 
     # define MAX7456DISABLE   digitalWrite(MAX7456SELECT,HIGH); 
 #else                                  
