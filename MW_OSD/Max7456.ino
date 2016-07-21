@@ -120,10 +120,8 @@ void MAX7456Setup(void)
   uint8_t MAX7456_reset=0x0C;
   uint8_t MAX_screen_rows;
 
-  // Set hardware as per def.h
-  SETHARDWAREPORTS
-  MAX7456HWRESET
   MAX7456DISABLE
+  MAX7456HWRESET
   
   // SPCR = 01010000
   //interrupt disabled,spi enabled,msb 1st,master,clk low when idle,
