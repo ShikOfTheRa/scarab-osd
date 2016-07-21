@@ -1,9 +1,7 @@
 1 How do I use OSD / smart switch / Screen switching
   * There are 2 methods - using a RC channel (0-7) or by using OSD SWITCH if the FC supports it.
-  * Step1 - Select which method on the GUI
-  * if using OSD_SWITCH method, enablele #define OSD_SWITCH on multiwii FC or via CLI / GUI for other FC
-  * if using OSD_SWITCH method, assign a switch on the FC GUI to the OSD Switch which will now be visible
-  * if using RC Channel, just make sure you use teh correct channel. 
+  * Select which method on the GUI
+  * if using RC Channel, just make sure you use the correct channel. 
 
 ---
 
@@ -207,15 +205,32 @@ HARAKIRI USERS - ensure protocol set as follows:
   * Note it may also be a sign of an old pc or other application / malware running on PC
 
 ---
-26 Can I swap between different batteries 3/4s and set alarms automatically
+27 Can I swap between different batteries 3/4s and set alarms automatically
   * Use R1.6 and higher
   * uncomment AUTOCELL
   * Amend Woltage waring section in config.h as you require 
   * Consider use of AUTOCELL_VOLTAGE
   
----
 
-COMPATIBILITY ISSUES
+---
+SPECIAL NOTE - POWER ISSUES
+Poor quality voltage supply can significantly impact the the reliability of your the system. This ranges from high voltage spikes that will cause your FC or OSD to fail completely to low voltage brownouts that will cause your FC or OSD to hang. All are bad, but all can be avoided.
+Regenerative / Braked ESC such as those using BLHeli / Damped light option contribute significantly to the issue.
+Systems with digital servos powered through the FC are also vulnerable.
+
+It is important to provide a clean supply to your FC and OSD etc. Consider 5v and 12v connections (and also for FC/OSD with embedded switching regulator , the battery supply). Also consider any servos connected to the 5v on the FC.
+
+Options to consider in order of recommendation of least effective to most effective are:
+  0 - Use a good ground wiring layout design to a common point (consider this mandatory)
+  1 - Use a high value electrolytic cap on supply lines (3300uf, 16v for 4s)
+  2 - Use a Low ESR, high value cap on the supply lines (1000uf, 16v low ESR for 4s). 
+  3 - Use a traditional inductor / capacitor (LC) filter on the supply lines to the electronics
+  4 - Use a linear voltage regulator circuit (7805/7812 etc)
+
+For overvoltage protection:
+0 Consider use of a protection diode (BZX79C5V6)
+---
+SPECIAL NOTE - CAMERA COMPATIBILITY ISSUES
 Chack camera compatibility document
  
 
