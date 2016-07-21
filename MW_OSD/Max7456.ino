@@ -102,6 +102,8 @@ uint16_t MAX_screen_size;
 // Goods for tidiness
 #define VIDEO_MODE (Settings[S_VIDEOSIGNALTYPE] ? VIDEO_MODE_PAL : VIDEO_MODE_NTSC)
 
+uint8_t detectedCamType = 0;
+
 //////////////////////////////////////////////////////////////
 uint8_t spi_transfer(uint8_t data)
 {
@@ -139,6 +141,9 @@ void MAX7456Setup(void)
 
 #ifdef AUTOCAM 
   uint8_t srdata;
+
+  delay(1000/25); // Extra delay for input sync detection
+
   spi_transfer(MAX7456ADD_STAT);
   srdata = spi_transfer(0xFF); 
   srdata &= B00000011;
@@ -153,6 +158,7 @@ void MAX7456Setup(void)
   else{
     flags.signaltype = 2 + Settings[S_VIDEOSIGNALTYPE]; // NOT DETECTED    
   }
+  detectedCamType = srdata;
 #else
   flags.signaltype = Settings[S_VIDEOSIGNALTYPE];
 #endif //AUTOCAM
@@ -317,7 +323,6 @@ void write_NVM(uint8_t char_address)
 
 #if defined(AUTOCAM) || defined(MAXSTALLDETECT)
 void MAX7456CheckStatus(void){
-  static uint8_t MAX7456signaltype;
   uint8_t srdata;
   MAX7456ENABLE
 
@@ -325,8 +330,7 @@ void MAX7456CheckStatus(void){
   spi_transfer(MAX7456ADD_STAT);
   srdata = spi_transfer(0xFF);
   srdata &= B00000011;
-  if (MAX7456signaltype!=srdata) {
-    MAX7456signaltype = srdata & B00000011;
+  if (detectedCamType != srdata) {
     MAX7456Setup();
     return;
   }
