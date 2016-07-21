@@ -221,14 +221,14 @@ Systems with digital servos powered through the FC are also vulnerable.
 It is important to provide a clean supply to your FC and OSD etc. Consider 5v and 12v connections (and also for FC/OSD with embedded switching regulator , the battery supply). Also consider any servos connected to the 5v on the FC.
 
 Options to consider in order of recommendation of least effective to most effective are:
-  0 - Use a good ground wiring layout design to a common point (consider this mandatory)
-  1 - Use a high value electrolytic cap on supply lines (3300uf, 16v for 4s)
-  2 - Use a Low ESR, high value cap on the supply lines (1000uf, 16v low ESR for 4s). 
-  3 - Use a traditional inductor / capacitor (LC) filter on the supply lines to the electronics
-  4 - Use a linear voltage regulator circuit (7805/7812 etc)
+ Use a good ground wiring layout design to a common point (consider this mandatory)
+ Use a high value electrolytic cap on supply lines (3300uf, 16v for 4s)
+ Use a Low ESR, high value cap on the supply lines (1000uf, 16v low ESR for 4s). 
+ Use a traditional inductor / capacitor (LC) filter on the supply lines to the electronics
+ Use a linear voltage regulator circuit (7805/7812 etc)
 
 For overvoltage protection:
-0 Consider use of a protection diode (BZX79C5V6)
+ Consider use of a protection diode (BZX79C5V6)
 ---
 SPECIAL NOTE - CAMERA COMPATIBILITY ISSUES
 Chack camera compatibility document
