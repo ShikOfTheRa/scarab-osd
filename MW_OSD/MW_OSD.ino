@@ -135,6 +135,8 @@ void setup()
 //---
   Serial.flush();
 
+  MAX7456SETHARDWAREPORTS
+
   pinMode(PWMRSSIPIN, INPUT);
   pinMode(RSSIPIN, INPUT);
   pinMode(LEDPIN,OUTPUT);
