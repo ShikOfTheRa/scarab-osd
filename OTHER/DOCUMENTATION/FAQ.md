@@ -222,8 +222,8 @@ SPECIAL NOTE - POWER ISSUES
 
 Options to consider in order of recommendation of least effective to most effective are:
   * Use a good ground wiring layout design to a common point (consider this mandatory)
-  * Use a high value electrolytic cap on supply lines (3300uf, 16v for 4s)
-  * Use a Low ESR, high value cap on the supply lines (1000uf, 16v low ESR for 4s). 
+  * Use a high value electrolytic cap on supply lines (3300uf, 16v for 4s. 25v better but larger)
+  * Use a Low ESR, high value cap on the supply lines (1000uf, 16v low ESR for 4s. 25v better but larger). 
   * Use a traditional inductor / capacitor (LC) filter on the supply lines to the electronics
   * Use a linear voltage regulator circuit (7805/7812 etc)
 
