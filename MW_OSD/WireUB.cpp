@@ -23,6 +23,8 @@
   Modified 2016 by jflyper
 */
 
+#define EMBEDDED
+
 extern "C" {
   #include <stdlib.h>
   #include <string.h>
@@ -60,6 +62,7 @@ void (*TwoWireUB::user_onReceive)(int);
 uint8_t reg;
 uint8_t reg_iir;
 uint8_t reg_ier;
+uint8_t reg_brh;
 int8_t irqpin;
 
 unsigned long writeTimo;
@@ -249,6 +252,17 @@ void TwoWireUB::onReceiveService(uint8_t* inBytes, int numBytes)
   case IS7x0_REG_IOCONTROL:
     // Should handle software reset
     break;
+
+#ifndef EMBEDDED
+  case UB_REG_BRH:
+    reg_brh = *inBytes;
+    break;
+
+  case UB_REG_BRL:
+    // Calling Serial.begin() on already began Serial shouldn't be a problem.
+    Serial.begin(((reg_brh << 8) | *inBytes) * 150);
+    break;
+#endif
 
   default:
     break;
