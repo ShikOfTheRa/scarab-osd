@@ -959,7 +959,7 @@ void ProcessSensors(void) {
         }
       }
       if(Settings[S_MWRSSI]) {
-        sensortemp = MwRssi<<2;
+        sensortemp = MwRssi;
       }
     }
     //--- Apply filtering    
