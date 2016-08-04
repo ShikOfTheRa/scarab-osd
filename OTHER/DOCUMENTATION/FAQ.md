@@ -213,6 +213,11 @@ HARAKIRI USERS - ensure protocol set as follows:
   
 
 ---
+28 GUI is very slow to open up
+  * Try disabling buetooth
+  
+
+---
 SPECIAL NOTE - POWER ISSUES  
   Poor quality voltage supply can significantly impact the the reliability of your the system. This ranges from high voltage spikes that will cause your FC or OSD to fail completely to low voltage brownouts that will cause your FC or OSD to hang. All are bad, but all can be avoided.
   Regenerative / Braked ESC such as those using BLHeli / Damped light option contribute significantly to the issue.
