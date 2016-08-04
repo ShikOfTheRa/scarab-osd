@@ -207,7 +207,6 @@ void SetConfigItem(int index, int value) {
     return;
 
   if(index == GetSetting("S_VOLTAGEMIN"))confItem[index].setValue(float(value)/10);//preserve decimal
-  else if(index == GetSetting("S_VIDVOLTAGEMIN"))confItem[index].setValue(float(value)/10);//preserve decimal
   else if(index == GetSetting("S_GPSTZ"))confItem[index].setValue(float(value)/10);//preserve decimal, maybe can go elsewhere - haydent
   else confItem[index].setValue(value);
 //  if (index == CONFIGITEMS-1)
@@ -560,7 +559,7 @@ void SendCommand(int cmd){
         serialize8(int(SGPS_FIX.arrayValue()[0]));
         serialize8(int(SGPS_numSat.value()));
         GPSstartlat=GPSstartlat+100;
-        GPSstartlon=GPSstartlon+100;
+        GPSstartlon=GPSstartlon-100;
         serialize32(GPSstartlat);
         serialize32(GPSstartlon);
         serialize16(int(SGPS_altitude.value()/100));
@@ -988,12 +987,8 @@ void MWData_Com() {
   int c = 0;
   
   //System.out.println("MWData_Com");  
-    int serialprocess=50; // max chars processed to help with PC's that processs serial slowly
-    if (g_serial.available()==0){
-      serialprocess=0;
-    }
-    while (serialprocess>0) {
-      serialprocess--;
+    
+    while (g_serial.available()>0) {
 //    while (g_serial.available()>0 && (toggleMSP_Data == true)) {
     try{
       c = (g_serial.read());
@@ -1171,9 +1166,6 @@ void MWData_Com() {
 //    confItem[GetSetting("S_AMPMAXH")].setValue(int(confItem[GetSetting("S_AMPDIVIDERRATIO")].value())>>8);
     for(int i = 0; i < CONFIGITEMS; i++){
       if(i == GetSetting("S_VOLTAGEMIN")){
-        EElookuptable[i]=int(confItem[i].value()*10);
-      }
-      else if(i == GetSetting("S_VIDVOLTAGEMIN")){
         EElookuptable[i]=int(confItem[i].value()*10);
       }
       else if(i == GetSetting("S_GPSTZ")){

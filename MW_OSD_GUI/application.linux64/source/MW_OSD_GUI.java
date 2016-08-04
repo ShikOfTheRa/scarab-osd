@@ -80,7 +80,7 @@ And to a lesser extent code from the following :-
 
 
 String MW_OSD_GUI_Version = "MWOSD R1.6 - NextGeneration";
-int MW_OSD_EEPROM_Version = 13;
+int MW_OSD_EEPROM_Version = 12;
 int CONFIGITEMS16 = 7;
 
 int  GPS_numSatPosition = 0;
@@ -125,11 +125,10 @@ int  glidescopePosition = 38;
 int  callSignPosition = 39;
 int  debugPosition = 40;
 
-int GPSstartlat =  43094861;  //10 000 000 = 4.3
-int GPSstartlon = -71889706; //=7.1
+int GPSstartlat = 430948610;
+int GPSstartlon = -718897060;
 
 int MSP_sendOrder =0;
-int LTM_sendOrder =0;
 PImage img_Clear,GUIBackground,OSDBackground,DONATEimage,RadioPot;
 
 int readcounter=0;
@@ -205,7 +204,6 @@ boolean PortRead = false;
 boolean PortWrite = false;
 int PortReadtimer = 0;
 //int ReadConfig = 0;
-int DisplayMillis = 0;
 int ReadMillis = 0;
 int WriteConfig = 0;
 int WriteMillis = 0;
@@ -239,13 +237,11 @@ int processingtxtval = 0;
 int oldseconds=0;
 int framerate=0;
 String frameratetxt="";
-int loop1hz=0;
-int loop10hz=0;
 
 // XML config editorvariables
 int hudeditposition=0;
 
-int[] kisstable;
+
 int[] SimPosn;
 int[][] ConfigLayout;
 int[] EElookuptable= new int[512];
@@ -262,8 +258,6 @@ String OSname = System.getProperty("os.name");
 String LoadPercent = "";
 String CallSign = "";
 String Title;
-
-// gui configuration
 int Passthroughcomm;
 int AutoSimulator=0;
 int AutoDebugGUI=1;
@@ -706,8 +700,7 @@ int yellow_ = color(200, 200, 20),
       donateback_ = color(180, 100, 0),
       donatefront_ = color(50, 50, 255),
       osdcontr_ = color(50, 50, 50),
-      calibrate_ = color(50, 50, 255),
-      background_ = color(50, 50, 50)
+      calibrate_ = color(50, 50, 255)
       ;
 //Colors--------------------------------------------------------------------------------------------------------------------
 
@@ -974,8 +967,6 @@ CreateItem(GetSetting("S_AMPERAGE_ALARM"),  5,7*17, G_Amperage);
 CreateItem(GetSetting("S_VIDVOLTAGE"),  5,0, G_VVoltage);
 CreateItem(GetSetting("S_VIDDIVIDERRATIO"),  5,1*17, G_VVoltage);
 CreateItem(GetSetting("S_VIDVOLTAGEMIN"), 5,2*17, G_VVoltage);
-  confItem[GetSetting("S_VIDVOLTAGEMIN")].setDecimalPrecision(1);
-  confItem[GetSetting("S_VIDVOLTAGEMIN")].setMultiplier(0.1f);
 
 //  Temperature  --------------------------------------------------------------------
 //CreateItem(GetSetting("S_DISPLAYTEMPERATURE"),  5,0, G_Alarms);
@@ -1254,14 +1245,12 @@ public void MakePorts(){
 
 public void draw() {
 
-  MWData_Com(); 
-  if (millis()>loop1hz){
-    loop1hz=millis()+1000;
-  }
-    if (millis()>loop10hz){
-    loop10hz=millis()+100;
-  }
-
+     MWData_Com(); 
+//  debug[0]=WriteLayouts;
+//  debug[1]=OSD_S_HUDSW0;
+//  debug[2]=OSD_S_HUDSW1;
+//  debug[3]=OSD_S_HUDSW2;
+// Initial setup
   int seconds = second();
   time=millis();
   progresstxt="";
@@ -1363,6 +1352,7 @@ public void draw() {
     eeindexmessage.setValue(eeindextxt);
     processingmessage.setValue(processingtxt);
     
+// txtlblconfItem[0].setValue(""); huh?
 
 // Layout editor
   txtlblLayoutTxt.setValue(" : "+ CONFIGHUDTEXT[hudeditposition]);
@@ -1431,14 +1421,14 @@ public void draw() {
         if (ClosePort) return;
         
         get_OSD_SENSORS();
-
+ ///*
         if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==0)) {
 
           if (init_com==1)SendCommand(MSP_ATTITUDE);
           if (init_com==1)SendCommand(MSP_RC);
           if (init_com==1)SendCommand(MSP_STATUS);
 
-          MSP_sendOrder++;
+        MSP_sendOrder++;
         switch(MSP_sendOrder) {
         case 1:
           if (init_com==1)SendCommand(MSP_BOXNAMES);
@@ -1485,12 +1475,8 @@ public void draw() {
           MSP_sendOrder=1;
         }
         PortWrite = !PortWrite; // toggle TX LED every other    
-        }     
-
-        process_mav_send(); //        if ((int(SimControlToggle.getValue())!=0)&&(Simtype==2)) {
-        process_ltm_send(); //        if ((int(SimControlToggle.getValue())!=0)&&(Simtype==3)) {
-        process_kiss_send(); //        if ((int(SimControlToggle.getValue())!=0)&&(Simtype==4)) {
-
+      } 
+//*/
       }
     } // End !FontMode
   }
@@ -1506,7 +1492,7 @@ public void draw() {
     
   MakePorts();  
   
-  background(background_);
+  background(80);
   // ------------------------------------------------------------------------
   // Draw background control boxes
   // ------------------------------------------------------------------------
@@ -1551,14 +1537,21 @@ public void draw() {
  }
    
   }
- 
- if(SimDisplayToggle.getValue()!=0){     
+  
+      
+    if (PApplet.parseInt(confItem[GetSetting("S_DISPLAYRSSI")].value()) > 0)    ShowRSSI(); 
+
+
+  if(confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() > 0) displayHorizon(PApplet.parseInt(MW_Pitch_Roll.arrayValue()[0])*10,PApplet.parseInt(MW_Pitch_Roll.arrayValue()[1])*10*-1);
   SimulateTimer();
   CalcAlt_Vario(); 
 
   ShowCurrentThrottlePosition();
-  ShowVolts(sVBat);
+  if (PApplet.parseInt(confItem[GetSetting("S_DISPLAYRSSI")].value()) > 0)    ShowRSSI(); 
+  if (PApplet.parseInt(confItem[GetSetting("S_DISPLAYVOLTAGE")].value()) > 0) ShowVolts(sVBat);
+
   ShowVideoVolts(sVBat);    
+ 
   displaySensors();
   displayMode();
   ShowAmps();
@@ -1575,24 +1568,25 @@ public void draw() {
   ShowDebug();
   ShowSideBarArrows();
   ShowAPstatus();
-  ShowRSSI(); 
-  ShowMapMode();  
-  ShowSPort();
 
   if(confItem[GetSetting("S_DISPLAYGPS")].value() > 0) {
-    ShowGPSAltitude();
-    ShowDistance();
-    ShowLatLon();
-    ShowSats();   
-    ShowSpeed();
-    ShowDirection();
-  }
-  if(confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() > 0) displayHorizon(PApplet.parseInt(MW_Pitch_Roll.arrayValue()[0])*10,PApplet.parseInt(MW_Pitch_Roll.arrayValue()[1])*10*-1);
+  ShowGPSAltitude();
+  ShowDistance();
+  ShowLatLon();
+  ShowSats();   
+  ShowSpeed();
+  ShowDirection();
  }
  
+ 
+  ShowMapMode();
+    
   MatchConfigs();
   MakePorts();
-    
+  
+  ShowSPort();
+ 
+  
   if ((ClosePort ==true)&& (PortWrite == false)){ //&& (init_com==1)
     ClosePort();
   }
@@ -2280,7 +2274,7 @@ public void LoadConfig(){
     BaudRate = 115200;
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
-    AutoSimulator = 0;
+    AutoSimulator = 1;
     AutoDebugGUI = 1;
     Simtype=1;
     FrameRate = 7;
@@ -2498,8 +2492,6 @@ public void initxml(){
     CONFIGHUDEN[hud][hudindex] = enabled;      
   }
   SimPosn = new int[hudoptions];
-    kisstable = new int[KISSFRAMELENGTH];
-
   ConfigLayout= new int[4][hudoptions];
   ConfigRanges[GetSetting("S_HUDSW0")] = hudsavailable-1;
   ConfigRanges[GetSetting("S_HUDSW1")] = hudsavailable-1;
@@ -2612,10 +2604,6 @@ public void coloriseswitches(){
     SimControlToggle.setColorActive(switches_);
   else
     SimControlToggle.setColorActive(red_);
-  if (PApplet.parseInt(SimDisplayToggle.getValue())==1)
-    SimDisplayToggle.setColorActive(switches_);
-  else
-    SimDisplayToggle.setColorActive(red_);
   if (PApplet.parseInt(DEBUGGUI.getValue())==1)
     DEBUGGUI.setColorActive(switches_);
   else
@@ -3861,7 +3849,6 @@ public void SetConfigItem(int index, int value) {
     return;
 
   if(index == GetSetting("S_VOLTAGEMIN"))confItem[index].setValue(PApplet.parseFloat(value)/10);//preserve decimal
-  else if(index == GetSetting("S_VIDVOLTAGEMIN"))confItem[index].setValue(PApplet.parseFloat(value)/10);//preserve decimal
   else if(index == GetSetting("S_GPSTZ"))confItem[index].setValue(PApplet.parseFloat(value)/10);//preserve decimal, maybe can go elsewhere - haydent
   else confItem[index].setValue(value);
 //  if (index == CONFIGITEMS-1)
@@ -4214,7 +4201,7 @@ public void SendCommand(int cmd){
         serialize8(PApplet.parseInt(SGPS_FIX.arrayValue()[0]));
         serialize8(PApplet.parseInt(SGPS_numSat.value()));
         GPSstartlat=GPSstartlat+100;
-        GPSstartlon=GPSstartlon+100;
+        GPSstartlon=GPSstartlon-100;
         serialize32(GPSstartlat);
         serialize32(GPSstartlon);
         serialize16(PApplet.parseInt(SGPS_altitude.value()/100));
@@ -4642,12 +4629,8 @@ public void MWData_Com() {
   int c = 0;
   
   //System.out.println("MWData_Com");  
-    int serialprocess=50; // max chars processed to help with PC's that processs serial slowly
-    if (g_serial.available()==0){
-      serialprocess=0;
-    }
-    while (serialprocess>0) {
-      serialprocess--;
+    
+    while (g_serial.available()>0) {
 //    while (g_serial.available()>0 && (toggleMSP_Data == true)) {
     try{
       c = (g_serial.read());
@@ -4827,9 +4810,6 @@ public void MWData_Com() {
       if(i == GetSetting("S_VOLTAGEMIN")){
         EElookuptable[i]=PApplet.parseInt(confItem[i].value()*10);
       }
-      else if(i == GetSetting("S_VIDVOLTAGEMIN")){
-        EElookuptable[i]=PApplet.parseInt(confItem[i].value()*10);
-      }
       else if(i == GetSetting("S_GPSTZ")){
         EElookuptable[i]=PApplet.parseInt(confItem[i].value()*10);
       }
@@ -4915,7 +4895,7 @@ CheckBox checkboxSimItem[] = new CheckBox[SIMITEMS] ;
 CheckBox ShowSimBackground, UnlockControls, SGPS_FIX,SFRSKY;
 //Toggles
 Toggle toggleModeItems[] = new Toggle[boxnames.length] ;
-Toggle SimControlToggle,SimDisplayToggle,DEBUGGUI;
+Toggle SimControlToggle,DEBUGGUI;
 // Toggle HudOptionEnabled;
 
 // Slider2d-
@@ -4924,7 +4904,7 @@ Slider2D Pitch_Roll, Throttle_Yaw,MW_Pitch_Roll;
 Slider s_Altitude,s_Vario,s_VBat,s_MRSSI;
 
 Textlabel txtlblModeItems[] = new Textlabel[boxnames.length] ;
-Textlabel SimControlText,SimDisplayText,DEBUGGUItext;
+Textlabel SimControlText,DEBUGGUItext;
 
 // Knobs----
 Knob HeadingKnob,SGPSHeadHome;
@@ -5167,16 +5147,6 @@ SGControlBox = ScontrolP5.addGroup("SGControlBox")
                ;   
 
 
-SimDisplayToggle = (controlP5.Toggle) hideLabel(controlP5.addToggle("DisplaySim"));
-SimDisplayToggle.setPosition(5,17);
-SimDisplayToggle.setSize(35,10);
-SimDisplayToggle.setMode(ControlP5.SWITCH);
-SimDisplayToggle.setGroup(SGControlBox);
-SimDisplayToggle.setValue(0);
-//SimDisplayText = (controlP5.Toggle) hideLabel(controlP5.addTextlabel("SimControlText","Simulate on OSD",62,3));
-SimDisplayText = controlP5.addTextlabel("SimDisplayText","Display Simulator",45,17);
-SimDisplayText.setGroup(SGControlBox);
-
 
 SimControlToggle = (controlP5.Toggle) hideLabel(controlP5.addToggle("SendSim"));
 SimControlToggle.setPosition(5,5);
@@ -5184,8 +5154,9 @@ SimControlToggle.setSize(35,10);
 SimControlToggle.setMode(ControlP5.SWITCH);
 SimControlToggle.setGroup(SGControlBox);
 SimControlToggle.setValue(0);
+
 //SimControlText = (controlP5.Toggle) hideLabel(controlP5.addTextlabel("SimControlText","Simulate on OSD",45,3));
-SimControlText = controlP5.addTextlabel("SimControlText","Emulate FC",45,3);
+SimControlText = controlP5.addTextlabel("SimControlText","Simulate on OSD",45,3);
 SimControlText.setGroup(SGControlBox);
 
 DEBUGGUI =  (controlP5.Toggle) hideLabel(controlP5.addToggle("DEBUGGUI"));
@@ -5540,44 +5511,20 @@ public void ShowCurrentThrottlePosition(){
 
 public void ShowLatLon(){
   if(confItem[GetSetting("S_COORDINATES")].value() > 0) {
-    String lat=" 71.88970S";
-    String lon=" 71.88970W";
-
-    float t1=GPSstartlat;
-    t1=t1/10000000;
-    String latsign="N";
-    if (t1<0) latsign="S";
-    lat = " "+t1;
-    while (lat.length()<9){
-      lat+=" ";
-    }
-    lat=lat.substring(0,9);
-    lat=lat+latsign;
-
-    float t2=GPSstartlon;
-    t2=t2/10000000;
-    String lonsign="E";
-    if (t2<0){
-      lonsign="W";
-      t2=-t2;
-    }
-    lon = " "+t2;
-    while (lon.length()<9){
-      lon+=" ";
-    }
-    lon=lon.substring(0,9);
-    lon=lon+lonsign;
-
-
-
-    mapchar(0xca, SimPosn[MwGPSLatPositionTop]);
-    makeText(lat, SimPosn[MwGPSLatPositionTop]+1);
-    mapchar(0xcb, SimPosn[MwGPSLonPositionTop]);
-    makeText(lon, SimPosn[MwGPSLonPositionTop]+1);
-//    makeText(" 71.88970W", SimPosn[MwGPSLonPositionTop]+1);
-  }
+//  if(confItem[GetSetting("S_GPSCOORDTOP")].value() > 0) {
+  mapchar(0xca, SimPosn[MwGPSLatPositionTop]);
+  makeText(" 43.09486N", SimPosn[MwGPSLatPositionTop]+1);
+  mapchar(0xcb, SimPosn[MwGPSLonPositionTop]);
+  makeText(" 71.88970W", SimPosn[MwGPSLonPositionTop]+1);
+//  }
+//  else {
+//  mapchar(0xca, SimPosn[MwGPSLatPosition]);
+//  makeText(" 43.09486N", SimPosn[MwGPSLatPosition]+1);
+//  mapchar(0xcb, SimPosn[MwGPSLonPosition]);
+//  makeText(" 71.88970W", SimPosn[MwGPSLonPosition]+1);
+//  }
 }
-
+}
 
 public void ShowDebug(){
   if(confItem[GetSetting("S_DEBUG")].value() > 0) {
@@ -6372,475 +6319,6 @@ public void LinksSetup(){
 
 }
 
-
-final int
-  KISSFRAMEINIT=5,
-  KISSFRAMELENGTH=154,
-  KISSCHECKSUM=99
-;
-
-int KISScksum=0;
-
-
-public void serialize8kiss(int val) {
-  try{
-    g_serial.write(val);
-  } 
-  catch(java.lang.Throwable t) {
-    System.out.println( t.getClass().getName() );
-    t.printStackTrace();
-  }
-}    
-
-public void synckiss(){
-
-  for (int i=0; i<(KISSFRAMELENGTH); i++) { 
-    kisstable[i]=0;
-  }
-  
-// armed 
-  if(toggleModeItems[0].getValue()> 0){ //armed
-    kisstable[16]=1;
-  }
-
-// flight mode
-  if(toggleModeItems[1].getValue()> 0){//stab
-    kisstable[65]=1;
-  }
-  else if(toggleModeItems[6].getValue()> 0){//RTH
-    kisstable[65]=2;
-  }
-  else if(toggleModeItems[7].getValue()> 0){//HOLD
-    kisstable[65]=3;
-  }
-  else{
-    kisstable[65]=0;
-  }  
-
-// bat
-  kisstable[17]=PApplet.parseInt(sVBat * 100)>>8;
-  kisstable[18]=PApplet.parseInt(sVBat * 100);
-
-// throttle
-  for (int i=0; i<(8); i++) { 
-    kisstable[i*2]=0;
-    kisstable[1+(i*2)]=0;
-  }
-  kisstable[0]=PApplet.parseInt(map(Throttle_Yaw.arrayValue()[1],1000,2000,-500,500))>>8;
-  kisstable[1]=PApplet.parseInt(map(Throttle_Yaw.arrayValue()[1],1000,2000,-500,500));    
-
-  kisstable[2]=PApplet.parseInt(map(Pitch_Roll.arrayValue()[0],1000,2000,-500,500))>>8;
-  kisstable[3]=PApplet.parseInt(map(Pitch_Roll.arrayValue()[0],1000,2000,-500,500));
-
-  kisstable[4]=PApplet.parseInt(map(Pitch_Roll.arrayValue()[1],1000,2000,-500,500))>>8;
-  kisstable[5]=PApplet.parseInt(map(Pitch_Roll.arrayValue()[1],1000,2000,-500,500));
-
-  kisstable[6]=PApplet.parseInt(map(Throttle_Yaw.arrayValue()[0],1000,2000,-500,500))>>8;
-  kisstable[7]=PApplet.parseInt(map(Throttle_Yaw.arrayValue()[0],1000,2000,-500,500));    
-
-
-// pitch roll
-  kisstable[31]=PApplet.parseInt(MW_Pitch_Roll.arrayValue()[0])>>8;
-  kisstable[32]=PApplet.parseInt(MW_Pitch_Roll.arrayValue()[0]);
-  kisstable[33]=PApplet.parseInt(MW_Pitch_Roll.arrayValue()[1])>>8;
-  kisstable[34]=PApplet.parseInt(MW_Pitch_Roll.arrayValue()[1]);
-
-// Amperage
-  kisstable[148]=millis()>>17;
-  kisstable[149]=millis()>>9;
-
-  kisstable[87]=PApplet.parseInt(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000))>>8;
-  kisstable[88]=PApplet.parseInt(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000));    
-  kisstable[97]=PApplet.parseInt(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000))>>8;
-  kisstable[98]=PApplet.parseInt(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000));    
-  kisstable[107]=PApplet.parseInt(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000))>>8;
-  kisstable[108]=PApplet.parseInt(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000));    
-  kisstable[117]=PApplet.parseInt(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000))>>8;
-  kisstable[118]=PApplet.parseInt(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,1000));    
-
-}
-
-public void process_kiss_send(){
-  synckiss();
-  if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==4)) {
-    KISScksum=0;
-    g_serial.write(KISSFRAMEINIT);
-    g_serial.write(KISSFRAMELENGTH);
-    for (int i=0; i<(KISSFRAMELENGTH); i++) { 
-      g_serial.write((kisstable[i]&0xFF));
-      KISScksum=KISScksum+(kisstable[i]&0xFF);
-    }
-    g_serial.write((KISScksum/KISSFRAMELENGTH)&0xFF);
-    println("ck:"+((KISScksum/KISSFRAMELENGTH)&0xFF));
-
-  }
-  PortWrite = !PortWrite; // toggle TX LED every other    
-} 
-
-
-public void process_ltm_send(){
-//  syncmav();
-  if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==3)) {
-//    if (init_com==1)SendCommandMAVLINK(MAVLINK_MSG_ID_HEARTBEAT);
-    LTM_sendOrder++;
-    switch(LTM_sendOrder) {
-      case 1:
-//        if (init_com==1)SendCommandMAVLINK(MAVLINK_MSG_ID_ATTITUDE);
-        break;
-      default:  
-        LTM_sendOrder=0;
-    }
-    PortWrite = !PortWrite; // toggle TX LED every other    
-  } 
-}
-
-
-float mavdata_roll=0;
-float mavdata_pitch=0;
-int mavdata_airspeed=0;
-int mavdata_groundspeed=0;
-int mavdata_altitude=0;
-int mavdata_heading=0;
-int mavdata_climbrate=0;
-int mavdata_throttle=0;
-int mavdata_rssi=0;
-int mavdata_gps_fixtype=0;
-int mavdata_gps_sats=0;
-int mavdata_gps_lat=0;
-int mavdata_gps_lon=0;
-int mavdata_voltage=0;
-int mavdata_amperage=0;
-int mavdata_remaining=0;
-int mavdata_sensors=0;
-
-int mav_sequence=0;
-int mavmillis=0;
-int mav_magic=50;
-int mav_message_length;
-int mav_custom_mode=0;
-int mav_base_mode=0;
-
-long mav_serial_checksum=0;
-  final int
-    MAVLINK_MSG_ID_HEARTBEAT=0,
-    MAVLINK_MSG_ID_HEARTBEAT_MAGIC=50,
-    MAVLINK_MSG_ID_HEARTBEAT_LEN=9,
-    MAVLINK_MSG_ID_VFR_HUD=74,
-    MAVLINK_MSG_ID_VFR_HUD_MAGIC=20,
-    MAVLINK_MSG_ID_VFR_HUD_LEN=20,
-    MAVLINK_MSG_ID_ATTITUDE=30,
-    MAVLINK_MSG_ID_ATTITUDE_MAGIC=39,
-    MAVLINK_MSG_ID_ATTITUDE_LEN=28,
-    MAVLINK_MSG_ID_GPS_RAW_INT=24,
-    MAVLINK_MSG_ID_GPS_RAW_INT_MAGIC=24,
-    MAVLINK_MSG_ID_GPS_RAW_INT_LEN=30,
-    MAVLINK_MSG_ID_RC_CHANNELS_RAW=35,
-    MAVLINK_MSG_ID_RC_CHANNELS_RAW_MAGIC=244,
-    MAVLINK_MSG_ID_RC_CHANNELS_RAW_LEN=22,    
-    MAVLINK_MSG_ID_SYS_STATUS=1,
-    MAVLINK_MSG_ID_SYS_STATUS_MAGIC=124,
-    MAVLINK_MSG_ID_SYS_STATUS_LEN=31  
-    ;
-
-public void SendCommandMAVLINK(int cmd){
-//  System.out.println("CMD:"+ cmd);
-    
-  int custom_mode=mav_custom_mode; ///< A bitfield for use for autopilot-specific flags.
-  int type=1; ///< Type of the MAV 1 - plane / 2 copter)
-  int autopilot=3; ///< Autopilot type / class. defined in MAV_AUTOPILOT ENUM
-  int base_mode=mav_base_mode; ///< System mode bitfield, see MAV_MODE_FLAGS ENUM in mavlink/include/mavlink_types.h
-  int system_status=4; ///< System status flag, see MAV_STATE ENUM
-  int mavlink_version=3; ///< MAVLink version, not writable by user, gets added by protocol because of magic data type: uint8_t_mavlink_version
-  
-  int icmd = (int)(cmd&0xFF);
-  switch(icmd) {
-    case MAVLINK_MSG_ID_HEARTBEAT:
-      PortIsWriting = true;
-      mav_message_length=MAVLINK_MSG_ID_HEARTBEAT_LEN;
-      mav_magic=MAVLINK_MSG_ID_HEARTBEAT_MAGIC;
-      mav_headserial(MAVLINK_MSG_ID_HEARTBEAT);
-      mav_serialize32(mav_custom_mode);
-      mav_serialize8(type);
-      mav_serialize8(autopilot);
-      mav_serialize8(base_mode);
-      mav_serialize8(system_status);
-      mav_serialize8(mavlink_version);
-      mav_tailserial();
-      PortIsWriting = false;
-    break;
-    case MAVLINK_MSG_ID_ATTITUDE:
-      PortIsWriting = true;
-      mav_message_length=MAVLINK_MSG_ID_ATTITUDE_LEN;
-      mav_magic=MAVLINK_MSG_ID_ATTITUDE_MAGIC;
-      mav_headserial(MAVLINK_MSG_ID_ATTITUDE);
-      mav_serialize32(millis());
-      mav_serializefloat(mavdata_roll); //rad roll
-      mav_serializefloat(mavdata_pitch); //rad  pitch
-      mav_serializefloat(0);
-      mav_serializefloat(0);
-      mav_serializefloat(0);
-      mav_serializefloat(0);
-      mav_tailserial();
-      PortIsWriting = false;
-    break;
-    case MAVLINK_MSG_ID_VFR_HUD: 
-      PortIsWriting = true;
-      mav_message_length=MAVLINK_MSG_ID_VFR_HUD_LEN;
-      mav_magic=MAVLINK_MSG_ID_VFR_HUD_MAGIC;
-      mav_headserial(MAVLINK_MSG_ID_VFR_HUD);
-      mav_serializefloat(mavdata_airspeed); //AS m/s
-      mav_serializefloat(mavdata_groundspeed); //GS m/s
-      mav_serializefloat(mavdata_altitude); //Alt m
-      mav_serializefloat(mavdata_climbrate); //Climb m/s
-      mav_serialize16(mavdata_heading); //Heading deg
-      mav_serialize16(mavdata_throttle); //throttle
-      mav_tailserial();
-      PortIsWriting = false;
-    break;
-    case MAVLINK_MSG_ID_GPS_RAW_INT: 
-      PortIsWriting = true;
-      mav_message_length=MAVLINK_MSG_ID_GPS_RAW_INT_LEN;
-      mav_magic=MAVLINK_MSG_ID_GPS_RAW_INT_MAGIC;
-      mav_headserial(MAVLINK_MSG_ID_GPS_RAW_INT);
-      mav_serialize32(0);
-      mav_serialize32(0); // 2nd - make up to 64 bit
-      mav_serialize32(mavdata_gps_lat); //lat
-      mav_serialize32(mavdata_gps_lon); //lon
-      mav_serialize32(0);//alt
-      mav_serialize16(0);//eph
-      mav_serialize16(0);//epv
-      mav_serialize16(mavdata_groundspeed);
-      mav_serialize16(mavdata_heading);
-      mav_serialize8(3);  //0-1: no fix, 2: 2D fix, 3: 3D fix, 4: DGPS, 5: RTK
-      mav_serialize8(mavdata_gps_sats); //sats     
-      mav_tailserial();
-      PortIsWriting = false;
-    break;
-    case MAVLINK_MSG_ID_RC_CHANNELS_RAW: 
-      PortIsWriting = true;
-      mav_message_length=MAVLINK_MSG_ID_RC_CHANNELS_RAW_LEN;
-      mav_magic=MAVLINK_MSG_ID_RC_CHANNELS_RAW_MAGIC;
-      mav_headserial(MAVLINK_MSG_ID_RC_CHANNELS_RAW);
-      mav_serialize32(0);
-      mav_serialize16(PApplet.parseInt(Pitch_Roll.arrayValue()[0])); //CH0
-      mav_serialize16(PApplet.parseInt(Pitch_Roll.arrayValue()[1]));
-      mav_serialize16(PApplet.parseInt(Throttle_Yaw.arrayValue()[0]));
-      mav_serialize16(PApplet.parseInt(Throttle_Yaw.arrayValue()[1]));
-      mav_serialize16(1100);
-      mav_serialize16(1100);
-      mav_serialize16(1100);
-      mav_serialize16(1100);  //CH7
-      mav_serialize8(1);
-      mav_serialize8(mavdata_rssi);  //RSSI
-      mav_tailserial();
-      PortIsWriting = false;
-    break;
-    case MAVLINK_MSG_ID_SYS_STATUS: 
-      PortIsWriting = true;
-      mav_message_length=MAVLINK_MSG_ID_SYS_STATUS_LEN;
-      mav_magic=MAVLINK_MSG_ID_SYS_STATUS_MAGIC;
-      mav_headserial(MAVLINK_MSG_ID_SYS_STATUS);
-      mav_serialize32(0);
-      mav_serialize32(mavdata_sensors); //mavdata_sensors
-      mav_serialize32(0);
-      mav_serialize16(0);
-      mav_serialize16(mavdata_voltage); // units mv
-      mav_serialize16(mavdata_amperage); // units 10ma
-      mav_serialize16(0);
-      mav_serialize16(0);
-      mav_serialize16(0);
-      mav_serialize16(0);
-      mav_serialize16(0);
-      mav_serialize16(0);
-      mav_serialize8(mavdata_remaining); //% remaining
-      mav_tailserial();
-      PortIsWriting = false;
-    break;
-  }
-}
-
-
-public void mav_headserial(int msg) {
-  if (mav_sequence>254){
-    mav_sequence=0;
-  }
-  else{
-    mav_sequence++;
-  }
-  mav_serial_checksum=0xFFFF; //init
-  serialize8ncs(0xFE);
-  mav_serialize8(mav_message_length);
-  mav_serialize8(mav_sequence&0xFF);
-  mav_serialize8(1);
-  mav_serialize8(1);
-  mav_serialize8(msg&0xFF);  
-}
-
-
-public void mav_tailserial(){
-  mav_checksum(mav_magic);
-  serialize8ncs((int)mav_serial_checksum&0xFF);
-  serialize8ncs((int)(mav_serial_checksum>>8)&0xFF);
-}
-
-
-public void serialize8ncs(int val) {
-  try{
-    g_serial.write(val);
-  } 
-  catch(java.lang.Throwable t) {
-    System.out.println( t.getClass().getName() );
-    t.printStackTrace();
-  }
-}
-
-
-public void mav_serialize8(int val) {
-  mav_checksum(val);
-  try{
-    g_serial.write(val);
-  } 
-  catch(java.lang.Throwable t) {
-    System.out.println( t.getClass().getName() );
-    t.printStackTrace();
-  }
-}
-
-
-public void mav_checksum(int val) {
-  long tmp;
-  tmp = val ^ mav_serial_checksum &0xFF;
-  tmp ^= (tmp<<4)&0xFF;
-  mav_serial_checksum = (mav_serial_checksum>>8) ^ (tmp<<8) ^ (tmp <<3) ^ (tmp>>4);  
-}
-
-
-public void mav_serialize16(int a) {
-  if (str(a)!=null ){
-  mav_serialize8((a   ) & 0xFF);
-  mav_serialize8((a>>8) & 0xFF);
-  }
-}
-
-
-public void mav_serialize32(int a) {
-  if (str(a)!=null ){
-    mav_serialize8((a    ) & 0xFF);
-    mav_serialize8((a>> 8) & 0xFF);
-    mav_serialize8((a>>16) & 0xFF);
-    mav_serialize8((a>>24) & 0xFF);
-  } 
-}
-
-
-public void mav_serializefloat(float b) {
-  int a = Float.floatToIntBits(b);
-  if (str(a)!=null ){
-    mav_serialize8((a    ) & 0xFF);
-    mav_serialize8((a>> 8) & 0xFF);
-    mav_serialize8((a>>16) & 0xFF);
-    mav_serialize8((a>>24) & 0xFF);
-  } 
-}
-
-
-public void process_mav_send(){
-  syncmav();
-  if ((PApplet.parseInt(SimControlToggle.getValue())!=0)&&(Simtype==2)) {
-    if (init_com==1)SendCommandMAVLINK(MAVLINK_MSG_ID_HEARTBEAT);
-    if (init_com==1)SendCommandMAVLINK(MAVLINK_MSG_ID_SYS_STATUS); 
-    MSP_sendOrder++;
-    switch(MSP_sendOrder) {
-      case 1:
-        if (init_com==1)SendCommandMAVLINK(MAVLINK_MSG_ID_ATTITUDE);
-        if (init_com==1)SendCommandMAVLINK(MAVLINK_MSG_ID_VFR_HUD);
-        break;
-      case 2:
-        if (init_com==1)SendCommandMAVLINK(MAVLINK_MSG_ID_GPS_RAW_INT); 
-        if (init_com==1)SendCommandMAVLINK(MAVLINK_MSG_ID_RC_CHANNELS_RAW);
-        break;
-      default:  
-        MSP_sendOrder=0;
-    }
-    PortWrite = !PortWrite; // toggle TX LED every other    
-  } 
-}
-
-public void syncmav(){
-
-  int SimModebits = 0;
-  int SimBitCounter = 1;
-  for (int i=0; i<boxnames.length; i++) { 
-      if(toggleModeItems[i].getValue() > 0) SimModebits |= SimBitCounter;
-      SimBitCounter += SimBitCounter;
-  }
-  
-  
-// armed 
-  mav_base_mode=0;
-  if(toggleModeItems[0].getValue()> 0){ //armed
-    mav_base_mode |=1<<7;
-  }
-
-// sensors active 
-  mavdata_sensors=0;
-
-  if((SimModebits&mode_stable) >0){ //stab
-      mavdata_sensors|=(1<<1);
-    }
-
-  if((SimModebits&mode_baro) >0){ //baro
-      mavdata_sensors|=(1<<3);
-      mavdata_sensors|=(1<<4);
-    }
-
-  if((SimModebits&mode_mag) >0){ //mag
-      mavdata_sensors|=(1<<2);
-    }
-  
-
-
-// flight mode
-  mav_custom_mode=0;
-  if(toggleModeItems[1].getValue()> 0){//stab
-    mav_custom_mode =0;
-  }
-  else if(toggleModeItems[6].getValue()> 0){//RTH
-    mav_custom_mode =6;
-  }
-  else if(toggleModeItems[7].getValue()> 0){//HOLD
-    mav_custom_mode =5;                //loit
-  }
-  else{
-    mav_custom_mode =1;                //acro
-  }
-  
-  mavdata_roll=radians(PApplet.parseInt(MW_Pitch_Roll.arrayValue()[0]));
-  mavdata_roll= -mavdata_roll;
-  mavdata_pitch=radians(PApplet.parseInt(MW_Pitch_Roll.arrayValue()[1]));
-  mavdata_airspeed=PApplet.parseInt(SGPS_speed.value())/100; //actual used on OSD
-  mavdata_groundspeed=PApplet.parseInt(SGPS_speed.value())/100;
-  mavdata_altitude=PApplet.parseInt(SGPS_altitude.value()/100);
-  mavdata_heading=MwHeading;
-  mavdata_climbrate=PApplet.parseInt(sVario);
-
-  mavdata_throttle=PApplet.parseInt(map(Throttle_Yaw.arrayValue()[1],1000,2000,0,100));
-  mavdata_rssi=PApplet.parseInt((sMRSSI*100)/1023);
-  mavdata_gps_fixtype=PApplet.parseInt(SGPS_FIX.arrayValue()[0]);
-  if (mavdata_gps_fixtype>1){
-      mavdata_gps_fixtype=3;
-  }
-  mavdata_gps_sats=PApplet.parseInt(SGPS_numSat.value());
-  mavdata_gps_lat=GPSstartlat;
-  mavdata_gps_lon=GPSstartlon;
-//  System.out.println("Lat:"+ mavdata_gps_lat);
-//  System.out.println("Lon:"+ mavdata_gps_lon);
-  mavdata_voltage=PApplet.parseInt(sVBat * 1000);
-  mavdata_amperage=mavdata_throttle*100;
-  mavdata_remaining=66;
-  GPSstartlat=GPSstartlat+100;
-  GPSstartlon=GPSstartlon-100;
-}
 
 byte[][] raw_font;
 PrintWriter  Output;

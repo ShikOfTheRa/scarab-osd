@@ -81,7 +81,7 @@ uint16_t UntouchedStack(void)
 
 //------------------------------------------------------------------------
 #define MWVERS "MW-OSD - R1.6"  
-#define MWOSDVER 13      // for eeprom layout verification
+#define MWOSDVER 12      // for eeprom layout verification
 #include <avr/pgmspace.h>
 #undef PROGMEM
 #define PROGMEM __attribute__(( section(".progmem.data") ))

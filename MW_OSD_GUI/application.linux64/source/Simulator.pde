@@ -32,7 +32,7 @@ CheckBox checkboxSimItem[] = new CheckBox[SIMITEMS] ;
 CheckBox ShowSimBackground, UnlockControls, SGPS_FIX,SFRSKY;
 //Toggles
 Toggle toggleModeItems[] = new Toggle[boxnames.length] ;
-Toggle SimControlToggle,SimDisplayToggle,DEBUGGUI;
+Toggle SimControlToggle,DEBUGGUI;
 // Toggle HudOptionEnabled;
 
 // Slider2d-
@@ -41,7 +41,7 @@ Slider2D Pitch_Roll, Throttle_Yaw,MW_Pitch_Roll;
 Slider s_Altitude,s_Vario,s_VBat,s_MRSSI;
 
 Textlabel txtlblModeItems[] = new Textlabel[boxnames.length] ;
-Textlabel SimControlText,SimDisplayText,DEBUGGUItext;
+Textlabel SimControlText,DEBUGGUItext;
 
 // Knobs----
 Knob HeadingKnob,SGPSHeadHome;
@@ -284,16 +284,6 @@ SGControlBox = ScontrolP5.addGroup("SGControlBox")
                ;   
 
 
-SimDisplayToggle = (controlP5.Toggle) hideLabel(controlP5.addToggle("DisplaySim"));
-SimDisplayToggle.setPosition(5,17);
-SimDisplayToggle.setSize(35,10);
-SimDisplayToggle.setMode(ControlP5.SWITCH);
-SimDisplayToggle.setGroup(SGControlBox);
-SimDisplayToggle.setValue(0);
-//SimDisplayText = (controlP5.Toggle) hideLabel(controlP5.addTextlabel("SimControlText","Simulate on OSD",62,3));
-SimDisplayText = controlP5.addTextlabel("SimDisplayText","Display Simulator",45,17);
-SimDisplayText.setGroup(SGControlBox);
-
 
 SimControlToggle = (controlP5.Toggle) hideLabel(controlP5.addToggle("SendSim"));
 SimControlToggle.setPosition(5,5);
@@ -301,8 +291,9 @@ SimControlToggle.setSize(35,10);
 SimControlToggle.setMode(ControlP5.SWITCH);
 SimControlToggle.setGroup(SGControlBox);
 SimControlToggle.setValue(0);
+
 //SimControlText = (controlP5.Toggle) hideLabel(controlP5.addTextlabel("SimControlText","Simulate on OSD",45,3));
-SimControlText = controlP5.addTextlabel("SimControlText","Emulate FC",45,3);
+SimControlText = controlP5.addTextlabel("SimControlText","Simulate on OSD",45,3);
 SimControlText.setGroup(SGControlBox);
 
 DEBUGGUI =  (controlP5.Toggle) hideLabel(controlP5.addToggle("DEBUGGUI"));
@@ -657,44 +648,20 @@ void ShowCurrentThrottlePosition(){
 
 void ShowLatLon(){
   if(confItem[GetSetting("S_COORDINATES")].value() > 0) {
-    String lat=" 71.88970S";
-    String lon=" 71.88970W";
-
-    float t1=GPSstartlat;
-    t1=t1/10000000;
-    String latsign="N";
-    if (t1<0) latsign="S";
-    lat = " "+t1;
-    while (lat.length()<9){
-      lat+=" ";
-    }
-    lat=lat.substring(0,9);
-    lat=lat+latsign;
-
-    float t2=GPSstartlon;
-    t2=t2/10000000;
-    String lonsign="E";
-    if (t2<0){
-      lonsign="W";
-      t2=-t2;
-    }
-    lon = " "+t2;
-    while (lon.length()<9){
-      lon+=" ";
-    }
-    lon=lon.substring(0,9);
-    lon=lon+lonsign;
-
-
-
-    mapchar(0xca, SimPosn[MwGPSLatPositionTop]);
-    makeText(lat, SimPosn[MwGPSLatPositionTop]+1);
-    mapchar(0xcb, SimPosn[MwGPSLonPositionTop]);
-    makeText(lon, SimPosn[MwGPSLonPositionTop]+1);
-//    makeText(" 71.88970W", SimPosn[MwGPSLonPositionTop]+1);
-  }
+//  if(confItem[GetSetting("S_GPSCOORDTOP")].value() > 0) {
+  mapchar(0xca, SimPosn[MwGPSLatPositionTop]);
+  makeText(" 43.09486N", SimPosn[MwGPSLatPositionTop]+1);
+  mapchar(0xcb, SimPosn[MwGPSLonPositionTop]);
+  makeText(" 71.88970W", SimPosn[MwGPSLonPositionTop]+1);
+//  }
+//  else {
+//  mapchar(0xca, SimPosn[MwGPSLatPosition]);
+//  makeText(" 43.09486N", SimPosn[MwGPSLatPosition]+1);
+//  mapchar(0xcb, SimPosn[MwGPSLonPosition]);
+//  makeText(" 71.88970W", SimPosn[MwGPSLonPosition]+1);
+//  }
 }
-
+}
 
 void ShowDebug(){
   if(confItem[GetSetting("S_DEBUG")].value() > 0) {
