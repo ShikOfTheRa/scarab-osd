@@ -118,7 +118,7 @@ void ltm_check() {
       amperagesum = 360*dummy;
       MWAmperage  = 10*calculateCurrentFromConsumedCapacity(dummy);
     }
-    MwRssi = ltmread_u8();
+    MwRssi = ltmread_u8() * 4; // 0-255 to 0-1023 (1020, actually)
     dummy = ltmread_u8();
     uint8_t ltm_armfsmode = ltmread_u8();
     armed = (ltm_armfsmode & 0b00000001) ? 1 : 0;
