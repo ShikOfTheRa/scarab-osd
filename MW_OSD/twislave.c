@@ -461,11 +461,13 @@ ISR(TWI_vect)
 {
   top:;
   switch(TW_STATUS){
-    // Slave Receiver
-    case TW_SR_SLA_ACK:   // addressed, returned ack
-    case TW_SR_GCALL_ACK: // addressed generally, returned ack
-    case TW_SR_ARB_LOST_SLA_ACK:   // lost arbitration, returned ack
-    case TW_SR_ARB_LOST_GCALL_ACK: // lost arbitration, returned ack
+
+    /*
+     * Slave Receiver
+     */
+
+    case TW_SR_SLA_ACK:   // 0x60 addressed, returned ack
+    sr_sla_ack:;
       digitalDebug(DebugPin1, HIGH);
       // enter slave receiver mode
       twis_state = TWI_SRX;
@@ -474,8 +476,9 @@ ISR(TWI_vect)
       twis_reply(1);
       digitalDebug(DebugPin1, LOW);
       break;
-    case TW_SR_DATA_ACK:       // data received, returned ack
-    case TW_SR_GCALL_DATA_ACK: // data received generally, returned ack
+
+    case TW_SR_DATA_ACK:       // 0x80 data received, returned ack
+      sr_data_ack:;
       // if there is still room in the rx buffer
       if(twis_rxBufferIndex < TWI_RX_BUFFER_LENGTH){
         // put byte in buffer and ack
@@ -486,7 +489,7 @@ ISR(TWI_vect)
         twis_reply(0);
       }
       break;
-    case TW_SR_STOP: // stop or repeated start condition received
+    case TW_SR_STOP: // 0xA0 stop or repeated start condition received
       digitalDebug(DebugPin2, HIGH);
       // ack future responses and leave slave receiver state
       //twis_releaseBus();
@@ -511,15 +514,14 @@ ISR(TWI_vect)
 
       break;
 
-    case TW_SR_DATA_NACK:       // data received, returned nack
-    case TW_SR_GCALL_DATA_NACK: // data received generally, returned nack
+    case TW_SR_DATA_NACK:       // 0x88 data received, returned nack
+      sr_data_nack:;
       // nack back at master
       twis_reply(0);
       break;
-    
-    // Slave Transmitter
-    case TW_ST_SLA_ACK:          // addressed, returned ack
-    case TW_ST_ARB_LOST_SLA_ACK: // arbitration lost, returned ack
+
+    case TW_ST_SLA_ACK:          // 0xA8 addressed, returned ack
+      st_sla_ack:;
       // enter slave transmitter mode
       twis_state = TWI_STX;
       // ready the tx buffer index for iteration
@@ -542,7 +544,7 @@ ISR(TWI_vect)
 
       // Fall through; transmit first byte from buffer
 
-    case TW_ST_DATA_ACK: // byte sent, ack returned
+    case TW_ST_DATA_ACK: // 0xB8 byte sent, ack returned
       // copy data to output register
       if (twis_txMode == TXMODE_BUFFER) {
         TWDR = twis_txBuffer[twis_txBufferIndex++];
@@ -563,8 +565,8 @@ ISR(TWI_vect)
         }
       }
       break;
-    case TW_ST_DATA_NACK: // received nack, we are done 
-    case TW_ST_LAST_DATA: // received ack, but we are done already!
+    case TW_ST_DATA_NACK: // 0xC0 received nack, we are done 
+    case TW_ST_LAST_DATA: // 0xC8 received ack, but we are done already!
       // ack future responses
       twis_reply(1);
       // leave slave receiver state
@@ -572,12 +574,24 @@ ISR(TWI_vect)
       break;
 
     // All
-    case TW_NO_INFO:   // no state information
+    case TW_NO_INFO:   // 0xF8 no state information
       break;
-    case TW_BUS_ERROR: // bus error, illegal stop/start
+    case TW_BUS_ERROR: // 0x00 bus error, illegal stop/start
       twis_error = TW_BUS_ERROR;
       twis_stop();
       break;
+
+    // Rare cases
+    case TW_SR_GCALL_ACK: // 0x70 addressed generally, returned ack
+    case TW_SR_ARB_LOST_SLA_ACK:   // 0x68 lost arbitration, returned ack
+    case TW_SR_ARB_LOST_GCALL_ACK: // 0x78 lost arbitration, returned ack
+      goto sr_sla_ack;
+    case TW_SR_GCALL_DATA_ACK: // 0x90 data received generally, returned ack
+      goto sr_data_ack;
+    case TW_SR_GCALL_DATA_NACK: // 0x98 data received generally, returned nack
+      goto sr_data_nack;
+    case TW_ST_ARB_LOST_SLA_ACK: // 0xB0 arbitration lost, returned ack
+      goto st_sla_ack;
   }
 }
 
