@@ -109,7 +109,7 @@ void TwoWireUB::begin(uint8_t address, int pin)
 
   irqpin = pin;
 
-  twis_attachSlaveTxEvent(onRequestService);
+  //twis_attachSlaveTxEvent(onRequestService);
   twis_attachSlaveRxEvent(onReceiveService);
 
   begin();
@@ -317,6 +317,7 @@ void TwoWireUB::updateIRQ(void)
   _updateIRQ();
 }
 
+#if 0
 // behind the scenes function that is called when data is requested
 void TwoWireUB::onRequestService(void)
 {
@@ -347,6 +348,7 @@ void TwoWireUB::onRequestService(void)
     break;
   }
 }
+#endif
 
 // Preinstantiate Objects //////////////////////////////////////////////////////
 
