@@ -30,6 +30,8 @@
 #include <avr/interrupt.h>
 #include <compat/twi.h>
 #include "Arduino.h" // for digitalWrite
+#include "sc16is7x0.h"
+#include "ubreg.h"
 
 #ifndef cbi
 #define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
@@ -60,7 +62,7 @@ static volatile uint8_t twis_slarw;
 static volatile uint8_t twis_sendStop;			// should the transaction end with a stop
 static volatile uint8_t twis_inRepStart;			// in the middle of a repeated start
 
-static void (*twis_onSlaveTransmit)(void);
+//static void (*twis_onSlaveTransmit)(void);
 static void (*twis_onSlaveReceive)(uint8_t*, int);
 
 static uint8_t twis_txBuffer[TWI_TX_BUFFER_LENGTH];
@@ -394,6 +396,7 @@ void twis_attachSlaveRxEvent( void (*function)(uint8_t*, int) )
   twis_onSlaveReceive = function;
 }
 
+#if 0
 /* 
  * Function twis_attachSlaveTxEvent
  * Desc     sets function called before a slave write operation
@@ -404,6 +407,7 @@ void twis_attachSlaveTxEvent( void (*function)(void) )
 {
   twis_onSlaveTransmit = function;
 }
+#endif
 
 /* 
  * Function twis_reply
@@ -459,6 +463,8 @@ void twis_releaseBus(void)
 
 ISR(TWI_vect)
 {
+  static uint8_t _reg;
+
   top:;
   switch(TW_STATUS){
 
@@ -494,12 +500,14 @@ ISR(TWI_vect)
       // ack future responses and leave slave receiver state
       //twis_releaseBus();
 
-#if 0
-      // put a null char after data if there's room
-      if(twis_rxBufferIndex < TWI_RX_BUFFER_LENGTH){
-        twis_rxBuffer[twis_rxBufferIndex] = '\0';
+      _reg = twis_rxBuffer[0] >> 3; // Ignore channel
+
+      if (twis_rxBufferIndex == 1) {
+        // Register (sub-address) designation cycle for a future read.
+        twis_releaseBus();
+        break;
       }
-#endif
+
       // callback to user defined callback
       twis_onSlaveReceive(twis_rxBuffer, twis_rxBufferIndex);
       // since we submit rx buffer to "wire" library, we can reset it
@@ -524,6 +532,52 @@ ISR(TWI_vect)
       st_sla_ack:;
       // enter slave transmitter mode
       twis_state = TWI_STX;
+
+      /*
+       * Fast response case
+       */
+      switch (_reg) {
+      case IS7x0_REG_RHR:
+        if (TWI_TX_QLEN) {
+          TWDR = twis_txQueue[twis_qtail];
+          twis_reply(1);
+          twis_qtail = (twis_qtail + 1) % TWI_TX_QUEUE_LENGTH;
+        } else {
+          TWDR = 0;
+          twis_reply(0);
+        }
+        goto out;
+
+      case IS7x0_REG_IIR:
+        TWDR = 0x01; // XXX Temporary, should return IIR
+        twis_reply(1);
+        goto out;
+
+      case IS7x0_REG_RXLVL:
+        TWDR = TWI_TX_QLEN;
+        twis_reply(1);
+        goto out;
+
+      case IS7x0_REG_TXLVL:
+        TWDR = TWI_RX_BUFFER_LENGTH; // XXX Should return room in client's buf
+        twis_reply(1);
+        goto out;
+
+      case UB_REG_ID:
+        memcpy(twis_txBuffer, (void *)"UB\x01\x00", 4);
+        twis_txBufferLength = 4;
+        twis_txBufferIndex = 0;
+        twis_txMode = TXMODE_BUFFER; // XXX Will be deleted
+        goto st_data_ack_other;
+
+      default:
+        twis_txBufferLength = 1;
+        twis_txBuffer[0] = 0x00;
+        goto st_data_ack_other;
+      }
+
+// XXX No more upper layer processing for transmitter handling
+#if 0
       // ready the tx buffer index for iteration
       twis_txBufferIndex = 0;
       // set tx buffer length to be zero, to verify if user changes it
@@ -532,7 +586,7 @@ ISR(TWI_vect)
       // request for data to transmit.
       digitalDebug(DebugPin3, HIGH);
 
-      twis_onSlaveTransmit();
+      twis_onSlaveTransmit(_reg);
 
       digitalDebug(DebugPin3, LOW);
       // if they didn't change buffer & length, initialize it
@@ -541,11 +595,32 @@ ISR(TWI_vect)
         twis_txBufferLength = 1;
         twis_txBuffer[0] = 0x00;
       }
+#endif
 
-      // Fall through; transmit first byte from buffer
+      // Fall through
 
     case TW_ST_DATA_ACK: // 0xB8 byte sent, ack returned
+
+      /*
+       * Fast response case
+       */
+      if (_reg == IS7x0_REG_RHR) {
+        if (TWI_TX_QLEN) {
+          TWDR = twis_txQueue[twis_qtail];
+          twis_reply(1);
+          twis_qtail = (twis_qtail + 1) % TWI_TX_QUEUE_LENGTH;
+        } else {
+          TWDR = 0;
+          twis_reply(0);
+        }
+        goto out;
+      }
+
+      // XXX FIFO case (else-clause) can be deleted if fast response works.
       // copy data to output register
+
+    st_data_ack_other:;
+
       if (twis_txMode == TXMODE_BUFFER) {
         TWDR = twis_txBuffer[twis_txBufferIndex++];
         // if there is more to send, ack, otherwise nack
@@ -565,6 +640,7 @@ ISR(TWI_vect)
         }
       }
       break;
+
     case TW_ST_DATA_NACK: // 0xC0 received nack, we are done 
     case TW_ST_LAST_DATA: // 0xC8 received ack, but we are done already!
       // ack future responses
@@ -593,5 +669,6 @@ ISR(TWI_vect)
     case TW_ST_ARB_LOST_SLA_ACK: // 0xB0 arbitration lost, returned ack
       goto st_sla_ack;
   }
+  out:;
 }
 
