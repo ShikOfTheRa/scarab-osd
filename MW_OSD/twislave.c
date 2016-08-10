@@ -586,7 +586,7 @@ ISR(TWI_vect)
       // request for data to transmit.
       digitalDebug(DebugPin3, HIGH);
 
-      twis_onSlaveTransmit(_reg);
+      twis_onSlaveTransmit();
 
       digitalDebug(DebugPin3, LOW);
       // if they didn't change buffer & length, initialize it
