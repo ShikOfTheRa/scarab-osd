@@ -57,10 +57,10 @@
 #define digitalDebug(pin, state)
 #endif
 
-static volatile uint8_t twis_state;
-static volatile uint8_t twis_slarw;
-static volatile uint8_t twis_sendStop;			// should the transaction end with a stop
-static volatile uint8_t twis_inRepStart;			// in the middle of a repeated start
+//static volatile uint8_t twis_state;
+//static volatile uint8_t twis_slarw;
+//static volatile uint8_t twis_sendStop;			// should the transaction end with a stop
+//static volatile uint8_t twis_inRepStart;			// in the middle of a repeated start
 
 //static void (*twis_onSlaveTransmit)(void);
 static void (*twis_onSlaveReceive)(uint8_t*, int);
@@ -100,9 +100,9 @@ pinMode(DebugPin3, OUTPUT);
 #endif
 
   // initialize state
-  twis_state = TWI_READY;
-  twis_sendStop = true;		// default value
-  twis_inRepStart = false;
+  //twis_state = TWI_READY;
+  //twis_sendStop = true;		// default value
+  //twis_inRepStart = false;
 
   // initialize internal variables
   twis_qhead = 0;
@@ -337,11 +337,13 @@ uint8_t twis_transmit(const uint8_t* data, uint8_t length)
   if(TWI_TX_BUFFER_LENGTH < length){
     return 1;
   }
-  
+
+#if 0
   // ensure we are currently a slave transmitter
   if(TWI_STX != twis_state){
     return 2;
   }
+#endif
   
   // set length and copy data into tx buffer
   twis_txBufferLength = length;
@@ -375,10 +377,12 @@ uint8_t twis_txqlen()
 
 uint8_t twis_txtxq()
 {
+#if 0
   // ensure we are currently a slave transmitter
   if(TWI_STX != twis_state){
     return 2;
   }
+#endif
 
   twis_txMode = TXMODE_QUEUE;
 
@@ -425,6 +429,7 @@ void twis_reply(uint8_t ack)
   }
 }
 
+#if 0
 /* 
  * Function twis_stop
  * Desc     relinquishes bus master status
@@ -445,6 +450,7 @@ void twis_stop(void)
   // update twi state
   twis_state = TWI_READY;
 }
+#endif
 
 /* 
  * Function twis_releaseBus
@@ -457,8 +463,10 @@ void twis_releaseBus(void)
   // release bus
   TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWEA) | _BV(TWINT);
 
+#if 0
   // update twi state
   twis_state = TWI_READY;
+#endif
 }
 
 ISR(TWI_vect)
@@ -475,8 +483,10 @@ ISR(TWI_vect)
     case TW_SR_SLA_ACK:   // 0x60 addressed, returned ack
     sr_sla_ack:;
       digitalDebug(DebugPin1, HIGH);
+#if 0
       // enter slave receiver mode
       twis_state = TWI_SRX;
+#endif
       // indicate that rx buffer can be overwritten and ack
       twis_rxBufferIndex = 0;
       twis_reply(1);
@@ -495,8 +505,11 @@ ISR(TWI_vect)
         twis_reply(0);
       }
       break;
+
     case TW_SR_STOP: // 0xA0 stop or repeated start condition received
+
       digitalDebug(DebugPin2, HIGH);
+
       // ack future responses and leave slave receiver state
       //twis_releaseBus();
 
@@ -505,6 +518,9 @@ ISR(TWI_vect)
       if (twis_rxBufferIndex == 1) {
         // Register (sub-address) designation cycle for a future read.
         twis_releaseBus();
+
+        digitalDebug(DebugPin2, LOW);
+
         break;
       }
 
@@ -530,8 +546,10 @@ ISR(TWI_vect)
 
     case TW_ST_SLA_ACK:          // 0xA8 addressed, returned ack
       st_sla_ack:;
+#if 0
       // enter slave transmitter mode
       twis_state = TWI_STX;
+#endif
 
       /*
        * Fast response case
@@ -645,17 +663,22 @@ ISR(TWI_vect)
     case TW_ST_LAST_DATA: // 0xC8 received ack, but we are done already!
       // ack future responses
       twis_reply(1);
+#if 0
       // leave slave receiver state
       twis_state = TWI_READY;
+#endif
       break;
 
     // All
     case TW_NO_INFO:   // 0xF8 no state information
       break;
+#if 0
+// Can't happen?
     case TW_BUS_ERROR: // 0x00 bus error, illegal stop/start
       twis_error = TW_BUS_ERROR;
       twis_stop();
       break;
+#endif
 
     // Rare cases
     case TW_SR_GCALL_ACK: // 0x70 addressed generally, returned ack
