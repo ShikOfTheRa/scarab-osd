@@ -63,7 +63,7 @@
 //static volatile uint8_t twis_inRepStart;			// in the middle of a repeated start
 
 //static void (*twis_onSlaveTransmit)(void);
-static void (*twis_onSlaveReceive)(uint8_t*, int) = NULL;
+static void (*twis_onRegisterWrite)(uint8_t, uint8_t) = NULL;
 
 static uint8_t twis_txBuffer[TWI_TX_BUFFER_LENGTH];
 static volatile uint8_t twis_txBufferIndex;
@@ -89,7 +89,7 @@ static volatile uint8_t twis_txMode;
 static uint8_t twis_rxBuffer[2]; // Only used for non-FIFO register writes
 static volatile uint8_t twis_rxBufferIndex;
 
-static volatile uint8_t twis_error;
+//static volatile uint8_t twis_error;
 
 /* 
  * Function twis_init
@@ -169,165 +169,6 @@ void twis_setAddress(uint8_t address)
   TWAR = address << 1;
 }
 
-#if 0
-/* 
- * Function twis_readFrom
- * Desc     attempts to become twi bus master and read a
- *          series of bytes from a device on the bus
- * Input    address: 7bit i2c device address
- *          data: pointer to byte array
- *          length: number of bytes to read into array
- *          sendStop: Boolean indicating whether to send a stop at the end
- * Output   number of bytes read
- */
-uint8_t twis_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sendStop)
-{
-  uint8_t i;
-
-  // ensure data will fit into buffer
-  if(TWI_BUFFER_LENGTH < length){
-    return 0;
-  }
-
-  // wait until twi is ready, become master receiver
-  while(TWI_READY != twis_state){
-    continue;
-  }
-  twis_state = TWI_MRX;
-  twis_sendStop = sendStop;
-  // reset error state (0xFF.. no error occured)
-  twis_error = 0xFF;
-
-  // initialize buffer iteration vars
-  twis_masterBufferIndex = 0;
-  twis_masterBufferLength = length-1;  // This is not intuitive, read on...
-  // On receive, the previously configured ACK/NACK setting is transmitted in
-  // response to the received byte before the interrupt is signalled. 
-  // Therefor we must actually set NACK when the _next_ to last byte is
-  // received, causing that NACK to be sent in response to receiving the last
-  // expected byte of data.
-
-  // build sla+w, slave device address + w bit
-  twis_slarw = TW_READ;
-  twis_slarw |= address << 1;
-
-  if (true == twis_inRepStart) {
-    // if we're in the repeated start state, then we've already sent the start,
-    // (@@@ we hope), and the TWI statemachine is just waiting for the address byte.
-    // We need to remove ourselves from the repeated start state before we enable interrupts,
-    // since the ISR is ASYNC, and we could get confused if we hit the ISR before cleaning
-    // up. Also, don't enable the START interrupt. There may be one pending from the 
-    // repeated start that we sent ourselves, and that would really confuse things.
-    twis_inRepStart = false;			// remember, we're dealing with an ASYNC ISR
-    do {
-      TWDR = twis_slarw;
-    } while(TWCR & _BV(TWWC));
-    TWCR = _BV(TWINT) | _BV(TWEA) | _BV(TWEN) | _BV(TWIE);	// enable INTs, but not START
-  }
-  else
-    // send start condition
-    TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWEA) | _BV(TWINT) | _BV(TWSTA);
-
-  // wait for read operation to complete
-  while(TWI_MRX == twis_state){
-    continue;
-  }
-
-  if (twis_masterBufferIndex < length)
-    length = twis_masterBufferIndex;
-
-  // copy twi buffer to data
-  for(i = 0; i < length; ++i){
-    data[i] = twis_masterBuffer[i];
-  }
-	
-  return length;
-}
-#endif
-
-#if 0
-/* 
- * Function twis_writeTo
- * Desc     attempts to become twi bus master and write a
- *          series of bytes to a device on the bus
- * Input    address: 7bit i2c device address
- *          data: pointer to byte array
- *          length: number of bytes in array
- *          wait: boolean indicating to wait for write or not
- *          sendStop: boolean indicating whether or not to send a stop at the end
- * Output   0 .. success
- *          1 .. length to long for buffer
- *          2 .. address send, NACK received
- *          3 .. data send, NACK received
- *          4 .. other twi error (lost bus arbitration, bus error, ..)
- */
-uint8_t twis_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait, uint8_t sendStop)
-{
-  uint8_t i;
-
-  // ensure data will fit into buffer
-  if(TWI_BUFFER_LENGTH < length){
-    return 1;
-  }
-
-  // wait until twi is ready, become master transmitter
-  while(TWI_READY != twis_state){
-    continue;
-  }
-  twis_state = TWI_MTX;
-  twis_sendStop = sendStop;
-  // reset error state (0xFF.. no error occured)
-  twis_error = 0xFF;
-
-  // initialize buffer iteration vars
-  twis_masterBufferIndex = 0;
-  twis_masterBufferLength = length;
-  
-  // copy data to twi buffer
-  for(i = 0; i < length; ++i){
-    twis_masterBuffer[i] = data[i];
-  }
-  
-  // build sla+w, slave device address + w bit
-  twis_slarw = TW_WRITE;
-  twis_slarw |= address << 1;
-  
-  // if we're in a repeated start, then we've already sent the START
-  // in the ISR. Don't do it again.
-  //
-  if (true == twis_inRepStart) {
-    // if we're in the repeated start state, then we've already sent the start,
-    // (@@@ we hope), and the TWI statemachine is just waiting for the address byte.
-    // We need to remove ourselves from the repeated start state before we enable interrupts,
-    // since the ISR is ASYNC, and we could get confused if we hit the ISR before cleaning
-    // up. Also, don't enable the START interrupt. There may be one pending from the 
-    // repeated start that we sent outselves, and that would really confuse things.
-    twis_inRepStart = false;			// remember, we're dealing with an ASYNC ISR
-    do {
-      TWDR = twis_slarw;				
-    } while(TWCR & _BV(TWWC));
-    TWCR = _BV(TWINT) | _BV(TWEA) | _BV(TWEN) | _BV(TWIE);	// enable INTs, but not START
-  }
-  else
-    // send start condition
-    TWCR = _BV(TWINT) | _BV(TWEA) | _BV(TWEN) | _BV(TWIE) | _BV(TWSTA);	// enable INTs
-
-  // wait for write operation to complete
-  while(wait && (TWI_MTX == twis_state)){
-    continue;
-  }
-  
-  if (twis_error == 0xFF)
-    return 0;	// success
-  else if (twis_error == TW_MT_SLA_NACK)
-    return 2;	// error: address send, nack received
-  else if (twis_error == TW_MT_DATA_NACK)
-    return 3;	// error: data send, nack received
-  else
-    return 4;	// other twi error
-}
-#endif
-
 /* 
  * Function twis_transmit
  * Desc     fills slave tx buffer with data
@@ -347,13 +188,6 @@ uint8_t twis_transmit(const uint8_t* data, uint8_t length)
     return 1;
   }
 
-#if 0
-  // ensure we are currently a slave transmitter
-  if(TWI_STX != twis_state){
-    return 2;
-  }
-#endif
-  
   // set length and copy data into tx buffer
   twis_txBufferLength = length;
   for(i = 0; i < length; ++i){
@@ -386,13 +220,6 @@ uint8_t twis_txqlen()
 
 uint8_t twis_txtxq()
 {
-#if 0
-  // ensure we are currently a slave transmitter
-  if(TWI_STX != twis_state){
-    return 2;
-  }
-#endif
-
   twis_txMode = TXMODE_QUEUE;
 
   return 0;
@@ -427,23 +254,10 @@ int twis_peek(void)
  * Input    function: callback function to use
  * Output   none
  */
-void twis_attachSlaveRxEvent( void (*function)(uint8_t*, int) )
+void twis_attachRegisterWriteHandler( void (*function)(uint8_t, uint8_t) )
 {
-  twis_onSlaveReceive = function;
+  twis_onRegisterWrite = function;
 }
-
-#if 0
-/* 
- * Function twis_attachSlaveTxEvent
- * Desc     sets function called before a slave write operation
- * Input    function: callback function to use
- * Output   none
- */
-void twis_attachSlaveTxEvent( void (*function)(void) )
-{
-  twis_onSlaveTransmit = function;
-}
-#endif
 
 #if 0
 /* 
@@ -472,7 +286,6 @@ void twis_reply(uint8_t ack)
 
 #endif
 
-#if 1
 /* 
  * Function twis_stop
  * Desc     relinquishes bus master status
@@ -489,13 +302,7 @@ void twis_stop(void)
   while(TWCR & _BV(TWSTO)){
     continue;
   }
-
-#if 0
-  // update twi state
-  twis_state = TWI_READY;
-#endif
 }
-#endif
 
 /* 
  * Function twis_releaseBus
@@ -532,10 +339,7 @@ ISR(TWI_vect)
     case TW_SR_SLA_ACK:   // 0x60 addressed, returned ack
     sr_sla_ack:;
       digitalDebug(DebugPin1, HIGH);
-#if 0
-      // enter slave receiver mode
-      twis_state = TWI_SRX;
-#endif
+
       // indicate that rx buffer can be overwritten and ack
       twis_rxBufferIndex = 0;
       twis_reply(1);
@@ -596,8 +400,8 @@ ISR(TWI_vect)
       // Process register writes:
       // Call user defined callback
 
-      if (_reg != IS7x0_REG_THR && twis_onSlaveReceive) {
-        twis_onSlaveReceive(twis_rxBuffer, twis_rxBufferIndex);
+      if (_reg != IS7x0_REG_THR && twis_onRegisterWrite) {
+        twis_onRegisterWrite(_reg, twis_rxBuffer[1]);
       }
 
       twis_releaseBus();
@@ -618,10 +422,6 @@ ISR(TWI_vect)
 
     case TW_ST_SLA_ACK:          // 0xA8 addressed, returned ack
       st_sla_ack:;
-#if 0
-      // enter slave transmitter mode
-      twis_state = TWI_STX;
-#endif
 
       /*
        * Fast response case
@@ -666,28 +466,7 @@ ISR(TWI_vect)
         goto st_data_ack_other;
       }
 
-// XXX No more upper layer processing for transmitter handling
-#if 0
-      // ready the tx buffer index for iteration
-      twis_txBufferIndex = 0;
-      // set tx buffer length to be zero, to verify if user changes it
-      twis_txBufferLength = 0;
-
-      // request for data to transmit.
-      digitalDebug(DebugPin3, HIGH);
-
-      twis_onSlaveTransmit(_reg);
-
-      digitalDebug(DebugPin3, LOW);
-      // if they didn't change buffer & length, initialize it
-
-      if(twis_txMode == TXMODE_BUFFER && 0 == twis_txBufferLength){
-        twis_txBufferLength = 1;
-        twis_txBuffer[0] = 0x00;
-      }
-#endif
-
-      // Fall through
+      break; // All gone at this point, but for consistency.
 
     case TW_ST_DATA_ACK: // 0xB8 byte sent, ack returned
 
@@ -735,26 +514,15 @@ ISR(TWI_vect)
     case TW_ST_LAST_DATA: // 0xC8 received ack, but we are done already!
       // ack future responses
       twis_reply(1);
-#if 0
-      // leave slave receiver state
-      twis_state = TWI_READY;
-#endif
       break;
 
     // All
     case TW_NO_INFO:   // 0xF8 no state information
-// XXX should consider releasing the bus
-//twis_releaseBus();
       break;
 
-// Can't happen?
     case TW_BUS_ERROR: // 0x00 bus error, illegal stop/start
-// XXX should consider releasing the bus
-//twis_releaseBus();
-#if 1
-      //twis_error = TW_BUS_ERROR;
+      // Dont remove this. Hangs the master at startup?
       twis_stop();
-#endif
       break;
 
     // Rare cases

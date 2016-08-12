@@ -38,32 +38,7 @@ extern "C" {
 #include "sc16is7x0.h"
 #include "ubreg.h"
 
-#if 0
-#define DN_BUFFER_LENGTH 32
-#define UP_BUFFER_LENGTH 8      // Can be smaller?
-#endif
-
 // Initialize Class Variables //////////////////////////////////////////////////
-
-#if 0
-uint8_t TwoWireUB::dnBuffer[DN_BUFFER_LENGTH];
-uint8_t TwoWireUB::dnBufferHead = 0;
-uint8_t TwoWireUB::dnBufferTail = 0;
-#define DNBUFLEN ((dnBufferHead - dnBufferTail) & (DN_BUFFER_LENGTH - 1))
-#define DNBUFROOM (DN_BUFFER_LENGTH - DNBUFLEN - 1)
-#endif
-
-#if 0
-uint8_t TwoWireUB::upBuffer[UP_BUFFER_LENGTH];
-uint8_t TwoWireUB::upBufferIndex = 0;
-uint8_t TwoWireUB::upBufferLength = 0;
-#endif
-
-#if 0
-//uint8_t TwoWireUB::transmitting = 0;
-//void (*TwoWireUB::user_onRequest)(void);
-//void (*TwoWireUB::user_onReceive)(int);
-#endif
 
 uint8_t reg;
 uint8_t reg_iir;
@@ -94,18 +69,6 @@ TwoWireUB::TwoWireUB()
 
 void TwoWireUB::begin(void)
 {
-#if 0
-// Not used anymore
-  dnBufferHead = 0;
-  dnBufferTail = 0;
-#endif
-
-#if 0
-// Not used anymore
-  upBufferIndex = 0;
-  upBufferLength = 0;
-#endif
-
   if (irqpin >= 0)
     ACTIVELOW_INIT(irqpin);
 
@@ -121,7 +84,7 @@ void TwoWireUB::begin(uint8_t address, int pin)
   irqpin = pin;
 
   //twis_attachSlaveTxEvent(onRequestService);
-  twis_attachSlaveRxEvent(onRegisterWrite);
+  twis_attachRegisterWriteHandler(onRegisterWrite);
 
   begin();
 }
@@ -152,24 +115,6 @@ void TwoWireUB::setThreshold(int rxlevel, int txlevel)
    rhrThreshold = rxlevel;
    thrThreshold = txlevel;
 }
-
-#if 0
-// must be called in:
-// slave tx event callback
-size_t TwoWireUB::writeReg(uint8_t data)
-{
-  twis_transmit(&data, 1);
-  return 1;
-}
-
-// must be called in:
-// slave tx event callback
-size_t TwoWireUB::writeReg(const uint8_t *data, size_t quantity)
-{
-  twis_transmit(data, quantity);
-  return quantity;
-}
-#endif
 
 size_t TwoWireUB::write(const uint8_t data)
 {
@@ -205,75 +150,20 @@ int TwoWireUB::peek(void)
   return twis_peek();
 }
 
-#if 0
-// must be called in:
-// slave rx event callback
-// or after requestFrom(address, numBytes)
-int TwoWireUB::read(void)
-{
-  int value;
-
-  if (DNBUFLEN) {
-    value = dnBuffer[dnBufferTail];
-    dnBufferTail = (dnBufferTail + 1) % DN_BUFFER_LENGTH;
-  } else {
-    value = -1;
-  }
-  return value;
-}
-
-// must be called in:
-// slave rx event callback
-// or after requestFrom(address, numBytes)
-int TwoWireUB::peek(void)
-{
-  int value;
-
-  if (DNBUFLEN) {
-    value = dnBuffer[dnBufferTail];
-  } else {
-    value = -1;
-  }
-  return value;
-}
-#endif
-
 void TwoWireUB::flush(void)
 {
   // XXX: to be implemented.
 }
 
 // Called from ISR upon non-FIFO register writes.
-// numBytes should always be 2 (reg + data).
-void TwoWireUB::onRegisterWrite(uint8_t* inBytes, int numBytes)
+void TwoWireUB::onRegisterWrite(uint8_t reg, uint8_t data)
 {
   uint8_t fcr;
 
-  //reg = (*inBytes++ & 0x7f) >> 3;
-  reg = *inBytes++; // Already shifted.
-
-  if (--numBytes == 0)
-    return;
-
-  // Write registers
-
   switch (reg) {
-#if 0
-  case IS7x0_REG_THR:
-    while (numBytes--) {
-        if (DNBUFROOM) {
-          dnBuffer[dnBufferHead] = *inBytes++;
-          dnBufferHead = (dnBufferHead + 1) % DN_BUFFER_LENGTH;
-        } else {
-          break;
-        }
-    }
-    break;
-#endif
-
   case IS7x0_REG_FCR:
     // Should handle FIFO reset
-    fcr = *inBytes;
+    fcr = data;
     break;
 
   case IS7x0_REG_IOCONTROL:
@@ -282,12 +172,12 @@ void TwoWireUB::onRegisterWrite(uint8_t* inBytes, int numBytes)
 
 #ifndef EMBEDDED
   case UB_REG_BRH:
-    reg_brh = *inBytes;
+    reg_brh = data;
     break;
 
   case UB_REG_BRL:
     // Calling Serial.begin() on already began Serial shouldn't be a problem.
-    Serial.begin(((reg_brh << 8) | *inBytes) * 150);
+    Serial.begin(((reg_brh << 8) | data) * 150);
     break;
 #endif
 
@@ -317,6 +207,7 @@ void TwoWireUB::_updateIRQ(void)
   } else if (upqlen && (micros() - lastWrite > writeTimo)) {
     iir = IS7x0_IIR_RXTIMO;
   }
+
 #if 0
  else if (DNBUFROOM > thrThreshold && thrArm) {
     iir = IS7x0_IIR_THR;
@@ -343,40 +234,6 @@ void TwoWireUB::updateIRQ(void)
 {
   _updateIRQ();
 }
-
-#if 0
-// behind the scenes function that is called when data is requested
-// XXX All read request is now handled within ISR.
-void TwoWireUB::onRegisterRead(void)
-{
-  uint8_t len;
-
-  switch (reg) {
-  case IS7x0_REG_RHR:
-    twis_txtxq();
-    _updateIRQ();
-    break;
-
-  case IS7x0_REG_IIR:
-    twis_transmit(&reg_iir, 1);
-    break;
-
-  case IS7x0_REG_RXLVL:
-    len = twis_txqlen();
-    twis_transmit(&len, 1);
-    break;
-
-  case IS7x0_REG_TXLVL:
-    len = DNBUFROOM;
-    twis_transmit(&len, 1);
-    break;
-
-  case UB_REG_ID:
-    twis_transmit((const uint8_t *)"UB\x01\x00", 4);
-    break;
-  }
-}
-#endif
 
 // Preinstantiate Objects //////////////////////////////////////////////////////
 
