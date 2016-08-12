@@ -37,24 +37,8 @@
 class TwoWireUB : public Stream
 {
   private:
-    static uint8_t dnBuffer[];
-    static uint8_t dnBufferHead;
-    static uint8_t dnBufferTail;
 
-#if 0
-    static uint8_t upBuffer[];
-    static uint8_t upBufferIndex;
-    static uint8_t upBufferLength;
-#endif
-
-    static uint8_t transmitting;
-
-#if 0
-    static void (*user_onRequest)(void);
-    static void (*user_onReceive)(int);
-#endif
-    static void onRegisterRead(void);
-    static void onRegisterWrite(uint8_t*, int);
+    static void onRegisterWrite(uint8_t, uint8_t);
 
     static void begin(void);
     static void _updateIRQ(void);
@@ -68,25 +52,13 @@ class TwoWireUB : public Stream
     void setWriteTimo(unsigned long);
     void setThreshold(int, int);
     void updateIRQ(void);
-    //void beginTransmission(uint8_t);
-    //void beginTransmission(int);
-    //uint8_t endTransmission(void);
-    //uint8_t endTransmission(uint8_t);
-    //uint8_t requestFrom(uint8_t, uint8_t);
-    //uint8_t requestFrom(uint8_t, uint8_t, uint8_t);
-    //uint8_t requestFrom(uint8_t, uint8_t, uint32_t, uint8_t, uint8_t);
-    //uint8_t requestFrom(int, int);
-    //uint8_t requestFrom(int, int, int);
-    //size_t writeReg(uint8_t);
-    //size_t writeReg(const uint8_t *, size_t);
+
     virtual size_t write(uint8_t);
     virtual size_t write(const uint8_t *, size_t);
     virtual int available(void);
     virtual int read(void);
     virtual int peek(void);
     virtual void flush(void);
-    void onReceive( void (*)(int) );
-    void onRequest( void (*)(void) );
 
     inline size_t write(unsigned long n) { return write((uint8_t)n); }
     inline size_t write(long n) { return write((uint8_t)n); }
