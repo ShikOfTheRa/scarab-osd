@@ -73,13 +73,13 @@ static uint8_t twis_txQueue[TWI_TX_QUEUE_LENGTH];
 static volatile uint8_t twis_txqin;
 static volatile uint8_t twis_txqout;
 #define TWI_TX_QLEN ((twis_txqin - twis_txqout) & (TWI_TX_QUEUE_LENGTH - 1))
-#define TWI_TX_QROOM (TWI_TX_QUEUE_LENGTH - TWI_TX_QLEN)
+#define TWI_TX_QROOM (TWI_TX_QUEUE_LENGTH - TWI_TX_QLEN - 1)
 
 static uint8_t twis_rxQueue[TWI_RX_QUEUE_LENGTH];
 static volatile uint8_t twis_rxqin;
 static volatile uint8_t twis_rxqout;
 #define TWI_RX_QLEN ((twis_rxqin - twis_rxqout) & (TWI_RX_QUEUE_LENGTH - 1))
-#define TWI_RX_QROOM (TWI_RX_QUEUE_LENGTH - TWI_RX_QLEN)
+#define TWI_RX_QROOM (TWI_RX_QUEUE_LENGTH - TWI_RX_QLEN - 1)
 
 static volatile uint8_t twis_txMode;
 #define TXMODE_BUFFER 0
@@ -408,8 +408,8 @@ int twis_read(void)
   int data;
 
   if (TWI_RX_QLEN) {
-    data = twis_rxQueue[twis_txqout];
-    twis_txqout = (twis_txqout + 1) % TWI_RX_QUEUE_LENGTH;
+    data = twis_rxQueue[twis_rxqout];
+    twis_rxqout = (twis_rxqout + 1) % TWI_RX_QUEUE_LENGTH;
     return data;
   }
 
@@ -418,7 +418,7 @@ int twis_read(void)
 
 int twis_peek(void)
 {
-  return TWI_RX_QLEN ? twis_rxQueue[twis_txqout] : -1;
+  return TWI_RX_QLEN ? twis_rxQueue[twis_rxqout] : -1;
 }
 
 /* 
@@ -461,7 +461,7 @@ void twis_reply(uint8_t ack)
   }
 }
 
-#if 0
+#if 1
 /* 
  * Function twis_stop
  * Desc     relinquishes bus master status
@@ -479,8 +479,10 @@ void twis_stop(void)
     continue;
   }
 
+#if 0
   // update twi state
   twis_state = TWI_READY;
+#endif
 }
 #endif
 
@@ -528,9 +530,6 @@ ISR(TWI_vect)
     case TW_SR_DATA_ACK:       // 0x80 data received, returned ack
       sr_data_ack:;
 
-twis_reply(1);
-
-#ifdef notdef
       if (twis_rxBufferIndex == 0) {
         // First byte
         _reg = TWDR >> 3;         // Ignore channel
@@ -539,7 +538,7 @@ twis_reply(1);
         twis_reply(1);
       } else {
         // Following bytes
-        if (_reg == 0) {
+        if (_reg == IS7x0_REG_THR) {
           if (TWI_RX_QROOM) {
             twis_rxQueue[twis_rxqin] = TWDR;
             twis_rxqin = (twis_rxqin + 1) % TWI_RX_QUEUE_LENGTH;
@@ -558,33 +557,17 @@ twis_reply(1);
           }
         }
       }
-#endif // notdef
-
-#if 0
-      // if there is still room in the rx buffer
-      if(twis_rxBufferIndex < TWI_RX_BUFFER_LENGTH){
-        // put byte in buffer and ack
-        twis_rxBuffer[twis_rxBufferIndex++] = TWDR;
-        twis_reply(1);
-      }else{
-        // otherwise nack
-        twis_reply(0);
-      }
-#endif
 
       break;
 
     case TW_SR_STOP: // 0xA0 stop or repeated start condition received
 
-      twis_releaseBus();
-
-#ifdef notdef
       digitalDebug(DebugPin2, HIGH);
 
       // ack future responses and leave slave receiver state
       //twis_releaseBus();
 
-      //_reg = twis_rxBuffer[0] >> 3; // Ignore channel
+      //_reg = twis_rxBuffer[0] >> 3; // Ignore channel // This is done already
 
       if (twis_rxBufferIndex == 1) {
         // Register (sub-address) designation cycle for a future read.
@@ -598,11 +581,8 @@ twis_reply(1);
       // Process register writes:
       // Call user defined callback
 
-      if (_reg != IS7x0_REG_THR) {
-          if (twis_onSlaveReceive)
-              twis_onSlaveReceive(twis_rxBuffer, twis_rxBufferIndex);
-          // since we submit rx buffer to "wire" library, we can reset it
-          twis_rxBufferIndex = 0;
+      if (_reg != IS7x0_REG_THR && twis_onSlaveReceive) {
+        twis_onSlaveReceive(twis_rxBuffer, twis_rxBufferIndex);
       }
 
       twis_releaseBus();
@@ -613,9 +593,6 @@ twis_reply(1);
       if (TWCR & _BV(TWINT))
         goto top;
 #endif
-
-#endif //notdef
-
       break;
 
     case TW_SR_DATA_NACK:       // 0x88 data received, returned nack
@@ -759,8 +736,8 @@ twis_reply(1);
     case TW_BUS_ERROR: // 0x00 bus error, illegal stop/start
 // XXX should consider releasing the bus
 //twis_releaseBus();
-#if 0
-      twis_error = TW_BUS_ERROR;
+#if 1
+      //twis_error = TW_BUS_ERROR;
       twis_stop();
 #endif
       break;
