@@ -59,9 +59,11 @@
   uint8_t twis_txqlen(void);
   uint8_t twis_txtxq();
 
-  int twis_available();
-  int twis_peek();
-  int twis_read();
+  int twis_available(void);
+  int twis_peek(void);
+  int twis_read(void);
+
+  int twis_getrxqsize(void);
 
   void twis_attachSlaveRxEvent( void (*)(uint8_t*, int) );
   void twis_attachSlaveTxEvent( void (*)(void) );
