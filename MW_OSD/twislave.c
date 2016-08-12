@@ -91,6 +91,8 @@ static volatile uint8_t twis_rxBufferIndex;
 
 //static volatile uint8_t twis_error;
 
+#define UBVERSION "UB\x01\x00"
+
 /* 
  * Function twis_init
  * Desc     readys twi pins and sets twi bitrate
@@ -259,28 +261,32 @@ void twis_attachRegisterWriteHandler( void (*function)(uint8_t, uint8_t) )
   twis_onRegisterWrite = function;
 }
 
-#if 0
 /* 
  * Function twis_reply
  * Desc     sends byte or readys receive line
  * Input    ack: byte indicating to ack or to nack
  * Output   none
  */
+#define TWREPLYACK (_BV(TWEN) | _BV(TWIE) | _BV(TWINT) | _BV(TWEA))
+#define TWREPLY (_BV(TWEN) | _BV(TWIE) | _BV(TWINT))
+
+#if 0
 void twis_reply(uint8_t ack)
 {
   // transmit master read ready signal, with or without ack
   if(ack){
-    TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWINT) | _BV(TWEA);
+    TWCR = TWREPLYACK;
   }else{
-    TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWINT);
+    TWCR = TWREPLY;
   }
 }
 #else
+// Optimizer should delete unused case
 #define twis_reply(ack) { \
   if(ack) { \
-    TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWINT) | _BV(TWEA); \
+    TWCR = TWREPLYACK;\
   }else{ \
-    TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWINT); \
+    TWCR = TWREPLY;\
   } \
 }
 
@@ -310,19 +316,15 @@ void twis_stop(void)
  * Input    none
  * Output   none
  */
+#define TWRELBUS (_BV(TWEN) | _BV(TWIE) | _BV(TWEA) | _BV(TWINT))
 #if 0
 void twis_releaseBus(void)
 {
   // release bus
-  TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWEA) | _BV(TWINT);
-
-#if 0
-  // update twi state
-  twis_state = TWI_READY;
-#endif
+  TWCR = TWRELBUS;
 }
 #else
-#define twis_releaseBus() { TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWEA) | _BV(TWINT); }
+#define twis_releaseBus() { TWCR = TWRELBUS; }
 #endif
 
 ISR(TWI_vect)
@@ -454,7 +456,11 @@ ISR(TWI_vect)
         goto out;
 
       case UB_REG_ID:
-        memcpy(twis_txBuffer, (void *)"UB\x01\x00", 4);
+        //memcpy(twis_txBuffer, (void *)"UB\x01\x00", 4);
+        twis_txBuffer[0] = UBVERSION[0];
+        twis_txBuffer[1] = UBVERSION[1];
+        twis_txBuffer[2] = UBVERSION[2];
+        twis_txBuffer[3] = UBVERSION[3];
         twis_txBufferLength = 4;
         twis_txBufferIndex = 0;
         twis_txMode = TXMODE_BUFFER; // XXX Will be deleted
