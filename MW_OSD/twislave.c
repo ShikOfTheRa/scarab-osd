@@ -445,6 +445,7 @@ void twis_attachSlaveTxEvent( void (*function)(void) )
 }
 #endif
 
+#if 0
 /* 
  * Function twis_reply
  * Desc     sends byte or readys receive line
@@ -460,6 +461,16 @@ void twis_reply(uint8_t ack)
     TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWINT);
   }
 }
+#else
+#define twis_reply(ack) { \
+  if(ack) { \
+    TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWINT) | _BV(TWEA); \
+  }else{ \
+    TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWINT); \
+  } \
+}
+
+#endif
 
 #if 1
 /* 
@@ -492,6 +503,7 @@ void twis_stop(void)
  * Input    none
  * Output   none
  */
+#if 0
 void twis_releaseBus(void)
 {
   // release bus
@@ -502,6 +514,9 @@ void twis_releaseBus(void)
   twis_state = TWI_READY;
 #endif
 }
+#else
+#define twis_releaseBus() { TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWEA) | _BV(TWINT); }
+#endif
 
 ISR(TWI_vect)
 {
