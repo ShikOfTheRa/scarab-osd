@@ -63,13 +63,11 @@
   int twis_peek(void);
   int twis_read(void);
 
-  int twis_getrxqsize(void);
-
-  void twis_attachSlaveRxEvent( void (*)(uint8_t*, int) );
-  void twis_attachSlaveTxEvent( void (*)(void) );
-  void twis_reply(uint8_t);
+  void twis_attachRegisterWriteHandler( void (*)(uint8_t, uint8_t) );
+  //void twis_attachSlaveTxEvent( void (*)(void) );
+  //void twis_reply(uint8_t);
   void twis_stop(void);
-  void twis_releaseBus(void);
+  //void twis_releaseBus(void);
 
 #endif
 
