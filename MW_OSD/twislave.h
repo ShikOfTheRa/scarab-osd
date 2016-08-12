@@ -41,10 +41,9 @@
   #define TWI_TX_QUEUE_LENGTH 32
   #endif
 
-  #ifndef TWI_RX_BUFFER_LENGTH
-  #define TWI_RX_BUFFER_LENGTH 32
+  #ifndef TWI_RX_QUEUE_LENGTH
+  #define TWI_RX_QUEUE_LENGTH 32
   #endif
-
 
   #define TWI_READY 0
   #define TWI_MRX   1
@@ -59,6 +58,11 @@
   uint8_t twis_txenq(const uint8_t*, uint8_t);
   uint8_t twis_txqlen(void);
   uint8_t twis_txtxq();
+
+  int twis_available();
+  int twis_peek();
+  int twis_read();
+
   void twis_attachSlaveRxEvent( void (*)(uint8_t*, int) );
   void twis_attachSlaveTxEvent( void (*)(void) );
   void twis_reply(uint8_t);
