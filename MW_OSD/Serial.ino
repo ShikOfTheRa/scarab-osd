@@ -298,7 +298,7 @@ void serialMSPCheck()
     MwVBat=read8();
     pMeterSum=read16();
     MwRssi = read16();
-    MWAmperage = read16();
+    MWAmperage = (int16_t)read16();
  }
 
 #ifdef MENU_SERVO  
