@@ -28,6 +28,7 @@
 #include <inttypes.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/atomic.h>
 #include <compat/twi.h>
 #include "Arduino.h" // for digitalWrite
 #include "sc16is7x0.h"
@@ -43,6 +44,8 @@
 
 #include "pins_arduino.h"
 #include "twislave.h"
+
+#define USE_QLEN
 
 // For debugging
 //#define DEBUG
@@ -69,17 +72,31 @@ static uint8_t twis_txBuffer[TWI_TX_BUFFER_LENGTH];
 static volatile uint8_t twis_txBufferIndex;
 static volatile uint8_t twis_txBufferLength;
 
-static uint8_t twis_txQueue[TWI_TX_QUEUE_LENGTH];
+static uint8_t twis_txQueue[TWI_TX_QUEUE_SIZE];
 static volatile uint8_t twis_txqin;
 static volatile uint8_t twis_txqout;
-#define TWI_TX_QLEN ((twis_txqin - twis_txqout) & (TWI_TX_QUEUE_LENGTH - 1))
-#define TWI_TX_QROOM (TWI_TX_QUEUE_LENGTH - TWI_TX_QLEN - 1)
 
-static uint8_t twis_rxQueue[TWI_RX_QUEUE_LENGTH];
+#ifdef USE_QLEN
+static volatile uint8_t twis_txqlen;
+#define TWI_TX_QLEN twis_txqlen
+#define TWI_TX_QROOM (TWI_TX_QUEUE_SIZE - twis_txqlen)
+#else
+#define TWI_TX_QLEN ((twis_txqin - twis_txqout) & (TWI_TX_QUEUE_SIZE - 1))
+#define TWI_TX_QROOM (TWI_TX_QUEUE_SIZE - TWI_TX_QLEN - 1)
+#endif
+
+static uint8_t twis_rxQueue[TWI_RX_QUEUE_SIZE];
 static volatile uint8_t twis_rxqin;
 static volatile uint8_t twis_rxqout;
-#define TWI_RX_QLEN ((twis_rxqin - twis_rxqout) & (TWI_RX_QUEUE_LENGTH - 1))
-#define TWI_RX_QROOM (TWI_RX_QUEUE_LENGTH - TWI_RX_QLEN - 1)
+
+#ifdef USE_QLEN
+static volatile uint8_t twis_rxqlen;
+#define TWI_RX_QLEN twis_rxqlen
+#define TWI_RX_QROOM (TWI_RX_QUEUE_SIZE - twis_rxqlen)
+#else
+#define TWI_RX_QLEN ((twis_rxqin - twis_rxqout) & (TWI_RX_QUEUE_SIZE - 1))
+#define TWI_RX_QROOM (TWI_RX_QUEUE_SIZE - TWI_RX_QLEN - 1)
+#endif
 
 static volatile uint8_t twis_txMode;
 #define TXMODE_BUFFER 0
@@ -204,17 +221,24 @@ uint8_t twis_transmit(const uint8_t* data, uint8_t length)
 uint8_t twis_txenq(const uint8_t* data, uint8_t length)
 {
   uint8_t room = TWI_TX_QROOM;
+
   if (length > room)
     length = room;
 
   for (int i = 0 ; i < length ; i++) {
     twis_txQueue[twis_txqin] = *data++;
-    twis_txqin = (twis_txqin + 1) % TWI_TX_QUEUE_LENGTH;
+    twis_txqin = (twis_txqin + 1) % TWI_TX_QUEUE_SIZE;
+#ifdef USE_QLEN
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+      twis_txqlen++;
+    }
+#endif
   }
 
   return length;
 }
 
+#if 0
 uint8_t twis_txqlen()
 {
   return TWI_TX_QLEN;
@@ -226,6 +250,7 @@ uint8_t twis_txtxq()
 
   return 0;
 }
+#endif
 
 int twis_available(void)
 {
@@ -238,7 +263,12 @@ int twis_read(void)
 
   if (TWI_RX_QLEN) {
     data = twis_rxQueue[twis_rxqout];
-    twis_rxqout = (twis_rxqout + 1) % TWI_RX_QUEUE_LENGTH;
+    twis_rxqout = (twis_rxqout + 1) % TWI_RX_QUEUE_SIZE;
+#ifdef USE_QLEN
+    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+      twis_rxqlen--;
+    }
+#endif
     return data;
   }
 
@@ -362,7 +392,10 @@ ISR(TWI_vect)
         if (_reg == IS7x0_REG_THR) {
           if (TWI_RX_QROOM) {
             twis_rxQueue[twis_rxqin] = TWDR;
-            twis_rxqin = (twis_rxqin + 1) % TWI_RX_QUEUE_LENGTH;
+            twis_rxqin = (twis_rxqin + 1) % TWI_RX_QUEUE_SIZE;
+#ifdef USE_QLEN
+            twis_rxqlen++;
+#endif
             twis_reply(1);
           } else {
             twis_reply(0);
@@ -433,7 +466,10 @@ ISR(TWI_vect)
         if (TWI_TX_QLEN) {
           TWDR = twis_txQueue[twis_txqout];
           twis_reply(1);
-          twis_txqout = (twis_txqout + 1) % TWI_TX_QUEUE_LENGTH;
+          twis_txqout = (twis_txqout + 1) % TWI_TX_QUEUE_SIZE;
+#ifdef USE_QLEN
+          twis_txqlen--;
+#endif
         } else {
           TWDR = 0;
           twis_reply(0);
@@ -483,7 +519,10 @@ ISR(TWI_vect)
         if (TWI_TX_QLEN) {
           TWDR = twis_txQueue[twis_txqout];
           twis_reply(1);
-          twis_txqout = (twis_txqout + 1) % TWI_TX_QUEUE_LENGTH;
+          twis_txqout = (twis_txqout + 1) % TWI_TX_QUEUE_SIZE;
+#ifdef USE_QLEN
+          twis_txqlen--;
+#endif
         } else {
           TWDR = 0;
           twis_reply(0);
@@ -508,7 +547,10 @@ ISR(TWI_vect)
         if (TWI_TX_QLEN) {
           TWDR = twis_txQueue[twis_txqout];
           twis_reply(1);
-          twis_txqout = (twis_txqout + 1) % TWI_TX_QUEUE_LENGTH;
+          twis_txqout = (twis_txqout + 1) % TWI_TX_QUEUE_SIZE;
+#ifdef USE_QLEN
+          twis_txqlen--;
+#endif
         } else {
           TWDR = 0;
           twis_reply(0);

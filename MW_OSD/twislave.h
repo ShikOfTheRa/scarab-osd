@@ -37,12 +37,12 @@
   #define TWI_TX_BUFFER_LENGTH 8
   #endif
 
-  #ifndef TWI_TX_QUEUE_LENGTH
-  #define TWI_TX_QUEUE_LENGTH 32
+  #ifndef TWI_TX_QUEUE_SIZE
+  #define TWI_TX_QUEUE_SIZE 32
   #endif
 
-  #ifndef TWI_RX_QUEUE_LENGTH
-  #define TWI_RX_QUEUE_LENGTH 32
+  #ifndef TWI_RX_QUEUE_SIZE
+  #define TWI_RX_QUEUE_SIZE 32
   #endif
 
   #define TWI_READY 0
@@ -56,8 +56,8 @@
   void twis_setAddress(uint8_t);
   uint8_t twis_transmit(const uint8_t*, uint8_t);
   uint8_t twis_txenq(const uint8_t*, uint8_t);
-  uint8_t twis_txqlen(void);
-  uint8_t twis_txtxq();
+  //uint8_t twis_txqlen(void);
+  //uint8_t twis_txtxq();
 
   int twis_available(void);
   int twis_peek(void);
