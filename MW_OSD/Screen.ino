@@ -1255,8 +1255,8 @@ void displayConfigScreen(void)
       else if ((X==2) &&(distanceMAX>9999)){
         formatDistance(distanceMAX,0,2);
       }
-      else if ((X==3) &&(distanceMAX>9999)){
-        formatDistance(distanceMAX,0,2);
+      else if ((X==3) &&(altitudeMAX>9999)){
+        formatDistance(altitudeMAX,0,2);
       }
       else{
         itoa(MenuBuffer[X],screenBuffer,10);
