@@ -164,8 +164,8 @@ void serialMAVCheck(){
     MwVario=(int16_t)serialbufferfloat(12)*100;     // m/s-->cm/s
     break;
   case MAVLINK_MSG_ID_ATTITUDE:
-    MwAngle[0]=(int16_t)(serialbufferfloat(4)*57296/10);     // rad-->0.1deg
-    MwAngle[1]=(int16_t)(serialbufferfloat(8)*57296/10);     // rad-->0.1deg
+    MwAngle[0]=(int16_t)(serialbufferfloat(4)*57.2958*10); // rad-->0.1deg
+    MwAngle[1]=(int16_t)(serialbufferfloat(8)*57.2958*10); // rad-->0.1deg
     break;
   case MAVLINK_MSG_ID_GPS_RAW_INT:
 #ifdef ALARM_GPS
