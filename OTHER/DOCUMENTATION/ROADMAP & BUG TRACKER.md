@@ -35,6 +35,8 @@
 
 ## Enhancement requests for future releases: ##
 
+RC switch channel limited to 8CH (0-7). Also starts at 0
+
 LTM support 
 
 Vortex style capacity indicator
