@@ -1033,7 +1033,11 @@ void ProcessSensors(void) {
     }  
   }
   else{
-    amperage = MWAmperage / AMPERAGE_DIV;
+    // Apply rounding math
+    if (MWAmperage < 0)
+      amperage = (MWAmperage - AMPERAGE_DIV / 2) / AMPERAGE_DIV;
+    else
+      amperage = (MWAmperage + AMPERAGE_DIV / 2) / AMPERAGE_DIV;
   }
 
 //-------------- RSSI
