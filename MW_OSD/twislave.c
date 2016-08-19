@@ -188,6 +188,7 @@ void twis_setAddress(uint8_t address)
   TWAR = address << 1;
 }
 
+#if 0
 /* 
  * Function twis_transmit
  * Desc     fills slave tx buffer with data
@@ -217,6 +218,7 @@ uint8_t twis_transmit(const uint8_t* data, uint8_t length)
   
   return 0;
 }
+#endif
 
 uint8_t twis_txenq(const uint8_t* data, uint8_t length)
 {
