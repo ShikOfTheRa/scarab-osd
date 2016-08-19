@@ -188,9 +188,6 @@ void TwoWireUB::onRegisterWrite(uint8_t reg, uint8_t data)
 
 void TwoWireUB::_updateIRQ(void)
 {
-#if 0
-// XXX All this should go into twislave.c
-
   static boolean thrArm = false;
   uint8_t iir = 0;
 
@@ -231,7 +228,6 @@ void TwoWireUB::_updateIRQ(void)
         ACTIVELOW_OFF(irqpin);
     }
   }
-#endif
 }
 
 void TwoWireUB::updateIRQ(void)
