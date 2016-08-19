@@ -46,6 +46,7 @@
 #include "twislave.h"
 
 #define USE_QLEN
+#define TX_PRELOAD
 
 // For debugging
 //#define DEBUG
@@ -362,6 +363,8 @@ void twis_releaseBus(void)
 ISR(TWI_vect)
 {
   static uint8_t _reg;
+  static bool preloaded = false;
+  static uint8_t tdata;
 
   top:;
   switch(TW_STATUS){
@@ -466,11 +469,27 @@ ISR(TWI_vect)
       switch (_reg) {
       case IS7x0_REG_RHR:
         if (TWI_TX_QLEN) {
+#ifdef TX_PRELOAD
+          if (preloaded)
+            TWDR = tdata;
+          else
+            TWDR = twis_txQueue[twis_txqout];
+#else
           TWDR = twis_txQueue[twis_txqout];
+#endif
           twis_reply(1);
           twis_txqout = (twis_txqout + 1) % TWI_TX_QUEUE_SIZE;
 #ifdef USE_QLEN
           twis_txqlen--;
+#endif
+
+#ifdef TX_PRELOAD
+          if (TWI_TX_QLEN) {
+            tdata = twis_txQueue[twis_txqout];
+            preloaded = true;
+          } else {
+            preloaded = false;
+          }
 #endif
         } else {
           TWDR = 0;
@@ -519,11 +538,27 @@ ISR(TWI_vect)
        */
       if (_reg == IS7x0_REG_RHR) {
         if (TWI_TX_QLEN) {
+#ifdef TX_PRELOAD
+          if (preloaded)
+            TWDR = tdata;
+          else
+            TWDR = twis_txQueue[twis_txqout];
+#else
           TWDR = twis_txQueue[twis_txqout];
+#endif
           twis_reply(1);
           twis_txqout = (twis_txqout + 1) % TWI_TX_QUEUE_SIZE;
 #ifdef USE_QLEN
           twis_txqlen--;
+#endif
+
+#ifdef TX_PRELOAD
+          if (TWI_TX_QLEN) {
+            tdata = twis_txQueue[twis_txqout];
+            preloaded = true;
+          } else {
+            preloaded = false;
+          }
 #endif
         } else {
           TWDR = 0;
