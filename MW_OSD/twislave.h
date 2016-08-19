@@ -54,7 +54,7 @@
   void twis_init(void);
   void twis_disable(void);
   void twis_setAddress(uint8_t);
-  uint8_t twis_transmit(const uint8_t*, uint8_t);
+  //uint8_t twis_transmit(const uint8_t*, uint8_t);
   uint8_t twis_txenq(const uint8_t*, uint8_t);
   //uint8_t twis_txqlen(void);
   //uint8_t twis_txtxq();
