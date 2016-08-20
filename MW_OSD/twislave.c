@@ -47,6 +47,7 @@
 
 #define USE_QLEN
 #define TX_PRELOAD
+#define RX_PREPTR
 
 // For debugging
 //#define DEBUG
@@ -365,6 +366,8 @@ ISR(TWI_vect)
   static uint8_t _reg;
   static bool preloaded = false;
   static uint8_t tdata;
+  static bool prepointed = false;
+  static uint8_t *rdatap;
 
   top:;
   switch(TW_STATUS){
@@ -392,9 +395,32 @@ ISR(TWI_vect)
         twis_rxBuffer[0] = _reg;  // Constant index for speed
         twis_rxBufferIndex++;
         twis_reply(1);
+#ifdef RX_PREPOINTER
+        if (TWI_RX_QROOM) {
+          rdatap = &twis_rxQueue[twis_rxqin];
+          prepointed = true;
+        } else {
+          prepointed = false;
+        }
+#endif
       } else {
         // Following bytes
         if (_reg == IS7x0_REG_THR) {
+#ifdef RX_PREPOINTER
+          if (prepointed) {
+            *rdatap = TWDR;
+            twis_reply(1);
+            twis_rxqin = (twis_rxqin + 1) % TWI_RX_QUEUE_SIZE;
+#ifdef USE_QLEN
+            twis_rxqlen++;
+#endif
+            if (TWI_RX_QROOM) {
+              rdatap = &twis_rxQueue[twis_rxqin];
+            } else {
+              prepointed = false;
+            }
+          } else
+#endif
           if (TWI_RX_QROOM) {
             twis_rxQueue[twis_rxqin] = TWDR;
             twis_rxqin = (twis_rxqin + 1) % TWI_RX_QUEUE_SIZE;
