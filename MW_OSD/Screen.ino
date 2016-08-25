@@ -701,10 +701,14 @@ void displayWatt(void)
     xx = GPS_speed * 0.036;           // From MWii cm/sec to Km/h
   else
     xx = GPS_speed * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
-  if(xx > 0)
-    speedMAX = xx;
-  uint16_t watts = amperage*voltage/(100*xx); // Watts/Speed
-#else 
+  uint16_t watts;
+  if(xx > 0){
+    watts = amperage*voltage/(100*xx); // Watts/Speed}
+  }
+  else{
+    watts = 999;
+  }
+  #else 
   uint16_t watts = amperage*voltage/100; // Watts
 #endif
   
