@@ -695,10 +695,26 @@ void displayWatt(void)
   if(!fieldIsVisible(wattPosition))
     return;
   uint16_t WhrPosition = getPosition(wattPosition);
-  uint16_t watts = amperage*voltage/100; 
+#ifdef DISPLAYEFFICIENCY
+  uint16_t xx;
+  if(!Settings[S_UNITSYSTEM])
+    xx = GPS_speed * 0.036;           // From MWii cm/sec to Km/h
+  else
+    xx = GPS_speed * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
+  if(xx > 0)
+    speedMAX = xx;
+  uint16_t watts = amperage*voltage/(100*xx); // Watts/Speed
+#else 
+  uint16_t watts = amperage*voltage/100; // Watts
+#endif
+  
   ItoaPadded(watts, screenBuffer+1 , 5, 5);
   screenBuffer[0] = SYM_BLANK;
+#ifdef DISPLAYEFFICIENCY
+  screenBuffer[5] = 0x2A;
+#else
   screenBuffer[5] = SYM_WATT;
+#endif
   screenBuffer[6] = 0;
   MAX7456_WriteString(screenBuffer,WhrPosition);
 }

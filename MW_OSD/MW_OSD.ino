@@ -513,7 +513,7 @@ void loop()
         if(Settings[S_AMPER_HOUR] && ((!ampAlarming()) || timer.Blink2hz))
           displaypMeterSum();
         displayTime();
-#if defined DISPLAYWATTS
+#if defined (DISPLAYWATTS) || defined (DISPLAYEFFICIENCY)
         displayWatt();
 #endif //DISPLAYWATTS
 
