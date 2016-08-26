@@ -423,11 +423,11 @@ ISR(TWI_vect)
 #endif
           if (TWI_RX_QROOM) {
             twis_rxQueue[twis_rxqin] = TWDR;
+            twis_reply(1);
             twis_rxqin = (twis_rxqin + 1) % TWI_RX_QUEUE_SIZE;
 #ifdef USE_QLEN
             twis_rxqlen++;
 #endif
-            twis_reply(1);
 #ifdef RX_PREPOINTER
             if (TWI_RX_QROOM) {
               rdatap = &twis_rxQueue[twis_rxqin];
