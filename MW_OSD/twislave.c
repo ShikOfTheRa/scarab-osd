@@ -428,6 +428,12 @@ ISR(TWI_vect)
             twis_rxqlen++;
 #endif
             twis_reply(1);
+#ifdef RX_PREPOINTER
+            if (TWI_RX_QROOM) {
+              rdatap = &twis_rxQueue[twis_rxqin];
+              prepointed = true;
+            }
+#endif
           } else {
             twis_reply(0);
           }
