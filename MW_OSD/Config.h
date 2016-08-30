@@ -238,13 +238,13 @@
 
 
 /********************       Voltage Warning Settings         ************************/
-//#define AUTOCELL                  // Uncomment this to use automatic cell count and voltage warning. Overrides GUI/OSD voltage warning setting. Usefull if using different cell count batteries.
-//#define FC_VOLTAGE_CONFIG         // Additionally uncomment this if you want to use the vbat voltage config with BASEFLIGHT and CLEANFLIGHT on the flight controller (include: min cell voltage, max cell voltage and warning cell voltage)
+//#define AUTOCELL                  // Uncomment this to use varying cell count batteries. Overrides GUI/OSD voltage warning settings. Uses CELL_VOLTS_* below unless AUTOCELL_ALARM defined
+//#define AUTOCELL_ALARM            // Use with Autocell - uses the Main battery Alarm value on GUI OSD instead of CELL_VOLTS_WARN. Main battery Alarm is a per cell value instead of full battery. i.e. 3.4 = 10.2v on a 3s 
 //The following variables are available for adjustment unless using FC_VOLTAGE_CONFIG 
 #define CELL_VOLTS_WARN 35          // Specify the cell voltage level at which low voltage warning takes place eg. 35 = 3.5 volts per cell
 #define CELL_VOLTS_MIN 34           // Specify the cell voltage at which it is considered empty
 #define CELL_VOLTS_MAX 42           // Specify the max normal LIPO cell voltage
-//#define AUTOCELL_VOLTAGE          // Optionally use Main battery Alarm value as individual cell value. i.e. 3.4 = 10.2v on a 3s
+//#define FC_VOLTAGE_CONFIG         // Additionally uncomment this if you want to use the vbat voltage config with BASEFLIGHT and CLEANFLIGHT on the flight controller (include: min cell voltage, max cell voltage and warning cell voltage)
 
 
 /********************       Battery Status Settings         ************************/
