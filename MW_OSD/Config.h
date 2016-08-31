@@ -15,6 +15,9 @@
 // #define SWAPVOLTAGEPINS          // For boards with batt voltage appearing on vid voltage
 // #define ALTERNATEDIVIDERS        // For boards with voltage unable to be adjusted high enough
 
+// For hardwares WITHOUT access to MAX RESET pin (e.g. Airbot MicroOSD v2.3)
+#define MAX_SOFTRESET
+
 
 /********************       CONTROLLER SOFTWARE      *********************/
 // Choose ONLY ONE option:-

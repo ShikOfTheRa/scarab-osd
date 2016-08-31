@@ -115,13 +115,54 @@ uint8_t spi_transfer(uint8_t data)
 
 // ============================================================   WRITE TO SCREEN
 
+#ifdef MAX_SOFTRESET
+/*
+ * Try to bring the MAX to known state.
+ * Three consequtive 0xFF writes seems to take the MAX out of
+ * any intermediate state (reg-data & auto increment mode).
+ */
+void MAX7456SoftReset(void)
+{
+  uint8_t rval;
+
+  MAX7456ENABLE;
+
+  spi_transfer(MAX7456ADD_STAT);
+  rval = spi_transfer(0xFF);
+
+  if (rval & 7)
+    return;
+
+  // The magic triplet
+  spi_transfer(0xFF);
+  spi_transfer(0xFF);
+  spi_transfer(0xFF);
+
+  spi_transfer(MAX7456ADD_STAT);
+  rval = spi_transfer(0xFF);
+
+  if ((rval & 7) == 0) {
+    // Should alert...
+    // Serial.println("\r\nFailed to synchronize with MAX");
+    delay(1000);
+  }
+
+  // Issue software reset
+  MAX7456_Send(VM0_reg, (1 << 1));
+  MAX7456DISABLE;
+}
+#endif
+
 void MAX7456Setup(void)
 {
   uint8_t MAX7456_reset=0x0C;
   uint8_t MAX_screen_rows;
 
   MAX7456DISABLE
+
+#ifndef MAX_SOFTRESET
   MAX7456HWRESET
+#endif
   
   // SPCR = 01010000
   //interrupt disabled,spi enabled,msb 1st,master,clk low when idle,
@@ -134,8 +175,12 @@ void MAX7456Setup(void)
   spi_junk=SPSR;
   spi_junk=SPDR;
   delay(10);
-  MAX7456ENABLE
 
+#ifdef MAX_SOFTRESET
+  MAX7456SoftReset();
+#endif
+
+  MAX7456ENABLE
 
 #ifdef AUTOCAM 
   uint8_t srdata;
