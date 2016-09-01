@@ -16,7 +16,7 @@
 // #define ALTERNATEDIVIDERS        // For boards with voltage unable to be adjusted high enough
 
 // For hardwares WITHOUT access to MAX RESET pin (e.g. Airbot MicroOSD v2.3)
-#define MAX_SOFTRESET
+//#define MAX_SOFTRESET
 
 
 /********************       CONTROLLER SOFTWARE      *********************/
