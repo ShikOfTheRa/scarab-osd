@@ -41,7 +41,6 @@ class TwoWireUB : public Stream
     static void onRegisterWrite(uint8_t, uint8_t);
 
     static void begin(void);
-    static void _updateIRQ(void);
 
   public:
     TwoWireUB();
@@ -51,7 +50,6 @@ class TwoWireUB : public Stream
     void setClock(uint32_t);
     void setWriteTimo(unsigned long);
     void setThreshold(int, int);
-    void updateIRQ(void);
 
     virtual size_t write(uint8_t);
     virtual size_t write(const uint8_t *, size_t);
