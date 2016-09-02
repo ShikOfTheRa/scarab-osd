@@ -120,7 +120,6 @@ size_t TwoWireUB::write(const uint8_t data)
 {
   lastWrite = micros();
   twis_txenq(&data, 1);
-  _updateIRQ();
   return 1;
 }
 
@@ -128,7 +127,6 @@ size_t TwoWireUB::write(const uint8_t *data, size_t quantity)
 {
   lastWrite = micros();
   twis_txenq(data, quantity);
-  _updateIRQ();
   return quantity;
 }
 
@@ -184,57 +182,6 @@ void TwoWireUB::onRegisterWrite(uint8_t reg, uint8_t data)
   default:
     break;
   }
-}
-
-void TwoWireUB::_updateIRQ(void)
-{
-#if 0
-  static boolean thrArm = false;
-  uint8_t iir = 0;
-
-    // Update the interrupt conditions.
-    // There are priorities.
-    // Priority 2-High. RX time-out, stale data in RX FIFO
-    //   rxidle > rxtimo && rxqlen > 0 && rxqlen < rxthresh
-    // Priority 2-Low. RHR interrupt
-    //   rxqlen >= rxthresh
-    // Priority 3. THR interrupt
-    //   txqlen < txthresh && otxqlen > txthresh (one shot ???)
-
-  uint8_t upqlen = twis_txqlen();
-
-  if (upqlen >= rhrThreshold) {
-    iir = IS7x0_IIR_RHR;
-  } else if (upqlen && (micros() - lastWrite > writeTimo)) {
-    iir = IS7x0_IIR_RXTIMO;
-  }
-
-#if 0
- else if (DNBUFROOM > thrThreshold && thrArm) {
-    iir = IS7x0_IIR_THR;
-    thrArm = false;
-  } else if (DNBUFROOM <= thrThreshold) {
-    thrArm = true;
-  }
-#endif
-
-  if (iir) {
-    reg_iir = iir;
-    if (irqpin >= 0) {
-        ACTIVELOW_ON(irqpin);
-    }
-  } else {
-    reg_iir = IS7x0_IIR_INTSTAT;
-    if (irqpin >= 0) {
-        ACTIVELOW_OFF(irqpin);
-    }
-  }
-#endif
-}
-
-void TwoWireUB::updateIRQ(void)
-{
-  _updateIRQ();
 }
 
 // Preinstantiate Objects //////////////////////////////////////////////////////

@@ -62,12 +62,6 @@
 #define digitalDebug(pin, state)
 #endif
 
-//static volatile uint8_t twis_state;
-//static volatile uint8_t twis_slarw;
-//static volatile uint8_t twis_sendStop;			// should the transaction end with a stop
-//static volatile uint8_t twis_inRepStart;			// in the middle of a repeated start
-
-//static void (*twis_onSlaveTransmit)(void);
 static void (*twis_onRegisterWrite)(uint8_t, uint8_t) = NULL;
 
 static uint8_t twis_txBuffer[TWI_TX_BUFFER_LENGTH];
@@ -138,9 +132,11 @@ pinMode(DebugPin3, OUTPUT);
   twis_rxqin = 0;
   twis_rxqout = 0;
   
+#if 0
   // activate internal pullups for twi.
   digitalWrite(SDA, 1);
   digitalWrite(SCL, 1);
+#endif
 
   // initialize twi prescaler and bit rate
   cbi(TWSR, TWPS0);
@@ -166,12 +162,6 @@ void twis_disable(void)
 {
   // disable twi module, acks, and twi interrupt
   TWCR &= ~(_BV(TWEN) | _BV(TWIE) | _BV(TWEA));
-
-#if 0
-  // deactivate internal pullups for twi.
-  digitalWrite(SDA, 0);
-  digitalWrite(SCL, 0);
-#endif
 
   // Bus may still be active; go passive.
   pinMode(SDA, INPUT);
@@ -241,20 +231,6 @@ uint8_t twis_txenq(const uint8_t* data, uint8_t length)
 
   return length;
 }
-
-#if 0
-uint8_t twis_txqlen()
-{
-  return TWI_TX_QLEN;
-}
-
-uint8_t twis_txtxq()
-{
-  twis_txMode = TXMODE_QUEUE;
-
-  return 0;
-}
-#endif
 
 int twis_available(void)
 {
