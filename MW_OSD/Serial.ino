@@ -15,7 +15,7 @@ static uint8_t dataSize;
 static uint8_t cmdMSP;
 static uint8_t rcvChecksum;
 static uint8_t readIndex;
-uint8_t txChecksum;
+static uint8_t txChecksum;
 
 #if defined PROTOCOL_MAVLINK
   #include "MAVLINK.h"
@@ -54,16 +54,12 @@ uint8_t read8()  {
 #define skip32() {readIndex+=4;}
 #define skipn(n) {readIndex+=n;}
 
-#ifdef I2C_SUPPORT
-void streamWriteRequest(Stream *port, uint8_t mspCommand, uint8_t txDataSize){
-  port->write("$M<");
-  txChecksum = 0;
-  streamWrite8(port, txDataSize);
-  streamWrite8(port, mspCommand);
-  if(txDataSize == 0)
-    streamWriteChecksum(port);
-}
-#else
+#ifndef I2C_UB_SUPPORT
+
+//
+// Legacy mspWrite*()
+//
+
 void mspWriteRequest(uint8_t mspCommand, uint8_t txDataSize){
   //return;
   Serial.write('$');
@@ -75,66 +71,89 @@ void mspWriteRequest(uint8_t mspCommand, uint8_t txDataSize){
   if(txDataSize == 0)
     mspWriteChecksum();
 }
-#endif
 
-#ifdef I2C_SUPPORT
-void streamWrite8(Stream *port, uint8_t t){
-  port->write(t);
-  txChecksum ^= t;
-}
-#else
 void mspWrite8(uint8_t t){
   Serial.write(t);
   txChecksum ^= t;
 }
-#endif
 
-#ifdef I2C_SUPPORT
-void streamWrite16(Stream *port, uint16_t t){
-  streamWrite8(port, t);
-  streamWrite8(port, t>>8);
-}
-#else
 void mspWrite16(uint16_t t){
   mspWrite8(t);
   mspWrite8(t>>8);
 }
-#endif
 
-#ifdef I2C_SUPPORT
-void streamWrite32(Stream *port, uint32_t t){
-  streamWrite16(port, t);
-  streamWrite16(port, t>>16);
-}
-#else
 void mspWrite32(uint32_t t){
   mspWrite8(t);
   mspWrite8(t>>8);
   mspWrite8(t>>16);
   mspWrite8(t>>24);
 }
-#endif
 
-#ifdef I2C_SUPPORT
-void streamWriteChecksum(Stream *port){
-  port->write(txChecksum);
-}
-#else
 void mspWriteChecksum(){
   Serial.write(txChecksum);
 }
-#endif
 
-#ifdef I2C_SUPPORT
+// Writes to GUI (OSD_xxx) is distinguished from writes to FC (MSP_xxx) by
+// cfgWrite*() and mspWrite*().
+//
+// If I2C is not used, then all cfgWrite*() will be mspWrite*().
+
+# define cfgWriteRequest mspWriteRequest
+# define cfgWrite8 mspWrite8
+# define cfgWrite16 mspWrite16
+# define cfgWrite32 mspWrite32
+# define cfgWriteChecksum mspWriteChecksum
+
+#else // I2C_UB_SUPPORT
+
+//
+// streamWrite*()
+//
+// With I2C_UB_SUPPORT, we have two message i/o streams; one being a tradional
+// serial, another being an I2C. Here, we generalize writes to these streams
+// with streamWrite*().
+// mspWrite*() and cfgWrite*() will eventually call streamWrite*() with
+// appropriate stream handle (port).
+
+void streamWriteRequest(Stream *port, uint8_t mspCommand, uint8_t txDataSize){
+  port->write("$M<");
+  txChecksum = 0;
+  streamWrite8(port, txDataSize);
+  streamWrite8(port, mspCommand);
+  if(txDataSize == 0)
+    streamWriteChecksum(port);
+}
+
+void streamWrite8(Stream *port, uint8_t t){
+  port->write(t);
+  txChecksum ^= t;
+}
+
+void streamWrite16(Stream *port, uint16_t t){
+  streamWrite8(port, t);
+  streamWrite8(port, t>>8);
+}
+
+void streamWrite32(Stream *port, uint32_t t){
+  streamWrite16(port, t);
+  streamWrite16(port, t>>16);
+}
+
+void streamWriteChecksum(Stream *port){
+  port->write(txChecksum);
+}
+
+//
+// mspWrite*(): Use streamWrite*(), duplicate MSP to config port if specified
+//
+
 void mspWriteRequest(uint8_t mspCommand, uint8_t txDataSize){
 # ifdef MSP2CFG
   streamWriteRequest(&Serial, mspCommand, txDataSize);
 #endif
   streamWriteRequest(&WireUB, mspCommand, txDataSize);
 }
-#endif
 
-#ifdef I2C_SUPPORT
 void mspWrite8(uint8_t t){
 # ifdef MSP2CFG
   streamWrite8(&Serial, t);
@@ -162,9 +181,11 @@ void mspWriteChecksum(){
 # endif
   streamWriteChecksum(&WireUB);
 }
-#endif
 
-#ifdef I2C_SUPPORT
+//
+// cfgWrite*(): Explicit write to config (GUI) port
+//
+
 void cfgWriteRequest(uint8_t mspCommand, uint8_t txDataSize){
   streamWriteRequest(&Serial, mspCommand, txDataSize);
 }
@@ -184,16 +205,7 @@ void cfgWrite32(uint32_t t){
 void cfgWriteChecksum(){
   streamWriteChecksum(&Serial);
 }
-#else
-// If not using I2C, then all cfgWrite*()
-// will goto corresponding mspWrite*().
-# define cfgWriteRequest mspWriteRequest
-# define cfgWrite8 mspWrite8
-# define cfgWrite16 mspWrite16
-# define cfgWrite32 mspWrite32
-# define cfgWriteChecksum mspWriteChecksum
-#endif
-
+#endif // I2C_UB_SUPPORT
 
 // --------------------------------------------------------------------------------------
 // Here are decoded received commands from MultiWii
@@ -1095,10 +1107,13 @@ void serialMSPreceive(uint8_t loops)
   }
   c_state = IDLE;
 
-#ifdef I2C_SUPPORT
-  // The focusPort is a multiplexer that switch between serial and i2c ports.
-  // Once a first character of a new message is read, then focusPort is
-  // fixed and will not change until the state goes back to IDLE.
+#ifdef I2C_UB_SUPPORT
+  // The focusPort is a message oriented multiplexer that switches
+  // between serial and i2c ports.
+  //
+  // Once a first character of a new message is read from either port,
+  // then the focusPort is fixed to that port and will not change
+  // until the state goes back to IDLE.
 
   static Stream *focusPort = NULL;
 
@@ -1126,7 +1141,7 @@ void serialMSPreceive(uint8_t loops)
 
   while(loopserial==1)
   {
-#ifdef I2C_SUPPORT
+#ifdef I2C_UB_SUPPORT
     // Read from the active port.
     c = focusPort->read();
 #else
@@ -1210,7 +1225,7 @@ void serialMSPreceive(uint8_t loops)
         serialBuffer[receiverIndex++]=c;
     }
     if (loops==0) loopserial=0;
-#ifdef I2C_SUPPORT
+#ifdef I2C_UB_SUPPORT
     if (!focusPort->available()) loopserial=0;
 #else
     if (!Serial.available()) loopserial=0;

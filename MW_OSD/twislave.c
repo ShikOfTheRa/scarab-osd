@@ -23,6 +23,9 @@
   Modified 2016 by jflyper
 */
 
+#include "Config.h" // Look for I2C_UB_SUPPORT
+#ifdef I2C_UB_SUPPORT
+
 #include <math.h>
 #include <stdlib.h>
 #include <inttypes.h>
@@ -632,4 +635,4 @@ ISR(TWI_vect)
   }
   out:;
 }
-
+#endif // I2C_UB_SUPPORT

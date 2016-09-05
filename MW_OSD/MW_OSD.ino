@@ -103,7 +103,7 @@ uint16_t UntouchedStack(void)
   #include "fontB.h"
 #endif
 
-#ifdef I2C_SUPPORT
+#ifdef I2C_UB_SUPPORT
 #include "WireUB.h"
 #endif
 
@@ -139,7 +139,7 @@ void setup()
 //---
   Serial.flush();
 
-#ifdef I2C_SUPPORT
+#ifdef I2C_UB_SUPPORT
   // I2C initialization
   //WireUB.begin(I2C_ADDR, I2C_IRQPIN);
   WireUB.begin(I2C_ADDR, -1);
@@ -713,7 +713,7 @@ int16_t getNextCharToRequest() {
 
 void resetFunc(void)
 {
-#ifdef I2C_SUPPORT
+#ifdef I2C_UB_SUPPORT
   WireUB.end();
 #endif
   asm volatile ("  jmp 0"); 

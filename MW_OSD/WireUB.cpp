@@ -23,7 +23,11 @@
   Modified 2016 by jflyper
 */
 
-#define EMBEDDED
+#include "Config.h" // Look for I2C_UB_SUPPORT
+
+#ifdef I2C_UB_SUPPORT
+
+#define EMBEDDED // Not a standalone bridge
 
 extern "C" {
   #include <stdlib.h>
@@ -187,3 +191,4 @@ void TwoWireUB::onRegisterWrite(uint8_t reg, uint8_t data)
 // Preinstantiate Objects //////////////////////////////////////////////////////
 
 TwoWireUB WireUB = TwoWireUB();
+#endif // I2C_UB_SUPPORT

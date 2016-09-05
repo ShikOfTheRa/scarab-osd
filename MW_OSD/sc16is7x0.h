@@ -117,6 +117,3 @@
 #define     IS7x0_EFCR_TXDISABLE 0x04
 #define     IS7x0_EFCR_RXDISABLE 0x02
 #define     IS7x0_EFCR_9BIT      0x01
-
-// UB (UART Bridge)
-#define     UB_ID                IS7x0_REG_SPR
