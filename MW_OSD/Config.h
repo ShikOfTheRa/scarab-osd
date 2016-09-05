@@ -20,11 +20,11 @@
 /*
  * I2C Support
  */
-#define I2C_SUPPORT
+#define I2C_UB_SUPPORT
 
-#ifdef I2C_SUPPORT
+#ifdef I2C_UB_SUPPORT
 #define I2C_ADDR      0x19
-#define I2C_IRQPIN    3
+//#define I2C_IRQPIN    3
 #define I2C_BREQUIV   115200UL  // Pretend baudrate of 115200
 #define MSP2CFG                 // Duplicate MSP request to config port
 #endif
