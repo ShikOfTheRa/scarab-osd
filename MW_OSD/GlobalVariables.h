@@ -562,8 +562,8 @@ int32_t  old_MwAltitude=0;                     // This hold barometric value
 
 
 int16_t MwAngle[2]={0,0};           // Those will hold Accelerometer Angle
-static uint16_t MwRcData[9]={   // This hold receiver pulse signal
-  1500,1500,1500,1500,1500,1500,1500,1500} ;
+static uint16_t MwRcData[1+16]={   // This hold receiver pulse signal
+  1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500} ;
 
 // for analogue / PWM sensor filtering 
 #define SENSORFILTERSIZE 8

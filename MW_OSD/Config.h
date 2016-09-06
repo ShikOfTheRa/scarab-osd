@@ -220,9 +220,9 @@
 #define AIRMODE 30                  // Enable this to display BETAFLIGHT airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
 //#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
 
-/********************   TRANSMITTER MODE for STICK MENU     *********************/
+/********************   RC TX Settings     *********************/
 //#define MODE1                     // Enable this if wish to use cursor controls on same stick - for MODE 1 TX users
-
+//#define RCCHANNELS 8              // Amend if require up to 16 RC channels
 
 /********************       Airspeed Settings         ************************/
 // Completely UNTESTED for future integration of support for airspeed sensor

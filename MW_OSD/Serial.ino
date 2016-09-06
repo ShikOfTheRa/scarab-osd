@@ -197,7 +197,7 @@ void serialMSPCheck()
 
   if (cmdMSP==MSP_RC)
   {
-    for(uint8_t i=1;i<9;i++)
+    for(uint8_t i=1;i<RCCHANNELS+1;i++)
       MwRcData[i] = read16();
     handleRawRC();
   }

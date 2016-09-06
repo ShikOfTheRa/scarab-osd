@@ -610,6 +610,10 @@
   #define THROTTLESTICK    4
 #endif
 
+#ifndef RCCHANNELS
+  #define RCCHANNELS 8 
+#endif
+
 /********************  RSSI  *********************/
 #if defined FASTPWMRSSI
   #define INTPWMRSSI
