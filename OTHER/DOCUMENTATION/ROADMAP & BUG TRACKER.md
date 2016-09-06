@@ -5,6 +5,11 @@
 ---
 
 ## Bugfixes / Enhancements completed for next release (1.7): ##
+ * OSD    - very improved camera auto detection.  
+ * OSD    - long distance and negative altitude support .  
+ * OSD    - Support for power Efficiency 
+ * OSD    - Additional hardware support - OSD's without MAX hardware reset line connected 
+ * OSD    - Low voltage hysteresis filter for short high throttle situations  
  * OSD    - Support for MAVLINK/APM/PIXHAWK
  * OSD    - GPS OSD mode home set improvement - higher sat counts and consecutive valid fix required.
  * OSD    - Support for LTM protocol OSD
@@ -20,6 +25,9 @@
  * GUI    - Video volts shown in decimal format
  * BUG    - Armed timer bugfix
  * BUG    - Warning message display overwriting
+ * BUG    - Added simple GPS glitch filter for MAX speed errors from GPS.
+ * BUG    - fix for high altitude > 9999.
+ * BUG    - fix for negative amperage situations.
  * CODE   - Quality improvements - tidying 
  * CODE   - Memory improvements - significant memory savings 
 
@@ -27,9 +35,9 @@
 
 ## Bugfixes / Enhancements intended for 1.7: ##
 
- * OSD    - Voltage load sag hysterysis
- * OSD    - Support for alternative crosshairs
+ * GUI    - New Chrome GUI
  * GUI    - Improved speed
+ * OSD    - RC switch migrated to 1-8 rather than 0-7 
 
 ---
 
