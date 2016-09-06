@@ -47,7 +47,7 @@ import java.text.DecimalFormat;
 
 
 String MW_OSD_GUI_Version = "MWOSD R1.6 - NextGeneration";
-int MW_OSD_EEPROM_Version = 13;
+int MW_OSD_EEPROM_Version = 12;
 int CONFIGITEMS16 = 7;
 
 int  GPS_numSatPosition = 0;
