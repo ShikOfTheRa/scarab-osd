@@ -43,8 +43,8 @@ void kiss_sync() {
   MwAngle[1]=(int16_t)kissread_u16(33)/10;
   Kvar.mode = kissread_u8(65); 
   Kvar.mode = (Kvar.mode>2) ? 0 : Kvar.mode;
-  MwRcData[0]=1000+(int16_t)kissread_u16(0);
-  for(uint8_t i=1; i<8; i++) {
+  MwRcData[1]=1000+(int16_t)kissread_u16(0);
+  for(uint8_t i=2; i<9; i++) {
     MwRcData[i]=1500+(int16_t)kissread_u16(i*2);
   } 
   handleRawRC();

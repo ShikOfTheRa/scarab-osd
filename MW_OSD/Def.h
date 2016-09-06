@@ -577,37 +577,37 @@
 
 /********************  RX channel rule definitions  *********************/
 
-#if defined SERIAL_SUM_PPM_GS            //PITCH,YAW,THROTTLE,ROLL,AUX1,AUX2,AUX3,AUX4,8,9,10,11 //For Graupner/Spektrum    
-  #define ROLLSTICK        3
-  #define PITCHSTICK       0
-  #define YAWSTICK         1
-  #define THROTTLESTICK    2
-#elif defined SERIAL_SUM_PPM_RHF         //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4,8,9,10,11 //For Robe/Hitec/Futaba
-  #define ROLLSTICK        0
-  #define PITCHSTICK       1
-  #define YAWSTICK         3
-  #define THROTTLESTICK    2
-#elif defined SERIAL_SUM_PPM_M           //ROLL,PITCH,YAW,THROTTLE,AUX1,AUX2,AUX3,AUX4,8,9,10,11 //For Multiplex
-  #define ROLLSTICK        0
+#if defined SERIAL_SUM_PPM_GS            //PITCH,YAW,THROTTLE,ROLL,AUX1,AUX2,AUX3,AUX4 //For Graupner/Spektrum    
+  #define ROLLSTICK        4
   #define PITCHSTICK       1
   #define YAWSTICK         2
   #define THROTTLESTICK    3
-#elif defined SERIAL_SUM_PPM_HS          //PITCH,ROLL,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4,8,9,10,11 //For some Hitec/Sanwa/Others
+#elif defined SERIAL_SUM_PPM_RHF         //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For Robe/Hitec/Futaba
   #define ROLLSTICK        1
-  #define PITCHSTICK       0
-  #define YAWSTICK         3
-  #define THROTTLESTICK    2
-#elif defined KISS
+  #define PITCHSTICK       2
+  #define YAWSTICK         4
+  #define THROTTLESTICK    3
+#elif defined SERIAL_SUM_PPM_M           //ROLL,PITCH,YAW,THROTTLE,AUX1,AUX2,AUX3,AUX4 //For Multiplex
   #define ROLLSTICK        1
   #define PITCHSTICK       2
   #define YAWSTICK         3
-  #define THROTTLESTICK    0
+  #define THROTTLESTICK    4
+#elif defined SERIAL_SUM_PPM_HS          //PITCH,ROLL,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For some Hitec/Sanwa/Others
+  #define ROLLSTICK        2
+  #define PITCHSTICK       1
+  #define YAWSTICK         4
+  #define THROTTLESTICK    3
+#elif defined KISS
+  #define ROLLSTICK        2
+  #define PITCHSTICK       3
+  #define YAWSTICK         4
+  #define THROTTLESTICK    1
 #else
   // RX CHANEL IN MwRcData table
-  #define ROLLSTICK        0
-  #define PITCHSTICK       1
-  #define YAWSTICK         2
-  #define THROTTLESTICK    3
+  #define ROLLSTICK        1
+  #define PITCHSTICK       2
+  #define YAWSTICK         3
+  #define THROTTLESTICK    4
 #endif
 
 /********************  RSSI  *********************/

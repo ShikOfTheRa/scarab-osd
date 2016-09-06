@@ -1362,7 +1362,7 @@ void draw() {
   else {
 //    toggleConfItem[GetSetting("S_RCWSWITCH_CH")].show();
     txtlblconfItem[GetSetting("S_RCWSWITCH")].setText("Using RC Channel");
-    txtlblconfItem[GetSetting("S_RCWSWITCH_CH")].setText("OSD ch (0-7)");
+    txtlblconfItem[GetSetting("S_RCWSWITCH_CH")].setText("OSD ch (1-8)");
     txtlblconfItem[GetSetting("S_HUDSW0")].setText("HUD - LOW");
     txtlblconfItem[GetSetting("S_HUDSW1")].setText("HUD - HIGH");
     txtlblconfItem[GetSetting("S_HUDSW2")].setText("HUD - MID");

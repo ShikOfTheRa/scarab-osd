@@ -186,7 +186,7 @@ void serialMAVCheck(){
     break;
   case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
     MwRssi=(uint16_t)(((103)*serialBuffer[21])/10);
-    for(uint8_t i=0;i<8;i++)
+    for(uint8_t i=1;i<9;i++)
       MwRcData[i] = (int16_t)(serialBuffer[4+(i*2)]|(serialBuffer[5+(i*2)]<<8));
     handleRawRC();
     break;

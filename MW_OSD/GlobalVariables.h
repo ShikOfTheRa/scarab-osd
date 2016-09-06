@@ -365,7 +365,7 @@ DEBUGDEF,   // DEBUG                       37e
 0,   // S_UNUSED_1, S_AMPMAXL,
 0,   // S_UNUSED_2, S_AMPMAXH,
 0,   // S_RCWSWITCH,
-4,   // S_RCWSWITCH_CH,
+5,   // S_RCWSWITCH_CH,
 0,   // S_HUDSW0, LOW / NORMAL
 1,   // S_HUDSW1, HIGH / OSDSW
 0,   // S_HUDSW2, MID
@@ -562,7 +562,7 @@ int32_t  old_MwAltitude=0;                     // This hold barometric value
 
 
 int16_t MwAngle[2]={0,0};           // Those will hold Accelerometer Angle
-static uint16_t MwRcData[8]={   // This hold receiver pulse signal
+static uint16_t MwRcData[9]={   // This hold receiver pulse signal
   1500,1500,1500,1500,1500,1500,1500,1500} ;
 
 // for analogue / PWM sensor filtering 
