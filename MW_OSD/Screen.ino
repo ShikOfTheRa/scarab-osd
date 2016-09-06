@@ -695,32 +695,39 @@ void displayWatt(void)
   if(!fieldIsVisible(wattPosition))
     return;
   uint16_t WhrPosition = getPosition(wattPosition);
-#ifdef DISPLAYEFFICIENCY
+  uint16_t watts = amperage*voltage/100; // Watts
+  
+  ItoaPadded(watts, screenBuffer+1 , 5, 5);
+  screenBuffer[0] = SYM_BLANK;
+  screenBuffer[5] = SYM_WATT;
+  screenBuffer[6] = 0;
+  MAX7456_WriteString(screenBuffer,WhrPosition);
+}
+
+
+void displayEfficiency(void)
+{
+  if(!fieldIsVisible(wattPosition))
+    return;
+  uint16_t WhrPosition = getPosition(wattPosition);
   uint16_t xx;
   if(!Settings[S_UNITSYSTEM])
     xx = GPS_speed * 0.036;           // From MWii cm/sec to Km/h
   else
     xx = GPS_speed * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
-  uint16_t watts;
+  uint16_t eff;
   if(xx > 0){
-    watts = amperage*voltage/(100*xx); // Watts/Speed}
+    eff = amperage*voltage/(10*xx); // Watts/Speed}
   }
   else{
-    watts = 999;
+    eff = 999;
   }
-  #else 
-  uint16_t watts = amperage*voltage/100; // Watts
-#endif
-  
-  ItoaPadded(watts, screenBuffer+1 , 5, 5);
+  ItoaPadded(eff, screenBuffer+1 , 4, 3);
   screenBuffer[0] = SYM_BLANK;
-#ifdef DISPLAYEFFICIENCY
   screenBuffer[5] = 0x2A;
-#else
-  screenBuffer[5] = SYM_WATT;
-#endif
   screenBuffer[6] = 0;
-  MAX7456_WriteString(screenBuffer,WhrPosition);
+  if (eff < 999)
+    MAX7456_WriteString(screenBuffer,WhrPosition);
 }
 
 
