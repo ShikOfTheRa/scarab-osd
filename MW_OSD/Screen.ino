@@ -921,7 +921,7 @@ void displayGPS_speed(void)
     xx = GPS_speed * 0.036;           // From MWii cm/sec to Km/h
   else
     xx = GPS_speed * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
-  if(xx > speedMAX)
+  if((xx > speedMAX)&&(xx<(speedMAX+30))) // simple GPS glitch filter
     speedMAX = xx;
   if(!fieldIsVisible(speedPosition))
     return;
