@@ -1,7 +1,7 @@
 1 How do I use OSD / smart switch / Screen switching
-  * There are 2 methods - using a RC channel (0-7) or by using OSD SWITCH if the FC supports it.
+  * There are 2 methods - using a RC channel (1-8) or by using OSD SWITCH if the FC supports it.
   * Select which method on the GUI
-  * if using RC Channel, just make sure you use the correct channel. 
+  * if using RC Channel, just make sure you use the correct channel. Numbering changed after 1.6 
 
 ---
 
