@@ -141,12 +141,11 @@ void setup()
 
 #ifdef I2C_UB_SUPPORT
   // I2C initialization
-  //WireUB.begin(I2C_ADDR, I2C_IRQPIN);
-  WireUB.begin(I2C_ADDR, -1);
+  WireUB.begin(I2C_UB_ADDR, -1);
   TWBR=2; // Probably has no effect.
   // Compute rx queue timeout in microseconds
   //   = 3 character time at current bps (10bits/char)
-  WireUB.setWriteTimo((1000000UL) / (I2C_BREQUIV/10) * 3);
+  WireUB.setWriteTimo((1000000UL) / (I2C_UB_BREQUIV/10) * 3);
 #endif
 
   MAX7456SETHARDWAREPORTS
