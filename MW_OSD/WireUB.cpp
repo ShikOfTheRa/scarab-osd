@@ -20,7 +20,7 @@
  
   Modified 2012 by Todd Krein (todd@krein.org) to implement repeated starts
 
-  Modified 2016 by jflyper
+  Modified 2016 by jflyper for UART Bridge Slave
 */
 
 #include "Config.h" // Look for I2C_UB_SUPPORT

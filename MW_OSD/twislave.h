@@ -1,5 +1,5 @@
 /*
-  twislave.h - TWI/I2C slave optimized library for I2C-UART Bridge
+  twislave.c - TWI/I2C optimized for NXP SC16IS7xx emulation,
       Heavily modified from ...
 
   twi.h - TWI/I2C library for Wiring & Arduino
