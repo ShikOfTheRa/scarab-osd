@@ -3,11 +3,11 @@
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
-#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware
+//#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware
 //#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
 //#define RTFQV1                    // Uncomment this if using standard RTFQ/Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
 //#define RTFQMICRO                 // Uncomment this if using micro RTFQ/Witespy Micro Minim OSD, select this to correct for swapped bat1/bat 2.  
-//#define RUSHDUINO                 // Uncomment this if using Rushduino
+#define RUSHDUINO                 // Uncomment this if using Rushduino
 //#define KYLIN250PDB               // Uncomment this if using a Kylin 250 FPV PDB (Using A6 as VOLTAGEPIN)
 
 // NOTE-some of the popular RTFQ/Witespy boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
@@ -17,6 +17,17 @@
 
 // For hardwares WITHOUT access to MAX RESET pin (e.g. Airbot MicroOSD v2.3)
 //#define MAX_SOFTRESET
+/*
+ * I2C Support
+ */
+#define I2C_UB_SUPPORT
+
+#ifdef I2C_UB_SUPPORT
+#define I2C_UB_ADDR      0x19
+//#define I2C_UB_IRQPIN    3
+#define I2C_UB_BREQUIV   115200UL  // Pretend baudrate of 115200
+#define MSP2CFG                 // Duplicate MSP request to config port
+#endif
 
 
 /********************       CONTROLLER SOFTWARE      *********************/

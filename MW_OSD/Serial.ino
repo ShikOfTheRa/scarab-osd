@@ -15,7 +15,7 @@ static uint8_t dataSize;
 static uint8_t cmdMSP;
 static uint8_t rcvChecksum;
 static uint8_t readIndex;
-uint8_t txChecksum;
+static uint8_t txChecksum;
 
 #if defined PROTOCOL_MAVLINK
   #include "MAVLINK.h"
@@ -54,6 +54,12 @@ uint8_t read8()  {
 #define skip32() {readIndex+=4;}
 #define skipn(n) {readIndex+=n;}
 
+#ifndef I2C_UB_SUPPORT
+
+//
+// Legacy mspWrite*()
+//
+
 void mspWriteRequest(uint8_t mspCommand, uint8_t txDataSize){
   //return;
   Serial.write('$');
@@ -86,6 +92,120 @@ void mspWrite32(uint32_t t){
 void mspWriteChecksum(){
   Serial.write(txChecksum);
 }
+
+// Writes to GUI (OSD_xxx) is distinguished from writes to FC (MSP_xxx) by
+// cfgWrite*() and mspWrite*().
+//
+// If I2C is not used, then all cfgWrite*() will be mspWrite*().
+
+# define cfgWriteRequest mspWriteRequest
+# define cfgWrite8 mspWrite8
+# define cfgWrite16 mspWrite16
+# define cfgWrite32 mspWrite32
+# define cfgWriteChecksum mspWriteChecksum
+
+#else // I2C_UB_SUPPORT
+
+//
+// streamWrite*()
+//
+// With I2C_UB_SUPPORT, we have two message i/o streams; one being a tradional
+// serial, another being an I2C. Here, we generalize writes to these streams
+// with streamWrite*().
+// mspWrite*() and cfgWrite*() will eventually call streamWrite*() with
+// appropriate stream handle (port).
+
+void streamWriteRequest(Stream *port, uint8_t mspCommand, uint8_t txDataSize){
+  port->write("$M<");
+  txChecksum = 0;
+  streamWrite8(port, txDataSize);
+  streamWrite8(port, mspCommand);
+  if(txDataSize == 0)
+    streamWriteChecksum(port);
+}
+
+void streamWrite8(Stream *port, uint8_t t){
+  port->write(t);
+  txChecksum ^= t;
+}
+
+void streamWrite16(Stream *port, uint16_t t){
+  streamWrite8(port, t);
+  streamWrite8(port, t>>8);
+}
+
+void streamWrite32(Stream *port, uint32_t t){
+  streamWrite16(port, t);
+  streamWrite16(port, t>>16);
+}
+
+void streamWriteChecksum(Stream *port){
+  port->write(txChecksum);
+}
+
+//
+// mspWrite*(): Use streamWrite*(), duplicate MSP to config port if specified
+//
+
+void mspWriteRequest(uint8_t mspCommand, uint8_t txDataSize){
+# ifdef MSP2CFG
+  streamWriteRequest(&Serial, mspCommand, txDataSize);
+#endif
+  streamWriteRequest(&WireUB, mspCommand, txDataSize);
+}
+
+void mspWrite8(uint8_t t){
+# ifdef MSP2CFG
+  streamWrite8(&Serial, t);
+# endif
+  streamWrite8(&WireUB, t);
+}
+
+void mspWrite16(uint16_t t){
+# ifdef MSP2CFG
+  streamWrite16(&Serial, t);
+# endif
+  streamWrite16(&WireUB, t);
+}
+
+void mspWrite32(uint32_t t){
+# ifdef MSP2CFG
+  streamWrite32(&Serial, t);
+# endif
+  streamWrite32(&WireUB, t);
+}
+
+void mspWriteChecksum(){
+# ifdef MSP2CFG
+  streamWriteChecksum(&Serial);
+# endif
+  streamWriteChecksum(&WireUB);
+}
+
+//
+// cfgWrite*(): Explicit write to config (GUI) port
+//
+
+void cfgWriteRequest(uint8_t mspCommand, uint8_t txDataSize){
+  streamWriteRequest(&Serial, mspCommand, txDataSize);
+}
+
+void cfgWrite8(uint8_t t){
+  streamWrite8(&Serial, t);
+}
+
+void cfgWrite16(uint16_t t){
+  streamWrite16(&Serial, t);
+}
+
+void cfgWrite32(uint32_t t){
+  streamWrite32(&Serial, t);
+}
+
+void cfgWriteChecksum(){
+  streamWriteChecksum(&Serial);
+}
+#endif // I2C_UB_SUPPORT
 
 // --------------------------------------------------------------------------------------
 // Here are decoded received commands from MultiWii
@@ -128,14 +248,14 @@ void serialMSPCheck()
     }
 #ifdef GUISENSORS
     if (cmd == OSD_SENSORS) {
-      mspWriteRequest(MSP_OSD,1+10);
-      mspWrite8(OSD_SENSORS);
+      cfgWriteRequest(MSP_OSD,1+10);
+      cfgWrite8(OSD_SENSORS);
       for (uint8_t sensor=0;sensor<SENSORTOTAL;sensor++) {
 //        uint16_t sensortemp = analogRead(sensorpinarray[sensor]);
         uint16_t sensortemp = (uint16_t)sensorfilter[sensor][SENSORFILTERSIZE]/SENSORFILTERSIZE;
-        mspWrite16(sensortemp);
+        cfgWrite16(sensortemp);
       }
-       mspWriteChecksum();
+       cfgWriteChecksum();
     }
 #endif
 
@@ -987,10 +1107,46 @@ void serialMSPreceive(uint8_t loops)
   }
   c_state = IDLE;
 
+#ifdef I2C_UB_SUPPORT
+  // The focusPort is a message oriented multiplexer that switches
+  // between serial and i2c ports.
+  //
+  // Once a first character of a new message is read from either port,
+  // then the focusPort is fixed to that port and will not change
+  // until the state goes back to IDLE.
+
+  static Stream *focusPort = NULL;
+
+  // Always reset focusPort if IDLE
+  if (c_state == IDLE)
+    focusPort = NULL;
+
+  if (focusPort && focusPort->available()) {
+    // Message is actively read.
+    loopserial=1;
+  } else {
+    // Beginning of a new message. Fix the focusPort.
+    if (Serial.available()) {
+      focusPort = &Serial;
+      loopserial = 1;
+    }
+    else if (WireUB.available()) {
+      focusPort = &WireUB;
+      loopserial = 1;
+    }
+  }
+#else
   if (Serial.available()) loopserial=1;
+#endif
+
   while(loopserial==1)
   {
+#ifdef I2C_UB_SUPPORT
+    // Read from the active port.
+    c = focusPort->read();
+#else
     c = Serial.read();
+#endif
 
     #ifdef GPSOSD    
       armedtimer = 0;
@@ -1030,6 +1186,10 @@ void serialMSPreceive(uint8_t loops)
       if (c > SERIALBUFFERSIZE)
       {  // now we are expecting the payload size
         c_state = IDLE;
+#ifdef SERIALCHECK
+        // Payload too large
+        debug[1]++;
+#endif
       }
       else
       {
@@ -1053,13 +1213,23 @@ void serialMSPreceive(uint8_t loops)
         if(rcvChecksum == 0) {
             serialMSPCheck();
         }
+#ifdef SERIALCHECK
+        else {
+          // Checksum error
+          debug[0]++;
+        }
+#endif
         c_state = IDLE;
       }
       else
         serialBuffer[receiverIndex++]=c;
     }
     if (loops==0) loopserial=0;
+#ifdef I2C_UB_SUPPORT
+    if (!focusPort->available()) loopserial=0;
+#else
     if (!Serial.available()) loopserial=0;
+#endif
   }
 }
 
@@ -1195,29 +1365,29 @@ void configSave()
 }
 
 void fontSerialRequest() {
-  mspWriteRequest(MSP_OSD,3);
-  mspWrite8(OSD_GET_FONT);
-  mspWrite16(getNextCharToRequest());
-  mspWriteChecksum();
+  cfgWriteRequest(MSP_OSD,3);
+  cfgWrite8(OSD_GET_FONT);
+  cfgWrite16(getNextCharToRequest());
+  cfgWriteChecksum();
 }
 
 void settingsSerialRequest() {
-  mspWriteRequest(MSP_OSD,1+30);
-  mspWrite8(OSD_READ_CMD_EE);
+  cfgWriteRequest(MSP_OSD,1+30);
+  cfgWrite8(OSD_READ_CMD_EE);
   for(uint8_t i=0; i<10; i++) {
     eedata = EEPROM.read(eeaddress);
-    mspWrite16(eeaddress);
-    mspWrite8(eedata);
+    cfgWrite16(eeaddress);
+    cfgWrite8(eedata);
     eeaddress++;
   }
-  mspWriteChecksum();
+  cfgWriteChecksum();
 }
 
 void settingswriteSerialRequest() {
-  mspWriteRequest(MSP_OSD,3);
-  mspWrite8(OSD_READ_CMD_EE);
-  mspWrite16(eeaddress);
-  mspWriteChecksum();
+  cfgWriteRequest(MSP_OSD,3);
+  cfgWrite8(OSD_READ_CMD_EE);
+  cfgWrite16(eeaddress);
+  cfgWriteChecksum();
 }
 
 void setFCProfile()
