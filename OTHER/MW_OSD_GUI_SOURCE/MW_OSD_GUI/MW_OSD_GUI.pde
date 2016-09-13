@@ -294,8 +294,8 @@ int XCOMPASS   = 510;        int YCOMPASS    = 98;
 //int XGPS       = 305;        int YGPS    = 5;
 int XTIME      = 510;        int YTIME    = 190;
 //int XTIME      = 510;        int YTIME    = 5;
-int XHUD       = 305;        int YHUD     = 240;
-int XDisplay     = 305;        int YDisplay   = 114; //48;
+int XHUD       = 305;        int YHUD     = 257;
+int XDisplay     = 305;        int YDisplay   = 131;
 int XSPORT      = 810;        int YSPORT    = 357;
 
 int XOther     = 305;        int YOther   = 5; //48;
@@ -363,7 +363,7 @@ String[] ConfigNames = {
   "Use FC amperage",
   "Display mAh",
   "Use Virtual Sensor",
-  "Unused3",
+  "Display Text Alarms",
   "Display Video Voltage",
   "Voltage Adjust",
   "Unused4",
@@ -450,7 +450,7 @@ String[] ConfigHelp = {
   "Use MWii",
   "Display mAh",
   "Use Virtual Sensor",
-  "Unused3",
+  "Display Text Alarms",
   "Display Video Voltage",
   "Voltage Adjust",
   "Unused4",
@@ -550,7 +550,7 @@ int[] ConfigRanges = {
 1,     // S_MWAMPERAGE,              12a
 1,     // S_AMPER_HOUR,            13
 1,     // S_AMPERAGE_VIRTUAL,
-1,     // UNUSED_3,      
+1,     // S_ALARMS_TEXT,      
 
 1,     // S_VIDVOLTAGE             14
 255,   // S_VIDDIVIDERRATIO        15    
@@ -896,7 +896,6 @@ DONATEimage  = loadImage("DON_def.png");
 CreateItem(GetSetting("S_CHECK_"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_UNUSED_1"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_UNUSED_2"), 5, 0, G_EEPROM);
-CreateItem(GetSetting("S_UNUSED_3"),  5,0, G_EEPROM);
 CreateItem(GetSetting("S_UNUSED_4"),  5,1*17, G_EEPROM);
 CreateItem(GetSetting("S_USE_BOXNAMES"),  5,0, G_EEPROM);
 CreateItem(GetSetting("S_GPSCOORDTOP"),  5,0, G_EEPROM);
@@ -993,6 +992,7 @@ BuildRadioButton(GetSetting("S_VIDEOSIGNALTYPE"),  5,1*17, G_Other, "NTSC","PAL"
 CreateItem(GetSetting("S_THROTTLEPOSITION"),  5,2*17, G_Other);
 CreateItem(GetSetting("S_SHOWBATLEVELEVOLUTION"),  5,3*17, G_Other);
 CreateItem(GetSetting("S_RESETSTATISTICS"),  5,4*17, G_Other);
+CreateItem(GetSetting("S_ALARMS_TEXT"),  5,5*17, G_Other);
 
 //  Display ---------------------------------------------------------------------------
 CreateItem(GetSetting("S_MODEICON"),  5,0*17, G_DISPLAY);
@@ -2249,7 +2249,7 @@ public void LoadConfig(){
     Passthroughcomm = 0;
     AutoSimulator = 0;
     AutoDebugGUI = 1;
-    Simtype=1;
+    Simtype=0;
     FrameRate = 7;
     StartupMessage = 0;
     Donate = 2;

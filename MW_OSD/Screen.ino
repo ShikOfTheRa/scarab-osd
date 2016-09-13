@@ -1201,8 +1201,8 @@ void displayCursor(void)
     if(configPage==MENU_ADVANCED)
     {  
       COL=3;
-      if (ROW==9) ROW=6;
-      if (ROW==7) ROW=10;
+      if (ROW==9) ROW=5;
+      if (ROW==6) ROW=10;
       cursorpos=(ROW+2)*30+10+6+6;
     }
 #endif
@@ -1219,8 +1219,8 @@ void displayCursor(void)
     if(configPage==MENU_ALARMS)
     {  
       COL=3;
-      if (ROW==9) ROW=6;
-      if (ROW==7) ROW=10;
+      if (ROW==9) ROW=7;
+      if (ROW==8) ROW=10;
       cursorpos=(ROW+2)*30+10+6+6;
     }
 #endif     
@@ -1508,7 +1508,7 @@ void displayConfigScreen(void)
 #ifdef MENU_ADVANCED
   if(configPage==MENU_ADVANCED)
   {
-    for(uint8_t X=0; X<=5; X++) {
+    for(uint8_t X=0; X<=4; X++) {
       MAX7456_WriteString_P(PGMSTR(&(menu_advanced[X])),ROLLT+(X*30));
     }
 
@@ -1522,24 +1522,19 @@ void displayConfigScreen(void)
     else {
       MAX7456_WriteString_P(configMsg711, ROLLD);
     }
-    if(!Settings[S_VIDEOSIGNALTYPE]){
-      MAX7456_WriteString_P(configMsg720, PITCHD);
-    }
-    else {
-      MAX7456_WriteString_P(configMsg721, PITCHD);
-    }
+//    Menuconfig_onoff(PITCHD,S_ALARMS_TEXT);
     if(Settings[S_VREFERENCE]){
-      MAX7456_WriteString_P(configMsg730, YAWD);
+      MAX7456_WriteString_P(configMsg730, PITCHD);
     }
     else {
-      MAX7456_WriteString_P(configMsg731, YAWD);
+      MAX7456_WriteString_P(configMsg731, PITCHD);
     }
-    Menuconfig_onoff(ALTD,S_DEBUG);    
+    Menuconfig_onoff(YAWD,S_DEBUG);    
     if(timer.magCalibrationTimer>0)
-      MAX7456_WriteString(itoa(timer.magCalibrationTimer,screenBuffer,10),VELD);
+      MAX7456_WriteString(itoa(timer.magCalibrationTimer,screenBuffer,10),ALTD);
     else
-      MAX7456_WriteString("-",VELD);
-    MAX7456_WriteString(itoa(Settings[S_RCWSWITCH_CH],screenBuffer,10),LEVD);
+      MAX7456_WriteString("-",ALTD);
+    MAX7456_WriteString(itoa(Settings[S_RCWSWITCH_CH],screenBuffer,10),VELD);
   }
 #endif
 #ifdef MENU_GPS_TIME
@@ -1561,10 +1556,12 @@ void displayConfigScreen(void)
     MenuBuffer[3]=Settings[S_FLYTIME_ALARM];
     MenuBuffer[4]=Settings[S_AMPER_HOUR_ALARM];
     MenuBuffer[5]=Settings[S_AMPERAGE_ALARM];
-    for(uint8_t X=0; X<=5; X++) {
+    for(uint8_t X=0; X<=6; X++) {
       MAX7456_WriteString_P(PGMSTR(&(menu_alarm_item[X])),ROLLT+(X*30));
-      MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
+      if (X<=5)
+        MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
     }
+    Menuconfig_onoff(MAGD,S_ALARMS_TEXT);
   }
 #endif  
 #ifdef MENU_PROFILE
@@ -1857,6 +1854,10 @@ void displayArmed(void)
   if(!fieldIsVisible(motorArmedPosition)){
     return;  
   }
+  if(!Settings[S_ALARMS_TEXT]){
+    return;  
+  }
+
 
 #ifdef HAS_ALARMS
   if (alarmState != ALARM_OK) {

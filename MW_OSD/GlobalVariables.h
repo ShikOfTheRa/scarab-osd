@@ -234,7 +234,7 @@ enum Setting_ {
   S_MWAMPERAGE,
   S_AMPER_HOUR,
   S_AMPERAGE_VIRTUAL,
-  S_UNUSED_3,
+  S_ALARMS_TEXT,
   S_VIDVOLTAGE,
   S_VIDDIVIDERRATIO,
   S_UNUSED_4,
@@ -322,8 +322,8 @@ MWOSDVER,   // used for check              0
 0,   // S_AMPERAGE                  12
 0,   // S_MWAMPERAGE                12a :)
 0,   // S_AMPER_HOUR                13
-0,   // S_AMPERAGE_VIRTUAL,
-150, // S_UNUSED_3,
+0,   // S_AMPERAGE_VIRTUAL,         13a
+1  , // S_ALARMS_TEXT,              13b
 0,   // S_VIDVOLTAGE                14
 200, // S_VIDDIVIDERRATIO           15
 0,   // S_VIDVOLTAGE_VBAT           16 
@@ -974,9 +974,6 @@ const char configMsg70[]  PROGMEM = "ADVANCED";
 const char configMsg71[]  PROGMEM = "UNITS";
 const char configMsg710[] PROGMEM = "MET";
 const char configMsg711[] PROGMEM = "IMP";
-const char configMsg72[]  PROGMEM = "SIGNAL";
-const char configMsg720[] PROGMEM = "NTSC";
-const char configMsg721[] PROGMEM = "PAL";
 const char configMsg73[]  PROGMEM = "V REF";
 const char configMsg730[] PROGMEM = "5V";
 const char configMsg731[] PROGMEM = "1.1V";
@@ -996,6 +993,8 @@ const char configMsg93[] PROGMEM = "SPEED";
 const char configMsg94[] PROGMEM = "TIMER";
 const char configMsg95[] PROGMEM = "MAH X100";
 const char configMsg96[] PROGMEM = "AMPS";
+const char configMsg97[] PROGMEM = "TEXT ALARMS";
+
 //-----------------------------------------------------------Page10
 const char configMsg100[] PROGMEM = "ADVANCE TUNING";
 const char configMsg101[] PROGMEM = "PROFILE";
@@ -1064,12 +1063,6 @@ const PROGMEM char * const menu_choice_unit[] =
   configMsg710,
   configMsg711,
 };
-// Menu selections
-const PROGMEM char * const menu_choice_video[] =
-{   
-  configMsg720,
-  configMsg721,
-};// Menu selections
 const PROGMEM char * const menu_choice_ref[] =
 {   
   configMsg731,
@@ -1194,7 +1187,6 @@ const PROGMEM char * const menu_display[] =
 const PROGMEM char * const menu_advanced[] = 
 {   
   configMsg71,
-  configMsg72,
   configMsg73,
   configMsg74,
   configMsg75,
@@ -1215,6 +1207,7 @@ const PROGMEM char * const menu_alarm_item[] =
   configMsg94,
   configMsg95,
   configMsg96,
+  configMsg97,
 };
 
 const PROGMEM char * const menu_profile[] = 

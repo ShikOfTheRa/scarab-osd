@@ -1022,14 +1022,11 @@ void serialMenuCommon()
   if (configPage == MENU_ADVANCED && COL == 3) {
     switch(ROW) {
     case 1: ReverseSetting(S_UNITSYSTEM)
-    case 2:
-      Settings[S_VIDEOSIGNALTYPE]=!Settings[S_VIDEOSIGNALTYPE];
-      MAX7456Setup();
-      break;
-    case 3: ReverseSetting(S_VREFERENCE)
-    case 4: ReverseSetting(S_DEBUG)
-    case 5: timer.magCalibrationTimer=CALIBRATION_DELAY; break;
-    case 6: ModifySetting(S_RCWSWITCH_CH)
+//    case 3: ReverseSetting(S_ALARMS_TEXT)
+    case 2: ReverseSetting(S_VREFERENCE)
+    case 3: ReverseSetting(S_DEBUG)
+    case 4: timer.magCalibrationTimer=CALIBRATION_DELAY; break;
+    case 5: ModifySetting(S_RCWSWITCH_CH)
     }
   }
 #endif
@@ -1057,6 +1054,7 @@ void serialMenuCommon()
     case 4: ModifySetting(S_FLYTIME_ALARM)
     case 5: ModifySetting(S_AMPER_HOUR_ALARM)
     case 6: ModifySetting(S_AMPERAGE_ALARM)
+    case 7: ReverseSetting(S_ALARMS_TEXT)
     }
   }
 #endif
