@@ -385,6 +385,11 @@ void loop()
       case REQ_MSP_PID:
         MSPcmdsend = MSP_PID;
         break;
+#ifdef MENU_PID_ADVANCED  
+      case REQ_MSP_PID_ADVANCED:
+        MSPcmdsend = MSP_PID_ADVANCED;
+        break;
+#endif        
 #ifdef MENU_SERVO  
       case REQ_MSP_SERVO_CONF:
         MSPcmdsend = MSP_SERVO_CONF;

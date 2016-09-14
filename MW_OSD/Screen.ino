@@ -1102,6 +1102,15 @@ void displayCursor(void)
       cursorpos = (ROW+2)*30+10+(COL-1)*6;
     }
 #endif
+
+#ifdef MENU_PID_ADVANCED
+    if(configPage==MENU_PID_ADVANCED){
+      if (ROW==2) ROW=10;
+      if (ROW==9) ROW=1;
+    }
+#endif
+
+
 #ifdef MENU_RC
 #if defined CORRECT_MENU_RCT2
     if(configPage==MENU_RC){
@@ -1340,6 +1349,19 @@ void displayConfigScreen(void)
     MAX7456_WriteString("P",71);
     MAX7456_WriteString("I",77);
     MAX7456_WriteString("D",83);
+  }
+#endif
+#ifdef MENU_PID_ADVANCED
+  if(configPage==MENU_PID_ADVANCED)
+  {   
+    MenuBuffer[0]=cfgpa.yawItermIgnoreRate;
+    MenuBuffer[1]=cfgpa.yaw_p_limit;
+    MenuBuffer[2]=cfgpa.rateAccelLimit;
+    MenuBuffer[3]=cfgpa.yawRateAccelLimit;
+    for(uint8_t X=0; X<=3; X++) {
+      MAX7456_WriteString_P(PGMSTR(&(menu_pid_advanced[X])),ROLLT+(X*30));
+      MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
+    }
   }
 #endif
 #ifdef MENU_RC

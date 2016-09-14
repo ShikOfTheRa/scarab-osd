@@ -604,6 +604,31 @@ void serialMSPCheck()
   }
 #endif
 
+#ifdef ENABLE_MSP_PID_ADVANCED
+  if (cmdMSP == MSP_PID_ADVANCED)
+  {
+    cfgpa.rollPitchItermIgnoreRate=read16();
+    cfgpa.yawItermIgnoreRate=read16();
+    cfgpa.yaw_p_limit=read16();
+    cfgpa.deltaMethod=read8();
+    cfgpa.vbatPidCompensation=read8();
+    cfgpa.ptermSRateWeight=read8();
+    cfgpa.dtermSetpointWeight=read8();
+    cfgpa.=read8();
+    cfgpa.=read8();
+    cfgpa.itermThrottleGain=read8();
+    cfgpa.rateAccelLimit=read16();
+    cfgpa.yawRateAccelLimit=read16();
+    modeMSPRequests &=~ REQ_MSP_PID_ADVANCED;
+  }
+
+  if (cmdMSP == MSP_LOOP_TIME)
+  {
+    LoopTime = read16();
+    modeMSPRequests &=~ REQ_MSP_LOOP_TIME;
+  }
+#endif
+
 #ifdef HAS_ALARMS
   if (cmdMSP == MSP_ALARMS)
   {
@@ -896,6 +921,11 @@ void serialMenuCommon()
   }
 #endif
 
+#ifdef MENU_PID_ADVANCED
+  if(configPage == MENU_PID_ADVANCED) {    
+  }
+#endif
+  
 #ifdef MENU_SERVO
   if(configPage == MENU_SERVO) {
     switch(COL) {
@@ -1277,6 +1307,24 @@ void configSave()
     mspWrite8(D8[i]);
   }
   mspWriteChecksum();
+
+#if defined MENU_PID_ADVANCED
+  mspWriteRequest(MSP_SET_PID_ADVANCED, 17);
+  mspWrite16(cfgpa.rollPitchItermIgnoreRate);
+  mspWrite16(cfgpa.yawItermIgnoreRate);
+  mspWrite16(cfgpa.yaw_p_limit);
+  mspWrite8(cfgpa.deltaMethod);
+  mspWrite8(cfgpa.vbatPidCompensation);
+  mspWrite8(cfgpa.ptermSRateWeight);
+  mspWrite8(cfgpa.dtermSetpointWeight);
+  mspWrite8(0);
+  mspWrite8(0);
+  mspWrite8(cfgpa.itermThrottleGain);
+  mspWrite16(cfgpa.rateAccelLimit);
+  mspWrite16(cfgpa.yawRateAccelLimit);
+  mspWriteChecksum();
+#endif  
+
   
 #if defined CORRECT_MSP_CF2
   mspWriteRequest(MSP_SET_RC_TUNING,11);

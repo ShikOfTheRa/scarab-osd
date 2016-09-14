@@ -9,25 +9,12 @@
 //#define RTFQMICRO                 // Uncomment this if using micro RTFQ/Witespy Micro Minim OSD, select this to correct for swapped bat1/bat 2.  
 //#define RUSHDUINO                 // Uncomment this if using Rushduino
 //#define KYLIN250PDB               // Uncomment this if using a Kylin 250 FPV PDB (Using A6 as VOLTAGEPIN)
+//#define AIRBOTMICRO23             // Uncomment this if using an airbot MicroOSD v2.3
 
 // NOTE-some of the popular RTFQ/Witespy boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct: 
 // #define SWAPVOLTAGEPINS          // For boards with batt voltage appearing on vid voltage
 // #define ALTERNATEDIVIDERS        // For boards with voltage unable to be adjusted high enough
-
-// For hardwares WITHOUT access to MAX RESET pin (e.g. Airbot MicroOSD v2.3)
-//#define MAX_SOFTRESET
-/*
- * I2C Support
- */
-//#define I2C_UB_SUPPORT
-
-#ifdef I2C_UB_SUPPORT
-#define I2C_UB_ADDR      0x19
-//#define I2C_UB_IRQPIN    3
-#define I2C_UB_BREQUIV   115200UL  // Pretend baudrate of 115200
-#define MSP2CFG                 // Duplicate MSP request to config port
-#endif
 
 
 /********************       CONTROLLER SOFTWARE      *********************/
@@ -45,8 +32,8 @@
 //#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
-//#define BETAFLIGHT                // Uncomment this if you are using BETAFLIGHT (same as CLEANFLIGHT at time of this MWOSD release)
-#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight 
+#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version (3.0.0 at time of this MWOSD release)
+//#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight 
 //#define FIXEDWING_BF_SERVO        // Uncomment this if you are using fixed wing Baseflight with additional SERVO adjustment menu.
 //#define HARAKIRI                  // Uncomment this if you are using HARAKIRI (for BOXNAMES compatibility)
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
@@ -64,6 +51,8 @@
 //#define BASEFLIGHT20150327        // Uncomment this if you are using BASEFLIGHT up to and including version Stable 2015.03.27
 //#define CLEANFLIGHT172            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.7.2
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1 
+//#define BETAFLIGHT2               // Uncomment this if you are using BETAFLIGHT versions prior to 3.0.0
+
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
@@ -266,6 +255,10 @@
 // Enable to use a battery icon that indicates capacity remaining dependant upon battery voltage or mAh used. Or both if required.
 #define BATTERYICONVOLTS          //Enable to use with voltage as indicator of capacity remaining
 //#define BATTERYICONAMPS           //Enable to use with mAh used percentage of AMPHR alarm limit. Warning will now be at 80% of that GUI value
+
+
+/********************       I2C support         ************************/
+//#define I2C_UB_SUPPORT
 
 
 /********************       FrSky S.Port settings      *********************/

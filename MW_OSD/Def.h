@@ -32,7 +32,7 @@
 #endif
 
 #ifdef BETAFLIGHT    //set up latest at time of release
-//  #define BETAFLIGHT
+  #define BETAFLIGHT3
 #endif
 
 #ifdef TAULABS    //set up latest at time of release
@@ -97,7 +97,7 @@
 //ENABLE_MSP_SAVE_ADVANCED - adds the code to read/write PROFILE+LOOPIME+PID CONTROLLER if supported
 //CORRECTLOOPTIME show looptime option in Adavanced tuning menu
 
-#if defined BETAFLIGHT
+#if defined BETAFLIGHT2
   #define AMPERAGE_DIV 10
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
@@ -114,6 +114,27 @@
   #define MENU_ADVANCED 7       //ADVANCED
   #define MENU_ALARMS   8       //ALARMS
   #define MENU_PROFILE  9       //PROFILE+PID CONTROLLER
+  #define MAXPAGE       MENU_PROFILE
+#endif
+
+#if defined BETAFLIGHT3
+  #define AMPERAGE_DIV 10
+  #define CORRECT_MSP_CF2
+  #define CORRECT_MENU_RCT2
+  #define ENABLE_MSP_SAVE_ADVANCED
+  #define ACROPLUS
+
+  #define MENU_STAT     0       //STATISTICS
+  #define MENU_PID      1       //PID CONFIG
+  #define MENU_PID_ADVANCED 2   //ADVANCED PID CONFIG
+  #define MENU_RC       3       //RC TUNING
+  #define MENU_VOLTAGE  4       //VOLTAGE
+  #define MENU_RSSI     5       //RSSI
+  #define MENU_CURRENT  6       //CURRENT
+  #define MENU_DISPLAY  7       //DISPLAY
+  #define MENU_ADVANCED 8       //ADVANCED
+  #define MENU_ALARMS   9       //ALARMS
+  #define MENU_PROFILE  10      //PROFILE+PID CONTROLLER
   #define MAXPAGE       MENU_PROFILE
 #endif
 
@@ -413,6 +434,10 @@
     # define MAX7456HWRESET   PORTB&=B11111011;delay(100);PORTB|=B00000100;
 #endif
 
+#ifdef AIRBOTMICRO23
+    #define MAX_SOFTRESET
+#endif
+
 #ifdef RTFQV1                     
     #define SWAPVOLTAGEPINS
     #define ALTERNATEDIVIDERS
@@ -443,6 +468,12 @@
     #define DIVIDER5v       0.0005      // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
 #endif
 
+#ifdef I2C_UB_SUPPORT
+    #define I2C_UB_ADDR      0x19
+  //#define I2C_UB_IRQPIN    3
+    #define I2C_UB_BREQUIV   115200UL   // Pretend baudrate of 115200
+    #define MSP2CFG                     // Duplicate MSP request to config port
+#endif
 
 /********************  GPS OSD rule definitions  *********************/
 
