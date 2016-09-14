@@ -77,6 +77,10 @@
   #define MULTIWII_V24
 #endif
 
+#ifdef PIXHAWK   //set up latest at time of release
+  #define APM
+#endif
+
 #ifdef APM       //set up latest at time of release
 #endif
 
