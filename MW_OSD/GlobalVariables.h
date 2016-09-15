@@ -701,6 +701,7 @@ uint16_t flyingTime=0;
   uint8_t  GPS_armedangleset = 0;
   uint8_t  GPS_active=5; 
   uint8_t  GPS_fix_HOME=0;
+  uint16_t GPS_pdop=100;
   const char satnogps_text[] PROGMEM = " NO GPS ";
 #endif
 

@@ -523,10 +523,11 @@ void loop()
 #if defined (DISPLAYEFFICIENCY)
         displayEfficiency();
 #endif //DISPLAYWATTS
-
-
 #ifdef TEMPSENSOR
         if(((temperature<Settings[TEMPERATUREMAX])||(timer.Blink2hz))) displayTemperature();
+#endif
+#ifdef DISPLAYDOP
+        displayDOP();
 #endif
         displayArmed();
         if (Settings[S_THROTTLEPOSITION])

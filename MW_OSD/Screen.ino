@@ -183,6 +183,20 @@ void displayTemperature(void)        // DEPRECATED RUSHDUINO SUPPORT
 }
 
 
+void displayDOP(void)        // Display stas DOP
+{
+  if(!fieldIsVisible(temperaturePosition))
+    return;
+
+  ItoaPadded(GPS_pdop/10, screenBuffer+1 , 4, 3);
+  screenBuffer[0] = SYM_BLANK;
+  screenBuffer[5] = 0x2B;
+  screenBuffer[6] = 0;
+  if (GPS_pdop>GPSDOP)
+    MAX7456_WriteString(screenBuffer,getPosition(temperaturePosition));
+}
+
+
 void displayMode(void)
 {
   if(timer.MSP_active==0){ // no MSP >> mode display not valid
@@ -928,8 +942,10 @@ void displayGPS_speed(void)
     xx = GPS_speed * 0.036;           // From MWii cm/sec to Km/h
   else
     xx = GPS_speed * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
-  if((xx > speedMAX)&&(xx<(speedMAX+30))) // simple GPS glitch filter
-    speedMAX = xx;
+  if(xx > (speedMAX+20)) // simple GPS glitch limit filter
+    speedMAX+=20; 
+  else if(xx > speedMAX)
+    speedMAX=xx; 
   if(!fieldIsVisible(speedPosition))
     return;
   if((xx>Settings[S_SPEED_ALARM])&&(timer.Blink2hz))
