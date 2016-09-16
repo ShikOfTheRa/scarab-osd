@@ -611,10 +611,12 @@ bool GPS_newFrame(char c) {
       _fix_ok = 0;
       if((_buffer.solution.fix_status & NAV_STATUS_FIX_VALID) && (_buffer.solution.fix_type == FIX_3D || _buffer.solution.fix_type == FIX_2D)) _fix_ok = 1;
       GPS_numSat = _buffer.solution.satellites;
+#ifdef DISPLAYDOP
       GPS_pdop = _buffer.solution.position_DOP;
       if ((GPS_fix_HOME == 0) && (GPS_pdop>GPSDOP)) {
           GPS_numSat=MINSATFIX-1;
       }
+#endif      
       break;
     case MSG_VELNED:
       GPS_speed         = _buffer.velned.speed_2d;  // cm/s

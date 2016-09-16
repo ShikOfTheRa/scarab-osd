@@ -183,6 +183,7 @@ void displayTemperature(void)        // DEPRECATED RUSHDUINO SUPPORT
 }
 
 
+#ifdef DISPLAYDOP
 void displayDOP(void)        // Display stas DOP
 {
   if(!fieldIsVisible(temperaturePosition))
@@ -195,7 +196,7 @@ void displayDOP(void)        // Display stas DOP
   if (GPS_pdop>GPSDOP)
     MAX7456_WriteString(screenBuffer,getPosition(temperaturePosition));
 }
-
+#endif
 
 void displayMode(void)
 {
