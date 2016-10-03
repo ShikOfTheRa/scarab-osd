@@ -163,6 +163,16 @@ uint8_t fieldIsVisible(uint8_t pos) {
     return 0;  
 }
 
+#ifdef VIRTUAL_NOSE
+void displayVirtualNose(void)        
+{
+   #define HTCENTER 14   
+   screenBuffer[0]=0xC9;
+   screenBuffer[1]=0;
+   uint16_t htpos = map(MwRcData[HTCHANNEL], 1000, 2000, -HTSCALE, HTSCALE);
+   MAX7456_WriteString(screenBuffer,(30*HTLINE)+ HTCENTER HTDIRECTION htpos);
+}
+#endif
 
 void displayTemperature(void)        // DEPRECATED RUSHDUINO SUPPORT
 {

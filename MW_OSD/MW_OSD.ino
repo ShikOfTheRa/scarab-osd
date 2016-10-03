@@ -526,6 +526,9 @@ void loop()
 #ifdef TEMPSENSOR
         if(((temperature<Settings[TEMPERATUREMAX])||(timer.Blink2hz))) displayTemperature();
 #endif
+#ifdef VIRTUAL_NOSE
+        displayVirtualNose();
+#endif
 #ifdef DISPLAYDOP
         displayDOP();
 #endif

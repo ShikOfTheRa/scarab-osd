@@ -264,6 +264,14 @@
 //#define I2C_UB_SUPPORT
 
 
+/********************       Headtracker support         ************************/
+//#define VIRTUAL_NOSE    // Enables the use of a virtual nose for headtracker users where aircraft nose is not visible
+#define HTCHANNEL   3     // RC channel uses ch 1 - 8/16
+#define HTSCALE     10    // Scaling of Pan Axis - Max of 10
+#define HTLINE      11    // Row on which Headtracker info is displayed
+#define HTDIRECTION +     // Reverses direction of pan action
+
+
 /********************       FrSky S.Port settings      *********************/
 //enables data transfer from frsky reciever s.port to osd via multiwii
 //requires serial inverter cable & multiwii with s.port code
