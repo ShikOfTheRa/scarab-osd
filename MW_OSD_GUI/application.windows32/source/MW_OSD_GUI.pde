@@ -92,10 +92,11 @@ int  glidescopePosition = 38;
 int  callSignPosition = 39;
 int  debugPosition = 40;
 
-int GPSstartlat = 430948610;
-int GPSstartlon = -718897060;
+int GPSstartlat =  43094861;  //10 000 000 = 4.3
+int GPSstartlon = -71889706; //=7.1
 
 int MSP_sendOrder =0;
+int LTM_sendOrder =0;
 PImage img_Clear,GUIBackground,OSDBackground,DONATEimage,RadioPot;
 
 int readcounter=0;
@@ -171,6 +172,7 @@ boolean PortRead = false;
 boolean PortWrite = false;
 int PortReadtimer = 0;
 //int ReadConfig = 0;
+int DisplayMillis = 0;
 int ReadMillis = 0;
 int WriteConfig = 0;
 int WriteMillis = 0;
@@ -204,11 +206,13 @@ int processingtxtval = 0;
 int oldseconds=0;
 int framerate=0;
 String frameratetxt="";
+int loop1hz=0;
+int loop10hz=0;
 
 // XML config editorvariables
 int hudeditposition=0;
 
-
+int[] kisstable;
 int[] SimPosn;
 int[][] ConfigLayout;
 int[] EElookuptable= new int[512];
@@ -225,6 +229,8 @@ String OSname = System.getProperty("os.name");
 String LoadPercent = "";
 String CallSign = "";
 String Title;
+
+// gui configuration
 int Passthroughcomm;
 int AutoSimulator=0;
 int AutoDebugGUI=1;
@@ -288,8 +294,8 @@ int XCOMPASS   = 510;        int YCOMPASS    = 98;
 //int XGPS       = 305;        int YGPS    = 5;
 int XTIME      = 510;        int YTIME    = 190;
 //int XTIME      = 510;        int YTIME    = 5;
-int XHUD       = 305;        int YHUD     = 240;
-int XDisplay     = 305;        int YDisplay   = 114; //48;
+int XHUD       = 305;        int YHUD     = 257;
+int XDisplay     = 305;        int YDisplay   = 131;
 int XSPORT      = 810;        int YSPORT    = 357;
 
 int XOther     = 305;        int YOther   = 5; //48;
@@ -357,7 +363,7 @@ String[] ConfigNames = {
   "Use FC amperage",
   "Display mAh",
   "Use Virtual Sensor",
-  "Unused3",
+  "Display Text Alarms",
   "Display Video Voltage",
   "Voltage Adjust",
   "Unused4",
@@ -444,7 +450,7 @@ String[] ConfigHelp = {
   "Use MWii",
   "Display mAh",
   "Use Virtual Sensor",
-  "Unused3",
+  "Display Text Alarms",
   "Display Video Voltage",
   "Voltage Adjust",
   "Unused4",
@@ -544,7 +550,7 @@ int[] ConfigRanges = {
 1,     // S_MWAMPERAGE,              12a
 1,     // S_AMPER_HOUR,            13
 1,     // S_AMPERAGE_VIRTUAL,
-1,     // UNUSED_3,      
+1,     // S_ALARMS_TEXT,      
 
 1,     // S_VIDVOLTAGE             14
 255,   // S_VIDDIVIDERRATIO        15    
@@ -667,7 +673,8 @@ color yellow_ = color(200, 200, 20),
       donateback_ = color(180, 100, 0),
       donatefront_ = color(50, 50, 255),
       osdcontr_ = color(50, 50, 50),
-      calibrate_ = color(50, 50, 255)
+      calibrate_ = color(50, 50, 255),
+      background_ = color(50, 50, 50)
       ;
 //Colors--------------------------------------------------------------------------------------------------------------------
 
@@ -889,7 +896,6 @@ DONATEimage  = loadImage("DON_def.png");
 CreateItem(GetSetting("S_CHECK_"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_UNUSED_1"), 5, 0, G_EEPROM);
 CreateItem(GetSetting("S_UNUSED_2"), 5, 0, G_EEPROM);
-CreateItem(GetSetting("S_UNUSED_3"),  5,0, G_EEPROM);
 CreateItem(GetSetting("S_UNUSED_4"),  5,1*17, G_EEPROM);
 CreateItem(GetSetting("S_USE_BOXNAMES"),  5,0, G_EEPROM);
 CreateItem(GetSetting("S_GPSCOORDTOP"),  5,0, G_EEPROM);
@@ -934,6 +940,8 @@ CreateItem(GetSetting("S_AMPERAGE_ALARM"),  5,7*17, G_Amperage);
 CreateItem(GetSetting("S_VIDVOLTAGE"),  5,0, G_VVoltage);
 CreateItem(GetSetting("S_VIDDIVIDERRATIO"),  5,1*17, G_VVoltage);
 CreateItem(GetSetting("S_VIDVOLTAGEMIN"), 5,2*17, G_VVoltage);
+  confItem[GetSetting("S_VIDVOLTAGEMIN")].setDecimalPrecision(1);
+  confItem[GetSetting("S_VIDVOLTAGEMIN")].setMultiplier(0.1);
 
 //  Temperature  --------------------------------------------------------------------
 //CreateItem(GetSetting("S_DISPLAYTEMPERATURE"),  5,0, G_Alarms);
@@ -984,6 +992,7 @@ BuildRadioButton(GetSetting("S_VIDEOSIGNALTYPE"),  5,1*17, G_Other, "NTSC","PAL"
 CreateItem(GetSetting("S_THROTTLEPOSITION"),  5,2*17, G_Other);
 CreateItem(GetSetting("S_SHOWBATLEVELEVOLUTION"),  5,3*17, G_Other);
 CreateItem(GetSetting("S_RESETSTATISTICS"),  5,4*17, G_Other);
+CreateItem(GetSetting("S_ALARMS_TEXT"),  5,5*17, G_Other);
 
 //  Display ---------------------------------------------------------------------------
 CreateItem(GetSetting("S_MODEICON"),  5,0*17, G_DISPLAY);
@@ -1212,12 +1221,14 @@ void MakePorts(){
 
 void draw() {
 
-     MWData_Com(); 
-//  debug[0]=WriteLayouts;
-//  debug[1]=OSD_S_HUDSW0;
-//  debug[2]=OSD_S_HUDSW1;
-//  debug[3]=OSD_S_HUDSW2;
-// Initial setup
+  MWData_Com(); 
+  if (millis()>loop1hz){
+    loop1hz=millis()+1000;
+  }
+    if (millis()>loop10hz){
+    loop10hz=millis()+100;
+  }
+
   int seconds = second();
   time=millis();
   progresstxt="";
@@ -1319,7 +1330,6 @@ void draw() {
     eeindexmessage.setValue(eeindextxt);
     processingmessage.setValue(processingtxt);
     
-// txtlblconfItem[0].setValue(""); huh?
 
 // Layout editor
   txtlblLayoutTxt.setValue(" : "+ CONFIGHUDTEXT[hudeditposition]);
@@ -1352,7 +1362,7 @@ void draw() {
   else {
 //    toggleConfItem[GetSetting("S_RCWSWITCH_CH")].show();
     txtlblconfItem[GetSetting("S_RCWSWITCH")].setText("Using RC Channel");
-    txtlblconfItem[GetSetting("S_RCWSWITCH_CH")].setText("OSD ch (0-7)");
+    txtlblconfItem[GetSetting("S_RCWSWITCH_CH")].setText("OSD ch (1-8)");
     txtlblconfItem[GetSetting("S_HUDSW0")].setText("HUD - LOW");
     txtlblconfItem[GetSetting("S_HUDSW1")].setText("HUD - HIGH");
     txtlblconfItem[GetSetting("S_HUDSW2")].setText("HUD - MID");
@@ -1388,14 +1398,14 @@ void draw() {
         if (ClosePort) return;
         
         get_OSD_SENSORS();
- ///*
+
         if ((int(SimControlToggle.getValue())!=0)&&(Simtype==0)) {
 
           if (init_com==1)SendCommand(MSP_ATTITUDE);
           if (init_com==1)SendCommand(MSP_RC);
           if (init_com==1)SendCommand(MSP_STATUS);
 
-        MSP_sendOrder++;
+          MSP_sendOrder++;
         switch(MSP_sendOrder) {
         case 1:
           if (init_com==1)SendCommand(MSP_BOXNAMES);
@@ -1442,8 +1452,12 @@ void draw() {
           MSP_sendOrder=1;
         }
         PortWrite = !PortWrite; // toggle TX LED every other    
-      } 
-//*/
+        }     
+
+        process_mav_send(); //        if ((int(SimControlToggle.getValue())!=0)&&(Simtype==2)) {
+        process_ltm_send(); //        if ((int(SimControlToggle.getValue())!=0)&&(Simtype==3)) {
+        process_kiss_send(); //        if ((int(SimControlToggle.getValue())!=0)&&(Simtype==4)) {
+
       }
     } // End !FontMode
   }
@@ -1459,7 +1473,7 @@ void draw() {
     
   MakePorts();  
   
-  background(80);
+  background(background_);
   // ------------------------------------------------------------------------
   // Draw background control boxes
   // ------------------------------------------------------------------------
@@ -1504,21 +1518,14 @@ void draw() {
  }
    
   }
-  
-      
-    if (int(confItem[GetSetting("S_DISPLAYRSSI")].value()) > 0)    ShowRSSI(); 
-
-
-  if(confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() > 0) displayHorizon(int(MW_Pitch_Roll.arrayValue()[0])*10,int(MW_Pitch_Roll.arrayValue()[1])*10*-1);
+ 
+ if(SimDisplayToggle.getValue()!=0){     
   SimulateTimer();
   CalcAlt_Vario(); 
 
   ShowCurrentThrottlePosition();
-  if (int(confItem[GetSetting("S_DISPLAYRSSI")].value()) > 0)    ShowRSSI(); 
-  if (int(confItem[GetSetting("S_DISPLAYVOLTAGE")].value()) > 0) ShowVolts(sVBat);
-
+  ShowVolts(sVBat);
   ShowVideoVolts(sVBat);    
- 
   displaySensors();
   displayMode();
   ShowAmps();
@@ -1535,25 +1542,24 @@ void draw() {
   ShowDebug();
   ShowSideBarArrows();
   ShowAPstatus();
+  ShowRSSI(); 
+  ShowMapMode();  
+  ShowSPort();
 
   if(confItem[GetSetting("S_DISPLAYGPS")].value() > 0) {
-  ShowGPSAltitude();
-  ShowDistance();
-  ShowLatLon();
-  ShowSats();   
-  ShowSpeed();
-  ShowDirection();
+    ShowGPSAltitude();
+    ShowDistance();
+    ShowLatLon();
+    ShowSats();   
+    ShowSpeed();
+    ShowDirection();
+  }
+  if(confItem[GetSetting("S_DISPLAY_HORIZON_BR")].value() > 0) displayHorizon(int(MW_Pitch_Roll.arrayValue()[0])*10,int(MW_Pitch_Roll.arrayValue()[1])*10*-1);
  }
  
- 
-  ShowMapMode();
-    
   MatchConfigs();
   MakePorts();
-  
-  ShowSPort();
- 
-  
+    
   if ((ClosePort ==true)&& (PortWrite == false)){ //&& (init_com==1)
     ClosePort();
   }
@@ -2241,9 +2247,9 @@ public void LoadConfig(){
     BaudRate = 115200;
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
-    AutoSimulator = 1;
+    AutoSimulator = 0;
     AutoDebugGUI = 1;
-    Simtype=1;
+    Simtype=0;
     FrameRate = 7;
     StartupMessage = 0;
     Donate = 2;
@@ -2459,6 +2465,8 @@ void initxml(){
     CONFIGHUDEN[hud][hudindex] = enabled;      
   }
   SimPosn = new int[hudoptions];
+    kisstable = new int[KISSFRAMELENGTH];
+
   ConfigLayout= new int[4][hudoptions];
   ConfigRanges[GetSetting("S_HUDSW0")] = hudsavailable-1;
   ConfigRanges[GetSetting("S_HUDSW1")] = hudsavailable-1;
@@ -2571,6 +2579,10 @@ void coloriseswitches(){
     SimControlToggle.setColorActive(switches_);
   else
     SimControlToggle.setColorActive(red_);
+  if (int(SimDisplayToggle.getValue())==1)
+    SimDisplayToggle.setColorActive(switches_);
+  else
+    SimDisplayToggle.setColorActive(red_);
   if (int(DEBUGGUI.getValue())==1)
     DEBUGGUI.setColorActive(switches_);
   else
