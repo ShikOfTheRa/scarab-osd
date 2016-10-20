@@ -49,9 +49,7 @@
 
 ## Enhancement requests for future releases: ##
 
-Headtracker position support
-
-LTM support 
+FRSKY telemetry support 
 
 Vortex style capacity indicator
 
