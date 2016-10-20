@@ -49,6 +49,8 @@
 
 ## Enhancement requests for future releases: ##
 
+I2C master support for direct compass, baro, acc hardware support.
+
 FRSKY telemetry support 
 
 Vortex style capacity indicator
