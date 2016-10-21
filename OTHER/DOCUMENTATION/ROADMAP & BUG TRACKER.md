@@ -49,9 +49,9 @@
 
 ## Enhancement requests for future releases: ##
 
-Headtracker position support
+I2C master support for direct compass, baro, acc hardware support.
 
-LTM support 
+FRSKY telemetry support 
 
 Vortex style capacity indicator
 
