@@ -185,7 +185,6 @@ void MAX7456Setup(void)
 #ifdef AUTOCAM 
   uint8_t srdata;
 
-  delay(1000/25); // Extra delay for input sync detection
 
   spi_transfer(MAX7456ADD_STAT);
   srdata = spi_transfer(0xFF); 
