@@ -107,7 +107,10 @@ uint16_t UntouchedStack(void)
 #include "WireUB.h"
 #endif
 
-char screen[480];      // Main screen ram for MAX7456
+char screen[480];          // Main screen ram for MAX7456
+#ifdef INVERTED_CHAR_SUPPORT
+uint8_t screenAttr[480/8]; // Attribute (INV) bits for each char in screen[]
+#endif
 char screenBuffer[20]; 
 uint32_t modeMSPRequests;
 uint32_t queuedMSPRequests;
@@ -301,7 +304,11 @@ void loop()
   if((currentMillis - previous_millis_sync) >= sync_speed_cycle)  // (Executed > NTSC/PAL hz 33ms)
   {
     previous_millis_sync = previous_millis_sync+sync_speed_cycle;    
+#ifdef CANVAS_SUPPORT
+    if(!fontMode && !canvasMode)
+#else
     if(!fontMode)
+#endif
        #ifndef KISS
        mspWriteRequest(MSP_ATTITUDE,0);
        #endif
@@ -329,7 +336,11 @@ void loop()
     #endif    
     #ifndef GPSOSD 
       #ifdef MSP_SPEED_MED
+        #ifdef CANVAS_SUPPORT
+        if(!fontMode && !canvasMode){
+        #else
         if(!fontMode){
+        #endif
           #ifndef KISS
           mspWriteRequest(MSP_ATTITUDE,0);
           #endif // KISS
@@ -451,7 +462,10 @@ void loop()
        #ifdef KISS
        Serial.write(0x20);
        #else     
-       mspWriteRequest(MSPcmdsend, 0); 
+         #ifdef CANVAS_SUPPORT
+         if (!canvasMode)
+           mspWriteRequest(MSPcmdsend, 0); 
+         #endif
        #endif // KISS
       #endif //GPSOSD
       #ifdef SKYTRACK
@@ -495,6 +509,28 @@ void loop()
       {
         displayConfigScreen();
       }
+#ifdef CANVAS_SUPPORT
+      else if (canvasMode)
+      {
+        // In canvas mode, we don't actively write the screen; just listen to MSP stream.
+        if (lastCanvas + CANVAS_TIMO < currentMillis) {
+          MAX7456_ClearScreen();
+          canvasMode = false;
+        }
+
+        // Place a small indicator for canvas mode to detect spurious 
+        // canvas requests.
+        // It should go away on the very first clear screen request,
+        // but may remain until next clear screen if the begin and
+        // the first clear request comes in back-to-back before the
+        // indicator is drawn.
+
+        if (canvasFirst) {
+          MAX7456_WriteString("*", (LINE01+01));
+          canvasFirst = false;
+        }
+      }
+#endif
       else
       {
         setMspRequests();

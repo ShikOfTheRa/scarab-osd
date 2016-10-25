@@ -86,6 +86,8 @@
 //#define GPSTIME       // Enable/disable GPS Time functions
 //#define SPORT         // Enable/disable FRSKY S.PORT cell code
 
+//#define CANVAS_SUPPORT            // Enable CANVAS mode support for post betaflight 3.1.0 CMS
+//#define INVERTED_CHAR_SUPPORT     // Enable inverted char support
 
 /********************       TELEMETRY settings      *********************/
 //Select ONLY if you are sure your OSD is connected to a telemetry feed:

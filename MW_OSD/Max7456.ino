@@ -1,3 +1,5 @@
+#include "bitarray.h"
+
 #if defined WHITEBRIGHTNESS | defined BLACKBRIGHTNESS
   #ifndef WHITEBRIGHTNESS
     #define WHITEBRIGHTNESS 0x01
@@ -7,15 +9,6 @@
   #endif
   #define BWBRIGHTNESS ((BLACKBRIGHTNESS << 2) | WHITEBRIGHTNESS)
 #endif
-
-
-//MAX7456 opcodes
-#define DMM_reg   0x04
-#define DMAH_reg  0x05
-#define DMAL_reg  0x06
-#define DMDI_reg  0x07
-#define VM0_reg   0x00
-#define VM1_reg   0x01
 
 // video mode register 0 bits
 #define VIDEO_BUFFER_DISABLE 0x01
@@ -148,7 +141,7 @@ void MAX7456SoftReset(void)
   }
 
   // Issue software reset
-  MAX7456_Send(VM0_reg, (1 << 1));
+  MAX7456_Send(MAX7456ADD_VM0, (1 << 1));
   MAX7456DISABLE;
 }
 #endif
@@ -216,7 +209,7 @@ void MAX7456Setup(void)
   }
 
   // Set up the Max chip. Enable display + set standard.
-  MAX7456_Send(VM0_reg, MAX7456_reset);
+  MAX7456_Send(MAX7456ADD_VM0, MAX7456_reset);
    
 #ifdef FASTPIXEL // force fast pixel timing helps with ghosting for some cams
   MAX7456_Send(MAX7456ADD_OSDM, 0x00);
@@ -239,13 +232,36 @@ void MAX7456Setup(void)
   readEEPROM_screenlayout();
 }
 
-
 // Copy string from ram into screen buffer
-void MAX7456_WriteString(const char *string, int Adresse)
+
+#ifdef INVERTED_CHAR_SUPPORT
+
+// XXX Have to check which derives the smaller code:
+// XXX (1) Prepare WriteString and WriteStringWithAttr
+// XXX (2) Pass call to WriteString to WriteStringWithAttr
+
+void MAX7456_WriteString(const char *string, int addr)
 {
-  char *screenp = &screen[Adresse];
-  while (*string)
+  MAX7456_WriteStringWithAttr(string, addr, 0);
+}
+
+void MAX7456_WriteStringWithAttr(const char *string, int addr, int attr)
+#else
+void MAX7456_WriteString(const char *string, int addr)
+#endif
+{
+  char *screenp = &screen[addr];
+  while (*string) {
     *screenp++ = *string++;
+#ifdef INVERTED_CHAR_SUPPORT
+    if (attr) {
+      bitSET(screenAttr, addr);
+    } else {
+      bitCLR(screenAttr, addr);
+    }
+    addr++;
+#endif
+  }
 }
 
 // Copy string from progmem into the screen buffer
@@ -257,68 +273,102 @@ void MAX7456_WriteString_P(const char *string, int Adresse)
     *screenp++ = c;
 }
 
-#ifdef USE_VSYNC
-  volatile unsigned char vsync_wait = 0;
-  ISR(INT0_vect) {
-    vsync_wait = 0;
+#ifdef CANVAS_SUPPORT
+void MAX7456_ClearScreen(void)
+{
+  for(int xx = 0; xx < MAX_screen_size; ++xx) {
+    screen[xx] = ' ';
+#ifdef INVERTED_CHAR_SUPPORT
+    bitCLR(screenAttr, xx);
+#endif
   }
+}
+#endif
+
+#ifdef USE_VSYNC
+volatile unsigned char vsync_wait = 0;
+
+ISR(INT0_vect) {
+    vsync_wait = 0;
+}
+
+void MAX7456_WaitVSYNC(void)
+{
+  uint32_t vsync_timer = 40 + millis();
+
+  vsync_wait = 1;
+
+  while (vsync_wait) {
+    if (millis() > vsync_timer){
+      vsync_wait=0;
+    } else{
+      serialMSPreceive(0); // Might as well do something whilst waiting :)
+    }
+  }
+}
 #endif
 
 void MAX7456_DrawScreen()
 {
   uint16_t xx;
+  bool invActive = false;
 
-    MAX7456ENABLE
+  MAX7456ENABLE;
 
-  #ifdef USE_VSYNC
-    MAX7456_Send(DMM_reg, 1);
-    MAX7456_Send(DMAH_reg, 0);
-    MAX7456_Send(DMAL_reg, 0);
-    vsync_wait = 1;
-    uint32_t vsynctimer=40+millis();
-  #endif
+  MAX7456_Send(MAX7456ADD_DMAH, 0);
+  MAX7456_Send(MAX7456ADD_DMAL, 0);
+  MAX7456_Send(MAX7456ADD_DMM, 1);
 
-  for(xx=0;xx<MAX_screen_size;++xx){
-    #ifdef USE_VSYNC
-      SPDR = MAX7456ADD_DMDI;
-      if (xx==240) {
-        vsynctimer=40+millis();
-        vsync_wait = 1;      // Not enough time to load all characters within VBI period. This splits and waits until next field
-      }
-      while (!(SPSR & (1<<SPIF)));     // Wait the end of the last SPI transmission is clear
-      while (vsync_wait){
-        if (millis()>vsynctimer){
-          vsync_wait=0;
-        }
-        else{
-          serialMSPreceive(0); // Might as well do something whilst waiting :)
-        }
-      }
-      SPDR = screen[xx];
+#ifdef USE_VSYNC
+  MAX7456_WaitVSYNC();
+#endif
+
+  for(xx = 0; xx < MAX_screen_size; ++xx) {
+#ifdef USE_VSYNC
+    // We don't actually need this?
+    if (xx == 240)
+        MAX7456_WaitVSYNC(); // Don't need this?
+#endif
+
+#ifdef INVERTED_CHAR_SUPPORT
+    if (!invActive && bitISSET(screenAttr, xx)) {
+      MAX7456_Send(MAX7456ADD_DMM, 1|(1<<3));
+      invActive = true;
+    } else if (invActive && bitISCLR(screenAttr, xx)) {
+      MAX7456_Send(MAX7456ADD_DMM, 1);
+      invActive = false;
+    }
+#endif
+
+    MAX7456_Send(MAX7456ADD_DMDI, screen[xx]);
+
+#ifdef CANVAS_SUPPORT
+    // Don't erase in canvas mode
+    if (!canvasMode) {
       screen[xx] = ' ';
-      while (!(SPSR & (1<<SPIF)));     // Wait the end of the last SPI transmission is clear
-    #else   
-      MAX7456_Send(MAX7456ADD_DMAH, xx>>8);
-      MAX7456_Send(MAX7456ADD_DMAL, xx);
-      MAX7456_Send(MAX7456ADD_DMDI, screen[xx]);
-      screen[xx] = ' ';
+    #ifdef INVERTED_CHAR_SUPPORT
+      bitCLR(screenAttr, xx);
     #endif
-  }
-  #ifdef USE_VSYNC
-    MAX7456_Send(DMDI_reg, END_string);
-    MAX7456_Send(DMM_reg, B00000000);
+    }
+#else
+    screen[xx] = ' ';
+  #ifdef INVERTED_CHAR_SUPPORT
+    bitCLR(screenAttr, xx);
   #endif
+#endif
+  }
 
-  MAX7456DISABLE
+  MAX7456_Send(MAX7456ADD_DMDI, END_string);
+  MAX7456_Send(MAX7456ADD_DMM, 0);
+
+  MAX7456DISABLE;
 }
-
 
 void MAX7456_Send(uint8_t add, uint8_t data)
 {
   spi_transfer(add);
   spi_transfer(data);
 }
-
 
 //MAX7456 commands
 
@@ -341,7 +391,7 @@ void write_NVM(uint8_t char_address)
 #ifdef WRITE_TO_MAX7456
   // disable display
   MAX7456ENABLE
-  MAX7456_Send(VM0_reg, VIDEO_MODE);
+  MAX7456_Send(MAX7456ADD_VM0, VIDEO_MODE);
 
   MAX7456_Send(MAX7456ADD_CMAH, char_address); // set start address high
 
@@ -357,7 +407,7 @@ void write_NVM(uint8_t char_address)
   // wait until bit 5 in the status register returns to 0 (12ms)
   while ((spi_transfer(MAX7456ADD_STAT) & STATUS_reg_nvr_busy) != 0x00);
 
-  MAX7456_Send(VM0_reg, OSD_ENABLE|VERTICAL_SYNC_NEXT_VSYNC|VIDEO_MODE); // turn on screen next vertical
+  MAX7456_Send(MAX7456ADD_VM0, OSD_ENABLE|VERTICAL_SYNC_NEXT_VSYNC|VIDEO_MODE); // turn on screen next vertical
   MAX7456DISABLE  
 #else
   delay(12);

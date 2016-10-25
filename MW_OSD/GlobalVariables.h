@@ -179,6 +179,14 @@ uint8_t cells=0;
   uint8_t bfconfig[25];
 #endif
 
+// Canvas mode
+#ifdef CANVAS_SUPPORT
+bool canvasMode = false;
+bool canvasFirst = true;
+uint32_t lastCanvas = 0;
+#define CANVAS_TIMO 2000  // Canvas mode timeout in msec.
+#endif
+
 // Config status and cursor location
 uint8_t screenlayout=0;
 uint8_t oldscreenlayout=0;
@@ -732,6 +740,8 @@ uint16_t flyingTime=0;
 #define MSP_BOXIDS               119   //out message         get the permanent IDs associated to BOXes
 #define MSP_SERVO_CONF           120    //out message         Servo settings
 #define MSP_NAV_STATUS           121   //out message	     Returns navigation status
+
+#define MSP_CANVAS               182
 
 #define MSP_CELLS                130   //out message         FrSky SPort Telemtry
 

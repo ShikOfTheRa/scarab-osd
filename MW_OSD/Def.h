@@ -140,6 +140,8 @@
   #define MENU_ALARMS   9       //ALARMS
   #define MENU_PROFILE  10      //PROFILE+PID CONTROLLER
   #define MAXPAGE       MENU_PROFILE
+
+  #define CANVAS_SUPPORT
 #endif
 
 #if defined CLEANFLIGHT190

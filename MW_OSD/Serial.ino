@@ -292,6 +292,74 @@ void serialMSPCheck()
 
 #ifdef PROTOCOL_MSP
 
+  #ifdef CANVAS_SUPPORT
+  if (cmdMSP == MSP_CANVAS) {
+    // Don't go into canvas mode when armed or in other special mode
+    if (armed || fontMode || configMode)
+        return;
+/*
+Notes on MSP_CANVAS protocol
+(should go into the protocol document... where is that?)
+
+byte: description
+0: MSP_CANVAS
+1: sub-command
+   0: Enter/hold canvas mode
+       Sender must periodically send the enter/hold message:
+        FC may exist menu mode without notifying for many reasons,
+        including manual reset or power off/cycle.
+        We expect the FC to sustain canvasMode by sending non-exit
+        message within CANVAS_TIMO while the menu mode is active.
+
+   1: Exit canvas mode and resume normal OSD operation
+   2: Clear canvas
+   3: Draw string at (row,col) with attribute attr
+        Automagically wraps to next row.
+
+For sub-command 3 (draw string):
+2: row
+3: col
+4: attr (0=normal, 1=inverted)
+5...len-1: asciz string to draw (charset compat problem is ignored for now)
+*/
+
+    lastCanvas = millis();
+
+    switch(read8()) {
+    case 0: // Enter / hold canvas mode
+      canvasMode = true;
+      break;
+
+    case 1: // Exit canvas mode
+      canvasMode = false;
+      canvasFirst = true;
+      break;
+
+    case 2: // Clear canvas
+      MAX7456_ClearScreen();
+      break;
+
+    case 3: // Draw string at (row,col) with attribute
+      uint8_t canvasy = read8();
+      uint8_t canvasx = read8();
+      uint8_t canvasa = read8();
+      for (int i = 5; i <= dataSize ; i++) {
+        char canvasc[2];
+        canvasc[0] = read8();
+        canvasc[1] = 0;
+#ifdef INVERTED_CHAR_SUPPORT
+        MAX7456_WriteStringWithAttr(canvasc, canvasy * LINE + canvasx, canvasa);
+#else
+        MAX7456_WriteString(canvasc, canvasy * LINE + canvasx);
+#endif
+        ++canvasx;
+      }
+      break;
+    }
+    return;
+  }
+  #endif // CANVAS_SUPPORT
+
   if (cmdMSP==MSP_IDENT)
   {
     flags.ident=1;
@@ -791,7 +859,12 @@ void handleRawRC() {
   if(!waitStick)
   {
     if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THROTTLESTICK]>MINSTICK)){
+    //if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]<MINSTICK)&&(MwRcData[THROTTLESTICK]>MINSTICK)){
+#ifdef CANVAS_SUPPORT
+      if (!configMode && (allSec > 5) && !armed && !canvasMode){
+#else
       if (!configMode&&(allSec>5)&&!armed){
+#endif
           // Enter config mode using stick combination
           waitStick =  2;	// Sticks must return to center before continue!
           configMode = 1;
