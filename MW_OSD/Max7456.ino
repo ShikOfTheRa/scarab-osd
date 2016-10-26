@@ -343,19 +343,14 @@ void MAX7456_DrawScreen()
     MAX7456_Send(MAX7456ADD_DMDI, screen[xx]);
 
 #ifdef CANVAS_SUPPORT
-    // Don't erase in canvas mode
-    if (!canvasMode) {
+    if (!canvasMode) // Don't erase in canvas mode
+#endif
+    {
       screen[xx] = ' ';
     #ifdef INVERTED_CHAR_SUPPORT
       bitCLR(screenAttr, xx);
     #endif
     }
-#else
-    screen[xx] = ' ';
-  #ifdef INVERTED_CHAR_SUPPORT
-    bitCLR(screenAttr, xx);
-  #endif
-#endif
   }
 
   MAX7456_Send(MAX7456ADD_DMDI, END_string);

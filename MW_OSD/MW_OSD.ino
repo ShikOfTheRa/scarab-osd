@@ -309,9 +309,11 @@ void loop()
 #else
     if(!fontMode)
 #endif
+    {
        #ifndef KISS
        mspWriteRequest(MSP_ATTITUDE,0);
        #endif
+    }
   }
 #endif //MSP_SPEED_HIGH
 
@@ -337,10 +339,11 @@ void loop()
     #ifndef GPSOSD 
       #ifdef MSP_SPEED_MED
         #ifdef CANVAS_SUPPORT
-        if(!fontMode && !canvasMode){
+        if(!fontMode && !canvasMode)
         #else
-        if(!fontMode){
+        if(!fontMode)
         #endif
+        {
           #ifndef KISS
           mspWriteRequest(MSP_ATTITUDE,0);
           #endif // KISS
@@ -464,8 +467,10 @@ void loop()
        #else     
          #ifdef CANVAS_SUPPORT
          if (!canvasMode)
-           mspWriteRequest(MSPcmdsend, 0); 
          #endif
+         {
+           mspWriteRequest(MSPcmdsend, 0); 
+         }
        #endif // KISS
       #endif //GPSOSD
       #ifdef SKYTRACK
@@ -483,10 +488,10 @@ void loop()
     if( allSec < INTRO_DELAY ){
       displayIntro();
       timer.lastCallSign=onTime-CALLSIGNINTERVAL;
-    }  
+    }
     else
     {
-    if(armed){
+      if(armed){
         previousarmedstatus=1;
         if (configMode==1)
           configExit();
@@ -520,10 +525,10 @@ void loop()
 
         // Place a small indicator for canvas mode to detect spurious 
         // canvas requests.
-        // It should go away on the very first clear screen request,
-        // but may remain until next clear screen if the begin and
-        // the first clear request comes in back-to-back before the
-        // indicator is drawn.
+        // In a normal situation, It should go away on the very first
+        // clear screen request, but may remain until next clear screen
+        // if the begin and the first clear request comes in back-to-back
+        // before the indicator is drawn.
 
         if (canvasFirst) {
           MAX7456_WriteString("*", (LINE01+01));

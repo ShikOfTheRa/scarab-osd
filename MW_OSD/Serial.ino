@@ -320,7 +320,9 @@ For sub-command 3 (draw string):
 2: row
 3: col
 4: attr (0=normal, 1=inverted)
-5...len-1: asciz string to draw (charset compat problem is ignored for now)
+5...len-1: string to draw
+           Zero prematurely terminates the string.
+           (Charset compat problem is ignored)
 */
 
     lastCanvas = millis();
@@ -339,13 +341,15 @@ For sub-command 3 (draw string):
       MAX7456_ClearScreen();
       break;
 
-    case 3: // Draw string at (row,col) with attribute
+    case 3: // Draw string at (row,col) with attribute (if supported)
       uint8_t canvasy = read8();
       uint8_t canvasx = read8();
       uint8_t canvasa = read8();
       for (int i = 5; i <= dataSize ; i++) {
         char canvasc[2];
         canvasc[0] = read8();
+        if (canvasc[0] == 0)
+          break;
         canvasc[1] = 0;
 #ifdef INVERTED_CHAR_SUPPORT
         MAX7456_WriteStringWithAttr(canvasc, canvasy * LINE + canvasx, canvasa);
@@ -859,12 +863,12 @@ void handleRawRC() {
   if(!waitStick)
   {
     if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THROTTLESTICK]>MINSTICK)){
-    //if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]<MINSTICK)&&(MwRcData[THROTTLESTICK]>MINSTICK)){
 #ifdef CANVAS_SUPPORT
-      if (!configMode && (allSec > 5) && !armed && !canvasMode){
+      if (!configMode && (allSec > 5) && !armed && !canvasMode)
 #else
-      if (!configMode&&(allSec>5)&&!armed){
+      if (!configMode&&(allSec>5)&&!armed)
 #endif
+      {
           // Enter config mode using stick combination
           waitStick =  2;	// Sticks must return to center before continue!
           configMode = 1;
