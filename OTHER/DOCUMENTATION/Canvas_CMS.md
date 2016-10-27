@@ -31,12 +31,14 @@ However, since the canvas mode protocol is simplex from FC to MWOSD, CMS on FC a
 - Other cases are not known yet.
 
 You can tell the out-of-sync state by:
+
 1. For the above mentioned reset case, the MWOSD will not get out of opening screen.
 2. You may see an asterisk character ('*') at upper left corner of your screen when this happens.
 3. You may also see cursor character move as you input navigational stick commands.
 4. Other erratic text displayed (not a screen full of random characters).
 
 There are numbers of ways to get out of this state.
+
 1. Enter a stick command that causes page redraw, such as menu back. (It is not a wise move to enter a stick command that causes item selection.)
 2. Blindly navigate to BACK or EXIT menu item and select it.
 3. Reset or power cycle your flight controller.
