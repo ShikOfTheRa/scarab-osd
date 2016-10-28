@@ -3,7 +3,6 @@
 /*
 Scarab NG OSD ... 
 
- Subject to exceptions listed below, this program is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  any later version. see http://www.gnu.org/licenses/
@@ -92,9 +91,7 @@ uint16_t UntouchedStack(void)
 #include "symbols.h"
 #include "GlobalVariables.h"
 #include "math.h"
-#if defined NAZA
-  #include "Naza.h"
-#endif  
+
 #if defined LOADFONT_LARGE
   #include "fontL.h"
 #elif defined LOADFONT_DEFAULT 
@@ -150,14 +147,12 @@ void setup()
 
   MAX7456SETHARDWAREPORTS
 
-  pinMode(PWMRSSIPIN, INPUT);
+  pinMode(A6, INPUT);
   pinMode(RSSIPIN, INPUT);
+  pinMode(TEMPPIN, INPUT);
   pinMode(LEDPIN,OUTPUT);
   
-
-#if defined (INTPWMRSSI) || defined (PPMOSDCONTROL)
-  initRSSIint();
-#endif
+  initPulseInts();  // initialise PWM / PPM inputs
 
 #if defined EEPROM_CLEAR
   EEPROM_clear();
@@ -243,23 +238,15 @@ void loop()
   #if defined (MEMCHECK)
     debug[MEMCHECK] = UntouchedStack();
   #endif
-
-  #ifdef PWMTHROTTLE
-    MwRcData[THROTTLESTICK] = pwmRSSI;
-  #endif //THROTTLE_RSSI
-
   #if defined (KISS)      
     if (Kvar.mode==1)
       screenlayout=1;
     else
       screenlayout=0; 
   #elif defined (OSD_SWITCH_RC)                   
-    uint8_t rcswitch_ch = Settings[S_RCWSWITCH_CH];
+    rcswitch_ch = Settings[S_RCWSWITCH_CH];
     screenlayout=0;
     if (Settings[S_RCWSWITCH]){
-      #ifdef OSD_SWITCH_RSSI
-        MwRcData[rcswitch_ch]=pwmRSSI;      
-      #endif
       if (MwRcData[rcswitch_ch] > 1600){
         screenlayout=1;
       }
@@ -279,10 +266,6 @@ void loop()
       screenlayout=0;
   #endif
   
-#if defined (DEVELOPMENT)
-      screenlayout=0;
-#endif
-
   if (screenlayout!=oldscreenlayout){
     readEEPROM_screenlayout();
   }
@@ -308,13 +291,13 @@ void loop()
   }
 #endif //MSP_SPEED_HIGH
 
-#ifdef INTPWMRSSI
-// to prevent issues with high pulse RSSi consuming CPU
-  if((currentMillis - previous_millis_rssi) >= (1000/RSSIhz)){  
-    previous_millis_rssi = currentMillis; 
-    initRSSIint();
-  }   
-#endif // INTPWMRSSI
+// to prevent issues with high pulse RSSi consuming CPU, limit number of interrupts
+//    if (!PulseType){
+      if((currentMillis - previous_millis_rssi) >= (10000/RSSIhz)){  
+        previous_millis_rssi = currentMillis; 
+        initPulseInts();
+      }   
+//    }
 
   if((currentMillis - previous_millis_low) >= lo_speed_cycle)  // 10 Hz (Executed every 100ms)
   {
@@ -577,7 +560,6 @@ void loop()
 #endif
         }
         displayMode();       
-        displayDebug();
 #ifdef I2CERROR
         displayI2CError();
 #endif        
@@ -585,6 +567,7 @@ void loop()
         if(MwSensorPresent)
           displayCells();
 #endif
+        displayDebug();
 #ifdef HAS_ALARMS
         displayAlarms();
 #endif
@@ -977,13 +960,7 @@ void ProcessSensors(void) {
     //--- override with PWM, FC RC CH or FC RSSI data if enabled    
     if (sensor ==4) { 
       if (Settings[S_PWMRSSI]){
-      #if defined RCRSSI
-        sensortemp = MwRcData[RCRSSI]>>1;
-      #elif defined INTPWMRSSI
         sensortemp = pwmRSSI>>1;
-      #else
-        sensortemp = pulseIn(PWMRSSIPIN, HIGH,18000)>>1;        
-      #endif
         if (sensortemp==0) { // timed out - use previous
           sensortemp=sensorfilter[sensor][sensorindex];
         }
@@ -991,6 +968,9 @@ void ProcessSensors(void) {
       if(Settings[S_MWRSSI]) {
         sensortemp = MwRssi;
       }
+      #if defined RCRSSI
+        sensortemp = MwRcData[RCRSSI]>>1;
+      #endif
     }
     //--- Apply filtering    
 #if defined FILTER_HYSTERYSIS  // Hysteris incremental averaged change    
@@ -1093,116 +1073,143 @@ void ProcessSensors(void) {
 }
 
 
-unsigned long FastpulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
-{
-  uint8_t bit = digitalPinToBitMask(pin);
-  uint8_t port = digitalPinToPort(pin);
-  uint8_t stateMask = (state ? bit : 0);
-  unsigned long width = 0;
-  unsigned long numloops = 0;
-  unsigned long maxloops = timeout;
-	
-  while ((*portInputRegister(port) & bit) == stateMask)
-    if (numloops++ == maxloops)
-      return 0;
-	
-  while ((*portInputRegister(port) & bit) != stateMask)
-    if (numloops++ == maxloops)
-      return 0;
-	
-  while ((*portInputRegister(port) & bit) == stateMask) {
-    if (numloops++ == maxloops)
-      return 0;
-    width++;
-  }
-  return width; 
-}
-
-#if defined INTPWMRSSI
-void initRSSIint() { // enable ONLY RSSI pin A3 for interrupt (bit 3 on port C)
-  DDRC &= ~(1 << DDC3);
-//  PORTC |= (1 << PORTC3);
+void initPulseInts() { //RSSI/PWM/PPM int initialisation
+  #if defined INTC3
+  DDRC &= ~(1 << DDC3); //  PORTC |= (1 << PORTC3);
+  #endif
+  #if defined INTD5
+  DDRD &= ~(1 << DDD5); //  PORTD |= (1 << PORTD5);
+  #endif
   cli();
-  PCICR =  (1 << PCIE1);
-  PCMSK1 = (1 << PCINT11);
+  #if defined INTC3
+  if ((PCMSK1&(1 << PCINT11))==0){
+    PCICR |=  (1 << PCIE1);
+    PCMSK1 |= (1 << PCINT11);
+  }
+  #endif
+  #if defined INTD5
+  if ((PCMSK2&(1 << PCINT21))==0){
+    PCICR |=  (1 << PCIE2);
+    PCMSK2 |= (1 << PCINT21);
+  }
+  #endif
   sei();
 }
 
 
-ISR(PCINT1_vect) { //
-  static uint16_t PulseStart;  
-  static uint8_t PulseCounter;  
+#if defined INTC3
+ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
+  static uint16_t PulseStart;
+  static uint8_t  RCchan = 1; 
+  static uint16_t LastTime = 0; 
+  static uint8_t  PulseCounter;  
   uint8_t pinstatus;
   pinstatus = PINC;
+  #define PWMPIN1 DDC3
   sei();
-  uint16_t CurrentTime;
   uint16_t PulseDuration;
-  CurrentTime = micros();
-  if (!(pinstatus & (1<<DDC3))) { // RSSI pin A3 - ! measures low duration
-    if (PulseCounter >1){ // why? - to skip any partial pulse due to toggling of int's
+  uint16_t CurrentTime= micros();
+
+  if((CurrentTime-LastTime)>3000) RCchan = 1; // assume this is PPM gap
+  LastTime = CurrentTime;
+  if (!(pinstatus & (1<<PWMPIN1))) { // measures low duration
+    if (PulseType){ 
+      PulseCounter=2;
+    }     
+    if (PulseCounter >1){ // why? - to skip any partial pulse due to toggling of int's for PWM
       PulseDuration = CurrentTime-PulseStart; 
       PulseCounter=0;
-    #if defined FASTPWMRSSI
-      pwmRSSI = PulseDuration;
-      PCMSK1 =0;
-    #else
-      if ((750<PulseDuration) && (PulseDuration<2250)) {
+      if ((750<PulseDuration) && (PulseDuration<2250)) {    
+    #ifdef INTD5
         pwmRSSI = PulseDuration;
         PCMSK1 =0;
+    #else
+     #ifdef PPM_CONTROL
+        PulseType=1;
+      #endif
+        if (PulseType){ //PPM
+          if (RCchan<=RCCHANNELS)// avoid array overflow if > standard ch PPM
+            MwRcData[RCchan] = PulseDuration; // Val updated
+        }
+        else{ //PWM
+        #ifdef PWM_OSD_SWITCH
+          MwRcData[rcswitch_ch]=PulseDuration;
+        #elif defined PWM_THROTTLE
+          MwRcData[THROTTLESTICK] = PulseDuration;
+        #else      
+          pwmRSSI = PulseDuration;
+        #endif
+          PCMSK1 = 0;
+        }
+    #endif
       }
-    #endif 
+      RCchan++;
+      pwmval1=PulseDuration;
     }
     PulseCounter++;
   } 
   else {
     PulseStart = CurrentTime;
   }
-//  sei();   
 }
-#endif // INTPWMRSSI
+#endif
 
-
-#if defined PPMOSDCONTROL
-void initRSSIint() { // enable ONLY RSSI pin A3 for interrupt (bit 3 on port C)
-  DDRC &= ~(1 << DDC3);
-//  PORTC |= (1 << PORTC3);
-  cli();
-  PCICR =  (1 << PCIE1);
-  PCMSK1 = (1 << PCINT11);
-  sei();
-}
-
-
-ISR(PCINT1_vect) { //
+#if defined INTD5
+ISR(PCINT2_vect) { // // Default Arduino D5 Atmega D5
   static uint16_t PulseStart;
-  static uint8_t RCchan = 0; 
+  static uint8_t  RCchan = 1; 
   static uint16_t LastTime = 0; 
+  static uint8_t  PulseCounter;  
   uint8_t pinstatus;
-  pinstatus = PINC;
+  #define PWMPIN2 DDD5
+  pinstatus = PIND;
   sei();
-  uint16_t CurrentTime;
   uint16_t PulseDuration;
-  CurrentTime = micros(); 
-  if((CurrentTime-LastTime)>3000) RCchan = 0; // assume this is PPM gap
+  uint16_t CurrentTime= micros();
+
+  if((CurrentTime-LastTime)>3000) RCchan = 1; // assume this is PPM gap
   LastTime = CurrentTime;
-  if (!(pinstatus & (1<<DDC3))) { // RSSI pin A3 - ! measures low duration
-    PulseDuration = CurrentTime-PulseStart; 
-    if ((750<PulseDuration) && (PulseDuration<2250)) {
-      if (RCchan<8)// avoid array overflow if > standard 8 ch PPM
-        MwRcData[RCchan] = PulseDuration; // Val updated
+  
+  if (!(pinstatus & (1<<PWMPIN2))) { // measures low duration
+    if (PulseType) 
+      PulseCounter=2;     
+    if (PulseCounter >1){ // why? - to skip any partial pulse due to toggling of int's for PWM
+      PulseDuration = CurrentTime-PulseStart; 
+      PulseCounter=0;
+      if ((750<PulseDuration) && (PulseDuration<2250)) {    
+      #ifdef PPM_CONTROL
+        PulseType=1;
+      #endif
+        if (PulseType){ //PPM
+          if (RCchan<=RCCHANNELS)// avoid array overflow if > standard ch PPM
+            MwRcData[RCchan] = PulseDuration; // Val updated
+        }
+        else{ //PWM
+        #ifdef PWM_THROTTLE
+          MwRcData[THROTTLESTICK] = PulseDuration;
+        #elif defined OSD_SWITCH_RC     
+          MwRcData[rcswitch_ch]=PulseDuration;
+        #endif
+          PCMSK2 = 0;
+        }
+      }
+      RCchan++;
+      pwmval2=PulseDuration;
     }
-    RCchan++;
-  } 
+    PulseCounter++;
+  }  
   else {
     PulseStart = CurrentTime;
   }
 }
-#endif //PPMOSDCONTROL
+#endif
+
 
 void EEPROM_clear(){
   for (int i = 0; i < 512; i++)
     EEPROM.write(i, 0);
 }
+
 
 
 #if defined USE_AIRSPEED_SENSOR

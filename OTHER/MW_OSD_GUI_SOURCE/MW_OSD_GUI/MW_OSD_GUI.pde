@@ -600,7 +600,7 @@ int[] ConfigRanges = {
 1,   // S_UNUSED_1,
 1,     // S_UNUSED_2,
 1,     // S_RCWSWITCH,
-7,     // S_RCWSWITCH_CH,
+8,     // S_RCWSWITCH_CH,
 7,     // S_HUDSW0,
 7,     // S_HUDSW1,
 7,     // S_HUDSW2,

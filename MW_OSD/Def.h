@@ -4,13 +4,19 @@
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-//#define DEBUG         // Enable/disable option to display OSD debug values 
-//#define DEBUGMW       // Disable to prevent load Mutltiwii debug values from MSP 
 //#define ALWAYSARMED
 //#define DEVELOPMENT   // to force layout 0, set debug default eeprombit = 1
-//#define FORCEDEBUG    // to force debug display
 //#define FORCESENSORS
 
+// Display Debug screen display options
+//#define FORCEDEBUG         // to force debug display (overides GUI / OSD menu setting) 
+//#define DEBUGMW            // Enable to display MSP debug values 
+#define DEBUGDSWITCH         // Enable to use screenswitching debug 
+#define DEBUGDPOSRCDATA 33   // display RCDATA values at position X
+#define DEBUGDPOSANAL 84     // display sensor values at position X
+#define DEBUGDPOSPWM 264     // display PWM values at position X
+#define DEBUGDPOSVAL 70      // display debug  values at position X
+#define DEBUGDCLEAR          // clears display except for basics
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
 
@@ -407,8 +413,8 @@
 #define AMPERAGEPIN   A1
 #define TEMPPIN       A3  // also used for airspeed         
 #define RSSIPIN       A3              
-#define PWMRSSIPIN    A3              
 #define LEDPIN        7
+#define INTC3       // Arduino A3 enabled for PWM/PPM interrupts)
 
 // All aircraft / FC types defaults...
 #define RESETGPSALTITUDEATARM
@@ -420,7 +426,7 @@
 
 
 /********************  OSD HARDWARE rule definitions  *********************/
-#ifdef RUSHDUINO // Example for Arduino guys                     
+#ifdef RUSHDUINO                    
     # define DATAOUT          11 // MOSI
     # define DATAIN           12 // MISO
     # define SPICLOCK         13 // sck
@@ -431,11 +437,28 @@
     # define MAX7456HWRESET   digitalWrite(MAX7456RESET,LOW);delay(60);digitalWrite(MAX7456RESET,HIGH);delay(40);
     # define MAX7456ENABLE    digitalWrite(MAX7456SELECT,LOW); 
     # define MAX7456DISABLE   digitalWrite(MAX7456SELECT,HIGH); 
+#elif defined ARDUINO_OSD // Example for Arduino guys                     
+    # define DATAOUT          11 // MOSI
+    # define DATAIN           12 // MISO
+    # define SPICLOCK         13 // sck
+    # define VSYNC             2 // INT0
+    # define MAX7456SELECT     6 // ss
+    # define MAX7456RESET     10 // RESET
+    # define MAX7456SETHARDWAREPORTS  pinMode(MAX7456RESET,OUTPUT);pinMode(MAX7456SELECT,OUTPUT);pinMode(DATAOUT, OUTPUT);pinMode(DATAIN, INPUT);pinMode(SPICLOCK,OUTPUT);pinMode(VSYNC, INPUT);
+    # define MAX7456HWRESET   digitalWrite(MAX7456RESET,LOW);delay(60);digitalWrite(MAX7456RESET,HIGH);delay(40);
+    # define MAX7456ENABLE    digitalWrite(MAX7456SELECT,LOW); 
+    # define MAX7456DISABLE   digitalWrite(MAX7456SELECT,HIGH); 
 #else                                  
     # define MAX7456ENABLE    PORTD&=B10111111; 
     # define MAX7456DISABLE   PORTD|=B01000000; 
     # define MAX7456SETHARDWAREPORTS  DDRB|=B00101100;DDRB&=B11101111;DDRD|=B01000000;DDRD&=B11111011;
     # define MAX7456HWRESET   PORTB&=B11111011;delay(100);PORTB|=B00000100;
+#endif
+
+
+#ifdef AEROMAX
+    #define TEMPPIN       A6  // also used for airspeed         
+    #define INTD5     
 #endif
 
 #ifdef AIRBOTMICRO23
@@ -481,10 +504,9 @@
 
 /********************  GPS OSD rule definitions  *********************/
 
-#if defined PPMOSDCONTROL
+#if defined PPM_CONTROL
   #undef OSD_SWITCH
-  #undef OSD_SWITCH_RSSI
-  #undef INTPWMRSSI
+  #undef PWM_OSD_SWITCH
   #define OSD_SWITCH_RC               // Enables 3 way screen switch using a TX channel via FC. Specify channel on GUI (range 0-7 AUX1=4 AUX4=7)
 #endif
 
@@ -548,7 +570,7 @@
   #define MAXPAGE       MENU_ALARMS
 #endif
 
-#if defined (OSD_SWITCH_RSSI)
+#if defined (PWM_OSD_SWITCH)
   #define OSD_SWITCH_RC
 #endif
 
@@ -649,15 +671,10 @@
   #define RCCHANNELS 8 
 #endif
 
-/********************  RSSI  *********************/
-#if defined FASTPWMRSSI
-  #define INTPWMRSSI
-#endif  
-
 /********************  other paramters  *********************/
 #define RSSIhz           10 
 
-#ifdef PWMTHROTTLE
+#ifdef PWM_THROTTLE
   #define ALWAYSARMED  // starts OSD in armed mode
 #endif
 

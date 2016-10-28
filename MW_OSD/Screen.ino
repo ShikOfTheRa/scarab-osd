@@ -1638,17 +1638,56 @@ void displayConfigScreen(void)
 
 void displayDebug(void)
 {
-#if defined (DEBUG)||defined (DEBUGMW)||defined (FORCEDEBUG)
+#if defined (DEBUG)
 #ifndef FORCEDEBUG 
   if(!Settings[S_DEBUG])
     return;
 #endif //FORCEDEBUG 
+
+#ifdef DEBUGDSWITCH
+ if (screenlayout!=DEBUG)
+   return;
+#endif
+
+#ifdef DEBUGDCLEAR
+ for(uint16_t xx=0;xx<MAX_screen_size;++xx){ // clear screen
+   screen[xx] = ' ';
+ }
+#endif
+ 
+#ifdef DEBUGDPOSRCDATA
+  MAX7456_WriteString("RC",DEBUGDPOSRCDATA);
+  for(uint8_t X=1; X<=8; X++) {
+    itoa(MwRcData[X],screenBuffer,10);
+    MAX7456_WriteString(screenBuffer,DEBUGDPOSRCDATA+(X*LINE));
+  } 
+#endif
+#ifdef DEBUGDPOSANAL
+  MAX7456_WriteString("ANAL",DEBUGDPOSANAL-30);
+  for (uint8_t sensor=0;sensor<SENSORTOTAL;sensor++) {
+    itoa(sensorfilter[sensor][SENSORFILTERSIZE],screenBuffer,10);
+    MAX7456_WriteString(screenBuffer,DEBUGDPOSANAL+(sensor*LINE));
+  } 
+#endif
+#ifdef DEBUGDPOSVAL    
+  MAX7456_WriteString("DEBUG",DEBUGDPOSVAL-30);
   for(uint8_t X=0; X<4; X++) {
     ItoaPadded(debug[X], screenBuffer+2,7,0);     
     screenBuffer[0] = 0x30+X;
     screenBuffer[1] = 0X3A;
-    MAX7456_WriteString(screenBuffer,getPosition(debugPosition)+(X*LINE));
+    MAX7456_WriteString(screenBuffer,DEBUGDPOSVAL+(X*LINE));
   } 
+#endif
+#ifdef DEBUGDPOSPWM   
+  MAX7456_WriteString("PWM",DEBUGDPOSPWM);
+  itoa(pwmval1,screenBuffer,10);
+  MAX7456_WriteString(screenBuffer,DEBUGDPOSPWM+(1*LINE));
+  itoa(pwmval2,screenBuffer,10);
+  MAX7456_WriteString(screenBuffer,DEBUGDPOSPWM+(2*LINE));
+#endif  
+  displayVoltage();
+  displayDirectionToHome();
+
 #endif //(DEBUG)||defined (DEBUGMW)||defined (FORCEDEBUG)
 }
 

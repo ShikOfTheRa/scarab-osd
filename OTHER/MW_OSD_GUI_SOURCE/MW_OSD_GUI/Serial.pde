@@ -403,12 +403,12 @@ void SendCommand(int cmd){
       
       case MSP_RC:
         PortIsWriting = true;
-        headSerialReply(MSP_RC, 14);
+        headSerialReply(MSP_RC, 16);
         serialize16(int(Pitch_Roll.arrayValue()[0]));
         serialize16(int(Pitch_Roll.arrayValue()[1]));
         serialize16(int(Throttle_Yaw.arrayValue()[0]));
         serialize16(int(Throttle_Yaw.arrayValue()[1]));
-        for (int i=5; i<8; i++) {
+        for (int i=5; i<=8; i++) {
           serialize16(1500);
         }
         tailSerialReply();

@@ -1,16 +1,18 @@
 /*--------------------------       MANDATORY configurable parameters      ----------------------------------------------------*/
 /*--------------------------       MANDATORY configurable parameters      ----------------------------------------------------*/
 
+#define DEBUG 2       // Enable/disable option to display OSD debug values. Define which OSD SW/RC switch to show debug on screen display 0 (default)or 1. Also 2 for midpoint on a 3 way RC switch
+
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
 #define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware
 //#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
+//#define AEROMAX                     // Uncomment this if using MWOSD AEROMAX hardware
 //#define RTFQV1                    // Uncomment this if using standard RTFQ/Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
 //#define RTFQMICRO                 // Uncomment this if using micro RTFQ/Witespy Micro Minim OSD, select this to correct for swapped bat1/bat 2.  
 //#define RUSHDUINO                 // Uncomment this if using Rushduino
 //#define KYLIN250PDB               // Uncomment this if using a Kylin 250 FPV PDB (Using A6 as VOLTAGEPIN)
 //#define AIRBOTMICRO23             // Uncomment this if using an airbot MicroOSD v2.3
-
 // NOTE-some of the popular RTFQ/Witespy boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct: 
 // #define SWAPVOLTAGEPINS          // For boards with batt voltage appearing on vid voltage
@@ -96,16 +98,16 @@
 //#define FORCE_MSP                 // Uncomment to enable use of MSP as well as telemetry. Uses more memory 
 
 
-/********************       GPS OSD settings      *********************/
+/********************       GPS OSD settings (GPS / NAZA)      *********************/
 #define GPSHOMEFIX 50               // Number of consecutive valid fixes before home will be set. 50@ 10hz = 5 seconds of valid fixes.
 #define HOMESATFIX 6                // Minimum number of sats required when setting initial home location. 
 #define GPSOSDARMDISTANCE 20        // distance from home in meters when GPSOSD arms. Starts flight timer etc.
 #define GPSOSDHOMEDISTANCE 40       // distance from home in meters when GPSOSD is home. When speed is low it disarms and displays summary screen.
 //#define GPSDOP 300                // UBLOX only - minimum PDOP required for sat fix. A DOP of 2.00 is considered good 
 //#define DISPLAYDOP                // UBLOX only - display DOP when its bad - above GPSDOP. Uses and requires temperature position to be enabled
-//#define OSD_SWITCH_RSSI           // Enables 3 way screen switch using a TX channel via a RX channel connected to the OSD RSSI pin. Typically used for GPSOSD.
-//#define PWMTHROTTLE               // Enables throttle feature, virtual current sensor using RC throttle connected into OSD RSSI pin. Calibrate throttle using GUI RSSI cal functions 
-//#define PPMOSDCONTROL             // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD RSSI pin. Requires TX type to be set below. 
+//#define PWM_OSD_SWITCH            // Enables 3 way screen switch using a TX channel via a RX channel connected to the OSD PWM input pin (RSSI pin on basic MINIM hardware). 
+//#define PWM_THROTTLE              // Enables throttle feature, virtual current sensor using RC throttle connected into OSD PWM input pin (RSSI pin on basic MINIM hardware). 
+//#define PPM_CONTROL               // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD PWM input pin (RSSI pin on basic MINIM hardware). Requires TX type to be set below. 
 //#define SERIAL_SUM_PPM_RHF        // Enable for Robe/Hitec/Futaba
 //#define SERIAL_SUM_PPM_GS         // Enable for Graupner/Spektrum    
 //#define SERIAL_SUM_PPM_M          // Enable for Multiplex
@@ -118,11 +120,8 @@
 //#define FILTER_HYSTERYSIS 2       // Alternative filter with hysteris to provide smoother changes. Higher number = more filtering. Max 4  
 
 /********************       RSSI settings (PWM/PPM)      *********************/
-//Choose ONLY ONE option: 
 //Note all require PWM RSSI to be enabled on GUI
-#define INTPWMRSSI                  // Undefine this to use new interrupt PWM RSSI method (standard PWM 0-2000ms pulse width)
-//#define PULSEINPWMRSSI            // DEPRECATED Undefine this to use legacy non interrupt PWM RSSI method (pulse width 0 - 2000ms pulse width)
-//#define RCRSSI 3                  // Undefine this to use RC channel (0-7) for RSSI (this can be from the FC - or a PPM channel with GPSOSD)
+//#define RCRSSI 4                  // Undefine this to use RC channel (1-RCCHANNELS- default 8) for RSSI (this can be from the FC - or a PPM channel with GPSOSD)
 
 
 /********************       GPS settings      *********************/
@@ -157,7 +156,7 @@
 
 
 /******************** Mavlink settings *********************/
-#define MAVLINKREQ                // Enable this for mavlink systems where the Mavlink data requires requesting. 
+//#define MAVLINKREQ                // Enable this for mavlink systems where the Mavlink data requires requesting. 
 
 
 /******************** Serial MSP speed settings *********************/
@@ -175,7 +174,7 @@
 //#define FREETEXTGIMBAL           // Alternative option - enable to display freetext (or callsign) when GIMBAL Switch active on TX.
 
 /********************       STARTUP settings      *********************/
-#define INTRO_VERSION               "MWOSD - BETA 1.6.3.0" // Call the OSD something else if you prefer. 
+#define INTRO_VERSION               "MWOSD - 1.6.5.X" // Call the OSD something else if you prefer. 
 #define INTRO_MENU                  // Enable to display TX stick MENU 
 #define INTRO_CALLSIGN            // Enable to display callsign at startup
 #define INTRO_SIGNALTYPE          // Enable to display video type at startup
@@ -220,7 +219,7 @@
 //#define DISPLAYWATTS              // Enable this to display Watts (if Watts selected in layouts)
 #define DISPLAYEFFICIENCY         // Enable this to display Watts/KMh or Mph for efficiency (if Watts selected in layouts)
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft
-#define AIRMODE 30                  // Enable this to display BETAFLIGHT airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
+#define AIRMODE 2                  // Enable this to display BETAFLIGHT airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
 //#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
 
 /********************   RC TX Settings     *********************/

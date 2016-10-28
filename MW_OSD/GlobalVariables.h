@@ -175,6 +175,10 @@ uint16_t cycleTime;
 uint16_t I2CError;
 uint8_t oldROW=0;
 uint8_t cells=0;
+uint8_t rcswitch_ch=8;
+int8_t PulseType = 0; //0 PWM 1 PPM
+uint16_t pwmval1=0;
+uint16_t pwmval2=0;
 #if defined CORRECT_MSP_BF1
   uint8_t bfconfig[25];
 #endif

@@ -797,3 +797,7 @@ void gpsvario(){
     MwVario=(GPS_altitude-previousfwaltitude)*20;
   }  
 }
+
+#if defined NAZA
+  #include "Naza.h"
+#endif  
