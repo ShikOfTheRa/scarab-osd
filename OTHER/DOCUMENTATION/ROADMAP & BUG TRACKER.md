@@ -25,6 +25,9 @@
  * OSD    - I2C MSP slave support for FC's that support this method
  * OSD    - Support for up to 16 TX channels
  * OSD    - Support for efficiency display - Watts/KMh or Mph
+ * OSD    - Improved support for AB7456 hardware
+ * OSD    - Support for boards with 2 PWM/PWM+PPM input. AEROMAX
+ * OSD    - Support for jflpyers canvas mode - BETAFLIGHT Configuration menus 
  * GUI    - Support for LTM,MAVLINK,KISS protocol
  * GUI    - Option to disable simulator graphics for improved speed
  * GUI    - Video volts shown in decimal format
