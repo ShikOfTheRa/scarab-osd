@@ -674,7 +674,6 @@
 #endif
 
 /********************  other paramters  *********************/
-#define RSSIhz           10 
 
 #ifdef PWM_THROTTLE
   #define ALWAYSARMED  // starts OSD in armed mode

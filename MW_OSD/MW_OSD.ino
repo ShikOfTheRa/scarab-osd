@@ -300,14 +300,6 @@ void loop()
   }
 #endif //MSP_SPEED_HIGH
 
-// to prevent issues with high pulse RSSi consuming CPU, limit number of interrupts
-//    if (!PulseType){
-      if((currentMillis - previous_millis_rssi) >= (10000/RSSIhz)){  
-        previous_millis_rssi = currentMillis; 
-        initPulseInts();
-      }   
-//    }
-
   if((currentMillis - previous_millis_low) >= lo_speed_cycle)  // 10 Hz (Executed every 100ms)
   {
     previous_millis_low = previous_millis_low+lo_speed_cycle;    
@@ -1143,7 +1135,6 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
   static uint16_t PulseStart;
   static uint8_t  RCchan = 1; 
   static uint16_t LastTime = 0; 
-  static uint8_t  PulseCounter;  
   uint8_t pinstatus;
   pinstatus = PINC;
   #define PWMPIN1 DDC3
@@ -1154,40 +1145,31 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
   if((CurrentTime-LastTime)>3000) RCchan = 1; // assume this is PPM gap
   LastTime = CurrentTime;
   if (!(pinstatus & (1<<PWMPIN1))) { // measures low duration
-    if (PulseType){ 
-      PulseCounter=2;
-    }     
-    if (PulseCounter >1){ // why? - to skip any partial pulse due to toggling of int's for PWM
-      PulseDuration = CurrentTime-PulseStart; 
-      PulseCounter=0;
-      if ((750<PulseDuration) && (PulseDuration<2250)) {    
-    #ifdef INTD5
-        pwmRSSI = PulseDuration;
-        PCMSK1 =0;
-    #else
-     #ifdef PPM_CONTROL
-        PulseType=1;
-      #endif
-        if (PulseType){ //PPM
-          if (RCchan<=RCCHANNELS)// avoid array overflow if > standard ch PPM
-            MwRcData[RCchan] = PulseDuration; // Val updated
-        }
-        else{ //PWM
-        #ifdef PWM_OSD_SWITCH
-          MwRcData[rcswitch_ch]=PulseDuration;
-        #elif defined PWM_THROTTLE
-          MwRcData[THROTTLESTICK] = PulseDuration;
-        #else      
-          pwmRSSI = PulseDuration;
-        #endif
-          PCMSK1 = 0;
-        }
+    PulseDuration = CurrentTime-PulseStart; 
+    if ((750<PulseDuration) && (PulseDuration<2250)) {    
+  #ifdef INTD5
+      pwmRSSI = PulseDuration;
+  #else
+    #ifdef PPM_CONTROL
+      PulseType=1;
     #endif
+      if (PulseType){ //PPM
+        if (RCchan<=RCCHANNELS)// avoid array overflow if > standard ch PPM
+          MwRcData[RCchan] = PulseDuration; // Val updated
       }
-      RCchan++;
-      pwmval1=PulseDuration;
+      else{ //PWM
+      #ifdef PWM_OSD_SWITCH
+        MwRcData[rcswitch_ch]=PulseDuration;
+      #elif defined PWM_THROTTLE
+        MwRcData[THROTTLESTICK] = PulseDuration;
+      #else      
+        pwmRSSI = PulseDuration;
+      #endif
+      }
+    #endif
     }
-    PulseCounter++;
+    RCchan++;
+    pwmval1=PulseDuration;
   } 
   else {
     PulseStart = CurrentTime;
@@ -1200,7 +1182,6 @@ ISR(PCINT2_vect) { // // Default Arduino D5 Atmega D5
   static uint16_t PulseStart;
   static uint8_t  RCchan = 1; 
   static uint16_t LastTime = 0; 
-  static uint8_t  PulseCounter;  
   uint8_t pinstatus;
   #define PWMPIN2 DDD5
   pinstatus = PIND;
@@ -1212,32 +1193,25 @@ ISR(PCINT2_vect) { // // Default Arduino D5 Atmega D5
   LastTime = CurrentTime;
   
   if (!(pinstatus & (1<<PWMPIN2))) { // measures low duration
-    if (PulseType) 
-      PulseCounter=2;     
-    if (PulseCounter >1){ // why? - to skip any partial pulse due to toggling of int's for PWM
-      PulseDuration = CurrentTime-PulseStart; 
-      PulseCounter=0;
-      if ((750<PulseDuration) && (PulseDuration<2250)) {    
-      #ifdef PPM_CONTROL
-        PulseType=1;
-      #endif
-        if (PulseType){ //PPM
-          if (RCchan<=RCCHANNELS)// avoid array overflow if > standard ch PPM
-            MwRcData[RCchan] = PulseDuration; // Val updated
-        }
-        else{ //PWM
-        #ifdef PWM_THROTTLE
-          MwRcData[THROTTLESTICK] = PulseDuration;
-        #elif defined OSD_SWITCH_RC     
-          MwRcData[rcswitch_ch]=PulseDuration;
-        #endif
-          PCMSK2 = 0;
-        }
+    PulseDuration = CurrentTime-PulseStart; 
+    if ((750<PulseDuration) && (PulseDuration<2250)) {    
+    #ifdef PPM_CONTROL
+      PulseType=1;
+    #endif
+      if (PulseType){ //PPM
+        if (RCchan<=RCCHANNELS)// avoid array overflow if > standard ch PPM
+          MwRcData[RCchan] = PulseDuration; // Val updated
       }
-      RCchan++;
-      pwmval2=PulseDuration;
+      else{ //PWM
+      #ifdef PWM_THROTTLE
+        MwRcData[THROTTLESTICK] = PulseDuration;
+      #elif defined OSD_SWITCH_RC     
+        MwRcData[rcswitch_ch]=PulseDuration;
+      #endif
+      }
     }
-    PulseCounter++;
+    RCchan++;
+    pwmval2=PulseDuration;
   }  
   else {
     PulseStart = CurrentTime;
