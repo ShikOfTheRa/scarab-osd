@@ -1,7 +1,6 @@
 /*--------------------------       MANDATORY configurable parameters      ----------------------------------------------------*/
 /*--------------------------       MANDATORY configurable parameters      ----------------------------------------------------*/
 
-#define DEBUG 2       // Enable/disable option to display OSD debug values. Define which OSD SW/RC switch to show debug on screen display 0 (default)or 1. Also 2 for midpoint on a 3 way RC switch
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
@@ -158,7 +157,7 @@
 
 
 /******************** Mavlink settings *********************/
-//#define MAVLINKREQ                // Enable this for mavlink systems where the Mavlink data requires requesting. 
+#define MAVLINKREQ                // Enable this for mavlink systems where the Mavlink data requires requesting. 
 
 
 /******************** Serial MSP speed settings *********************/

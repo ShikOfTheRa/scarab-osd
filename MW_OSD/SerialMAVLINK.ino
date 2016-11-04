@@ -70,26 +70,35 @@ void mav_serialize16(uint16_t val) {
   mav_serialize8((val>>8) & 0xFF);
 }
 
+void mav_serialize32(uint16_t val) {
+  mav_serialize8((val   ) & 0xFF);
+  mav_serialize8((val>>8) & 0xFF);
+  mav_serialize8((val>>16) & 0xFF);
+  mav_serialize8((val>>24) & 0xFF);
+}
+
 
 void mavlink_msg_request_data_stream_send(uint8_t MAVStreams, uint16_t MAVRates){
   //head:
+  static int8_t tx_sequence=0;
+  tx_sequence++;
   mw_mav.tx_checksum=0xFFFF; //init
   Serial.write(0xFE);
-  mav_serialize8(mw_mav.message_length);
-  mav_serialize8(mw_mav.sequence&0xFF);
+  mav_serialize8(6);
+  mav_serialize8(tx_sequence);
   mav_serialize8(99);
   mav_serialize8(99);
   mav_serialize8(MAVLINK_MSG_ID_REQUEST_DATA_STREAM);  
   //body:
   mav_serialize16(MAVRates); //MAVRates
-  mav_serialize8(mw_mav.message_sysid);
-  mav_serialize8(mw_mav.message_component);
+  mav_serialize8(1);
+  mav_serialize8(1);
   mav_serialize8(MAVStreams);
   mav_serialize8(1);
   //tail:
-  mav_checksum(MAVLINK_MSG_ID_REQUEST_DATA_STREAM_MAGIC);
-  Serial.write((uint8_t)(mw_mav.serial_checksum&0xFF));
-  Serial.write((uint8_t)(mw_mav.serial_checksum>>8&0xFF));
+  mav_tx_checksum_func(MAVLINK_MSG_ID_REQUEST_DATA_STREAM_MAGIC);
+  Serial.write((uint8_t)(mw_mav.tx_checksum&0xFF));
+  Serial.write((uint8_t)(mw_mav.tx_checksum>>8&0xFF));
 }
 
 
@@ -121,7 +130,8 @@ void serialMAVCheck(){
   uint8_t osd_mode=serialbufferint(0);
   switch(mw_mav.message_cmd) {
   case MAVLINK_MSG_ID_HEARTBEAT:
-    mode.armed      = (1<<0);
+ debug[0]++;
+ mode.armed      = (1<<0);
     mode.gpshome    = (1<<4);
     mode.gpshold    = (1<<5);
     mode.gpsmission = (1<<6);
@@ -149,7 +159,8 @@ void serialMAVCheck(){
 #endif //MAVLINKREQ
     break;
   case MAVLINK_MSG_ID_VFR_HUD:
-    GPS_speed=(int16_t)serialbufferfloat(4)*100;    // m/s-->cm/s 
+debug[1]++;
+GPS_speed=(int16_t)serialbufferfloat(4)*100;    // m/s-->cm/s 
     GPS_altitude=(int16_t)serialbufferfloat(8);     // m-->m
     if (GPS_fix_HOME == 0){
       GPS_reset_home_position();
@@ -164,7 +175,8 @@ void serialMAVCheck(){
     MwVario=(int16_t)serialbufferfloat(12)*100;     // m/s-->cm/s
     break;
   case MAVLINK_MSG_ID_ATTITUDE:
-    MwAngle[0]=(int16_t)(serialbufferfloat(4)*57.2958*10); // rad-->0.1deg
+debug[2]++;
+MwAngle[0]=(int16_t)(serialbufferfloat(4)*57.2958*10); // rad-->0.1deg
     MwAngle[1]=(int16_t)(serialbufferfloat(8)*57.2958*10); // rad-->0.1deg
     break;
   case MAVLINK_MSG_ID_GPS_RAW_INT:
@@ -191,6 +203,7 @@ void serialMAVCheck(){
     handleRawRC();
     break;
   case MAVLINK_MSG_ID_SYS_STATUS:
+debug[3]++;
     mode.stable = 2;
     mode.baro   = 4;
     mode.mag    = 8;
@@ -223,6 +236,10 @@ void serialMAVCheck(){
 void serialMAVreceive(uint8_t c)
 {
   static uint8_t mav_payload_index; 
+if ((mav_payload_index) > SERIALBUFFERSIZE){
+//  mav_payload_index=100;
+  }
+
   static uint16_t mav_checksum_rcv; 
 
   static enum _serial_state {
@@ -302,7 +319,7 @@ void serialMAVreceive(uint8_t c)
     }
     else{
       mav_checksum_rcv+=(c<<8);
-      int8_t mav_magic;
+      int8_t mav_magic=0;
       switch(mw_mav.message_cmd) {
       case MAVLINK_MSG_ID_HEARTBEAT:
         mav_magic = MAVLINK_MSG_ID_HEARTBEAT_MAGIC;

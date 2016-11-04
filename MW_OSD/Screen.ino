@@ -1649,11 +1649,9 @@ void displayDebug(void)
    return;
 #endif
 
-#ifdef DEBUGDCLEAR
  for(uint16_t xx=0;xx<MAX_screen_size;++xx){ // clear screen
    screen[xx] = ' ';
  }
-#endif
  
 #ifdef DEBUGDPOSRCDATA
   MAX7456_WriteString("RC",DEBUGDPOSRCDATA);

@@ -17,9 +17,6 @@ static uint8_t rcvChecksum;
 static uint8_t readIndex;
 static uint8_t txChecksum;
 
-#if defined PROTOCOL_MAVLINK
-  #include "MAVLINK.h"
-#endif 
 
 #if defined PROTOCOL_LTM
   #include "LTM.h"
