@@ -61,6 +61,8 @@
 #define ROTORCRAFT                  // Default for multirotors etc. 
 //#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight 
 
+
+
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
 // Ignore this section unless you know you need to use it !!
@@ -90,12 +92,10 @@
 //#define CANVAS_SUPPORT            // Enable CANVAS mode support for post betaflight 3.1.0 CMS
 //#define INVERTED_CHAR_SUPPORT     // Enable inverted char support
 
+
 /********************       TELEMETRY settings      *********************/
-//Select ONLY if you are sure your OSD is connected to a telemetry feed:
-//#define TELEMETRY_LTM             // Uncomment this if you are using a LTM telemetry feed (under development)
-//#define TELEMETRY_MAVLINK         // Uncomment this if you are using a MAVLINK telemetry feed (under development)
-//#define TELEMETRY_SKYTRACK        // Under development
-//#define SETHOMEARMED              // Uncomment this to disable reset home position when arming. Use if FC armed data is sent via LTM
+//Select ONLY if you are sure your OSD is connected to a telemetry feed such as MAVLINK/LTM:
+//#define SETHOMEARMED              // Uncomment this ONLY if armed information is not sent within telemetry feedd. Or you do not want to reset home position when arming.
 //#define FORCE_MSP                 // Uncomment to enable use of MSP as well as telemetry. Uses more memory 
 
 
@@ -109,10 +109,6 @@
 //#define PWM_OSD_SWITCH            // Enables 3 way screen switch using a TX channel via a RX channel connected to the OSD PWM input pin (RSSI pin on basic MINIM hardware). 
 //#define PWM_THROTTLE              // Enables throttle feature, virtual current sensor using RC throttle connected into OSD PWM input pin (RSSI pin on basic MINIM hardware). 
 //#define PPM_CONTROL               // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD PWM input pin (RSSI pin on basic MINIM hardware). Requires TX type to be set below. 
-//#define SERIAL_SUM_PPM_RHF        // Enable for Robe/Hitec/Futaba
-//#define SERIAL_SUM_PPM_GS         // Enable for Graupner/Spektrum    
-//#define SERIAL_SUM_PPM_M          // Enable for Multiplex
-//#define SERIAL_SUM_PPM_HS         // Enable for Hitec/Sanwa
 
 
 /********************       FILTER settings      *********************/
@@ -122,7 +118,7 @@
 
 /********************       RSSI settings (PWM/PPM)      *********************/
 //Note all require PWM RSSI to be enabled on GUI
-//#define RCRSSI 4                  // Undefine this to use RC channel (1-RCCHANNELS- default 8) for RSSI (this can be from the FC - or a PPM channel with GPSOSD)
+//#define RCRSSI 4                  // Undefine this to use RC channel (1-TX_CHANNELS- default 8) for RSSI (this can be from the FC - or a PPM channel with GPSOSD)
 
 
 /********************       GPS settings      *********************/
@@ -223,9 +219,15 @@
 #define AIRMODE 2                  // Enable this to display BETAFLIGHT airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
 //#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
 
+
 /********************   RC TX Settings     *********************/
-//#define MODE1                     // Enable this if wish to use cursor controls on same stick - for MODE 1 TX users
-//#define RCCHANNELS 8              // Amend if require up to 16 RC channels
+//#define TX_MODE1                  // Enable this if wish to use cursor controls on same stick - for MODE 1 TX users
+//#define TX_CHANNELS 8             // Amend if require up to 16 RC channels (Only use for GPSOSD/NAZA/APM/PIXHAWK/MAVLINK)
+//#define TX_RHF                    // Enable for Robe/Hitec/Futaba (Only use for GPSOSD/NAZA/APM/PIXHAWK/MAVLINK)
+//#define TX_GS                     // Enable for Graupner/Spektrum (Only use for GPSOSD/NAZA/APM/PIXHAWK/MAVLINK)    
+//#define TX_M                      // Enable for Multiplex (Only use for GPSOSD/NAZA/APM/PIXHAWK/MAVLINK)
+//#define TX_HS                     // Enable for Hitec/Sanwa (Only use for GPSOSD/NAZA/APM/PIXHAWK/MAVLINK)
+
 
 /********************       Airspeed Settings         ************************/
 // Completely UNTESTED for future integration of support for airspeed sensor

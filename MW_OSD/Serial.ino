@@ -386,7 +386,7 @@ For sub-command 3 (draw string):
 
   if (cmdMSP==MSP_RC)
   {
-    for(uint8_t i=1;i<=RCCHANNELS;i++)
+    for(uint8_t i=1;i<=TX_CHANNELS;i++)
       MwRcData[i] = read16();
     handleRawRC();
   }
@@ -882,7 +882,7 @@ void handleRawRC() {
 	waitStick = 2;
 	configExit();
       }
-#ifdef MODE1
+#ifdef TX_MODE1
       if(configMode&&(MwRcData[YAWSTICK]>MAXSTICK)) // MOVE RIGHT
 #else
       if(configMode&&(MwRcData[ROLLSTICK]>MAXSTICK)) // MOVE RIGHT
@@ -892,7 +892,7 @@ void handleRawRC() {
 	COL++;
 	if(COL>3) COL=3;
       }
-#ifdef MODE1
+#ifdef TX_MODE1
       else if(configMode&&(MwRcData[YAWSTICK]<MINSTICK)) // MOVE LEFT
 #else
       else if(configMode&&(MwRcData[ROLLSTICK]<MINSTICK)) // MOVE LEFT
@@ -919,7 +919,7 @@ void handleRawRC() {
 	if(ROW>10)
 	  ROW=10;
       }
-#ifdef MODE1
+#ifdef TX_MODE1
       else if(!previousarmedstatus&&configMode&&(MwRcData[ROLLSTICK]<MINSTICK)) // DECREASE
 #else
       else if(!previousarmedstatus&&configMode&&(MwRcData[YAWSTICK]<MINSTICK)) // DECREASE
@@ -929,7 +929,7 @@ void handleRawRC() {
         menudir=-1+oldmenudir;
         serialMenuCommon();  
       }
-#ifdef MODE1
+#ifdef TX_MODE1
       else if(!previousarmedstatus&&configMode&&(MwRcData[ROLLSTICK]>MAXSTICK)) // INCREASE
 #else
       else if(!previousarmedstatus&&configMode&&(MwRcData[YAWSTICK]>MAXSTICK)) // INCREASE

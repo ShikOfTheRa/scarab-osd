@@ -577,19 +577,6 @@
 #endif
 
 
-/********************  TELEMTERY rule definitions  *********************/
-#ifdef TELEMETRY_LTM
-#define PROTOCOL_LTM
-#endif
-
-#ifdef TELEMETRY_MAVLINK
-#define PROTOCOL_MAVLINK
-#endif
-
-#ifdef TELEMETRY_SKYTRACK
-#define PROTOCOL_SKYTRACK
-#endif
-
 /********************  PROTOCOL rule definitions  *********************/
 #define PROTOCOL_MSP // on by default
 
@@ -636,22 +623,22 @@
 
 /********************  RX channel rule definitions  *********************/
 
-#if defined SERIAL_SUM_PPM_GS            //PITCH,YAW,THROTTLE,ROLL,AUX1,AUX2,AUX3,AUX4 //For Graupner/Spektrum    
+#if defined TX_GS            //PITCH,YAW,THROTTLE,ROLL,AUX1,AUX2,AUX3,AUX4 //For Graupner/Spektrum    
   #define ROLLSTICK        4
   #define PITCHSTICK       1
   #define YAWSTICK         2
   #define THROTTLESTICK    3
-#elif defined SERIAL_SUM_PPM_RHF         //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For Robe/Hitec/Futaba
+#elif defined TX_RHF         //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For Robe/Hitec/Futaba
   #define ROLLSTICK        1
   #define PITCHSTICK       2
   #define YAWSTICK         4
   #define THROTTLESTICK    3
-#elif defined SERIAL_SUM_PPM_M           //ROLL,PITCH,YAW,THROTTLE,AUX1,AUX2,AUX3,AUX4 //For Multiplex
+#elif defined TX_M           //ROLL,PITCH,YAW,THROTTLE,AUX1,AUX2,AUX3,AUX4 //For Multiplex
   #define ROLLSTICK        1
   #define PITCHSTICK       2
   #define YAWSTICK         3
   #define THROTTLESTICK    4
-#elif defined SERIAL_SUM_PPM_HS          //PITCH,ROLL,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For some Hitec/Sanwa/Others
+#elif defined TX_HS          //PITCH,ROLL,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For some Hitec/Sanwa/Others
   #define ROLLSTICK        2
   #define PITCHSTICK       1
   #define YAWSTICK         4
@@ -669,8 +656,8 @@
   #define THROTTLESTICK    4
 #endif
 
-#ifndef RCCHANNELS
-  #define RCCHANNELS 8 
+#ifndef TX_CHANNELS
+  #define TX_CHANNELS 8 
 #endif
 
 /********************  other paramters  *********************/

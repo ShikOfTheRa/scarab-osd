@@ -1,3 +1,4 @@
+#ifdef PROTOCOL_MAVLINK
 
 
 void mav_checksum(uint8_t val) {
@@ -348,6 +349,8 @@ if ((mav_payload_index) > SERIALBUFFERSIZE){
     }
   }
 }
+
+#endif
 
 
 

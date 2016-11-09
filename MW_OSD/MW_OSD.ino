@@ -1154,7 +1154,7 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
       PulseType=1;
     #endif
       if (PulseType){ //PPM
-        if (RCchan<=RCCHANNELS)// avoid array overflow if > standard ch PPM
+        if (RCchan<=TX_CHANNELS)// avoid array overflow if > standard ch PPM
           MwRcData[RCchan] = PulseDuration; // Val updated
       }
       else{ //PWM
@@ -1199,7 +1199,7 @@ ISR(PCINT2_vect) { // // Default Arduino D5 Atmega D5
       PulseType=1;
     #endif
       if (PulseType){ //PPM
-        if (RCchan<=RCCHANNELS)// avoid array overflow if > standard ch PPM
+        if (RCchan<=TX_CHANNELS)// avoid array overflow if > standard ch PPM
           MwRcData[RCchan] = PulseDuration; // Val updated
       }
       else{ //PWM
