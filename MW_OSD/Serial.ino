@@ -1288,10 +1288,6 @@ void serialMSPreceive(uint8_t loops)
       if (c > SERIALBUFFERSIZE)
       {  // now we are expecting the payload size
         c_state = IDLE;
-#ifdef SERIALCHECK
-        // Payload too large
-        debug[1]++;
-#endif
       }
       else
       {
@@ -1315,12 +1311,6 @@ void serialMSPreceive(uint8_t loops)
         if(rcvChecksum == 0) {
             serialMSPCheck();
         }
-#ifdef SERIALCHECK
-        else {
-          // Checksum error
-          debug[0]++;
-        }
-#endif
         c_state = IDLE;
       }
       else

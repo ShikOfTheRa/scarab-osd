@@ -131,8 +131,7 @@ void serialMAVCheck(){
   uint8_t osd_mode=serialbufferint(0);
   switch(mw_mav.message_cmd) {
   case MAVLINK_MSG_ID_HEARTBEAT:
- debug[0]++;
- mode.armed      = (1<<0);
+    mode.armed      = (1<<0);
     mode.gpshome    = (1<<4);
     mode.gpshold    = (1<<5);
     mode.gpsmission = (1<<6);
@@ -160,8 +159,7 @@ void serialMAVCheck(){
 #endif //MAVLINKREQ
     break;
   case MAVLINK_MSG_ID_VFR_HUD:
-debug[1]++;
-GPS_speed=(int16_t)serialbufferfloat(4)*100;    // m/s-->cm/s 
+    GPS_speed=(int16_t)serialbufferfloat(4)*100;    // m/s-->cm/s 
     GPS_altitude=(int16_t)serialbufferfloat(8);     // m-->m
     if (GPS_fix_HOME == 0){
       GPS_reset_home_position();
@@ -176,8 +174,7 @@ GPS_speed=(int16_t)serialbufferfloat(4)*100;    // m/s-->cm/s
     MwVario=(int16_t)serialbufferfloat(12)*100;     // m/s-->cm/s
     break;
   case MAVLINK_MSG_ID_ATTITUDE:
-debug[2]++;
-MwAngle[0]=(int16_t)(serialbufferfloat(4)*57.2958*10); // rad-->0.1deg
+    MwAngle[0]=(int16_t)(serialbufferfloat(4)*57.2958*10); // rad-->0.1deg
     MwAngle[1]=(int16_t)(serialbufferfloat(8)*57.2958*10); // rad-->0.1deg
     break;
   case MAVLINK_MSG_ID_GPS_RAW_INT:
@@ -204,7 +201,6 @@ MwAngle[0]=(int16_t)(serialbufferfloat(4)*57.2958*10); // rad-->0.1deg
     handleRawRC();
     break;
   case MAVLINK_MSG_ID_SYS_STATUS:
-debug[3]++;
     mode.stable = 2;
     mode.baro   = 4;
     mode.mag    = 8;

@@ -9,7 +9,7 @@
 //#define FORCESENSORS
 
 // Display Debug screen display options
-#define DEBUG 2            // Enable/disable option to display OSD debug values. Define which OSD SW/RC switch to show debug on screen display 0 (default)or 1. Also 2 for midpoint on a 3 way RC switch
+//#define DEBUG 2            // Enable/disable option to display OSD debug values. Define which OSD SW/RC switch to show debug on screen display 0 (default)or 1. Also 2 for midpoint on a 3 way RC switch
 #define FORCEDEBUG           // to force debug display (overides GUI / OSD menu setting) 
 //#define DEBUGMW            // Enable to display MSP debug values (assumes debug[x] values are not set elsewhere) 
 //#define DEBUGDSWITCH       // Disable to always display debug screen 

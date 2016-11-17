@@ -153,7 +153,7 @@
 
 
 /******************** Mavlink settings *********************/
-#define MAVLINKREQ                // Enable this for mavlink systems where the Mavlink data requires requesting. 
+//#define MAVLINKREQ                // Enable this for mavlink systems where the Mavlink data requires requesting. 
 
 
 /******************** Serial MSP speed settings *********************/

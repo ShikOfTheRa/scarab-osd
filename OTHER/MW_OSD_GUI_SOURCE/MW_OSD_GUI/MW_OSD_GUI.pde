@@ -2638,3 +2638,10 @@ void mouseClicked(){
   if ((mouseX>=(XLINKS+20)) && (mouseX<=(XLINKS+20+100)) && (mouseY>=(YLINKS+207)) && (mouseY<=(YLINKS+207+30)))
     DONATELINK();
 }
+
+//MSP PUSH Simtype==0
+//MSP PULL Simtype==1
+//MAV      Simtype==2
+//LTM      Simtype==3
+//KISS     Simtype==4
+
