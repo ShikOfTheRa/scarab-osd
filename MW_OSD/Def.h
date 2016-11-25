@@ -463,7 +463,7 @@
     #define INTD5     
 #endif
 
-#ifdef AIRBOTMICRO23
+#ifdef AIRBOTMICRO
     #define MAX_SOFTRESET
 #endif
 

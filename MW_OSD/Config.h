@@ -6,12 +6,12 @@
 //Choose ONLY ONE option:
 #define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware
 //#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
-//#define AEROMAX                     // Uncomment this if using MWOSD AEROMAX hardware
+//#define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
 //#define RTFQV1                    // Uncomment this if using standard RTFQ/Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
 //#define RTFQMICRO                 // Uncomment this if using micro RTFQ/Witespy Micro Minim OSD, select this to correct for swapped bat1/bat 2.  
 //#define RUSHDUINO                 // Uncomment this if using Rushduino
 //#define KYLIN250PDB               // Uncomment this if using a Kylin 250 FPV PDB (Using A6 as VOLTAGEPIN)
-//#define AIRBOTMICRO23             // Uncomment this if using an airbot MicroOSD v2.3
+//#define AIRBOTMICRO               // Uncomment this if using an airbot MicroOSD
 // NOTE-some of the popular RTFQ/Witespy boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct: 
 // #define SWAPVOLTAGEPINS          // For boards with batt voltage appearing on vid voltage

@@ -153,9 +153,7 @@ void MAX7456Setup(void)
 
   MAX7456DISABLE
 
-#ifndef MAX_SOFTRESET
   MAX7456HWRESET
-#endif
   
   // SPCR = 01010000
   //interrupt disabled,spi enabled,msb 1st,master,clk low when idle,
