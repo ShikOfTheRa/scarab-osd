@@ -5,6 +5,7 @@
 void NAZA_NewData(uint8_t c){
   uint8_t decodedMessage = NazaDecoder.decode(c);
   int8_t sattemp;
+  timer.MSP_active=ALARM_MSP;             // getting something on serial port
   switch (decodedMessage){
     uint8_t GPS_fix_temp;
     case NAZA_MESSAGE_GPS:

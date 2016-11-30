@@ -557,7 +557,9 @@
 
 #if defined GPSOSD
   #undef  INTRO_MENU
-  #undef  ALARM_MSP
+  #ifndef NAZA
+    #undef  ALARM_MSP
+  #endif
   #undef  OSD_SWITCH_RC
   #define HIDEARMEDSTATUS
   #define ALARM_GPS 5

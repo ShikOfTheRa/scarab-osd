@@ -240,7 +240,7 @@ void loop()
   }
   #if defined (MEMCHECK)
     debug[MEMCHECK] = UntouchedStack();
-  #endif
+  #endif  
   #if defined (KISS)      
     if (Kvar.mode==1)
       screenlayout=1;
@@ -1158,6 +1158,18 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
           MwRcData[RCchan] = PulseDuration; // Val updated
       }
       else{ //PWM
+      #ifdef NAZA
+        Naza.mode=0;
+        if (PulseDuration > NAZA_PMW_HIGH){
+          Naza.mode=NAZA_MODE_HIGH;
+        }
+        else if (PulseDuration > NAZA_PMW_MED){
+          Naza.mode=NAZA_MODE_MED;
+        }
+        else if (PulseDuration > NAZA_PWM_LOW){
+          Naza.mode=NAZA_MODE_LOW;
+        }
+      #endif  
       #ifdef PWM_OSD_SWITCH
         MwRcData[rcswitch_ch]=PulseDuration;
       #elif defined PWM_THROTTLE
@@ -1178,7 +1190,7 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
 #endif
 
 #if defined INTD5
-ISR(PCINT2_vect) { // // Default Arduino D5 Atmega D5
+ISR(PCINT2_vect) { // // Secondary Arduino D5 Atmega D5
   static uint16_t PulseStart;
   static uint8_t  RCchan = 1; 
   static uint16_t LastTime = 0; 
@@ -1203,6 +1215,18 @@ ISR(PCINT2_vect) { // // Default Arduino D5 Atmega D5
           MwRcData[RCchan] = PulseDuration; // Val updated
       }
       else{ //PWM
+      #ifdef NAZA
+        Naza.mode=0;
+        if (PulseDuration > NAZA_PMW_HIGH){
+          Naza.mode=NAZA_MODE_HIGH;
+        }
+        else if (PulseDuration > NAZA_PMW_MED){
+          Naza.mode=NAZA_MODE_MED;
+        }
+        else if (PulseDuration > NAZA_PWM_LOW){
+          Naza.mode=NAZA_MODE_LOW;
+        }
+      #endif  
       #ifdef PWM_THROTTLE
         MwRcData[THROTTLESTICK] = PulseDuration;
       #elif defined OSD_SWITCH_RC     

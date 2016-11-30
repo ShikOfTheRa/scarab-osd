@@ -155,8 +155,11 @@ void serialMAVCheck(){
      MwSensorActive|=(1<<6);
      */
 #if defined MAVLINKREQ
-    request_mavlink_rates();
+     static uint8_t mavreqdone=0;
+     if (mavreqdone==0) 
+       request_mavlink_rates();
 #endif //MAVLINKREQ
+
     break;
   case MAVLINK_MSG_ID_VFR_HUD:
     GPS_speed=(int16_t)serialbufferfloat(4)*100;    // m/s-->cm/s 

@@ -99,6 +99,11 @@
 #define DEBUGDEF 0   
 #endif
 
+
+#define NAZA_PWM_LOW  1100
+#define NAZA_PMW_MED  1400
+#define NAZA_PMW_HIGH 1600
+
 //General use variables
 struct  __timer {
   uint8_t  tenthSec;
@@ -1566,4 +1571,26 @@ struct __Kvar {
 Kvar;
 
 #endif // PROTOCOL_KISS
+
+
+#ifdef NAZA
+// Vars
+struct __Naza {
+  uint8_t mode;
+}
+Naza; 
+
+const char naza_mode_GPSA[] PROGMEM   = "GPSA"; //GPS ATTI
+const char naza_mode_ATTI[] PROGMEM   = "ATTI"; //ATTI
+const char naza_mode_MANU[] PROGMEM   = "MANU";
+const char naza_mode_FAIL[] PROGMEM   = "FAIL";
+const PROGMEM char * const NAZA_mode_index[] = 
+{   
+ naza_mode_FAIL, //0
+ naza_mode_MANU,
+ naza_mode_ATTI,
+ naza_mode_GPSA,
+};
+#endif // NAZA
+
 

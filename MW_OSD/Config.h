@@ -239,10 +239,11 @@
 
 
 /********************       NAZA Settings         ************************/
-//#define NAZAMODECONTROL           // Enables NAZA mode control display using a PWM signal into OSD RSSI pin. Can be used with OSD_SWITCH_RSSI   
-#define NAZA_MODE_GPS 1600
-#define NAZA_MODE_ATI 
-#define NAZA_MODE_MAN 1400
+// Note: PWM_OSD_SWITCH can be used in conjunction with NAZAMODECONTROL to display different layout in different modes
+#define NAZAMODECONTROL             // Enables NAZA mode control display using a PWM signal into OSD PWM pin.   
+#define NAZA_MODE_HIGH 3            // NAZA mode TX low: 0=FAIL, 1= MANU, 2=ATTI, 3=GPS ATTI
+#define NAZA_MODE_MED  2            // NAZA mode TX low: 0=FAIL, 1= MANU, 2=ATTI, 3=GPS ATTI
+#define NAZA_MODE_LOW  1            // NAZA mode TX low: 0=FAIL, 1= MANU, 2=ATTI, 3=GPS ATTI
 
 
 /********************       Voltage Warning Settings         ************************/

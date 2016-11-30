@@ -210,9 +210,11 @@ void displayDOP(void)        // Display stas DOP
 
 void displayMode(void)
 {
+  #ifndef NAZA
   if(timer.MSP_active==0){ // no MSP >> mode display not valid
     return;
   }  
+  #endif
   uint8_t xx = 0;
 
   if((MwSensorActive&mode.camstab)&&Settings[S_GIMBAL]){
@@ -248,6 +250,8 @@ void displayMode(void)
     strcpy_P(screenBuffer, (char*)pgm_read_word(&(ltm_mode_index[mw_ltm.mode])));
 #elif defined PROTOCOL_KISS// override MWOSD mode icons
     strcpy_P(screenBuffer, (char*)pgm_read_word(&(KISS_mode_index[Kvar.mode])));
+#elif defined (NAZAMODECONTROL) && defined (NAZA)// override MWOSD mode icons
+    strcpy_P(screenBuffer, (char*)pgm_read_word(&(NAZA_mode_index[Naza.mode])));
 #else  
   if(MwSensorActive&mode.passthru){
     screenBuffer[2]=0;
