@@ -10,10 +10,10 @@
  * OSD    - Support for power Efficiency 
  * OSD    - Additional hardware support - OSD's without MAX hardware reset line connected 
  * OSD    - Low voltage hysteresis filter for short high throttle situations  
- * OSD    - Support for MAVLINK 1.0 - APM/PIXHAWK 
  * OSD    - GPS OSD mode home set improvement - higher home sat count / consecutive valid fix / PDOP
  * OSD    - Support for LTM protocol OSD
  * OSD    - Support for KISS OSD
+ * OSD    - Support for MAVLINK 1.0 - APM/PIXHAWK 
  * OSD    - Support for GPS / NAV PID adjustments - BF FIXEDWING
  * OSD    - Support for servo adjustments - BF FIXEDWING
  * OSD    - Legacy FC version display removed
@@ -28,6 +28,8 @@
  * OSD    - Improved support for AB7456 hardware
  * OSD    - Support for boards with 2 PWM/PWM+PPM input. AEROMAX
  * OSD    - Support for jflpyers canvas mode - BETAFLIGHT Configuration menus 
+ * OSD    - Support for NAZA control modes mode inicator - GPS/ATTI/MANU/FAIL 
+ * OSD    - Debug screen for testers and troubleshooting
  * GUI    - Support for LTM,MAVLINK,KISS protocol
  * GUI    - Option to disable simulator graphics for improved speed
  * GUI    - Video volts shown in decimal format
