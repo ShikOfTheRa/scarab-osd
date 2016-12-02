@@ -460,7 +460,8 @@ void displayHorizon(int rollAngle, int pitchAngle)
 
   if(Settings[S_DISPLAY_HORIZON_BR]&fieldIsVisible(horizonPosition)){
 
-#ifdef FULLAHI
+#ifdef NOAHI
+#elif  FULLAHI
     for(uint8_t X=0; X<=12; X++) {
       if (X==6) X=7;
       int Y = (rollAngle * (4-X)) / 64;

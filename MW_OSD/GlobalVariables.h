@@ -100,7 +100,7 @@
 #endif
 
 
-#define NAZA_PWM_LOW  1100
+#define NAZA_PWM_LOW  1000
 #define NAZA_PMW_MED  1400
 #define NAZA_PMW_HIGH 1600
 

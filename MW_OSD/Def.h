@@ -561,6 +561,9 @@
     #undef  ALARM_MSP
   #endif
   #undef  OSD_SWITCH_RC
+  #undef  DISPLAY_PR
+  #define NOAHI
+  
   #define HIDEARMEDSTATUS
   #define ALARM_GPS 5
 
