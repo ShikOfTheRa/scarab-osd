@@ -5,6 +5,49 @@
 
 ---
 
+## Bugfixes / Enhancements completed for next release (1.7): ##
+ * OSD    - very improved camera auto detection.  
+ * OSD    - long distance and negative altitude support .  
+ * OSD    - Support for power Efficiency 
+ * OSD    - Additional hardware support - OSD's without MAX hardware reset line connected 
+ * OSD    - Low voltage hysteresis filter for short high throttle situations  
+ * OSD    - GPS OSD mode home set improvement - higher home sat count / consecutive valid fix / PDOP
+ * OSD    - Support for LTM protocol OSD
+ * OSD    - Support for KISS OSD
+ * OSD    - Support for MAVLINK 1.0 - APM/PIXHAWK 
+ * OSD    - Support for GPS / NAV PID adjustments - BF FIXEDWING
+ * OSD    - Support for servo adjustments - BF FIXEDWING
+ * OSD    - Legacy FC version display removed
+ * OSD    - Option - display signal type at startup
+ * OSD    - Additional hardware support - kylin 250
+ * OSD    - Support for long distance - max travelled greater than 32km
+ * OSD    - Ability to enable/disable indifividual warning text alarms via config.h
+ * OSD    - Ability to disable warning text alarms via OSD menu 
+ * OSD    - I2C MSP slave support for FC's that support this method
+ * OSD    - Support for up to 16 TX channels
+ * OSD    - Support for efficiency display - Watts/KMh or Mph
+ * OSD    - Improved support for AB7456 hardware
+ * OSD    - Support for boards with 2 PWM/PWM+PPM input. AEROMAX
+ * OSD    - Support for jflpyers canvas mode - BETAFLIGHT Configuration menus 
+ * OSD    - Support for NAZA control modes mode inicator - GPS/ATTI/MANU/FAIL 
+ * OSD    - Debug screen for testers and troubleshooting
+ * GUI    - Support for LTM,MAVLINK,KISS protocol
+ * GUI    - Option to disable simulator graphics for improved speed
+ * GUI    - Video volts shown in decimal format
+ * GUI    - Improved speed
+ * BUG    - Armed timer bugfix
+ * BUG    - Warning message display overwriting
+ * BUG    - Added simple GPS glitch filter for MAX speed errors from GPS.
+ * BUG    - fix for high altitude > 9999.
+ * BUG    - fix for negative amperage situations.
+ * CODE   - Quality improvements - tidying 
+ * CODE   - Memory improvements - significant memory savings 
+ * INFO   - GUI / OSD RC channel identifiers are now 1-8 insted of 0-7 to be more human readable
+ * INFO   - Clearer AUTO voltage / alarm  cell count 
+
+
+---
+
 Key Improvements for `R1.6`:-
 
  * OSD    - Support for TUALABS - thanks to Dustin
