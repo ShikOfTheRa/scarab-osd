@@ -137,7 +137,11 @@ void InitSerial(float portValue) {
       buttonRESET.setColorBackground(green_);
       commListbox.setColorBackground(green_);
       buttonRESTART.setColorBackground(green_);
-      
+
+      ResetControl=int(SimControlToggle.getValue());
+      ResetDispaly=int(SimDisplayToggle.getValue());
+      Restart=1;
+
       g_serial.buffer(100);
             txtmessage.setText("");
 //      delay(1500);
@@ -1054,6 +1058,8 @@ public void evaluateCommand(byte cmd, int size) {
           }
           if (eeaddressGUI>=(CONFIGITEMS+CONFIGITEMS16)){ // hit end address config only
             ReadConfigMSPMillis=0;
+            SimControlToggle.setValue(ResetControl);
+            SimDisplayToggle.setValue(ResetDispaly);
           }
         }
         if (MW_OSD_EEPROM_Version!=confCheck){
@@ -1239,9 +1245,10 @@ void MWData_Com() {
   public void READconfigMSP_init(){
 //    println("Console test print");
     SimControlToggle.setValue(0);
+    SimDisplayToggle.setValue(0);
     ReadConfigMSPMillis=1000+millis(); 
     WriteConfigMSPMillis=millis(); 
-    eeaddressGUI=0;   
+    eeaddressGUI=0;
   }
 
   public void READconfigMSP(){
@@ -1272,6 +1279,8 @@ void MWData_Com() {
   }
 
   public void WRITEconfigMSP_init(){
+    SimControlToggle.setValue(0);
+    SimDisplayToggle.setValue(0);
     eeaddressGUI=0;  
     CheckCallSign(); 
     EElookuptableReSet();

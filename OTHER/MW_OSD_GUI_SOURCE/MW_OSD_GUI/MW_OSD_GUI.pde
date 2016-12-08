@@ -208,6 +208,9 @@ int framerate=0;
 String frameratetxt="";
 int loop1hz=0;
 int loop10hz=0;
+int Restart=-0;
+int ResetControl=0;
+int ResetDispaly=0;
 
 // XML config editorvariables
 int hudeditposition=0;
@@ -1290,8 +1293,14 @@ void draw() {
 
 // Process and outstanding Read or Write EEPROM requests
   if((millis()>ReadConfigMSPMillis)&&(millis()>WriteConfigMSPMillis)&&(init_com==1)){
+    if (Restart !=0){
+      SimControlToggle.setValue(ResetControl);
+      SimDisplayToggle.setValue(ResetDispaly);
+      Restart=0;
+    }
     if (AutoSimulator !=0){
       SimControlToggle.setValue(1);
+      SimDisplayToggle.setValue(1);
     }
   }
   if (int(SimControlToggle.getValue())==0){
@@ -2310,7 +2319,8 @@ public void LoadConfig(){
     commListbox.addItem("Pass Thru Comm",commListMax+1); 
   }
   if (AutoSimulator !=0){
-    SimControlToggle.setValue(1);
+      SimControlToggle.setValue(1);
+      SimDisplayToggle.setValue(1);
   }
   if (AutoDebugGUI !=0){
     DEBUGGUI.setValue(1);
@@ -2643,10 +2653,16 @@ public void bSetRSSIhigh(){
 }
 
 void READEEMSP(){
+  ResetControl=int(SimControlToggle.getValue());
+  ResetDispaly=int(SimDisplayToggle.getValue());
+  Restart=1;
   READconfigMSP_init();
 }
 
 void WRITEEEMSP(){
+  ResetControl=int(SimControlToggle.getValue());
+  ResetDispaly=int(SimDisplayToggle.getValue());
+  Restart=1;
   WRITEconfigMSP_init();
 }
 
