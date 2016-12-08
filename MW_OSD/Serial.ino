@@ -234,7 +234,7 @@ void serialMSPCheck()
         MSP_OSD_timer=3000+millis();
         EEPROM.write(eeaddress,eedata);
 //        if (eeaddress==0){
-          EEPROM.write(0,MWOSDVER);
+          EEPROM.write(0,EEPROMVER);
 //        }
         if ((eeaddress==EEPROM_SETTINGS+(EEPROM16_SETTINGS*2))||(eeaddress==EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(3*2*POSITIONS_SETTINGS))){
           readEEPROM();
@@ -252,6 +252,15 @@ void serialMSPCheck()
         uint16_t sensortemp = (uint16_t)sensorfilter[sensor][SENSORFILTERSIZE]/SENSORFILTERSIZE;
         cfgWrite16(sensortemp);
       }
+       cfgWriteChecksum();
+       cfgWriteRequest(MSP_OSD,1+12);
+       cfgWrite8(OSD_INFO);
+       cfgWrite16(INFO_CONTROLLER); 
+       cfgWrite16(INFO_HARDWARE);
+       cfgWrite16(INFO_VERSION); 
+       cfgWrite16(INFO_AIRCRAFT);
+       cfgWrite16(INFO_OPTIONS1);
+       cfgWrite16(INFO_VENDOR);
        cfgWriteChecksum();
     }
 #endif

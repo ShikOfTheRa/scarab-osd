@@ -156,7 +156,7 @@ ControlP5 SmallcontrolP5;
 ControlP5 ScontrolP5;
 ControlP5 FontGroupcontrolP5;
 ControlP5 GroupcontrolP5;
-Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage,eeindexmessage,processingmessage,analmessage; 
+Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage,eeindexmessage,processingmessage,analmessage,infomessage; 
 Textlabel txtlblLayoutTxt,txtlblLayoutEnTxt, txtlblLayoutHudTxt; 
 Textlabel txtlblLayoutTxt2,txtlblLayoutEnTxt2, txtlblLayoutHudTxt2; 
 ListBox commListbox,baudListbox;
@@ -251,7 +251,9 @@ String msptxt="";
 String eeindextxt="";
 String processingtxt="";
 String analtxt="";
+String infotxt="";
 int analSENSORS=5;
+int infoSENSORS=6;
 int xcolor=20;  
 
 
@@ -684,6 +686,7 @@ Textarea myTextarea;
 
 // textlabels -------------------------------------------------------------------------------------------------------------
 Textlabel txtlblanal[] = new Textlabel[analSENSORS] ;
+Textlabel txtlblinfo[] = new Textlabel[infoSENSORS] ;
 Textlabel txtlblconfItem[] = new Textlabel[CONFIGITEMS] ;
 Textlabel txtlblSimItem[] = new Textlabel[SIMITEMS] ;
 Textlabel FileUploadText, TXText, RXText;
@@ -873,6 +876,15 @@ DONATEimage  = loadImage("DON_def.png");
   txtlblanal[2] = controlP5.addTextlabel("txtlblanal2","",XHUD+735,315); // analog sensor value
   txtlblanal[3] = controlP5.addTextlabel("txtlblanal3","",XHUD+735,335); // analog sensor value
   txtlblanal[4] = controlP5.addTextlabel("txtlblanal4","",XHUD+735,355); // analog sensor value
+
+
+  infomessage = controlP5.addTextlabel("infomessage","",XHUD+735,405); //
+  txtlblinfo[0] = controlP5.addTextlabel("txtlblinfo0","",XHUD+735,425); // infoog sensor value
+  txtlblinfo[1] = controlP5.addTextlabel("txtlblinfo1","",XHUD+735,445); // infoog sensor value
+  txtlblinfo[2] = controlP5.addTextlabel("txtlblinfo2","",XHUD+735,465); // infoog sensor value
+  txtlblinfo[3] = controlP5.addTextlabel("txtlblinfo3","",XHUD+735,485); // infoog sensor value
+  txtlblinfo[4] = controlP5.addTextlabel("txtlblinfo4","",XHUD+735,505); // infoog sensor value
+  txtlblinfo[5] = controlP5.addTextlabel("txtlblinfo5","",XHUD+735,525); // infoog sensor value
 //  XHUD+735,22
 
 // BUTTONS SELECTION ---------------------------------------
@@ -1384,10 +1396,14 @@ void draw() {
     eeindextxt="";
 //    processingtxt="";
     analmessage.setValue("");
+    infomessage.setValue("");
     eeindexmessage.setValue("");
     processingmessage.setValue("");
     for (int i=0; i<analSENSORS; i++) {
       txtlblanal[i].setValue("");
+    }
+    for (int i=0; i<infoSENSORS; i++) {
+      txtlblinfo[i].setValue("");
     }
   }
 

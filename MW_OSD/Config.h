@@ -275,6 +275,11 @@
 #define HTDIRECTION +     // Reverses direction of pan action
 
 
+/********************       Vendor support         ************************/
+// This is for vendor use only for custom GUI support
+#define VENDOR   1        // For vendor use for custom GUI
+
+
 /********************       FrSky S.Port settings      *********************/
 //enables data transfer from frsky reciever s.port to osd via multiwii
 //requires serial inverter cable & multiwii with s.port code

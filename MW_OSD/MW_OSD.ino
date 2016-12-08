@@ -80,7 +80,8 @@ uint16_t UntouchedStack(void)
 
 //------------------------------------------------------------------------
 #define MWVERS "MW-OSD - R1.6"  
-#define MWOSDVER 12      // for eeprom layout verification
+#define MWOSDVERSION 1650 // 1650=1.6.5.0 for GUI
+#define EEPROMVER 12      // for eeprom layout verification
 #include <avr/pgmspace.h>
 #undef PROGMEM
 #define PROGMEM __attribute__(( section(".progmem.data") ))
@@ -865,7 +866,7 @@ void writeEEPROM(void) // OSD will only change 8 bit values. GUI changes directl
     EEPROM.write(pos,Settings16[en]&0xFF);
     EEPROM.write(pos+1,Settings16[en]>>8);
   } 
-  EEPROM.write(0,MWOSDVER);
+  EEPROM.write(0,EEPROMVER);
 }
 
 
@@ -914,7 +915,7 @@ void readEEPROM_screenlayout(void)
 void checkEEPROM(void)
 {
   uint8_t EEPROM_Loaded = EEPROM.read(0);
-  if (EEPROM_Loaded!=MWOSDVER){
+  if (EEPROM_Loaded!=EEPROMVER){
     for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
       EEPROM.write(en,pgm_read_byte(&EEPROM_DEFAULT[en]));
     }

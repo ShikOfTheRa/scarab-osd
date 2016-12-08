@@ -679,3 +679,108 @@
   #endif // PROTOCOL_MAVLINK
 #endif // BAUDRATE
 
+
+/********************  info for GUI  *********************/
+#define INFO_CONTROLLER          0            // default - unknown 
+#define INFO_VERSION             MWOSDVERSION // version specified 
+#define INFO_VENDOR              VENDOR       // vendor specific reference 
+#define INFO_HARDWARE            0            // default - unknown 
+#define INFO_AIRCRAFT            0            // default - unknown 
+#define INFO_OPTIONS1            0            // default - unknown 
+
+#ifdef MULTIWII
+  #define INFO_CONTROLLER 1
+#endif
+#ifdef BASEFLIGHT
+  #define INFO_CONTROLLER 2
+#endif
+#ifdef LIBREPILOT
+  #define INFO_CONTROLLER 3
+#endif
+#ifdef TAULABS
+  #define INFO_CONTROLLER 4
+#endif
+#ifdef DRONIN
+  #define INFO_CONTROLLER 5
+#endif
+#ifdef CLEANFLIGHT
+  #define INFO_CONTROLLER 6
+#endif
+#ifdef BETAFLIGHT
+  #define INFO_CONTROLLER 7
+#endif
+#ifdef FIXEDWING_BF
+  #define INFO_CONTROLLER 8
+#endif
+#ifdef FIXEDWING_BF_SERVO
+  #define INFO_CONTROLLER 9
+#endif
+#ifdef HARAKIRI
+  #define INFO_CONTROLLER 10
+#endif
+#ifdef NAZA
+  #define INFO_CONTROLLER 11
+#endif
+#ifdef iNAV
+  #define INFO_CONTROLLER 12
+#endif
+#ifdef KISS
+  #define INFO_CONTROLLER 13
+#endif
+#ifdef APM
+  #define INFO_CONTROLLER 14
+#endif
+#ifdef PIXHAWK
+  #define INFO_CONTROLLER 15
+#endif
+#ifdef SKYTRACK
+  #define INFO_CONTROLLER 16
+#endif
+#ifdef GPSOSD_UBLOX
+  #define INFO_CONTROLLER 17
+#endif
+#ifdef GPSOSD_NMEA
+  #define INFO_CONTROLLER 18
+#endif
+#ifdef GPSOSD_NMEA
+  #define INFO_CONTROLLER 19
+#endif
+#ifdef NOCONTROLLER
+  #define INFO_CONTROLLER 20
+#endif
+
+
+#ifdef MINIMOSD
+  #define INFO_HARDWARE 1
+#endif
+#ifdef MICROMINIMOSD
+  #define INFO_HARDWARE 2
+#endif
+#ifdef AEROMAX
+  #define INFO_HARDWARE 3
+#endif
+#ifdef RTFQV1
+  #define INFO_HARDWARE 4
+#endif
+#ifdef RTFQMICRO
+  #define INFO_HARDWARE 5
+#endif
+#ifdef RUSHDUINO
+  #define INFO_HARDWARE 6
+#endif
+#ifdef KYLIN250PDB
+  #define INFO_HARDWARE 7
+#endif
+#ifdef AIRBOTMICRO
+  #define INFO_HARDWARE 8
+#endif
+
+
+#ifdef ROTORCRAFT
+  #define INFO_AIRCRAFT 1
+#endif
+#ifdef FIXEDWING
+  #define INFO_AIRCRAFT 2
+#endif
+
+
