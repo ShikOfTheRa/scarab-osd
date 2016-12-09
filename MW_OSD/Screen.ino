@@ -461,7 +461,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
   if(Settings[S_DISPLAY_HORIZON_BR]&fieldIsVisible(horizonPosition)){
 
 #ifdef NOAHI
-#elif  FULLAHI
+#elif defined FULLAHI
     for(uint8_t X=0; X<=12; X++) {
       if (X==6) X=7;
       int Y = (rollAngle * (4-X)) / 64;
@@ -1688,6 +1688,12 @@ void displayDebug(void)
   itoa(pwmval2,screenBuffer,10);
   MAX7456_WriteString(screenBuffer,DEBUGDPOSPWM+(2*LINE));
 #endif  
+#ifdef DEBUGDPOSLOOP    
+  MAX7456_WriteString("LOOP",DEBUGDPOSLOOP);
+  itoa(framerate,screenBuffer,10);
+  MAX7456_WriteString(screenBuffer,DEBUGDPOSLOOP+(1*LINE));
+#endif
+
   displayVoltage();
   displayDirectionToHome();
 

@@ -118,6 +118,7 @@ struct  __timer {
   uint32_t seconds;
   uint8_t  MSP_active;
   uint8_t  GPS_active;
+  uint16_t  loopcount;
   uint32_t alarms;                            // Alarm length timer
 }
 timer;
@@ -209,11 +210,12 @@ uint8_t fontData[54];
 uint8_t nextCharToRequest;
 uint8_t lastCharToRequest;
 uint8_t retransmitQueue;
+
 uint16_t eeaddress = 0;
 uint8_t eedata = 0;
 uint8_t settingsMode=0;
 uint32_t MSP_OSD_timer=0;
-
+uint16_t framerate = 0;
 // Mode bits
 struct __mode {
   uint8_t armed;

@@ -901,9 +901,6 @@ public void evaluateCommand(byte cmd, int size) {
                txtlblinfo[i].setValue("Version : "+info16);
                break;
              case 3:
-               txtlblinfo[i].setValue("Vendor  : "+info16);
-               break;
-             case 4:
                 switch(info16) {
                  case 0:
                    info16text="Airplane";
@@ -916,7 +913,7 @@ public void evaluateCommand(byte cmd, int size) {
                  }
                txtlblinfo[i].setValue("Aircraft  : "+info16text);
                break;
-             case 5:
+             case 4:
                txtlblinfo[i].setValue("Options : "+info16);
                break;
              default:  

@@ -16,7 +16,8 @@
 #define DEBUGDPOSRCDATA 33   // display RCDATA values at position X
 #define DEBUGDPOSANAL 84     // display sensor values at position X
 #define DEBUGDPOSPWM 264     // display PWM values at position X
-#define DEBUGDPOSVAL 70      // display debug  values at position X
+#define DEBUGDPOSVAL 70      // display debug values at position X
+#define DEBUGDPOSLOOP 258    // display loop rate value at position X
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
 

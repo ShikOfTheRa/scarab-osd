@@ -5,3 +5,4 @@ MW_OSD_GUI/application.windows64/data/custom.mcm
 notes.txt
 
 .DS_Store
+*.osd

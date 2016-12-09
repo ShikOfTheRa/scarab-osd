@@ -236,6 +236,7 @@ void loop()
 void loop()
 {
   alarms.active=0;
+  timer.loopcount++;
   if (flags.reset){
     resetFunc();
   }
@@ -618,6 +619,10 @@ void loop()
   {
     timer.seconds+=1000;
     timer.tenthSec=0;
+    #ifdef DEBUGDPOSLOOP
+      framerate=timer.loopcount;
+      timer.loopcount=0;
+    #endif
     onTime++;
     #if defined(AUTOCAM) || defined(MAXSTALLDETECT)
       if (!fontMode)
@@ -662,6 +667,8 @@ void loop()
   }
 //  setMspRequests();
   serialMSPreceive(1);
+  delay(1);
+
 }  // End of main loop
 #endif //main loop
 
