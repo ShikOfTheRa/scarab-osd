@@ -210,8 +210,8 @@
 //#define AHICORRECT 10             // Enable to adjust AHI on display to match horizon. -10 = -1 degree
 #define AHIPITCHMAX 200             // Specify maximum AHI pitch value displayed. Default 200 = 20.0 degrees
 #define AHIROLLMAX  400             // Specify maximum AHI roll value displayed. Default 400 = 40.0 degrees 
-//#define AHIPITCHSCALE 20          // Specify scaling sensitvity for Pitch. Higher number = pitches more on OSD         
-//#define AHIROLLSCALE 20           // Specify scaling sensitvity for Roll. Higher number = rolls more on OSD         
+//#define AHIPITCHSCALE 100          // Specify scaling sensitvity for Pitch. Higher number = pitches more on OSD         
+//#define AHIROLLSCALE 100           // Specify scaling sensitvity for Roll. Higher number = rolls more on OSD         
 #define AHILEVEL                    // Enable to display AHI level indicators on sidebars 
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 #define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
