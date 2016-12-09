@@ -449,6 +449,14 @@ void displayHorizon(int rollAngle, int pitchAngle)
   if(pitchAngle<-AHIPITCHMAX) pitchAngle=-AHIPITCHMAX;
   if(rollAngle>AHIROLLMAX) rollAngle=AHIROLLMAX;
   if(rollAngle<-AHIROLLMAX) rollAngle=-AHIROLLMAX;
+
+#ifdef AHIPITCHSCALE
+  pitchAngle=pitchAngle*AHIPITCHSCALE/100;
+#endif
+#ifdef AHIROLLSCALE
+ rollAngle=rollAngle*AHIROLLSCALE/100;
+#endif 
+  
 #ifndef AHICORRECT
 #define AHICORRECT 10
 #endif
