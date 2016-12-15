@@ -138,6 +138,7 @@ void serialMAVCheck(){
     MwSensorActive&=0xFFFFFF8E;
     apm_mav_type=serialBuffer[4];   
     mw_mav.mode=serialbufferint(0);
+    mw_mav.mode = (mw_mav.mode>mav_mode_APM) ? mav_mode_APM : mw_mav.mode;
     if (serialBuffer[6]&(1<<7)){     //armed
       MwSensorActive|=(1<<0);
       armed=1;
