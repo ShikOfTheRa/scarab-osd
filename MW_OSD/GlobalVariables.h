@@ -119,6 +119,7 @@ struct  __timer {
   uint8_t  MSP_active;
   uint8_t  GPS_active;
   uint16_t  loopcount;
+  uint16_t  packetcount;
   uint32_t alarms;                            // Alarm length timer
 }
 timer;
@@ -216,6 +217,8 @@ uint8_t eedata = 0;
 uint8_t settingsMode=0;
 uint32_t MSP_OSD_timer=0;
 uint16_t framerate = 0;
+uint16_t packetrate = 0;
+
 // Mode bits
 struct __mode {
   uint8_t armed;
@@ -1416,8 +1419,9 @@ const PROGMEM char * const mav_mode_index[] =
  mav_mode_APM , 
  mav_mode_GUID,
  mav_mode_INIT, //16
- mav_mode_APM , 
+ mav_mode_APM , //17
 };
+#define MAV_MODE_MAX 17
 #else
 const char mav_mode_ALTH[] PROGMEM   = "ALTH"; //Altitude Hold: auto control
 const char mav_mode_POSI[] PROGMEM   = "POSI"; //Position: auto control
@@ -1446,8 +1450,9 @@ const PROGMEM char * const mav_mode_index[] =
  mav_mode_FLIP,
  mav_mode_ATUN,
  mav_mode_HYBR, //16
- mav_mode_APM , 
+ mav_mode_APM , //17
 };
+#define MAV_MODE_MAX 17
 #endif //FIXEDWING
 
 // Vars

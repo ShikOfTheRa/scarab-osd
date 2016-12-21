@@ -5,19 +5,20 @@
 
 /*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
 //#define ALWAYSARMED
-//#define DEVELOPMENT   // to force layout 0, set debug default eeprombit = 1
 //#define FORCESENSORS
 
 // Display Debug screen display options
-//#define DEBUG 2            // Enable/disable option to display OSD debug values. Define which OSD SW/RC switch to show debug on screen display 0 (default)or 1. Also 2 for midpoint on a 3 way RC switch
-#define FORCEDEBUG           // to force debug display (overides GUI / OSD menu setting) 
 //#define DEBUGMW            // Enable to display MSP debug values (assumes debug[x] values are not set elsewhere) 
-//#define DEBUGDSWITCH       // Disable to always display debug screen 
 #define DEBUGDPOSRCDATA 33   // display RCDATA values at position X
 #define DEBUGDPOSANAL 84     // display sensor values at position X
 #define DEBUGDPOSPWM 264     // display PWM values at position X
 #define DEBUGDPOSVAL 70      // display debug values at position X
-#define DEBUGDPOSLOOP 258    // display loop rate value at position X
+#define DEBUGDPOSLOOP 220    // display loop rate value at position X
+#define DEBUGDPOSSAT 250     // display sat value at position X
+#define DEBUGDPOSARMED 280   // display armed value at position X
+#define DEBUGDPOSPACKET 310  // display serial packet rate rate value at position X
+#define DEBUGDPOSMEMORY 340  // display free heap/stack memory at position X. Requires MEMCHECK and not valid in latest Arduino versions
+
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
 

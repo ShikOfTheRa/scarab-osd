@@ -27,7 +27,7 @@ This work is based on the following open source work :-
 */
 
 //------------------------------------------------------------------------
-//#define MEMCHECK 3  // to enable memory checking and set debug[x] value. Requires DEVELOPMENT to be enabled
+#define MEMCHECK   // to enable memory checking.
 #if 1
 __asm volatile ("nop");
 #endif
@@ -66,7 +66,6 @@ uint16_t UntouchedStack(void)
 
     return count; 
 } 
-#define FORCEDEBUG
 #endif
 
 // Workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34734
@@ -240,9 +239,6 @@ void loop()
   if (flags.reset){
     resetFunc();
   }
-  #if defined (MEMCHECK)
-    debug[MEMCHECK] = UntouchedStack();
-  #endif  
   #if defined (KISS)      
     if (Kvar.mode==1)
       screenlayout=1;
@@ -460,7 +456,10 @@ void loop()
 
 
 #ifndef INTRO_DELAY 
-#define INTRO_DELAY 8
+  #define INTRO_DELAY 8
+  #ifdef DEBUG 
+    #define INTRO_DELAY 0
+  #endif
 #endif
     if( allSec < INTRO_DELAY ){
       displayIntro();
@@ -622,6 +621,10 @@ void loop()
     #ifdef DEBUGDPOSLOOP
       framerate=timer.loopcount;
       timer.loopcount=0;
+    #endif
+    #ifdef DEBUGDPOSPACKET
+      packetrate=timer.packetcount;
+      timer.packetcount=0;
     #endif
     onTime++;
     #if defined(AUTOCAM) || defined(MAXSTALLDETECT)

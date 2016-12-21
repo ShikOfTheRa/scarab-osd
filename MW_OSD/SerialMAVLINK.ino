@@ -128,9 +128,11 @@ void serialMAVCheck(){
 #endif //ALARM_MSP
   int16_t MwHeading360;
   uint8_t apm_mav_type=0;
-  uint8_t osd_mode=serialbufferint(0);
   switch(mw_mav.message_cmd) {
   case MAVLINK_MSG_ID_HEARTBEAT:
+    #ifdef DEBUGDPOSPACKET
+      timer.packetcount++;
+    #endif
     mode.armed      = (1<<0);
     mode.gpshome    = (1<<4);
     mode.gpshold    = (1<<5);
@@ -138,7 +140,7 @@ void serialMAVCheck(){
     MwSensorActive&=0xFFFFFF8E;
     apm_mav_type=serialBuffer[4];   
     mw_mav.mode=serialbufferint(0);
-    mw_mav.mode = (mw_mav.mode>mav_mode_APM) ? mav_mode_APM : mw_mav.mode;
+    if (mw_mav.mode>MAV_MODE_MAX) mw_mav.mode=MAV_MODE_MAX;
     if (serialBuffer[6]&(1<<7)){     //armed
       MwSensorActive|=(1<<0);
       armed=1;
@@ -156,13 +158,16 @@ void serialMAVCheck(){
      MwSensorActive|=(1<<6);
      */
 #if defined MAVLINKREQ
-     static uint8_t mavreqdone=0;
-     if (mavreqdone==0) 
+     static uint8_t mavreqdone=5;
+     if (mavreqdone>0){ 
        request_mavlink_rates();
+       mavreqdone--;
+     }
 #endif //MAVLINKREQ
 
     break;
   case MAVLINK_MSG_ID_VFR_HUD:
+    debug[3]++;
     GPS_speed=(int16_t)serialbufferfloat(4)*100;    // m/s-->cm/s 
     GPS_altitude=(int16_t)serialbufferfloat(8);     // m-->m
     if (GPS_fix_HOME == 0){
@@ -178,6 +183,7 @@ void serialMAVCheck(){
     MwVario=(int16_t)serialbufferfloat(12)*100;     // m/s-->cm/s
     break;
   case MAVLINK_MSG_ID_ATTITUDE:
+    debug[2]++;
     MwAngle[0]=(int16_t)(serialbufferfloat(4)*57.2958*10); // rad-->0.1deg
     MwAngle[1]=(int16_t)(serialbufferfloat(8)*57.2958*10); // rad-->0.1deg
     break;
@@ -199,12 +205,14 @@ void serialMAVCheck(){
     } 
     break;
   case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
+    debug[1]++;
     MwRssi=(uint16_t)(((103)*serialBuffer[21])/10);
     for(uint8_t i=0;i<8;i++)
       MwRcData[i+1] = (int16_t)(serialBuffer[4+(i*2)]|(serialBuffer[5+(i*2)]<<8));
     handleRawRC();
     break;
   case MAVLINK_MSG_ID_SYS_STATUS:
+    debug[0]++;
     mode.stable = 2;
     mode.baro   = 4;
     mode.mag    = 8;
@@ -236,11 +244,7 @@ void serialMAVCheck(){
 
 void serialMAVreceive(uint8_t c)
 {
-  static uint8_t mav_payload_index; 
-if ((mav_payload_index) > SERIALBUFFERSIZE){
-//  mav_payload_index=100;
-  }
-
+  static uint8_t  mav_payload_index; 
   static uint16_t mav_checksum_rcv; 
 
   static enum _serial_state {

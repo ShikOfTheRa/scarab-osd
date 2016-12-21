@@ -378,6 +378,9 @@ For sub-command 3 (draw string):
 
   if (cmdMSP==MSP_STATUS)
   {
+    #ifdef DEBUGDPOSPACKET
+      timer.packetcount++;
+    #endif
     cycleTime=read16();
     I2CError=read16();
     MwSensorPresent = read16();

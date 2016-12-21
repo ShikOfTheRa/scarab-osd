@@ -62,6 +62,9 @@
 //#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight 
 
 
+/********************       Debug      *********************/
+//#define DEBUG 4            // Enable/disable option to display OSD debug values. Define which OSD switchposition to show debug on screen display 0 (default), 1 or 2. 4 for always on
+
 
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/

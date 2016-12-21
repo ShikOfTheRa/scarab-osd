@@ -1652,15 +1652,15 @@ void displayConfigScreen(void)
 void displayDebug(void)
 {
 #if defined (DEBUG)
-#ifndef FORCEDEBUG 
-  if(!Settings[S_DEBUG])
-    return;
-#endif //FORCEDEBUG 
 
-#ifdef DEBUGDSWITCH
- if (screenlayout!=DEBUG)
-   return;
-#endif
+  switch(DEBUG) {
+    case 4:
+      break;
+    default:
+      if (screenlayout!=DEBUG)
+        return;
+      break;  
+  }
 
  for(uint16_t xx=0;xx<MAX_screen_size;++xx){ // clear screen
    screen[xx] = ' ';
@@ -1699,8 +1699,30 @@ void displayDebug(void)
 #ifdef DEBUGDPOSLOOP    
   MAX7456_WriteString("LOOP",DEBUGDPOSLOOP);
   itoa(framerate,screenBuffer,10);
-  MAX7456_WriteString(screenBuffer,DEBUGDPOSLOOP+(1*LINE));
+  MAX7456_WriteString(screenBuffer,DEBUGDPOSLOOP+5);
 #endif
+#ifdef DEBUGDPOSSAT    
+  MAX7456_WriteString("SAT",DEBUGDPOSSAT);
+  itoa(GPS_numSat,screenBuffer,10);
+  MAX7456_WriteString(screenBuffer,DEBUGDPOSSAT+5);
+#endif
+#ifdef DEBUGDPOSARMED    
+  MAX7456_WriteString("ARM",DEBUGDPOSARMED);
+  itoa(armed,screenBuffer,10);
+  MAX7456_WriteString(screenBuffer,DEBUGDPOSARMED+5);
+#endif
+#ifdef DEBUGDPOSPACKET    
+  MAX7456_WriteString("PKT",DEBUGDPOSPACKET);
+  itoa(packetrate,screenBuffer,10);
+  MAX7456_WriteString(screenBuffer,DEBUGDPOSPACKET+5);
+#endif
+#if defined (MEMCHECK)
+  #ifdef DEBUGDPOSMEMORY    
+    MAX7456_WriteString("MEM",DEBUGDPOSMEMORY);
+    itoa(UntouchedStack(),screenBuffer,10);
+    MAX7456_WriteString(screenBuffer,DEBUGDPOSMEMORY+5);
+  #endif
+#endif  
 
   displayVoltage();
   displayDirectionToHome();
