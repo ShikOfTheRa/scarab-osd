@@ -54,6 +54,8 @@
 
 ## Enhancement requests for future releases: ##
 
+Display minimum voltage
+
 I2C master support for direct compass, baro, acc hardware support.
 
 FRSKY telemetry support 
