@@ -626,6 +626,10 @@ void loop()
       packetrate=timer.packetcount;
       timer.packetcount=0;
     #endif
+    #ifdef DEBUGDPOSRX    
+      serialrxrate=timer.serialrxrate;
+      timer.serialrxrate=0;
+    #endif
     onTime++;
     #if defined(AUTOCAM) || defined(MAXSTALLDETECT)
       if (!fontMode)

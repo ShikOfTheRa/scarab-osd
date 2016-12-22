@@ -1716,6 +1716,11 @@ void displayDebug(void)
   itoa(packetrate,screenBuffer,10);
   MAX7456_WriteString(screenBuffer,DEBUGDPOSPACKET+5);
 #endif
+#ifdef DEBUGDPOSRX    
+  MAX7456_WriteString("RX",DEBUGDPOSRX);
+  itoa(serialrxrate,screenBuffer,10);
+  MAX7456_WriteString(screenBuffer,DEBUGDPOSRX+5);
+#endif
 #if defined (MEMCHECK)
   #ifdef DEBUGDPOSMEMORY    
     MAX7456_WriteString("MEM",DEBUGDPOSMEMORY);

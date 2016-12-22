@@ -32,7 +32,7 @@
 //#define LIBREPILOT                 // Uncomment this if you are using the latest LibrePilot MSP Module
 //#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
-#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
+//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
 //#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version (3.0.0 at time of this MWOSD release)
 //#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight 
 //#define FIXEDWING_BF_SERVO        // Uncomment this if you are using fixed wing Baseflight with additional SERVO adjustment menu.
@@ -40,7 +40,7 @@
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define KISS                      // Uncomment this if you are using KISS FC
-//#define APM                       // Uncomment this if you are using APM MAVLINK 1.0 compatible FC (Requires testing)
+#define APM                       // Uncomment this if you are using APM MAVLINK 1.0 compatible FC (Requires testing)
 //#define PIXHAWK                   // Uncomment this if you are using PIXHAWK MAVLINK 1.0 compatible FC
 //#define SKYTRACK                  // Under development
 //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
@@ -63,7 +63,7 @@
 
 
 /********************       Debug      *********************/
-//#define DEBUG 4            // Enable/disable option to display OSD debug values. Define which OSD switchposition to show debug on screen display 0 (default), 1 or 2. 4 for always on
+#define DEBUG 4            // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
 
 
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
@@ -178,8 +178,8 @@
 #define INTRO_MENU                  // Enable to display TX stick MENU 
 #define INTRO_CALLSIGN            // Enable to display callsign at startup
 #define INTRO_SIGNALTYPE          // Enable to display video type at startup
-//#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 8 
-//#define STARTUPDELAY 2000         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
+#define INTRO_DELAY 1             // Seconds intro screen should show for. Default is 8 
+#define STARTUPDELAY 500         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
 
 /********************       I2CGPS type settings      *********************/
@@ -200,7 +200,7 @@
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define FORCECROSSHAIR            // Forces a crosshair even if no AHI / horizon used
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
-//#define HIDESUMMARY               // Enable to suspend display of summary screen when disarming
+#define HIDESUMMARY               // Enable to suspend display of summary screen when disarming
 //#define SHORTSUMMARY              // Display only timer on flight summary 
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x01      // Optional change from default 0x00=120%,0x01=100%,0x10=90%,0x11=80%  default is 0x01=100%

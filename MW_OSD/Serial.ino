@@ -208,6 +208,9 @@ void cfgWriteChecksum(){
 // Here are decoded received commands from MultiWii
 void serialMSPCheck()
 {
+  #ifdef DEBUGDPOSPACKET
+    timer.packetcount++;
+  #endif
   readIndex = 0;
   #ifdef ALARM_MSP
     timer.MSP_active=ALARM_MSP; // getting something on serial port
@@ -378,9 +381,6 @@ For sub-command 3 (draw string):
 
   if (cmdMSP==MSP_STATUS)
   {
-    #ifdef DEBUGDPOSPACKET
-      timer.packetcount++;
-    #endif
     cycleTime=read16();
     I2CError=read16();
     MwSensorPresent = read16();
@@ -1260,6 +1260,9 @@ void serialMSPreceive(uint8_t loops)
     c = focusPort->read();
 #else
     c = Serial.read();
+  #ifdef DEBUGDPOSRX    
+    timer.serialrxrate++;
+  #endif
 #endif
 
     #ifdef GPSOSD    
@@ -1274,11 +1277,9 @@ void serialMSPreceive(uint8_t loops)
     #if defined (PROTOCOL_MAVLINK)
        serialMAVreceive(c);
     #endif //PROTOCOL_MAVLINK   
-
     #if defined (PROTOCOL_LTM)
        serialLTMreceive(c);
     #endif // PROTOCOL_LTM   
-    
     #if defined (PROTOCOL_KISS)
        serialKISSreceive(c);
     #endif // PROTOCOL_KISS   

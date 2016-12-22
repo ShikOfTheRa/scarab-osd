@@ -123,6 +123,9 @@ void request_mavlink_rates(){
 
 
 void serialMAVCheck(){
+#ifdef DEBUGDPOSPACKET
+  timer.packetcount++;
+#endif
 #ifdef ALARM_MSP
   timer.MSP_active=ALARM_MSP; // getting valid MAV on serial port
 #endif //ALARM_MSP
@@ -130,9 +133,6 @@ void serialMAVCheck(){
   uint8_t apm_mav_type=0;
   switch(mw_mav.message_cmd) {
   case MAVLINK_MSG_ID_HEARTBEAT:
-    #ifdef DEBUGDPOSPACKET
-      timer.packetcount++;
-    #endif
     mode.armed      = (1<<0);
     mode.gpshome    = (1<<4);
     mode.gpshold    = (1<<5);
@@ -141,14 +141,18 @@ void serialMAVCheck(){
     apm_mav_type=serialBuffer[4];   
     mw_mav.mode=serialbufferint(0);
     if (mw_mav.mode>MAV_MODE_MAX) mw_mav.mode=MAV_MODE_MAX;
+debug[0]=armed;
     if (serialBuffer[6]&(1<<7)){     //armed
       MwSensorActive|=(1<<0);
       armed=1;
+debug[1]=armed;
     }
     else{
       armed=0;
+debug[1]=armed;
       GPS_fix_HOME=0;
     }
+debug[2]=serialBuffer[6]&(1<<7);
     /* maybe implement MWOSD mode icons ?
      if (apm_mav_mode==11)      //RTH
      MwSensorActive|=(1<<4);
@@ -167,7 +171,6 @@ void serialMAVCheck(){
 
     break;
   case MAVLINK_MSG_ID_VFR_HUD:
-    debug[3]++;
     GPS_speed=(int16_t)serialbufferfloat(4)*100;    // m/s-->cm/s 
     GPS_altitude=(int16_t)serialbufferfloat(8);     // m-->m
     if (GPS_fix_HOME == 0){
@@ -183,7 +186,6 @@ void serialMAVCheck(){
     MwVario=(int16_t)serialbufferfloat(12)*100;     // m/s-->cm/s
     break;
   case MAVLINK_MSG_ID_ATTITUDE:
-    debug[2]++;
     MwAngle[0]=(int16_t)(serialbufferfloat(4)*57.2958*10); // rad-->0.1deg
     MwAngle[1]=(int16_t)(serialbufferfloat(8)*57.2958*10); // rad-->0.1deg
     break;
@@ -205,14 +207,12 @@ void serialMAVCheck(){
     } 
     break;
   case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
-    debug[1]++;
     MwRssi=(uint16_t)(((103)*serialBuffer[21])/10);
     for(uint8_t i=0;i<8;i++)
       MwRcData[i+1] = (int16_t)(serialBuffer[4+(i*2)]|(serialBuffer[5+(i*2)]<<8));
     handleRawRC();
     break;
   case MAVLINK_MSG_ID_SYS_STATUS:
-    debug[0]++;
     mode.stable = 2;
     mode.baro   = 4;
     mode.mag    = 8;
@@ -285,7 +285,7 @@ void serialMAVreceive(uint8_t c)
   {
     mw_mav.message_length = c;
     mav_state = MAV_HEADER_LEN;
-    if ((mav_payload_index) > SERIALBUFFERSIZE){  // too much data so reset check
+    if ((mw_mav.message_length) > 35){  // too much data so reset check
       mav_state = MAV_IDLE;
     }
   }
