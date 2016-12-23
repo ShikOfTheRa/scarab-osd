@@ -32,7 +32,7 @@
 //#define LIBREPILOT                 // Uncomment this if you are using the latest LibrePilot MSP Module
 //#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
-//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
+#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.11.0 at time of this MWOSD release)
 //#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version (3.0.0 at time of this MWOSD release)
 //#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight 
 //#define FIXEDWING_BF_SERVO        // Uncomment this if you are using fixed wing Baseflight with additional SERVO adjustment menu.
@@ -40,7 +40,7 @@
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define KISS                      // Uncomment this if you are using KISS FC
-#define APM                       // Uncomment this if you are using APM MAVLINK 1.0 compatible FC (Requires testing)
+//#define APM                       // Uncomment this if you are using APM MAVLINK 1.0 compatible FC (Requires testing)
 //#define PIXHAWK                   // Uncomment this if you are using PIXHAWK MAVLINK 1.0 compatible FC
 //#define SKYTRACK                  // Under development
 //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
@@ -63,7 +63,7 @@
 
 
 /********************       Debug      *********************/
-#define DEBUG 4            // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+//#define DEBUG 4            // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
 
 
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
@@ -83,6 +83,7 @@
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
 
+
 /********************       FEATURES      *********************/
 // Disable features if you require memory for other features
 // Further configuration may be require elsewhere in config.h + option enabled on GUI
@@ -98,8 +99,9 @@
 
 /********************       TELEMETRY settings      *********************/
 //Select ONLY if you are sure your OSD is connected to a telemetry feed such as MAVLINK/LTM:
-//#define SETHOMEARMED              // Uncomment this ONLY if armed information is not sent within telemetry feedd. Or you do not want to reset home position when arming.
+//#define SETHOMEARMED              // Uncomment this ONLY if armed information is not sent within telemetry feeed. Or you do not want to reset home position when arming.
 //#define FORCE_MSP                 // Uncomment to enable use of MSP as well as telemetry. Uses more memory 
+//#define PROTOCOL_LTM              // To use LTM protocol instead of MSP
 
 
 /********************       GPS OSD settings (GPS / NAZA)      *********************/

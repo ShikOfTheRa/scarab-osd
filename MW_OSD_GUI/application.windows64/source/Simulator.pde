@@ -289,7 +289,7 @@ SimDisplayToggle.setPosition(5,17);
 SimDisplayToggle.setSize(35,10);
 SimDisplayToggle.setMode(ControlP5.SWITCH);
 SimDisplayToggle.setGroup(SGControlBox);
-SimDisplayToggle.setValue(0);
+SimDisplayToggle.setValue(1);
 //SimDisplayText = (controlP5.Toggle) hideLabel(controlP5.addTextlabel("SimControlText","Simulate on OSD",62,3));
 SimDisplayText = controlP5.addTextlabel("SimDisplayText","Display Simulator",45,17);
 SimDisplayText.setGroup(SGControlBox);
@@ -300,7 +300,7 @@ SimControlToggle.setPosition(5,5);
 SimControlToggle.setSize(35,10);
 SimControlToggle.setMode(ControlP5.SWITCH);
 SimControlToggle.setGroup(SGControlBox);
-SimControlToggle.setValue(0);
+SimControlToggle.setValue(1);
 //SimControlText = (controlP5.Toggle) hideLabel(controlP5.addTextlabel("SimControlText","Simulate on OSD",45,3));
 SimControlText = controlP5.addTextlabel("SimControlText","Emulate FC",45,3);
 SimControlText.setGroup(SGControlBox);
@@ -541,6 +541,48 @@ s_MRSSI = ScontrolP5.addSlider("sMRSSI")
     toggleModeItems[i].setGroup(SGModes);
     txtlblModeItems[i] = controlP5.addTextlabel("ModeItems"+i,boxnames[i].substring(0, boxnames[i].length()-1) ,20,i*16);
     txtlblModeItems[i].setGroup(SGModes);
+  }
+ 
+  for(int i=2;i<6 ;i++) {
+     toggleModeItems[i].setValue(1);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+r1 = controlP5.addRadioButton("radioButton")
+         .setGroup(G_RCSWITCH)
+         .setPosition(130,34)
+         .setSize(13,12)
+         .setColorForeground(color(120))
+         .setColorActive(color(green_))
+         .setColorLabel(color(255))
+         .setItemsPerRow(1)
+         .setSpacingColumn(50)
+         .setSpacingRow(5)
+         .addItem("0",0)
+         .addItem("1",1)
+         .addItem("2",2)
+         .activate(0)
+         .hideLabels()
+         ;
+  
+  for(int i=0;i<3 ;i++) {
+ //   RadioButtonShowHud[i] = (controlP5.RadioButton) hideLabel(ScontrolP5.addRadioButton("b"+i,false));
+ //    RadioButtonShowHud[i] = 1;
+ //    RadioButtonShowHud[i].setPosition(50,3+i*16);
+ //    RadioButtonShowHud[i].setSize(10,10);
+ //    RadioButtonShowHud[i].setGroup(G_RCSWITCH);
   }
  
   for(int i=2;i<6 ;i++) {

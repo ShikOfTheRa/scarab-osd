@@ -546,6 +546,48 @@ s_MRSSI = ScontrolP5.addSlider("sMRSSI")
   for(int i=2;i<6 ;i++) {
      toggleModeItems[i].setValue(1);
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+r1 = controlP5.addRadioButton("radioButton")
+         .setGroup(G_RCSWITCH)
+         .setPosition(130,34)
+         .setSize(13,12)
+         .setColorForeground(color(120))
+         .setColorActive(color(green_))
+         .setColorLabel(color(255))
+         .setItemsPerRow(1)
+         .setSpacingColumn(50)
+         .setSpacingRow(5)
+         .addItem("0",0)
+         .addItem("1",1)
+         .addItem("2",2)
+         .activate(0)
+         .hideLabels()
+         ;
+  
+  for(int i=0;i<3 ;i++) {
+ //   RadioButtonShowHud[i] = (controlP5.RadioButton) hideLabel(ScontrolP5.addRadioButton("b"+i,false));
+ //    RadioButtonShowHud[i] = 1;
+ //    RadioButtonShowHud[i].setPosition(50,3+i*16);
+ //    RadioButtonShowHud[i].setSize(10,10);
+ //    RadioButtonShowHud[i].setGroup(G_RCSWITCH);
+  }
+ 
+  for(int i=2;i<6 ;i++) {
+     toggleModeItems[i].setValue(1);
+  }
       
 GetModes();  
 } 

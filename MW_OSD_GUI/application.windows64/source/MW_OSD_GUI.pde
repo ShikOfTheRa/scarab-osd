@@ -156,10 +156,11 @@ ControlP5 SmallcontrolP5;
 ControlP5 ScontrolP5;
 ControlP5 FontGroupcontrolP5;
 ControlP5 GroupcontrolP5;
-Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage,eeindexmessage,processingmessage,analmessage; 
+Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage,eeindexmessage,processingmessage,analmessage,infomessage; 
 Textlabel txtlblLayoutTxt,txtlblLayoutEnTxt, txtlblLayoutHudTxt; 
 Textlabel txtlblLayoutTxt2,txtlblLayoutEnTxt2, txtlblLayoutHudTxt2; 
 ListBox commListbox,baudListbox;
+RadioButton r1;
 
 //char serialBuffer[] = new char[128]; // this hold the imcoming string from serial O string
 //String TestString = "";
@@ -208,6 +209,9 @@ int framerate=0;
 String frameratetxt="";
 int loop1hz=0;
 int loop10hz=0;
+int Restart=-0;
+int ResetControl=0;
+int ResetDispaly=0;
 
 // XML config editorvariables
 int hudeditposition=0;
@@ -233,6 +237,7 @@ String Title;
 // gui configuration
 int Passthroughcomm;
 int AutoSimulator=0;
+int AutoDisplay=1;
 int AutoDebugGUI=1;
 int Simtype=0;
 int Donate=2;
@@ -251,7 +256,9 @@ String msptxt="";
 String eeindextxt="";
 String processingtxt="";
 String analtxt="";
+String infotxt="";
 int analSENSORS=5;
+int infoSENSORS=6;
 int xcolor=20;  
 
 
@@ -600,7 +607,7 @@ int[] ConfigRanges = {
 1,   // S_UNUSED_1,
 1,     // S_UNUSED_2,
 1,     // S_RCWSWITCH,
-7,     // S_RCWSWITCH_CH,
+8,     // S_RCWSWITCH_CH,
 7,     // S_HUDSW0,
 7,     // S_HUDSW1,
 7,     // S_HUDSW2,
@@ -684,6 +691,7 @@ Textarea myTextarea;
 
 // textlabels -------------------------------------------------------------------------------------------------------------
 Textlabel txtlblanal[] = new Textlabel[analSENSORS] ;
+Textlabel txtlblinfo[] = new Textlabel[infoSENSORS] ;
 Textlabel txtlblconfItem[] = new Textlabel[CONFIGITEMS] ;
 Textlabel txtlblSimItem[] = new Textlabel[SIMITEMS] ;
 Textlabel FileUploadText, TXText, RXText;
@@ -873,6 +881,15 @@ DONATEimage  = loadImage("DON_def.png");
   txtlblanal[2] = controlP5.addTextlabel("txtlblanal2","",XHUD+735,315); // analog sensor value
   txtlblanal[3] = controlP5.addTextlabel("txtlblanal3","",XHUD+735,335); // analog sensor value
   txtlblanal[4] = controlP5.addTextlabel("txtlblanal4","",XHUD+735,355); // analog sensor value
+
+
+  infomessage = controlP5.addTextlabel("infomessage","",XHUD+735,405); //
+  txtlblinfo[0] = controlP5.addTextlabel("txtlblinfo0","",XHUD+735,425); // infoog sensor value
+  txtlblinfo[1] = controlP5.addTextlabel("txtlblinfo1","",XHUD+735,445); // infoog sensor value
+  txtlblinfo[2] = controlP5.addTextlabel("txtlblinfo2","",XHUD+735,465); // infoog sensor value
+  txtlblinfo[3] = controlP5.addTextlabel("txtlblinfo3","",XHUD+735,485); // infoog sensor value
+  txtlblinfo[4] = controlP5.addTextlabel("txtlblinfo4","",XHUD+735,505); // infoog sensor value
+  txtlblinfo[5] = controlP5.addTextlabel("txtlblinfo5","",XHUD+735,525); // infoog sensor value
 //  XHUD+735,22
 
 // BUTTONS SELECTION ---------------------------------------
@@ -1278,8 +1295,14 @@ void draw() {
 
 // Process and outstanding Read or Write EEPROM requests
   if((millis()>ReadConfigMSPMillis)&&(millis()>WriteConfigMSPMillis)&&(init_com==1)){
+    if (Restart !=0){
+      SimControlToggle.setValue(ResetControl);
+      SimDisplayToggle.setValue(ResetDispaly);
+      Restart=0;
+    }
     if (AutoSimulator !=0){
       SimControlToggle.setValue(1);
+      SimDisplayToggle.setValue(1);
     }
   }
   if (int(SimControlToggle.getValue())==0){
@@ -1384,10 +1407,14 @@ void draw() {
     eeindextxt="";
 //    processingtxt="";
     analmessage.setValue("");
+    infomessage.setValue("");
     eeindexmessage.setValue("");
     processingmessage.setValue("");
     for (int i=0; i<analSENSORS; i++) {
       txtlblanal[i].setValue("");
+    }
+    for (int i=0; i<infoSENSORS; i++) {
+      txtlblinfo[i].setValue("");
     }
   }
 
@@ -1502,9 +1529,9 @@ void draw() {
    ConfigLayout[2][i]=CONFIGHUD[int(confItem[GetSetting("S_HUDSW2")].value())][i];
 
 
-   if (toggleModeItems[9].getValue()==2)
+   if (r1.getValue()==2)
       SimPosn[i]=ConfigLayout[2][i];
-   else if (toggleModeItems[9].getValue()==1)
+   else if (r1.getValue()==1)
       SimPosn[i]=ConfigLayout[1][i];
    else
       SimPosn[i]=ConfigLayout[0][i];
@@ -1952,31 +1979,37 @@ public void bLADD() {
 
 public void bHUDLUP() {
   int hudid=0;
-  if (toggleModeItems[9].getValue()==2)
+  if (r1.getValue()==2)
     hudid = int(confItem[GetSetting("S_HUDSW2")].value());
-  else if (toggleModeItems[9].getValue()==1)
+  else if (r1.getValue()==1)
     hudid = int(confItem[GetSetting("S_HUDSW1")].value());
   else
     hudid = int(confItem[GetSetting("S_HUDSW0")].value());
   hudid--;
   hudid= constrain(hudid,0,hudsavailable-1);
-  confItem[GetSetting("S_HUDSW2")].setValue(hudid);
-  confItem[GetSetting("S_HUDSW1")].setValue(hudid);
-  confItem[GetSetting("S_HUDSW0")].setValue(hudid);
+  if (r1.getValue()==2)
+    confItem[GetSetting("S_HUDSW2")].setValue(hudid);
+  else if (r1.getValue()==1)
+    confItem[GetSetting("S_HUDSW1")].setValue(hudid);
+  else
+    confItem[GetSetting("S_HUDSW0")].setValue(hudid);
 }
 public void bHUDLDOWN() {
   int hudid=0;
-  if (toggleModeItems[9].getValue()==2)
+  if (r1.getValue()==2)
     hudid = int(confItem[GetSetting("S_HUDSW2")].value());
-  else if (toggleModeItems[9].getValue()==1)
+  else if (r1.getValue()==1)
     hudid = int(confItem[GetSetting("S_HUDSW1")].value());
   else
     hudid = int(confItem[GetSetting("S_HUDSW0")].value());
   hudid++;
   hudid= constrain(hudid,0,hudsavailable-1);
-  confItem[GetSetting("S_HUDSW2")].setValue(hudid);
-  confItem[GetSetting("S_HUDSW1")].setValue(hudid);
-  confItem[GetSetting("S_HUDSW0")].setValue(hudid);
+  if (r1.getValue()==2)
+    confItem[GetSetting("S_HUDSW2")].setValue(hudid);
+  else if (r1.getValue()==1)
+    confItem[GetSetting("S_HUDSW1")].setValue(hudid);
+  else
+    confItem[GetSetting("S_HUDSW0")].setValue(hudid);
 }
 
 
@@ -2206,6 +2239,7 @@ public void updateConfig(){
   ConfigClass.setProperty("Title",Title);
   ConfigClass.setProperty("Passthroughcomm",str(Passthroughcomm));
   ConfigClass.setProperty("AutoSimulator",str(AutoSimulator));
+  ConfigClass.setProperty("AutoDisplay",str(AutoDisplay));
   ConfigClass.setProperty("AutoDebugGUI",str(AutoDebugGUI));
   ConfigClass.setProperty("Simtype",str(Simtype));
   ConfigClass.setProperty("StartupMessage",str(StartupMessage));
@@ -2248,6 +2282,7 @@ public void LoadConfig(){
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
     AutoSimulator = 0;
+    AutoDisplay = 1;
     AutoDebugGUI = 1;
     Simtype=0;
     FrameRate = 7;
@@ -2267,6 +2302,7 @@ public void LoadConfig(){
       Title =ConfigClass.getProperty("Title");
       Passthroughcomm = int(ConfigClass.getProperty("Passthroughcomm"));
       AutoSimulator = int(ConfigClass.getProperty("AutoSimulator"));
+      AutoDisplay = int(ConfigClass.getProperty("AutoDisplay"));
       AutoDebugGUI = int(ConfigClass.getProperty("AutoDebugGUI"));
       Simtype = int(ConfigClass.getProperty("Simtype"));
       FrameRate = int(ConfigClass.getProperty("FrameRate"));
@@ -2294,12 +2330,27 @@ public void LoadConfig(){
     commListbox.addItem("Pass Thru Comm",commListMax+1); 
   }
   if (AutoSimulator !=0){
-    SimControlToggle.setValue(1);
+      ResetControl=1;
   }
+  else{
+      ResetControl=0;
+  }
+      SimControlToggle.setValue(ResetControl);
+  if (AutoDisplay !=0){
+      ResetDispaly=1;
+  }
+  else{
+      ResetDispaly=0;
+  }
+      SimDisplayToggle.setValue(ResetDispaly);
   if (AutoDebugGUI !=0){
     DEBUGGUI.setValue(1);
   }
 
+  confItem[GetSetting("S_HUDSW2")].setValue(0);
+  confItem[GetSetting("S_HUDSW1")].setValue(0);
+  confItem[GetSetting("S_HUDSW0")].setValue(0);
+  setset();
 }
 
 //  our configuration 
@@ -2627,10 +2678,16 @@ public void bSetRSSIhigh(){
 }
 
 void READEEMSP(){
+  ResetControl=int(SimControlToggle.getValue());
+  ResetDispaly=int(SimDisplayToggle.getValue());
+  Restart=1;
   READconfigMSP_init();
 }
 
 void WRITEEEMSP(){
+  ResetControl=int(SimControlToggle.getValue());
+  ResetDispaly=int(SimDisplayToggle.getValue());
+  Restart=1;
   WRITEconfigMSP_init();
 }
 
@@ -2638,3 +2695,10 @@ void mouseClicked(){
   if ((mouseX>=(XLINKS+20)) && (mouseX<=(XLINKS+20+100)) && (mouseY>=(YLINKS+207)) && (mouseY<=(YLINKS+207+30)))
     DONATELINK();
 }
+
+//MSP PUSH Simtype==0
+//MSP PULL Simtype==1
+//MAV      Simtype==2
+//LTM      Simtype==3
+//KISS     Simtype==4
+

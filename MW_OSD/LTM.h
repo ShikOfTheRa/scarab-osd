@@ -66,6 +66,7 @@ uint16_t calculateCurrentFromConsumedCapacity(uint16_t mahUsed)
 void ltm_check() {
   mw_ltm.LTMreadIndex=0;
   static uint8_t GPS_fix_HOME_validation=GPSHOMEFIX;
+  static uint8_t armedglitchprotect=0;
   uint32_t dummy;
 #ifdef ALARM_MSP
   timer.MSP_active=ALARM_MSP;             // getting something on serial port
@@ -123,9 +124,22 @@ void ltm_check() {
     dummy = ltmread_u8();
     uint8_t ltm_armfsmode = ltmread_u8();
     armed = (ltm_armfsmode & 0b00000001) ? 1 : 0;
+    if (ltm_armfsmode & 0b00000001){
+      armed=1;
+      armedglitchprotect=3;
+    }
+    else{
+      if (armedglitchprotect>0){
+        armedglitchprotect--;        
+      }
+      else{
+        armed=0;
 #ifndef SETHOMEARMED
-    if (!armed) GPS_fix_HOME = 0;
+        GPS_fix_HOME = 0;
 #endif
+      }
+    }
+    
     dummy = (ltm_armfsmode >> 1) & 0b00000001; // uavData.isFailsafe
     mw_ltm.mode = (ltm_armfsmode >> 2) & 0b00111111; // uavData.flightMode
     mw_ltm.mode = (mw_ltm.mode>15) ? 15 : mw_ltm.mode;

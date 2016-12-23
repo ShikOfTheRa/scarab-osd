@@ -1681,11 +1681,12 @@ void displayDebug(void)
   } 
 #endif
 #ifdef DEBUGDPOSVAL    
-  MAX7456_WriteString("DEBUG",DEBUGDPOSVAL-30);
+//  MAX7456_WriteString("DEBUG",DEBUGDPOSVAL-30);
   for(uint8_t X=0; X<4; X++) {
     ItoaPadded(debug[X], screenBuffer+2,7,0);     
-    screenBuffer[0] = 0x30+X;
-    screenBuffer[1] = 0X3A;
+    screenBuffer[0] = 0x44;
+    screenBuffer[1] = 0x30+X;
+    screenBuffer[2] = 0X3A;
     MAX7456_WriteString(screenBuffer,DEBUGDPOSVAL+(X*LINE));
   } 
 #endif

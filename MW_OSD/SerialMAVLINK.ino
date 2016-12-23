@@ -131,6 +131,7 @@ void serialMAVCheck(){
 #endif //ALARM_MSP
   int16_t MwHeading360;
   uint8_t apm_mav_type=0;
+  static uint8_t armedglitchprotect=0;
   switch(mw_mav.message_cmd) {
   case MAVLINK_MSG_ID_HEARTBEAT:
     mode.armed      = (1<<0);
@@ -145,12 +146,18 @@ debug[0]=armed;
     if (serialBuffer[6]&(1<<7)){     //armed
       MwSensorActive|=(1<<0);
       armed=1;
+      armedglitchprotect=3;
 debug[1]=armed;
     }
     else{
-      armed=0;
+      if (armedglitchprotect>0){
+        armedglitchprotect--;        
+      }
+      else{
+        armed=0;
+        GPS_fix_HOME=0;
+      }
 debug[1]=armed;
-      GPS_fix_HOME=0;
     }
 debug[2]=serialBuffer[6]&(1<<7);
     /* maybe implement MWOSD mode icons ?
