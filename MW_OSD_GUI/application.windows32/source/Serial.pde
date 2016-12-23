@@ -107,7 +107,8 @@ private static final int
   OSD_DEFAULT              =6,
   OSD_SENSORS              =7,
   OSD_WRITE_CMD_EE         =8,
-  OSD_READ_CMD_EE          =9;
+  OSD_READ_CMD_EE          =9,
+  OSD_INFO                 =10;
 
 
 
@@ -136,8 +137,12 @@ void InitSerial(float portValue) {
       buttonRESET.setColorBackground(green_);
       commListbox.setColorBackground(green_);
       buttonRESTART.setColorBackground(green_);
-      
-      g_serial.buffer(100);
+
+      ResetControl=int(SimControlToggle.getValue());
+      ResetDispaly=int(SimDisplayToggle.getValue());
+      Restart=1;
+
+      g_serial.buffer(200);
             txtmessage.setText("");
 //      delay(1500);
 //      SendCommand(MSP_IDENT);
@@ -403,12 +408,12 @@ void SendCommand(int cmd){
       
       case MSP_RC:
         PortIsWriting = true;
-        headSerialReply(MSP_RC, 14);
+        headSerialReply(MSP_RC, 16);
         serialize16(int(Pitch_Roll.arrayValue()[0]));
         serialize16(int(Pitch_Roll.arrayValue()[1]));
         serialize16(int(Throttle_Yaw.arrayValue()[0]));
         serialize16(int(Throttle_Yaw.arrayValue()[1]));
-        for (int i=5; i<8; i++) {
+        for (int i=5; i<=8; i++) {
           serialize16(1500);
         }
         tailSerialReply();
@@ -775,12 +780,161 @@ public void evaluateCommand(byte cmd, int size) {
 
       if(cmd_internal == OSD_NULL) {
       }
+      if(cmd_internal == OSD_INFO) { // response to a sensor request - info
+        if (int(DEBUGGUI.getValue())==1){
+         int infoL;
+         int infoH;
+         int info16;
+         String  info16text;
+         infomessage.setValue("OSD info:");
+         for (int i=0; i<infoSENSORS; i++) {
+           infoL=read8();
+           infoH=read8();
+           info16=infoL+(infoH<<8);
+           info16text="Unknown";
+           switch(i) {
+             case 0:
+               switch(info16) {
+                 case 0:
+                   info16text="Unknown";
+                   break;
+                 case 1:
+                   info16text="Multiwii";
+                   break;
+                 case 2:
+                   info16text="Baseflight";
+                   break;
+                 case 3:
+                   info16text="Librepilot";
+                   break;
+                 case 4:
+                   info16text="Taulabs";
+                   break;
+                 case 5:
+                   info16text="Dronin";
+                   break;
+                 case 6:
+                   info16text="Cleanflight";
+                   break;
+                 case 7:
+                   info16text="Betaflight";
+                   break;
+                 case 8:
+                   info16text="PatrikE FW";
+                   break;
+                 case 9:
+                   info16text="PatrikE FW";
+                   break;
+                 case 10:
+                   info16text="Harakiri";
+                   break;
+                 case 11:
+                   info16text="Naza";
+                   break;
+                 case 12:
+                   info16text="iNAV";
+                   break;
+                 case 13:
+                   info16text="Kiss";
+                   break;
+                 case 14:
+                   info16text="APM";
+                   break;
+                 case 15:
+                   info16text="Pixhawk";
+                   break;
+                 case 16:
+                   info16text="Skytrack";
+                   break;
+                 case 17:
+                   info16text="OSD (UBLOX)";
+                   break;
+                 case 18:
+                   info16text="OSD (MTK)";
+                   break;
+                 case 19:
+                   info16text="OSD (NMEA)";
+                   break;
+                 case 20:
+                   info16text="OSD (Basic)";
+                   break;
+                 default: 
+                   info16text="Unknown";
+              } 
+               txtlblinfo[i].setValue("Controller : "+info16text);
+               break;
+             case 1:
+                switch(info16) {
+                 case 0:
+                   info16text="Unknown";
+                   break;
+                 case 1:
+                   info16text="Minim";
+                   break;
+                 case 2:
+                   info16text="MicroMinim";
+                   break;
+                 case 3:
+                   info16text="Aeromax";
+                   break;
+                 case 4:
+                   info16text="RTFQ v1";
+                   break;
+                 case 5:
+                   info16text="RTFQ micro";
+                   break;
+                 case 6:
+                   info16text="Rushduino";
+                   break;
+                 case 7:
+                   info16text="Kylin 250";
+                   break;
+                 case 8:
+                   info16text="Airbot Micro";
+                   break;
+                 default: 
+                   info16text="Unknown";
+              } 
+              txtlblinfo[i].setValue("Hardware  : "+info16text);
+               break;
+             case 2:
+               txtlblinfo[i].setValue("Version : "+info16);
+               break;
+             case 3:
+                switch(info16) {
+                 case 0:
+                   info16text="Airplane";
+                   break;
+                 case 1:
+                   info16text="MultiRotor";
+                   break;
+                 default: 
+                   info16text="Unknown";
+                 }
+               txtlblinfo[i].setValue("Aircraft  : "+info16text);
+               break;
+             case 4:
+               txtlblinfo[i].setValue("Options : "+info16);
+               break;
+             default:  
+           }
+         }
+        }
+        else {
+          msptxt="";
+          infomessage.setValue("");
+          for (int i=0; i<infoSENSORS; i++) {
+            txtlblinfo[i].setValue("");
+          }
+        }
+
+      }      
       if(cmd_internal == OSD_SENSORS) { // response to a sensor request
         if (int(DEBUGGUI.getValue())==1){
          int analL;
          int analH;
          int analsense;
-         analmessage.setValue("OSD sensors 0-1023");
+         analmessage.setValue("OSD sensors 0-1023:");
          for (int i=0; i<analSENSORS; i++) {
            analL=read8();
            analH=read8();
@@ -901,6 +1055,8 @@ public void evaluateCommand(byte cmd, int size) {
           }
           if (eeaddressGUI>=(CONFIGITEMS+CONFIGITEMS16)){ // hit end address config only
             ReadConfigMSPMillis=0;
+            SimControlToggle.setValue(ResetControl);
+            SimDisplayToggle.setValue(ResetDispaly);
           }
         }
         if (MW_OSD_EEPROM_Version!=confCheck){
@@ -1086,9 +1242,10 @@ void MWData_Com() {
   public void READconfigMSP_init(){
 //    println("Console test print");
     SimControlToggle.setValue(0);
+    SimDisplayToggle.setValue(0);
     ReadConfigMSPMillis=1000+millis(); 
     WriteConfigMSPMillis=millis(); 
-    eeaddressGUI=0;   
+    eeaddressGUI=0;
   }
 
   public void READconfigMSP(){
@@ -1119,6 +1276,8 @@ void MWData_Com() {
   }
 
   public void WRITEconfigMSP_init(){
+    SimControlToggle.setValue(0);
+    SimDisplayToggle.setValue(0);
     eeaddressGUI=0;  
     CheckCallSign(); 
     EElookuptableReSet();

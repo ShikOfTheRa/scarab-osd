@@ -189,10 +189,11 @@ ControlP5 SmallcontrolP5;
 ControlP5 ScontrolP5;
 ControlP5 FontGroupcontrolP5;
 ControlP5 GroupcontrolP5;
-Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage,eeindexmessage,processingmessage,analmessage; 
+Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage,eeindexmessage,processingmessage,analmessage,infomessage; 
 Textlabel txtlblLayoutTxt,txtlblLayoutEnTxt, txtlblLayoutHudTxt; 
 Textlabel txtlblLayoutTxt2,txtlblLayoutEnTxt2, txtlblLayoutHudTxt2; 
 ListBox commListbox,baudListbox;
+RadioButton r1;
 
 //char serialBuffer[] = new char[128]; // this hold the imcoming string from serial O string
 //String TestString = "";
@@ -241,6 +242,9 @@ int framerate=0;
 String frameratetxt="";
 int loop1hz=0;
 int loop10hz=0;
+int Restart=-0;
+int ResetControl=0;
+int ResetDispaly=0;
 
 // XML config editorvariables
 int hudeditposition=0;
@@ -266,6 +270,7 @@ String Title;
 // gui configuration
 int Passthroughcomm;
 int AutoSimulator=0;
+int AutoDisplay=1;
 int AutoDebugGUI=1;
 int Simtype=0;
 int Donate=2;
@@ -284,7 +289,9 @@ String msptxt="";
 String eeindextxt="";
 String processingtxt="";
 String analtxt="";
+String infotxt="";
 int analSENSORS=5;
+int infoSENSORS=6;
 int xcolor=20;  
 
 
@@ -633,7 +640,7 @@ int[] ConfigRanges = {
 1,   // S_UNUSED_1,
 1,     // S_UNUSED_2,
 1,     // S_RCWSWITCH,
-7,     // S_RCWSWITCH_CH,
+8,     // S_RCWSWITCH_CH,
 7,     // S_HUDSW0,
 7,     // S_HUDSW1,
 7,     // S_HUDSW2,
@@ -717,6 +724,7 @@ Textarea myTextarea;
 
 // textlabels -------------------------------------------------------------------------------------------------------------
 Textlabel txtlblanal[] = new Textlabel[analSENSORS] ;
+Textlabel txtlblinfo[] = new Textlabel[infoSENSORS] ;
 Textlabel txtlblconfItem[] = new Textlabel[CONFIGITEMS] ;
 Textlabel txtlblSimItem[] = new Textlabel[SIMITEMS] ;
 Textlabel FileUploadText, TXText, RXText;
@@ -906,6 +914,15 @@ DONATEimage  = loadImage("DON_def.png");
   txtlblanal[2] = controlP5.addTextlabel("txtlblanal2","",XHUD+735,315); // analog sensor value
   txtlblanal[3] = controlP5.addTextlabel("txtlblanal3","",XHUD+735,335); // analog sensor value
   txtlblanal[4] = controlP5.addTextlabel("txtlblanal4","",XHUD+735,355); // analog sensor value
+
+
+  infomessage = controlP5.addTextlabel("infomessage","",XHUD+735,405); //
+  txtlblinfo[0] = controlP5.addTextlabel("txtlblinfo0","",XHUD+735,425); // infoog sensor value
+  txtlblinfo[1] = controlP5.addTextlabel("txtlblinfo1","",XHUD+735,445); // infoog sensor value
+  txtlblinfo[2] = controlP5.addTextlabel("txtlblinfo2","",XHUD+735,465); // infoog sensor value
+  txtlblinfo[3] = controlP5.addTextlabel("txtlblinfo3","",XHUD+735,485); // infoog sensor value
+  txtlblinfo[4] = controlP5.addTextlabel("txtlblinfo4","",XHUD+735,505); // infoog sensor value
+  txtlblinfo[5] = controlP5.addTextlabel("txtlblinfo5","",XHUD+735,525); // infoog sensor value
 //  XHUD+735,22
 
 // BUTTONS SELECTION ---------------------------------------
@@ -1311,8 +1328,14 @@ public void draw() {
 
 // Process and outstanding Read or Write EEPROM requests
   if((millis()>ReadConfigMSPMillis)&&(millis()>WriteConfigMSPMillis)&&(init_com==1)){
+    if (Restart !=0){
+      SimControlToggle.setValue(ResetControl);
+      SimDisplayToggle.setValue(ResetDispaly);
+      Restart=0;
+    }
     if (AutoSimulator !=0){
       SimControlToggle.setValue(1);
+      SimDisplayToggle.setValue(1);
     }
   }
   if (PApplet.parseInt(SimControlToggle.getValue())==0){
@@ -1417,10 +1440,14 @@ public void draw() {
     eeindextxt="";
 //    processingtxt="";
     analmessage.setValue("");
+    infomessage.setValue("");
     eeindexmessage.setValue("");
     processingmessage.setValue("");
     for (int i=0; i<analSENSORS; i++) {
       txtlblanal[i].setValue("");
+    }
+    for (int i=0; i<infoSENSORS; i++) {
+      txtlblinfo[i].setValue("");
     }
   }
 
@@ -1535,9 +1562,9 @@ public void draw() {
    ConfigLayout[2][i]=CONFIGHUD[PApplet.parseInt(confItem[GetSetting("S_HUDSW2")].value())][i];
 
 
-   if (toggleModeItems[9].getValue()==2)
+   if (r1.getValue()==2)
       SimPosn[i]=ConfigLayout[2][i];
-   else if (toggleModeItems[9].getValue()==1)
+   else if (r1.getValue()==1)
       SimPosn[i]=ConfigLayout[1][i];
    else
       SimPosn[i]=ConfigLayout[0][i];
@@ -1985,31 +2012,37 @@ public void bLADD() {
 
 public void bHUDLUP() {
   int hudid=0;
-  if (toggleModeItems[9].getValue()==2)
+  if (r1.getValue()==2)
     hudid = PApplet.parseInt(confItem[GetSetting("S_HUDSW2")].value());
-  else if (toggleModeItems[9].getValue()==1)
+  else if (r1.getValue()==1)
     hudid = PApplet.parseInt(confItem[GetSetting("S_HUDSW1")].value());
   else
     hudid = PApplet.parseInt(confItem[GetSetting("S_HUDSW0")].value());
   hudid--;
   hudid= constrain(hudid,0,hudsavailable-1);
-  confItem[GetSetting("S_HUDSW2")].setValue(hudid);
-  confItem[GetSetting("S_HUDSW1")].setValue(hudid);
-  confItem[GetSetting("S_HUDSW0")].setValue(hudid);
+  if (r1.getValue()==2)
+    confItem[GetSetting("S_HUDSW2")].setValue(hudid);
+  else if (r1.getValue()==1)
+    confItem[GetSetting("S_HUDSW1")].setValue(hudid);
+  else
+    confItem[GetSetting("S_HUDSW0")].setValue(hudid);
 }
 public void bHUDLDOWN() {
   int hudid=0;
-  if (toggleModeItems[9].getValue()==2)
+  if (r1.getValue()==2)
     hudid = PApplet.parseInt(confItem[GetSetting("S_HUDSW2")].value());
-  else if (toggleModeItems[9].getValue()==1)
+  else if (r1.getValue()==1)
     hudid = PApplet.parseInt(confItem[GetSetting("S_HUDSW1")].value());
   else
     hudid = PApplet.parseInt(confItem[GetSetting("S_HUDSW0")].value());
   hudid++;
   hudid= constrain(hudid,0,hudsavailable-1);
-  confItem[GetSetting("S_HUDSW2")].setValue(hudid);
-  confItem[GetSetting("S_HUDSW1")].setValue(hudid);
-  confItem[GetSetting("S_HUDSW0")].setValue(hudid);
+  if (r1.getValue()==2)
+    confItem[GetSetting("S_HUDSW2")].setValue(hudid);
+  else if (r1.getValue()==1)
+    confItem[GetSetting("S_HUDSW1")].setValue(hudid);
+  else
+    confItem[GetSetting("S_HUDSW0")].setValue(hudid);
 }
 
 
@@ -2239,6 +2272,7 @@ public void updateConfig(){
   ConfigClass.setProperty("Title",Title);
   ConfigClass.setProperty("Passthroughcomm",str(Passthroughcomm));
   ConfigClass.setProperty("AutoSimulator",str(AutoSimulator));
+  ConfigClass.setProperty("AutoDisplay",str(AutoDisplay));
   ConfigClass.setProperty("AutoDebugGUI",str(AutoDebugGUI));
   ConfigClass.setProperty("Simtype",str(Simtype));
   ConfigClass.setProperty("StartupMessage",str(StartupMessage));
@@ -2281,6 +2315,7 @@ public void LoadConfig(){
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
     AutoSimulator = 0;
+    AutoDisplay = 1;
     AutoDebugGUI = 1;
     Simtype=0;
     FrameRate = 7;
@@ -2300,6 +2335,7 @@ public void LoadConfig(){
       Title =ConfigClass.getProperty("Title");
       Passthroughcomm = PApplet.parseInt(ConfigClass.getProperty("Passthroughcomm"));
       AutoSimulator = PApplet.parseInt(ConfigClass.getProperty("AutoSimulator"));
+      AutoDisplay = PApplet.parseInt(ConfigClass.getProperty("AutoDisplay"));
       AutoDebugGUI = PApplet.parseInt(ConfigClass.getProperty("AutoDebugGUI"));
       Simtype = PApplet.parseInt(ConfigClass.getProperty("Simtype"));
       FrameRate = PApplet.parseInt(ConfigClass.getProperty("FrameRate"));
@@ -2327,12 +2363,27 @@ public void LoadConfig(){
     commListbox.addItem("Pass Thru Comm",commListMax+1); 
   }
   if (AutoSimulator !=0){
-    SimControlToggle.setValue(1);
+      ResetControl=1;
   }
+  else{
+      ResetControl=0;
+  }
+      SimControlToggle.setValue(ResetControl);
+  if (AutoDisplay !=0){
+      ResetDispaly=1;
+  }
+  else{
+      ResetDispaly=0;
+  }
+      SimDisplayToggle.setValue(ResetDispaly);
   if (AutoDebugGUI !=0){
     DEBUGGUI.setValue(1);
   }
 
+  confItem[GetSetting("S_HUDSW2")].setValue(0);
+  confItem[GetSetting("S_HUDSW1")].setValue(0);
+  confItem[GetSetting("S_HUDSW0")].setValue(0);
+  setset();
 }
 
 //  our configuration 
@@ -2660,10 +2711,16 @@ public void bSetRSSIhigh(){
 }
 
 public void READEEMSP(){
+  ResetControl=PApplet.parseInt(SimControlToggle.getValue());
+  ResetDispaly=PApplet.parseInt(SimDisplayToggle.getValue());
+  Restart=1;
   READconfigMSP_init();
 }
 
 public void WRITEEEMSP(){
+  ResetControl=PApplet.parseInt(SimControlToggle.getValue());
+  ResetDispaly=PApplet.parseInt(SimDisplayToggle.getValue());
+  Restart=1;
   WRITEconfigMSP_init();
 }
 
@@ -2671,6 +2728,13 @@ public void mouseClicked(){
   if ((mouseX>=(XLINKS+20)) && (mouseX<=(XLINKS+20+100)) && (mouseY>=(YLINKS+207)) && (mouseY<=(YLINKS+207+30)))
     DONATELINK();
 }
+
+//MSP PUSH Simtype==0
+//MSP PULL Simtype==1
+//MAV      Simtype==2
+//LTM      Simtype==3
+//KISS     Simtype==4
+
 PImage FullFont;
 
 public boolean FontChanged = false;
@@ -3761,7 +3825,8 @@ private static final int
   OSD_DEFAULT              =6,
   OSD_SENSORS              =7,
   OSD_WRITE_CMD_EE         =8,
-  OSD_READ_CMD_EE          =9;
+  OSD_READ_CMD_EE          =9,
+  OSD_INFO                 =10;
 
 
 
@@ -3790,8 +3855,12 @@ public void InitSerial(float portValue) {
       buttonRESET.setColorBackground(green_);
       commListbox.setColorBackground(green_);
       buttonRESTART.setColorBackground(green_);
-      
-      g_serial.buffer(100);
+
+      ResetControl=PApplet.parseInt(SimControlToggle.getValue());
+      ResetDispaly=PApplet.parseInt(SimDisplayToggle.getValue());
+      Restart=1;
+
+      g_serial.buffer(200);
             txtmessage.setText("");
 //      delay(1500);
 //      SendCommand(MSP_IDENT);
@@ -4057,12 +4126,12 @@ public void SendCommand(int cmd){
       
       case MSP_RC:
         PortIsWriting = true;
-        headSerialReply(MSP_RC, 14);
+        headSerialReply(MSP_RC, 16);
         serialize16(PApplet.parseInt(Pitch_Roll.arrayValue()[0]));
         serialize16(PApplet.parseInt(Pitch_Roll.arrayValue()[1]));
         serialize16(PApplet.parseInt(Throttle_Yaw.arrayValue()[0]));
         serialize16(PApplet.parseInt(Throttle_Yaw.arrayValue()[1]));
-        for (int i=5; i<8; i++) {
+        for (int i=5; i<=8; i++) {
           serialize16(1500);
         }
         tailSerialReply();
@@ -4429,12 +4498,161 @@ public void evaluateCommand(byte cmd, int size) {
 
       if(cmd_internal == OSD_NULL) {
       }
+      if(cmd_internal == OSD_INFO) { // response to a sensor request - info
+        if (PApplet.parseInt(DEBUGGUI.getValue())==1){
+         int infoL;
+         int infoH;
+         int info16;
+         String  info16text;
+         infomessage.setValue("OSD info:");
+         for (int i=0; i<infoSENSORS; i++) {
+           infoL=read8();
+           infoH=read8();
+           info16=infoL+(infoH<<8);
+           info16text="Unknown";
+           switch(i) {
+             case 0:
+               switch(info16) {
+                 case 0:
+                   info16text="Unknown";
+                   break;
+                 case 1:
+                   info16text="Multiwii";
+                   break;
+                 case 2:
+                   info16text="Baseflight";
+                   break;
+                 case 3:
+                   info16text="Librepilot";
+                   break;
+                 case 4:
+                   info16text="Taulabs";
+                   break;
+                 case 5:
+                   info16text="Dronin";
+                   break;
+                 case 6:
+                   info16text="Cleanflight";
+                   break;
+                 case 7:
+                   info16text="Betaflight";
+                   break;
+                 case 8:
+                   info16text="PatrikE FW";
+                   break;
+                 case 9:
+                   info16text="PatrikE FW";
+                   break;
+                 case 10:
+                   info16text="Harakiri";
+                   break;
+                 case 11:
+                   info16text="Naza";
+                   break;
+                 case 12:
+                   info16text="iNAV";
+                   break;
+                 case 13:
+                   info16text="Kiss";
+                   break;
+                 case 14:
+                   info16text="APM";
+                   break;
+                 case 15:
+                   info16text="Pixhawk";
+                   break;
+                 case 16:
+                   info16text="Skytrack";
+                   break;
+                 case 17:
+                   info16text="OSD (UBLOX)";
+                   break;
+                 case 18:
+                   info16text="OSD (MTK)";
+                   break;
+                 case 19:
+                   info16text="OSD (NMEA)";
+                   break;
+                 case 20:
+                   info16text="OSD (Basic)";
+                   break;
+                 default: 
+                   info16text="Unknown";
+              } 
+               txtlblinfo[i].setValue("Controller : "+info16text);
+               break;
+             case 1:
+                switch(info16) {
+                 case 0:
+                   info16text="Unknown";
+                   break;
+                 case 1:
+                   info16text="Minim";
+                   break;
+                 case 2:
+                   info16text="MicroMinim";
+                   break;
+                 case 3:
+                   info16text="Aeromax";
+                   break;
+                 case 4:
+                   info16text="RTFQ v1";
+                   break;
+                 case 5:
+                   info16text="RTFQ micro";
+                   break;
+                 case 6:
+                   info16text="Rushduino";
+                   break;
+                 case 7:
+                   info16text="Kylin 250";
+                   break;
+                 case 8:
+                   info16text="Airbot Micro";
+                   break;
+                 default: 
+                   info16text="Unknown";
+              } 
+              txtlblinfo[i].setValue("Hardware  : "+info16text);
+               break;
+             case 2:
+               txtlblinfo[i].setValue("Version : "+info16);
+               break;
+             case 3:
+                switch(info16) {
+                 case 0:
+                   info16text="Airplane";
+                   break;
+                 case 1:
+                   info16text="MultiRotor";
+                   break;
+                 default: 
+                   info16text="Unknown";
+                 }
+               txtlblinfo[i].setValue("Aircraft  : "+info16text);
+               break;
+             case 4:
+               txtlblinfo[i].setValue("Options : "+info16);
+               break;
+             default:  
+           }
+         }
+        }
+        else {
+          msptxt="";
+          infomessage.setValue("");
+          for (int i=0; i<infoSENSORS; i++) {
+            txtlblinfo[i].setValue("");
+          }
+        }
+
+      }      
       if(cmd_internal == OSD_SENSORS) { // response to a sensor request
         if (PApplet.parseInt(DEBUGGUI.getValue())==1){
          int analL;
          int analH;
          int analsense;
-         analmessage.setValue("OSD sensors 0-1023");
+         analmessage.setValue("OSD sensors 0-1023:");
          for (int i=0; i<analSENSORS; i++) {
            analL=read8();
            analH=read8();
@@ -4555,6 +4773,8 @@ public void evaluateCommand(byte cmd, int size) {
           }
           if (eeaddressGUI>=(CONFIGITEMS+CONFIGITEMS16)){ // hit end address config only
             ReadConfigMSPMillis=0;
+            SimControlToggle.setValue(ResetControl);
+            SimDisplayToggle.setValue(ResetDispaly);
           }
         }
         if (MW_OSD_EEPROM_Version!=confCheck){
@@ -4740,9 +4960,10 @@ public void MWData_Com() {
   public void READconfigMSP_init(){
 //    println("Console test print");
     SimControlToggle.setValue(0);
+    SimDisplayToggle.setValue(0);
     ReadConfigMSPMillis=1000+millis(); 
     WriteConfigMSPMillis=millis(); 
-    eeaddressGUI=0;   
+    eeaddressGUI=0;
   }
 
   public void READconfigMSP(){
@@ -4773,6 +4994,8 @@ public void MWData_Com() {
   }
 
   public void WRITEconfigMSP_init(){
+    SimControlToggle.setValue(0);
+    SimDisplayToggle.setValue(0);
     eeaddressGUI=0;  
     CheckCallSign(); 
     EElookuptableReSet();
@@ -5172,7 +5395,7 @@ SimDisplayToggle.setPosition(5,17);
 SimDisplayToggle.setSize(35,10);
 SimDisplayToggle.setMode(ControlP5.SWITCH);
 SimDisplayToggle.setGroup(SGControlBox);
-SimDisplayToggle.setValue(0);
+SimDisplayToggle.setValue(1);
 //SimDisplayText = (controlP5.Toggle) hideLabel(controlP5.addTextlabel("SimControlText","Simulate on OSD",62,3));
 SimDisplayText = controlP5.addTextlabel("SimDisplayText","Display Simulator",45,17);
 SimDisplayText.setGroup(SGControlBox);
@@ -5183,7 +5406,7 @@ SimControlToggle.setPosition(5,5);
 SimControlToggle.setSize(35,10);
 SimControlToggle.setMode(ControlP5.SWITCH);
 SimControlToggle.setGroup(SGControlBox);
-SimControlToggle.setValue(0);
+SimControlToggle.setValue(1);
 //SimControlText = (controlP5.Toggle) hideLabel(controlP5.addTextlabel("SimControlText","Simulate on OSD",45,3));
 SimControlText = controlP5.addTextlabel("SimControlText","Emulate FC",45,3);
 SimControlText.setGroup(SGControlBox);
@@ -5424,6 +5647,48 @@ s_MRSSI = ScontrolP5.addSlider("sMRSSI")
     toggleModeItems[i].setGroup(SGModes);
     txtlblModeItems[i] = controlP5.addTextlabel("ModeItems"+i,boxnames[i].substring(0, boxnames[i].length()-1) ,20,i*16);
     txtlblModeItems[i].setGroup(SGModes);
+  }
+ 
+  for(int i=2;i<6 ;i++) {
+     toggleModeItems[i].setValue(1);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+r1 = controlP5.addRadioButton("radioButton")
+         .setGroup(G_RCSWITCH)
+         .setPosition(130,34)
+         .setSize(13,12)
+         .setColorForeground(color(120))
+         .setColorActive(color(green_))
+         .setColorLabel(color(255))
+         .setItemsPerRow(1)
+         .setSpacingColumn(50)
+         .setSpacingRow(5)
+         .addItem("0",0)
+         .addItem("1",1)
+         .addItem("2",2)
+         .activate(0)
+         .hideLabels()
+         ;
+  
+  for(int i=0;i<3 ;i++) {
+ //   RadioButtonShowHud[i] = (controlP5.RadioButton) hideLabel(ScontrolP5.addRadioButton("b"+i,false));
+ //    RadioButtonShowHud[i] = 1;
+ //    RadioButtonShowHud[i].setPosition(50,3+i*16);
+ //    RadioButtonShowHud[i].setSize(10,10);
+ //    RadioButtonShowHud[i].setGroup(G_RCSWITCH);
   }
  
   for(int i=2;i<6 ;i++) {

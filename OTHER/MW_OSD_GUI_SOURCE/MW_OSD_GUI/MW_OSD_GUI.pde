@@ -160,6 +160,7 @@ Textlabel txtlblWhichcom,txtlblWhichbaud,txtmessage,mspmessage,eeindexmessage,pr
 Textlabel txtlblLayoutTxt,txtlblLayoutEnTxt, txtlblLayoutHudTxt; 
 Textlabel txtlblLayoutTxt2,txtlblLayoutEnTxt2, txtlblLayoutHudTxt2; 
 ListBox commListbox,baudListbox;
+RadioButton r1;
 
 //char serialBuffer[] = new char[128]; // this hold the imcoming string from serial O string
 //String TestString = "";
@@ -236,6 +237,7 @@ String Title;
 // gui configuration
 int Passthroughcomm;
 int AutoSimulator=0;
+int AutoDisplay=1;
 int AutoDebugGUI=1;
 int Simtype=0;
 int Donate=2;
@@ -1527,9 +1529,9 @@ void draw() {
    ConfigLayout[2][i]=CONFIGHUD[int(confItem[GetSetting("S_HUDSW2")].value())][i];
 
 
-   if (toggleModeItems[9].getValue()==2)
+   if (r1.getValue()==2)
       SimPosn[i]=ConfigLayout[2][i];
-   else if (toggleModeItems[9].getValue()==1)
+   else if (r1.getValue()==1)
       SimPosn[i]=ConfigLayout[1][i];
    else
       SimPosn[i]=ConfigLayout[0][i];
@@ -1977,31 +1979,37 @@ public void bLADD() {
 
 public void bHUDLUP() {
   int hudid=0;
-  if (toggleModeItems[9].getValue()==2)
+  if (r1.getValue()==2)
     hudid = int(confItem[GetSetting("S_HUDSW2")].value());
-  else if (toggleModeItems[9].getValue()==1)
+  else if (r1.getValue()==1)
     hudid = int(confItem[GetSetting("S_HUDSW1")].value());
   else
     hudid = int(confItem[GetSetting("S_HUDSW0")].value());
   hudid--;
   hudid= constrain(hudid,0,hudsavailable-1);
-  confItem[GetSetting("S_HUDSW2")].setValue(hudid);
-  confItem[GetSetting("S_HUDSW1")].setValue(hudid);
-  confItem[GetSetting("S_HUDSW0")].setValue(hudid);
+  if (r1.getValue()==2)
+    confItem[GetSetting("S_HUDSW2")].setValue(hudid);
+  else if (r1.getValue()==1)
+    confItem[GetSetting("S_HUDSW1")].setValue(hudid);
+  else
+    confItem[GetSetting("S_HUDSW0")].setValue(hudid);
 }
 public void bHUDLDOWN() {
   int hudid=0;
-  if (toggleModeItems[9].getValue()==2)
+  if (r1.getValue()==2)
     hudid = int(confItem[GetSetting("S_HUDSW2")].value());
-  else if (toggleModeItems[9].getValue()==1)
+  else if (r1.getValue()==1)
     hudid = int(confItem[GetSetting("S_HUDSW1")].value());
   else
     hudid = int(confItem[GetSetting("S_HUDSW0")].value());
   hudid++;
   hudid= constrain(hudid,0,hudsavailable-1);
-  confItem[GetSetting("S_HUDSW2")].setValue(hudid);
-  confItem[GetSetting("S_HUDSW1")].setValue(hudid);
-  confItem[GetSetting("S_HUDSW0")].setValue(hudid);
+  if (r1.getValue()==2)
+    confItem[GetSetting("S_HUDSW2")].setValue(hudid);
+  else if (r1.getValue()==1)
+    confItem[GetSetting("S_HUDSW1")].setValue(hudid);
+  else
+    confItem[GetSetting("S_HUDSW0")].setValue(hudid);
 }
 
 
@@ -2231,6 +2239,7 @@ public void updateConfig(){
   ConfigClass.setProperty("Title",Title);
   ConfigClass.setProperty("Passthroughcomm",str(Passthroughcomm));
   ConfigClass.setProperty("AutoSimulator",str(AutoSimulator));
+  ConfigClass.setProperty("AutoDisplay",str(AutoDisplay));
   ConfigClass.setProperty("AutoDebugGUI",str(AutoDebugGUI));
   ConfigClass.setProperty("Simtype",str(Simtype));
   ConfigClass.setProperty("StartupMessage",str(StartupMessage));
@@ -2273,6 +2282,7 @@ public void LoadConfig(){
     Title = MW_OSD_GUI_Version;
     Passthroughcomm = 0;
     AutoSimulator = 0;
+    AutoDisplay = 1;
     AutoDebugGUI = 1;
     Simtype=0;
     FrameRate = 7;
@@ -2292,6 +2302,7 @@ public void LoadConfig(){
       Title =ConfigClass.getProperty("Title");
       Passthroughcomm = int(ConfigClass.getProperty("Passthroughcomm"));
       AutoSimulator = int(ConfigClass.getProperty("AutoSimulator"));
+      AutoDisplay = int(ConfigClass.getProperty("AutoDisplay"));
       AutoDebugGUI = int(ConfigClass.getProperty("AutoDebugGUI"));
       Simtype = int(ConfigClass.getProperty("Simtype"));
       FrameRate = int(ConfigClass.getProperty("FrameRate"));
@@ -2319,13 +2330,27 @@ public void LoadConfig(){
     commListbox.addItem("Pass Thru Comm",commListMax+1); 
   }
   if (AutoSimulator !=0){
-      SimControlToggle.setValue(1);
-      SimDisplayToggle.setValue(1);
+      ResetControl=1;
   }
+  else{
+      ResetControl=0;
+  }
+      SimControlToggle.setValue(ResetControl);
+  if (AutoDisplay !=0){
+      ResetDispaly=1;
+  }
+  else{
+      ResetDispaly=0;
+  }
+      SimDisplayToggle.setValue(ResetDispaly);
   if (AutoDebugGUI !=0){
     DEBUGGUI.setValue(1);
   }
 
+  confItem[GetSetting("S_HUDSW2")].setValue(0);
+  confItem[GetSetting("S_HUDSW1")].setValue(0);
+  confItem[GetSetting("S_HUDSW0")].setValue(0);
+  setset();
 }
 
 //  our configuration 

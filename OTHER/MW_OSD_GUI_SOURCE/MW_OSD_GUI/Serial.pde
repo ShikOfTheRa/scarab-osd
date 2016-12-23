@@ -142,7 +142,7 @@ void InitSerial(float portValue) {
       ResetDispaly=int(SimDisplayToggle.getValue());
       Restart=1;
 
-      g_serial.buffer(100);
+      g_serial.buffer(200);
             txtmessage.setText("");
 //      delay(1500);
 //      SendCommand(MSP_IDENT);

@@ -120,6 +120,7 @@ struct  __timer {
   uint8_t  GPS_active;
   uint16_t  loopcount;
   uint16_t  packetcount;
+  uint16_t  serialrxrate;
   uint32_t alarms;                            // Alarm length timer
 }
 timer;
@@ -218,6 +219,7 @@ uint8_t settingsMode=0;
 uint32_t MSP_OSD_timer=0;
 uint16_t framerate = 0;
 uint16_t packetrate = 0;
+uint16_t serialrxrate = 0;
 
 // Mode bits
 struct __mode {

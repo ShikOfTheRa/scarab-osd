@@ -63,7 +63,7 @@
 
 
 /********************       Debug      *********************/
-//#define DEBUG 4            // Enable/disable option to display OSD debug values. Define which OSD switchposition to show debug on screen display 0 (default), 1 or 2. 4 for always on
+//#define DEBUG 4            // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
 
 
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
@@ -83,6 +83,7 @@
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
 
+
 /********************       FEATURES      *********************/
 // Disable features if you require memory for other features
 // Further configuration may be require elsewhere in config.h + option enabled on GUI
@@ -98,8 +99,9 @@
 
 /********************       TELEMETRY settings      *********************/
 //Select ONLY if you are sure your OSD is connected to a telemetry feed such as MAVLINK/LTM:
-//#define SETHOMEARMED              // Uncomment this ONLY if armed information is not sent within telemetry feedd. Or you do not want to reset home position when arming.
+//#define SETHOMEARMED              // Uncomment this ONLY if armed information is not sent within telemetry feeed. Or you do not want to reset home position when arming.
 //#define FORCE_MSP                 // Uncomment to enable use of MSP as well as telemetry. Uses more memory 
+//#define PROTOCOL_LTM              // To use LTM protocol instead of MSP
 
 
 /********************       GPS OSD settings (GPS / NAZA)      *********************/
@@ -178,8 +180,8 @@
 #define INTRO_MENU                  // Enable to display TX stick MENU 
 #define INTRO_CALLSIGN            // Enable to display callsign at startup
 #define INTRO_SIGNALTYPE          // Enable to display video type at startup
-//#define INTRO_DELAY 5             // Seconds intro screen should show for. Default is 8 
-//#define STARTUPDELAY 2000         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
+#define INTRO_DELAY 1             // Seconds intro screen should show for. Default is 8 
+#define STARTUPDELAY 500         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
 
 /********************       I2CGPS type settings      *********************/
@@ -200,7 +202,7 @@
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define FORCECROSSHAIR            // Forces a crosshair even if no AHI / horizon used
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
-//#define HIDESUMMARY               // Enable to suspend display of summary screen when disarming
+#define HIDESUMMARY               // Enable to suspend display of summary screen when disarming
 //#define SHORTSUMMARY              // Display only timer on flight summary 
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x01      // Optional change from default 0x00=120%,0x01=100%,0x10=90%,0x11=80%  default is 0x01=100%
