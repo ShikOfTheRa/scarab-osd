@@ -178,10 +178,10 @@
 /********************       STARTUP settings      *********************/
 #define INTRO_VERSION               "MWOSD - 1.6.5.X" // Call the OSD something else if you prefer. 
 #define INTRO_MENU                  // Enable to display TX stick MENU 
-#define INTRO_CALLSIGN            // Enable to display callsign at startup
-#define INTRO_SIGNALTYPE          // Enable to display video type at startup
-#define INTRO_DELAY 1             // Seconds intro screen should show for. Default is 8 
-#define STARTUPDELAY 500         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
+#define INTRO_CALLSIGN              // Enable to display callsign at startup
+#define INTRO_SIGNALTYPE            // Enable to display video type at startup
+//#define INTRO_DELAY 1             // Seconds intro screen should show for. Default is 8 
+//#define STARTUPDELAY 500         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
 
 /********************       I2CGPS type settings      *********************/

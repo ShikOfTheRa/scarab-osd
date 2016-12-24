@@ -1507,7 +1507,7 @@ void draw() {
 
   image(GUIBackground,0, 0, windowsX, windowsY); 
 
-  if (((seconds&0x1F)!= 0)&&(Donate>0)){
+  if (((seconds&0x0F)!= 0)&&(Donate>0)){
    image(DONATEimage,XLINKS+20,YLINKS+207, 100, 40);  
   }  
 

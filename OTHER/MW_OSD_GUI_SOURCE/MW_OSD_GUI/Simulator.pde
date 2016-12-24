@@ -532,7 +532,6 @@ s_MRSSI = ScontrolP5.addSlider("sMRSSI")
     .align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);          
 
 
-
   for(int i=0;i<boxnames.length ;i++) {
     toggleModeItems[i] = (controlP5.Toggle) hideLabel(ScontrolP5.addToggle("toggleModeItems"+i,false));
     toggleModeItems[i].setPosition(5,3+i*16);
@@ -546,19 +545,6 @@ s_MRSSI = ScontrolP5.addSlider("sMRSSI")
   for(int i=2;i<6 ;i++) {
      toggleModeItems[i].setValue(1);
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 r1 = controlP5.addRadioButton("radioButton")
          .setGroup(G_RCSWITCH)
@@ -577,17 +563,6 @@ r1 = controlP5.addRadioButton("radioButton")
          .hideLabels()
          ;
   
-  for(int i=0;i<3 ;i++) {
- //   RadioButtonShowHud[i] = (controlP5.RadioButton) hideLabel(ScontrolP5.addRadioButton("b"+i,false));
- //    RadioButtonShowHud[i] = 1;
- //    RadioButtonShowHud[i].setPosition(50,3+i*16);
- //    RadioButtonShowHud[i].setSize(10,10);
- //    RadioButtonShowHud[i].setGroup(G_RCSWITCH);
-  }
- 
-  for(int i=2;i<6 ;i++) {
-     toggleModeItems[i].setValue(1);
-  }
       
 GetModes();  
 } 
@@ -1089,10 +1064,6 @@ void displayMode()
       mapchar(0xb6,SimPosn[ModePosition]+1);
       mapchar(0x30,SimPosn[ModePosition]+2);
     }
-    else if((SimModebits&mode_air) >0){
-      mapchar(0xea,SimPosn[ModePosition]+30);
-      mapchar(0xeb,SimPosn[ModePosition]+31);
-    }
     else if((SimModebits&mode_stable) >0){
       mapchar(0xac,SimPosn[ModePosition]);
       mapchar(0xad,SimPosn[ModePosition]+1);
@@ -1107,7 +1078,11 @@ void displayMode()
     }
     else{
       mapchar(0xae,SimPosn[ModePosition]);
-      mapchar(0xaf,SimPosn[ModePosition]+1);
+      mapchar(0xaf,SimPosn[ModePosition]+1);    
+      if((SimModebits&mode_air) >0){
+        mapchar(0xea,SimPosn[ModePosition]+2);
+        mapchar(0xeb,SimPosn[ModePosition]+3);
+      }     
     }
    }
 
