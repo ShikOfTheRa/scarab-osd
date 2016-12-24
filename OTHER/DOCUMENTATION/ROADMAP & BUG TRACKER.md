@@ -29,11 +29,14 @@
  * OSD    - Support for boards with 2 PWM/PWM+PPM input. AEROMAX
  * OSD    - Support for jflpyers canvas mode - BETAFLIGHT Configuration menus 
  * OSD    - Support for NAZA control modes mode inicator - GPS/ATTI/MANU/FAIL 
+ * OSD    - Support for AHI roll and pitch scaling 
  * OSD    - Debug screen for testers and troubleshooting
  * GUI    - Support for LTM,MAVLINK,KISS protocol
  * GUI    - Option to disable simulator graphics for improved speed
  * GUI    - Video volts shown in decimal format
  * GUI    - Improved speed
+ * GUI    - Display OSD info. Hardware,config etc.
+ * GUI    - SImulator send rcdata for OSD RC Switch
  * BUG    - Armed timer bugfix
  * BUG    - Warning message display overwriting
  * BUG    - Added simple GPS glitch filter for MAX speed errors from GPS.
