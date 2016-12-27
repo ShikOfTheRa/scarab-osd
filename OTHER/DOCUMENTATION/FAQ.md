@@ -209,12 +209,16 @@ HARAKIRI USERS - ensure protocol set as follows:
   * Use R1.6 and higher
   * uncomment AUTOCELL
   * Amend Woltage waring section in config.h as you require 
-  * Consider use of AUTOCELL_VOLTAGE
-  
+  * Consider use of AUTOCELL_VOLTAGE  
 
 ---
 28 GUI is very slow to open up
   * Try disabling buetooth
+
+---
+29 MAVLINK / PIXHAWK / APM showing no data from FC
+  * Try following setup link
+  * https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Mavlink%20setup.md
   
 
 ---
