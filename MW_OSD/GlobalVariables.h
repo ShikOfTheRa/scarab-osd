@@ -152,10 +152,12 @@ struct __cfgpa {
   uint16_t rollPitchItermIgnoreRate;
   uint16_t yawItermIgnoreRate;
   uint16_t yaw_p_limit;
-  uint8_t  deltaMethod;
+  uint8_t  t0;
   uint8_t  vbatPidCompensation;
   uint8_t  ptermSRateWeight;
   uint8_t  dtermSetpointWeight;
+  uint8_t  t1;
+  uint8_t  t2;
   uint8_t  itermThrottleGain;
   uint16_t rateAccelLimit;
   uint16_t yawRateAccelLimit;
