@@ -21,4 +21,4 @@ notifications:
     on_failure: change
     
 env:
- - BOARD=arduino:avr:pro:cpu=atmega168
+ - BOARD=arduino:avr:pro:cpu=atmega328
