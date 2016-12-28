@@ -1,5 +1,5 @@
 
-[![Build Status](https://travis-ci.org/ShikOfTheRa/scarab-osd.svg?branch=master)](https://travis-ci.org/ShikOfTheRa/scarab-osd)| [![](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EBS76N8F426G2&lc=GB&item_name=MW%2dOSD&item_number=R1%2e3&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)
+[![Build Status](https://travis-ci.org/ShikOfTheRa/scarab-osd.svg?branch=master)](https://travis-ci.org/ShikOfTheRa/scarab-osd) [![](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EBS76N8F426G2&lc=GB&item_name=MW%2dOSD&item_number=R1%2e3&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)
 ## MWOSD NextGeneration ##
 
 An Multipurpose Open Source OSD software with support for:
