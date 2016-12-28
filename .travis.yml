@@ -10,10 +10,10 @@ before_install:
   - sudo ln -s /usr/local/share/arduino/arduino /usr/local/bin/arduino
   
 install:
-  - ln -s $PWD /usr/local/share/arduino/libraries/scarab-osd
+  - ln -s $PWD /usr/local/share/arduino/libraries/
   
 script:
-  - arduino --verify --board ${BOARD} $PWD/mw_osd/mw_osd.ino
+  - arduino --verify --board ${BOARD} $PWD/led/led.ino
   
 notifications:
   email:
