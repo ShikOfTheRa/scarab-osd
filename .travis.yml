@@ -11,6 +11,15 @@ cache:
 
 env:
     - PLATFORMIO_CI_SRC=MW_OSD/MW_OSD.ino
+    - PLATFORMIO_CI_SRC=MW_OSD/GPS.ino
+    - PLATFORMIO_CI_SRC=MW_OSD/Max7456.ino
+    - PLATFORMIO_CI_SRC=MW_OSD/Screen.ino
+    - PLATFORMIO_CI_SRC=MW_OSDSerial.ino
+    - PLATFORMIO_CI_SRC=MW_OSD/SerialMAVLINK.ino
+    - PLATFORMIO_CI_SRC=MW_OSD/Config.h
+    - PLATFORMIO_CI_SRC=MW_OSD/Def.h
+    - PLATFORMIO_CI_SRC=MW_OSD/GlobalVariables.h
+    - PLATFORMIO_CI_SRC=MW_OSD/symbols.h
 
 install:
     - pip install -U platformio
