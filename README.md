@@ -11,6 +11,7 @@ An Multipurpose Open Source OSD software with support for:
 <ul class="task-list">
 <li>BETAFLIGHT</li>
 <li>CLEANFLIGHT</li>
+<li>RACEFLIGHT</li>
 <li>BASEFLIGHT</li>
 <li>iNAV</li>
 <li>KISS</li>
