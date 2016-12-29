@@ -2,17 +2,23 @@
 Current development repository status : [![Build Status](https://travis-ci.org/ShikOfTheRa/scarab-osd.svg?branch=master)](https://travis-ci.org/ShikOfTheRa/scarab-osd) 
 
 We need you help to keep MWOSD alive. Please help support and donate : [![](https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=EBS76N8F426G2&lc=GB&item_name=MW%2dOSD&item_number=R1%2e3&currency_code=GBP&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)
-## MWOSD NextGeneration ##
+##
+## MWOSD NextGeneration OSD for UAV##
 
 An Multipurpose Open Source OSD software with support for:
 <ul class="task-list">
+<li>BETAFLIGHT</li>
 <li>CLEANFLIGHT</li>
 <li>BASEFLIGHT</li>
+<li>iNAV</li>
+<li>KISS</li>
+<li>APM</li>
+<li>PIXHAWK</li>
 <li>MULTIWII</li>
 <li>dRonin</li>
+<li>LIBREPILOT</li>
 <li>HARIKIRI</li>
 <li>TAULABS</li>
-<li>iNAV</li>
 <li>DJI NAZA</li>
 <li>FIXEDWING (BF/MWII)</li>
 </ul>
