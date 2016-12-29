@@ -5,6 +5,8 @@ We need you help to keep MWOSD alive. Please help support and donate : [![](http
 ##
 ## MWOSD NextGeneration OSD for UAV##
 
+<a href='http://www.youtube.com/watch?feature=player_embedded&v=FCIyhbT1kK0' target='_blank'><img src='http://img.youtube.com/vi/FCIyhbT1kK0/0.jpg' width='425' height=344 /></a><br>
+
 An Multipurpose Open Source OSD software with support for:
 <ul class="task-list">
 <li>BETAFLIGHT</li>
@@ -32,6 +34,6 @@ MWOSD also provides support a number of other configurations:
 
 <a href='http://www.mwosd.com' target='_blank'>Click here to DOWNLOAD or find out more</a><br>
 
-<a href='http://www.youtube.com/watch?feature=player_embedded&v=FCIyhbT1kK0' target='_blank'><img src='http://img.youtube.com/vi/FCIyhbT1kK0/0.jpg' width='425' height=344 /></a><br>
+
 <br>
 <hr />
