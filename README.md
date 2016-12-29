@@ -34,6 +34,5 @@ MWOSD also provides support a number of other configurations:
 
 <a href='http://www.mwosd.com' target='_blank'>Click here to DOWNLOAD or find out more</a><br>
 
-
 <br>
 <hr />
