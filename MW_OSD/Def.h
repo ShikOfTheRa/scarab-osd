@@ -682,6 +682,17 @@
 #endif // BAUDRATE
 
 
+/********************  BOXID compatibility  *********************/
+
+#ifdef iNAV
+  #define IDBOXAIR 29
+  #define IDBOXWP 28
+#else
+  #define IDBOXAIR 28
+  #define IDBOXWP 20
+#endif
+
+
 /********************  info for GUI  *********************/
 #define INFO_CONTROLLER          0            // default - unknown 
 #define INFO_VERSION             MWOSDVERSION // version specified 

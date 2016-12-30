@@ -827,13 +827,13 @@ For sub-command 3 (draw string):
       case 19:
         mode.osd_switch |= bit;
         break;
-      case 20:
+      case IDBOXWP:
         mode.gpsmission |= bit;
         break;
       case 21:
         mode.gpsland |= bit;
         break;
-      case 28:
+      case IDBOXAIR:
         mode.air |= bit;
         break;
 #if defined ACROPLUS
