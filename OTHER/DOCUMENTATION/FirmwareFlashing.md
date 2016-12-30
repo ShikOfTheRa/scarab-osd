@@ -3,7 +3,7 @@
 ## Preparation 
 * Download the [MW OSD software pack](https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Downloads.md) of your choice.
 * Download the [Arduino flavor](http://arduino.cc/en/Main/Software) that matches your system. Requires version 1.6 minimum
-* Have an FTDI breakout board (which usually connects to a USB port) with the proper headers to connect to your OSD hardware.
+* Have an FTDI breakout board (which usually connects to a USB port) or equivalent, with the proper headers to connect to your OSD hardware. The breakout board must also be capable of supplying at least 4.8V through VCC pin for successful flashing and font updating.
 
 ## Testing Firmware communication flashing 
 * Connect the OSD to the FTDI adapter, and that to the PC.
