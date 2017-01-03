@@ -71,7 +71,8 @@ void LayoutEditorSetup(){
     .setLabel("Layout Editor")
     .setMoveable(true)
     .disableCollapse()
-    .hide()
+//    .hide()
+    .show()
     ;
  LEW.captionLabel()
     .toUpperCase(false);
@@ -161,12 +162,12 @@ void LayoutEditorSetup(){
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);
   buttonLSAVE = controlP5.addButton("bLSAVE",1,270,47,65,16)
-  .setLabel("    WRITE")
+  .setLabel("     SAVE")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);
   buttonLCANCEL = controlP5.addButton("bLCANCEL",1,270,66,65,16)
-  .setLabel("      EXIT")
+  .setLabel("  RELOAD")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);

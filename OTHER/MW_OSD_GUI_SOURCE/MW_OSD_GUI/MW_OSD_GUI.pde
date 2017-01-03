@@ -180,7 +180,7 @@ int WriteMillis = 0;
 int linktimer = 0;
 ControlGroup messageBox;
 Textlabel MessageText;
-int LEWvisible=0;
+int LEWvisible=1;
 // XML config variables
 int DISPLAY_STATE;
 int hudsavailable=8;
@@ -900,7 +900,7 @@ DONATEimage  = loadImage("DON_def.png");
   buttonWRITE = controlP5.addButton("WRITEEEMSP",1,20,25,60,16);buttonWRITE.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel("   WRITE");
   buttonRESET = controlP5.addButton("DEFAULT",1,20,45,60,16);buttonRESET.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel(" DEFAULT");
   buttonRESTART = controlP5.addButton("RESTART",1,20,65,60,16);buttonRESTART.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel(" RESTART");
-  buttonLEW = controlP5.addButton("LEW",1,30,(6*17),92,16);buttonLEW.setColorBackground(osdcontr_).setGroup(G_RCSWITCH).setLabel("Layout Editor");
+  buttonLEW = controlP5.addButton("LEW",1,30,(6*17),92,16);buttonLEW.setColorBackground(osdcontr_).setGroup(G_RCSWITCH).setLabel("         LINKS");
 
   buttonSetRSSIlow = controlP5.addButton("bSetRSSIlow",1,140,(3*17),30,16);buttonSetRSSIlow.setColorBackground(calibrate_).setGroup(G_RSSI).setLabel("SET");
   buttonSetRSSIhigh = controlP5.addButton("bSetRSSIhigh",1,140,(4*17),30,16);buttonSetRSSIhigh.setColorBackground(calibrate_).setGroup(G_RSSI).setLabel("SET");
@@ -1961,9 +1961,9 @@ public void bLSAVE() {
 
 public void bLCANCEL() {
   Lock_All_Controls(false);
-  LEW.hide();
-  LEWvisible=0;
-  G_LINKS.show(); 
+//  LEW.hide();
+//  LEWvisible=0;
+//  G_LINKS.show(); 
   initxml();
   if (init_com==1)
     READconfigMSP_init();
@@ -2642,9 +2642,19 @@ void coloriseswitches(){
 
 void LEW(){
 //  Lock_All_Controls(true);
-  G_LINKS.hide();
-  LEW.show();
-  LEWvisible=1;
+  if (LEWvisible==0){
+    LEWvisible=1;
+    G_LINKS.hide();
+    LEW.show();
+    buttonLEW.setLabel("         LINKS");
+  }
+  else{
+    LEWvisible=0;
+    G_LINKS.show();
+    LEW.hide();
+    buttonLEW.setLabel("Layout Editor");
+  }
+  
 //  Lock_All_Controls(true);
 }
 

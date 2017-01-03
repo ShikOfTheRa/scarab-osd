@@ -75,7 +75,7 @@ void SetupGroups(){
                 .setBackgroundColor(color(30,255))
                 .setBackgroundHeight(104)
                 .setLabel("LINKS")
-                //.hide()
+                .hide()
                 .disableCollapse()
                ;
 
