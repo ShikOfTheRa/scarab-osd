@@ -1358,12 +1358,12 @@ void draw() {
   txtlblLayoutTxt.setValue(" : "+ CONFIGHUDTEXT[hudeditposition]);
 
   int hudid=0;
-  if (toggleModeItems[9].getValue()==2)
+  if (r1.getValue()==2)
     hudid = int(confItem[GetSetting("S_HUDSW2")].value());
-  else if (toggleModeItems[9].getValue()==1)
+  else if (r1.getValue()==1)
     hudid = int(confItem[GetSetting("S_HUDSW1")].value());
   else
-    hudid = int(confItem[GetSetting("S_HUDSW0")].value()); 
+    hudid = int(confItem[GetSetting("S_HUDSW0")].value());
   txtlblLayoutHudTxt.setValue(" : "+hudid);
   LEW.setLabel("Layout Editor for profile: "+hudid+" - "+CONFIGHUDNAME[hudid]);
   if (CONFIGHUDEN[hudid][hudeditposition]>0)
