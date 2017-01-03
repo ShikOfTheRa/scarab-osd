@@ -414,7 +414,17 @@ void SendCommand(int cmd){
         serialize16(int(Throttle_Yaw.arrayValue()[0]));
         serialize16(int(Throttle_Yaw.arrayValue()[1]));
         for (int i=5; i<=8; i++) {
-          serialize16(1500);
+          if(int(confItem[GetSetting("S_RCWSWITCH_CH")].value())==i){
+            if (r1.getValue()==2)
+              serialize16(1500);
+            else if (r1.getValue()==1)
+              serialize16(1900);
+            else
+              serialize16(1100);
+          }
+          else{
+            serialize16(1500);
+          }
         }
         tailSerialReply();
         PortIsWriting = false;

@@ -213,7 +213,7 @@ int WriteMillis = 0;
 int linktimer = 0;
 ControlGroup messageBox;
 Textlabel MessageText;
-int LEWvisible=0;
+int LEWvisible=1;
 // XML config variables
 int DISPLAY_STATE;
 int hudsavailable=8;
@@ -933,7 +933,7 @@ DONATEimage  = loadImage("DON_def.png");
   buttonWRITE = controlP5.addButton("WRITEEEMSP",1,20,25,60,16);buttonWRITE.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel("   WRITE");
   buttonRESET = controlP5.addButton("DEFAULT",1,20,45,60,16);buttonRESET.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel(" DEFAULT");
   buttonRESTART = controlP5.addButton("RESTART",1,20,65,60,16);buttonRESTART.setColorBackground(osdcontr_).setGroup(OSD_CONTROLS).setLabel(" RESTART");
-  buttonLEW = controlP5.addButton("LEW",1,30,(6*17),92,16);buttonLEW.setColorBackground(osdcontr_).setGroup(G_RCSWITCH).setLabel("Layout Editor");
+  buttonLEW = controlP5.addButton("LEW",1,30,(6*17),92,16);buttonLEW.setColorBackground(osdcontr_).setGroup(G_RCSWITCH).setLabel("         LINKS");
 
   buttonSetRSSIlow = controlP5.addButton("bSetRSSIlow",1,140,(3*17),30,16);buttonSetRSSIlow.setColorBackground(calibrate_).setGroup(G_RSSI).setLabel("SET");
   buttonSetRSSIhigh = controlP5.addButton("bSetRSSIhigh",1,140,(4*17),30,16);buttonSetRSSIhigh.setColorBackground(calibrate_).setGroup(G_RSSI).setLabel("SET");
@@ -1391,12 +1391,12 @@ public void draw() {
   txtlblLayoutTxt.setValue(" : "+ CONFIGHUDTEXT[hudeditposition]);
 
   int hudid=0;
-  if (toggleModeItems[9].getValue()==2)
+  if (r1.getValue()==2)
     hudid = PApplet.parseInt(confItem[GetSetting("S_HUDSW2")].value());
-  else if (toggleModeItems[9].getValue()==1)
+  else if (r1.getValue()==1)
     hudid = PApplet.parseInt(confItem[GetSetting("S_HUDSW1")].value());
   else
-    hudid = PApplet.parseInt(confItem[GetSetting("S_HUDSW0")].value()); 
+    hudid = PApplet.parseInt(confItem[GetSetting("S_HUDSW0")].value());
   txtlblLayoutHudTxt.setValue(" : "+hudid);
   LEW.setLabel("Layout Editor for profile: "+hudid+" - "+CONFIGHUDNAME[hudid]);
   if (CONFIGHUDEN[hudid][hudeditposition]>0)
@@ -1540,7 +1540,7 @@ public void draw() {
 
   image(GUIBackground,0, 0, windowsX, windowsY); 
 
-  if (((seconds&0x1F)!= 0)&&(Donate>0)){
+  if (((seconds&0x0F)!= 0)&&(Donate>0)){
    image(DONATEimage,XLINKS+20,YLINKS+207, 100, 40);  
   }  
 
@@ -1994,9 +1994,9 @@ public void bLSAVE() {
 
 public void bLCANCEL() {
   Lock_All_Controls(false);
-  LEW.hide();
-  LEWvisible=0;
-  G_LINKS.show(); 
+//  LEW.hide();
+//  LEWvisible=0;
+//  G_LINKS.show(); 
   initxml();
   if (init_com==1)
     READconfigMSP_init();
@@ -2675,9 +2675,19 @@ public void coloriseswitches(){
 
 public void LEW(){
 //  Lock_All_Controls(true);
-  G_LINKS.hide();
-  LEW.show();
-  LEWvisible=1;
+  if (LEWvisible==0){
+    LEWvisible=1;
+    G_LINKS.hide();
+    LEW.show();
+    buttonLEW.setLabel("         LINKS");
+  }
+  else{
+    LEWvisible=0;
+    G_LINKS.show();
+    LEW.hide();
+    buttonLEW.setLabel("Layout Editor");
+  }
+  
 //  Lock_All_Controls(true);
 }
 
@@ -3267,7 +3277,7 @@ public void SetupGroups(){
                 .setBackgroundColor(color(30,255))
                 .setBackgroundHeight(104)
                 .setLabel("LINKS")
-                //.hide()
+                .hide()
                 .disableCollapse()
                ;
 
@@ -4132,7 +4142,17 @@ public void SendCommand(int cmd){
         serialize16(PApplet.parseInt(Throttle_Yaw.arrayValue()[0]));
         serialize16(PApplet.parseInt(Throttle_Yaw.arrayValue()[1]));
         for (int i=5; i<=8; i++) {
-          serialize16(1500);
+          if(PApplet.parseInt(confItem[GetSetting("S_RCWSWITCH_CH")].value())==i){
+            if (r1.getValue()==2)
+              serialize16(1500);
+            else if (r1.getValue()==1)
+              serialize16(1900);
+            else
+              serialize16(1100);
+          }
+          else{
+            serialize16(1500);
+          }
         }
         tailSerialReply();
         PortIsWriting = false;
@@ -5177,7 +5197,8 @@ public void LayoutEditorSetup(){
     .setLabel("Layout Editor")
     .setMoveable(true)
     .disableCollapse()
-    .hide()
+//    .hide()
+    .show()
     ;
  LEW.captionLabel()
     .toUpperCase(false);
@@ -5267,12 +5288,12 @@ public void LayoutEditorSetup(){
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);
   buttonLSAVE = controlP5.addButton("bLSAVE",1,270,47,65,16)
-  .setLabel("    WRITE")
+  .setLabel("     SAVE")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);
   buttonLCANCEL = controlP5.addButton("bLCANCEL",1,270,66,65,16)
-  .setLabel("      EXIT")
+  .setLabel("  RELOAD")
   .setColorBackground(blue_)
   .setColorCaptionLabel(yellow_)
   .setGroup(LEW);
@@ -5638,7 +5659,6 @@ s_MRSSI = ScontrolP5.addSlider("sMRSSI")
     .align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);          
 
 
-
   for(int i=0;i<boxnames.length ;i++) {
     toggleModeItems[i] = (controlP5.Toggle) hideLabel(ScontrolP5.addToggle("toggleModeItems"+i,false));
     toggleModeItems[i].setPosition(5,3+i*16);
@@ -5652,19 +5672,6 @@ s_MRSSI = ScontrolP5.addSlider("sMRSSI")
   for(int i=2;i<6 ;i++) {
      toggleModeItems[i].setValue(1);
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 r1 = controlP5.addRadioButton("radioButton")
          .setGroup(G_RCSWITCH)
@@ -5683,17 +5690,6 @@ r1 = controlP5.addRadioButton("radioButton")
          .hideLabels()
          ;
   
-  for(int i=0;i<3 ;i++) {
- //   RadioButtonShowHud[i] = (controlP5.RadioButton) hideLabel(ScontrolP5.addRadioButton("b"+i,false));
- //    RadioButtonShowHud[i] = 1;
- //    RadioButtonShowHud[i].setPosition(50,3+i*16);
- //    RadioButtonShowHud[i].setSize(10,10);
- //    RadioButtonShowHud[i].setGroup(G_RCSWITCH);
-  }
- 
-  for(int i=2;i<6 ;i++) {
-     toggleModeItems[i].setValue(1);
-  }
       
 GetModes();  
 } 
@@ -6195,10 +6191,6 @@ public void displayMode()
       mapchar(0xb6,SimPosn[ModePosition]+1);
       mapchar(0x30,SimPosn[ModePosition]+2);
     }
-    else if((SimModebits&mode_air) >0){
-      mapchar(0xea,SimPosn[ModePosition]+30);
-      mapchar(0xeb,SimPosn[ModePosition]+31);
-    }
     else if((SimModebits&mode_stable) >0){
       mapchar(0xac,SimPosn[ModePosition]);
       mapchar(0xad,SimPosn[ModePosition]+1);
@@ -6213,7 +6205,11 @@ public void displayMode()
     }
     else{
       mapchar(0xae,SimPosn[ModePosition]);
-      mapchar(0xaf,SimPosn[ModePosition]+1);
+      mapchar(0xaf,SimPosn[ModePosition]+1);    
+      if((SimModebits&mode_air) >0){
+        mapchar(0xea,SimPosn[ModePosition]+2);
+        mapchar(0xeb,SimPosn[ModePosition]+3);
+      }     
     }
    }
 
