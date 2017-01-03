@@ -445,7 +445,6 @@ For sub-command 3 (draw string):
 #endif
   }
 
-#if defined MULTIWII_V24
   if (cmdMSP==MSP_NAV_STATUS)
   {
      read8();
@@ -453,7 +452,6 @@ For sub-command 3 (draw string):
      read8();
      GPS_waypoint_step=read8();
   }
-#endif //MULTIWII_V24
 
   if (cmdMSP==MSP_ATTITUDE)
   {
