@@ -176,7 +176,7 @@
 //#define FREETEXTGIMBAL           // Alternative option - enable to display freetext (or callsign) when GIMBAL Switch active on TX.
 
 /********************       STARTUP settings      *********************/
-#define INTRO_VERSION               "MWOSD - 1.6.5.X" // Call the OSD something else if you prefer. 
+#define INTRO_VERSION               "MWOSD - 1.6.6.X" // Call the OSD something else if you prefer. 
 #define INTRO_MENU                  // Enable to display TX stick MENU 
 #define INTRO_CALLSIGN              // Enable to display callsign at startup
 #define INTRO_SIGNALTYPE            // Enable to display video type at startup
