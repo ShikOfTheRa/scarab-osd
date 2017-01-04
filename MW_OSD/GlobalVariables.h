@@ -759,7 +759,7 @@ uint16_t flyingTime=0;
 #define MSP_SERVO_CONF           120    //out message         Servo settings
 #define MSP_NAV_STATUS           121   //out message	     Returns navigation status
 
-#define MSP_CANVAS               182
+#define MSP_DISPLAYPORT          182
 
 #define MSP_CELLS                130   //out message         FrSky SPort Telemtry
 
