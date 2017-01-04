@@ -302,16 +302,16 @@ void serialMSPCheck()
 #ifdef PROTOCOL_MSP
 
   #ifdef CANVAS_SUPPORT
-  if (cmdMSP == MSP_CANVAS) {
+  if (cmdMSP == MSP_DISPLAYPORT) {
     // Don't go into canvas mode when armed or in other special mode
     if (armed || fontMode || configMode)
         return;
 /*
-Notes on MSP_CANVAS protocol
+Notes on MSP_DISPLAYPORT protocol
 (should go into the protocol document... where is that?)
 
 byte: description
-0: MSP_CANVAS
+0: MSP_DISPLAYPORT
 1: sub-command
    0: Enter/hold canvas mode
        Sender must periodically send the enter/hold message:
