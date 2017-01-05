@@ -673,6 +673,10 @@
   #define ALWAYSARMED  // starts OSD in armed mode
 #endif
 
+#ifdef MAV_ARMED
+  #define ALWAYSARMED  // starts OSD in armed mode
+#endif
+
 #ifndef BAUDRATE 
   #ifdef PROTOCOL_MAVLINK 
     #define BAUDRATE 57600

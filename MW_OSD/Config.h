@@ -159,7 +159,9 @@
 
 /******************** Mavlink settings *********************/
 //#define MAVLINKREQ                // Enable this for mavlink systems where the Mavlink data requires requesting. 
-
+#define MAV_SYS_ID 1                // System ID of MAV. 
+#define MAV_COM_ID 1                // Component ID of MAV.
+//#define MAV_ARMED                 // Forces OSD to be always armed (for when MAV does not send armed status in heartbeat).
 
 /******************** Serial MSP speed settings *********************/
 // Choose ONLY ONE option: increases speeds of serial update - but with impact to flight controller 

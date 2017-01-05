@@ -177,7 +177,7 @@ uint16_t debug[4];   // int32_t ?...
 int8_t menudir;
 unsigned int allSec=0;
 unsigned int menuSec=0;
-uint8_t armedtimer=255;
+uint8_t armedtimer=30;
 uint16_t debugerror;
 uint16_t debugval=0;
 uint16_t cell_data[6]={0,0,0,0,0,0};
@@ -1359,7 +1359,7 @@ const PROGMEM char * const menu_on_off[] =
 
 #define MAVLINK_MSG_ID_HEARTBEAT 0
 #define MAVLINK_MSG_ID_HEARTBEAT_MAGIC 50
-#define AVLINK_MSG_ID_HEARTBEAT_LEN 9
+#define MAVLINK_MSG_ID_HEARTBEAT_LEN 9
 #define MAVLINK_MSG_ID_VFR_HUD 74
 #define MAVLINK_MSG_ID_VFR_HUD_MAGIC 20
 #define MAVLINK_MSG_ID_VFR_HUD_LEN 20
@@ -1463,10 +1463,8 @@ const PROGMEM char * const mav_mode_index[] =
 struct __mw_mav {
   uint8_t  message_cmd;
   uint8_t  message_length;
-  uint8_t  message_sysid;
   uint8_t  mode;
   uint8_t  sequence;
-  uint8_t  message_component;
   uint16_t serial_checksum;
   uint16_t tx_checksum;
   float    GPS_scaleLonDown;
