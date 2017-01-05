@@ -130,7 +130,6 @@ void serialMAVCheck(){
   timer.MSP_active=ALARM_MSP; // getting valid MAV on serial port
 #endif //ALARM_MSP
   int16_t MwHeading360;
-  uint8_t apm_mav_type=0;
   static uint8_t armedglitchprotect=0;
   switch(mw_mav.message_cmd) {
   case MAVLINK_MSG_ID_HEARTBEAT:
@@ -138,16 +137,27 @@ void serialMAVCheck(){
     mode.gpshome    = (1<<4);
     mode.gpshold    = (1<<5);
     mode.gpsmission = (1<<6);
-    MwSensorActive&=0xFFFFFF8E;
-    apm_mav_type=serialBuffer[4];   
+    MwSensorActive&=0xFFFFFFFE; // set disarmed
+
     mw_mav.mode=serialbufferint(0);
     if (mw_mav.mode>MAV_MODE_MAX) mw_mav.mode=MAV_MODE_MAX;
-debug[0]=armed;
+    /* maybe implement MWOSD mode icons ?
+     if (apm_mav_mode==11)      //RTH
+     MwSensorActive|=(1<<4);
+     if (apm_mav_mode==1)       //HOLD
+     MwSensorActive|=(1<<5);
+     if (apm_mav_mode==99)      //MISSION
+     MwSensorActive|=(1<<6);
+     */
+    debug[3]=serialBuffer[6];
+
+    #ifdef ALWAYSARMED
+      serialBuffer[6]|=(1<<7); 
+    #endif
     if (serialBuffer[6]&(1<<7)){     //armed
       MwSensorActive|=(1<<0);
       armed=1;
       armedglitchprotect=3;
-debug[1]=armed;
     }
     else{
       if (armedglitchprotect>0){
@@ -157,17 +167,7 @@ debug[1]=armed;
         armed=0;
         GPS_fix_HOME=0;
       }
-debug[1]=armed;
     }
-debug[2]=serialBuffer[6]&(1<<7);
-    /* maybe implement MWOSD mode icons ?
-     if (apm_mav_mode==11)      //RTH
-     MwSensorActive|=(1<<4);
-     if (apm_mav_mode==1)       //HOLD
-     MwSensorActive|=(1<<5);
-     if (apm_mav_mode==99)      //MISSION
-     MwSensorActive|=(1<<6);
-     */
 #if defined MAVLINKREQ
      static uint8_t mavreqdone=5;
      if (mavreqdone>0){ 
@@ -175,7 +175,6 @@ debug[2]=serialBuffer[6]&(1<<7);
        mavreqdone--;
      }
 #endif //MAVLINKREQ
-
     break;
   case MAVLINK_MSG_ID_VFR_HUD:
     GPS_speed=(int16_t)serialbufferfloat(4)*100;    // m/s-->cm/s 
@@ -220,9 +219,9 @@ debug[2]=serialBuffer[6]&(1<<7);
     handleRawRC();
     break;
   case MAVLINK_MSG_ID_SYS_STATUS:
-    mode.stable = 2;
-    mode.baro   = 4;
-    mode.mag    = 8;
+    mode.stable = (1<<1);
+    mode.baro   = (1<<2);
+    mode.mag    = (1<<3);
     MwSensorActive&=0xFFFFFFF1;
     if ((serialbufferint(4)&(1<<1))>0) //acc
       MwSensorActive|=(1<<1);
@@ -253,6 +252,7 @@ void serialMAVreceive(uint8_t c)
 {
   static uint8_t  mav_payload_index; 
   static uint16_t mav_checksum_rcv; 
+  static uint8_t  mav_magic=0;
 
   static enum _serial_state {
     MAV_IDLE,
@@ -292,9 +292,6 @@ void serialMAVreceive(uint8_t c)
   {
     mw_mav.message_length = c;
     mav_state = MAV_HEADER_LEN;
-    if ((mw_mav.message_length) > 35){  // too much data so reset check
-      mav_state = MAV_IDLE;
-    }
   }
   else if (mav_state == MAV_HEADER_LEN)
   {
@@ -302,18 +299,58 @@ void serialMAVreceive(uint8_t c)
   }
   else if (mav_state == MAV_HEADER_SEQ)
   {
-    mw_mav.message_sysid = c;
-    mav_state = MAV_HEADER_SYS;
+    if (c==MAV_SYS_ID){
+      mav_state = MAV_HEADER_SYS;        
+    }
+    else{
+      mav_state = MAV_IDLE;  
+    }
   }
   else if (mav_state == MAV_HEADER_SYS)
   {
-    mw_mav.message_component = c;
-    mav_state = MAV_HEADER_COMP;
+    if (c==MAV_COM_ID){
+      mav_state = MAV_HEADER_COMP;        
+    }
+    else{
+      mav_state = MAV_IDLE;  
+    }
   }
   else if (mav_state == MAV_HEADER_COMP)
   {
     mw_mav.message_cmd = c;
-    mav_state = MAV_HEADER_MSG;
+    uint8_t  mav_len; 
+    switch(c) {
+      case MAVLINK_MSG_ID_HEARTBEAT:
+        mav_magic = MAVLINK_MSG_ID_HEARTBEAT_MAGIC;
+        mav_len = MAVLINK_MSG_ID_HEARTBEAT_LEN;
+        break;
+      case MAVLINK_MSG_ID_VFR_HUD:
+        mav_magic = MAVLINK_MSG_ID_VFR_HUD_MAGIC;
+        mav_len = MAVLINK_MSG_ID_VFR_HUD_LEN;
+        break;
+      case MAVLINK_MSG_ID_ATTITUDE:
+        mav_magic = MAVLINK_MSG_ID_ATTITUDE_MAGIC;
+        mav_len = MAVLINK_MSG_ID_ATTITUDE_LEN;
+        break;
+      case MAVLINK_MSG_ID_GPS_RAW_INT:
+        mav_magic = MAVLINK_MSG_ID_GPS_RAW_INT_MAGIC;
+        mav_len = MAVLINK_MSG_ID_GPS_RAW_INT_LEN;
+        break;
+      case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
+        mav_magic = MAVLINK_MSG_ID_RC_CHANNELS_RAW_MAGIC;
+        mav_len = MAVLINK_MSG_ID_RC_CHANNELS_RAW_LEN;
+        break;
+      case MAVLINK_MSG_ID_SYS_STATUS:
+        mav_magic = MAVLINK_MSG_ID_SYS_STATUS_MAGIC;
+        mav_len = MAVLINK_MSG_ID_SYS_STATUS_LEN;
+        break;
+      }
+      if ((mw_mav.message_length) == mav_len){  // too much data so reset check
+         mav_state = MAV_HEADER_MSG;
+      }
+      else{
+        mav_state = MAV_IDLE;
+      }
   }
   else if (mav_state == MAV_HEADER_MSG)
   {
@@ -331,27 +368,6 @@ void serialMAVreceive(uint8_t c)
     }
     else{
       mav_checksum_rcv+=(c<<8);
-      int8_t mav_magic=0;
-      switch(mw_mav.message_cmd) {
-      case MAVLINK_MSG_ID_HEARTBEAT:
-        mav_magic = MAVLINK_MSG_ID_HEARTBEAT_MAGIC;
-        break;
-      case MAVLINK_MSG_ID_VFR_HUD:
-        mav_magic = MAVLINK_MSG_ID_VFR_HUD_MAGIC;
-        break;
-      case MAVLINK_MSG_ID_ATTITUDE:
-        mav_magic = MAVLINK_MSG_ID_ATTITUDE_MAGIC;
-        break;
-      case MAVLINK_MSG_ID_GPS_RAW_INT:
-        mav_magic = MAVLINK_MSG_ID_GPS_RAW_INT_MAGIC;
-        break;
-      case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
-        mav_magic = MAVLINK_MSG_ID_RC_CHANNELS_RAW_MAGIC;
-        break;
-      case MAVLINK_MSG_ID_SYS_STATUS:
-        mav_magic = MAVLINK_MSG_ID_SYS_STATUS_MAGIC;
-        break;
-      }
       mav_checksum(mav_magic);
       if(mav_checksum_rcv == mw_mav.serial_checksum) {
         serialMAVCheck();
