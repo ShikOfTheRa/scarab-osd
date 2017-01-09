@@ -2,7 +2,7 @@
 
 To connect hardware, it can be carried out like this:
 
-https://github.com/ShikOfTheRa/scarab-osd/OTHER/DOCUMENTATION/NAZA_MWOSD_connection.png
+https://github.com/ShikOfTheRa/scarab-osd/OTHER/DOCUMENTATION/NAZAMWOSDconnection.png
 
 See other guides for installing Arduino and uploading MWOSD:
 
