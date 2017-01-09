@@ -1,9 +1,11 @@
 # How to setup for NAZA OSD
 
 To connect hardware, it can be carried out like this:
-https://github.com/ShikOfTheRa/scarab-osd/OTHER/DOCUMENTATION/NAZA MWOSD connection.png
+
+https://github.com/ShikOfTheRa/scarab-osd/OTHER/DOCUMENTATION/NAZA_MWOSD_connection.png
 
 See other guides for installing Arduino and uploading MWOSD:
+
 https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/FirmwareFlashing.md
 
 # Step 1: prepare your config.h file
