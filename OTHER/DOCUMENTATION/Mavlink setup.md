@@ -54,4 +54,4 @@ Notes:
   * Baud rate in OSD and APM/PIXHAWK must match.
   * Always try 57600 and 115200 if no data
   * Use debug screen to verify: RX > 0 means there is data. PKT > 0 means there is valid data.
-    * If no valid data, likely incorrect baud rate
+  * If no valid data, likely incorrect baud rate
