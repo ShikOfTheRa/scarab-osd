@@ -1,8 +1,29 @@
-Step 1: - Configure OSD config.h option and upload
-  * #define APM 
-  * #define PIXHAWK
+# How to setup for PIXHAWK / APM / MAVLINK OSD
 
-Step 2: - Configure the APM/PIXAWK settings to send correct telemetry values
+
+See other guides for installing Arduino and uploading MWOSD:
+
+https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/FirmwareFlashing.md
+
+# Step 1: prepare your config.h file
+
+## Select the GPS chip type by removing the comments:
+* //#define PIXHAWK
+
+## Select the aircraft type:
+* //#define ROTORCRAFT
+* //#define FIXEDWING
+
+# Step 2: Upload 
+https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/FirmwareFlashing.md
+
+# Step 3: Change GUI speed to match OSD - usually 57600
+
+# Step 4: Upload fontfile using GUI
+
+# Step 5: Configure OSD using GUI
+
+# Step 5: Configure the APM/PIXHAWK?MAVLINK settings to send correct telemetry values
   * Connect to Mission Planner
   * Go to config/tuning
   * Locate parameters in parameter list
@@ -29,7 +50,7 @@ If you are connecting OSD to telemetry 2 port:
   * SR2_RC_CHAN, 5 ( 5hz for radio input or radio output data )
 
 Notes: 
-57600 is default serial buad rate recommended when selecting APM / PIXHAWK in config.h
-Baud rate in OSD and APM/PIXHAWK must match.
-There are reported bugs - always try 57600 and 115200 if no data
-Use debug screen to verify: RX > 0 means there is data. PKT > 0 means there is valid data. If no valid data, luiekly incorrect baud
+  * 57600 is default serial buad rate recommended when selecting APM / PIXHAWK in config.h
+  * Baud rate in OSD and APM/PIXHAWK must match.
+  * Always try 57600 and 115200 if no data
+  * Use debug screen to verify: RX > 0 means there is data. PKT > 0 means there is valid data. If no valid data, liekly incorrect baud
