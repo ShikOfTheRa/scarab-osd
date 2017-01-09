@@ -132,11 +132,11 @@ void setup()
 {
 
   Serial.begin(BAUDRATE);
-//---- override UBRR with MWC settings
-  uint8_t h = ((F_CPU  / 4 / (BAUDRATE) -1) / 2) >> 8;
-  uint8_t l = ((F_CPU  / 4 / (BAUDRATE) -1) / 2);
-  UCSR0A  |= (1<<U2X0); UBRR0H = h; UBRR0L = l; 
-//---
+  #ifndef PROTOCOL_MAVLINK //use double speed asynch mode (multiwii compatible)
+    uint8_t h = ((F_CPU  / 4 / (BAUDRATE) -1) / 2) >> 8;
+    uint8_t l = ((F_CPU  / 4 / (BAUDRATE) -1) / 2);
+    UCSR0A  |= (1<<U2X0); UBRR0H = h; UBRR0L = l; 
+  #endif
   Serial.flush();
 
 #ifdef I2C_UB_SUPPORT
