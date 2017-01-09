@@ -11,14 +11,14 @@ https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Firmwa
 ## Select the GPS chip type by removing the comments:
 * //#define NAZA
 
-## Select the aircaraft type:
+## Select the aircraft type:
 * //#define ROTORCRAFT
 * //#define FIXEDWING
 
 ## Optional Considerations:
 
 /********************       NAZA Settings         ************************/
-//#define NAZAMODECONTROL           // Enables NAZA mode control display using a PWM signal into OSD RSSI pin. Can be used with OSD_SWITCH_RSSI   
+//#define NAZAMODECONTROL           // Enables NAZA mode control display using a PWM signal into OSD RSSI pin.
 
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 
