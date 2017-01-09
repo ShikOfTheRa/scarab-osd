@@ -20,6 +20,7 @@ https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Firmwa
 ## Optional Considerations:
 
 /********************       NAZA Settings         ************************/
+
 //#define NAZAMODECONTROL           // Enables NAZA mode control display using a PWM signal into OSD RSSI pin.
 
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
