@@ -306,9 +306,14 @@ void loop()
     timer.Blink10hz=!timer.Blink10hz;
     calculateTrip();
     if (Settings[S_AMPER_HOUR]) 
-    #ifndef KISS
-      amperagesum += amperage;
-    #endif    
+    {
+      #ifndef KISS
+        amperagesum += amperage;
+      #else 
+        if (!Settings[S_MWAMPERAGE]) 
+          amperagesum += amperage;
+      #endif   // KISS
+    }
     #ifndef GPSOSD 
       #ifdef MSP_SPEED_MED
         #ifdef CANVAS_SUPPORT
