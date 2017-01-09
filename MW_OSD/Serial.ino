@@ -1383,7 +1383,7 @@ void configSave()
   }
   mspWriteChecksum();
 
-#if defined MENU_PID_ADVANCED
+#if defined ENABLE_MSP_SAVE_ADVANCED
   mspWriteRequest(MSP_SET_PID_ADVANCED, 17);
   mspWrite16(cfgpa.rollPitchItermIgnoreRate);
   mspWrite16(cfgpa.yawItermIgnoreRate);
