@@ -23,7 +23,7 @@ https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/Firmwa
 
 # Step 5: Configure OSD using GUI
 
-# Step 5: Configure the APM/PIXHAWK?MAVLINK settings to send correct telemetry values
+# Step 6: Configure the MAVLINK settings
   * Connect to Mission Planner
   * Go to config/tuning
   * Locate parameters in parameter list
