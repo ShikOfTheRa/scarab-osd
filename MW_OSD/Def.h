@@ -20,6 +20,12 @@
 #define DEBUGDPOSMEMORY 340  // display free heap/stack memory at position X. Requires MEMCHECK and not valid in latest Arduino versions
 #define DEBUGDPOSRX 220      // display serial data rate at position X
 
+// Display Debug text message in standard screen text warning message area
+// Enable and set debugtext=1 in code when required 
+//#define ENABLEDEBUGTEXT
+#define DEBUGTEXT "DEBUG"    // Set text you wish to display when debug text message required. Must be CAPSLOCK text
+
+
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
 
 /********************       OSD SCREEN SWITCH settings      *********************/

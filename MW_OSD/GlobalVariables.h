@@ -189,6 +189,7 @@ uint8_t rcswitch_ch=8;
 int8_t PulseType = 0; //0 PWM 1 PPM
 uint16_t pwmval1=0;
 uint16_t pwmval2=0;
+uint8_t debugtext=0;
 #if defined CORRECT_MSP_BF1
   uint8_t bfconfig[25];
 #endif
@@ -835,6 +836,7 @@ const char APRTHtext[]      PROGMEM = "AUTO RTH";
 const char APHOLDtext[]     PROGMEM = "AUTO HOLD";
 const char APWAYPOINTtext[] PROGMEM = " MISSION";
 const char lowvolts_text[]  PROGMEM = "LOW VOLTS";
+const char debug_text[]     PROGMEM = DEBUGTEXT;
 
 // For Alarm / Message text
 const PROGMEM char * const message_text[] =
@@ -850,10 +852,11 @@ const PROGMEM char * const alarm_text[] =
   blank_text,     //0
   disarmed_text,  //1
   armed_text,     //2
-  nodata_text,
-  nogps_text,
-  satlow_text,
-  lowvolts_text,
+  nodata_text,    //3
+  nogps_text,     //4
+  satlow_text,    //5
+  lowvolts_text,  //6
+  debug_text,     //7
 };
 
 struct __alarms {

@@ -2017,6 +2017,11 @@ void displayArmed(void)
     }
   }
 
+#ifdef ENABLEDEBUGTEXT
+    if (debugtext==1)
+      alarms.active|=(1<<7);
+#endif
+
 #ifdef ALARM_VOLTAGE
     if (voltage<=voltageWarning)
       alarms.active|=(1<<6);
@@ -2059,7 +2064,7 @@ void displayArmed(void)
   }
          
   uint8_t queueindexbit;
-  for (uint8_t i = 0; i < 7; i++) {
+  for (uint8_t i = 0; i <= 7; i++) {
       if  (queueindex & (1<<i))
         queueindexbit=i;
    }  
