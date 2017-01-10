@@ -683,7 +683,7 @@ For sub-command 3 (draw string):
   }
 #endif
 
-#ifdef ENABLE_MSP_PID_ADVANCED
+#ifdef MENU_PID_ADVANCED
   if (cmdMSP == MSP_PID_ADVANCED)
   {
     cfgpa.rollPitchItermIgnoreRate=read16();
@@ -1383,7 +1383,7 @@ void configSave()
   }
   mspWriteChecksum();
 
-#if defined ENABLE_MSP_SAVE_ADVANCED
+#if defined MENU_PID_ADVANCED
   mspWriteRequest(MSP_SET_PID_ADVANCED, 17);
   mspWrite16(cfgpa.rollPitchItermIgnoreRate);
   mspWrite16(cfgpa.yawItermIgnoreRate);
