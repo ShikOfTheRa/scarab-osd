@@ -1072,8 +1072,8 @@ const char configMsg128[] PROGMEM = "S7";
 const char configMsg130[] PROGMEM = "ADVANCED PID";
 const char configMsg131[] PROGMEM = "YAW I IGNORE";
 const char configMsg132[] PROGMEM = "YAW P LIMIT";
-const char configMsg133[] PROGMEM = "YAW RATE ACC";
-const char configMsg134[] PROGMEM = "YAW RATE ACC LIMIT";
+const char configMsg133[] PROGMEM = "YAW RATE ACC LIMIT";
+const char configMsg134[] PROGMEM = "RATE ACC LIMIT";
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={

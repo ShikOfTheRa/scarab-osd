@@ -1145,8 +1145,9 @@ void displayCursor(void)
 
 #ifdef MENU_PID_ADVANCED
     if(configPage==MENU_PID_ADVANCED){
-      if (ROW==2) ROW=10;
-      if (ROW==9) ROW=1;
+      if (ROW==5) ROW=10;
+      if (ROW==9) ROW=4;
+      cursorpos=(ROW+2)*30+10+6+6;
     }
 #endif
 
@@ -1396,8 +1397,8 @@ void displayConfigScreen(void)
   {   
     MenuBuffer[0]=cfgpa.yawItermIgnoreRate;
     MenuBuffer[1]=cfgpa.yaw_p_limit;
-    MenuBuffer[2]=cfgpa.rateAccelLimit;
-    MenuBuffer[3]=cfgpa.yawRateAccelLimit;
+    MenuBuffer[2]=cfgpa.yawRateAccelLimit;
+    MenuBuffer[3]=cfgpa.rateAccelLimit;
     for(uint8_t X=0; X<=3; X++) {
       MAX7456_WriteString_P(PGMSTR(&(menu_pid_advanced[X])),ROLLT+(X*30));
       MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
