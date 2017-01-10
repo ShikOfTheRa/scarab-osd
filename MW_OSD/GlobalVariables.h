@@ -1070,10 +1070,11 @@ const char configMsg127[] PROGMEM = "S6";
 const char configMsg128[] PROGMEM = "S7";
 //-----------------------------------------------------------BETAFLIGHT PID_ADVANCED Page
 const char configMsg130[] PROGMEM = "ADVANCED PID";
-const char configMsg131[] PROGMEM = "YAW I IGNORE";
-const char configMsg132[] PROGMEM = "YAW P LIMIT";
-const char configMsg133[] PROGMEM = "YAW RATE ACC LIMIT";
-const char configMsg134[] PROGMEM = "RATE ACC LIMIT";
+const char configMsg131[] PROGMEM = "YAW RC EXPO";
+const char configMsg132[] PROGMEM = "YAW I IGNORE";
+const char configMsg133[] PROGMEM = "YAW P LIMIT";
+const char configMsg134[] PROGMEM = "YAW RATE ACC LIMIT";
+const char configMsg135[] PROGMEM = "RATE ACC LIMIT";
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={
@@ -1168,6 +1169,7 @@ const PROGMEM char * const menu_pid_advanced[] =
   configMsg132,
   configMsg133,
   configMsg134,
+  configMsg135,
 };
 
 const PROGMEM char * const menu_rc[] = 

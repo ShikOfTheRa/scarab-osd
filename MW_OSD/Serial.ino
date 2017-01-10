@@ -1008,10 +1008,11 @@ void serialMenuCommon()
 #ifdef MENU_PID_ADVANCED
   if(configPage == MENU_PID_ADVANCED && COL == 3) {    
     switch(ROW) {
-      case 1: cfgpa.yawItermIgnoreRate += menudir; break;
-      case 2: cfgpa.yaw_p_limit += menudir; break;
-      case 3: cfgpa.yawRateAccelLimit += menudir; break;
-      case 4: cfgpa.rateAccelLimit += menudir; break;
+      case 1: rcYawExpo8 += menudir; break;
+      case 2: cfgpa.yawItermIgnoreRate += menudir; break;
+      case 3: cfgpa.yaw_p_limit += menudir; break;
+      case 4: cfgpa.yawRateAccelLimit += menudir; break;
+      case 5: cfgpa.rateAccelLimit += menudir; break;
     }
   }
 #endif

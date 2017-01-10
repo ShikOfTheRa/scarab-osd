@@ -1145,8 +1145,8 @@ void displayCursor(void)
 
 #ifdef MENU_PID_ADVANCED
     if(configPage==MENU_PID_ADVANCED){
-      if (ROW==5) ROW=10;
-      if (ROW==9) ROW=4;
+      if (ROW==6) ROW=10;
+      if (ROW==9) ROW=5;
       cursorpos=(ROW+2)*30+10+6+6;
     }
 #endif
@@ -1395,11 +1395,12 @@ void displayConfigScreen(void)
 #ifdef MENU_PID_ADVANCED
   if(configPage==MENU_PID_ADVANCED)
   {   
-    MenuBuffer[0]=cfgpa.yawItermIgnoreRate;
-    MenuBuffer[1]=cfgpa.yaw_p_limit;
-    MenuBuffer[2]=cfgpa.yawRateAccelLimit;
-    MenuBuffer[3]=cfgpa.rateAccelLimit;
-    for(uint8_t X=0; X<=3; X++) {
+    MenuBuffer[0]=rcYawExpo8;
+    MenuBuffer[1]=cfgpa.yawItermIgnoreRate;
+    MenuBuffer[2]=cfgpa.yaw_p_limit;
+    MenuBuffer[3]=cfgpa.yawRateAccelLimit;
+    MenuBuffer[4]=cfgpa.rateAccelLimit;
+    for(uint8_t X=0; X<=4; X++) {
       MAX7456_WriteString_P(PGMSTR(&(menu_pid_advanced[X])),ROLLT+(X*30));
       MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
     }
@@ -1571,7 +1572,7 @@ void displayConfigScreen(void)
 #ifdef MENU_ADVANCED
   if(configPage==MENU_ADVANCED)
   {
-    for(uint8_t X=0; X<=4; X++) {
+    for(uint8_t X=0; X<=5; X++) {
       MAX7456_WriteString_P(PGMSTR(&(menu_advanced[X])),ROLLT+(X*30));
     }
 
