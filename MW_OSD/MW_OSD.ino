@@ -800,6 +800,9 @@ void setMspRequests() {
 #ifdef HAS_ALARMS
       REQ_MSP_ALARMS|
 #endif
+#ifdef MENU_PID_ADVANCED
+      REQ_MSP_PID_ADVANCED|
+#endif
 #ifdef MENU_SERVO
       REQ_MSP_SERVO_CONF|
 #endif
