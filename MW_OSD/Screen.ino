@@ -1572,7 +1572,7 @@ void displayConfigScreen(void)
 #ifdef MENU_ADVANCED
   if(configPage==MENU_ADVANCED)
   {
-    for(uint8_t X=0; X<=5; X++) {
+    for(uint8_t X=0; X<=4; X++) {
       MAX7456_WriteString_P(PGMSTR(&(menu_advanced[X])),ROLLT+(X*30));
     }
 
