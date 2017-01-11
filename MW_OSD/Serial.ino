@@ -336,6 +336,9 @@ For sub-command 3 (draw string):
 
     lastCanvas = millis();
 
+    if (configMode)
+      configExit(); // exits MWOSD menu so never be in menu when CMS mode active
+
     switch(read8()) {
     case 0: // Enter / hold canvas mode
       canvasMode = true;
