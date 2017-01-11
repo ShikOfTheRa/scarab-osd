@@ -1143,10 +1143,10 @@ void displayCursor(void)
     }
 #endif
 
-#ifdef MENU_PID_ADVANCED
-    if(configPage==MENU_PID_ADVANCED){
-      if (ROW==6) ROW=10;
-      if (ROW==9) ROW=5;
+#ifdef MENU_RC_2
+    if(configPage==MENU_RC_2){
+      if (ROW==3) ROW=10;
+      if (ROW==9) ROW=2;
       cursorpos=(ROW+2)*30+10+6+6;
     }
 #endif
@@ -1155,6 +1155,13 @@ void displayCursor(void)
 #ifdef MENU_RC
 #if defined CORRECT_MENU_RCT2
     if(configPage==MENU_RC){
+      if (ROW==9){
+        if (oldROW==8)
+          ROW=10;
+        else
+          ROW=8;
+      }
+      oldROW=ROW;
       COL=3;
       cursorpos=(ROW+2)*30+10+6+6;
     }
@@ -1392,16 +1399,13 @@ void displayConfigScreen(void)
     MAX7456_WriteString("D",83);
   }
 #endif
-#ifdef MENU_PID_ADVANCED
-  if(configPage==MENU_PID_ADVANCED)
+#ifdef MENU_RC_2
+  if(configPage==MENU_RC_2)
   {   
-    MenuBuffer[0]=rcYawExpo8;
-    MenuBuffer[1]=cfgpa.yawItermIgnoreRate;
-    MenuBuffer[2]=cfgpa.yaw_p_limit;
-    MenuBuffer[3]=cfgpa.yawRateAccelLimit;
-    MenuBuffer[4]=cfgpa.rateAccelLimit;
-    for(uint8_t X=0; X<=4; X++) {
-      MAX7456_WriteString_P(PGMSTR(&(menu_pid_advanced[X])),ROLLT+(X*30));
+    MenuBuffer[0]=tpa_breakpoint16;
+    MenuBuffer[1]=rcYawExpo8;
+    for(uint8_t X=0; X<=1; X++) {
+      MAX7456_WriteString_P(PGMSTR(&(menu_rc_2[X])),ROLLT+(X*30));
       MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
     }
   }
@@ -1418,8 +1422,7 @@ void displayConfigScreen(void)
     MenuBuffer[5]=dynThrPID;
     MenuBuffer[6]=thrMid8;
     MenuBuffer[7]=thrExpo8;
-    MenuBuffer[8]=tpa_breakpoint16;
-    for(uint8_t X=0; X<=8; X++) {
+    for(uint8_t X=0; X<=7; X++) {
       MAX7456_WriteString_P(PGMSTR(&(menu_rc[X])),ROLLT+(X*30));
       MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
     }

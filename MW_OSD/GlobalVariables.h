@@ -788,8 +788,6 @@ uint16_t flyingTime=0;
 #define MSP_DEBUG                254   //out message         debug1,debug2,debug3,debug4
 
 // Betaflight specific
-#define MSP_PID_ADVANCED         94
-#define MSP_SET_PID_ADVANCED     95
 
 // Cleanflight/Betaflight specific
 #define MSP_PID_CONTROLLER       59    //in message          no param
@@ -983,7 +981,6 @@ const char configMsg27[] PROGMEM = "THROTTLE EXPO";
 #if defined CORRECT_MENU_RCT2
   const char configMsg23a[] PROGMEM = "ROLL RATE";
   const char configMsg23b[] PROGMEM = "PITCH RATE";
-  const char configMSg28[]  PROGMEM = "TPA BREAKPOINT";
 #endif
 //-----------------------------------------------------------Page3
 const char configMsg30[] PROGMEM = "VOLTAGE";
@@ -1071,13 +1068,10 @@ const char configMsg125[] PROGMEM = "S4";
 const char configMsg126[] PROGMEM = "S5";
 const char configMsg127[] PROGMEM = "S6";
 const char configMsg128[] PROGMEM = "S7";
-//-----------------------------------------------------------BETAFLIGHT PID_ADVANCED Page
-const char configMsg130[] PROGMEM = "ADVANCED PID";
-const char configMsg131[] PROGMEM = "YAW RC EXPO";
-const char configMsg132[] PROGMEM = "YAW I IGNORE";
-const char configMsg133[] PROGMEM = "YAW P LIMIT";
-const char configMsg134[] PROGMEM = "YAW RATE ACC LIMIT";
-const char configMsg135[] PROGMEM = "RATE ACC LIMIT";
+//-----------------------------------------------------------RC TUNING Page 2
+const char configMsg130[] PROGMEM = "RC TUNING 2";
+const char configMsg131[] PROGMEM = "TPA BREAKPOINT";
+const char configMsg132[] PROGMEM = "YAW RC EXPO";
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={
@@ -1113,7 +1107,6 @@ const unsigned char UnitsIcon[8]={
 #define REQ_MSP_FW_CONFIG      (1L<<20) 
 #define REQ_MSP_PIDNAMES       (1L<<21)
 #define REQ_MSP_SERVO_CONF     (1L<<22)
-#define REQ_MSP_PID_ADVANCED   (1L<<23)
 // Menu selections
 const PROGMEM char * const menu_choice_unit[] =
 {   
@@ -1166,13 +1159,10 @@ const PROGMEM char * const menu_pid[] =
 };
 #endif
 
-const PROGMEM char * const menu_pid_advanced[] = 
+const PROGMEM char * const menu_rc_2[] = 
 {   
   configMsg131,
   configMsg132,
-  configMsg133,
-  configMsg134,
-  configMsg135,
 };
 
 const PROGMEM char * const menu_rc[] = 
@@ -1186,7 +1176,6 @@ const PROGMEM char * const menu_rc[] =
     configMsg25,
     configMsg26,
     configMsg27,
-    configMSg28,
   #elif defined CORRECT_MENU_RCT1 
     configMsg21,
     configMsg22,
@@ -1315,11 +1304,11 @@ const PROGMEM char * const menutitle_item[] =
 #ifdef MENU_PID
   configMsg10,
 #endif
-#ifdef MENU_PID_ADVANCED
-  configMsg130,
-#endif
 #ifdef MENU_RC
   configMsg20,
+#endif
+#ifdef MENU_RC_2
+  configMsg130,
 #endif
 #ifdef MENU_SERVO
   configMsg120,

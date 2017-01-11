@@ -377,11 +377,6 @@ void loop()
       case REQ_MSP_PID:
         MSPcmdsend = MSP_PID;
         break;
-#ifdef MENU_PID_ADVANCED  
-      case REQ_MSP_PID_ADVANCED:
-        MSPcmdsend = MSP_PID_ADVANCED;
-        break;
-#endif        
 #ifdef MENU_SERVO  
       case REQ_MSP_SERVO_CONF:
         MSPcmdsend = MSP_SERVO_CONF;
@@ -679,7 +674,7 @@ void loop()
   }
 //  setMspRequests();
   serialMSPreceive(1);
-  delay(1);
+//  delay(1);
 
 }  // End of main loop
 #endif //main loop
@@ -799,9 +794,6 @@ void setMspRequests() {
 #endif
 #ifdef HAS_ALARMS
       REQ_MSP_ALARMS|
-#endif
-#ifdef MENU_PID_ADVANCED
-      REQ_MSP_PID_ADVANCED|
 #endif
 #ifdef MENU_SERVO
       REQ_MSP_SERVO_CONF|
