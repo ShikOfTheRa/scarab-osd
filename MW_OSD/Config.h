@@ -27,7 +27,8 @@
 // Choose ONLY ONE option from the following long list :-
 
 // latest release...
-#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.0 onwards (3.1 at time of this MWOSD release)
+#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
+//#define BETAFLIGHT3               // Uncomment this if you are using BETAFLIGHT version 3.0.x
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9 onwards 1.14.2 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define APM                       // Uncomment this if you are using APM MAVLINK 1.0 compatible FC

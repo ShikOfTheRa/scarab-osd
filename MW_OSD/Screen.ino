@@ -1281,6 +1281,13 @@ void displayCursor(void)
       cursorpos=(ROW+2)*30+10+6+6;
     }
 #endif     
+#ifdef MENU_INFO
+    if(configPage==MENU_INFO)
+    {  
+      COL=3;
+      ROW=10;
+    }
+#endif
 #ifdef MENU_PROFILE
     if(configPage==MENU_PROFILE)
     {  
@@ -1631,6 +1638,7 @@ void displayConfigScreen(void)
     Menuconfig_onoff(MAGD,S_ALARMS_TEXT);
   }
 #endif  
+
 #ifdef MENU_PROFILE
   if(configPage==MENU_PROFILE){
 #ifdef CORRECTLOOPTIME
@@ -1644,6 +1652,14 @@ void displayConfigScreen(void)
     for(uint8_t X=0; X<=MENU10MAX; X++) {
       MAX7456_WriteString_P(PGMSTR(&(menu_profile[X])), ROLLT+(X*30));
       MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),113+(30*X));
+    }
+  }
+#endif  
+
+#ifdef MENU_INFO
+  if(configPage==MENU_INFO){
+    for(uint8_t X=0; X<=2; X++) {
+      MAX7456_WriteString_P(PGMSTR(&(menu_info[X])), ROLLT+(X*30));
     }
   }
 #endif  

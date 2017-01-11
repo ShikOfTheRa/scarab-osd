@@ -46,7 +46,7 @@
 #endif
 
 #ifdef BETAFLIGHT    //set up latest at time of release
-  #define BETAFLIGHT3
+  #define BETAFLIGHT31
 #endif
 
 #ifdef TAULABS    //set up latest at time of release
@@ -136,7 +136,7 @@
   #define MAXPAGE       MENU_PROFILE
 #endif
 
-#if defined BETAFLIGHT3
+#if defined BETAFLIGHT2
   #define AMPERAGE_DIV 10
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
@@ -154,6 +154,28 @@
   #define MENU_ADVANCED 8       //ADVANCED
   #define MENU_ALARMS   9       //ALARMS
   #define MENU_PROFILE  10      //PROFILE+PID CONTROLLER
+  #define MAXPAGE       MENU_PROFILE
+#endif
+
+#if defined BETAFLIGHT31
+  #define AMPERAGE_DIV 10
+  #define CORRECT_MSP_CF2
+  #define CORRECT_MENU_RCT2
+  #define ENABLE_MSP_SAVE_ADVANCED
+  #define ACROPLUS
+
+  #define MENU_STAT     0       //STATISTICS
+  #define MENU_PID      1       //PID CONFIG
+  #define MENU_RC       2       //RC TUNING
+  #define MENU_RC_2     3       //RC TUNING PAGE 2
+  #define MENU_INFO     4       //RC TUNING PAGE 2
+  #define MENU_VOLTAGE  5       //VOLTAGE
+  #define MENU_RSSI     6       //RSSI
+  #define MENU_CURRENT  7       //CURRENT
+  #define MENU_DISPLAY  8       //DISPLAY
+  #define MENU_ADVANCED 9       //ADVANCED
+  #define MENU_ALARMS   10      //ALARMS
+  #define MENU_PROFILE  11      //PROFILE+PID CONTROLLER
   #define MAXPAGE       MENU_PROFILE
 
   #define CANVAS_SUPPORT

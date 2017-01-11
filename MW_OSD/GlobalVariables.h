@@ -1072,6 +1072,11 @@ const char configMsg128[] PROGMEM = "S7";
 const char configMsg130[] PROGMEM = "RC TUNING 2";
 const char configMsg131[] PROGMEM = "TPA BREAKPOINT";
 const char configMsg132[] PROGMEM = "YAW RC EXPO";
+//-----------------------------------------------------------INFO Page
+const char configMsg140[] PROGMEM = "ACCESS ALL SETTINGS";
+const char configMsg141[] PROGMEM = "TX  :THRT MIDDLE";
+const char configMsg142[] PROGMEM = "    +YAW LEFT";
+const char configMsg143[] PROGMEM = "    +PITCH FULL";
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={
@@ -1158,12 +1163,6 @@ const PROGMEM char * const menu_pid[] =
 #endif
 };
 #endif
-
-const PROGMEM char * const menu_rc_2[] = 
-{   
-  configMsg131,
-  configMsg132,
-};
 
 const PROGMEM char * const menu_rc[] = 
 {   
@@ -1296,6 +1295,19 @@ const PROGMEM char * const menu_servo[] =
   configMsg128,
 };
 
+const PROGMEM char * const menu_rc_2[] = 
+{   
+  configMsg131,
+  configMsg132,
+};
+
+const PROGMEM char * const menu_info[] = 
+{   
+  configMsg141,
+  configMsg142,
+  configMsg143,
+};
+
 const PROGMEM char * const menutitle_item[] = 
 {   
 #ifdef MENU_STAT
@@ -1309,6 +1321,9 @@ const PROGMEM char * const menutitle_item[] =
 #endif
 #ifdef MENU_RC_2
   configMsg130,
+#endif
+#ifdef MENU_INFO
+  configMsg140,
 #endif
 #ifdef MENU_SERVO
   configMsg120,
