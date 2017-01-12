@@ -304,7 +304,7 @@ void serialMSPCheck()
   #ifdef CANVAS_SUPPORT
   if (cmdMSP == MSP_DISPLAYPORT) {
     // Don't go into canvas mode when armed or in other special mode
-    if (armed || fontMode || configMode)
+    if (armed || fontMode)
         return;
 /*
 Notes on MSP_DISPLAYPORT protocol

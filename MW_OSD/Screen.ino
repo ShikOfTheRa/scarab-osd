@@ -1658,7 +1658,7 @@ void displayConfigScreen(void)
 
 #ifdef MENU_INFO
   if(configPage==MENU_INFO){
-    for(uint8_t X=0; X<=2; X++) {
+    for(uint8_t X=0; X<=4; X++) {
       MAX7456_WriteString_P(PGMSTR(&(menu_info[X])), ROLLT+(X*30));
     }
   }

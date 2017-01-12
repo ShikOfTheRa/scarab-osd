@@ -1077,6 +1077,8 @@ const char configMsg140[] PROGMEM = "ACCESS ALL SETTINGS";
 const char configMsg141[] PROGMEM = "TX  :THRT MIDDLE";
 const char configMsg142[] PROGMEM = "    +YAW LEFT";
 const char configMsg143[] PROGMEM = "    +PITCH FULL";
+const char configMsg144[] PROGMEM = " ";
+const char configMsg145[] PROGMEM = "F3 CONTROLLERS ONLY";
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={
@@ -1306,6 +1308,8 @@ const PROGMEM char * const menu_info[] =
   configMsg141,
   configMsg142,
   configMsg143,
+  configMsg144,
+  configMsg145,
 };
 
 const PROGMEM char * const menutitle_item[] = 
