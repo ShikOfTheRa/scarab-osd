@@ -422,6 +422,7 @@ For sub-command 3 (draw string):
     #if defined RESETGPSALTITUDEATARM
       if (!armed){
         GPS_home_altitude=GPS_altitude;
+        MSP_home_set=1;
       } 
       GPS_altitude=GPS_altitude-GPS_home_altitude;
     #endif // RESETGPSALTITUDEATARM  

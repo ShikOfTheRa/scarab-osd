@@ -190,6 +190,7 @@ int8_t PulseType = 0; //0 PWM 1 PPM
 uint16_t pwmval1=0;
 uint16_t pwmval2=0;
 uint8_t debugtext=0;
+uint8_t MSP_home_set=0;
 #if defined CORRECT_MSP_BF1
   uint8_t bfconfig[25];
 #endif

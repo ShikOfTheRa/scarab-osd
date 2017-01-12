@@ -35,7 +35,8 @@ void GPS_reset_home_position() {
   if (GPS_fix && GPS_numSat >= MINSATFIX) {
     GPS_home[LAT] = GPS_latitude;
     GPS_home[LON] = GPS_longitude;
-    mw_ltm.GPS_altitude_home = GPS_altitude;
+    if (!MSP_home_set)
+      mw_ltm.GPS_altitude_home = GPS_altitude;
     GPS_calc_longitude_scaling(GPS_latitude);  //need an initial value for distance and bearing calc
     GPS_fix_HOME = 1;
   }
