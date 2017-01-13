@@ -30,6 +30,7 @@
   
 * Ensure the application.macosx/MW_OSD_GUI.app/Contents/MacOS/MW_OSD_GUI file is executable
   * If not issue chmod +x on that file
+  * chmod 755 MW_OSD_GUI/application.macosx/MW_OSD_GUI.app/Contents/MacOS/MW_OSD_GUI
 
 ---
 
