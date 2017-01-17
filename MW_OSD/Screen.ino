@@ -1117,7 +1117,7 @@ void displayDirectionToHome(void)
 
 void displayCursor(void)
 {
-  int cursorpos;
+  uint16_t cursorpos=0;
   if(ROW==10){
     if(COL==3) cursorpos=SAVEP+16-1;    // page
     if(COL==1) cursorpos=SAVEP-1;       // exit
@@ -2082,7 +2082,7 @@ void displayArmed(void)
     timer.alarms=millis();
   }
          
-  uint8_t queueindexbit;
+  uint8_t queueindexbit=0;
   for (uint8_t i = 0; i <= 7; i++) {
       if  (queueindex & (1<<i))
         queueindexbit=i;
@@ -2132,7 +2132,7 @@ void formatDistance(int32_t d2f, uint8_t units, uint8_t type ) {
     screenBuffer[xx-1] = DECIMAL;
     xx++;
     screenBuffer[xx] = 0;
-    type = (type==2) ? type=6 : type=4 ; //           
+    type = (type==2) ? type=6 : type=4; //           
   }
   else{
     itoa(d2f, screenBuffer+units, 10);

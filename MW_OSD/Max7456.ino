@@ -203,7 +203,7 @@ void MAX7456Setup(void)
   }
   else {                              // NTSC
     MAX_screen_size = 390;
-    MAX_screen_rows = 13;
+    MAX_screen_rows=13;
   }
 
   // Set up the Max chip. Enable display + set standard.
@@ -274,7 +274,7 @@ void MAX7456_WriteString_P(const char *string, int Adresse)
 #ifdef CANVAS_SUPPORT
 void MAX7456_ClearScreen(void)
 {
-  for(int xx = 0; xx < MAX_screen_size; ++xx) {
+  for(uint16_t xx = 0; xx < MAX_screen_size; ++xx) {
     screen[xx] = ' ';
 #ifdef INVERTED_CHAR_SUPPORT
     bitCLR(screenAttr, xx);
@@ -309,7 +309,6 @@ void MAX7456_WaitVSYNC(void)
 void MAX7456_DrawScreen()
 {
   uint16_t xx;
-  bool invActive = false;
 
   MAX7456ENABLE;
 
@@ -329,6 +328,7 @@ void MAX7456_DrawScreen()
 #endif
 
 #ifdef INVERTED_CHAR_SUPPORT
+    bool invActive = false;
     if (!invActive && bitISSET(screenAttr, xx)) {
       MAX7456_Send(MAX7456ADD_DMM, 1|(1<<3));
       invActive = true;
