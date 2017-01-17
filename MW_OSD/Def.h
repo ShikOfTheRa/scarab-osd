@@ -725,15 +725,6 @@
   #define IDBOXWP 20
 #endif
 
-
-/********************  info for GUI  *********************/
-#define INFO_CONTROLLER          0            // default - unknown 
-#define INFO_VERSION             MWOSDVERSION // version specified 
-#define INFO_VENDOR              VENDOR       // vendor specific reference 
-#define INFO_HARDWARE            0            // default - unknown 
-#define INFO_AIRCRAFT            0            // default - unknown 
-#define INFO_OPTIONS1            0            // default - unknown 
-
 #ifdef MULTIWII
   #define INFO_CONTROLLER 1
 #endif
@@ -827,6 +818,32 @@
 #endif
 #ifdef FIXEDWING
   #define INFO_AIRCRAFT 2
+#endif
+
+
+/********************  info for GUI  *********************/
+#ifndef INFO_CONTROLLER
+  #define INFO_CONTROLLER          0            // default - unknown 
+#endif
+
+#ifndef INFO_VERSION
+  #define INFO_VERSION             MWOSDVERSION // version specified 
+#endif
+
+#ifndef INFO_VENDOR
+  #define INFO_VENDOR              VENDOR       // vendor specific reference 
+#endif
+
+#ifndef INFO_HARDWARE
+  #define INFO_HARDWARE            0            // default - unknown 
+#endif
+
+#ifndef INFO_AIRCRAFT
+  #define INFO_AIRCRAFT            0            // default - unknown 
+#endif
+
+#ifndef INFO_O
+  #define INFO_OPTIONS1            0            // default - unknown 
 #endif
 
 

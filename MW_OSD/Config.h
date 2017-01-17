@@ -4,14 +4,15 @@
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
-#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware
-//#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
+//#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware
+#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
 //#define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
 //#define RTFQV1                    // Uncomment this if using standard RTFQ/Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
 //#define RTFQMICRO                 // Uncomment this if using micro RTFQ/Witespy Micro Minim OSD, select this to correct for swapped bat1/bat 2.  
 //#define RUSHDUINO                 // Uncomment this if using Rushduino
 //#define KYLIN250PDB               // Uncomment this if using a Kylin 250 FPV PDB (Using A6 as VOLTAGEPIN)
 //#define AIRBOTMICRO               // Uncomment this if using an airbot MicroOSD
+//#define IMPULSERC_VTX             // Uncomment this if using an ImpulseRC integrated OSD/VTX
 // NOTE-some of the popular RTFQ/Witespy boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct: 
 // #define SWAPVOLTAGEPINS          // For boards with batt voltage appearing on vid voltage
@@ -27,13 +28,13 @@
 // Choose ONLY ONE option from the following long list :-
 
 // latest release...
+//#define MULTIWII                  // Uncomment this if you are using latest MULTIWII version from repository (2.4 at time of this MWOSD release)
 #define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
 //#define BETAFLIGHT3               // Uncomment this if you are using BETAFLIGHT version 3.0.x
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9 onwards 1.14.2 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define APM                       // Uncomment this if you are using APM MAVLINK 1.0 compatible FC
 //#define PIXHAWK                   // Uncomment this if you are using PIXHAWK MAVLINK 1.0 compatible FC
-//#define MULTIWII                  // Uncomment this if you are using latest MULTIWII version from repository (2.4 at time of this MWOSD release)
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
 //#define LIBREPILOT                // Uncomment this if you are using the latest LibrePilot MSP Module
 //#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
@@ -59,8 +60,8 @@
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
-#define ROTORCRAFT                  // Default for multirotors etc. 
-//#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight 
+//#define ROTORCRAFT                  // Default for multirotors etc. 
+#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight 
 
 
 /********************       Debug      *********************/
@@ -322,7 +323,10 @@
 #define HIGHTHROTTLE 1900                // Maximum recognised value for throttle 
 #define LOWTHROTTLE  1100                // Minimum recognised value for throttle
 
-
+/********************           VTX settings           *********************/
+ //Choose ONLY ONE option:
+ #define VTX_REGION_UNRESTRICTED                // Enable for all 40 channels
+ //#define VTX_REGION_AUSTRALIA                   // Enable for AU legal channels and power level only
 
 
 
