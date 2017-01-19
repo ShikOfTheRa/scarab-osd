@@ -498,6 +498,11 @@
     #define MAX_SOFTRESET
 #endif
 
+
+#ifdef ANDROMEDA
+    #define MAX_SOFTRESET
+#endif
+
 #ifdef RTFQV1                     
     #define SWAPVOLTAGEPINS
     #define ALTERNATEDIVIDERS
@@ -810,6 +815,9 @@
 #endif
 #ifdef AIRBOTMICRO
   #define INFO_HARDWARE 8
+#endif
+#ifdef ANDROMEDA
+  #define INFO_HARDWARE 9
 #endif
 
 

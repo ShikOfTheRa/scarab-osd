@@ -12,8 +12,9 @@
 //#define RUSHDUINO                 // Uncomment this if using Rushduino
 //#define KYLIN250PDB               // Uncomment this if using a Kylin 250 FPV PDB (Using A6 as VOLTAGEPIN)
 //#define AIRBOTMICRO               // Uncomment this if using an airbot MicroOSD
-//#define IMPULSERC_VTX             // Uncomment this if using an ImpulseRC integrated OSD/VTX
-// NOTE-some of the popular RTFQ/Witespy boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
+//#define ANDROMEDA                 // Uncomment this if using an Andromeda (http://www.multiwiicopter.com/)
+
+// NOTE-some boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct: 
 // #define SWAPVOLTAGEPINS          // For boards with batt voltage appearing on vid voltage
 // #define ALTERNATEDIVIDERS        // For boards with voltage unable to be adjusted high enough
