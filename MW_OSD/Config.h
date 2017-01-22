@@ -43,6 +43,7 @@
 //#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight 
 //#define FIXEDWING_BF_SERVO        // Uncomment this if you are using fixed wing Baseflight with additional SERVO adjustment menu.
 //#define HARAKIRI                  // Uncomment this if you are using HARAKIRI (for BOXNAMES compatibility)
+//#define RACEFLIGHT                // Uncomment this if you are using RACEFLIGHT - untested. Test and feedback required
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define KISS                      // Uncomment this if you are using KISS FC
 //#define SKYTRACK                  // Under development

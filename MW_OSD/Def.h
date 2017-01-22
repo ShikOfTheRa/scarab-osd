@@ -73,6 +73,9 @@
 #ifdef BASEFLIGHT     //set up latest at time of release
   #define BASEFLIGHT20150627
 #endif
+  
+#ifdef RACEFLIGHT     //set up latest at time of release
+#endif
 
 #ifdef FIXEDWING_BF     //set up latest at time of release
   // based upon these..
@@ -306,6 +309,19 @@
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
   #define MENU_ALARMS   8       //ALARMS
+  #define MAXPAGE MENU_ALARMS
+#endif
+
+#if defined (RACEFLIGHT)
+  #define AMPERAGE_DIV  10
+  #define MENU_STAT     0       //STATISTICS
+  #define MENU_PID      1       //PID CONFIG
+  #define MENU_VOLTAGE  2       //VOLTAGE
+  #define MENU_RSSI     3       //RSSI
+  #define MENU_CURRENT  4       //CURRENT
+  #define MENU_DISPLAY  5       //DISPLAY
+  #define MENU_ADVANCED 6       //ADVANCED
+  #define MENU_ALARMS   7       //ALARMS
   #define MAXPAGE MENU_ALARMS
 #endif
 
@@ -789,6 +805,9 @@
 #endif
 #ifdef NOCONTROLLER
   #define INFO_CONTROLLER 20
+#endif
+#ifdef RACEFLIGHT
+  #define INFO_CONTROLLER 21
 #endif
 
 
