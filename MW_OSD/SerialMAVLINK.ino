@@ -161,11 +161,13 @@ void serialMAVCheck(){
     }
     else{
       if (armedglitchprotect>0){
-        armedglitchprotect--;        
+          armedglitchprotect--;        
       }
       else{
         armed=0;
-        GPS_fix_HOME=0;
+        #ifdef RESETHOMEARMED
+          GPS_fix_HOME=0;
+        #endif      
       }
     }
 #if defined MAVLINKREQ
@@ -179,9 +181,6 @@ void serialMAVCheck(){
   case MAVLINK_MSG_ID_VFR_HUD:
     GPS_speed=(int16_t)serialbufferfloat(4)*100;    // m/s-->cm/s 
     GPS_altitude=(int16_t)serialbufferfloat(8);     // m-->m
-    if (GPS_fix_HOME == 0){
-      GPS_reset_home_position();
-    }
     GPS_altitude=GPS_altitude - GPS_altitude_home;
     MwAltitude = (int32_t) GPS_altitude *100;       // m--cm gps to baro
     MwHeading=serialBuffer[16]|serialBuffer[17]<<8; // deg (-->deg*10 if GPS heading)
@@ -235,6 +234,9 @@ void serialMAVCheck(){
     MWAmperage=serialBuffer[16]|(serialBuffer[17]<<8);
     break;
   }
+  if (GPS_fix_HOME == 0){
+    GPS_reset_home_position();
+  }
   if ((GPS_fix>2) && (GPS_numSat >= MINSATFIX) && armed){
     GPS_fix_HOME = 1;
   }
@@ -243,7 +245,6 @@ void serialMAVCheck(){
     MwAltitude = 0 ;          
     GPS_distanceToHome = 0;
     GPS_directionToHome = 0;
-    GPS_fix_HOME = 0;
   }
 }
 

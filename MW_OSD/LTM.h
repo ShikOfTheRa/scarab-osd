@@ -38,7 +38,6 @@ void GPS_reset_home_position() {
     if (!MSP_home_set)
       mw_ltm.GPS_altitude_home = GPS_altitude;
     GPS_calc_longitude_scaling(GPS_latitude);  //need an initial value for distance and bearing calc
-    GPS_fix_HOME = 1;
   }
 }
 
@@ -135,7 +134,7 @@ void ltm_check() {
       }
       else{
         armed=0;
-#ifndef SETHOMEARMED
+#ifdef RESETHOMEARMED
         GPS_fix_HOME = 0;
 #endif
       }

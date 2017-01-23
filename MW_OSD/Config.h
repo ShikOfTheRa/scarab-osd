@@ -4,8 +4,8 @@
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
-//#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware
-#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
+#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware
+//#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
 //#define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
 //#define RTFQV1                    // Uncomment this if using standard RTFQ/Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
 //#define RTFQMICRO                 // Uncomment this if using micro RTFQ/Witespy Micro Minim OSD, select this to correct for swapped bat1/bat 2.  
@@ -29,23 +29,23 @@
 // Choose ONLY ONE option from the following long list :-
 
 // latest release...
-//#define MULTIWII                  // Uncomment this if you are using latest 2.4 MULTIWII / MAHOWII  (https://github.com/mahowik/mahowii)
-#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
-//#define BETAFLIGHT3               // Uncomment this if you are using BETAFLIGHT version 3.0.x
+#define BETAFLIGHT                  // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
+//#define BETAFLIGHT3               // Uncomment this if you are using BETAFLIGHT version 3.0.x 
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9 onwards 1.14.2 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define APM                       // Uncomment this if you are using APM MAVLINK 1.0 compatible FC
 //#define PIXHAWK                   // Uncomment this if you are using PIXHAWK MAVLINK 1.0 compatible FC
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
+//#define MULTIWII                  // Uncomment this if you are using latest 2.4 MULTIWII / MAHOWII  (https://github.com/mahowik/mahowii)
+//#define KISS                      // Uncomment this if you are using KISS FC
+//#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
+//#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define LIBREPILOT                // Uncomment this if you are using the latest LibrePilot MSP Module
 //#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
-//#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
 //#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight 
 //#define FIXEDWING_BF_SERVO        // Uncomment this if you are using fixed wing Baseflight with additional SERVO adjustment menu.
 //#define HARAKIRI                  // Uncomment this if you are using HARAKIRI (for BOXNAMES compatibility)
 //#define RACEFLIGHT                // Uncomment this if you are using RACEFLIGHT - untested. Test and feedback required
-//#define NAZA                      // Uncomment this if you are using NAZA flight controller
-//#define KISS                      // Uncomment this if you are using KISS FC
 //#define SKYTRACK                  // Under development
 //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
 //#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
@@ -103,7 +103,7 @@
 
 /********************       TELEMETRY settings      *********************/
 //Select ONLY if you are sure your OSD is connected to a telemetry feed such as MAVLINK/LTM:
-//#define SETHOMEARMED              // Uncomment this ONLY if armed information is not sent within telemetry feeed. Or you do not want to reset home position when arming.
+//#define RESETHOMEARMED            // Uncomment this ONLY if armed information is sent within telemetry feeed AND you do not want to reset home position when re-arming. DO NOT DISARM IN FLIGHT 
 //#define FORCE_MSP                 // Uncomment to enable use of MSP as well as telemetry. Uses more memory 
 //#define PROTOCOL_LTM              // To use LTM protocol instead of MSP
 
@@ -166,6 +166,8 @@
 #define MAV_SYS_ID 1                // System ID of MAV. 
 #define MAV_COM_ID 1                // Component ID of MAV.
 //#define MAV_ARMED                 // Forces OSD to be always armed (for when MAV does not send armed status in heartbeat).
+//#define MAV_RESET_HOME            // Resets home position when not armed. When enabled, note that RX glitch etc. could potentially reset home position.
+
 
 /******************** Serial MSP speed settings *********************/
 // Choose ONLY ONE option: increases speeds of serial update - but with impact to flight controller 
