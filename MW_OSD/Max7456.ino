@@ -402,6 +402,7 @@ void write_NVM(uint8_t char_address)
 
   MAX7456_Send(MAX7456ADD_VM0, OSD_ENABLE|VERTICAL_SYNC_NEXT_VSYNC|VIDEO_MODE); // turn on screen next vertical
   MAX7456DISABLE  
+  delay(20);
 #else
   delay(12);
 #endif
