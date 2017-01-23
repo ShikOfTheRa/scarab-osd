@@ -935,8 +935,11 @@ void displayGPSAltitude(void){
       xx = GPS_altitude * 3.2808; // Mt to Feet
     else
       xx = GPS_altitude;          // Mt
-    if(((xx/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
-      return;
+
+    if (Settings[S_ALTITUDE_ALARM]>0){
+      if(((xx/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
+        return;
+    }
     formatDistance(xx,1,0);
     MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
   }
@@ -972,8 +975,10 @@ void displayGPS_speed(void)
     speedMAX=xx; 
   if(!fieldIsVisible(speedPosition))
     return;
-  if((xx>Settings[S_SPEED_ALARM])&&(timer.Blink2hz))
-    return;    
+  if (Settings[S_SPEED_ALARM]>0){
+    if((xx>Settings[S_SPEED_ALARM])&&(timer.Blink2hz))
+      return;
+  }    
   screenBuffer[0]=speedUnitAdd[Settings[S_UNITSYSTEM]];
   itoa(xx,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(speedPosition));
@@ -1026,8 +1031,10 @@ void displayAltitude(void)
     return;
   if(!Settings[S_BAROALT])
     return;
-  if(((altitude/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
-    return;   
+  if (Settings[S_ALTITUDE_ALARM]>0){
+    if(((altitude/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
+      return;   
+  }
   formatDistance(altitude,1,0);
   MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition));
 #ifdef SHOW_MAX_ALTITUDE
@@ -1072,8 +1079,10 @@ void displayDistanceToHome(void)
   if(!fieldIsVisible(GPS_distanceToHomePosition))
     return;
 
-  if(((dist/100)>=Settings[S_DISTANCE_ALARM])&&(timer.Blink2hz))
-    return;
+  if (Settings[S_DISTANCE_ALARM]>0){
+    if(((dist/100)>=Settings[S_DISTANCE_ALARM])&&(timer.Blink2hz))
+      return;
+  }
 
   formatDistance(dist,1,2);
   MAX7456_WriteString(screenBuffer,getPosition(GPS_distanceToHomePosition));
