@@ -45,6 +45,10 @@
   #define MULTIWII_V24
 #endif
 
+#ifdef MAHOWII       //set up latest at time of release
+  #define MULTIWII_V24
+#endif
+
 #ifdef BETAFLIGHT    //set up latest at time of release
   #define BETAFLIGHT31
 #endif

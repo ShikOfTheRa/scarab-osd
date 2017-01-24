@@ -36,7 +36,8 @@
 //#define APM                       // Uncomment this if you are using APM MAVLINK 1.0 compatible FC
 //#define PIXHAWK                   // Uncomment this if you are using PIXHAWK MAVLINK 1.0 compatible FC
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
-//#define MULTIWII                  // Uncomment this if you are using latest 2.4 MULTIWII / MAHOWII  (https://github.com/mahowik/mahowii)
+//#define MULTIWII                  // Uncomment this if you are using latest 2.4 MULTIWII
+//#define MAHOWII                   // Uncomment this if you are using MAHOWII (https://github.com/mahowik/mahowii)
 //#define KISS                      // Uncomment this if you are using KISS FC
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
