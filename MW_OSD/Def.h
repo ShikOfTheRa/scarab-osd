@@ -414,17 +414,6 @@
   #define AMPERAGE_DIV 10
 #endif
 
-#ifdef NOCONTROLLER
-  #undef  INTRO_MENU
-  #undef  ALARM_MSP
-  #undef  ALARM_SATS
-  #undef  ALARM_GPS
-  #undef  OSD_SWITCH_RC
-  #define HIDEARMEDSTATUS
-  #define MENU_STAT  0           //STATISTICS
-  #define MAXPAGE MENU_STAT
-#endif
-
 #ifdef SKYTRACK
   #undef  INTRO_MENU
   #undef  ALARM_MSP
@@ -434,6 +423,23 @@
   #define MENU_STAT  0           //STATISTICS
   #define MAXPAGE MENU_STAT
   #define PROTOCOL_SKYTRACK
+#endif
+
+// Flight Controller Software types to be added before here...
+
+#ifndef MAXPAGE
+  #define NOCONTROLLER
+#endif
+
+#ifdef NOCONTROLLER
+  #undef  INTRO_MENU
+  #undef  ALARM_MSP
+  #undef  ALARM_SATS
+  #undef  ALARM_GPS
+  #undef  OSD_SWITCH_RC
+  #define HIDEARMEDSTATUS
+  #define MENU_STAT  0           //STATISTICS
+  #define MAXPAGE MENU_STAT
 #endif
 
 #ifdef HAS_ALARMS

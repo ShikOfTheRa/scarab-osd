@@ -4,7 +4,7 @@
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
-#define MINIMOSD                    // Uncomment this if using standard MINIMOSD hardware
+//#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
 //#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
 //#define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
 //#define RTFQV1                    // Uncomment this if using standard RTFQ/Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
@@ -29,7 +29,7 @@
 // Choose ONLY ONE option from the following long list :-
 
 // latest release...
-#define BETAFLIGHT                  // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
+//#define BETAFLIGHT                  // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
 //#define BETAFLIGHT3               // Uncomment this if you are using BETAFLIGHT version 3.0.x 
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9 onwards 1.14.2 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
