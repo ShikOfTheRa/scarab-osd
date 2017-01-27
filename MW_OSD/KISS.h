@@ -34,6 +34,7 @@ uint16_t calculateCurrentFromConsumedCapacity(uint16_t mahUsed)
 }
 
 void kiss_sync() {
+  timer.packetcount++;
 #ifdef ALARM_MSP
   timer.MSP_active=ALARM_MSP;             // getting something on serial port
 #endif

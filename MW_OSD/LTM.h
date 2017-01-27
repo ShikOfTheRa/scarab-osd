@@ -64,6 +64,7 @@ uint16_t calculateCurrentFromConsumedCapacity(uint16_t mahUsed)
 }
 
 void ltm_check() {
+  timer.packetcount++;
   mw_ltm.LTMreadIndex=0;
   static uint8_t GPS_fix_HOME_validation=GPSHOMEFIX;
   static uint8_t armedglitchprotect=0;
