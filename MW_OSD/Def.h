@@ -588,6 +588,7 @@
 
 #ifdef AIRBOTMICRO
     #define MAX_SOFTRESET
+    #define SWAPVOLTAGEPINS
 #endif
 
 

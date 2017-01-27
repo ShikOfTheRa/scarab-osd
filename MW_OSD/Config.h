@@ -63,8 +63,8 @@
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
-//#define ROTORCRAFT                  // Default for multirotors etc. 
-#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight 
+#define ROTORCRAFT                // Default for multirotors etc. 
+//#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight 
 
 
 /********************       Debug      *********************/
