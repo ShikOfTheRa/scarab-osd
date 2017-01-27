@@ -425,6 +425,72 @@
   #define PROTOCOL_SKYTRACK
 #endif
 
+
+#if defined GPSOSD_UBLOX
+  #define UBLOX
+#endif
+#if defined GPSOSD_NMEA
+  #define NMEA
+#endif
+#if defined GPSOSD_MTK
+  #define MTK
+#endif
+
+
+#if defined MTK_BINARY16
+  #define GPSOSD
+  #define NMEA
+  #define INIT_MTK_GPS
+  #define MTK_BINARY16
+#endif
+
+#if defined MTK_BINARY19
+  #define GPSOSD
+  #define NMEA
+  #define INIT_MTK_GPS
+  #define MTK_BINARY19
+#endif
+
+#if defined MTK
+  #define GPSOSD
+  #define NMEA
+  #define INIT_MTK_GPS
+#endif
+
+#if defined UBLOX
+  #define GPSOSD
+#endif
+
+#if defined NMEA
+  #define GPSOSD
+#endif
+
+#if defined NAZA
+  #define GPSOSD
+#endif
+
+#if defined GPSOSD
+  #undef  INTRO_MENU
+  #ifndef NAZA
+    #undef  ALARM_MSP
+  #endif
+  #undef  OSD_SWITCH_RC
+  #undef  DISPLAY_PR
+  #define NOAHI
+  
+  #define HIDEARMEDSTATUS
+  #define ALARM_GPS 5
+
+  #define MENU_STAT     0       //STATISTICS
+  #define MENU_VOLTAGE  1       //VOLTAGE
+  #define MENU_RSSI     2       //RSSI
+  #define MENU_CURRENT  3       //CURRENT
+  #define MENU_DISPLAY  4       //DISPLAY
+  #define MENU_ADVANCED 5       //ADVANCED
+  #define MENU_ALARMS   6       //ALARMS
+  #define MAXPAGE       MENU_ALARMS
+#endif
+
 // Flight Controller Software types to be added before here...
 
 #ifndef MAXPAGE
@@ -572,71 +638,6 @@
   #undef OSD_SWITCH
   #undef PWM_OSD_SWITCH
   #define OSD_SWITCH_RC               // Enables 3 way screen switch using a TX channel via FC. Specify channel on GUI (range 0-7 AUX1=4 AUX4=7)
-#endif
-
-#if defined GPSOSD_UBLOX
-  #define UBLOX
-#endif
-#if defined GPSOSD_NMEA
-  #define NMEA
-#endif
-#if defined GPSOSD_MTK
-  #define MTK
-#endif
-
-
-#if defined MTK_BINARY16
-  #define GPSOSD
-  #define NMEA
-  #define INIT_MTK_GPS
-  #define MTK_BINARY16
-#endif
-
-#if defined MTK_BINARY19
-  #define GPSOSD
-  #define NMEA
-  #define INIT_MTK_GPS
-  #define MTK_BINARY19
-#endif
-
-#if defined MTK
-  #define GPSOSD
-  #define NMEA
-  #define INIT_MTK_GPS
-#endif
-
-#if defined UBLOX
-  #define GPSOSD
-#endif
-
-#if defined NMEA
-  #define GPSOSD
-#endif
-
-#if defined NAZA
-  #define GPSOSD
-#endif
-
-#if defined GPSOSD
-  #undef  INTRO_MENU
-  #ifndef NAZA
-    #undef  ALARM_MSP
-  #endif
-  #undef  OSD_SWITCH_RC
-  #undef  DISPLAY_PR
-  #define NOAHI
-  
-  #define HIDEARMEDSTATUS
-  #define ALARM_GPS 5
-
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_VOLTAGE  1       //VOLTAGE
-  #define MENU_RSSI     2       //RSSI
-  #define MENU_CURRENT  3       //CURRENT
-  #define MENU_DISPLAY  4       //DISPLAY
-  #define MENU_ADVANCED 5       //ADVANCED
-  #define MENU_ALARMS   6       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
 #endif
 
 #if defined (PWM_OSD_SWITCH)
