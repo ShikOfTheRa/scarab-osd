@@ -356,9 +356,7 @@ For sub-command 3 (draw string):
     case 3: // Draw string at (row,col) with attribute (if supported)
       uint8_t canvasy = read8();
       uint8_t canvasx = read8();
-#ifdef INVERTED_CHAR_SUPPORT
       uint8_t canvasa = read8();
-#endif
       for (int i = 5; i <= dataSize ; i++) {
         char canvasc[2];
         canvasc[0] = read8();
