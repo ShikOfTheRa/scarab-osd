@@ -53,4 +53,7 @@ install:
 
 script:
     - platformio ci --board=pro16MHzatmega328
- 
+
+branches:
+  only:
+  - master
