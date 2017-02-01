@@ -539,7 +539,10 @@ void loop()
 #endif //DISPLAYWATTS
 #if defined (DISPLAYEFFICIENCY)
         displayEfficiency();
-#endif //DISPLAYWATTS
+#endif //DISPLAYEFFICIENCY
+#if defined (DISPLAYMAHMIN)
+        displaymAhmin();
+#endif //DISPLAYMAHMIN
 #ifdef TEMPSENSOR
         if(((temperature<Settings[TEMPERATUREMAX])||(timer.Blink2hz))) displayTemperature();
 #endif

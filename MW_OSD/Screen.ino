@@ -774,6 +774,23 @@ void displayEfficiency(void)
 }
 
 
+void displaymAhmin(void)
+{
+  if(!fieldIsVisible(wattPosition))
+    return;
+  uint16_t WhrPosition = getPosition(wattPosition);
+  uint16_t mAhmin = 0;
+  if (flyingTime>0)
+    mAhmin = (uint32_t) amperagesum/(flyingTime*6);
+  
+  ItoaPadded(mAhmin, screenBuffer+1 , 5, 5);
+  screenBuffer[0] = SYM_BLANK;
+  screenBuffer[5] = 0x2A;
+  screenBuffer[6] = 0;
+  MAX7456_WriteString(screenBuffer,WhrPosition);
+}
+
+
 void displaypMeterSum(void)
 {
   if(!fieldIsVisible(pMeterSumPosition))

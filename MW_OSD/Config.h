@@ -229,11 +229,15 @@
 #define AHILEVEL                    // Enable to display AHI level indicators on sidebars 
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 #define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
-#define DISPLAYWATTS                // Enable this to display Watts (if Watts selected in layouts). Select either WATTS or EFFICIENCY. Not both
-//#define DISPLAYEFFICIENCY         // Enable this to display Watts/KMh or Mph for efficiency (if Watts selected in layouts). Select either WATTS or EFFICIENCY. Not both
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft
 #define AIRMODE 2                   // Enable this to display airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
 //#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
+
+
+/********************       Power / efficiency display Settings         ************************/
+#define DISPLAYWATTS                // Enable this to display Watts (if Watts selected in layouts). Select one of WATTS/MAHMIN/EFFICIENCY
+//#define DISPLAYEFFICIENCY         // Enable this to display Watts/KMh or Mph for efficiency (if Watts selected in layouts). Select one of WATTS/MAHMIN/EFFICIENCY
+//#define DISPLAYMAHMIN             // Enable this to display average mAh/minKMh (if Watts selected in layouts). Select one of WATTS/MAHMIN/EFFICIENCY
 
 
 /********************   RC TX Settings     *********************/
