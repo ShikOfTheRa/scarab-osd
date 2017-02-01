@@ -215,6 +215,7 @@ void displayMode(void)
     return;
   }  
   #elif defined NAZA
+    return;
   #else
   if(timer.MSP_active==0){ // no MSP >> mode display not valid
     return;
@@ -2083,7 +2084,7 @@ void displayArmed(void)
     if (GPS_numSat<MINSATFIX){ // below minimum preferred value
       alarms.active|=(1<<5);
     }
-#endif //ALARM_GPS
+#endif //ALARM_SATS
 
 #ifdef ALARM_GPS
     if(timer.GPS_active==0){

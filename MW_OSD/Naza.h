@@ -9,12 +9,11 @@ void NAZA_NewData(uint8_t c){
     uint8_t GPS_fix_temp;
     case NAZA_MESSAGE_GPS:
      timer.packetcount++;
-     timer.MSP_active=ALARM_MSP;             // getting something on serial port
+     #ifdef ALARM_GPS
+       timer.GPS_active=ALARM_GPS;
+     #endif //ALARM_GPS
      sattemp=NazaDecoder.getNumSat();
       if (sattemp>4){
-        #ifdef ALARM_GPS
-          timer.GPS_active=ALARM_GPS;
-        #endif //ALARM_GPS
         GPS_numSat=NazaDecoder.getNumSat();
         GPS_coord[LAT]=(int32_t)(10000000*NazaDecoder.getLat());
         GPS_coord[LON]=(int32_t)(10000000*NazaDecoder.getLon());
@@ -31,7 +30,9 @@ void NAZA_NewData(uint8_t c){
       break;
     case NAZA_MESSAGE_COMPASS:
      timer.packetcount++;
-     timer.MSP_active=ALARM_MSP;             // getting something on serial port
+     #ifdef ALARM_MSP
+       timer.MSP_active=ALARM_MSP;             // getting something on serial port
+     #endif //ALARM_MSP
       GPS_ground_course=10*NazaDecoder.getHeadingNc();
       int16_t MwHeading360=GPS_ground_course/10;
       if (MwHeading360>180)
