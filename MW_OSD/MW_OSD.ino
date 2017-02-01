@@ -456,7 +456,7 @@ void loop()
 
 
 #ifndef INTRO_DELAY 
-  #define INTRO_DELAY 8
+  #define INTRO_DELAY 5
   #ifdef DEBUG 
     #define INTRO_DELAY 0
   #endif

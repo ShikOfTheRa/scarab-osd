@@ -210,7 +210,12 @@ void displayDOP(void)        // Display stas DOP
 
 void displayMode(void)
 {
-  #ifndef NAZA
+  #ifdef NAZAMODECONTROL
+  if(timer.MSP_active==0){ // no MSP >> mode display not valid
+    return;
+  }  
+  #elif defined NAZA
+  #else
   if(timer.MSP_active==0){ // no MSP >> mode display not valid
     return;
   }  

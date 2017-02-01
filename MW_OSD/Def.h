@@ -425,6 +425,16 @@
   #define PROTOCOL_SKYTRACK
 #endif
 
+#ifdef NOCONTROLLER
+  #undef  INTRO_MENU
+  #undef  ALARM_MSP
+  #undef  ALARM_SATS
+  #undef  ALARM_GPS
+  #undef  OSD_SWITCH_RC
+  #define HIDEARMEDSTATUS
+  #define MENU_STAT  0           //STATISTICS
+  #define MAXPAGE MENU_STAT
+#endif
 
 #if defined GPSOSD_UBLOX
   #define UBLOX
@@ -494,18 +504,15 @@
 // Flight Controller Software types to be added before here...
 
 #ifndef MAXPAGE
-  #define NOCONTROLLER
-#endif
-
-#ifdef NOCONTROLLER
-  #undef  INTRO_MENU
-  #undef  ALARM_MSP
-  #undef  ALARM_SATS
-  #undef  ALARM_GPS
-  #undef  OSD_SWITCH_RC
-  #define HIDEARMEDSTATUS
-  #define MENU_STAT  0           //STATISTICS
-  #define MAXPAGE MENU_STAT
+  #define INFO_CONTROLLER 0
+  #define MENU_STAT     0       //STATISTICS
+  #define MENU_VOLTAGE  1       //VOLTAGE
+  #define MENU_RSSI     2       //RSSI
+  #define MENU_CURRENT  3       //CURRENT
+  #define MENU_DISPLAY  4       //DISPLAY
+  #define MENU_ADVANCED 5       //ADVANCED
+  #define MENU_ALARMS   6       //ALARMS
+  #define MAXPAGE       MENU_ALARMS
 #endif
 
 #ifdef HAS_ALARMS

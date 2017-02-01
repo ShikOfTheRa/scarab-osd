@@ -29,7 +29,7 @@
 // Choose ONLY ONE option from the following long list :-
 
 // latest release...
-//#define BETAFLIGHT                  // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
+//#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
 //#define BETAFLIGHT3               // Uncomment this if you are using BETAFLIGHT version 3.0.x 
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9 onwards 1.14.2 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
@@ -63,12 +63,12 @@
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
-#define ROTORCRAFT                // Default for multirotors etc. 
+//#define ROTORCRAFT                // Default for multirotors etc. 
 //#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight 
 
 
 /********************       Debug      *********************/
-//#define DEBUG 4            // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+//#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
 
 
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
@@ -123,7 +123,7 @@
 
 /********************       FILTER settings      *********************/
 //Choose ONLY ONE option to enable filtered smoother readings of voltage / current / RSSI :
-#define FILTER_AVG                // Enable standard averaging filter  
+#define FILTER_AVG                  // Enable standard averaging filter  
 //#define FILTER_HYSTERYSIS 2       // Alternative filter with hysteris to provide smoother changes. Higher number = more filtering. Max 4  
 
 /********************       RSSI settings (PWM/PPM)      *********************/
@@ -189,8 +189,8 @@
 #define INTRO_MENU                  // Enable to display TX stick MENU 
 #define INTRO_CALLSIGN              // Enable to display callsign at startup
 #define INTRO_SIGNALTYPE            // Enable to display video type at startup
-//#define INTRO_DELAY 1             // Seconds intro screen should show for. Default is 8 
-//#define STARTUPDELAY 500         // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
+//#define INTRO_DELAY 1             // Seconds intro screen should show for. Default is 5 
+//#define STARTUPDELAY 500          // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
 
 /********************       I2CGPS type settings      *********************/
@@ -211,28 +211,28 @@
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define FORCECROSSHAIR            // Forces a crosshair even if no AHI / horizon used
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
-#define HIDESUMMARY               // Enable to suspend display of summary screen when disarming
+//#define HIDESUMMARY               // Enable to suspend display of summary screen when disarming
 //#define SHORTSUMMARY              // Display only timer on flight summary 
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x01      // Optional change from default 0x00=120%,0x01=100%,0x10=90%,0x11=80%  default is 0x01=100%
 //#define BLACKBRIGHTNESS 0x00      // Optional change from default 0x00=0%,0x01=10%,0x10=20%0x11=30%  default is 0x00=0%
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
 //#define NOTHROTTLESPACE           // Enable to remove space between throttle symbol and the data
-//#define DISPLAY_PR                // Display pitch / roll angles. Requires relevant layout ppositions to be enabled
+#define DISPLAY_PR                  // Display pitch / roll angles. Requires relevant layout ppositions to be enabled
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
 //#define REVERSEAHI                // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
 //#define AHICORRECT 10             // Enable to adjust AHI on display to match horizon. -10 = -1 degree
 #define AHIPITCHMAX 200             // Specify maximum AHI pitch value displayed. Default 200 = 20.0 degrees
 #define AHIROLLMAX  400             // Specify maximum AHI roll value displayed. Default 400 = 40.0 degrees 
-//#define AHIPITCHSCALE 100          // Specify scaling sensitvity for Pitch. Higher number = pitches more on OSD         
-//#define AHIROLLSCALE 100           // Specify scaling sensitvity for Roll. Higher number = rolls more on OSD         
+//#define AHIPITCHSCALE 100         // Specify scaling sensitvity for Pitch. Higher number = pitches more on OSD         
+//#define AHIROLLSCALE 100          // Specify scaling sensitvity for Roll. Higher number = rolls more on OSD         
 #define AHILEVEL                    // Enable to display AHI level indicators on sidebars 
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 #define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
-//#define DISPLAYWATTS              // Enable this to display Watts (if Watts selected in layouts)
-#define DISPLAYEFFICIENCY         // Enable this to display Watts/KMh or Mph for efficiency (if Watts selected in layouts)
+#define DISPLAYWATTS                // Enable this to display Watts (if Watts selected in layouts). Select either WATTS or EFFICIENCY. Not both
+//#define DISPLAYEFFICIENCY         // Enable this to display Watts/KMh or Mph for efficiency (if Watts selected in layouts). Select either WATTS or EFFICIENCY. Not both
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft
-#define AIRMODE 2                  // Enable this to display BETAFLIGHT airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
+#define AIRMODE 2                   // Enable this to display airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
 //#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
 
 
@@ -275,7 +275,7 @@
 /********************       Battery Status Settings         ************************/
 // This works in conjunction with the GUI switch "Display Battery Status
 // Enable to use a battery icon that indicates capacity remaining dependant upon battery voltage or mAh used. Or both if required.
-#define BATTERYICONVOLTS          //Enable to use with voltage as indicator of capacity remaining
+#define BATTERYICONVOLTS            //Enable to use with voltage as indicator of capacity remaining
 //#define BATTERYICONAMPS           //Enable to use with mAh used percentage of AMPHR alarm limit. Warning will now be at 80% of that GUI value
 
 
@@ -327,11 +327,6 @@
 #define AUTOTHROTTLE 
 #define HIGHTHROTTLE 1900                // Maximum recognised value for throttle 
 #define LOWTHROTTLE  1100                // Minimum recognised value for throttle
-
-/********************           VTX settings           *********************/
- //Choose ONLY ONE option:
- #define VTX_REGION_UNRESTRICTED                // Enable for all 40 channels
- //#define VTX_REGION_AUSTRALIA                   // Enable for AU legal channels and power level only
 
 
 
