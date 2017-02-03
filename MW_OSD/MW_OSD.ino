@@ -387,9 +387,11 @@ void loop()
         MSPcmdsend = MSP_PIDNAMES;
         break;
 #endif
+#ifdef CORRECTLOOPTIME
       case REQ_MSP_LOOP_TIME:
         MSPcmdsend = MSP_LOOP_TIME;
-        break;        
+        break;     
+#endif           
       case REQ_MSP_BOX:
 #ifdef BOXNAMES
         MSPcmdsend = MSP_BOXNAMES;
@@ -785,7 +787,9 @@ void setMspRequests() {
       REQ_MSP_PIDNAMES|
 #endif
       REQ_MSP_PID|
+#ifdef CORRECTLOOPTIME
       REQ_MSP_LOOP_TIME|
+#endif
 #ifdef CORRECT_MSP_BF1
       REQ_MSP_CONFIG|
 #endif

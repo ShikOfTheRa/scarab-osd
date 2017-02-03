@@ -679,19 +679,14 @@ For sub-command 3 (draw string):
     PIDController = read8();
     modeMSPRequests &=~ REQ_MSP_PID_CONTROLLER;
   }
-
-  if (cmdMSP == MSP_LOOP_TIME)
-  {
-    LoopTime = read16();
-    modeMSPRequests &=~ REQ_MSP_LOOP_TIME;
-  }
+  #ifdef CORRECTLOOPTIME
+    if (cmdMSP == MSP_LOOP_TIME)
+    {
+      LoopTime = read16();
+      modeMSPRequests &=~ REQ_MSP_LOOP_TIME;
+    }
+  #endif
 #endif
-
-  if (cmdMSP == MSP_LOOP_TIME)
-  {
-    LoopTime = read16();
-    modeMSPRequests &=~ REQ_MSP_LOOP_TIME;
-  }
 
 #ifdef HAS_ALARMS
   if (cmdMSP == MSP_ALARMS)
@@ -1357,10 +1352,11 @@ void configSave()
   mspWriteRequest(MSP_SET_PID_CONTROLLER, 1);
   mspWrite8(PIDController);
   mspWriteChecksum();
-
-  mspWriteRequest(MSP_SET_LOOP_TIME, 2);
-  mspWrite16(LoopTime);
-  mspWriteChecksum();  
+  #if defined CORRECTLOOPTIME
+    mspWriteRequest(MSP_SET_LOOP_TIME, 2);
+    mspWrite16(LoopTime);
+    mspWriteChecksum();  
+  #endif
 #endif
 
   mspWriteRequest(MSP_SET_PID, PIDITEMS*3);

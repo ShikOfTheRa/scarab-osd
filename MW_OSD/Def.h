@@ -193,6 +193,7 @@
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
   #define ENABLE_MSP_SAVE_ADVANCED
+  #define CORRECTLOOPTIME
 
   #define MENU_STAT     0       //STATISTICS
   #define MENU_PID      1       //PID CONFIG
@@ -206,7 +207,6 @@
   #define MENU_ALARMS   9       //ALARMS
   #define MENU_PROFILE  10      //PROFILE+PID CONTROLLER
   #define MAXPAGE       MENU_PROFILE
-  #define CORRECTLOOPTIME
 #endif
 
 #if defined CLEANFLIGHT180
