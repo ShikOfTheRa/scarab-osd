@@ -260,16 +260,24 @@ void displayMode(void)
     strcpy_P(screenBuffer, (char*)pgm_read_word(&(NAZA_mode_index[Naza.mode])));
 #else  
   if(MwSensorActive&mode.passthru){
-    screenBuffer[2]=0;
-    screenBuffer[0]=SYM_PASS;
-    screenBuffer[1]=SYM_PASS1;
+    #ifdef TEXTMODE
+	  strcpy(screenBuffer, "PASSTHRU");
+    #else
+      screenBuffer[2]=0;
+      screenBuffer[0]=SYM_PASS;
+      screenBuffer[1]=SYM_PASS1;
+    #endif
   }
   else if(MwSensorActive&mode.gpshome){
-#ifdef APINDICATOR
-    screenBuffer[0] = SYM_GHOME;
-    screenBuffer[1] = SYM_GHOME1;
-    screenBuffer[2]=0;
-#else
+    #ifdef APINDICATOR
+      #ifdef TEXTMODE
+	    strcpy(screenBuffer, "GPSHOME");
+      #else
+        screenBuffer[0] = SYM_GHOME;
+        screenBuffer[1] = SYM_GHOME1;
+        screenBuffer[2]=0;
+      #endif
+    #else
     uint32_t dist;
     if(Settings[S_UNITSYSTEM]){
       dist = GPS_distanceToHome * 3.2808;           // mt to feet
@@ -294,9 +302,13 @@ void displayMode(void)
 #endif
   }
   else if(MwSensorActive&mode.gpshold){
-    screenBuffer[2]=0;
-    screenBuffer[0] = SYM_GHOLD;
-    screenBuffer[1] = SYM_GHOLD1;
+    #ifdef TEXTMODE
+	  strcpy(screenBuffer, "GPSHOLD");
+    #else
+      screenBuffer[2]=0;
+      screenBuffer[0] = SYM_GHOLD;
+      screenBuffer[1] = SYM_GHOLD1;
+    #endif
   }
   else if(MwSensorActive&mode.gpsmission){
     itoa(GPS_waypoint_step,screenBuffer+2,10);
@@ -306,46 +318,85 @@ void displayMode(void)
   }
 #if defined MULTIWII_V24
   else if(MwSensorActive&mode.gpsland){
-    screenBuffer[2]=0;
-    screenBuffer[0] = SYM_GLAND;
-    screenBuffer[1] = SYM_GLAND1;
+    #ifdef TEXTMODE
+	  strcpy(screenBuffer, "GPSLAND");
+    #else
+      screenBuffer[2]=0;
+      screenBuffer[0] = SYM_GLAND;
+      screenBuffer[1] = SYM_GLAND1;
+    #endif
   }
 #endif //MULTIWII_V24    
   else if(MwSensorActive&mode.stable){
+    #ifdef TEXTMODE
+	  strcpy(screenBuffer, "STABLE");
+    #else
     screenBuffer[2]=0;
     screenBuffer[0]=SYM_STABLE;
     screenBuffer[1]=SYM_STABLE1;
+    #endif
   }
   else if(MwSensorActive&mode.horizon){
-    screenBuffer[2]=0;
-    screenBuffer[0]=SYM_HORIZON;
-    screenBuffer[1]=SYM_HORIZON1;
+    #ifdef TEXTMODE
+	  strcpy(screenBuffer, "HORIZON");
+    #else
+      screenBuffer[2]=0;
+      screenBuffer[0]=SYM_HORIZON;
+      screenBuffer[1]=SYM_HORIZON1;
+    #endif
   }
   else{
-    screenBuffer[2]=0;
-#ifdef FIXEDWING
-    screenBuffer[0]=SYM_ACROGY;
-#else
-    screenBuffer[0]=SYM_ACRO;
-#endif
-    screenBuffer[1]=SYM_ACRO1;
-#if defined ACROPLUS
-    if((MwSensorActive)&(mode.acroplus)){
-      screenBuffer[1]=SYM_PLUS;
-    }
-#endif //ACROPLUS
+    #ifndef TEXTMODE
+      screenBuffer[2]=0;
+    #endif
+    #ifdef FIXEDWING
+      #ifdef TEXTMODE
+	    strcpy(screenBuffer, "GYRO");
+      #else
+        screenBuffer[0]=SYM_ACROGY;
+      #endif
+    #else
+      #ifdef TEXTMODE
+	    strcpy(screenBuffer, "ACRO");
+      #else
+        screenBuffer[0]=SYM_ACRO;
+      #endif
+    #endif
+    #ifndef TEXTMODE
+      screenBuffer[1]=SYM_ACRO1;
+    #endif
+
+    #ifdef AIRMODE
+    #ifdef TEXTMODE
+	  if ((MwSensorActive)&(mode.air)) {
+		  strcpy(screenBuffer, "AIR");
+	  }
+    #endif //TEXTMODE
+    #endif //AIRMODE  
+    #if defined ACROPLUS
+      if((MwSensorActive)&(mode.acroplus)){
+        #ifdef TEXTMODE
+		  screenBuffer[5]=0;
+		  screenBuffer[4]=SYM_PLUS;
+        #else
+		  screenBuffer[1]=SYM_PLUS;
+        #endif
+      }
+    #endif //ACROPLUS
   }
 #endif //PROTOCOL_MAVLINK/KISS/LTM
   if(Settings[S_MODEICON]){
     if(fieldIsVisible(ModePosition)){
       MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
 #ifdef AIRMODE
+#ifndef TEXTMODE
       if((MwSensorActive)&(mode.air)){
         screenBuffer[0]=SYM_AIR;
         screenBuffer[1]=SYM_AIR1;
         screenBuffer[2]=0;
         MAX7456_WriteString(screenBuffer,getPosition(ModePosition)+AIRMODE);
       }
+#endif //TEXTMODE
 #endif //AIRMODE  
     }  
   }
