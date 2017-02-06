@@ -36,6 +36,7 @@
 
 5 I can't open GUI on my MAC -  .app is damaged and can’t be opened
   * http://www.tech-recipes.com/rx/45404/mac-downloaded-app-is-damaged-and-cant-be-opened-error-solved/
+  * For MacOS Sierra (10.12), security control panel does not have "Anywhere" option by default. Refer to this url for revealing the option: http://osxdaily.com/2016/09/27/allow-apps-from-anywhere-macos-gatekeeper/
 
 ---
 
