@@ -232,6 +232,7 @@
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft
 #define AIRMODE 2                   // Enable this to display airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
 //#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
+//#define TEXTMODE                  // Enable to display the flyingmode as text instead of symbols
 
 
 /********************       Power / efficiency display Settings         ************************/
