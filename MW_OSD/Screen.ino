@@ -726,9 +726,13 @@ void displayCurrentThrottle(void)
   else
 #endif // FIXEDWING    
   {
-    int CurThrottle = map(MwRcData[THROTTLESTICK],LowT,HighT,0,100);
-    ItoaPadded(CurThrottle,screenBuffer+1+THROTTLESPACE,3,0);
-    screenBuffer[4+THROTTLESPACE]='%';
+    #ifdef DISPLAYTHROTTLEPWM
+      ItoaPadded(MwRcData[THROTTLESTICK],screenBuffer+1+THROTTLESPACE,4,0);
+    #else  
+      int CurThrottle = map(MwRcData[THROTTLESTICK],LowT,HighT,0,100);
+      ItoaPadded(CurThrottle,screenBuffer+1+THROTTLESPACE,3,0);
+      screenBuffer[4+THROTTLESPACE]='%';
+    #endif    
   }
   screenBuffer[0]=SYM_THR;
   screenBuffer[5+THROTTLESPACE]=0;

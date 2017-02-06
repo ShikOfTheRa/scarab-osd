@@ -217,6 +217,7 @@
 //#define WHITEBRIGHTNESS 0x01      // Optional change from default 0x00=120%,0x01=100%,0x10=90%,0x11=80%  default is 0x01=100%
 //#define BLACKBRIGHTNESS 0x00      // Optional change from default 0x00=0%,0x01=10%,0x10=20%0x11=30%  default is 0x00=0%
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
+//#define DISPLAYTHROTTLEPWM        // Displays throttle value as PWM value instead of %. Usefull for setting FC hover point
 //#define NOTHROTTLESPACE           // Enable to remove space between throttle symbol and the data
 #define DISPLAY_PR                  // Display pitch / roll angles. Requires relevant layout ppositions to be enabled
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
