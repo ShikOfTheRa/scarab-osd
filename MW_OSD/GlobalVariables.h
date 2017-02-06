@@ -1368,6 +1368,42 @@ const PROGMEM char * const menu_on_off[] =
   configMsgON,
 };
 
+#ifdef MODETEXTMODE
+
+//Ordering to be resolved - for priority of confilicting modes
+const char msp_mode_ACRO[] PROGMEM   = "ACRO"; //Acrobatic: rate control
+const char msp_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
+const char msp_mode_HOZN[] PROGMEM   = "HOZN"; //Horizon
+const char msp_mode_HOLD[] PROGMEM   = "HOLD"; //3D Hold
+const char msp_mode_2D[]   PROGMEM   = "2D  "; //2D Hold No alt hold
+const char msp_mode_HEAD[] PROGMEM   = "HEAD"; //Head
+const char msp_mode_FAIL[] PROGMEM   = "FAIL"; //Failsafe: auto control
+const char msp_mode_WAYP[] PROGMEM   = "WAYP"; //Mission/Waypoint: auto control
+const char msp_mode_PASS[] PROGMEM   = "PASS"; //Passthrough
+const char msp_mode_RTH[]  PROGMEM   = "RTH "; //Return to Launch: auto control
+const char msp_mode_LNCH[] PROGMEM   = "LNCH"; //Launch mode - or gone to lunch :)
+const char msp_mode_AIR[]  PROGMEM   = "AIR "; //Air mode
+const char msp_mode_MSP[]  PROGMEM   = "****"; //Unknown MSP mode
+
+const PROGMEM char * const msp_mode_index[] = 
+{   
+ msp_mode_ACRO, //0
+ msp_mode_STAB,
+ msp_mode_HOZN,
+ msp_mode_BARO,
+ msp_mode_MAG,
+ msp_mode_RTH,
+ msp_mode_HOLD,
+ msp_mode_WAYP, 
+ msp_mode_CAM, 
+ msp_mode_AIR,
+ msp_mode_LNCH, 
+ msp_mode_2D, 
+ msp_mode_FAIL, 
+ msp_mode_PASS, 
+ msp_mode_MSP, 
+};
+#endif
 
 #ifdef PROTOCOL_MAVLINK
 
