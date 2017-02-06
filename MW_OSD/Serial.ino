@@ -1157,25 +1157,27 @@ void serialMenuCommon()
 #endif
 
 #ifdef MENU_PROFILE
-  if (configPage == MENU_PROFILE && COL == 3) {
-    switch(ROW) {
-    case 1: FCProfile += menudir; break;
-    case 2: PIDController += +menudir; break;
-  #ifdef CORRECTLOOPTIME
-    case 3: LoopTime += menudir; break;
-  #endif
+  #ifdef ADVANCEDSAVE
+    if (configPage == MENU_PROFILE && COL == 3) {
+      switch(ROW) {
+      case 1: FCProfile += menudir; break;
+      case 2: PIDController += +menudir; break;
+      #ifdef CORRECTLOOPTIME
+        case 3: LoopTime += menudir; break;
+      #endif //CORRECTLOOPTIME
+      }
     }
-  }
 
-  #ifdef ENABLE_MSP_SAVE_ADVANCED
-  if (FCProfile > 2)
-    FCProfile=0;
+    #ifdef ENABLE_MSP_SAVE_ADVANCED
+      if (FCProfile > 2)
+        FCProfile=0;
 
-  if (FCProfile != PreviousFCProfile){
-    setFCProfile();
-    PreviousFCProfile = FCProfile;
-  }        
-  #endif
+      if (FCProfile != PreviousFCProfile){
+        setFCProfile();
+        PreviousFCProfile = FCProfile;
+      }        
+    #endif ENABLE_MSP_SAVE_ADVANCED
+  #endif //ADVANCEDSAVE
 #endif  
 
   if (ROW == 10) {
@@ -1349,15 +1351,17 @@ void configSave()
   CurrentFCProfile=FCProfile;
 
 #if defined ENABLE_MSP_SAVE_ADVANCED
-  mspWriteRequest(MSP_SET_PID_CONTROLLER, 1);
-  mspWrite8(PIDController);
-  mspWriteChecksum();
-  #if defined CORRECTLOOPTIME
-    mspWriteRequest(MSP_SET_LOOP_TIME, 2);
-    mspWrite16(LoopTime);
-    mspWriteChecksum();  
-  #endif
-#endif
+  #if defined ADVANCEDSAVE
+    mspWriteRequest(MSP_SET_PID_CONTROLLER, 1);
+    mspWrite8(PIDController);
+    mspWriteChecksum();
+    #if defined CORRECTLOOPTIME
+      mspWriteRequest(MSP_SET_LOOP_TIME, 2);
+      mspWrite16(LoopTime);
+      mspWriteChecksum();  
+    #endif //CORRECTLOOPTIME
+  #endif //ADVANCEDSAVE
+#endif //ENABLE_MSP_SAVE_ADVANCED
 
   mspWriteRequest(MSP_SET_PID, PIDITEMS*3);
   for(uint8_t i=0; i<PIDITEMS; i++) {

@@ -332,6 +332,9 @@
 #define HIGHTHROTTLE 1900                // Maximum recognised value for throttle 
 #define LOWTHROTTLE  1100                // Minimum recognised value for throttle
 
-
+/********************  Advanced parameters  settings      *********************/
+// This is to enable rarely used advanced parameter saving. Off by default to minimise risk 
+// Enabling may create ability to write invalid data to FC
+//#define ADVANCEDSAVE                   // Enables saving of advanced paramters where supported (Looptime/profile)
 
 
