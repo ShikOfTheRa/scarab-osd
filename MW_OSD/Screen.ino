@@ -327,6 +327,15 @@ void displayMode(void)
     #endif
   }
 #endif //MULTIWII_V24    
+  else if(MwSensorActive&mode.baro){
+    #ifdef TEXTMODE
+    strcpy(screenBuffer, "ALTHOLD");
+    #else
+      screenBuffer[2]=0;
+      screenBuffer[0] = SYM_GHOLD;
+      screenBuffer[1] = SYM_GHOLD1;
+    #endif
+  }
   else if(MwSensorActive&mode.stable){
     #ifdef TEXTMODE
 	  strcpy(screenBuffer, "STABLE");
