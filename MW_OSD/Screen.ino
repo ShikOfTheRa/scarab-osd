@@ -735,13 +735,14 @@ void displayCurrentThrottle(void)
   else
 #endif // FIXEDWING    
   {
-    #ifdef DISPLAYTHROTTLEPWM
-      ItoaPadded(MwRcData[THROTTLESTICK],screenBuffer+1+THROTTLESPACE,4,0);
-    #else  
+    if (Settings[S_THROTTLE_PWM]>0){    
+     ItoaPadded(MwRcData[THROTTLESTICK],screenBuffer+1+THROTTLESPACE,4,0);
+    }
+    else{
       int CurThrottle = map(MwRcData[THROTTLESTICK],LowT,HighT,0,100);
       ItoaPadded(CurThrottle,screenBuffer+1+THROTTLESPACE,3,0);
       screenBuffer[4+THROTTLESPACE]='%';
-    #endif    
+    }
   }
   screenBuffer[0]=SYM_THR;
   screenBuffer[5+THROTTLESPACE]=0;
@@ -1354,8 +1355,8 @@ void displayCursor(void)
     if(configPage==MENU_ADVANCED)
     {  
       COL=3;
-      if (ROW==9) ROW=5;
-      if (ROW==6) ROW=10;
+      if (ROW==9) ROW=6;
+      if (ROW==7) ROW=10;
       cursorpos=(ROW+2)*30+10+6+6;
     }
 #endif
@@ -1678,7 +1679,7 @@ void displayConfigScreen(void)
 #ifdef MENU_ADVANCED
   if(configPage==MENU_ADVANCED)
   {
-    for(uint8_t X=0; X<=4; X++) {
+    for(uint8_t X=0; X<=5; X++) {
       MAX7456_WriteString_P(PGMSTR(&(menu_advanced[X])),ROLLT+(X*30));
     }
 
@@ -1705,6 +1706,7 @@ void displayConfigScreen(void)
     else
       MAX7456_WriteString("-",ALTD);
     MAX7456_WriteString(itoa(Settings[S_RCWSWITCH_CH],screenBuffer,10),VELD);
+    Menuconfig_onoff(LEVD,S_THROTTLE_PWM);    
   }
 #endif
 #ifdef MENU_GPS_TIME

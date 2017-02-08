@@ -1119,11 +1119,11 @@ void serialMenuCommon()
   if (configPage == MENU_ADVANCED && COL == 3) {
     switch(ROW) {
     case 1: ReverseSetting(S_UNITSYSTEM)
-//    case 3: ReverseSetting(S_ALARMS_TEXT)
     case 2: ReverseSetting(S_VREFERENCE)
     case 3: ReverseSetting(S_DEBUG)
     case 4: timer.magCalibrationTimer=CALIBRATION_DELAY; break;
     case 5: ModifySetting(S_RCWSWITCH_CH)
+    case 6: ReverseSetting(S_THROTTLE_PWM)
     }
   }
 #endif

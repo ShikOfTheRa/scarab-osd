@@ -279,7 +279,7 @@ enum Setting_ {
   S_ALARMS_TEXT,
   S_VIDVOLTAGE,
   S_VIDDIVIDERRATIO,
-  S_UNUSED_4,
+  S_THROTTLE_PWM,
   S_AMPER_HOUR_ALARM,
   S_AMPERAGE_ALARM,
   S_DISPLAYGPS,
@@ -1029,6 +1029,7 @@ const char configMsg731[] PROGMEM = "1.1V";
 const char configMsg74[]  PROGMEM = "DEBUG";
 const char configMsg75[]  PROGMEM = "MAG CAL";
 const char configMsg76[]  PROGMEM = "OSD TX CH";
+const char configMsg77[]  PROGMEM = "THROTTLE PWM";
 //-----------------------------------------------------------Page8
 const char configMsg80[] PROGMEM = "GPS TIME";
 const char configMsg81[] PROGMEM = "DISPLAY";
@@ -1247,7 +1248,9 @@ const PROGMEM char * const menu_advanced[] =
   configMsg73,
   configMsg74,
   configMsg75,
-  configMsg76,};
+  configMsg76,
+  configMsg77,
+};
 
 const PROGMEM char * const menu_gps_time[] = 
 {   
