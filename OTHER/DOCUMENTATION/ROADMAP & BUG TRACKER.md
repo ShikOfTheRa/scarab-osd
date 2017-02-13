@@ -57,6 +57,8 @@
 
 ## Enhancement requests for future releases: ##
 
+FRSY implemenation for receiver side
+
 Display minimum voltage
 
 I2C master support for direct compass, baro, acc hardware support.
