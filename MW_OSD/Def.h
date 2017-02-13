@@ -38,6 +38,12 @@
 
 
 
+/********************  HARDWARE rule definitions  **********************/
+#ifdef IMPULSERC_VTX
+  #define RUSHDUINO
+  #define VTX_RTC6705
+
+#endif //IMPULSERC_VTX
 
 /********************  CONTROLLER rule definitions  **********************/
 
@@ -515,6 +521,15 @@
   #define MAXPAGE       MENU_ALARMS
 #endif
 
+// ALL controller type MENUS must go before here. This area is to add extra menus for hardware
+
+#ifdef VTX_RTC6705
+  const uint8_t MENU_vtx_tmp = MAXPAGE+1;
+  #define MENU_VTX MENU_vtx_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_VTX 
+#endif
+
 #ifdef HAS_ALARMS
   #define MAX_ALARM_LEN 30
 #endif
@@ -558,7 +573,7 @@
 
 
 /********************  OSD HARDWARE rule definitions  *********************/
-#ifdef RUSHDUINO                    
+#if defined(RUSHDUINO)                  
     # define DATAOUT          11 // MOSI
     # define DATAIN           12 // MISO
     # define SPICLOCK         13 // sck

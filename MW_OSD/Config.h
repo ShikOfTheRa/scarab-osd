@@ -13,6 +13,7 @@
 //#define KYLIN250PDB               // Uncomment this if using a Kylin 250 FPV PDB (Using A6 as VOLTAGEPIN)
 //#define AIRBOTMICRO               // Uncomment this if using an airbot MicroOSD
 //#define ANDROMEDA                 // Uncomment this if using an Andromeda (http://www.multiwiicopter.com/)
+//#define IMPULSERC_VTX             // Uncomment this if using an ImpulseRC integrated OSD/VTX
 
 // NOTE-some boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct: 
@@ -332,6 +333,13 @@
 #define AUTOTHROTTLE 
 #define HIGHTHROTTLE 1900                // Maximum recognised value for throttle 
 #define LOWTHROTTLE  1100                // Minimum recognised value for throttle
+
+
+/********************           VTX settings           *********************/
+//Choose ONLY ONE option:
+#define VTX_REGION_UNRESTRICTED                // Enable for all 40 channels
+//#define VTX_REGION_AUSTRALIA                   // Enable for AU legal channels and power level only
+
 
 /********************  Advanced parameters  settings      *********************/
 // This is to enable rarely used advanced parameter saving. Off by default to minimise risk 

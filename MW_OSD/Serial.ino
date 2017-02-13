@@ -849,6 +849,37 @@ void handleRawRC() {
 
   if(!waitStick)
   {
+    #ifdef MENU_VTX
+    if (MwRcData[THROTTLESTICK]>MAXSTICK && MwRcData[PITCHSTICK] > 1300 && MwRcData[PITCHSTICK] < 1700 && !configMode && !armed && allSec>VTX_STICK_CMD_DELAY){
+      
+      if (MwRcData[YAWSTICK]>MAXSTICK && MwRcData[ROLLSTICK]>MAXSTICK) { //Increase channel
+        Settings[S_VTX_CHANNEL] = constrain(Settings[S_VTX_CHANNEL]+1, 0, VTX_CHANNEL_COUNT - 1);
+        vtx_flash_led(Settings[S_VTX_CHANNEL] + 1);
+      }
+      if (MwRcData[YAWSTICK]>MAXSTICK && MwRcData[ROLLSTICK]<MINSTICK) { //Decrease channel
+        Settings[S_VTX_CHANNEL] = constrain(Settings[S_VTX_CHANNEL]-1, 0, VTX_CHANNEL_COUNT - 1);
+        vtx_flash_led(Settings[S_VTX_CHANNEL] + 1);
+      }
+      if (MwRcData[YAWSTICK]<MINSTICK && MwRcData[ROLLSTICK]>MAXSTICK) { //Increase band
+        Settings[S_VTX_BAND] = constrain(Settings[S_VTX_BAND]+1, 0, VTX_BAND_COUNT - 1);
+        vtx_flash_led(Settings[S_VTX_BAND] + 1);
+      }
+      if (MwRcData[YAWSTICK]<MINSTICK && MwRcData[ROLLSTICK]<MINSTICK) { //Decrease band
+        Settings[S_VTX_BAND] = constrain(Settings[S_VTX_BAND]-1, 0, VTX_BAND_COUNT - 1);
+        vtx_flash_led(Settings[S_VTX_BAND] + 1);
+      }
+      
+      if (vtxBand != Settings[S_VTX_BAND] || vtxChannel != Settings[S_VTX_CHANNEL])
+      {
+//        EEPROM.write(S_VTX_BAND, Settings[S_VTX_BAND]); // write is save only in configsave??
+//        EEPROM.write(S_VTX_CHANNEL, Settings[S_VTX_CHANNEL]);  // write is save only in configsave??      
+        vtxBand = Settings[S_VTX_BAND];
+        vtxChannel = Settings[S_VTX_CHANNEL];
+        vtx_set_frequency(vtxBand, vtxChannel);        
+        waitStick = 1;
+      }
+    }
+#endif //MENU_VTX
     if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THROTTLESTICK]>MINSTICK)){
 #ifdef CANVAS_SUPPORT
       if (!configMode && (allSec > 5) && !armed && !canvasMode)
@@ -1180,6 +1211,16 @@ void serialMenuCommon()
   #endif //ADVANCEDSAVE
 #endif  
 
+#ifdef MENU_VTX
+  if(configPage == MENU_VTX && COL == 3) {
+      switch(ROW) {
+      case 1: Settings[S_VTX_POWER] = constrain(Settings[S_VTX_POWER]+menudir, 0, VTX_POWER_COUNT - 1);
+      case 2: Settings[S_VTX_BAND] = constrain(Settings[S_VTX_BAND]+menudir, 0, VTX_BAND_COUNT - 1);
+      case 3: Settings[S_VTX_CHANNEL] = constrain(Settings[S_VTX_CHANNEL]+menudir, 0, VTX_CHANNEL_COUNT - 1);
+      }
+  };
+#endif
+
   if (ROW == 10) {
     previousconfigPage = configPage;
     switch(COL) {
@@ -1343,6 +1384,10 @@ void configExit()
       setFCProfile();
     }
   #endif
+  #ifdef VTX_RTC6705   
+    vtx_read();
+  #endif //VTX_RTC6705
+
   setMspRequests();
 }
 
@@ -1447,8 +1492,12 @@ void configSave()
           mspWrite16(servo.settings[ii][i]);
       }
    }
-  mspWriteChecksum();
+  mspWriteChecksum();  
 #endif
+
+#ifdef MENU_VTX
+  vtx_save();
+#endif //MENU_VTX  
 
   writeEEPROM();
   mspWriteRequest(MSP_EEPROM_WRITE,0);

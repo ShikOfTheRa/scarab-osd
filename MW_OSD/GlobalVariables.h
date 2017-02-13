@@ -93,6 +93,54 @@
 #define GPSSENSOR      8//0b00001000
 //#define SONAR         16//0b00010000
 
+
+/********************       VTX      *********************/
+
+#ifdef MENU_VTX
+
+#ifdef VTX_REGION_UNRESTRICTED
+
+  #define VTX_DEFAULT_CHANNEL                 0
+  #define VTX_DEFAULT_BAND                    3
+  #define VTX_DEFAULT_POWER                   0
+  
+  #define VTX_BAND_COUNT                      5
+  #define VTX_CHANNEL_COUNT                   8
+  #define VTX_POWER_COUNT                     3
+  
+  const PROGMEM uint16_t vtx_frequencies[VTX_BAND_COUNT][VTX_CHANNEL_COUNT] = {
+    { 5865, 5845, 5825, 5805, 5785, 5765, 5745, 5725 }, //A
+    { 5733, 5752, 5771, 5790, 5809, 5828, 5847, 5866 }, //B
+    { 5705, 5685, 5665, 5645, 5885, 5905, 5925, 5945 }, //E
+    { 5740, 5760, 5780, 5800, 5820, 5840, 5860, 5880 }, //F
+    { 5658, 5695, 5732, 5769, 5806, 5843, 5880, 5917 }  //R
+  };
+  
+#elif defined(VTX_REGION_AUSTRALIA)
+
+  #define VTX_DEFAULT_CHANNEL                 0
+  #define VTX_DEFAULT_BAND                    2
+  #define VTX_DEFAULT_POWER                   0
+  
+  #define VTX_BAND_COUNT                      4
+  #define VTX_CHANNEL_COUNT                   8
+  #define VTX_POWER_COUNT                     1
+  
+  const PROGMEM uint16_t vtx_frequencies[VTX_BAND_COUNT][VTX_CHANNEL_COUNT] = {
+    { 5865, 5845, 5825, 5805, 5785, 5765, 5745, 5725 }, //A
+    { 5733, 5752, 5771, 5790, 5809, 5828, 5847, 5866 }, //B
+    { 5740, 5760, 5780, 5800, 5820, 5840, 5860, 5860 }, //F
+    { 5732, 5732, 5732, 5769, 5806, 5843, 5843, 5843 }  //R
+  };
+#endif //VTX_REGION_XXXXX
+
+#define VTX_STICK_CMD_DELAY                   2
+uint8_t vtxPower=VTX_DEFAULT_POWER;
+uint8_t vtxBand=VTX_DEFAULT_BAND;
+uint8_t vtxChannel=VTX_DEFAULT_CHANNEL;
+
+#endif //MENU_VTX
+
 #if defined (DEVELOPMENT)
 #define DEBUGDEF 1
 #else
@@ -314,9 +362,9 @@ enum Setting_ {
   S_TIMER,
   S_MODESENSOR,
   S_SIDEBARTOPS,
-  S_UNUSED_6,
-  S_UNUSED_1, //S_AMPMAXL,
-  S_UNUSED_2, //S_AMPMAXH,
+  S_VTX_POWER,
+  S_VTX_BAND,
+  S_VTX_CHANNEL,
   S_RCWSWITCH,
   S_RCWSWITCH_CH,
   S_HUDSW0,
@@ -403,9 +451,15 @@ DEBUGDEF,   // DEBUG                       37e
 1,   // S_TIMER                     41h
 1,   // S_MODESENSOR                42h
 0,   // S_SIDEBARTOPS               43h
-4,   // S_UNUSED_6,
-0,   // S_UNUSED_1, S_AMPMAXL,
-0,   // S_UNUSED_2, S_AMPMAXH,
+#ifndef VTX_DEFAULT_POWER // if not defined fix
+0,    // S_VTX_POWER,
+0,     // S_VTX_BAND,
+0,  // S_VTX_CHANNEL,
+#else
+VTX_DEFAULT_POWER,    // S_VTX_POWER,
+VTX_DEFAULT_BAND,     // S_VTX_BAND,
+VTX_DEFAULT_CHANNEL,  // S_VTX_CHANNEL,
+#endif
 0,   // S_RCWSWITCH,
 5,   // S_RCWSWITCH_CH,
 0,   // S_HUDSW0, LOW / NORMAL
@@ -1081,6 +1135,19 @@ const char configMsg142[] PROGMEM = "    +YAW LEFT";
 const char configMsg143[] PROGMEM = "    +PITCH FULL";
 const char configMsg144[] PROGMEM = " ";
 const char configMsg145[] PROGMEM = "F3 CONTROLLERS ONLY";
+//-----------------------------------------------------------VTX Page
+const char configMsg150[] PROGMEM = "VTX";
+const char configMsg151[] PROGMEM = "POWER";
+const char configMsg152[] PROGMEM = "BAND";
+const char configMsg153[] PROGMEM = "CHANNEL";
+const char configMsg1510[] PROGMEM = "25";
+const char configMsg1511[] PROGMEM = "200";
+const char configMsg1512[] PROGMEM = "500";
+const char configMsg1520[] PROGMEM = "A";
+const char configMsg1521[] PROGMEM = "B";
+const char configMsg1522[] PROGMEM = "E";
+const char configMsg1523[] PROGMEM = "F";
+const char configMsg1524[] PROGMEM = "R";
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={
@@ -1127,6 +1194,49 @@ const PROGMEM char * const menu_choice_ref[] =
   configMsg731,
   configMsg730,
 };
+
+#ifdef MENU_VTX
+  #ifdef VTX_REGION_UNRESTRICTED
+  // Menu selections
+  const PROGMEM char * const menu_choice_power[] =
+  {   
+    configMsg1510,
+    configMsg1511,
+    configMsg1512
+  };
+  // Menu selections
+  const PROGMEM char * const menu_choice_band[] =
+  {   
+    configMsg1520,
+    configMsg1521,
+    configMsg1522,
+    configMsg1523,
+    configMsg1524
+  };
+  #elif defined(VTX_REGION_AUSTRALIA)
+  // Menu selections
+  const PROGMEM char * const menu_choice_power[] =
+  {   
+    configMsg1510
+  };
+  // Menu selections
+  const PROGMEM char * const menu_choice_band[] =
+  {   
+    configMsg1520,
+    configMsg1521,
+    configMsg1523,
+    configMsg1524
+  };
+  #endif //VTX_REGION_XXXX
+
+const PROGMEM char * const menu_vtx[] = 
+{   
+  configMsg151,
+  configMsg152,
+  configMsg153,
+};
+
+#endif //MENU_VTX
 
 // Menu
 //PROGMEM const char *menu_stats_item[] =
@@ -1362,6 +1472,9 @@ const PROGMEM char * const menutitle_item[] =
 #endif
 #ifdef MENU_PROFILE
   configMsg100,
+#endif
+#ifdef MENU_VTX // always last
+  configMsg150,
 #endif
 };
 

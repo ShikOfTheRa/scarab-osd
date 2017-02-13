@@ -131,6 +131,10 @@ boolean ledstatus=HIGH;
 void setup()
 {
 
+  #ifdef MENU_VTX
+    vtx_init();
+  #endif //MENU_VTX
+
   Serial.begin(BAUDRATE);
   #ifndef PROTOCOL_MAVLINK //use double speed asynch mode (multiwii compatible)
     uint8_t h = ((F_CPU  / 4 / (BAUDRATE) -1) / 2) >> 8;
@@ -163,15 +167,28 @@ void setup()
   checkEEPROM();
   readEEPROM();
   
+#ifdef VTX_RTC6705
+  vtx_read();
+  vtx_flash_led(5);
+#endif //VTX_RTC6705
+  
   #ifndef STARTUPDELAY
     #define STARTUPDELAY 500
   #endif
   delay(STARTUPDELAY);
  
+#ifdef VTX_RTC6705
+  //Ignore setting because this is critical to making sure we can detect the
+  //VTX power jumper being installed. If we aren't using 5V ref there is
+  //the chance we will power up on wrong frequency.
+  Settings[S_VREFERENCE]=1;
+  analogReference(DEFAULT);
+#else
   if (Settings[S_VREFERENCE])
     analogReference(DEFAULT);
   else
     analogReference(INTERNAL);
+#endif //VTX_RTC6705
 
   MAX7456Setup();
   #if defined GPSOSD
@@ -280,6 +297,10 @@ void loop()
 
   //---------------  Start Timed Service Routines  ---------------------------------------
   unsigned long currentMillis = millis();
+
+#ifdef VTX_RTC6705
+  vtx_process_state(currentMillis, vtxBand, vtxChannel);
+#endif //VTX_RTC6705
 
 #ifdef MSP_SPEED_HIGH
   if((currentMillis - previous_millis_sync) >= sync_speed_cycle)  // (Executed > NTSC/PAL hz 33ms)
@@ -617,7 +638,10 @@ void loop()
   if(timer.halfSec >= 5) {
     timer.halfSec = 0;
     timer.Blink2hz =! timer.Blink2hz;
-  }
+    #ifdef VTX_RTC6705
+      vtx_set_power(armed ? vtxPower : 0);
+    #endif // VTX_RTC6705
+ }
 
   if(millis() > timer.seconds+1000)     // this execute 1 time a second
   {

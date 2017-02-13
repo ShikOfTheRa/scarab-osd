@@ -1399,7 +1399,18 @@ void displayCursor(void)
       COL=3;
       cursorpos=(ROW+2)*30+10+6+6;
     }
-#endif     
+#endif 
+#ifdef MENUVTX  
+    if(configPage==MENUVTX)
+      {  
+        COL=3;
+        if (ROW==9) ROW=3;
+        if (ROW==4) ROW=10;
+        cursorpos=(ROW+2)*30+10+6+6;
+      }
+#endif         
+
+    
   }
   if(timer.Blink10hz)
     screen[cursorpos] = SYM_CURSOR;
@@ -1760,6 +1771,23 @@ void displayConfigScreen(void)
       MAX7456_WriteString_P(PGMSTR(&(menu_info[X])), ROLLT+(X*30));
     }
   }
+#endif  
+
+#ifdef MENU_VTX
+    if(configPage==MENU_VTX){
+      
+      for(uint8_t X=0; X<=2; X++) {
+        strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_vtx[X])));
+        MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
+      }
+
+      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_choice_power[Settings[S_VTX_POWER]])));
+      MAX7456_WriteString(screenBuffer,ROLLD);
+      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_choice_band[Settings[S_VTX_BAND]])));
+      MAX7456_WriteString(screenBuffer,PITCHD);
+      MAX7456_WriteString(itoa(Settings[S_VTX_CHANNEL] + 1,screenBuffer,10),YAWD);
+    
+    }
 #endif  
   if(configPage > MAXPAGE)configPage=MINPAGE;
 
