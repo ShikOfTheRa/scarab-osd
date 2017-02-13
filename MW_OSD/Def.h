@@ -123,27 +123,10 @@
 //CORRECTLOOPTIME show looptime option in Adavanced tuning menu
 
 #if defined BETAFLIGHT2
-  #define AMPERAGE_DIV 10
-  #define CORRECT_MSP_CF2
-  #define CORRECT_MENU_RCT2
-  #define ENABLE_MSP_SAVE_ADVANCED
-  #define ACROPLUS
-
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_RC_2     3       //RC TUNING PAGE 2
-  #define MENU_VOLTAGE  4       //VOLTAGE
-  #define MENU_RSSI     5       //RSSI
-  #define MENU_CURRENT  6       //CURRENT
-  #define MENU_DISPLAY  7       //DISPLAY
-  #define MENU_ADVANCED 8       //ADVANCED
-  #define MENU_ALARMS   9       //ALARMS
-  #define MENU_PROFILE  10      //PROFILE+PID CONTROLLER
-  #define MAXPAGE       MENU_PROFILE
+  #define BETAFLIGHT3
 #endif
 
-#if defined BETAFLIGHT2
+#if defined BETAFLIGHT3
   #define AMPERAGE_DIV 10
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
