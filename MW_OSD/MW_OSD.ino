@@ -292,7 +292,9 @@ void loop()
 #endif
     {
        #ifndef KISS
-       mspWriteRequest(MSP_ATTITUDE,0);
+       if (timer.GUI_active==0){
+         mspWriteRequest(MSP_ATTITUDE,0);
+       }
        #endif
     }
   }
@@ -323,7 +325,9 @@ void loop()
         #endif
         {
           #ifndef KISS
-          mspWriteRequest(MSP_ATTITUDE,0);
+            if (timer.GUI_active==0){
+              mspWriteRequest(MSP_ATTITUDE,0);
+            }
           #endif // KISS
         }
       #endif //MSP_SPEED_MED  
@@ -396,6 +400,7 @@ void loop()
 #ifdef BOXNAMES
         MSPcmdsend = MSP_BOXNAMES;
 #else
+       //if (flags.box!=1)
         MSPcmdsend = MSP_BOXIDS;
 #endif
          break;
@@ -444,7 +449,9 @@ void loop()
          if (!canvasMode)
          #endif
          {
-           mspWriteRequest(MSPcmdsend, 0); 
+           if (timer.GUI_active==0){
+             mspWriteRequest(MSPcmdsend, 0);
+           } 
          }
        #endif // KISS
       #endif //GPSOSD
@@ -651,6 +658,10 @@ void loop()
     if (timer.MSP_active>0){
       timer.MSP_active--;
     }  
+    if (timer.GUI_active>0){
+      timer.GUI_active--;
+    }  
+    
     if(!armed) {
 //      setMspRequests();
 #ifndef MAPMODENORTH

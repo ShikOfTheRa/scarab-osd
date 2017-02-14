@@ -220,6 +220,7 @@ void serialMSPCheck()
     uint8_t cmd = read8();
 
     if (cmd == OSD_READ_CMD_EE) {
+      timer.GUI_active=2;
       eeaddress = read8();
       eeaddress = eeaddress+read8();
       eedata = read8();
@@ -229,6 +230,7 @@ void serialMSPCheck()
     }
 
     if (cmd == OSD_WRITE_CMD_EE) {
+      timer.GUI_active=2;
       for(uint8_t i=0; i<10; i++) {
         eeaddress = read8();
         eeaddress = eeaddress+(read8()<<8);
@@ -388,6 +390,7 @@ For sub-command 3 (draw string):
     I2CError=read16();
     MwSensorPresent = read16();
     MwSensorActive = read32();
+    debug[0]=(uint32_t) MwSensorActive&0xFFFF;
     #if defined FORCESENSORS
       MwSensorPresent=GPSSENSOR|BAROMETER|MAGNETOMETER|ACCELEROMETER;
     #endif  
@@ -789,6 +792,7 @@ For sub-command 3 (draw string):
         break;
       case 8:
         mode.camstab |= bit;
+        debug[1]=mode.camstab;
        break;
       case 10:
         mode.gpshome |= bit;
@@ -798,6 +802,7 @@ For sub-command 3 (draw string):
         break;
       case 12:
         mode.passthru  |= bit;
+        debug[2]=mode.passthru;
         break;
       case 16:
         mode.llights |= bit;
