@@ -234,9 +234,9 @@ struct __mode {
   uint8_t baro;
   uint8_t mag;
   uint16_t camstab;
-  uint16_t gpshome;
-  uint16_t gpshold;
-  uint16_t passthru;
+  uint32_t gpshome;
+  uint32_t gpshold;
+  uint32_t passthru;
   uint32_t air;
   uint32_t acroplus;
   uint32_t osd_switch;

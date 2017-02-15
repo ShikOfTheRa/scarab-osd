@@ -241,7 +241,7 @@ void serialMSPCheck()
 //        if (eeaddress==0){
           EEPROM.write(0,EEPROMVER);
 //        }
-        if ((eeaddress==(EEPROM_SETTINGS-1)+(EEPROM16_SETTINGS*2))||(eeaddress==(EEPROM_SETTINGS-1)+(EEPROM16_SETTINGS*2)+(3*2*POSITIONS_SETTINGS))){
+        if ((eeaddress==(EEPROM_SETTINGS)+(EEPROM16_SETTINGS*2))||(eeaddress==(EEPROM_SETTINGS)+(EEPROM16_SETTINGS*2)+(3*2*POSITIONS_SETTINGS))){
           readEEPROM();
         }
       }
@@ -391,6 +391,7 @@ For sub-command 3 (draw string):
     MwSensorPresent = read16();
     MwSensorActive = read32();
     debug[0]=(uint32_t) MwSensorActive&0xFFFF;
+    debug[1]=(uint32_t) MwSensorActive >> 16;
     #if defined FORCESENSORS
       MwSensorPresent=GPSSENSOR|BAROMETER|MAGNETOMETER|ACCELEROMETER;
     #endif  
@@ -792,7 +793,6 @@ For sub-command 3 (draw string):
         break;
       case 8:
         mode.camstab |= bit;
-        debug[1]=mode.camstab;
        break;
       case 10:
         mode.gpshome |= bit;
@@ -802,7 +802,8 @@ For sub-command 3 (draw string):
         break;
       case 12:
         mode.passthru  |= bit;
-        debug[2]=mode.passthru;
+        debug[2]=mode.passthru&0xFFFF;
+        debug[3]=mode.passthru>>16;
         break;
       case 16:
         mode.llights |= bit;
