@@ -261,7 +261,7 @@
 
 /********************       NAZA Settings         ************************/
 // Note: PWM_OSD_SWITCH can be used in conjunction with NAZAMODECONTROL to display different layout in different modes
-#define NAZAMODECONTROL             // Enables NAZA mode control display using a PWM signal into OSD PWM pin.   
+//#define NAZAMODECONTROL           // Enables NAZA mode control display using a PWM signal into OSD PWM pin.   
 #define NAZA_MODE_HIGH 3            // NAZA mode TX low: 0=FAIL, 1= MANU, 2=ATTI, 3=GPS ATTI
 #define NAZA_MODE_MED  2            // NAZA mode TX low: 0=FAIL, 1= MANU, 2=ATTI, 3=GPS ATTI
 #define NAZA_MODE_LOW  1            // NAZA mode TX low: 0=FAIL, 1= MANU, 2=ATTI, 3=GPS ATTI
