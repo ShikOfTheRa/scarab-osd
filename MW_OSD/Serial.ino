@@ -212,8 +212,8 @@ void serialMSPCheck()
     timer.packetcount++;
   #endif
   readIndex = 0;
-  #ifdef ALARM_MSP
-    timer.MSP_active=ALARM_MSP; // getting something on serial port
+  #ifdef DATA_MSP
+    timer.MSP_active=DATA_MSP; // getting something on serial port
   #endif
 
   if (cmdMSP == MSP_OSD) {

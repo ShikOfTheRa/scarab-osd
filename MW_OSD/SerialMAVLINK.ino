@@ -126,9 +126,9 @@ void serialMAVCheck(){
 #ifdef DEBUGDPOSPACKET
   timer.packetcount++;
 #endif
-#ifdef ALARM_MSP
-  timer.MSP_active=ALARM_MSP; // getting valid MAV on serial port
-#endif //ALARM_MSP
+#ifdef DATA_MSP
+  timer.MSP_active=DATA_MSP; // getting valid MAV on serial port
+#endif //DATA_MSP
   int16_t MwHeading360;
   static uint8_t armedglitchprotect=0;
   switch(mw_mav.message_cmd) {

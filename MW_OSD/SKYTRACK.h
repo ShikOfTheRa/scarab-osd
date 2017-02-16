@@ -28,8 +28,8 @@ uint32_t SLread_u32(uint8_t val) {
 
 void SL_sync() {
   timer.packetcount++;
-#ifdef ALARM_MSP
-  timer.MSP_active = ALARM_MSP;           // getting something on serial port
+#ifdef DATA_MSP
+  timer.MSP_active = DATA_MSP;           // getting something on serial port
 #endif
   GPS_longitude = (int32_t)SLread_u32(4);
   GPS_latitude  = (int32_t)SLread_u32(8);

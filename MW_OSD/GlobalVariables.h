@@ -99,6 +99,11 @@
 #define DEBUGDEF 0   
 #endif
 
+#if defined (ALARM_MSP)
+#define DATA_MSP ALARM_MSP
+#else
+#define DATA_MSP 5   
+#endif
 
 #define NAZA_PWM_LOW  1000
 #define NAZA_PMW_MED  1400

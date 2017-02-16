@@ -30,9 +30,9 @@ void NAZA_NewData(uint8_t c){
       break;
     case NAZA_MESSAGE_COMPASS:
      timer.packetcount++;
-     #ifdef ALARM_MSP
-       timer.MSP_active=ALARM_MSP;             // getting something on serial port
-     #endif //ALARM_MSP
+     #ifdef DATA_MSP
+       timer.MSP_active=DATA_MSP;             // getting something on serial port
+     #endif //DATA_MSP
       GPS_ground_course=10*NazaDecoder.getHeadingNc();
       int16_t MwHeading360=GPS_ground_course/10;
       if (MwHeading360>180)

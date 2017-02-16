@@ -69,8 +69,8 @@ void ltm_check() {
   static uint8_t GPS_fix_HOME_validation=GPSHOMEFIX;
   static uint8_t armedglitchprotect=0;
   uint32_t dummy;
-#ifdef ALARM_MSP
-  timer.MSP_active=ALARM_MSP;             // getting something on serial port
+#ifdef DATA_MSP
+  timer.MSP_active=DATA_MSP;             // getting something on serial port
 #endif
   if (mw_ltm.LTMcmd == LIGHTTELEMETRY_GFRAME)
   {
