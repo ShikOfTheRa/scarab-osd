@@ -57,7 +57,9 @@
 
 ## Enhancement requests for future releases: ##
 
-FRSY implemenation for receiver side
+Wind direction indicator
+
+FRSY implemenation for receiver side OSD
 
 Display minimum voltage
 
