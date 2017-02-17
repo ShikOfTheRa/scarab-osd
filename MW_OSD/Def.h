@@ -9,16 +9,17 @@
 
 // Display Debug screen display options
 //#define DEBUGMW            // Enable to display MSP debug values (assumes debug[x] values are not set elsewhere) 
-#define DEBUGDPOSRCDATA 33   // display RCDATA values at position X
-#define DEBUGDPOSANAL 84     // display sensor values at position X
-#define DEBUGDPOSPWM 264     // display PWM values at position X
-#define DEBUGDPOSVAL 40      // display debug values at position X
-#define DEBUGDPOSLOOP 190    // display loop rate value at position X
-#define DEBUGDPOSSAT 250     // display sat value at position X
-#define DEBUGDPOSARMED 280   // display armed value at position X
-#define DEBUGDPOSPACKET 310  // display serial packet rate rate value at position X
-#define DEBUGDPOSMEMORY 340  // display free heap/stack memory at position X. Requires MEMCHECK and not valid in latest Arduino versions
-#define DEBUGDPOSRX 220      // display serial data rate at position X
+//#define DEBUG 4
+#define DEBUGDPOSRCDATA 264   // display RCDATA values at position X
+//#define DEBUGDPOSANAL 84     // display sensor values at position X
+//#define DEBUGDPOSPWM 264     // display PWM values at position X
+//#define DEBUGDPOSVAL 40      // display debug values at position X
+//#define DEBUGDPOSLOOP 190    // display loop rate value at position X
+//#define DEBUGDPOSSAT 250     // display sat value at position X
+//#define DEBUGDPOSARMED 280   // display armed value at position X
+//#define DEBUGDPOSPACKET 310  // display serial packet rate rate value at position X
+//#define DEBUGDPOSMEMORY 340  // display free heap/stack memory at position X. Requires MEMCHECK and not valid in latest Arduino versions
+//#define DEBUGDPOSRX 220      // display serial data rate at position X
 
 // Display Debug text message in standard screen text warning message area
 // Enable and set debugtext=1 in code when required 
@@ -39,11 +40,11 @@
 
 
 /********************  HARDWARE rule definitions  **********************/
-#ifdef IMPULSERC_VTX
+#ifdef IMPULSERC_HELIX
   #define RUSHDUINO
   #define VTX_RTC6705
-
-#endif //IMPULSERC_VTX
+  #define MENU_VTX
+#endif //IMPULSERC_HELIX
 
 /********************  CONTROLLER rule definitions  **********************/
 
