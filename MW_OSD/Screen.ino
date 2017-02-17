@@ -1222,6 +1222,14 @@ void displayCursor(void)
   }
   if(ROW<10)
   {
+#ifdef MENU_VTX
+    if (configPage == MENU_VTX) {
+      if (ROW==5) ROW=10;
+      if (ROW==9) ROW=4;
+      cursorpos=(ROW+2)*30+16;
+    }
+#endif
+
 #ifdef MENU_PID
     if(configPage==MENU_PID){
 #ifdef MENU_PID_VEL
@@ -1774,27 +1782,40 @@ void displayConfigScreen(void)
 #endif  
 
 #ifdef MENU_VTX
-    if(configPage==MENU_VTX){
-      
-      for(uint8_t X=0; X<=2; X++) {
-        strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_vtx[X])));
-        MAX7456_WriteString(screenBuffer, ROLLT+ (X*30));
-      }
+  if(configPage == MENU_VTX) {
+    for(uint8_t X=0; X<=2; X++)
+      MAX7456_WriteString_P(PGMSTR(&(menu_vtx[X])), ROLLT+ (X*30));
+    // Power
+    MAX7456_WriteString_P(PGMSTR(&(vtxPowerNames[Settings[S_VTX_POWER]])) ,ROLLI);
+    // Band
+    MAX7456_WriteString_P(PGMSTR(&(vtxBandNames[Settings[S_VTX_BAND]])) ,PITCHI);
+    // Channel
+    MAX7456_WriteString(itoa(Settings[S_VTX_CHANNEL] + 1, screenBuffer, 10), YAWI);
+    // Set
+    MAX7456_WriteString("SET", ALTI);
 
-      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_choice_power[Settings[S_VTX_POWER]])));
-      MAX7456_WriteString(screenBuffer,ROLLD);
-      strcpy_P(screenBuffer, (char*)pgm_read_word(&(menu_choice_band[Settings[S_VTX_BAND]])));
-      MAX7456_WriteString(screenBuffer,PITCHD);
-      MAX7456_WriteString(itoa(Settings[S_VTX_CHANNEL] + 1,screenBuffer,10),YAWD);
-    
-    }
-#endif  
+    updateVtxStatus();
+  }
+#endif
+
   if(configPage > MAXPAGE)configPage=MINPAGE;
 
   displayCursor();
 }
 
-
+#ifdef MENU_VTX
+void updateVtxStatus(void)
+{
+  if (configPage == MENU_VTX) {
+    char tmp[2];
+    tmp[0] = (char)pgm_read_byte(&vtxBandLetters[vtxBand]);
+    tmp[1] = 0;
+    MAX7456_WriteString(tmp, 12 + 30);
+    MAX7456_WriteString(itoa(vtxChannel + 1, screenBuffer, 10), 14 + 30);
+    MAX7456_WriteString_P(PGMSTR(&(vtxPowerNames[vtxPower])), 16 + 30);
+  }
+}
+#endif
 
 void displayDebug(void)
 {
@@ -1809,9 +1830,11 @@ void displayDebug(void)
       break;  
   }
 
+#if 0
  for(uint16_t xx=0;xx<MAX_screen_size;++xx){ // clear screen
    screen[xx] = ' ';
  }
+#endif
  
 #ifdef DEBUGDPOSRCDATA
   MAX7456_WriteString("RC",DEBUGDPOSRCDATA);

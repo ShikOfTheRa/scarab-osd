@@ -13,7 +13,7 @@
 //#define KYLIN250PDB               // Uncomment this if using a Kylin 250 FPV PDB (Using A6 as VOLTAGEPIN)
 //#define AIRBOTMICRO               // Uncomment this if using an airbot MicroOSD
 //#define ANDROMEDA                 // Uncomment this if using an Andromeda (http://www.multiwiicopter.com/)
-//#define IMPULSERC_VTX             // Uncomment this if using an ImpulseRC integrated OSD/VTX
+#define IMPULSERC_HELIX             // Uncomment this if using an ImpulseRC integrated OSD/VTX
 
 // NOTE-some boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct: 

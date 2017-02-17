@@ -849,37 +849,6 @@ void handleRawRC() {
 
   if(!waitStick)
   {
-    #ifdef MENU_VTX
-    if (MwRcData[THROTTLESTICK]>MAXSTICK && MwRcData[PITCHSTICK] > 1300 && MwRcData[PITCHSTICK] < 1700 && !configMode && !armed && allSec>VTX_STICK_CMD_DELAY){
-      
-      if (MwRcData[YAWSTICK]>MAXSTICK && MwRcData[ROLLSTICK]>MAXSTICK) { //Increase channel
-        Settings[S_VTX_CHANNEL] = constrain(Settings[S_VTX_CHANNEL]+1, 0, VTX_CHANNEL_COUNT - 1);
-        vtx_flash_led(Settings[S_VTX_CHANNEL] + 1);
-      }
-      if (MwRcData[YAWSTICK]>MAXSTICK && MwRcData[ROLLSTICK]<MINSTICK) { //Decrease channel
-        Settings[S_VTX_CHANNEL] = constrain(Settings[S_VTX_CHANNEL]-1, 0, VTX_CHANNEL_COUNT - 1);
-        vtx_flash_led(Settings[S_VTX_CHANNEL] + 1);
-      }
-      if (MwRcData[YAWSTICK]<MINSTICK && MwRcData[ROLLSTICK]>MAXSTICK) { //Increase band
-        Settings[S_VTX_BAND] = constrain(Settings[S_VTX_BAND]+1, 0, VTX_BAND_COUNT - 1);
-        vtx_flash_led(Settings[S_VTX_BAND] + 1);
-      }
-      if (MwRcData[YAWSTICK]<MINSTICK && MwRcData[ROLLSTICK]<MINSTICK) { //Decrease band
-        Settings[S_VTX_BAND] = constrain(Settings[S_VTX_BAND]-1, 0, VTX_BAND_COUNT - 1);
-        vtx_flash_led(Settings[S_VTX_BAND] + 1);
-      }
-      
-      if (vtxBand != Settings[S_VTX_BAND] || vtxChannel != Settings[S_VTX_CHANNEL])
-      {
-//        EEPROM.write(S_VTX_BAND, Settings[S_VTX_BAND]); // write is save only in configsave??
-//        EEPROM.write(S_VTX_CHANNEL, Settings[S_VTX_CHANNEL]);  // write is save only in configsave??      
-        vtxBand = Settings[S_VTX_BAND];
-        vtxChannel = Settings[S_VTX_CHANNEL];
-        vtx_set_frequency(vtxBand, vtxChannel);        
-        waitStick = 1;
-      }
-    }
-#endif //MENU_VTX
     if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THROTTLESTICK]>MINSTICK)){
 #ifdef CANVAS_SUPPORT
       if (!configMode && (allSec > 5) && !armed && !canvasMode)
@@ -995,6 +964,42 @@ void serialMenuCommon()
 
   if(configPage < MINPAGE) configPage = MAXPAGE;
   if(configPage > MAXPAGE) configPage = MINPAGE;
+
+#ifdef MENU_VTX
+  if (configPage == MENU_VTX) {
+    switch(ROW) {
+      case 1: // Power
+        Settings[S_VTX_POWER] += menudir;
+        Settings[S_VTX_POWER] = constrain((int8_t)Settings[S_VTX_POWER], 0, VTX_POWER_COUNT - 1);
+        vtx_flash_led(Settings[S_VTX_POWER] + 1);
+        break;
+
+      case 2: // Band
+        Settings[S_VTX_BAND] += menudir;
+        Settings[S_VTX_BAND] = constrain((int8_t)Settings[S_VTX_BAND], 0, VTX_BAND_COUNT - 1);
+        vtx_flash_led(Settings[S_VTX_BAND] + 1);
+        break;
+
+      case 3: // Chan
+        Settings[S_VTX_CHANNEL] += menudir;
+        Settings[S_VTX_CHANNEL] = constrain((int8_t)Settings[S_VTX_CHANNEL], 0, VTX_CHANNEL_COUNT - 1);
+        vtx_flash_led(Settings[S_VTX_CHANNEL] + 1);
+        break;
+
+      case 4: // Set
+        if (menudir > 0) {
+          if (vtxBand != Settings[S_VTX_BAND] || vtxChannel != Settings[S_VTX_CHANNEL])
+          {
+            vtxBand = Settings[S_VTX_BAND];
+            vtxChannel = Settings[S_VTX_CHANNEL];
+            vtx_set_frequency(vtxBand, vtxChannel);
+            updateVtxStatus();
+          }
+        }
+        break;
+    }
+  }
+#endif
 
 #ifdef MENU_PID
   if(configPage == MENU_PID) {
@@ -1211,16 +1216,6 @@ void serialMenuCommon()
   #endif //ADVANCEDSAVE
 #endif  
 
-#ifdef MENU_VTX
-  if(configPage == MENU_VTX && COL == 3) {
-      switch(ROW) {
-      case 1: Settings[S_VTX_POWER] = constrain(Settings[S_VTX_POWER]+menudir, 0, VTX_POWER_COUNT - 1);
-      case 2: Settings[S_VTX_BAND] = constrain(Settings[S_VTX_BAND]+menudir, 0, VTX_BAND_COUNT - 1);
-      case 3: Settings[S_VTX_CHANNEL] = constrain(Settings[S_VTX_CHANNEL]+menudir, 0, VTX_CHANNEL_COUNT - 1);
-      }
-  };
-#endif
-
   if (ROW == 10) {
     previousconfigPage = configPage;
     switch(COL) {
@@ -1384,9 +1379,12 @@ void configExit()
       setFCProfile();
     }
   #endif
+
+#if 0 // XXX What is this for???
   #ifdef VTX_RTC6705   
     vtx_read();
   #endif //VTX_RTC6705
+#endif
 
   setMspRequests();
 }
@@ -1495,9 +1493,11 @@ void configSave()
   mspWriteChecksum();  
 #endif
 
+#if 0 // This is not necessary? vtxBand,vtxChannel&vtxPower are all in sync with corresponding Settings at the end of stick handling.
 #ifdef MENU_VTX
   vtx_save();
 #endif //MENU_VTX  
+#endif
 
   writeEEPROM();
   mspWriteRequest(MSP_EEPROM_WRITE,0);

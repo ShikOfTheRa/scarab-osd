@@ -1,28 +1,42 @@
 #ifdef VTX_RTC6705
 
-#define CS        PINC1
-#define CS_PORT   PORTC
-#define CS_DDR    DDRC
+#if defined(IMPULSERC_HELIX)
+// A1
+# define CS        PINC1
+# define CS_PORT   PORTC
+# define CS_DDR    DDRC
 
-#define SCK       PINC0
-#define SCK_PORT  PORTC
-#define SCK_DDR   DDRC
+// A0
+# define SCK       PINC0
+# define SCK_PORT  PORTC
+# define SCK_DDR   DDRC
 
-#define MOSI      PINC2
-#define MOSI_PORT PORTC
-#define MOSI_DDR  DDRC
+// A2
+# define MOSI      PINC2
+# define MOSI_PORT PORTC
+# define MOSI_DDR  DDRC
 
-#define PSW1      PIND5
-#define PSW1_PORT PORTD
-#define PSW1_DDR  DDRD
+// D5
+# define PSW1      PIND5
+# define PSW1_PORT PORTD
+# define PSW1_DDR  DDRD
 
-#define PSW2      PIND6
-#define PSW2_PORT PORTD
-#define PSW2_DDR  DDRD
+// D6
+# define PSW2      PIND6
+# define PSW2_PORT PORTD
+# define PSW2_DDR  DDRD
 
-#define LED      PINB0
-#define LED_PORT PORTB
-#define LED_DDR  DDRB
+// D8
+# define LED      PINB0
+# define LED_PORT PORTB
+# define LED_DDR  DDRB
+
+// A6 is used for power sensing
+
+#elif defined(FFPV_INNOVA)
+#else
+  // Empty
+#endif
 
 #define CLR(x,y) (x&=(~(1<<y)))
 #define SET(x,y) (x|=(1<<y))
@@ -42,8 +56,15 @@ void vtx_init() {
   CLR(PSW1_PORT, PSW1);
   CLR(PSW2_PORT, PSW2);
   SET(LED_PORT, LED);
+
+  vtxPower = Settings[S_VTX_POWER];
+  vtxBand = Settings[S_VTX_BAND];
+  vtxChannel = Settings[S_VTX_CHANNEL];
+
+  vtx_set_frequency(vtxBand, vtxChannel);
 }
 
+#if defined(IMPULSERC_HELIX)
 void vtx_set_power(uint8_t power)
 { 
   switch (power)
@@ -62,6 +83,10 @@ void vtx_set_power(uint8_t power)
       break;
   }
 }
+#elif defined(FFPV_INNOVA)
+#else
+  // Empty
+#endif
 
 //http://fpv-community.de/showthread.php?28337-RTC6705-Sender-auf-FatShark-Frequenz&p=844717&viewfull=1#post844717
 void vtx_set_frequency(uint8_t band, uint8_t channel)
@@ -125,7 +150,7 @@ uint32_t debounce = 0;
 uint16_t ledToggle = 0;
 uint32_t lastToggle = 0;
 
-
+#ifdef IMPULSERC_HELIX
 void vtx_flash_led(uint8_t count)
 {
   if (ledToggle == 0)
@@ -156,6 +181,7 @@ void vtx_process_state(uint32_t currentMillis, uint8_t band, uint8_t channel)
   
   wasPowered = reading;
 }
+#endif
 
 void vtx_save(){
   Settings[S_VTX_POWER]=vtxPower;
@@ -167,10 +193,4 @@ void vtx_save(){
   }
 }
 
-void vtx_read(){
-  vtxPower=Settings[S_VTX_POWER];
-  vtxBand=Settings[S_VTX_BAND];
-  vtxChannel=Settings[S_VTX_CHANNEL];
-  vtx_set_frequency(vtxBand, vtxChannel);
-}
 #endif

@@ -96,7 +96,11 @@
 
 /********************       VTX      *********************/
 
-#ifdef MENU_VTX
+#ifdef VTX_RTC6705
+
+uint8_t vtxPower;
+uint8_t vtxBand;
+uint8_t vtxChannel;
 
 #ifdef VTX_REGION_UNRESTRICTED
 
@@ -134,12 +138,7 @@
   };
 #endif //VTX_REGION_XXXXX
 
-#define VTX_STICK_CMD_DELAY                   2
-uint8_t vtxPower=VTX_DEFAULT_POWER;
-uint8_t vtxBand=VTX_DEFAULT_BAND;
-uint8_t vtxChannel=VTX_DEFAULT_CHANNEL;
-
-#endif //MENU_VTX
+#endif // VTX_RTC6705
 
 #if defined (DEVELOPMENT)
 #define DEBUGDEF 1
@@ -451,14 +450,14 @@ DEBUGDEF,   // DEBUG                       37e
 1,   // S_TIMER                     41h
 1,   // S_MODESENSOR                42h
 0,   // S_SIDEBARTOPS               43h
-#ifndef VTX_DEFAULT_POWER // if not defined fix
-0,    // S_VTX_POWER,
-0,     // S_VTX_BAND,
-0,  // S_VTX_CHANNEL,
+#ifdef VTX_RTC6705
+VTX_DEFAULT_POWER,    // S_VTX_POWER
+VTX_DEFAULT_BAND,     // S_VTX_BAND
+VTX_DEFAULT_CHANNEL,  // S_VTX_CHANNEL
 #else
-VTX_DEFAULT_POWER,    // S_VTX_POWER,
-VTX_DEFAULT_BAND,     // S_VTX_BAND,
-VTX_DEFAULT_CHANNEL,  // S_VTX_CHANNEL,
+0,   // S_VTX_POWER
+0,   // S_VTX_BAND
+0,   // S_VTX_CHANNEL
 #endif
 0,   // S_RCWSWITCH,
 5,   // S_RCWSWITCH_CH,
@@ -479,7 +478,6 @@ VTX_DEFAULT_CHANNEL,  // S_VTX_CHANNEL,
 0x20,   // S_CS7,
 0x20,   // S_CS8,
 0x20,   // S_CS9,
-
 };
 
 PROGMEM const uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
@@ -490,7 +488,6 @@ PROGMEM const uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
   1024,// S16_RSSIMAX,
   500,// S16_SPARE1,
   600,// S16_SPARE2,
-  
 };
 
 
@@ -1140,14 +1137,15 @@ const char configMsg150[] PROGMEM = "VTX";
 const char configMsg151[] PROGMEM = "POWER";
 const char configMsg152[] PROGMEM = "BAND";
 const char configMsg153[] PROGMEM = "CHANNEL";
+const char configMsg154[] PROGMEM = "";
 const char configMsg1510[] PROGMEM = "25";
 const char configMsg1511[] PROGMEM = "200";
 const char configMsg1512[] PROGMEM = "500";
-const char configMsg1520[] PROGMEM = "A";
-const char configMsg1521[] PROGMEM = "B";
-const char configMsg1522[] PROGMEM = "E";
-const char configMsg1523[] PROGMEM = "F";
-const char configMsg1524[] PROGMEM = "R";
+const char configMsg1520[] PROGMEM = "BOSCAM A";
+const char configMsg1521[] PROGMEM = "BOSCAM B";
+const char configMsg1522[] PROGMEM = "BOSCAM E";
+const char configMsg1523[] PROGMEM = "FATSHARK";
+const char configMsg1524[] PROGMEM = "RACE";
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={
@@ -1198,14 +1196,14 @@ const PROGMEM char * const menu_choice_ref[] =
 #ifdef MENU_VTX
   #ifdef VTX_REGION_UNRESTRICTED
   // Menu selections
-  const PROGMEM char * const menu_choice_power[] =
+  const PROGMEM char * const vtxPowerNames[] =
   {   
     configMsg1510,
     configMsg1511,
     configMsg1512
   };
   // Menu selections
-  const PROGMEM char * const menu_choice_band[] =
+  const PROGMEM char * const vtxBandNames[] =
   {   
     configMsg1520,
     configMsg1521,
@@ -1213,20 +1211,22 @@ const PROGMEM char * const menu_choice_ref[] =
     configMsg1523,
     configMsg1524
   };
+  const PROGMEM char vtxBandLetters[] = "ABEFR";
   #elif defined(VTX_REGION_AUSTRALIA)
   // Menu selections
-  const PROGMEM char * const menu_choice_power[] =
+  const PROGMEM char * const vtxPowerNames[] =
   {   
     configMsg1510
   };
   // Menu selections
-  const PROGMEM char * const menu_choice_band[] =
+  const PROGMEM char * const vtxBandNames[] =
   {   
     configMsg1520,
     configMsg1521,
     configMsg1523,
     configMsg1524
   };
+  const PROGMEM char vtxBandLetters[] = "ABFR";
   #endif //VTX_REGION_XXXX
 
 const PROGMEM char * const menu_vtx[] = 
@@ -1234,6 +1234,7 @@ const PROGMEM char * const menu_vtx[] =
   configMsg151,
   configMsg152,
   configMsg153,
+  configMsg154,
 };
 
 #endif //MENU_VTX
