@@ -336,10 +336,12 @@
 
 
 /********************           VTX settings           *********************/
-//Choose ONLY ONE option:
+// Regional RF frequency regulations: Choose ONLY ONE option:
 #define VTX_REGION_UNRESTRICTED                // Enable for all 40 channels
 //#define VTX_REGION_AUSTRALIA                   // Enable for AU legal channels and power level only
 
+// Direct stick commands for band/chan manipulation
+#define VTX_RC
 
 /********************  Advanced parameters  settings      *********************/
 // This is to enable rarely used advanced parameter saving. Off by default to minimise risk 

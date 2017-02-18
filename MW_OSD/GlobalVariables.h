@@ -102,6 +102,8 @@ uint8_t vtxPower;
 uint8_t vtxBand;
 uint8_t vtxChannel;
 
+#define VTX_STICK_CMD_DELAY                   2
+
 #ifdef VTX_REGION_UNRESTRICTED
 
   #define VTX_DEFAULT_CHANNEL                 0

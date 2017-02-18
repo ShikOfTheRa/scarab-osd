@@ -849,6 +849,38 @@ void handleRawRC() {
 
   if(!waitStick)
   {
+#ifdef VTX_RC
+    if (MwRcData[THROTTLESTICK]>MAXSTICK && MwRcData[PITCHSTICK] > 1300 && MwRcData[PITCHSTICK] < 1700 && !configMode && !armed && allSec>VTX_STICK_CMD_DELAY){
+      
+      if (MwRcData[YAWSTICK]>MAXSTICK && MwRcData[ROLLSTICK]>MAXSTICK) { //Increase channel
+        Settings[S_VTX_CHANNEL] = constrain(Settings[S_VTX_CHANNEL]+1, 0, VTX_CHANNEL_COUNT - 1);
+        vtx_flash_led(Settings[S_VTX_CHANNEL] + 1);
+      }
+      if (MwRcData[YAWSTICK]>MAXSTICK && MwRcData[ROLLSTICK]<MINSTICK) { //Decrease channel
+        Settings[S_VTX_CHANNEL] = constrain(Settings[S_VTX_CHANNEL]-1, 0, VTX_CHANNEL_COUNT - 1);
+        vtx_flash_led(Settings[S_VTX_CHANNEL] + 1);
+      }
+      if (MwRcData[YAWSTICK]<MINSTICK && MwRcData[ROLLSTICK]>MAXSTICK) { //Increase band
+        Settings[S_VTX_BAND] = constrain(Settings[S_VTX_BAND]+1, 0, VTX_BAND_COUNT - 1);
+        vtx_flash_led(Settings[S_VTX_BAND] + 1);
+      }
+      if (MwRcData[YAWSTICK]<MINSTICK && MwRcData[ROLLSTICK]<MINSTICK) { //Decrease band
+        Settings[S_VTX_BAND] = constrain(Settings[S_VTX_BAND]-1, 0, VTX_BAND_COUNT - 1);
+        vtx_flash_led(Settings[S_VTX_BAND] + 1);
+      }
+      
+      if (vtxBand != Settings[S_VTX_BAND] || vtxChannel != Settings[S_VTX_CHANNEL])
+      {
+//        EEPROM.write(S_VTX_BAND, Settings[S_VTX_BAND]); // write is save only in configsave??
+//        EEPROM.write(S_VTX_CHANNEL, Settings[S_VTX_CHANNEL]);  // write is save only in configsave??      
+        vtxBand = Settings[S_VTX_BAND];
+        vtxChannel = Settings[S_VTX_CHANNEL];
+        vtx_set_frequency(vtxBand, vtxChannel);        
+        waitStick = 1;
+      }
+    }
+#endif
+
     if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THROTTLESTICK]>MINSTICK)){
 #ifdef CANVAS_SUPPORT
       if (!configMode && (allSec > 5) && !armed && !canvasMode)
@@ -971,30 +1003,32 @@ void serialMenuCommon()
       case 1: // Power
         Settings[S_VTX_POWER] += menudir;
         Settings[S_VTX_POWER] = constrain((int8_t)Settings[S_VTX_POWER], 0, VTX_POWER_COUNT - 1);
-        vtx_flash_led(Settings[S_VTX_POWER] + 1);
         break;
 
       case 2: // Band
         Settings[S_VTX_BAND] += menudir;
         Settings[S_VTX_BAND] = constrain((int8_t)Settings[S_VTX_BAND], 0, VTX_BAND_COUNT - 1);
-        vtx_flash_led(Settings[S_VTX_BAND] + 1);
         break;
 
       case 3: // Chan
         Settings[S_VTX_CHANNEL] += menudir;
         Settings[S_VTX_CHANNEL] = constrain((int8_t)Settings[S_VTX_CHANNEL], 0, VTX_CHANNEL_COUNT - 1);
-        vtx_flash_led(Settings[S_VTX_CHANNEL] + 1);
         break;
 
       case 4: // Set
         if (menudir > 0) {
-          if (vtxBand != Settings[S_VTX_BAND] || vtxChannel != Settings[S_VTX_CHANNEL])
-          {
+          if (vtxBand != Settings[S_VTX_BAND] || vtxChannel != Settings[S_VTX_CHANNEL]) {
             vtxBand = Settings[S_VTX_BAND];
             vtxChannel = Settings[S_VTX_CHANNEL];
             vtx_set_frequency(vtxBand, vtxChannel);
-            updateVtxStatus();
           }
+
+          if (vtxPower != Settings[S_VTX_POWER]) {
+            vtxPower = Settings[S_VTX_POWER];
+            vtx_set_power(vtxPower);
+          }
+
+          updateVtxStatus();
         }
         break;
     }
