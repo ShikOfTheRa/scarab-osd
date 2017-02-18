@@ -102,6 +102,8 @@ uint8_t vtxPower;
 uint8_t vtxBand;
 uint8_t vtxChannel;
 
+#define VTX_STICK_CMD_DELAY                   2
+
 #ifdef VTX_REGION_UNRESTRICTED
 
   #define VTX_DEFAULT_CHANNEL                 0
@@ -110,7 +112,16 @@ uint8_t vtxChannel;
   
   #define VTX_BAND_COUNT                      5
   #define VTX_CHANNEL_COUNT                   8
-  #define VTX_POWER_COUNT                     3
+
+  // XXX Kludge
+  // We take advantage of the co-inciddence that Innova's power selection is 25-200mW.
+  // So boring to do this {Hardwares} x {Regulatory woes} correctly.
+
+# ifdef FFPV_INNOVA
+#   define VTX_POWER_COUNT                    2
+# else
+#   define VTX_POWER_COUNT                    3
+# endif
   
   const PROGMEM uint16_t vtx_frequencies[VTX_BAND_COUNT][VTX_CHANNEL_COUNT] = {
     { 5865, 5845, 5825, 5805, 5785, 5765, 5745, 5725 }, //A
@@ -128,6 +139,9 @@ uint8_t vtxChannel;
   
   #define VTX_BAND_COUNT                      4
   #define VTX_CHANNEL_COUNT                   8
+
+  // XXX Kludge Here, we again take advantage of the co-incidence that
+  // Helix and Innova has the same and only power selection for this region.
   #define VTX_POWER_COUNT                     1
   
   const PROGMEM uint16_t vtx_frequencies[VTX_BAND_COUNT][VTX_CHANNEL_COUNT] = {
@@ -1212,7 +1226,9 @@ const PROGMEM char * const menu_choice_ref[] =
     configMsg1524
   };
   const PROGMEM char vtxBandLetters[] = "ABEFR";
+
   #elif defined(VTX_REGION_AUSTRALIA)
+
   // Menu selections
   const PROGMEM char * const vtxPowerNames[] =
   {   

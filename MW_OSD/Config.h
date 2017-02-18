@@ -13,7 +13,8 @@
 //#define KYLIN250PDB               // Uncomment this if using a Kylin 250 FPV PDB (Using A6 as VOLTAGEPIN)
 //#define AIRBOTMICRO               // Uncomment this if using an airbot MicroOSD
 //#define ANDROMEDA                 // Uncomment this if using an Andromeda (http://www.multiwiicopter.com/)
-#define IMPULSERC_HELIX             // Uncomment this if using an ImpulseRC integrated OSD/VTX
+//#define IMPULSERC_HELIX           // Uncomment this if using an ImpulseRC integrated OSD/VTX
+#define FFPV_INNOVA               // Uncomment this if using an ImpulseRC integrated OSD/VTX
 
 // NOTE-some boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct: 
@@ -30,7 +31,7 @@
 // Choose ONLY ONE option from the following long list :-
 
 // latest release...
-//#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
+#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
 //#define BETAFLIGHT3               // Uncomment this if you are using BETAFLIGHT version 3.0.x 
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9 onwards 1.14.2 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
@@ -336,10 +337,12 @@
 
 
 /********************           VTX settings           *********************/
-//Choose ONLY ONE option:
+// Regional RF frequency regulations: Choose ONLY ONE option:
 #define VTX_REGION_UNRESTRICTED                // Enable for all 40 channels
 //#define VTX_REGION_AUSTRALIA                   // Enable for AU legal channels and power level only
 
+// Direct stick commands for band/chan manipulation
+#define VTX_RC
 
 /********************  Advanced parameters  settings      *********************/
 // This is to enable rarely used advanced parameter saving. Off by default to minimise risk 
