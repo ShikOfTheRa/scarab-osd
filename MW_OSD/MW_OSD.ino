@@ -169,10 +169,12 @@ void setup()
 
 #ifdef VTX_RTC6705
   vtx_init();
+# ifdef IMPULSERC_HELIX
   vtx_flash_led(5);
+# endif
 #endif
  
-#ifdef VTX_RTC6705 // XXX This is too much. May be IMPULSERC_HELIX.
+#ifdef IMPULSERC_HELIX
   //Ignore setting because this is critical to making sure we can detect the
   //VTX power jumper being installed. If we aren't using 5V ref there is
   //the chance we will power up on wrong frequency.
@@ -183,7 +185,7 @@ void setup()
     analogReference(DEFAULT);
   else
     analogReference(INTERNAL);
-#endif //VTX_RTC6705
+#endif // IMPULSERC_HELIX
 
   MAX7456Setup();
   #if defined GPSOSD
@@ -293,9 +295,9 @@ void loop()
   //---------------  Start Timed Service Routines  ---------------------------------------
   unsigned long currentMillis = millis();
 
-#ifdef VTX_RTC6705
+#ifdef IMPULSERC_HELIX
   vtx_process_state(currentMillis, vtxBand, vtxChannel);
-#endif //VTX_RTC6705
+#endif
 
 #ifdef MSP_SPEED_HIGH
   if((currentMillis - previous_millis_sync) >= sync_speed_cycle)  // (Executed > NTSC/PAL hz 33ms)
@@ -633,9 +635,15 @@ void loop()
   if(timer.halfSec >= 5) {
     timer.halfSec = 0;
     timer.Blink2hz =! timer.Blink2hz;
+
+#if 0
+    // XXX What is this for? On-Arm power setting?
+    // XXX May be "Power up at minimum power, then goto stored power on-arming."for stick based blind operation or something similar
+    // XXX Leave commented out until intension is known.
     #ifdef VTX_RTC6705
       vtx_set_power(armed ? vtxPower : 0);
     #endif // VTX_RTC6705
+#endif
  }
 
   if(millis() > timer.seconds+1000)     // this execute 1 time a second

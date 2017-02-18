@@ -40,11 +40,27 @@
 
 
 /********************  HARDWARE rule definitions  **********************/
+
+// VTX_RTC6705 Support for RTC6705 based VTX
+// VTX_RC      Support for SINGULARITY-style direct RC stick command
+// VTX_LED     Support for dedicated single status LED (not a LED strip support)
+// MENU_VTX    Support for VTX page in MWOSD MENU
+
 #ifdef IMPULSERC_HELIX
   #define RUSHDUINO
   #define VTX_RTC6705
+  #define VTX_RC
+  #define VTX_LED
   #define MENU_VTX
-#endif //IMPULSERC_HELIX
+#endif
+
+#ifdef FFPV_INNOVA
+  #define MINIMOSD
+  #define VTX_RTC6705
+  //#define VTX_RC    // Can be turned on, hard to use without VTX_LED
+  //#define VTX_LED   // Needs VTXLED_* definitions in RTC6705.ino
+  #define MENU_VTX
+#endif
 
 /********************  CONTROLLER rule definitions  **********************/
 
@@ -577,26 +593,48 @@
 #if defined(RUSHDUINO)                  
     # define DATAOUT          11 // MOSI
     # define DATAIN           12 // MISO
-    # define SPICLOCK         13 // sck
+    # define SPICLOCK         13 // SCK
     # define VSYNC             2 // INT0
     # define MAX7456RESET      9 // RESET
-    # define MAX7456SELECT    10 // CHIP SELECT 
+    # define MAX7456SELECT    10 // SS
     # define MAX7456SETHARDWAREPORTS  pinMode(MAX7456RESET,OUTPUT);pinMode(MAX7456SELECT,OUTPUT);pinMode(DATAOUT, OUTPUT);pinMode(DATAIN, INPUT);pinMode(SPICLOCK,OUTPUT);pinMode(VSYNC, INPUT);
     # define MAX7456HWRESET   digitalWrite(MAX7456RESET,LOW);delay(60);digitalWrite(MAX7456RESET,HIGH);delay(40);
     # define MAX7456ENABLE    digitalWrite(MAX7456SELECT,LOW); 
     # define MAX7456DISABLE   digitalWrite(MAX7456SELECT,HIGH); 
+
 #elif defined ARDUINO_OSD // Example for Arduino guys                     
     # define DATAOUT          11 // MOSI
     # define DATAIN           12 // MISO
-    # define SPICLOCK         13 // sck
+    # define SPICLOCK         13 // SCK
     # define VSYNC             2 // INT0
-    # define MAX7456SELECT     6 // ss
+    # define MAX7456SELECT     6 // SS
     # define MAX7456RESET     10 // RESET
     # define MAX7456SETHARDWAREPORTS  pinMode(MAX7456RESET,OUTPUT);pinMode(MAX7456SELECT,OUTPUT);pinMode(DATAOUT, OUTPUT);pinMode(DATAIN, INPUT);pinMode(SPICLOCK,OUTPUT);pinMode(VSYNC, INPUT);
     # define MAX7456HWRESET   digitalWrite(MAX7456RESET,LOW);delay(60);digitalWrite(MAX7456RESET,HIGH);delay(40);
     # define MAX7456ENABLE    digitalWrite(MAX7456SELECT,LOW); 
     # define MAX7456DISABLE   digitalWrite(MAX7456SELECT,HIGH); 
+
+#elif defined(FFPV_INNOVA)
+    # define DATAOUT          11 // MOSI
+    # define DATAIN           12 // MISO
+    # define SPICLOCK         13 // SCK
+    # define VSYNC             2 // INT0
+    # define MAX7456SELECT     6 // SS
+    //# define MAX7456RESET     10 // RESET; used for RTC6705 SPIDATA
+    # define MAX7456SETHARDWAREPORTS  /*pinMode(MAX7456RESET,OUTPUT);*/pinMode(MAX7456SELECT,OUTPUT);pinMode(DATAOUT, OUTPUT);pinMode(DATAIN, INPUT);pinMode(SPICLOCK,OUTPUT);pinMode(VSYNC, INPUT);
+    //# define MAX7456HWRESET   digitalWrite(MAX7456RESET,LOW);delay(60);digitalWrite(MAX7456RESET,HIGH);delay(40);
+    # define MAX7456HWRESET    if (0) {} // XXX Kludge!!!
+    # define MAX7456ENABLE    digitalWrite(MAX7456SELECT,LOW); 
+    # define MAX7456DISABLE   digitalWrite(MAX7456SELECT,HIGH); 
+
 #else                                  
+    //# define DATAOUT          11 // MOSI
+    //# define DATAIN           12 // MISO
+    //# define SPICLOCK         13 // SCK
+    //# define VSYNC             2 // INT0
+    //# define MAX7456SELECT     6 // CHIP SELECT 
+    //# define MAX7456RESET     10 // RESET
+
     # define MAX7456ENABLE    PORTD&=B10111111; 
     # define MAX7456DISABLE   PORTD|=B01000000; 
     # define MAX7456SETHARDWAREPORTS  DDRB|=B00101100;DDRB&=B11101111;DDRD|=B01000000;DDRD&=B11111011;

@@ -850,27 +850,41 @@ void handleRawRC() {
   if(!waitStick)
   {
 #ifdef VTX_RC
-    if (MwRcData[THROTTLESTICK]>MAXSTICK && MwRcData[PITCHSTICK] > 1300 && MwRcData[PITCHSTICK] < 1700 && !configMode && !armed && allSec>VTX_STICK_CMD_DELAY){
-      
+    static bool vtxLocked = false;
+    if (armed)
+      vtxLocked = true;
+
+    if (!vtxLocked && MwRcData[THROTTLESTICK]>MAXSTICK && MwRcData[PITCHSTICK] > 1300 && MwRcData[PITCHSTICK] < 1700 && !configMode && !armed && allSec>VTX_STICK_CMD_DELAY){
+
       if (MwRcData[YAWSTICK]>MAXSTICK && MwRcData[ROLLSTICK]>MAXSTICK) { //Increase channel
         Settings[S_VTX_CHANNEL] = constrain(Settings[S_VTX_CHANNEL]+1, 0, VTX_CHANNEL_COUNT - 1);
+# ifdef VTX_LED
         vtx_flash_led(Settings[S_VTX_CHANNEL] + 1);
+# endif
       }
       if (MwRcData[YAWSTICK]>MAXSTICK && MwRcData[ROLLSTICK]<MINSTICK) { //Decrease channel
         Settings[S_VTX_CHANNEL] = constrain(Settings[S_VTX_CHANNEL]-1, 0, VTX_CHANNEL_COUNT - 1);
+# ifdef VTX_LED
         vtx_flash_led(Settings[S_VTX_CHANNEL] + 1);
+# endif
       }
       if (MwRcData[YAWSTICK]<MINSTICK && MwRcData[ROLLSTICK]>MAXSTICK) { //Increase band
         Settings[S_VTX_BAND] = constrain(Settings[S_VTX_BAND]+1, 0, VTX_BAND_COUNT - 1);
+# ifdef VTX_LED
         vtx_flash_led(Settings[S_VTX_BAND] + 1);
+# endif
       }
       if (MwRcData[YAWSTICK]<MINSTICK && MwRcData[ROLLSTICK]<MINSTICK) { //Decrease band
         Settings[S_VTX_BAND] = constrain(Settings[S_VTX_BAND]-1, 0, VTX_BAND_COUNT - 1);
+# ifdef VTX_LED
         vtx_flash_led(Settings[S_VTX_BAND] + 1);
+# endif
       }
       
       if (vtxBand != Settings[S_VTX_BAND] || vtxChannel != Settings[S_VTX_CHANNEL])
       {
+          // XXX Is this vtx_save()?
+
 //        EEPROM.write(S_VTX_BAND, Settings[S_VTX_BAND]); // write is save only in configsave??
 //        EEPROM.write(S_VTX_CHANNEL, Settings[S_VTX_CHANNEL]);  // write is save only in configsave??      
         vtxBand = Settings[S_VTX_BAND];
