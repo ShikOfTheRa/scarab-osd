@@ -1,5 +1,9 @@
 #include <stdio.h>
-#define ATOMIC_BLOCK(how)
+//#define ATOMIC_BLOCK(how) // Enable this for compiler output testing
+
+#define ATOMIC_RESTORE_STATE ATOMIC_RESTORESTATE
+
+#define _xxxconcat(a,b) a ## b
 
 #define _dp2rbit0 0
 #define _dp2rbit1 1
@@ -22,7 +26,8 @@
 #define _dp2rbit18 4
 #define _dp2rbit19 5
 
-#define _digital_pin_to_rbit(n) _dp2rbit##n
+#define _digital_pin_to_rbit(n) _xxxconcat(_dp2rbit, n)
+#define _DTOB(n) _digital_pin_to_rbit(n)
 
 #define _BV(n) (1 << (n))
 
@@ -47,7 +52,7 @@
 #define _dp2bm18 _BV(4)
 #define _dp2bm19 _BV(5)
 
-#define _digital_pin_to_bit_mask(n) _dp2bm##n
+#define _digital_pin_to_bit_mask(n) _xxxconcat(_dp2bm, n)
 
 #define _dp2p0   D /* 0 */
 #define _dp2p1   D
@@ -72,22 +77,24 @@
 
 #define _dp2p(n) _dp2p ## n
 
-#define _xxxconcat(a,b) a ## b
 #define _digital_pin_to_xxx(reg, group) _xxxconcat(reg, group)
 #define _digital_pin_to_ddr(n) _digital_pin_to_xxx(DDR, _dp2p(n))
 #define _digital_pin_to_port(n) _digital_pin_to_xxx(PORT, _dp2p(n))
 
-#define _pinModeOut(pin) ATOMIC_BLOCK(ATOMIC_RESTORE_STATE) {\
-  _digital_pin_to_ddr(pin) |= _digital_pin_to_bit_mask(pin);}
+#define _pinModeOut(pin) ATOMIC_BLOCK(ATOMIC_RESTORE_STATE) do {\
+  _digital_pin_to_ddr(pin) |= _digital_pin_to_bit_mask(pin);} while (false)
 
-#define _pinModeIn(pin) ATOMIC_BLOCK(ATOMIC_RESTORE_STATE) {\
-  _digital_pin_to_ddr(pin) &= ~_digital_pin_to_bit_mask(pin);}
+#define _pinModeIn(pin) ATOMIC_BLOCK(ATOMIC_RESTORE_STATE) do {\
+  _digital_pin_to_ddr(pin) &= ~_digital_pin_to_bit_mask(pin);} while (false)
 
-#define _digitalHi(pin) ATOMIC_BLOCK(ATOMIC_RESTORE_STATE) {\
-  _digital_pin_to_port(pin) |= _digital_pin_to_bit_mask(pin);}
+#define _digitalHi(pin) ATOMIC_BLOCK(ATOMIC_RESTORE_STATE) do {\
+  _digital_pin_to_port(pin) |= _digital_pin_to_bit_mask(pin);} while (false)
 
-#define _digitalLo(pin) ATOMIC_BLOCK(ATOMIC_RESTORE_STATE) {\
-  _digital_pin_to_port(pin) & ~_digital_pin_to_bit_mask(pin);}
+#define _digitalLo(pin) ATOMIC_BLOCK(ATOMIC_RESTORE_STATE) do {\
+  _digital_pin_to_port(pin) &= ~_digital_pin_to_bit_mask(pin);} while (false)
+
+#define _digitalToggle(pin) ATOMIC_BLOCK(ATOMIC_RESTORE_STATE) do {\
+  _digital_pin_to_port(pin) ^= _digital_pin_to_bit_mask(pin);} while (false)
 
 #define _dp2xbm0  (_BV(0) << 16) /* 0, port D */
 #define _dp2xbm1  (_BV(1) << 16)
@@ -113,17 +120,17 @@
 #define _digital_pin_to_extended_bit_mask(n) _dp2xbm ## n
 #define _xm_(n) _digital_pin_to_extended_bit_mask(n) // short hand
 
-#define _pinModeOutGroup(bm) ATOMIC_BLOCK(ATOMIC_RESTORE_STATE) { \
+#define _pinModeOutGroup(bm) ATOMIC_BLOCK(ATOMIC_RESTORE_STATE) do { \
   if ((bm) & 0xff) { DDRB |= ((bm) & 0xff); } \
   if (((bm) >> 8) & 0xff) { DDRC |= (((bm) >> 8) & 0xff); } \
-  if (((bm) >> 16) & 0xff) { DDRD |= (((bm) >> 16) & 0xff); } }
+  if (((bm) >> 16) & 0xff) { DDRD |= (((bm) >> 16) & 0xff); } } while (false)
 
-#define _pinModeInGroup(bm) ATOMIC_BLOCK(ATOMIC_RESTORE_STATE) { \
+#define _pinModeInGroup(bm) ATOMIC_BLOCK(ATOMIC_RESTORE_STATE) do { \
   if ((bm) & 0xff) { DDRB &= ~((bm) & 0xff); } \
   if (((bm) >> 8) & 0xff) { DDRC &= ~(((bm) >> 8) & 0xff); } \
-  if (((bm) >> 16) & 0xff) { DDRD &= ~(((bm) >> 16) & 0xff); } }
+  if (((bm) >> 16) & 0xff) { DDRD &= ~(((bm) >> 16) & 0xff); } } while (false)
 
-#define _pinModeIO(ibm, obm) ATOMIC_BLOCK(ATOMIC_RESTORE_STATE) { \
+#define _pinModeIO(ibm, obm) ATOMIC_BLOCK(ATOMIC_RESTORE_STATE) do { \
   DDRB = (DDRB & ~((ibm) & 0xff)) | ((obm) & 0xff);\
   DDRC = (DDRC & ~(((ibm) >> 8) & 0xff)) | (((obm) >> 8) & 0xff);\
-  DDRD = (DDRD & ~(((ibm) >> 16) & 0xff)) | (((obm) >> 16) & 0xff); }
+  DDRD = (DDRD & ~(((ibm) >> 16) & 0xff)) | (((obm) >> 16) & 0xff); } while (false)
