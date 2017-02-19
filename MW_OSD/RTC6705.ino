@@ -145,12 +145,6 @@ void vtx_set_frequency(uint8_t band, uint8_t channel)
   }
 }
 
-#ifdef IMPULSERC_HELIX
-bool powered = 1;
-bool wasPowered = 0;
-uint32_t debounce = 0;
-#endif
-
 #ifdef VTX_LED 
 uint16_t ledToggle = 0;
 uint32_t lastToggle = 0;
@@ -163,7 +157,7 @@ void vtx_flash_led(uint8_t count)
 
 void vtx_toggle_led(uint32_t currentMillis)
 {
-  if (ledToggle > 0 && (currentMillis - lastToggle) > 150)
+  if (ledToggle > 0 && (currentMillis - lastToggle) > 200)
   {
     _digitalToggle(VTX_LED_PIN);
 
@@ -179,6 +173,10 @@ void vtx_process_state(uint32_t currentMillis, uint8_t band, uint8_t channel)
 #ifdef VTX_LED
   vtx_toggle_led(currentMillis);
 #endif
+
+  static bool powered = 1;
+  static bool wasPowered = 0;
+  static uint32_t debounce = 0;
 
   bool reading = analogRead(A6) > 900 ? true : false;
 
