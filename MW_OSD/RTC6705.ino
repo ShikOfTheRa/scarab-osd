@@ -143,7 +143,7 @@ void vtx_init() {
 
 void vtx_transfer(int reg, int rw, uint32_t data)
 {
-  uint32_t regdata = (reg << 0)|(rw << 4)|data;
+  uint32_t regdata = (reg << 0)|(rw << 4)|(data << 5);
 
 #if 1
   _digitalLo(RTC_SPICLK);
@@ -254,13 +254,12 @@ void vtx_set_frequency(uint8_t band, uint8_t channel)
   if (frequency <5956 && frequency> 5644)
   {
 
-    data = 400 << 5;
-    vtx_transfer(0, 1, data);
+    vtx_transfer(0, 1, 400);
     
     N = ((uint32_t) frequency * 25) / 64;
     A = ((uint32_t) frequency * 25 - N * 64);
 
-    data = ((A & 0x7F) << 5) |  ((N & 0x1FFF) << 12);
+    data = (A & 0x7F) | ((N & 0x1FFF) << 7);
 
     vtx_transfer(1, 1, data);
   }
