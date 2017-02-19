@@ -395,7 +395,7 @@ void loop()
       case REQ_MSP_PID:
         MSPcmdsend = MSP_PID;
         break;
-#ifdef MENU_SERVO  
+#ifdef USE_MENU_SERVO  
       case REQ_MSP_SERVO_CONF:
         MSPcmdsend = MSP_SERVO_CONF;
         break;
@@ -441,7 +441,7 @@ void loop()
          MSPcmdsend = MSP_CONFIG;
       break;
 #endif
-#ifdef MENU_FIXEDWING
+#ifdef USE_MENU_FIXEDWING
       case REQ_MSP_FW_CONFIG:
          MSPcmdsend = MSP_FW_CONFIG;
       break;
@@ -494,6 +494,7 @@ void loop()
       }
 #ifndef HIDESUMMARY
       if(previousarmedstatus && !armed){
+        configIndex=0;
         configPage=0;
         ROW=10;
         COL=1;
@@ -509,6 +510,7 @@ void loop()
       if(configMode)
       {
         displayConfigScreen();
+        displayDebug();
       }
 #ifdef CANVAS_SUPPORT
       else if (canvasMode)
@@ -829,10 +831,10 @@ void setMspRequests() {
 #ifdef HAS_ALARMS
       REQ_MSP_ALARMS|
 #endif
-#ifdef MENU_SERVO
+#ifdef USE_MENU_SERVO
       REQ_MSP_SERVO_CONF|
 #endif
-#ifdef MENU_FIXEDWING
+#ifdef USE_MENU_FIXEDWING
       REQ_MSP_FW_CONFIG|
 #endif
       REQ_MSP_RC;

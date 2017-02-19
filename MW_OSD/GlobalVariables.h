@@ -225,13 +225,13 @@ struct __cfgpa {
 }
 cfgpa;
 
-#ifdef MENU_SERVO  
+#ifdef USE_MENU_SERVO  
 #define MAX_SERVOS 8
 struct __servo {
     uint16_t settings[5][MAX_SERVOS];
 }
 servo;
-#endif //MENU_SERVO  
+#endif //USE_MENU_SERVO  
 
 
 uint16_t debug[4];   // int32_t ?...
@@ -269,8 +269,9 @@ uint8_t screenlayout=0;
 uint8_t oldscreenlayout=0;
 uint8_t ROW=10;
 uint8_t COL=3;
-int8_t configPage=1;
-int8_t previousconfigPage=1;
+int8_t configPage;
+int8_t configIndex;
+int8_t previousConfigIndex=1;
 uint8_t configMode=0;
 uint8_t fontMode = 0;
 uint8_t fontData[54];
@@ -1006,160 +1007,6 @@ const char configMsgMWII[] PROGMEM = "USE FC";
 // For APSTATUS
 
 // For Config pages
-//-----------------------------------------------------------Page0
-const char configMsg00[] PROGMEM = "STATISTICS";
-const char configMsg01[] PROGMEM = "FLY TIME";
-const char configMsg02[] PROGMEM = "TOT DISTANCE";
-const char configMsg03[] PROGMEM = "MAX DISTANCE";
-const char configMsg04[] PROGMEM = "MAX ALTITUDE";
-const char configMsg05[] PROGMEM = "MAX SPEED";
-const char configMsg06[] PROGMEM = "MAH USED";
-const char configMsg07[] PROGMEM = "MAX AMPS";
-//-----------------------------------------------------------Page1
-const char configMsg10[] PROGMEM = "PID CONFIG";
-
-#ifndef USE_MSP_PIDNAMES
-const char configMsg11[] PROGMEM = "ROLL";
-const char configMsg12[] PROGMEM = "PITCH";
-const char configMsg13[] PROGMEM = "YAW";
-const char configMsg14[] PROGMEM = "ALT";
-const char configMsg15[] PROGMEM = "GPS";
-const char configMsg16[] PROGMEM = "LEVEL";
-const char configMsg17[] PROGMEM = "MAG";
-#ifdef MENU_PID_VEL
-const char configMsg18[] PROGMEM = "Z_VEL";
-#endif
-#endif /* !USE_MSP_PIDNAMES */
-
-//-----------------------------------------------------------Page2
-const char configMsg20[] PROGMEM = "RC TUNING";
-const char configMsg21[] PROGMEM = "RC RATE";
-const char configMsg22[] PROGMEM = "RC EXPO";
-const char configMsg23[] PROGMEM = "ROLL PITCH RATE";
-const char configMsg24[] PROGMEM = "YAW RATE";
-const char configMsg25[] PROGMEM = "TPA";
-const char configMsg26[] PROGMEM = "THROTTLE MID";
-const char configMsg27[] PROGMEM = "THROTTLE EXPO";
-#if defined CORRECT_MENU_RCT1
-  const char configMsg23a[] PROGMEM = "ROLL RATE";
-  const char configMsg23b[] PROGMEM = "PITCH RATE";
-#endif
-#if defined CORRECT_MENU_RCT2
-  const char configMsg23a[] PROGMEM = "ROLL RATE";
-  const char configMsg23b[] PROGMEM = "PITCH RATE";
-#endif
-//-----------------------------------------------------------Page3
-const char configMsg30[] PROGMEM = "VOLTAGE";
-const char configMsg31[] PROGMEM = "DISPLAY MAIN VOLTS";
-const char configMsg32[] PROGMEM = "ADJUST VOLTS";
-const char configMsg33[] PROGMEM = "MAIN VOLTS ALARM";
-const char configMsg34[] PROGMEM = "DISPLAY VID VOLTS";
-const char configMsg35[] PROGMEM = "ADJUST VOLTS";
-const char configMsg36[] PROGMEM = "CELLS";
-const char configMsg37[] PROGMEM = "USE FC";
-
-//-----------------------------------------------------------Page4
-const char configMsg40[] PROGMEM = "RSSI";
-const char configMsg42[] PROGMEM = "DISPLAY RSSI";
-const char configMsg43[] PROGMEM = "SET RSSI";
-const char configMsg44[] PROGMEM = "SET RSSI MAX";
-const char configMsg45[] PROGMEM = "SET RSSI MIN";
-const char configMsg46[] PROGMEM = "USE PWM";
-
-//-----------------------------------------------------------Page5
-const char configMsg50[] PROGMEM = "CURRENT";
-const char configMsg51[] PROGMEM = "DISPLAY AMPS";
-const char configMsg52[] PROGMEM = "DISPLAY MAH";
-const char configMsg53[] PROGMEM = "USE VIRTUAL SENSOR";
-const char configMsg54[] PROGMEM = "ADJUST AMPS";
-const char configMsg55[] PROGMEM = "ADJUST ZERO";
-//-----------------------------------------------------------Page6
-const char configMsg60[] PROGMEM = "DISPLAY";
-const char configMsg61[] PROGMEM = "HORIZON";
-const char configMsg62[] PROGMEM = "SIDE BARS";
-const char configMsg63[] PROGMEM = "SCROLLING BARS";
-const char configMsg64[] PROGMEM = "THROTTLE";
-const char configMsg65[] PROGMEM = "GPS COORDS";
-const char configMsg66[] PROGMEM = "SENSORS";
-const char configMsg67[] PROGMEM = "GIMBAL";
-const char configMsg68[] PROGMEM = "MAP MODE";
-//-----------------------------------------------------------Page7
-const char configMsg70[]  PROGMEM = "ADVANCED";
-const char configMsg71[]  PROGMEM = "UNITS";
-const char configMsg710[] PROGMEM = "MET";
-const char configMsg711[] PROGMEM = "IMP";
-const char configMsg73[]  PROGMEM = "V REF";
-const char configMsg730[] PROGMEM = "5V";
-const char configMsg731[] PROGMEM = "1.1V";
-const char configMsg74[]  PROGMEM = "DEBUG";
-const char configMsg75[]  PROGMEM = "MAG CAL";
-const char configMsg76[]  PROGMEM = "OSD TX CH";
-const char configMsg77[]  PROGMEM = "THROTTLE PWM";
-//-----------------------------------------------------------Page8
-const char configMsg80[] PROGMEM = "GPS TIME";
-const char configMsg81[] PROGMEM = "DISPLAY";
-const char configMsg82[] PROGMEM = "TZ FORWARD";
-const char configMsg83[] PROGMEM = "TZ ADJUST";
-//-----------------------------------------------------------Page9
-const char configMsg90[] PROGMEM = "ALARMS";
-const char configMsg91[] PROGMEM = "DISTANCE X100";
-const char configMsg92[] PROGMEM = "ALTITUDE X10";
-const char configMsg93[] PROGMEM = "SPEED";
-const char configMsg94[] PROGMEM = "TIMER";
-const char configMsg95[] PROGMEM = "MAH X100";
-const char configMsg96[] PROGMEM = "AMPS";
-const char configMsg97[] PROGMEM = "TEXT ALARMS";
-
-//-----------------------------------------------------------Page10
-const char configMsg100[] PROGMEM = "ADVANCE TUNING";
-const char configMsg101[] PROGMEM = "PROFILE";
-const char configMsg102[] PROGMEM = "PID CONTROLLER";
-const char configMsg103[] PROGMEM = "LOOPTIME";
-//-----------------------------------------------------------BF FIXEDWING Page
-const char configMsg110[] PROGMEM = "FIXEDWING";
-const char configMsg111[] PROGMEM = "MAX CORRECT";
-const char configMsg112[] PROGMEM = "RUDDER";
-const char configMsg113[] PROGMEM = "MAX CLIMB";
-const char configMsg114[] PROGMEM = "MAX DIVE";
-const char configMsg115[] PROGMEM = "THR CLIMB";
-const char configMsg116[] PROGMEM = "THR CRUISE";
-const char configMsg117[] PROGMEM = "THR IDLE";
-const char configMsg118[] PROGMEM = "RTH ALT";
-//-----------------------------------------------------------SERVO Page
-const char configMsg120[] PROGMEM = "SERVOS";
-const char configMsg121[] PROGMEM = "S0";
-const char configMsg122[] PROGMEM = "S1";
-const char configMsg123[] PROGMEM = "S2";
-const char configMsg124[] PROGMEM = "S3";
-const char configMsg125[] PROGMEM = "S4";
-const char configMsg126[] PROGMEM = "S5";
-const char configMsg127[] PROGMEM = "S6";
-const char configMsg128[] PROGMEM = "S7";
-//-----------------------------------------------------------RC TUNING Page 2
-const char configMsg130[] PROGMEM = "RC TUNING 2";
-const char configMsg131[] PROGMEM = "TPA BREAKPOINT";
-const char configMsg132[] PROGMEM = "YAW RC EXPO";
-//-----------------------------------------------------------INFO Page
-const char configMsg140[] PROGMEM = "ACCESS ALL SETTINGS";
-const char configMsg141[] PROGMEM = "TX  :THRT MIDDLE";
-const char configMsg142[] PROGMEM = "    +YAW LEFT";
-const char configMsg143[] PROGMEM = "    +PITCH FULL";
-const char configMsg144[] PROGMEM = " ";
-const char configMsg145[] PROGMEM = "F3 CONTROLLERS ONLY";
-//-----------------------------------------------------------VTX Page
-const char configMsg150[] PROGMEM = "VTX";
-const char configMsg151[] PROGMEM = "POWER";
-const char configMsg152[] PROGMEM = "BAND";
-const char configMsg153[] PROGMEM = "CHANNEL";
-const char configMsg154[] PROGMEM = "";
-const char configMsg1510[] PROGMEM = "25";
-const char configMsg1511[] PROGMEM = "200";
-const char configMsg1512[] PROGMEM = "500";
-const char configMsg1520[] PROGMEM = "BOSCAM A";
-const char configMsg1521[] PROGMEM = "BOSCAM B";
-const char configMsg1522[] PROGMEM = "BOSCAM E";
-const char configMsg1523[] PROGMEM = "FATSHARK";
-const char configMsg1524[] PROGMEM = "RACE";
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={
@@ -1195,19 +1042,466 @@ const unsigned char UnitsIcon[8]={
 #define REQ_MSP_FW_CONFIG      (1L<<20) 
 #define REQ_MSP_PIDNAMES       (1L<<21)
 #define REQ_MSP_SERVO_CONF     (1L<<22)
+
 // Menu selections
+
+typedef enum {
+#ifdef USE_MENU_STAT
+  MENU_STAT = 0,  // STATISTICS
+#endif
+#ifdef USE_MENU_PID
+  MENU_PID,       // PID CONFIG
+#endif
+#ifdef USE_MENU_RC
+  MENU_RC,        // RC TUNING
+#endif
+#ifdef USE_MENU_RC_2
+  MENU_RC_2,      // RC TUNING PAGE 2
+#endif
+#ifdef USE_MENU_INFO
+  MENU_INFO,      // BF CMS guide
+#endif
+#ifdef USE_MENU_VOLTAGE
+  MENU_VOLTAGE,   // VOLTAGE
+#endif
+#ifdef USE_MENU_RSSI
+  MENU_RSSI,      // RSSI
+#endif
+#ifdef USE_MENU_CURRENT
+  MENU_CURRENT,   // CURRENT
+#endif
+#ifdef USE_MENU_DISPLAY
+  MENU_DISPLAY,   // DISPLAY
+#endif
+#ifdef USE_MENU_ADVANCED
+  MENU_ADVANCED,  // ADVANCED
+#endif
+#ifdef USE_MENU_ALARMS
+  MENU_ALARMS,    // ALARMS
+#endif
+#ifdef USE_MENU_PROFILE
+  MENU_PROFILE,   // PROFILE+PID CONTROLLER
+#endif
+#ifdef USE_MENU_FIXEDWING
+  MENU_FIXEDWING, //FIXEDWING adjustments
+#endif
+#ifdef USE_MENU_SERVO
+  MENU_SERVO,    //FIXEDWING adjustments
+#endif
+#ifdef USE_MENU_GPS_TIME
+  MENU_GPS_TIME, //GPS time
+#endif
+#ifdef USE_MENU_VTX
+  MENU_VTX,      // VTX
+#endif
+  MENU_LAST,
+  MAXPAGE = MENU_VTX - 1
+} menuId_e;
+
+uint8_t menuConfig[] = {
+#ifdef USE_MENU_STAT
+    MENU_STAT,
+#endif
+#ifdef USE_MENU_VTX
+    MENU_VTX,
+#endif
+    MENU_CONFIG
+};
+
+// Menu strings
+
+
+//-----------------------------------------------------------Page0
+const char configMsg00[] PROGMEM = "STATISTICS";
+const char configMsg01[] PROGMEM = "FLY TIME";
+const char configMsg02[] PROGMEM = "TOT DISTANCE";
+const char configMsg03[] PROGMEM = "MAX DISTANCE";
+const char configMsg04[] PROGMEM = "MAX ALTITUDE";
+const char configMsg05[] PROGMEM = "MAX SPEED";
+const char configMsg06[] PROGMEM = "MAH USED";
+const char configMsg07[] PROGMEM = "MAX AMPS";
+
+const PROGMEM char * const menu_stats_item[] =
+{   
+  configMsg01,
+  configMsg02,
+  configMsg03,
+  configMsg04,
+  configMsg05,
+  configMsg06,
+  configMsg07,
+};
+
+//-----------------------------------------------------------Page1
+#ifdef USE_MENU_PID
+const char configMsg10[] PROGMEM = "PID CONFIG";
+
+#ifndef USE_MSP_PIDNAMES
+const char configMsg11[] PROGMEM = "ROLL";
+const char configMsg12[] PROGMEM = "PITCH";
+const char configMsg13[] PROGMEM = "YAW";
+const char configMsg14[] PROGMEM = "ALT";
+const char configMsg15[] PROGMEM = "GPS";
+const char configMsg16[] PROGMEM = "LEVEL";
+const char configMsg17[] PROGMEM = "MAG";
+# ifdef MENU_PID_VEL
+const char configMsg18[] PROGMEM = "Z_VEL";
+# endif
+#endif /* !USE_MSP_PIDNAMES */
+
+#ifdef USE_MSP_PIDNAMES
+
+# define PIDNAME_BUFSIZE  8
+# ifdef MENU_PID_VEL
+#  define PIDNAME_NUMITEMS 8
+# else
+#  define PIDNAME_NUMITEMS 7
+# endif
+
+char menu_pid[PIDNAME_NUMITEMS][PIDNAME_BUFSIZE];
+
+#else /* USE_MSP_PIDNAMES */
+const PROGMEM char * const menu_pid[] = 
+{   
+  configMsg11,
+  configMsg12,
+  configMsg13,
+  configMsg14,
+  configMsg15,
+  configMsg16,
+  configMsg17,
+# ifdef MENU_PID_VEL
+  configMsg18,
+# endif
+};
+#endif // USE_MSP_PIDNAMES
+
+#endif // USE_MENU_PID
+
+//-----------------------------------------------------------Page2
+#ifdef USE_MENU_RC
+const char configMsg20[] PROGMEM = "RC TUNING";
+const char configMsg21[] PROGMEM = "RC RATE";
+const char configMsg22[] PROGMEM = "RC EXPO";
+const char configMsg23[] PROGMEM = "ROLL PITCH RATE";
+const char configMsg24[] PROGMEM = "YAW RATE";
+const char configMsg25[] PROGMEM = "TPA";
+const char configMsg26[] PROGMEM = "THROTTLE MID";
+const char configMsg27[] PROGMEM = "THROTTLE EXPO";
+
+#if defined CORRECT_MENU_RCT1
+  const char configMsg23a[] PROGMEM = "ROLL RATE";
+  const char configMsg23b[] PROGMEM = "PITCH RATE";
+#endif
+#if defined CORRECT_MENU_RCT2
+  const char configMsg23a[] PROGMEM = "ROLL RATE";
+  const char configMsg23b[] PROGMEM = "PITCH RATE";
+#endif
+
+const PROGMEM char * const menu_rc[] = 
+{   
+  #if defined CORRECT_MENU_RCT2
+    configMsg21,
+    configMsg22,
+    configMsg23a,
+    configMsg23b,
+    configMsg24,
+    configMsg25,
+    configMsg26,
+    configMsg27,
+  #elif defined CORRECT_MENU_RCT1 
+    configMsg21,
+    configMsg22,
+    configMsg23a,
+    configMsg23b,
+    configMsg24,
+    configMsg25,
+    configMsg26,
+    configMsg27,
+  #else //BF original / Cleanflight original / multiwii
+    configMsg21,
+    configMsg22,
+    configMsg23,
+    configMsg24,
+    configMsg25,
+    configMsg26,
+    configMsg27,
+  #endif
+
+};
+#endif
+
+//-----------------------------------------------------------Page3
+#ifdef USE_MENU_VOLTAGE
+const char configMsg30[] PROGMEM = "VOLTAGE";
+const char configMsg31[] PROGMEM = "DISPLAY MAIN VOLTS";
+const char configMsg32[] PROGMEM = "ADJUST VOLTS";
+const char configMsg33[] PROGMEM = "MAIN VOLTS ALARM";
+const char configMsg34[] PROGMEM = "DISPLAY VID VOLTS";
+const char configMsg35[] PROGMEM = "ADJUST VOLTS";
+const char configMsg36[] PROGMEM = "CELLS";
+const char configMsg37[] PROGMEM = "USE FC";
+
+const PROGMEM char * const menu_bat[] = 
+{   
+  configMsg31,
+  configMsg32,
+  configMsg33,
+  configMsg34,
+  configMsg32,
+  configMsg36,
+  configMsgMWII,
+};
+#endif
+
+//-----------------------------------------------------------Page4
+#ifdef USE_MENU_RSSI
+const char configMsg40[] PROGMEM = "RSSI";
+const char configMsg42[] PROGMEM = "DISPLAY RSSI";
+const char configMsg43[] PROGMEM = "SET RSSI";
+const char configMsg44[] PROGMEM = "SET RSSI MAX";
+const char configMsg45[] PROGMEM = "SET RSSI MIN";
+const char configMsg46[] PROGMEM = "USE PWM";
+
+const PROGMEM char * const menu_rssi[] = 
+{   
+  configMsg42,
+  configMsg43,
+  configMsgMWII,
+  configMsg46,
+  configMsg44,
+  configMsg45,
+};
+#endif
+
+//-----------------------------------------------------------Page5
+#ifdef USE_MENU_CURRENT
+const char configMsg50[] PROGMEM = "CURRENT";
+const char configMsg51[] PROGMEM = "DISPLAY AMPS";
+const char configMsg52[] PROGMEM = "DISPLAY MAH";
+const char configMsg53[] PROGMEM = "USE VIRTUAL SENSOR";
+const char configMsg54[] PROGMEM = "ADJUST AMPS";
+const char configMsg55[] PROGMEM = "ADJUST ZERO";
+
+const PROGMEM char * const menu_amps[] = 
+{   
+  configMsg51,
+  configMsg52,
+  configMsg53,
+  configMsg54,
+  configMsg55,
+};
+#endif
+
+//-----------------------------------------------------------Page6
+#ifdef USE_MENU_DISPLAY
+const char configMsg60[] PROGMEM = "DISPLAY";
+const char configMsg61[] PROGMEM = "HORIZON";
+const char configMsg62[] PROGMEM = "SIDE BARS";
+const char configMsg63[] PROGMEM = "SCROLLING BARS";
+const char configMsg64[] PROGMEM = "THROTTLE";
+const char configMsg65[] PROGMEM = "GPS COORDS";
+const char configMsg66[] PROGMEM = "SENSORS";
+const char configMsg67[] PROGMEM = "GIMBAL";
+const char configMsg68[] PROGMEM = "MAP MODE";
+
+const PROGMEM char * const menu_display[] = 
+{   
+  configMsg61,
+  configMsg62,
+  configMsg63,
+  configMsg64,
+  configMsg65,
+  configMsg66,
+  configMsg67,
+  configMsg68,
+};
+#endif
+
+//-----------------------------------------------------------Page7
+#ifdef USE_MENU_ADVANCED
+const char configMsg70[]  PROGMEM = "ADVANCED";
+const char configMsg71[]  PROGMEM = "UNITS";
+const char configMsg710[] PROGMEM = "MET";
+const char configMsg711[] PROGMEM = "IMP";
+const char configMsg73[]  PROGMEM = "V REF";
+const char configMsg730[] PROGMEM = "5V";
+const char configMsg731[] PROGMEM = "1.1V";
+const char configMsg74[]  PROGMEM = "DEBUG";
+const char configMsg75[]  PROGMEM = "MAG CAL";
+const char configMsg76[]  PROGMEM = "OSD TX CH";
+const char configMsg77[]  PROGMEM = "THROTTLE PWM";
+
 const PROGMEM char * const menu_choice_unit[] =
 {   
   configMsg710,
   configMsg711,
 };
+
 const PROGMEM char * const menu_choice_ref[] =
 {   
   configMsg731,
   configMsg730,
 };
 
-#ifdef MENU_VTX
+const PROGMEM char * const menu_advanced[] = 
+{   
+  configMsg71,
+  configMsg73,
+  configMsg74,
+  configMsg75,
+  configMsg76,
+  configMsg77,
+};
+#endif
+
+//-----------------------------------------------------------Page8
+#ifdef USE_MENU_GPS_TIME
+const char configMsg80[] PROGMEM = "GPS TIME";
+const char configMsg81[] PROGMEM = "DISPLAY";
+const char configMsg82[] PROGMEM = "TZ FORWARD";
+const char configMsg83[] PROGMEM = "TZ ADJUST";
+const PROGMEM char * const menu_gps_time[] = 
+{   
+  configMsg81,
+  configMsg82,
+  configMsg83,
+};
+#endif
+
+//-----------------------------------------------------------Page9
+#ifdef USE_MENU_ALARMS
+const char configMsg90[] PROGMEM = "ALARMS";
+const char configMsg91[] PROGMEM = "DISTANCE X100";
+const char configMsg92[] PROGMEM = "ALTITUDE X10";
+const char configMsg93[] PROGMEM = "SPEED";
+const char configMsg94[] PROGMEM = "TIMER";
+const char configMsg95[] PROGMEM = "MAH X100";
+const char configMsg96[] PROGMEM = "AMPS";
+const char configMsg97[] PROGMEM = "TEXT ALARMS";
+
+const PROGMEM char * const menu_alarm_item[] = 
+{   
+  configMsg91,
+  configMsg92,
+  configMsg93,
+  configMsg94,
+  configMsg95,
+  configMsg96,
+  configMsg97,
+};
+#endif
+
+//-----------------------------------------------------------Page10
+#ifdef USE_MENU_PROFILE
+const char configMsg100[] PROGMEM = "ADVANCE TUNING";
+const char configMsg101[] PROGMEM = "PROFILE";
+const char configMsg102[] PROGMEM = "PID CONTROLLER";
+const char configMsg103[] PROGMEM = "LOOPTIME";
+
+const PROGMEM char * const menu_profile[] = 
+{   
+  configMsg101,
+  configMsg102,
+  configMsg103,
+};
+#endif
+
+//-----------------------------------------------------------BF FIXEDWING Page
+#ifdef USE_MENU_FIXEDWING
+const char configMsg110[] PROGMEM = "FIXEDWING";
+const char configMsg111[] PROGMEM = "MAX CORRECT";
+const char configMsg112[] PROGMEM = "RUDDER";
+const char configMsg113[] PROGMEM = "MAX CLIMB";
+const char configMsg114[] PROGMEM = "MAX DIVE";
+const char configMsg115[] PROGMEM = "THR CLIMB";
+const char configMsg116[] PROGMEM = "THR CRUISE";
+const char configMsg117[] PROGMEM = "THR IDLE";
+const char configMsg118[] PROGMEM = "RTH ALT";
+
+const PROGMEM char * const menu_fixedwing_bf[] = 
+{   
+  configMsg111,
+  configMsg112,
+  configMsg113,
+  configMsg114,
+  configMsg115,
+  configMsg116,
+  configMsg117,
+  configMsg118,
+};
+#endif
+
+//-----------------------------------------------------------SERVO Page
+#ifdef USE_MENU_SERVO
+const char configMsg120[] PROGMEM = "SERVOS";
+const char configMsg121[] PROGMEM = "S0";
+const char configMsg122[] PROGMEM = "S1";
+const char configMsg123[] PROGMEM = "S2";
+const char configMsg124[] PROGMEM = "S3";
+const char configMsg125[] PROGMEM = "S4";
+const char configMsg126[] PROGMEM = "S5";
+const char configMsg127[] PROGMEM = "S6";
+const char configMsg128[] PROGMEM = "S7";
+const PROGMEM char * const menu_servo[] = 
+{   
+  configMsg121,
+  configMsg122,
+  configMsg123,
+  configMsg124,
+  configMsg125,
+  configMsg126,
+  configMsg127,
+  configMsg128,
+};
+#endif
+
+//-----------------------------------------------------------RC TUNING Page 2
+#ifdef USE_MENU_RC_2
+const char configMsg130[] PROGMEM = "RC TUNING 2";
+const char configMsg131[] PROGMEM = "TPA BREAKPOINT";
+const char configMsg132[] PROGMEM = "YAW RC EXPO";
+const PROGMEM char * const menu_rc_2[] = 
+{   
+  configMsg131,
+  configMsg132,
+};
+#endif
+
+//-----------------------------------------------------------INFO Page
+#ifdef USE_MENU_INFO
+const char configMsg140[] PROGMEM = "FC-SIDE MENU INVOCATION";
+const char configMsg141[] PROGMEM = "TX  :THRT MIDDLE";
+const char configMsg142[] PROGMEM = "    +YAW LEFT";
+const char configMsg143[] PROGMEM = "    +PITCH FULL";
+const char configMsg144[] PROGMEM = " ";
+const char configMsg145[] PROGMEM = "BF3.1 AND LATER ONLY";
+const PROGMEM char * const menu_info[] = 
+{   
+  configMsg141,
+  configMsg142,
+  configMsg143,
+  configMsg144,
+  configMsg145,
+};
+#endif
+
+//-----------------------------------------------------------VTX Page
+#ifdef USE_MENU_VTX
+const char configMsg150[] PROGMEM = "VTX";
+const char configMsg151[] PROGMEM = "POWER";
+const char configMsg152[] PROGMEM = "BAND";
+const char configMsg153[] PROGMEM = "CHANNEL";
+const char configMsg154[] PROGMEM = "";
+const char configMsg1510[] PROGMEM = "25";
+const char configMsg1511[] PROGMEM = "200";
+const char configMsg1512[] PROGMEM = "500";
+const char configMsg1520[] PROGMEM = "BOSCAM A";
+const char configMsg1521[] PROGMEM = "BOSCAM B";
+const char configMsg1522[] PROGMEM = "BOSCAM E";
+const char configMsg1523[] PROGMEM = "FATSHARK";
+const char configMsg1524[] PROGMEM = "RACE";
+
   #ifdef VTX_REGION_UNRESTRICTED
   // Menu selections
   const PROGMEM char * const vtxPowerNames[] =
@@ -1252,245 +1546,56 @@ const PROGMEM char * const menu_vtx[] =
   configMsg153,
   configMsg154,
 };
-
 #endif //MENU_VTX
-
-// Menu
-//PROGMEM const char *menu_stats_item[] =
-const PROGMEM char * const menu_stats_item[] =
-{   
-  configMsg01,
-  configMsg02,
-  configMsg03,
-  configMsg04,
-  configMsg05,
-  configMsg06,
-  configMsg07,
-};
-
-#ifdef USE_MSP_PIDNAMES
-
-#define PIDNAME_BUFSIZE  8
-#ifdef MENU_PID_VEL
-#define PIDNAME_NUMITEMS 8
-#else
-#define PIDNAME_NUMITEMS 7
-#endif
-
-char menu_pid[PIDNAME_NUMITEMS][PIDNAME_BUFSIZE];
-
-#else /* USE_MSP_PIDNAMES */
-const PROGMEM char * const menu_pid[] = 
-{   
-  configMsg11,
-  configMsg12,
-  configMsg13,
-  configMsg14,
-  configMsg15,
-  configMsg16,
-  configMsg17,
-#ifdef MENU_PID_VEL
-  configMsg18,
-#endif
-};
-#endif
-
-const PROGMEM char * const menu_rc[] = 
-{   
-  #if defined CORRECT_MENU_RCT2
-    configMsg21,
-    configMsg22,
-    configMsg23a,
-    configMsg23b,
-    configMsg24,
-    configMsg25,
-    configMsg26,
-    configMsg27,
-  #elif defined CORRECT_MENU_RCT1 
-    configMsg21,
-    configMsg22,
-    configMsg23a,
-    configMsg23b,
-    configMsg24,
-    configMsg25,
-    configMsg26,
-    configMsg27,
-  #else //BF original / Cleanflight original / multiwii
-    configMsg21,
-    configMsg22,
-    configMsg23,
-    configMsg24,
-    configMsg25,
-    configMsg26,
-    configMsg27,
-  #endif
-
-};
-
-const PROGMEM char * const menu_bat[] = 
-{   
-  configMsg31,
-  configMsg32,
-  configMsg33,
-  configMsg34,
-  configMsg32,
-  configMsg36,
-  configMsgMWII,
-};
-
-const PROGMEM char * const menu_rssi[] = 
-{   
-  configMsg42,
-  configMsg43,
-  configMsgMWII,
-  configMsg46,
-  configMsg44,
-  configMsg45,
-};
-
-const PROGMEM char * const menu_amps[] = 
-{   
-  configMsg51,
-  configMsg52,
-  configMsg53,
-  configMsg54,
-  configMsg55,
-};
-
-const PROGMEM char * const menu_display[] = 
-{   
-  configMsg61,
-  configMsg62,
-  configMsg63,
-  configMsg64,
-  configMsg65,
-  configMsg66,
-  configMsg67,
-  configMsg68,
-};
-
-const PROGMEM char * const menu_advanced[] = 
-{   
-  configMsg71,
-  configMsg73,
-  configMsg74,
-  configMsg75,
-  configMsg76,
-  configMsg77,
-};
-
-const PROGMEM char * const menu_gps_time[] = 
-{   
-  configMsg81,
-  configMsg82,
-  configMsg83,
-};
-
-const PROGMEM char * const menu_alarm_item[] = 
-{   
-  configMsg91,
-  configMsg92,
-  configMsg93,
-  configMsg94,
-  configMsg95,
-  configMsg96,
-  configMsg97,
-};
-
-const PROGMEM char * const menu_profile[] = 
-{   
-  configMsg101,
-  configMsg102,
-  configMsg103,
-};
-
-const PROGMEM char * const menu_fixedwing_bf[] = 
-{   
-  configMsg111,
-  configMsg112,
-  configMsg113,
-  configMsg114,
-  configMsg115,
-  configMsg116,
-  configMsg117,
-  configMsg118,
-};
-
-const PROGMEM char * const menu_servo[] = 
-{   
-  configMsg121,
-  configMsg122,
-  configMsg123,
-  configMsg124,
-  configMsg125,
-  configMsg126,
-  configMsg127,
-  configMsg128,
-};
-
-const PROGMEM char * const menu_rc_2[] = 
-{   
-  configMsg131,
-  configMsg132,
-};
-
-const PROGMEM char * const menu_info[] = 
-{   
-  configMsg141,
-  configMsg142,
-  configMsg143,
-  configMsg144,
-  configMsg145,
-};
 
 const PROGMEM char * const menutitle_item[] = 
 {   
-#ifdef MENU_STAT
+#ifdef USE_MENU_STAT
   configMsg00,
 #endif
-#ifdef MENU_PID
+#ifdef USE_MENU_PID
   configMsg10,
 #endif
-#ifdef MENU_RC
+#ifdef USE_MENU_RC
   configMsg20,
 #endif
-#ifdef MENU_RC_2
+#ifdef USE_MENU_RC_2
   configMsg130,
 #endif
-#ifdef MENU_INFO
+#ifdef USE_MENU_INFO
   configMsg140,
 #endif
-#ifdef MENU_SERVO
+#ifdef USE_MENU_SERVO
   configMsg120,
 #endif
-#ifdef MENU_FIXEDWING
+#ifdef USE_MENU_FIXEDWING
   configMsg110,
 #endif
-#ifdef MENU_VOLTAGE
+#ifdef USE_MENU_VOLTAGE
   configMsg30,
 #endif
-#ifdef MENU_RSSI
+#ifdef USE_MENU_RSSI
   configMsg40,
 #endif
-#ifdef MENU_CURRENT
+#ifdef USE_MENU_CURRENT
   configMsg50,
 #endif
-#ifdef MENU_DISPLAY
+#ifdef USE_MENU_DISPLAY
   configMsg60,
 #endif
-#ifdef MENU_ADVANCED
+#ifdef USE_MENU_ADVANCED
   configMsg70,
 #endif
-#ifdef MENU_GPS_TIME
+#ifdef USE_MENU_GPS_TIME
   configMsg80,
 #endif
-#ifdef MENU_ALARMS
+#ifdef USE_MENU_ALARMS
   configMsg90,
 #endif
-#ifdef MENU_PROFILE
+#ifdef USE_MENU_PROFILE
   configMsg100,
 #endif
-#ifdef MENU_VTX // always last
+#ifdef USE_MENU_VTX
   configMsg150,
 #endif
 };

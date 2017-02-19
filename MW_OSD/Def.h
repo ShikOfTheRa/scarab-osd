@@ -10,7 +10,7 @@
 // Display Debug screen display options
 //#define DEBUGMW            // Enable to display MSP debug values (assumes debug[x] values are not set elsewhere) 
 //#define DEBUG 4
-#define DEBUGDPOSRCDATA 264   // display RCDATA values at position X
+//#define DEBUGDPOSRCDATA 264   // display RCDATA values at position X
 //#define DEBUGDPOSANAL 84     // display sensor values at position X
 //#define DEBUGDPOSPWM 264     // display PWM values at position X
 //#define DEBUGDPOSVAL 40      // display debug values at position X
@@ -51,7 +51,7 @@
   #define VTX_RTC6705
   #define VTX_RC
   #define VTX_LED
-  #define MENU_VTX
+  #define USE_MENU_VTX
 #endif
 
 #ifdef FFPV_INNOVA
@@ -59,7 +59,7 @@
   #define VTX_RTC6705
   //#define VTX_RC    // Can be turned on, hard to use without VTX_LED
   //#define VTX_LED   // Needs VTXLED_* definitions in RTC6705.ino
-  #define MENU_VTX
+  #define USE_MENU_VTX
 #endif
 
 /********************  CONTROLLER rule definitions  **********************/
@@ -145,6 +145,33 @@
 //ENABLE_MSP_SAVE_ADVANCED - adds the code to read/write PROFILE+LOOPIME+PID CONTROLLER if supported
 //CORRECTLOOPTIME show looptime option in Adavanced tuning menu
 
+/*
+ * Flight Controller dependent definitions
+ */
+
+// Menu defs: USE_MENU_xxx decides which menu page to be configured
+//            MENU_CONFIG determines menu page order
+//            Note1: USE_MENU_STAT is mandatory
+//            Note2: MENU_STAT is automatically included in MENU_CONFIG.
+//            Note3: MENU_VTX is automatically included in MENU_CONFIG.
+//
+//  USE_MENU_STAT       STATISTICS
+//  USE_MENU_PID        PID CONFIG
+//  USE_MENU_RC         RC TUNING
+//  USE_MENU_RC_2       RC TUNING PAGE 2
+//  USE_MENU_VOLTAGE    VOLTAGE
+//  USE_MENU_RSSI       RSSI
+//  USE_MENU_CURRENT    CURRENT
+//  USE_MENU_DISPLAY    DISPLAY
+//  USE_MENU_ADVANCED   ADVANCED
+//  USE_MENU_ALARMS     ALARMS
+//  USE_MENU_PROFILE    PROFILE+PID CONTROLLER
+//  USE_MENU_FIXEDWING  FIXEDWING adjustments
+//  USE_MENU_SERVO      SERVO
+//  USE_MENU_GPS_TIME   GPS TIME
+//  USE_MENU_INFO       Guide for CMS
+//  USE_MENU_VTX        VTX, should be defined as a part of HARDWARE defs above.
+
 #if defined BETAFLIGHT2
   #define AMPERAGE_DIV 10
   #define CORRECT_MSP_CF2
@@ -152,18 +179,29 @@
   #define ENABLE_MSP_SAVE_ADVANCED
   #define ACROPLUS
 
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_RC_2     3       //RC TUNING PAGE 2
-  #define MENU_VOLTAGE  4       //VOLTAGE
-  #define MENU_RSSI     5       //RSSI
-  #define MENU_CURRENT  6       //CURRENT
-  #define MENU_DISPLAY  7       //DISPLAY
-  #define MENU_ADVANCED 8       //ADVANCED
-  #define MENU_ALARMS   9       //ALARMS
-  #define MENU_PROFILE  10      //PROFILE+PID CONTROLLER
-  #define MAXPAGE       MENU_PROFILE
+  #define USE_MENU_STAT
+  #define USE_MENU_PID
+  #define USE_MENU_RC
+  #define USE_MENU_RC_2
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+  #define USE_MENU_PROFILE
+
+  #define MENU_CONFIG \
+    MENU_PID,      \
+    MENU_RC,       \
+    MENU_RC_2,     \
+    MENU_VOLTAGE,  \
+    MENU_RSSI,     \
+    MENU_CURRENT,  \
+    MENU_DISPLAY,  \
+    MENU_ADVANCED, \
+    MENU_ALARMS,   \
+    MENU_PROFILE,
 #endif
 
 #if defined BETAFLIGHT2
@@ -173,18 +211,29 @@
   #define ENABLE_MSP_SAVE_ADVANCED
   #define ACROPLUS
 
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_RC_2     3       //RC TUNING PAGE 2
-  #define MENU_VOLTAGE  4       //VOLTAGE
-  #define MENU_RSSI     5       //RSSI
-  #define MENU_CURRENT  6       //CURRENT
-  #define MENU_DISPLAY  7       //DISPLAY
-  #define MENU_ADVANCED 8       //ADVANCED
-  #define MENU_ALARMS   9       //ALARMS
-  #define MENU_PROFILE  10      //PROFILE+PID CONTROLLER
-  #define MAXPAGE       MENU_PROFILE
+  #define USE_MENU_STAT
+  #define USE_MENU_PID
+  #define USE_MENU_RC
+  #define USE_MENU_RC_2
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+  #define USE_MENU_PROFILE
+
+  #define MENU_CONFIG \
+    MENU_PID,      \
+    MENU_RC,       \
+    MENU_RC_2,     \
+    MENU_VOLTAGE,  \
+    MENU_RSSI,     \
+    MENU_CURRENT,  \
+    MENU_DISPLAY,  \
+    MENU_ADVANCED, \
+    MENU_ALARMS,   \
+    MENU_PROFILE,
 #endif
 
 #if defined BETAFLIGHT31
@@ -193,22 +242,33 @@
   #define CORRECT_MENU_RCT2
   #define ENABLE_MSP_SAVE_ADVANCED
   #define ACROPLUS
-
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_RC_2     3       //RC TUNING PAGE 2
-  #define MENU_INFO     4       //RC TUNING PAGE 2
-  #define MENU_VOLTAGE  5       //VOLTAGE
-  #define MENU_RSSI     6       //RSSI
-  #define MENU_CURRENT  7       //CURRENT
-  #define MENU_DISPLAY  8       //DISPLAY
-  #define MENU_ADVANCED 9       //ADVANCED
-  #define MENU_ALARMS   10      //ALARMS
-  #define MENU_PROFILE  11      //PROFILE+PID CONTROLLER
-  #define MAXPAGE       MENU_PROFILE
-
   #define CANVAS_SUPPORT
+
+  #define USE_MENU_STAT
+  #define USE_MENU_PID
+  #define USE_MENU_RC
+  #define USE_MENU_RC_2
+  #define USE_MENU_INFO
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+  #define USE_MENU_PROFILE
+
+  #define MENU_CONFIG \
+    MENU_INFO,     \
+    MENU_PID,      \
+    MENU_RC,       \
+    MENU_RC_2,     \
+    MENU_VOLTAGE,  \
+    MENU_RSSI,     \
+    MENU_CURRENT,  \
+    MENU_DISPLAY,  \
+    MENU_ADVANCED, \
+    MENU_ALARMS,   \
+    MENU_PROFILE,
 #endif
 
 #if defined CLEANFLIGHT190
@@ -218,49 +278,73 @@
   #define ENABLE_MSP_SAVE_ADVANCED
   #define CORRECTLOOPTIME
 
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_RC_2     3       //RC TUNING PAGE 2
-  #define MENU_VOLTAGE  4       //VOLTAGE
-  #define MENU_RSSI     5       //RSSI
-  #define MENU_CURRENT  6       //CURRENT
-  #define MENU_DISPLAY  7       //DISPLAY
-  #define MENU_ADVANCED 8       //ADVANCED
-  #define MENU_ALARMS   9       //ALARMS
-  #define MENU_PROFILE  10      //PROFILE+PID CONTROLLER
-  #define MAXPAGE       MENU_PROFILE
+  #define USE_MENU_STAT
+  #define USE_MENU_PID
+  #define USE_MENU_RC
+  #define USE_MENU_RC_2
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+  #define USE_MENU_PROFILE
+
+  #define MENU_CONFIG \
+    MENU_PID,      \
+    MENU_RC,       \
+    MENU_RC_2,     \
+    MENU_VOLTAGE,  \
+    MENU_RSSI,     \
+    MENU_CURRENT,  \
+    MENU_DISPLAY,  \
+    MENU_ADVANCED, \
+    MENU_ALARMS,   \
+    MENU_PROFILE,
 #endif
+
+#define MENU_CONFIG_BASEFLIGHT_LEGACY \
+    MENU_PID,      \
+    MENU_RC,       \
+    MENU_VOLTAGE,  \
+    MENU_RSSI,     \
+    MENU_CURRENT,  \
+    MENU_DISPLAY,  \
+    MENU_ADVANCED, \
+    MENU_ALARMS,
 
 #if defined CLEANFLIGHT180
   #define AMPERAGE_DIV 10
   #define CORRECT_MSP_CF1
   #define CORRECT_MENU_RCT1
 
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_ALARMS   8       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+  #define USE_MENU_STAT
+  #define USE_MENU_PID
+  #define USE_MENU_RC
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+
+  #define MENU_CONFIG MENU_CONFIG_BASEFLIGHT_LEGACY
 #endif
 
 #if defined CLEANFLIGHT172
   #define AMPERAGE_DIV  10
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_ALARMS   8       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+
+  #define USE_MENU_STAT
+  #define USE_MENU_PID
+  #define USE_MENU_RC
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+
+  #define MENU_CONFIG MENU_CONFIG_BASEFLIGHT_LEGACY
 #endif
 
 #if defined FIXEDWING_BF
@@ -270,18 +354,29 @@
   #define CORRECT_MENU_RCT1
   #define ENABLE_MSP_SAVE_ADVANCED
 
-  #define MENU_STAT          0       //STATISTICS
-  #define MENU_PID           1       //PID CONFIG
-  #define MENU_RC            2       //RC TUNING
-  #define MENU_FIXEDWING     3       //FIXEDWING adjustments
-  #define MENU_VOLTAGE       4       //VOLTAGE
-  #define MENU_RSSI          5       //RSSI
-  #define MENU_CURRENT       6       //CURRENT
-  #define MENU_DISPLAY       7       //DISPLAY
-  #define MENU_ADVANCED      8       //ADVANCED
-  #define MENU_ALARMS        9       //ALARMS
-  #define MENU_PROFILE       10      //PROFILE+PID CONTROLLER
-  #define MAXPAGE       MENU_PROFILE
+  #define USE_MENU_STAT
+  #define USE_MENU_PID
+  #define USE_MENU_RC
+  #define USE_MENU_FIXEDWING
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+  #define USE_MENU_PROFILE
+
+  #define MENU_CONFIG \
+    MENU_PID,       \
+    MENU_RC,        \
+    MENU_FIXEDWING, \
+    MENU_VOLTAGE,   \
+    MENU_RSSI,      \
+    MENU_CURRENT,   \
+    MENU_DISPLAY,   \
+    MENU_ADVANCED,  \
+    MENU_ALARMS,    \
+    MENU_PROFILE,
 #endif
 
 #if defined FIXEDWING_BF_SERVO
@@ -291,19 +386,31 @@
   #define CORRECT_MENU_RCT1
   #define ENABLE_MSP_SAVE_ADVANCED
 
-  #define MENU_STAT          0       //STATISTICS
-  #define MENU_PID           1       //PID CONFIG
-  #define MENU_RC            2       //RC TUNING
-  #define MENU_SERVO         3       //SERVO
-  #define MENU_FIXEDWING     4       //FIXEDWING adjustments
-  #define MENU_VOLTAGE       5       //VOLTAGE
-  #define MENU_RSSI          6       //RSSI
-  #define MENU_CURRENT       7       //CURRENT
-  #define MENU_DISPLAY       8       //DISPLAY
-  #define MENU_ADVANCED      9       //ADVANCED
-  #define MENU_ALARMS        10       //ALARMS
-  #define MENU_PROFILE       11      //PROFILE+PID CONTROLLER
-  #define MAXPAGE       MENU_PROFILE
+  #define USE_MENU_STAT
+  #define USE_MENU_PID
+  #define USE_MENU_RC
+  #define USE_MENU_SERVO
+  #define USE_MENU_FIXEDWING
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+  #define USE_MENU_PROFILE
+
+  #define MENU_CONFIG \
+    MENU_PID,       \
+    MENU_RC,        \
+    MENU_SERVO,     \
+    MENU_FIXEDWING, \
+    MENU_VOLTAGE,   \
+    MENU_RSSI,      \
+    MENU_CURRENT,   \
+    MENU_DISPLAY,   \
+    MENU_ADVANCED,  \
+    MENU_ALARMS,    \
+    MENU_PROFILE,
 #endif
 
 #if defined BASEFLIGHT20150627
@@ -312,129 +419,189 @@
   #define CORRECT_MENU_RCT1
   #define ENABLE_MSP_SAVE_ADVANCED
 
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_ALARMS   8       //ALARMS
-  #define MENU_PROFILE  9       //PROFILE+PID CONTROLLER
-  #define MAXPAGE       MENU_PROFILE
+  #define USE_MENU_STAT
+  #define USE_MENU_PID
+  #define USE_MENU_RC
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+
+  #define MENU_CONFIG MENU_CONFIG_BASEFLIGHT_LEGACY
 #endif
 
 #if defined (BASEFLIGHT20150327)
   #define AMPERAGE_DIV  10
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_ALARMS   8       //ALARMS
-  #define MAXPAGE MENU_ALARMS
+
+  #define USE_MENU_STAT
+  #define USE_MENU_PID
+  #define USE_MENU_RC
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+
+  #define MENU_CONFIG MENU_CONFIG_BASEFLIGHT_LEGACY
 #endif
 
 #if defined (RACEFLIGHT)
   #define AMPERAGE_DIV  10
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_VOLTAGE  2       //VOLTAGE
-  #define MENU_RSSI     3       //RSSI
-  #define MENU_CURRENT  4       //CURRENT
-  #define MENU_DISPLAY  5       //DISPLAY
-  #define MENU_ADVANCED 6       //ADVANCED
-  #define MENU_ALARMS   7       //ALARMS
-  #define MAXPAGE MENU_ALARMS
+
+  #define USE_MENU_STAT
+  #define USE_MENU_PID
+  #define USE_MENU_RC
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+
+  #define MENU_CONFIG MENU_CONFIG_BASEFLIGHT_LEGACY
 #endif
 
 #if defined (MULTIWII_V24)
   #define AMPERAGE_DIV  1
 
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_GPS_TIME 8       //GPS TIME
-  #define MENU_ALARMS   9       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+  #define USE_MENU_STAT
+  #define USE_MENU_PID
+  #define USE_MENU_RC
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_GPS_TIME
+  #define USE_MENU_ALARMS
+
+  #define MENU_CONFIG \
+    MENU_PID,      \
+    MENU_RC,       \
+    MENU_VOLTAGE,  \
+    MENU_RSSI,     \
+    MENU_CURRENT,  \
+    MENU_DISPLAY,  \
+    MENU_ADVANCED, \
+    MENU_GPS_TIME, \
+    MENU_ALARMS,
 #endif
 
 #if defined (MULTIWII_V23)
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_ALARMS   8       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+  #define USE_MENU_STAT
+  #define USE_MENU_PID
+  #define USE_MENU_RC
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+
+  #define MENU_CONFIG \
+    MENU_PID,      \
+    MENU_RC,       \
+    MENU_VOLTAGE,  \
+    MENU_RSSI,     \
+    MENU_CURRENT,  \
+    MENU_DISPLAY,  \
+    MENU_ADVANCED, \
+    MENU_ALARMS,
 #endif
 
 #if defined (MULTIWII_V21)
   #define BOXNAMES              // required to support legacy protocol
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_ALARMS   8       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+
+  #define USE_MENU_STAT
+  #define USE_MENU_PID
+  #define USE_MENU_RC
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+
+  #define MENU_CONFIG \
+    MENU_PID,      \
+    MENU_RC,       \
+    MENU_VOLTAGE,  \
+    MENU_RSSI,     \
+    MENU_CURRENT,  \
+    MENU_DISPLAY,  \
+    MENU_ADVANCED, \
+    MENU_ALARMS,
 #endif
 
 #if defined(TAULABS)
   #define AMPERAGE_DIV  10
   #define HAS_ALARMS
   #define ACROPLUS
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_ALARMS   8       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+
+  #define USE_MENU_STAT
+  #define USE_MENU_PID
+  #define USE_MENU_RC
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+
+  #define MENU_CONFIG \
+    MENU_PID,      \
+    MENU_RC,       \
+    MENU_VOLTAGE,  \
+    MENU_RSSI,     \
+    MENU_CURRENT,  \
+    MENU_DISPLAY,  \
+    MENU_ADVANCED, \
+    MENU_ALARMS,
 #endif
 
 #if defined(APM)
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_VOLTAGE  1       //VOLTAGE
-  #define MENU_RSSI     2       //RSSI
-  #define MENU_CURRENT  3       //CURRENT
-  #define MENU_DISPLAY  4       //DISPLAY
-  #define MENU_ADVANCED 5       //ADVANCED
-  #define MENU_ALARMS   6       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
   #define PROTOCOL_MAVLINK
   #define AMPERAGE_DIV 10
+
+  #define USE_MENU_STAT
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+
+  #define MENU_CONFIG \
+    MENU_VOLTAGE,  \
+    MENU_RSSI,     \
+    MENU_CURRENT,  \
+    MENU_DISPLAY,  \
+    MENU_ADVANCED, \
+    MENU_ALARMS,
 #endif
 
 #if defined(KISS)
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_VOLTAGE  1       //VOLTAGE
-  #define MENU_RSSI     2       //RSSI
-  #define MENU_CURRENT  3       //CURRENT
-  #define MENU_DISPLAY  4       //DISPLAY
-  #define MENU_ADVANCED 5       //ADVANCED
-  #define MENU_ALARMS   6       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
   #define PROTOCOL_KISS
   #define AMPERAGE_DIV 10
+
+  #define USE_MENU_STAT
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+
+  #define MENU_CONFIG \
+    MENU_VOLTAGE,  \
+    MENU_RSSI,     \
+    MENU_CURRENT,  \
+    MENU_DISPLAY,  \
+    MENU_ADVANCED, \
+    MENU_ALARMS,
 #endif
 
 #ifdef SKYTRACK
@@ -443,9 +610,12 @@
   #undef  ALARM_SATS
   #undef  ALARM_GPS
   #undef  OSD_SWITCH_RC
-  #define MENU_STAT  0           //STATISTICS
-  #define MAXPAGE MENU_STAT
+
   #define PROTOCOL_SKYTRACK
+
+  #define USE_MENU_STAT
+  #define MENU_CONFIG // empty
+  
 #endif
 
 #ifdef NOCONTROLLER
@@ -454,9 +624,11 @@
   #undef  ALARM_SATS
   #undef  ALARM_GPS
   #undef  OSD_SWITCH_RC
+
   #define HIDEARMEDSTATUS
-  #define MENU_STAT  0           //STATISTICS
-  #define MAXPAGE MENU_STAT
+
+  #define USE_MENU_STAT
+  #define MENU_CONFIG // empty
 #endif
 
 #if defined GPSOSD_UBLOX
@@ -514,38 +686,46 @@
   #define HIDEARMEDSTATUS
   #define ALARM_GPS 5
 
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_VOLTAGE  1       //VOLTAGE
-  #define MENU_RSSI     2       //RSSI
-  #define MENU_CURRENT  3       //CURRENT
-  #define MENU_DISPLAY  4       //DISPLAY
-  #define MENU_ADVANCED 5       //ADVANCED
-  #define MENU_ALARMS   6       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+  #define USE_MENU_STAT
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+
+  #define MENU_CONFIG \
+    MENU_VOLTAGE,  \
+    MENU_RSSI,     \
+    MENU_CURRENT,  \
+    MENU_DISPLAY,  \
+    MENU_ADVANCED, \
+    MENU_ALARMS,
 #endif
 
 // Flight Controller Software types to be added before here...
 
-#ifndef MAXPAGE
+#ifndef USE_MENU_STAT
   #define INFO_CONTROLLER 0
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_VOLTAGE  1       //VOLTAGE
-  #define MENU_RSSI     2       //RSSI
-  #define MENU_CURRENT  3       //CURRENT
-  #define MENU_DISPLAY  4       //DISPLAY
-  #define MENU_ADVANCED 5       //ADVANCED
-  #define MENU_ALARMS   6       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+
+  #define USE_MENU_STAT
+  #define USE_MENU_VOLTAGE
+  #define USE_MENU_RSSI
+  #define USE_MENU_CURRENT
+  #define USE_MENU_DISPLAY
+  #define USE_MENU_ADVANCED
+  #define USE_MENU_ALARMS
+
+  #define MENU_CONFIG \
+    MENU_VOLTAGE,  \
+    MENU_RSSI,     \
+    MENU_CURRENT,  \
+    MENU_DISPLAY,  \
+    MENU_ADVANCED, \
+    MENU_ALARMS,
 #endif
 
 // ALL controller type MENUS must go before here. This area is to add extra menus for hardware
-
-#ifdef VTX_RTC6705
-  const uint8_t MENU_vtx_tmp = MAXPAGE+1;
-  #define MENU_VTX MENU_vtx_tmp
-  #undef  MAXPAGE
-  #define MAXPAGE MENU_VTX 
-#endif
 
 #ifdef HAS_ALARMS
   #define MAX_ALARM_LEN 30
