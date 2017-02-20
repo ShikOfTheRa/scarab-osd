@@ -303,7 +303,7 @@
     MENU_PROFILE,
 #endif
 
-#define MENU_CONFIG_BASEFLIGHT_LEGACY \
+#define MENU_CONFIG_LEGACY \
     MENU_PID,      \
     MENU_RC,       \
     MENU_VOLTAGE,  \
@@ -328,7 +328,7 @@
   #define USE_MENU_ADVANCED
   #define USE_MENU_ALARMS
 
-  #define MENU_CONFIG MENU_CONFIG_BASEFLIGHT_LEGACY
+  #define MENU_CONFIG MENU_CONFIG_LEGACY
 #endif
 
 #if defined CLEANFLIGHT172
@@ -344,7 +344,7 @@
   #define USE_MENU_ADVANCED
   #define USE_MENU_ALARMS
 
-  #define MENU_CONFIG MENU_CONFIG_BASEFLIGHT_LEGACY
+  #define MENU_CONFIG MENU_CONFIG_LEGACY
 #endif
 
 #if defined FIXEDWING_BF
@@ -429,7 +429,7 @@
   #define USE_MENU_ADVANCED
   #define USE_MENU_ALARMS
 
-  #define MENU_CONFIG MENU_CONFIG_BASEFLIGHT_LEGACY
+  #define MENU_CONFIG MENU_CONFIG_LEGACY
 #endif
 
 #if defined (BASEFLIGHT20150327)
@@ -445,7 +445,7 @@
   #define USE_MENU_ADVANCED
   #define USE_MENU_ALARMS
 
-  #define MENU_CONFIG MENU_CONFIG_BASEFLIGHT_LEGACY
+  #define MENU_CONFIG MENU_CONFIG_LEGACY
 #endif
 
 #if defined (RACEFLIGHT)
@@ -461,7 +461,7 @@
   #define USE_MENU_ADVANCED
   #define USE_MENU_ALARMS
 
-  #define MENU_CONFIG MENU_CONFIG_BASEFLIGHT_LEGACY
+  #define MENU_CONFIG MENU_CONFIG_LEGACY
 #endif
 
 #if defined (MULTIWII_V24)
@@ -501,15 +501,7 @@
   #define USE_MENU_ADVANCED
   #define USE_MENU_ALARMS
 
-  #define MENU_CONFIG \
-    MENU_PID,      \
-    MENU_RC,       \
-    MENU_VOLTAGE,  \
-    MENU_RSSI,     \
-    MENU_CURRENT,  \
-    MENU_DISPLAY,  \
-    MENU_ADVANCED, \
-    MENU_ALARMS,
+  #define MENU_CONFIG MENU_CONFIG_LEGACY
 #endif
 
 #if defined (MULTIWII_V21)
@@ -525,15 +517,7 @@
   #define USE_MENU_ADVANCED
   #define USE_MENU_ALARMS
 
-  #define MENU_CONFIG \
-    MENU_PID,      \
-    MENU_RC,       \
-    MENU_VOLTAGE,  \
-    MENU_RSSI,     \
-    MENU_CURRENT,  \
-    MENU_DISPLAY,  \
-    MENU_ADVANCED, \
-    MENU_ALARMS,
+  #define MENU_CONFIG MENU_CONFIG_LEGACY
 #endif
 
 #if defined(TAULABS)
@@ -551,15 +535,7 @@
   #define USE_MENU_ADVANCED
   #define USE_MENU_ALARMS
 
-  #define MENU_CONFIG \
-    MENU_PID,      \
-    MENU_RC,       \
-    MENU_VOLTAGE,  \
-    MENU_RSSI,     \
-    MENU_CURRENT,  \
-    MENU_DISPLAY,  \
-    MENU_ADVANCED, \
-    MENU_ALARMS,
+  #define MENU_CONFIG MENU_CONFIG_LEGACY
 #endif
 
 #if defined(APM)
