@@ -58,33 +58,39 @@ void vtx_init() {
   vtxChannel = Settings[S_VTX_CHANNEL];
 
   vtx_set_frequency(vtxBand, vtxChannel);
+
+#ifdef FFPV_INNOVA
+  vtx_set_power(vtxPower);
+#endif
 }
+
 
 void vtx_transfer(int reg, int rw, uint32_t data)
 {
   uint32_t regdata = (reg << 0)|(rw << 4)|(data << 5);
+  uint32_t mask = 1;
+
+  // With ATmega328 running at 16MHz, we don't need any delay.
 
   _digitalLo(RTC_SPICLK);
   _digitalLo(RTC_SPILE);
 
-  for (int i = 0; i <25; i ++)
+  for (int i = 0; i < 25; i ++)
   {
 
-    if (regdata & ((uint32_t) 1 << i))
+    if (regdata & mask)
       _digitalHi(RTC_SPIDATA);
     else
       _digitalLo(RTC_SPIDATA);
-      
-    _delay_us (40);
 
     _digitalHi(RTC_SPICLK);
-    _delay_us (40);
 
     _digitalLo(RTC_SPICLK);
+
+    mask <<= 1;
   }
 
-  _delay_us (10);
-  _digitalLo(RTC_SPILE);
+  _digitalHi(RTC_SPILE);
 } 
 
 void vtx_set_power(uint8_t power)

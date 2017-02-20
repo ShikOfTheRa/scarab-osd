@@ -1817,6 +1817,7 @@ void updateVtxStatus(void)
     MAX7456_WriteString(tmp, 12 + 30);
     MAX7456_WriteString(itoa(vtxChannel + 1, screenBuffer, 10), 14 + 30);
     MAX7456_WriteString_P(PGMSTR(&(vtxPowerNames[vtxPower])), 16 + 30);
+    MAX7456_WriteString(itoa((uint16_t)pgm_read_word(&vtx_frequencies[vtxBand][vtxChannel]), screenBuffer, 10), 20 + 30);
   }
 }
 #endif
