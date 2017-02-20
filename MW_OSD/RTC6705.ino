@@ -4,83 +4,53 @@
 
 #if defined(IMPULSERC_HELIX)
 
-// SPILE = D15 (A1)
-#define CS_RBIT   _digital_pin_to_rbit(15)
-#define CS_PORT   _digital_pin_to_port(15)
-#define CS_DDR    _digital_pin_to_ddr(15)
-// SPICLK = D14 (A0)
-#define SCK_RBIT  _digital_pin_to_rbit(14)
-#define SCK_PORT  _digital_pin_to_port(14)
-#define SCK_DDR   _digital_pin_to_ddr(14)
-// SPIDATA = D16 (A2)
-#define MOSI_RBIT _digital_pin_to_rbit(16)
-#define MOSI_PORT _digital_pin_to_port(16)
-#define MOSI_DDR  _digital_pin_to_ddr(16)
-// PSW1 = D5
-# define PSW1_RBIT _digital_pin_to_rbit(5)
-# define PSW1_PORT _digital_pin_to_port(5)
-# define PSW1_DDR  _digital_pin_to_ddr(5)
-// PSW2 = D6
-# define PSW2_RBIT _digital_pin_to_rbit(6)
-# define PSW2_PORT _digital_pin_to_port(6)
-# define PSW2_DDR  _digital_pin_to_ddr(6)
-// VTXLED = D8
-# define VTXLED_RBIT _digital_pin_to_rbit(8)
-# define VTXLED_PORT _digital_pin_to_port(8)
-# define VTXLED_DDR  _digital_pin_to_ddr(8)
+# define RTC_SPILE   15 // A1
+# define RTC_SPICLK  14 // A0
+# define RTC_SPIDATA 16 // A2
 
-// A6 is used for power sensing
+# define VTX_PSW1_PIN 5
+# define VTX_PSW2_PIN 6
+# define VTX_LED_PIN  8
+
+// Note: A6 is additionally used for power sensing
 
 #elif defined(FFPV_INNOVA)
 
-// SPILE = D9
-#define CS_RBIT   _digital_pin_to_rbit(9)
-#define CS_PORT   _digital_pin_to_port(9)
-#define CS_DDR    _digital_pin_to_ddr(9)
-// SPICLK = D8
-#define SCK_RBIT  _digital_pin_to_rbit(8)
-#define SCK_PORT  _digital_pin_to_port(8)
-#define SCK_DDR   _digital_pin_to_ddr(8)
-// SPIDATA = D10
-#define MOSI_RBIT _digital_pin_to_rbit(10)
-#define MOSI_PORT _digital_pin_to_port(10)
-#define MOSI_DDR  _digital_pin_to_ddr(10)
+# define RTC_SPILE    9
+# define RTC_SPICLK   8
+# define RTC_SPIDATA 10
 
 #else
 # error Unknown VTX integrated board
 #endif
 
-#define CLR(x,y) (x&=(~(1<<y)))
-#define SET(x,y) (x|=(1<<y))
-#define TOGGLE(x,y) (x^=(1<<y))
-
 void vtx_init() {
-  //Set pins to output
-  CS_DDR |= (1 << CS_RBIT);
-  MOSI_DDR |= (1 << MOSI_RBIT);
-  SCK_DDR |= (1 << SCK_RBIT);
+
+  _pinModeOut(RTC_SPILE);
+  _pinModeOut(RTC_SPICLK);
+  _pinModeOut(RTC_SPIDATA);
 
 #ifdef IMPULSERC_HELIX
-  PSW1_DDR |= (1 << PSW1_RBIT);
-  PSW2_DDR |= (1 << PSW2_RBIT);
+  _pinModeOut(VTX_PSW1_PIN);
+  _pinModeOut(VTX_PSW2_PIN);
 #endif
 
 #ifdef VTX_LED
-  VTXLED_DDR |= (1 << VTXLED_RBIT);
+  _pinModeOut(VTX_LED_PIN);
 #endif
 
   // CS high
-  SET(CS_PORT, CS_RBIT);
+  _digitalHi(RTC_SPILE);
 
 #ifdef IMPULSERC_HELIX
   // Low output power
-  CLR(PSW1_PORT, PSW1_RBIT);
-  CLR(PSW2_PORT, PSW2_RBIT);
+  _digitalLo(VTX_PSW1_PIN);
+  _digitalLo(VTX_PSW2_PIN);
 #endif
 
 #ifdef VTX_LED
   // LED off
-  SET(VTXLED_PORT, VTXLED_RBIT);
+  _digitalHi(VTX_LED_PIN);
 #endif
 
   vtxPower = Settings[S_VTX_POWER];
@@ -88,28 +58,39 @@ void vtx_init() {
   vtxChannel = Settings[S_VTX_CHANNEL];
 
   vtx_set_frequency(vtxBand, vtxChannel);
+
+#ifdef FFPV_INNOVA
+  vtx_set_power(vtxPower);
+#endif
 }
+
 
 void vtx_transfer(int reg, int rw, uint32_t data)
 {
-  uint32_t regdata = (reg << 0)|(rw << 4)|data;
+  uint32_t regdata = (reg << 0)|(rw << 4)|(data << 5);
+  uint32_t mask = 1;
 
-  for (int i = 0; i <25; i ++)
+  // With ATmega328 running at 16MHz, we don't need any delay.
+
+  _digitalLo(RTC_SPICLK);
+  _digitalLo(RTC_SPILE);
+
+  for (int i = 0; i < 25; i ++)
   {
-    if (regdata & ((uint32_t) 1 << i))
-      SET(MOSI_PORT, MOSI_RBIT);
+
+    if (regdata & mask)
+      _digitalHi(RTC_SPIDATA);
     else
-      CLR(MOSI_PORT, MOSI_RBIT);
-      
-    _delay_us (40);
-    SET(SCK_PORT, SCK_RBIT);
-    _delay_us (40);
-    CLR(SCK_PORT, SCK_RBIT);
+      _digitalLo(RTC_SPIDATA);
+
+    _digitalHi(RTC_SPICLK);
+
+    _digitalLo(RTC_SPICLK);
+
+    mask <<= 1;
   }
 
-  _delay_us (10);
-    
-  SET(CS_PORT, CS_RBIT);
+  _digitalHi(RTC_SPILE);
 } 
 
 void vtx_set_power(uint8_t power)
@@ -117,20 +98,23 @@ void vtx_set_power(uint8_t power)
 #if defined(IMPULSERC_HELIX)
   switch (power) {
     case 0:
-      CLR(PSW1_PORT, PSW1_RBIT);
-      CLR(PSW2_PORT, PSW2_RBIT);
+      _digitalLo(VTX_PSW1_PIN);
+      _digitalLo(VTX_PSW2_PIN);
       break;
+
     case 1:
-      SET(PSW1_PORT, PSW1_RBIT);
-      CLR(PSW2_PORT, PSW2_RBIT);
+      _digitalHi(VTX_PSW1_PIN);
+      _digitalLo(VTX_PSW2_PIN);
       break;
+
     case 2:
-      SET(PSW1_PORT, PSW1_RBIT);
-      SET(PSW2_PORT, PSW2_RBIT);
+      _digitalHi(VTX_PSW1_PIN);
+      _digitalHi(VTX_PSW2_PIN);
       break;
   }
 
 #elif defined(FFPV_INNOVA)
+
   switch (power) {
     case 0:
       vtx_transfer(7, 1, 0x00040); // 25mW, per FFPV
@@ -140,57 +124,32 @@ void vtx_set_power(uint8_t power)
       vtx_transfer(7, 1, 0x04E8D); // 200mW, per FFPV
       break;
   }
+
 #else
 # error Unknown VTX integrated board
 #endif
 }
 
-//http://fpv-community.de/showthread.php?28337-RTC6705-Sender-auf-FatShark-Frequenz&p=844717&viewfull=1#post844717
 void vtx_set_frequency(uint8_t band, uint8_t channel)
 {
   uint16_t frequency = pgm_read_word(&vtx_frequencies[band][channel]);
   
   uint32_t N = 0;
   uint16_t A = 0;
-  uint32_t data0 = 0;
+  uint32_t data;
   uint8_t i = 0;
   if (frequency <5956 && frequency> 5644)
   {
-    data0 = (1 << 4) |  (400 << 5);
-
-    CLR(SCK_PORT, SCK_RBIT);
-    CLR(CS_PORT, CS_RBIT);
+    vtx_transfer(0, 1, 400);
     
-    
-    for (i = 0; i <25; i ++)
-    {
-      
-      if (data0 & ((uint32_t) 1 << i))
-        SET(MOSI_PORT, MOSI_RBIT);
-      else
-        CLR(MOSI_PORT, MOSI_RBIT);
-      
-      _delay_us (40);
-      SET(SCK_PORT, SCK_RBIT);
-      _delay_us (40);
-      CLR(SCK_PORT, SCK_RBIT);
-    }
-    
-    _delay_us (10);
-  
     N = ((uint32_t) frequency * 25) / 64;
     A = ((uint32_t) frequency * 25 - N * 64);
-    data0 = (1 << 0) |  (1 << 4) |  ((A & 0x7F) << 5) |  ((N & 0x1FFF) << 12);
 
-    vtx_transfer(1, 1, data0);
+    data = (A & 0x7F) | ((N & 0x1FFF) << 7);
+
+    vtx_transfer(1, 1, data);
   }
 }
-
-#ifdef IMPULSERC_HELIX
-bool powered = 1;
-bool wasPowered = 0;
-uint32_t debounce = 0;
-#endif
 
 #ifdef VTX_LED 
 uint16_t ledToggle = 0;
@@ -202,11 +161,12 @@ void vtx_flash_led(uint8_t count)
     ledToggle = count * 2;
 }
 
-void vtx_toggle_led(void)
+void vtx_toggle_led(uint32_t currentMillis)
 {
-  if (ledToggle > 0 && (currentMillis - lastToggle) > 150)
+  if (ledToggle > 0 && (currentMillis - lastToggle) > 200)
   {
-    TOGGLE(VTXLED_PORT, VTXLED_RBIT);
+    _digitalToggle(VTX_LED_PIN);
+
     lastToggle = currentMillis;
     ledToggle--;
   }
@@ -217,8 +177,12 @@ void vtx_toggle_led(void)
 void vtx_process_state(uint32_t currentMillis, uint8_t band, uint8_t channel)
 {
 #ifdef VTX_LED
-  vtx_toggle_led();
+  vtx_toggle_led(currentMillis);
 #endif
+
+  static bool powered = 1;
+  static bool wasPowered = 0;
+  static uint32_t debounce = 0;
 
   bool reading = analogRead(A6) > 900 ? true : false;
 

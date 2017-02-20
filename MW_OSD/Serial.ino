@@ -504,7 +504,7 @@ For sub-command 3 (draw string):
     MWAmperage = (int16_t)read16();
  }
 
-#ifdef MENU_SERVO  
+#ifdef USE_MENU_SERVO  
   if (cmdMSP==MSP_SERVO_CONF)
   {
     for (uint8_t i = 0; i < MAX_SERVOS; i++) {
@@ -519,7 +519,7 @@ For sub-command 3 (draw string):
  }
 #endif //MENU_SERVO   
 
-#ifdef MENU_FIXEDWING
+#ifdef USE_MENU_FIXEDWING
   if (cmdMSP==MSP_FW_CONFIG)
   {
     cfg.fw_althold_dir=read8();
@@ -538,7 +538,7 @@ For sub-command 3 (draw string):
     }
     modeMSPRequests &=~ REQ_MSP_FW_CONFIG;
   }
-#endif // MENU_FIXEDWING
+#endif // USE_MENU_FIXEDWING
 
 #ifdef USE_FC_VOLTS_CONFIG
   if (cmdMSP==MSP_MISC)
@@ -632,7 +632,7 @@ For sub-command 3 (draw string):
       for(uint8_t i = 0; i<dataSize; i++) {
         c = read8();
 
-#ifdef MENU_PID_VEL
+#ifdef USE_MENU_PID_VEL
         if((pn_index != 5) && (pn_index != 6) && (pn_index <= 9)) // 5, 6 and >9 are skipped
 #else
         if((pn_index != 5) && (pn_index != 6) && (pn_index <= 8)) // 5, 6 and >8 are skipped
@@ -905,7 +905,8 @@ void handleRawRC() {
           // Enter config mode using stick combination
           waitStick =  2;	// Sticks must return to center before continue!
           configMode = 1;
-          configPage = previousconfigPage;
+          configIndex = previousConfigIndex;
+          configPage = menuConfig[configIndex];
           setMspRequests();
       }
     }
@@ -973,7 +974,7 @@ void handleRawRC() {
       { 
 	waitStick =1;
         menudir=1+oldmenudir;
-        #ifdef MENU_ALARMS
+        #ifdef USE_MENU_ALARMS
 	if(configPage == MENU_ALARMS && COL == 3) {
 	  if(ROW==5) timer.magCalibrationTimer=0;
         }
@@ -1004,14 +1005,20 @@ void serialMenuCommon()
     if (menudir < -1){
       menudir = -1;
     }
-//      constrain(menudir,-1,1);
-    configPage += menudir;
+
+    debug[0] = configIndex;
+
+    configIndex += menudir;
+
+    if (configIndex < MINPAGE) configIndex = MAXPAGE;
+    if (configIndex > MAXPAGE) configIndex = MINPAGE;
+    configPage = menuConfig[configIndex];
   }
 
-  if(configPage < MINPAGE) configPage = MAXPAGE;
-  if(configPage > MAXPAGE) configPage = MINPAGE;
+  debug[1] = configIndex;
+  debug[2] = configPage;
 
-#ifdef MENU_VTX
+#ifdef USE_MENU_VTX
   if (configPage == MENU_VTX) {
     switch(ROW) {
       case 1: // Power
@@ -1049,9 +1056,9 @@ void serialMenuCommon()
   }
 #endif
 
-#ifdef MENU_PID
+#ifdef USE_MENU_PID
   if(configPage == MENU_PID) {
-#ifdef MENU_PID_VEL
+#ifdef USE_MENU_PID_VEL
     if(ROW >= 1 && ROW <= 8) {
 #else
     if(ROW >= 1 && ROW <= 7) {
@@ -1069,7 +1076,7 @@ void serialMenuCommon()
   }
 #endif
 
-#ifdef MENU_RC_2
+#ifdef USE_MENU_RC_2
   if(configPage == MENU_RC_2 && COL == 3) {    
     switch(ROW) {
       case 1: tpa_breakpoint16 += menudir; break;
@@ -1078,7 +1085,7 @@ void serialMenuCommon()
   }
 #endif
   
-#ifdef MENU_SERVO
+#ifdef USE_MENU_SERVO
   if(configPage == MENU_SERVO) {
     switch(COL) {
       case 1: servo.settings[0][ROW-1]+= menudir; break;
@@ -1088,7 +1095,7 @@ void serialMenuCommon()
   }
 #endif
 
-#ifdef MENU_RC
+#ifdef USE_MENU_RC
   #if defined CORRECT_MENU_RCT2
     if (configPage == MENU_RC && COL == 3) {
       switch(ROW) {
@@ -1130,7 +1137,7 @@ void serialMenuCommon()
   #endif
 #endif
 
-#ifdef MENU_FIXEDWING
+#ifdef USE_MENU_FIXEDWING
   if (configPage == MENU_FIXEDWING && COL == 3) {
     switch(ROW) {
     case 1: cfg.fw_gps_maxcorr += menudir; break;
@@ -1145,7 +1152,7 @@ void serialMenuCommon()
   }
 #endif
 
-#ifdef MENU_VOLTAGE
+#ifdef USE_MENU_VOLTAGE
   if (configPage == MENU_VOLTAGE && COL == 3) {
     switch(ROW) {
     case 1: ReverseSetting(S_DISPLAYVOLTAGE)
@@ -1159,7 +1166,7 @@ void serialMenuCommon()
   }
 #endif
 
-#ifdef MENU_RSSI
+#ifdef USE_MENU_RSSI
   if (configPage == MENU_RSSI && COL == 3) {
     switch(ROW) {
     case 1: ReverseSetting(S_DISPLAYRSSI)
@@ -1172,7 +1179,7 @@ void serialMenuCommon()
   }
 #endif
 
-#ifdef MENU_CURRENT
+#ifdef USE_MENU_CURRENT
   if (configPage == MENU_CURRENT && COL == 3) {
     switch(ROW) {
     case 1: ReverseSetting(S_AMPERAGE)
@@ -1184,7 +1191,7 @@ void serialMenuCommon()
   }
 #endif
 
-#ifdef MENU_DISPLAY
+#ifdef USE_MENU_DISPLAY
   if (configPage == MENU_DISPLAY && COL == 3) {
     switch(ROW) {
     case 1: ReverseSetting(S_DISPLAY_HORIZON_BR)
@@ -1199,7 +1206,7 @@ void serialMenuCommon()
   }
 #endif
 
-#ifdef MENU_ADVANCED
+#ifdef USE_MENU_ADVANCED
   if (configPage == MENU_ADVANCED && COL == 3) {
     switch(ROW) {
     case 1: ReverseSetting(S_UNITSYSTEM)
@@ -1212,7 +1219,7 @@ void serialMenuCommon()
   }
 #endif
 
-#ifdef MENU_GPS_TIME
+#ifdef USE_MENU_GPS_TIME
   if (configPage == MENU_GPS_TIME && COL == 3) {
     switch(ROW) {
     case 1: ReverseSetting(S_GPSTIME);
@@ -1226,7 +1233,7 @@ void serialMenuCommon()
   }
 #endif
 
-#ifdef MENU_ALARMS
+#ifdef USE_MENU_ALARMS
   if (configPage == MENU_ALARMS && COL == 3) {
     switch(ROW) {
     case 1: ModifySetting(S_DISTANCE_ALARM)
@@ -1240,7 +1247,7 @@ void serialMenuCommon()
   }
 #endif
 
-#ifdef MENU_PROFILE
+#ifdef USE_MENU_PROFILE
   #ifdef ADVANCEDSAVE
     if (configPage == MENU_PROFILE && COL == 3) {
       switch(ROW) {
@@ -1265,7 +1272,7 @@ void serialMenuCommon()
 #endif  
 
   if (ROW == 10) {
-    previousconfigPage = configPage;
+    previousConfigIndex = configIndex;
     switch(COL) {
     case 1: configExit(); break;
     case 2: configSave(); break;
@@ -1407,7 +1414,7 @@ void serialMSPreceive(uint8_t loops)
 
 void configExit()
 {
-  configPage=1;
+  configIndex=1;
   ROW=10;
   COL=3;
   configMode=0;
@@ -1509,7 +1516,7 @@ void configSave()
   mspWriteChecksum();
 #endif
 
-#if defined MENU_FIXEDWING
+#if defined USE_MENU_FIXEDWING
   mspWriteRequest(MSP_SET_FW_CONFIG,38);
   mspWrite8(cfg.fw_althold_dir);
   mspWrite16(cfg.fw_gps_maxcorr);
@@ -1526,9 +1533,9 @@ void configSave()
     mspWrite16(0);
   }
   mspWriteChecksum();  
-#endif // MENU_FIXEDWING
+#endif // USE_MENU_FIXEDWING
 
-#ifdef MENU_SERVO  
+#ifdef USE_MENU_SERVO  
   mspWriteRequest(MSP_SET_SERVO_CONF,(9*MAX_SERVOS));
     for (uint8_t i = 0; i < MAX_SERVOS; i++) {
       for (uint8_t ii = 0; ii < 5; ii++) {
@@ -1542,9 +1549,9 @@ void configSave()
 #endif
 
 #if 0 // This is not necessary? vtxBand,vtxChannel&vtxPower are all in sync with corresponding Settings at the end of stick handling.
-#ifdef MENU_VTX
+#ifdef USE_MENU_VTX
   vtx_save();
-#endif //MENU_VTX  
+#endif // USE_MENU_VTX  
 #endif
 
   writeEEPROM();
