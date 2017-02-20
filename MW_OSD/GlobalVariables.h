@@ -1095,7 +1095,7 @@ typedef enum {
   MENU_VTX,      // VTX
 #endif
   MENU_LAST,
-  MAXPAGE = MENU_VTX - 1
+  MAXPAGE = MENU_LAST - 1
 } menuId_e;
 
 uint8_t menuConfig[] = {
