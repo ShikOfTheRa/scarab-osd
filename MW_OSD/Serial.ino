@@ -241,7 +241,7 @@ void serialMSPCheck()
 //        if (eeaddress==0){
           EEPROM.write(0,EEPROMVER);
 //        }
-        if ((eeaddress==(EEPROM_SETTINGS)+(EEPROM16_SETTINGS*2))||(eeaddress==(EEPROM_SETTINGS)+(EEPROM16_SETTINGS*2)+(3*2*POSITIONS_SETTINGS))){
+        if ((eeaddress==(EEPROM_SETTINGS-1)+(EEPROM16_SETTINGS*2))||(eeaddress==(EEPROM_SETTINGS-1)+(EEPROM16_SETTINGS*2)+(3*2*POSITIONS_SETTINGS))){
           readEEPROM();
         }
       }
