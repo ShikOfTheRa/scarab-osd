@@ -29,7 +29,9 @@
 #define _digital_pin_to_rbit(n) _xxxconcat(_dp2rbit, n)
 #define _DTOB(n) _digital_pin_to_rbit(n)
 
-#define _BV(n) (1 << (n))
+#ifndef _BV
+# define _BV(n) (1 << (n))
+#endif
 
 #define _dp2bm0  _BV(0) /* 0, port D */
 #define _dp2bm1  _BV(1)
