@@ -4,7 +4,7 @@
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
-//#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
+#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
 //#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
 //#define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
 //#define RTFQV1                    // Uncomment this if using standard RTFQ/Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
@@ -14,7 +14,7 @@
 //#define AIRBOTMICRO               // Uncomment this if using an airbot MicroOSD
 //#define ANDROMEDA                 // Uncomment this if using an Andromeda (http://www.multiwiicopter.com/)
 //#define IMPULSERC_HELIX           // Uncomment this if using an ImpulseRC integrated OSD/VTX
-#define FFPV_INNOVA               // Uncomment this if using an ImpulseRC integrated OSD/VTX
+//#define FFPV_INNOVA               // Uncomment this if using an ImpulseRC integrated OSD/VTX
 
 // NOTE-some boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct: 
@@ -340,9 +340,6 @@
 // Regional RF frequency regulations: Choose ONLY ONE option:
 #define VTX_REGION_UNRESTRICTED                // Enable for all 40 channels
 //#define VTX_REGION_AUSTRALIA                   // Enable for AU legal channels and power level only
-
-// Direct stick commands for band/chan manipulation
-#define VTX_RC
 
 /********************  Advanced parameters  settings      *********************/
 // This is to enable rarely used advanced parameter saving. Off by default to minimise risk 
