@@ -469,7 +469,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
   if (Settings[S_SCROLLING]||Settings[S_SIDEBARTOPS]){
     if(!armed) GPS_speed=0;
     // Scrolling decoration
-    if (GPS_speed > (old_GPS_speed+15)){
+    if ((GPS_speed+15) < old_GPS_speed){
       sidebarsMillis = millis();
       sidebarsdir = 2;
       old_GPS_speed = GPS_speed;
@@ -477,7 +477,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
       if (SYM_AH_DECORATION_LEFT<0x10)
         SYM_AH_DECORATION_LEFT=0x15;
     }
-    else if ((GPS_speed+15) < old_GPS_speed){
+    else if (GPS_speed > (old_GPS_speed+15)){
       sidebarsMillis = millis();
       sidebarsdir = 1;
       old_GPS_speed = GPS_speed;
@@ -486,7 +486,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
         SYM_AH_DECORATION_LEFT=0x10;
     }
 
-    if (MwAltitude > old_MwAltitude+20){
+    if (MwAltitude+20 < old_MwAltitude){
       sidebaraMillis = millis();
       sidebaradir = 2;
       old_MwAltitude = MwAltitude;
@@ -494,7 +494,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
       if (SYM_AH_DECORATION_RIGHT<0x10)
         SYM_AH_DECORATION_RIGHT=0x15;
     }
-    else if (MwAltitude+20 < old_MwAltitude){
+    else if (MwAltitude > old_MwAltitude+20){
       sidebaraMillis = millis();
       sidebaradir = 1;
       old_MwAltitude = MwAltitude;
