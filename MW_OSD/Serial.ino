@@ -390,8 +390,6 @@ For sub-command 3 (draw string):
     I2CError=read16();
     MwSensorPresent = read16();
     MwSensorActive = read32();
-    debug[0]=(uint32_t) MwSensorActive&0xFFFF;
-    debug[1]=(uint32_t) MwSensorActive >> 16;
     #if defined FORCESENSORS
       MwSensorPresent=GPSSENSOR|BAROMETER|MAGNETOMETER|ACCELEROMETER;
     #endif  
@@ -447,6 +445,7 @@ For sub-command 3 (draw string):
 #endif
     
     GPS_directionToHome=read16();
+    
 #ifdef GPSTIME
     read8(); //missing
     GPS_time = read32();        //local time of coord calc - haydent
@@ -802,8 +801,6 @@ For sub-command 3 (draw string):
         break;
       case 12:
         mode.passthru  |= bit;
-        debug[2]=mode.passthru&0xFFFF;
-        debug[3]=mode.passthru>>16;
         break;
       case 16:
         mode.llights |= bit;

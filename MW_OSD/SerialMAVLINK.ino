@@ -149,8 +149,7 @@ void serialMAVCheck(){
      if (apm_mav_mode==99)      //MISSION
      MwSensorActive|=(1<<6);
      */
-    debug[3]=serialBuffer[6];
-
+ 
     #ifdef ALWAYSARMED
       serialBuffer[6]|=(1<<7); 
     #endif
