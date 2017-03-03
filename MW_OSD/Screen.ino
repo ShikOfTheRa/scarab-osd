@@ -1162,8 +1162,11 @@ void displayDistanceToHome(void)
     dist = GPS_distanceToHome * 3.2808;           // mt to feet
   else
     dist = GPS_distanceToHome;                    // Mt
-  if(dist > distanceMAX)
+  if(dist > distanceMAX){
+    if (dist > distanceMAX+100)
+      dist=distanceMAX+100; // constrain for data errors
     distanceMAX = dist;
+  }
   if(!fieldIsVisible(GPS_distanceToHomePosition))
     return;
 
