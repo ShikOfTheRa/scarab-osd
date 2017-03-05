@@ -248,7 +248,8 @@
 //#define TX_GS                     // Enable for Graupner/Spektrum (Only use for GPSOSD/NAZA/APM/PIXHAWK/MAVLINK)    
 //#define TX_M                      // Enable for Multiplex (Only use for GPSOSD/NAZA/APM/PIXHAWK/MAVLINK)
 //#define TX_HS                     // Enable for Hitec/Sanwa (Only use for GPSOSD/NAZA/APM/PIXHAWK/MAVLINK)
-
+#define TX_CHAN_MID 1400     //  test value for determining RC SWITCH MID position
+#define TX_CHAN_HIGH 1600    // test value for determining RC SWITCH HIGH position
 
 /********************       Airspeed Settings         ************************/
 // Completely UNTESTED for future integration of support for airspeed sensor
