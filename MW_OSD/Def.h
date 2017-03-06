@@ -506,7 +506,7 @@
   #define AMPERAGE_DIV 100
 #endif
 
-#if defined (FC_VOLTAGE_CONFIG) && (defined (CLEANFLIGHT) || defined(BASEFLIGHT))
+#if defined (FC_VOLTAGE_CONFIG) && (defined (CLEANFLIGHT) || defined(BASEFLIGHT) || defined(BETAFLIGHT))
   #define USE_FC_VOLTS_CONFIG
 #endif
 
