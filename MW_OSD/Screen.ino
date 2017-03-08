@@ -446,7 +446,12 @@ void displayHorizon(int rollAngle, int pitchAngle)
   screenBuffer[0]=0x50;
   int16_t xx=abs(pitchAngle/10);
   uint8_t offset=1;
-  if(pitchAngle<0) {
+#ifdef INVERT_PITCH
+  if(pitchAngle>0) 
+#else
+  if(pitchAngle<0)
+#endif	  
+  {
     screenBuffer[1]='-';
     offset++;
   }
@@ -456,7 +461,12 @@ void displayHorizon(int rollAngle, int pitchAngle)
   screenBuffer[0]=0x52;
   offset=1;
   xx=abs(rollAngle/10);
-  if(rollAngle<0) {
+#ifdef INVERT_ROLL
+  if(rollAngle>0) 
+#else
+  if(rollAngle<0) 
+#endif
+  {
     screenBuffer[1]='-';
     offset++;
   }
