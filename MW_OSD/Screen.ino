@@ -1126,7 +1126,7 @@ void displayAltitude(void)
   formatDistance(altitude,1,0);
   MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition));
 #ifdef SHOW_MAX_ALTITUDE
-  formatDistance(altitude,1,0);
+  formatDistance(altitudeMAX,1,0);
   MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+LINE);
 #endif //SHOW_MAX_ALTITUDE
 
@@ -1157,7 +1157,7 @@ void displayDistanceToHome(void)
 {
   if(!GPS_fix)
     return;
-  uint16_t dist;
+  uint32_t dist;
   if(Settings[S_UNITSYSTEM])
     dist = GPS_distanceToHome * 3.2808;           // mt to feet
   else
@@ -1177,6 +1177,11 @@ void displayDistanceToHome(void)
 
   formatDistance(dist,1,2);
   MAX7456_WriteString(screenBuffer,getPosition(GPS_distanceToHomePosition));
+
+  #if defined SHOW_MAX_DISTANCE
+    formatDistance(distanceMAX,1,2);
+    MAX7456_WriteString(screenBuffer,LINE+getPosition(GPS_distanceToHomePosition));
+  #endif //SHOW_MAX_DISTANCE
 }
 
 
@@ -1412,6 +1417,8 @@ void displayCursor(void)
 void displayConfigScreen(void)
 {
   int16_t MenuBuffer[10];
+  uint32_t MaxMenuBuffer[6];
+
   MAX7456_WriteString_P(PGMSTR(&(menutitle_item[configPage])),35);
 #ifdef MENU_PROFILE
   //   MAX7456_WriteString(itoa(FCProfile,screenBuffer,10),50); // Display Profile number
@@ -1430,31 +1437,20 @@ void displayConfigScreen(void)
     formatTime(flyingTime, screenBuffer, 1);
     MAX7456_WriteString(screenBuffer,ROLLD-4);
 #else // SHORTSUMMARY
-    MenuBuffer[1]=trip;
-    MenuBuffer[2]=distanceMAX;
-    MenuBuffer[3]=altitudeMAX;
-    MenuBuffer[4]=speedMAX;
-    MenuBuffer[5]=amperagesum/360;
-    MenuBuffer[6]=ampMAX/10;
+    MaxMenuBuffer[1]=trip;
+    MaxMenuBuffer[2]=distanceMAX;
+    MaxMenuBuffer[3]=altitudeMAX;
+    MaxMenuBuffer[4]=speedMAX;
+    MaxMenuBuffer[5]=amperagesum/360;
+    MaxMenuBuffer[6]=ampMAX/10;
 
     for(uint8_t X=0; X<=6; X++) {
       MAX7456_WriteString_P(PGMSTR(&(menu_stats_item[X])), ROLLT+(X*30));
 #ifdef LONG_RANGE_DISPLAY
-      if ((X==1)){
-        formatDistance(trip,0,2);
-      }
-      else if ((X==2) &&(distanceMAX>9999)){
-        formatDistance(distanceMAX,0,2);
-      }
-      else if ((X==3) &&(altitudeMAX>9999)){
-        formatDistance(altitudeMAX,0,2);
-      }
-      else{
-        itoa(MenuBuffer[X],screenBuffer,10);
-      }
+      formatDistance(MaxMenuBuffer[X],0,2);
       MAX7456_WriteString(screenBuffer,110+(30*X));
 #else
-      MAX7456_WriteString(itoa(MenuBuffer[X],screenBuffer,10),110+(30*X));
+      MAX7456_WriteString(itoa(MaxMenuBuffer[X],screenBuffer,10),110+(30*X));
 #endif    
     }
 
@@ -2233,7 +2229,7 @@ void formatDistance(int32_t d2f, uint8_t units, uint8_t type ) {
     screenBuffer[xx-1] = DECIMAL;
     xx++;
     screenBuffer[xx] = 0;
-    type = (type==2) ? type=6 : type=4; //           
+    // type = (type==2) ? type=6 : type=4; // additional fonts to be added           
   }
   else{
     itoa(d2f, screenBuffer+units, 10);

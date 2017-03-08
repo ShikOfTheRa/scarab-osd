@@ -439,7 +439,7 @@ For sub-command 3 (draw string):
 
   if (cmdMSP==MSP_COMP_GPS)
   {
-    GPS_distanceToHome=read16();
+    GPS_distanceToHome=(uint32_t)read16();
 #ifdef I2CGPS_DISTANCE
     gpsdistancefix();
 #endif
