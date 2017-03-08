@@ -219,6 +219,8 @@
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
 //#define NOTHROTTLESPACE           // Enable to remove space between throttle symbol and the data
 #define DISPLAY_PR                  // Display pitch / roll angles. Requires relevant layout ppositions to be enabled
+//#define INVERT_PITCH              // Invert the sign of the displayed numeric value for the pitch angle (ex: pitch up = positive )
+//#define INVERT_ROLL               // Invert the sign of the displayed numeric value for the roll angle (ex: roll right = negative )
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
 //#define REVERSEAHI                // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
 //#define AHICORRECT 10             // Enable to adjust AHI on display to match horizon. -10 = -1 degree
