@@ -327,6 +327,7 @@
 // It may require layouts to be amended to show data without overwriting other information
 //#define SHOW_MAX_SPEED                 // Enable to display MAX speed achieved on line below current speed
 //#define SHOW_MAX_ALTITUDE              // Enable to display MAX altitude achieved on line below current altitude
+//#define SHOW_MAX_DISTANCE              // Enable to display MAX distance achieved on line below current distance
 
 
 /********************  THROTTLE calibration  settings      *********************/
