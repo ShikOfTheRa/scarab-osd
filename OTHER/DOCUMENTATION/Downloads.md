@@ -3,9 +3,9 @@
 
 Download the latest release of MW OSD here:-
 
-**Release 1.6 - 08/03/2016 :**
+**Release 1.7 - 10/03/2016 :**
 
-[MW OSD R1.6](https://drive.google.com/uc?export=download&id=0B2MInRUrbpWxdFdWVmRsSFJQdVE)
+[MW OSD R1.7](https://drive.google.com/uc?export=download&id=0B2MInRUrbpWxa1ZmM3VDZENKVzA)
 
 ---
 
@@ -15,6 +15,10 @@ Download the latest release of MW OSD here:-
 ---
 
 Historic releases of MW OSD are here:-
+
+**Release 1.6 - 08/03/2016 :**
+
+[MW OSD R1.6](https://drive.google.com/uc?export=download&id=0B2MInRUrbpWxdFdWVmRsSFJQdVE)
 
 **Release 1.5 - 14/08/2015 :**
 
