@@ -3,7 +3,7 @@
 
 Download the latest release of MW OSD here:-
 
-**Release 1.7 - 10/03/2016 :**
+**Release 1.7 - 10/03/2017 :**
 
 [MW OSD R1.7](https://drive.google.com/uc?export=download&id=0B2MInRUrbpWxa1ZmM3VDZENKVzA)
 
