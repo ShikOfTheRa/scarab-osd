@@ -175,7 +175,8 @@ void setup()
 
   MAX7456Setup();
   #if defined GPSOSD
-    GPS_SerialInit();
+    timer.GPS_initdelay=3; 
+    //GPS_SerialInit();
   #else
   #endif
 #if defined FORECSENSORACC
@@ -661,7 +662,15 @@ void loop()
     if (timer.GUI_active>0){
       timer.GUI_active--;
     }  
-    
+    #if defined GPSOSD
+    if (timer.GPS_initdelay==1){
+      GPS_SerialInit();
+    }  
+    if (timer.GPS_initdelay>0){
+      timer.GPS_initdelay--;
+    }  
+    #endif
+
     if(!armed) {
 //      setMspRequests();
 #ifndef MAPMODENORTH

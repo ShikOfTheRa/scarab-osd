@@ -124,6 +124,7 @@ struct  __timer {
   uint8_t  MSP_active;
   uint8_t  GPS_active;
   uint8_t  GUI_active;
+  uint8_t  GPS_initdelay;
   uint16_t  loopcount;
   uint16_t  packetcount;
   uint16_t  serialrxrate;
