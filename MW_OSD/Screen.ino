@@ -1433,7 +1433,7 @@ void displayCursor(void)
 void displayConfigScreen(void)
 {
   int16_t MenuBuffer[10];
-  uint32_t MaxMenuBuffer[6];
+  uint32_t MaxMenuBuffer[7];
 
   MAX7456_WriteString_P(PGMSTR(&(menutitle_item[configPage])),35);
 #ifdef MENU_PROFILE
