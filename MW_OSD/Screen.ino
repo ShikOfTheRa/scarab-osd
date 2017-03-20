@@ -1,5 +1,3 @@
-
-
 char *ItoaPadded(int val, char *str, uint8_t bytes, uint8_t decimalpos)  {
   // Val to convert
   // Return String
@@ -152,6 +150,11 @@ uint16_t getPosition(uint8_t pos) {
   uint16_t val = screenPosition[pos];
   uint16_t ret = val&POS_MASK;
   return ret;
+}
+
+void constrainedScreen(uint16_t pos, uint16_t Y) {
+  if (pos<480)
+    screen[pos] = SYM_AH_BAR9_0+(Y%9);
 }
 
 uint8_t fieldIsVisible(uint8_t pos) {
@@ -551,36 +554,28 @@ void displayHorizon(int rollAngle, int pitchAngle)
       int Y = (rollAngle * (4-X)) / 64;
       Y -= pitchAngle / 8;
       Y += 41;
-      if(Y >= 0 && Y <= 81) {
-        uint16_t pos = position -9 + LINE*(Y/9) + 3 - 4*LINE + X;
-        if (pos < 480)
-          screen[pos] = SYM_AH_BAR9_0+(Y%9);
-        if (Settings[S_HORIZON_ELEVATION]){ 
-          if(X >= 4 && X <= 8) {
-            if ((pos-3*LINE) < 480)
-              screen[pos-3*LINE] = SYM_AH_BAR9_0+(Y%9);
-            if ((pos+3*LINE) < 480)
-              screen[pos+3*LINE] = SYM_AH_BAR9_0+(Y%9);
-          }
+      uint16_t pos = position -9 + LINE*(Y/9) + 3 - 4*LINE + X;
+      constrainedScreen(pos,Y);
+      if (Settings[S_HORIZON_ELEVATION]){ 
+        if(X >= 4 && X <= 8) {
+          constrainedScreen(pos-3*LINE,Y);
+          constrainedScreen(pos+3*LINE,Y);
         }
       }
     }
 #else //FULLAHI
-    for(uint8_t X=0; X<=8; X++) {
-      if (X==4) X=5;
+    for(int8_t X=-4; X<=4; X++) {
+      if (X==0) X=5;
       int Y = (rollAngle * (4-X)) / 64;
       Y -= pitchAngle / 8;
       Y += 41;
       if(Y >= 0 && Y <= 81) {
         uint16_t pos = position -7 + LINE*(Y/9) + 3 - 4*LINE + X;
-        if (pos < 480)
-          screen[pos] = SYM_AH_BAR9_0+(Y%9);
+        constrainedScreen(pos,Y);
         if (Settings[S_HORIZON_ELEVATION]){ 
           if(X >= 2 && X <= 6) {
-            if ((pos-3*LINE) < 480)
-              screen[pos-3*LINE] = SYM_AH_BAR9_0+(Y%9);
-            if ((pos+3*LINE) < 480)
-              screen[pos+3*LINE] = SYM_AH_BAR9_0+(Y%9);
+              constrainedScreen(pos-3*LINE,Y);
+              constrainedScreen(pos+3*LINE,Y);
           }
         }            
       }
