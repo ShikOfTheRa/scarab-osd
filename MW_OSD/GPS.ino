@@ -403,6 +403,7 @@ bool GPS_newFrame(char c) {
         checksum <<= 4;
         checksum += hex_c(string[1]);
         if (checksum == parity) {
+          timer.packetcount++;
           frameOK = 1;
             if (frame == FRAME_GGA){
             GPS_updateGGA();
@@ -592,6 +593,7 @@ bool GPS_newFrame(char c) {
   }
 
   bool UBLOX_parse_gps(void) {
+    timer.packetcount++;
     switch (_msg_id) {
     case MSG_POSLLH:
       //i2c_dataset.time                = _buffer.posllh.time;
@@ -761,6 +763,7 @@ restart:
                 break;
             }
 
+            timer.packetcount++;
             GPS_fix                   = ((_buffer.msg.fix_type == FIX_3D) || (_buffer.msg.fix_type == FIX_3D_SBAS));
             #ifdef ALARM_GPS
               timer.GPS_active=ALARM_GPS;
