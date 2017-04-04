@@ -175,7 +175,7 @@ void setup()
 
   MAX7456Setup();
   #if defined GPSOSD
-    timer.GPS_initdelay=3; 
+    timer.GPS_initdelay=10; 
     //GPS_SerialInit();
   #else
   #endif
