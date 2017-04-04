@@ -4,7 +4,7 @@ We need your help to keep MWOSD alive. Please help support and donate : [![](htt
 
 Check out our [WIKI] (https://github.com/ShikOfTheRa/scarab-osd/wiki) for the latest documentation
 ##
-## MWOSD NextGeneration OSD for UAV##
+## MWOSD NextGeneration OSD for UAV
 
 <a href='http://www.youtube.com/watch?feature=player_embedded&v=FCIyhbT1kK0' target='_blank'><img src='http://img.youtube.com/vi/FCIyhbT1kK0/0.jpg' width='425' height=344 /></a><br>
 
