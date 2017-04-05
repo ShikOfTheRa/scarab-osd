@@ -105,9 +105,6 @@ void ltm_check() {
     MwAngle[1]=(int16_t)10*ltmread_u16();
     MwAngle[0]=(int16_t)10*ltmread_u16();
     MwHeading = (int16_t)ltmread_u16();
-#if defined(USEGPSHEADING)
-    MwHeading = GPS_ground_course/10;
-#endif
 #ifdef HEADINGCORRECT
     if (MwHeading >= 180) MwHeading -= 360;
 #endif
