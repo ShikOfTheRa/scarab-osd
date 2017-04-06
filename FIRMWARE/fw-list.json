@@ -31,9 +31,13 @@
                 "board": "minim"                                
 },
 “iNAV”: {
+                “link” : https://github.com/ShikOfTheRa/scarab-osd/blob/master/FIRMWARE/1.7/minim.inav.hex
+                “version”: “1.7”
+                "board": "minim"                                
+},
+“iNAV”: {
                 “link” : https://github.com/ShikOfTheRa/scarab-osd/blob/master/FIRMWARE/1.7/aeromax.inav.hex
                 “version”: “1.7”
                 "board": "aeromax"                                
 },
-
 }
