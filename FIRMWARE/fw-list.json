@@ -1,43 +1,49 @@
+[
 {
-
-“Clear EEprom”: {
-                “link” : https://github.com/ShikOfTheRa/scarab-osd/blob/master/FIRMWARE/1.7/EEPROM.CLEAR.hex
-                “version”: “1.7”
-                "board": "minim"                
+  "name": "Clear EEprom",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/EEPROM.CLEAR.hex",
+  "version": "1.7",
+  "board": "minim"                
 },
-“Bold font installer”: {
-                “link” : https://github.com/ShikOfTheRa/scarab-osd/blob/master/FIRMWARE/1.7/FONT.BOLD.hex
-                “version”: “1.7”
-                
+{
+   "name": "Bold font installer",
+   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/FONT.BOLD.hex",
+   "version": "1.7"
 },
-“Default font installer”: {
-                “link” : https://github.com/ShikOfTheRa/scarab-osd/blob/master/FIRMWARE/1.7/FONT.DEFAULT.hex
-                “version”: “1.7”
-                "board": "minim"                                
+{
+  "name": "Default font installer",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/FONT.DEFAULT.hex",
+  "version": "1.7",
+  "board": "minim"                
 },
-“Large font installed”: {
-                “link” : https://github.com/ShikOfTheRa/scarab-osd/blob/master/FIRMWARE/1.7/FONT.LARGE.hex
-                “version”: “1.7”
-                "board": "minim"                                
+{
+  "name": "Large font installed",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/FONT.LARGE.hex",
+  "version": "1.7",
+  "board": "minim"                
 },
-“Betaflight”: {
-                “link” : https://github.com/ShikOfTheRa/scarab-osd/blob/master/FIRMWARE/1.7/minim.betaflight.hex
-                “version”: “1.7”
-                "board": "minim"                                
+{
+  "name": "Betaflight",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.betaflight.hex",
+  "version": "1.7",
+  "board": "minim"                
 },
-“Cleanflight”: {
-                “link” : https://github.com/ShikOfTheRa/scarab-osd/blob/master/FIRMWARE/1.7/minim.cleanflight.hex
-                “version”: “1.7”
-                "board": "minim"                                
+{
+  "name": "Cleanflight",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.cleanflight.hex",
+  "version": "1.7",
+  "board": "minim"                
 },
-“iNAV”: {
-                “link” : https://github.com/ShikOfTheRa/scarab-osd/blob/master/FIRMWARE/1.7/minim.inav.hex
-                “version”: “1.7”
-                "board": "minim"                                
+{
+  "name": "iNAV",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.inav.hex",
+  "version": "1.7",
+  "board": "minim"                
 },
-“iNAV”: {
-                “link” : https://github.com/ShikOfTheRa/scarab-osd/blob/master/FIRMWARE/1.7/aeromax.inav.hex
-                “version”: “1.7”
-                "board": "aeromax"                                
-},
+{
+  "name": "iNAV",
+  "url" : "LINK BROKEN https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.inav.hex",
+  "version": "1.7",
+  "board": "aeromax"                
 }
+]
