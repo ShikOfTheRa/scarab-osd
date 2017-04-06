@@ -130,6 +130,11 @@ boolean ledstatus=HIGH;
 //------------------------------------------------------------------------
 void setup()
 {
+#ifdef HARDRESET
+  MCUSR &= (0xFF & (0<<WDRF));
+  WDTCSR |= (1<<WDCE)|(1<<WDE)|(0<<WDIE);
+  WDTCSR =  (0<<WDE)|(0<<WDIE);  
+#endif
 
   Serial.begin(BAUDRATE);
   #ifndef PROTOCOL_MAVLINK //use double speed asynch mode (multiwii compatible)
@@ -784,8 +789,16 @@ void resetFunc(void)
 #ifdef I2C_UB_SUPPORT
   WireUB.end();
 #endif
-  asm volatile ("  jmp 0"); 
+#ifdef HARDRESET
+  MCUSR &= ~(1<<WDRF);
+  WDTCSR |= (1<<WDCE) | (1<<WDE) | (1<<WDIE);
+  WDTCSR = (1<<WDIE) | (0<<WDE) | (0<<WDP3) | (0<<WDP2) | (0<<WDP1) | (1<<WDP0);
+  while(1);
+#else
+  asm volatile ("  jmp 0");
+#endif
 } 
+
 
 void setMspRequests() {
   if(fontMode) {
