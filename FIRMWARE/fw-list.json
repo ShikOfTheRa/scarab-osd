@@ -42,7 +42,7 @@
 },
 {
   "name": "iNAV",
-  "url" : "LINK BROKEN https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.inav.hex",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.inav.hex",
   "version": "1.7",
   "board": "aeromax"                
 }
