@@ -22,6 +22,9 @@
   "version": "1.7",
   "board": "minim"                
 },
+
+
+
 {
   "name": "Betaflight",
   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.betaflight.hex",
@@ -41,9 +44,97 @@
   "board": "minim"                
 },
 {
+  "name": "APM/PIXHAWK",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.apm.hex",
+  "version": "1.7",
+  "board": "minim"                
+},
+{
+  "name": "dronin",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.dronin.hex",
+  "version": "1.7",
+  "board": "minim"                
+},
+{
+  "name": "KISS",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.kiss.hex",
+  "version": "1.7",
+  "board": "minim"                
+},
+{
+  "name": "Librepilot",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.librepilot.hex",
+  "version": "1.7",
+  "board": "minim"                
+},
+{
+  "name": "MultiWii",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.multiwii.hex",
+  "version": "1.7",
+  "board": "minim"                
+},
+{
+  "name": "Raceflight",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.raceflight.hex",
+  "version": "1.7",
+  "board": "minim"                
+},
+
+
+
+{
+  "name": "Betaflight",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.betaflight.hex",
+  "version": "1.7",
+  "board": "aeromax"                
+},
+{
+  "name": "Cleanflight",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.cleanflight.hex",
+  "version": "1.7",
+  "board": "aeromax"                
+},
+{
   "name": "iNAV",
   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.inav.hex",
   "version": "1.7",
   "board": "aeromax"                
-}
+},
+{
+  "name": "APM/PIXHAWK",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.apm.hex",
+  "version": "1.7",
+  "board": "aeromax"                
+},
+{
+  "name": "dronin",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.dronin.hex",
+  "version": "1.7",
+  "board": "aeromax"                
+},
+{
+  "name": "KISS",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.kiss.hex",
+  "version": "1.7",
+  "board": "aeromax"                
+},
+{
+  "name": "Librepilot",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.librepilot.hex",
+  "version": "1.7",
+  "board": "aeromax"                
+},
+{
+  "name": "MultiWii",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.multiwii.hex",
+  "version": "1.7",
+  "board": "aeromax"                
+},
+{
+  "name": "Raceflight",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.raceflight.hex",
+  "version": "1.7",
+  "board": "aeromax"                
+},
+
 ]
