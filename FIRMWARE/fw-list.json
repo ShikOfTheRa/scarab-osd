@@ -1,30 +1,4 @@
 [
-{
-  "name": "Clear EEprom",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/EEPROM.CLEAR.hex",
-  "version": "1.7",
-  "board": ""                
-},
-{
-   "name": "Bold font installer",
-   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/FONT.BOLD.hex",
-   "version": "1.7",
-   "board": ""                
-},
-{
-  "name": "Default font installer",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/FONT.DEFAULT.hex",
-  "version": "1.7",
-  "board": ""                
-},
-{
-  "name": "Large font installer",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/FONT.LARGE.hex",
-  "version": "1.7",
-  "board": ""                
-},
-
-
 
 {
   "name": "Betaflight",
@@ -136,8 +110,31 @@
   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.raceflight.hex",
   "version": "1.7",
   "board": "aeromax"                
-}
-
-
-
+},
+  
+  
+{
+  "name": "Clear EEprom",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/EEPROM.CLEAR.hex",
+  "version": "1.7",
+  "board": ""                
+},
+{
+   "name": "Bold font installer",
+   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/FONT.BOLD.hex",
+   "version": "1.7",
+   "board": ""                
+},
+{
+  "name": "Default font installer",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/FONT.DEFAULT.hex",
+  "version": "1.7",
+  "board": ""                
+},
+{
+  "name": "Large font installer",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/FONT.LARGE.hex",
+  "version": "1.7",
+  "board": ""                
+}  
 ]
