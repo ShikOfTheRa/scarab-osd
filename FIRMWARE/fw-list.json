@@ -41,7 +41,7 @@
   "board": "minim"                
 },
 {
-  "name": "APM/PIXHAWK",
+  "name": "APM PIXHAWK",
   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.apm.hex",
   "version": "1.7",
   "board": "minim"                
@@ -95,7 +95,7 @@
   "board": "aeromax"                
 },
 {
-  "name": "APM/PIXHAWK",
+  "name": "APM PIXHAWK",
   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.apm.hex",
   "version": "1.7",
   "board": "aeromax"                
