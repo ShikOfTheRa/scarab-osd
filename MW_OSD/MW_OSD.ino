@@ -667,7 +667,7 @@ void loop()
     if (timer.GUI_active>0){
       timer.GUI_active--;
     }  
-    #if defined GPSOSD
+    #if defined(GPSOSD) && !defined(NAZA)
     if (timer.GPS_initdelay==1){
       GPS_SerialInit();
     }  

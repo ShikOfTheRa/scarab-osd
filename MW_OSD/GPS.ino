@@ -2,7 +2,7 @@
 // Ublox config con be set using u-blox-config.ublox.txt 
 
 
-#if defined GPSOSD
+#if defined(GPSOSD) && !defined(NAZA)
 
   #if defined(INIT_MTK_GPS)
     #define MTK_SET_BINARY          PSTR("$PGCMD,16,0,0,0,0,0*6A\r\n")
