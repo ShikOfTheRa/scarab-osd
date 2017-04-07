@@ -22,9 +22,6 @@
   "version": "1.7",
   "board": "minim"                
 },
-
-
-
 {
   "name": "Betaflight",
   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.betaflight.hex",
@@ -79,9 +76,6 @@
   "version": "1.7",
   "board": "minim"                
 },
-
-
-
 {
   "name": "Betaflight",
   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.betaflight.hex",
@@ -136,5 +130,4 @@
   "version": "1.7",
   "board": "aeromax"                
 },
-
 ]
