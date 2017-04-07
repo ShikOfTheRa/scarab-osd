@@ -18,7 +18,7 @@
   "board": ""                
 },
 {
-  "name": "Large font installed",
+  "name": "Large font installer",
   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/FONT.LARGE.hex",
   "version": "1.7",
   "board": ""                
