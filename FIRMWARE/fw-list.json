@@ -20,7 +20,7 @@
 },
 {
   "name": "APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.apm.hex",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.mavlink.hex",
   "version": "1.7.1",
   "board": "Default minim"                
 },
@@ -64,7 +64,7 @@
 },
 {
   "name": "Fixedwing APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.apm.aero.hex",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.mavlink.aero.hex",
   "version": "1.7.1",
   "board": "Default minim"                
 },
@@ -104,7 +104,7 @@
 },
 {
   "name": "APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.apm.hex",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.mavlink.hex",
   "version": "1.7.1",
   "board": "VirtualPilot AeroMax"                
 },
@@ -148,7 +148,7 @@
 },
 {
   "name": "Fixedwing APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.apm.aero.hex",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.mavlink.aero.hex",
   "version": "1.7.1",
   "board": "VirtualPilot AeroMax"                
 },
@@ -182,7 +182,7 @@
 },
 {
   "name": "APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/andromeda.apm.hex",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/andromeda.mavlink.hex",
   "version": "1.7.1",
   "board": "Andromeda"                
 },
@@ -194,7 +194,7 @@
 },
 {
   "name": "Fixedwing APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/andromeda.apm.aero.hex",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/andromeda.mavlink.aero.hex",
   "version": "1.7.1",
   "board": "Andromeda"                
 },
