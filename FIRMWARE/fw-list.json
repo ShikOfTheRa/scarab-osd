@@ -1,140 +1,228 @@
 [
-
+                                                              
 {
   "name": "Betaflight",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.betaflight.hex",
-  "version": "1.7",
-  "board": "minim"                
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.betaflight.hex",
+  "version": "1.7.1",
+  "board": "Default minim"                
 },
 {
   "name": "Cleanflight",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.cleanflight.hex",
-  "version": "1.7",
-  "board": "minim"                
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.cleanflight.hex",
+  "version": "1.7.1",
+  "board": "Default minim"                
 },
 {
   "name": "iNAV",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.inav.hex",
-  "version": "1.7",
-  "board": "minim"                
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.inav.hex",
+  "version": "1.7.1",
+  "board": "Default minim"                
 },
 {
   "name": "APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.apm.hex",
-  "version": "1.7",
-  "board": "minim"                
-},
-{
-  "name": "dronin",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.dronin.hex",
-  "version": "1.7",
-  "board": "minim"                
-},
-{
-  "name": "KISS",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.kiss.hex",
-  "version": "1.7",
-  "board": "minim"                
-},
-{
-  "name": "Librepilot",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.librepilot.hex",
-  "version": "1.7",
-  "board": "minim"                
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.apm.hex",
+  "version": "1.7.1",
+  "board": "Default minim"                
 },
 {
   "name": "MultiWii",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.multiwii.hex",
-  "version": "1.7",
-  "board": "minim"                
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.multiwii.hex",
+  "version": "1.7.1",
+  "board": "Default minim"                
+},
+{
+  "name": "KISS",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.kiss.hex",
+  "version": "1.7.1",
+  "board": "Default minim"                
+},
+{
+  "name": "Dronin",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.dronin.hex",
+  "version": "1.7.1",
+  "board": "Default minim"                
+},
+{
+  "name": "Librepilot",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.librepilot.hex",
+  "version": "1.7.1",
+  "board": "Default minim"                
 },
 {
   "name": "Raceflight",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/minim.raceflight.hex",
-  "version": "1.7",
-  "board": "minim"                
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.raceflight.hex",
+  "version": "1.7.1",
+  "board": "Default minim"                
 },
+
+
+{
+  "name": "Fixedwing iNAV ",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.inav.aero.hex",
+  "version": "1.7.1",
+  "board": "Default minim"                
+},
+{
+  "name": "Fixedwing APM PIXHAWK",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.apm.aero.hex",
+  "version": "1.7.1",
+  "board": "Default minim"                
+},
+{
+  "name": "Fixedwing PatrikE BF",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.baseflight.aero.hex",
+  "version": "1.7.1",
+  "board": "Default minim"                
+},
+{
+  "name": "OSD UBLOX",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.ublox.hex",
+  "version": "1.7.1",
+  "board": "Default minim"                
+},
+
 
 
 
 {
   "name": "Betaflight",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.betaflight.hex",
-  "version": "1.7",
-  "board": "aeromax"                
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.betaflight.hex",
+  "version": "1.7.1",
+  "board": "VirtualPilotAeroMax"                
 },
 {
   "name": "Cleanflight",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.cleanflight.hex",
-  "version": "1.7",
-  "board": "aeromax"                
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.cleanflight.hex",
+  "version": "1.7.1",
+  "board": "VirtualPilot AeroMax"                
 },
 {
   "name": "iNAV",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.inav.hex",
-  "version": "1.7",
-  "board": "aeromax"                
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.inav.hex",
+  "version": "1.7.1",
+  "board": "VirtualPilot AeroMax"                
 },
 {
   "name": "APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.apm.hex",
-  "version": "1.7",
-  "board": "aeromax"                
-},
-{
-  "name": "dronin",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.dronin.hex",
-  "version": "1.7",
-  "board": "aeromax"                
-},
-{
-  "name": "KISS",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.kiss.hex",
-  "version": "1.7",
-  "board": "aeromax"                
-},
-{
-  "name": "Librepilot",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.librepilot.hex",
-  "version": "1.7",
-  "board": "aeromax"                
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.apm.hex",
+  "version": "1.7.1",
+  "board": "VirtualPilot AeroMax"                
 },
 {
   "name": "MultiWii",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.multiwii.hex",
-  "version": "1.7",
-  "board": "aeromax"                
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.multiwii.hex",
+  "version": "1.7.1",
+  "board": "VirtualPilot AeroMax"                
+},
+{
+  "name": "KISS",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.kiss.hex",
+  "version": "1.7.1",
+  "board": "VirtualPilot AeroMax"                
+},
+{
+  "name": "Dronin",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.dronin.hex",
+  "version": "1.7.1",
+  "board": "VirtualPilot AeroMax"                
+},
+{
+  "name": "Librepilot",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.librepilot.hex",
+  "version": "1.7.1",
+  "board": "VirtualPilot AeroMax"                
 },
 {
   "name": "Raceflight",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/aeromax.raceflight.hex",
-  "version": "1.7",
-  "board": "aeromax"                
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.raceflight.hex",
+  "version": "1.7.1",
+  "board": "VirtualPilot AeroMax"                
 },
+
+
+{
+  "name": "Fixedwing iNAV ",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.inav.aero.hex",
+  "version": "1.7.1",
+  "board": "VirtualPilot AeroMax"                
+},
+{
+  "name": "Fixedwing APM PIXHAWK",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.apm.aero.hex",
+  "version": "1.7.1",
+  "board": "VirtualPilot AeroMax"                
+},
+{
+  "name": "Fixedwing PatrikE BF",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.baseflight.aero.hex",
+  "version": "1.7.1",
+  "board": "VirtualPilot AeroMax"                
+},
+{
+  "name": "OSD UBLOX",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.ublox.hex",
+  "version": "1.7.1",
+  "board": "VirtualPilot AeroMax"                
+},
+
+
+
+
+{
+  "name": "Betaflight",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/andromeda.betaflight.hex",
+  "version": "1.7.1",
+  "board": "Andromeda"                
+},
+{
+  "name": "iNAV",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/andromeda.inav.hex",
+  "version": "1.7.1",
+  "board": "Andromeda"                
+},
+{
+  "name": "APM PIXHAWK",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/andromeda.apm.hex",
+  "version": "1.7.1",
+  "board": "Andromeda"                
+},
+{
+  "name": "Fixedwing iNAV ",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/andromeda.inav.aero.hex",
+  "version": "1.7.1",
+  "board": "Andromeda"                
+},
+{
+  "name": "Fixedwing APM PIXHAWK",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/andromeda.apm.aero.hex",
+  "version": "1.7.1",
+  "board": "Andromeda"                
+},
+
   
   
 {
   "name": "Clear EEprom",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/EEPROM.CLEAR.hex",
-  "version": "1.7",
-  "board": ""                
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/EEPROM.CLEAR.hex",
+  "version": "1.7.1",
+  "board": "Utilities"                
 },
 {
    "name": "Bold font installer",
-   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/FONT.BOLD.hex",
-   "version": "1.7",
-   "board": ""                
+   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/FONT.BOLD.hex",
+   "version": "1.7.1",
+   "board": "Utilities"                
 },
 {
   "name": "Default font installer",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/FONT.DEFAULT.hex",
-  "version": "1.7",
-  "board": ""                
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/FONT.DEFAULT.hex",
+  "version": "1.7.1",
+  "board": "Utilities"                
 },
 {
   "name": "Large font installer",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7/FONT.LARGE.hex",
-  "version": "1.7",
-  "board": ""                
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/FONT.LARGE.hex",
+  "version": "1.7.1",
+  "board": "Utilities"                
 }  
 ]
