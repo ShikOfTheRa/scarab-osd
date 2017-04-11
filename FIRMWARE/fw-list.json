@@ -88,7 +88,7 @@
   "name": "Betaflight",
   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.betaflight.hex",
   "version": "1.7.1",
-  "board": "VirtualPilotAeroMax"                
+  "board": "VirtualPilot AeroMax"                
 },
 {
   "name": "Cleanflight",
