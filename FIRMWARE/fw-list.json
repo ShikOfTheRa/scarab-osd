@@ -202,6 +202,12 @@
   
   
 {
+  "name": "DEBUG",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/DEBUG.hex",
+  "version": "1.7.1",
+  "board": "Utilities"                
+},
+{
   "name": "Clear EEprom",
   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/EEPROM.CLEAR.hex",
   "version": "1.7.1",
