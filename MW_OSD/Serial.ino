@@ -575,6 +575,17 @@ For sub-command 3 (draw string):
     MvVBatWarningCellVoltage = read8(); //vbatwarningcellvoltage
     
   }
+
+  if (cmdMSP==MSP_VOLTAGE_METER_CONFIG)
+  {
+    skip8(); //ignore: vbatscale
+
+    MvVBatMinCellVoltage = read8(); //vbatmincellvoltage
+    MvVBatMaxCellVoltage = read8(); //vbatmaxcellvoltage
+    MvVBatWarningCellVoltage = read8(); //vbatwarningcellvoltage
+
+    skip8(); //ignore batteryMeterType
+  }
 #endif //USE_FC_VOLTS_CONFIG
 
 #if defined (CORRECT_MSP_BF1)  

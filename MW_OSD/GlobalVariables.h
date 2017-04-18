@@ -798,6 +798,7 @@ uint16_t flyingTime=0;
 // Betaflight specific
 
 // Cleanflight/Betaflight specific
+#define MSP_VOLTAGE_METER_CONFIG 56    //out message         powermeter trig
 #define MSP_PID_CONTROLLER       59    //in message          no param
 #define MSP_SET_PID_CONTROLLER   60    //out message         sets a given pid controller
 
