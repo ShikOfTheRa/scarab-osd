@@ -1124,6 +1124,7 @@ const unsigned char UnitsIcon[8]={
 #define REQ_MSP_FW_CONFIG      (1L<<20) 
 #define REQ_MSP_PIDNAMES       (1L<<21)
 #define REQ_MSP_SERVO_CONF     (1L<<22)
+#define REQ_MSP_VOLTAGE_METER_CONFIG (1L<<23)
 // Menu selections
 const PROGMEM char * const menu_choice_unit[] =
 {   

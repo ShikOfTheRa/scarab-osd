@@ -444,6 +444,9 @@ void loop()
           MSPcmdsend = MSP_ALARMS;
       break;
 #endif
+      case REQ_MSP_VOLTAGE_METER_CONFIG:
+        MSPcmdsend = MSP_VOLTAGE_METER_CONFIG;
+        break;
     }
     
     if(!fontMode){
@@ -888,7 +891,11 @@ void setMspRequests() {
     modeMSPRequests |= REQ_MSP_ANALOG;
     
 #ifdef USE_FC_VOLTS_CONFIG
+  #if defined(CLEANFLIGHT) || defined(BETAFLIGHT)
+    modeMSPRequests |= REQ_MSP_VOLTAGE_METER_CONFIG;
+  #else
     modeMSPRequests |= REQ_MSP_MISC;
+  #endif
 #endif
 
   }
