@@ -1494,9 +1494,8 @@ void displayConfigScreen(void)
         MAX7456_WriteString(screenBuffer, 110+(30*Y));
 #else
         MAX7456_WriteString(itoa(MaxMenuBuffer[X], screenBuffer, 10), 110+(30*Y));
-      }
-        
 #endif    
+      }
     }
 
     formatTime(flyingTime, screenBuffer, 1);
