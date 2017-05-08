@@ -1493,11 +1493,19 @@ void displayConfigScreen(void)
       Y++;      
 #endif
               
-      MAX7456_WriteString_P(PGMSTR(&(menu_stats_item[X])), ROLLT+(Y*30));      
+      MAX7456_WriteString_P(PGMSTR(&(menu_stats_item[X])), ROLLT+(Y*30));  
+      // TODO: Use switch and add support for units    
+      // TODO: Hide items not visible. ie. !fieldIsVisible(rssiPosition)
       if(X==9) {
         MAX7456_WriteString(itoa(MaxMenuBuffer[X], screenBuffer, 10), 110+(30*Y));
+        // TODO
+        //itoa(MaxMenuBuffer[X], screenBuffer, 10)
+        //screenBuffer[4] = '%';
+        //MAX7456_WriteString(screenbuffer, 110+(30*Y));        
       } else if(X==7 or X==8) {
         ItoaPadded(MaxMenuBuffer[X], screenBuffer, 4, 3);  
+        // TODO
+        //screenBuffer[4] = SYM_VOLT;
         MAX7456_WriteString(screenBuffer, 110+(30*Y));       
       } else  {      
 #ifdef LONG_RANGE_DISPLAY

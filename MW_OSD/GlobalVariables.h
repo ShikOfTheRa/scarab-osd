@@ -720,7 +720,7 @@ uint32_t distanceMAX=0;
 uint16_t ampMAX=0;
 uint32_t trip=0;
 uint16_t flyingTime=0; 
-int16_t voltageMIN=168;
+uint16_t voltageMIN=168;
 int16_t rssiMIN=100;
 
 
