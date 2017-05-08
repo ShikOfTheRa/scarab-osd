@@ -1351,6 +1351,8 @@ void configExit()
     speedMAX=0;
     ampMAX=0;
     flyingTime=0;
+    voltageMIN=168;
+    rssiMIN=100;
   }
   #ifdef ENABLE_MSP_SAVE_ADVANCED
     if (FCProfile!=CurrentFCProfile){

@@ -647,6 +647,9 @@ void displayVoltage(void)
 //    voltage=MwVBat;
 //  }
 
+  if(voltage >= 0 && voltage < voltageMIN)
+    voltageMIN = voltage;
+
 #ifdef AUTOCELL
   uint8_t tcells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
   if (tcells>cells){
@@ -914,9 +917,12 @@ void displayI2CError(void)
 
 
 void displayRSSI(void)
-{
+{      
+  if(rssi < rssiMIN && rssi >= 0 && rssi <= 100)
+    rssiMIN = rssi;  
   if(!fieldIsVisible(rssiPosition))
     return;
+    
   screenBuffer[0] = SYM_RSSI;
   itoa(rssi,screenBuffer+1,10);
   uint8_t xx = FindNull();
@@ -1433,7 +1439,7 @@ void displayCursor(void)
 void displayConfigScreen(void)
 {
   int16_t MenuBuffer[10];
-  uint32_t MaxMenuBuffer[7];
+  uint32_t MaxMenuBuffer[10];
 
   MAX7456_WriteString_P(PGMSTR(&(menutitle_item[configPage])),35);
 #ifdef MENU_PROFILE
@@ -1453,20 +1459,43 @@ void displayConfigScreen(void)
     formatTime(flyingTime, screenBuffer, 1);
     MAX7456_WriteString(screenBuffer,ROLLD-4);
 #else // SHORTSUMMARY
+ 
     MaxMenuBuffer[1]=trip;
     MaxMenuBuffer[2]=distanceMAX;
     MaxMenuBuffer[3]=altitudeMAX;
     MaxMenuBuffer[4]=speedMAX;
     MaxMenuBuffer[5]=amperagesum/360;
     MaxMenuBuffer[6]=ampMAX/10;
+    MaxMenuBuffer[7]=voltage;
+    MaxMenuBuffer[8]=voltageMIN;
+    MaxMenuBuffer[9]=rssiMIN;
 
-    for(uint8_t X=0; X<=6; X++) {
-      MAX7456_WriteString_P(PGMSTR(&(menu_stats_item[X])), ROLLT+(X*30));
+    uint8_t Y=-1;
+    for(uint8_t X=0; X<=9; ++X) {
+#ifdef MINSUMMARY      
+      if(MaxMenuBuffer[X] <= 0) {
+        continue;
+      } else  {
+        Y++;
+      }
+#else 
+      Y++;      
+#endif
+              
+      MAX7456_WriteString_P(PGMSTR(&(menu_stats_item[X])), ROLLT+(Y*30));      
+      if(X==9) {
+        MAX7456_WriteString(itoa(MaxMenuBuffer[X], screenBuffer, 10), 110+(30*Y));
+      } else if(X==7 or X==8) {
+        ItoaPadded(MaxMenuBuffer[X], screenBuffer, 4, 3);  
+        MAX7456_WriteString(screenBuffer, 110+(30*Y));       
+      } else  {      
 #ifdef LONG_RANGE_DISPLAY
-      formatDistance(MaxMenuBuffer[X],0,2);
-      MAX7456_WriteString(screenBuffer,110+(30*X));
+        formatDistance(MaxMenuBuffer[X], 0, 2);
+        MAX7456_WriteString(screenBuffer, 110+(30*Y));
 #else
-      MAX7456_WriteString(itoa(MaxMenuBuffer[X],screenBuffer,10),110+(30*X));
+        MAX7456_WriteString(itoa(MaxMenuBuffer[X], screenBuffer, 10), 110+(30*Y));
+      }
+        
 #endif    
     }
 
