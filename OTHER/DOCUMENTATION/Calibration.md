@@ -20,20 +20,18 @@ NOTE: if use Flight Controller voltage, then ALL adjustments are made on the FC.
 
 ## Calibration - Current ##
 
-NOTE: if use a hardware sensor connected to teh Flight Controller, then ALL adjustments are made on the FC. The following does not apply.
-
 **Hardware current sensor - from a datasheet**
   1. Select "Enable ADC 5v ref"
   1. If "Enable ADC 5v ref" is changed, save and restart the OSD
   1. Click Amperage "CAL" on the GUI
-  1. Enter the OSD onboard 5v voltage measured with a volt meter (recommended for improved accuracy) 
+  1. Enter the OSD onboard 5v voltage measured with a volt meter (recommended for improved accuracy)
   1. Enter the offset voltage. (Voltage when 0A drawn)
   1. Enter the sensitvity - mV change per 1A change
 
 **Hardware current sensor - with a current meter**
   1. Select "Enable ADC 5v ref"
   1. If "Enable ADC 5v ref" is changed, save and restart the OSD
-  1. Either use calibration data from spreadsheet linked above (probably easier) or: 
+  1. Either use calibration data from spreadsheet linked above (probably easier) or:
   1. Starting at zero, increase "Zero adjust" to display correct Amps at motors off
   1. Starting at max, decrease "Amps adjust" to display correct Amps at mid - high throttle setting
 
@@ -49,6 +47,15 @@ NOTE: if use a hardware sensor connected to teh Flight Controller, then ALL adju
 
 **Save settings**
   Click "WRITE" to save settings to OSD
+
+**Use flight controller method - Current sensor connected directly to flight controller**
+1. Select `Use Flight Controller Amperage`
+1. Set `Amps Adjust` to `1`
+1. Set `Amps Zero Adjust` to `0`
+1. Save settings - Click "WRITE" to save settings to OSD
+1. Calibrate current sensor according to flight controller firmware documentation. (ie. [Cleanflight / Betaflight](https://github.com/cleanflight/cleanflight/blob/master/docs/Battery.md))
+
+NOTE: If using a hardware sensor connected to the Flight Controller, then ALL adjustments beyond the defaults shown above are made on the FC.
 
 ---
 
