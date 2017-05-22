@@ -54,7 +54,12 @@
   "version": "1.7.1",
   "board": "Default minim"                
 },
-
+{
+  "name": "Naza",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.naza.hex",
+  "version": "1.7.1",
+  "board": "Default minim"                
+},
 {
   "name": "Fixedwing iNAV ",
   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.inav.aero.hex",
@@ -140,6 +145,12 @@
 {
   "name": "Raceflight",
   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.raceflight.hex",
+  "version": "1.7.1",
+  "board": "VirtualPilot AeroMax"                
+},
+{
+  "name": "Naza",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.naza.hex",
   "version": "1.7.1",
   "board": "VirtualPilot AeroMax"                
 },
