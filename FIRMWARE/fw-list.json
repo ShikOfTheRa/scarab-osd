@@ -154,6 +154,12 @@
   "version": "1.7.1",
   "board": "VirtualPilot AeroMax"                
 },
+{
+  "name": "Standard GPS OSD - UBLOX",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/aeromax.ublox.hex",
+  "version": "1.7.1",
+  "board": "VirtualPilot AeroMax"                
+},
 
 
 {
