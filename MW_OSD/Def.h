@@ -707,6 +707,16 @@
   #define PITCHSTICK       3
   #define YAWSTICK         4
   #define THROTTLESTICK    1
+#elif defined PIXHAWK        //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For Pixhawk mavlink
+  #define ROLLSTICK        1
+  #define PITCHSTICK       2
+  #define YAWSTICK         4
+  #define THROTTLESTICK    3
+#elif defined APM            //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For APM mavlink
+  #define ROLLSTICK        1
+  #define PITCHSTICK       2
+  #define YAWSTICK         4
+  #define THROTTLESTICK    3
 #else
   // RX CHANEL IN MwRcData table
   #define ROLLSTICK        1
