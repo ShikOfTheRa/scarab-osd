@@ -213,7 +213,16 @@
   "board": "Andromeda"                
 },
 
-  
+
+
+{
+  "name": "Standard GPS OSD - UBLOX",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/test.ublox.hex",
+  "version": "1.7.1",
+  "board": "Test"                
+},
+
+
   
 {
   "name": "DEBUG",
