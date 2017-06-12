@@ -221,7 +221,12 @@
   "version": "1.7.1",
   "board": "Test"                
 },
-
+{
+  "name": "Test Fixedwing APM PIXHAWK",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/mavlink.aero.hex",
+  "version": "1.7.1",
+  "board": "Test"                
+},
 
   
 {
