@@ -48,9 +48,10 @@ void GPS_calc_longitude_scaling(int32_t lat) {
 void GPS_reset_home_position() {
   GPS_home[LAT] = GPS_latitude;
   GPS_home[LON] = GPS_longitude;
-  GPS_altitude_home = GPS_altitude;
-  //  GPS_calc_longitude_scaling(GPS_home[LAT]);
+  //GPS_altitude_home = GPS_altitude;
+  //GPS_calc_longitude_scaling(GPS_home[LAT]);
 }
+
 
 void mav_tx_checksum_func(int val) {
   long tmp;
@@ -188,6 +189,10 @@ void serialMAVCheck(){
       MwHeading360 = MwHeading360-360;
     MwHeading   = MwHeading360;
     MwVario=(int16_t)serialbufferfloat(12)*100;     // m/s-->cm/s
+    if (((GPS_fix_HOME & 0x01)==0) && (GPS_numSat >= MINSATFIX) && armed){
+      GPS_fix_HOME |= 0x01;
+      GPS_altitude_home = GPS_altitude;
+    }
     break;
   case MAVLINK_MSG_ID_ATTITUDE:
     MwAngle[0]=(int16_t)(serialbufferfloat(4)*57.2958*10); // rad-->0.1deg
@@ -208,7 +213,12 @@ void serialMAVCheck(){
       GPS_distance_cm_bearing(&GPS_latitude,&GPS_longitude,&GPS_home[LAT],&GPS_home[LON],&dist,&dir);
       GPS_distanceToHome = dist/100;
       GPS_directionToHome = dir/100;
-    } 
+    }
+    if (((GPS_fix_HOME & 0x02)==0) && (GPS_numSat >= MINSATFIX) && armed){
+      GPS_fix_HOME |= 0x02;
+      GPS_reset_home_position();
+    }
+
     break;
   case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
     MwRssi=(uint16_t)(((103)*serialBuffer[21])/10);
@@ -233,11 +243,7 @@ void serialMAVCheck(){
     MWAmperage=serialBuffer[16]|(serialBuffer[17]<<8);
     break;
   }
-  if (GPS_fix_HOME == 0){
-    GPS_reset_home_position();
-  }
-  if ((GPS_fix>2) && (GPS_numSat >= MINSATFIX) && armed){
-    GPS_fix_HOME = 1;
+  if (armed){
   }
   else{
     GPS_altitude = 0 ;
