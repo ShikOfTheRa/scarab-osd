@@ -268,6 +268,15 @@ void displayMode(void)
       screenBuffer[1]=SYM_PASS1;
     #endif
   }
+  else if(MwSensorActive&mode.failsafe){
+      #ifdef TEXTMODE
+      strcpy(screenBuffer, "FAIL");
+      #else
+        screenBuffer[0] = 0x46; //F
+        screenBuffer[1] = 0x53; //S
+        screenBuffer[2]=0;
+      #endif
+  }  
   else if(MwSensorActive&mode.gpshome){
     #ifdef APINDICATOR
       #ifdef TEXTMODE
@@ -416,12 +425,14 @@ void displayMode(void)
   if(!fieldIsVisible(APstatusPosition))
     return;
   uint8_t apactive=0;
-  if (MwSensorActive&mode.gpshome)
+  if (MwSensorActive&mode.failsafe)
     apactive=1;
-  else if (MwSensorActive&mode.gpshold)
+  else if (MwSensorActive&mode.gpshome)
     apactive=2;
-  else if (MwSensorActive&mode.gpsmission)
+  else if (MwSensorActive&mode.gpshold)
     apactive=3;
+  else if (MwSensorActive&mode.gpsmission)
+    apactive=4;
   else
     return;
 

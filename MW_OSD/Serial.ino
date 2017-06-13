@@ -829,6 +829,9 @@ For sub-command 3 (draw string):
       case IDBOXAIR:
         mode.air |= bit;
         break;
+      case 27:
+        mode.failsafe |= bit;
+        break;
 #if defined ACROPLUS
       case 29:
         mode.acroplus |= bit;

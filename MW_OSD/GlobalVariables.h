@@ -243,6 +243,7 @@ struct __mode {
   uint32_t gpshome;
   uint32_t gpshold;
   uint32_t passthru;
+  uint32_t failsafe;
   uint32_t air;
   uint32_t acroplus;
   uint32_t osd_switch;
@@ -839,6 +840,7 @@ const char nogps_text[]     PROGMEM = " NO GPS";
 const char satlow_text[]    PROGMEM = "LOW SATS";
 const char disarmed_text[]  PROGMEM = "DISARMED";
 const char armed_text[]     PROGMEM = " ARMED";
+const char FAILtext[]       PROGMEM = "FAILSAFE";
 const char APRTHtext[]      PROGMEM = "AUTO RTH";
 const char APHOLDtext[]     PROGMEM = "AUTO HOLD";
 const char APWAYPOINTtext[] PROGMEM = " MISSION";
@@ -849,8 +851,9 @@ const char debug_text[]     PROGMEM = DEBUGTEXT;
 const PROGMEM char * const message_text[] =
 {   
   blank_text,     //0
-  APRTHtext,      //1
-  APHOLDtext,     //2
+  FAILtext,       //1
+  APRTHtext,      //2
+  APHOLDtext,     //3
   APWAYPOINTtext,
 };
 
