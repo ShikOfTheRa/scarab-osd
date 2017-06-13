@@ -30,8 +30,7 @@
 
 // latest release...
 //#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
-//#define BETAFLIGHT3               // Uncomment this if you are using BETAFLIGHT version 3.0.x 
-//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (1.9 onwards 1.14.2 at time of this MWOSD release)
+//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.0 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define APM                       // Uncomment this if you are using APM MAVLINK 1.0 compatible FC
 //#define PIXHAWK                   // Uncomment this if you are using PIXHAWK MAVLINK 1.0 compatible FC
@@ -56,9 +55,10 @@
 //#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3  
 //#define MULTIWII_V21              // Uncomment this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
 //#define BASEFLIGHT20150327        // Uncomment this if you are using BASEFLIGHT up to and including version Stable 2015.03.27
+//#define CLEANFLIGHT190            // Uncomment this if you are using CLEANFLIGHT versions 1.9 through 1.14.2
 //#define CLEANFLIGHT172            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.7.2
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1 
-//#define BETAFLIGHT2               // Uncomment this if you are using BETAFLIGHT versions prior to 3.0.0
+//#define BETAFLIGHT3               // Uncomment this if you are using BETAFLIGHT versions prior to 3.1
 
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/

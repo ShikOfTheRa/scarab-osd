@@ -67,7 +67,7 @@
 #endif
 
 #ifdef CLEANFLIGHT    //set up latest at time of release
-  #define CLEANFLIGHT190
+  #define BETAFLIGHT31
 #endif
 
 #ifdef iNAV    //set up latest at time of release
@@ -121,10 +121,6 @@
 //CORRECT_MENU_RCT2 introduced CF190 - adds seperate Pitch/Roll/Yaw + TPA + Yaw expo     (Menu support)
 //ENABLE_MSP_SAVE_ADVANCED - adds the code to read/write PROFILE+LOOPIME+PID CONTROLLER if supported
 //CORRECTLOOPTIME show looptime option in Adavanced tuning menu
-
-#if defined BETAFLIGHT2
-  #define BETAFLIGHT3
-#endif
 
 #if defined BETAFLIGHT3
   #define AMPERAGE_DIV 10
