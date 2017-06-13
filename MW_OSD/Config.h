@@ -69,6 +69,7 @@
 
 /********************       Debug      *********************/
 //#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+#define DEBUGMENU                   // Enable to display debug values in OSD menu 
 
 
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
@@ -342,6 +343,6 @@
 // This is to enable rarely used advanced parameter saving. Off by default to minimise risk 
 // Enabling may create ability to write invalid data to FC
 //#define ADVANCEDSAVE                   // Enables saving of advanced paramters where supported (Looptime/profile)
-#define HARDRESET
+#define FIXEDLOOP                        // Enables 1ms loop max for consistency
 
 
