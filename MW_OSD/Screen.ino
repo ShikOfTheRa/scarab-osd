@@ -929,10 +929,11 @@ void displayI2CError(void)
 
 void displayRSSI(void)
 {      
-  if(rssi < rssiMIN && rssi >= 0 && rssi <= 100)
+  if(rssi < rssiMIN && rssi > 0)
     rssiMIN = rssi;  
-  if(!fieldIsVisible(rssiPosition))
+  if(!fieldIsVisible(rssiPosition)){
     return;
+  }
     
   screenBuffer[0] = SYM_RSSI;
   itoa(rssi,screenBuffer+1,10);
@@ -1450,7 +1451,7 @@ void displayCursor(void)
 void displayConfigScreen(void)
 {
   int16_t MenuBuffer[10];
-  uint32_t MaxMenuBuffer[10];
+  uint32_t MaxMenuBuffer[9];
 
   MAX7456_WriteString_P(PGMSTR(&(menutitle_item[configPage])),35);
 #ifdef MENU_PROFILE
@@ -1470,19 +1471,24 @@ void displayConfigScreen(void)
     formatTime(flyingTime, screenBuffer, 1);
     MAX7456_WriteString(screenBuffer,ROLLD-4);
 #else // SHORTSUMMARY
- 
+
+#ifdef MINSUMMARY      
+      if(!fieldIsVisible(rssiPosition) | !Settings[S_DISPLAYRSSI]){
+        rssiMIN = 0;
+      }
+#endif //MINSUMMARY      
+
     MaxMenuBuffer[1]=trip;
     MaxMenuBuffer[2]=distanceMAX;
     MaxMenuBuffer[3]=altitudeMAX;
     MaxMenuBuffer[4]=speedMAX;
     MaxMenuBuffer[5]=amperagesum/360;
-    MaxMenuBuffer[6]=ampMAX/10;
-    MaxMenuBuffer[7]=voltage;
-    MaxMenuBuffer[8]=voltageMIN;
-    MaxMenuBuffer[9]=rssiMIN;
+    MaxMenuBuffer[6]=ampMAX;
+    MaxMenuBuffer[7]=voltageMIN;
+    MaxMenuBuffer[8]=rssiMIN;
 
     uint8_t Y=-1;
-    for(uint8_t X=0; X<=9; ++X) {
+    for(uint8_t X=0; X<=8; ++X) {
 #ifdef MINSUMMARY      
       if(MaxMenuBuffer[X] <= 0) {
         continue;
@@ -1494,20 +1500,11 @@ void displayConfigScreen(void)
 #endif
               
       MAX7456_WriteString_P(PGMSTR(&(menu_stats_item[X])), ROLLT+(Y*30));  
-      // TODO: Use switch and add support for units    
-      // TODO: Hide items not visible. ie. !fieldIsVisible(rssiPosition)
-      if(X==9) {
-        MAX7456_WriteString(itoa(MaxMenuBuffer[X], screenBuffer, 10), 110+(30*Y));
-        // TODO
-        //itoa(MaxMenuBuffer[X], screenBuffer, 10)
-        //screenBuffer[4] = '%';
-        //MAX7456_WriteString(screenbuffer, 110+(30*Y));        
-      } else if(X==7 or X==8) {
+      if(( X==6) | ( X==7))  {
         ItoaPadded(MaxMenuBuffer[X], screenBuffer, 4, 3);  
-        // TODO
-        //screenBuffer[4] = SYM_VOLT;
         MAX7456_WriteString(screenBuffer, 110+(30*Y));       
-      } else  {      
+      } 
+      else  {      
 #ifdef LONG_RANGE_DISPLAY
         formatDistance(MaxMenuBuffer[X], 0, 2);
         MAX7456_WriteString(screenBuffer, 110+(30*Y));
