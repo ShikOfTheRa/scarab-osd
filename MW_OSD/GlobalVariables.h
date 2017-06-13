@@ -1092,6 +1092,12 @@ const char configMsg142[] PROGMEM = "    +YAW LEFT";
 const char configMsg143[] PROGMEM = "    +PITCH FULL";
 const char configMsg144[] PROGMEM = " ";
 const char configMsg145[] PROGMEM = "F3 CONTROLLERS ONLY";
+//-----------------------------------------------------------DEBUG Page
+#ifdef DEBUGMENU
+const char configMsg150[] PROGMEM = " ";
+#else
+const char configMsg150[] PROGMEM = "DEBUG DISABLED";
+#endif
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={
@@ -1374,6 +1380,9 @@ const PROGMEM char * const menutitle_item[] =
 #endif
 #ifdef MENU_PROFILE
   configMsg100,
+#endif
+#ifdef MENU_DEBUG
+  configMsg150,
 #endif
 };
 

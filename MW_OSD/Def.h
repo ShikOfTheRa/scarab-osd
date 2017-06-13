@@ -13,11 +13,11 @@
 #define DEBUGDPOSANAL 84     // display sensor values at position X
 #define DEBUGDPOSPWM 264     // display PWM values at position X
 #define DEBUGDPOSVAL 40      // display debug values at position X
-#define DEBUGDPOSLOOP 190    // display loop rate value at position X
-#define DEBUGDPOSSAT 250     // display sat value at position X
-#define DEBUGDPOSARMED 280   // display armed value at position X
-#define DEBUGDPOSPACKET 310  // display serial packet rate rate value at position X
-#define DEBUGDPOSMEMORY 340  // display free heap/stack memory at position X. Requires MEMCHECK and not valid in latest Arduino versions
+#define DEBUGDPOSLOOP 160    // display loop rate value at position X
+#define DEBUGDPOSSAT 190     // display sat value at position X
+#define DEBUGDPOSARMED 250   // display armed value at position X
+#define DEBUGDPOSPACKET 280  // display serial packet rate rate value at position X
+#define DEBUGDPOSMEMORY 310  // display free heap/stack memory at position X. Requires MEMCHECK and not valid in latest Arduino versions
 #define DEBUGDPOSRX 220      // display serial data rate at position X
 
 // Display Debug text message in standard screen text warning message area
@@ -25,6 +25,8 @@
 //#define ENABLEDEBUGTEXT
 #define DEBUGTEXT "DEBUG"    // Set text you wish to display when debug text message required. Must be CAPSLOCK text
 
+//#define HARDRESET                        // Enables watchdog timer reset rather than fixed memory jmp 
+#define BOOTRESET                          // Enables reset from default Atmega 328 bootloader address (instead of 0) 
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
 
@@ -140,7 +142,8 @@
   #define MENU_ADVANCED 8       //ADVANCED
   #define MENU_ALARMS   9       //ALARMS
   #define MENU_PROFILE  10      //PROFILE+PID CONTROLLER
-  #define MAXPAGE       MENU_PROFILE
+  #define MENU_DEBUG    11      //DEBUG
+  #define MAXPAGE       MENU_DEBUG
 #endif
 
 #if defined BETAFLIGHT31
@@ -162,7 +165,8 @@
   #define MENU_ADVANCED 9       //ADVANCED
   #define MENU_ALARMS   10      //ALARMS
   #define MENU_PROFILE  11      //PROFILE+PID CONTROLLER
-  #define MAXPAGE       MENU_PROFILE
+  #define MENU_DEBUG    12      //DEBUG
+  #define MAXPAGE       MENU_DEBUG
 
   #define CANVAS_SUPPORT
 #endif
@@ -185,7 +189,8 @@
   #define MENU_ADVANCED 8       //ADVANCED
   #define MENU_ALARMS   9       //ALARMS
   #define MENU_PROFILE  10      //PROFILE+PID CONTROLLER
-  #define MAXPAGE       MENU_PROFILE
+  #define MENU_DEBUG    11
+  #define MAXPAGE       MENU_DEBUG
 #endif
 
 #if defined CLEANFLIGHT180
@@ -202,7 +207,8 @@
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
   #define MENU_ALARMS   8       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+  #define MENU_DEBUG    9      //DEBUG
+  #define MAXPAGE       MENU_DEBUG
 #endif
 
 #if defined CLEANFLIGHT172
@@ -216,7 +222,8 @@
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
   #define MENU_ALARMS   8       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+  #define MENU_DEBUG    9      //DEBUG
+  #define MAXPAGE       MENU_DEBUG
 #endif
 
 #if defined FIXEDWING_BF
@@ -237,7 +244,8 @@
   #define MENU_ADVANCED      8       //ADVANCED
   #define MENU_ALARMS        9       //ALARMS
   #define MENU_PROFILE       10      //PROFILE+PID CONTROLLER
-  #define MAXPAGE       MENU_PROFILE
+  #define MENU_DEBUG         11      //DEBUG
+  #define MAXPAGE       MENU_DEBUG
 #endif
 
 #if defined FIXEDWING_BF_SERVO
@@ -259,7 +267,8 @@
   #define MENU_ADVANCED      9       //ADVANCED
   #define MENU_ALARMS        10       //ALARMS
   #define MENU_PROFILE       11      //PROFILE+PID CONTROLLER
-  #define MAXPAGE       MENU_PROFILE
+  #define MENU_DEBUG         12      //DEBUG
+  #define MAXPAGE       MENU_DEBUG
 #endif
 
 #if defined BASEFLIGHT20150627
@@ -278,7 +287,8 @@
   #define MENU_ADVANCED 7       //ADVANCED
   #define MENU_ALARMS   8       //ALARMS
   #define MENU_PROFILE  9       //PROFILE+PID CONTROLLER
-  #define MAXPAGE       MENU_PROFILE
+  #define MENU_DEBUG    10      //DEBUG
+  #define MAXPAGE       MENU_DEBUG
 #endif
 
 #if defined (BASEFLIGHT20150327)
@@ -292,7 +302,8 @@
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
   #define MENU_ALARMS   8       //ALARMS
-  #define MAXPAGE MENU_ALARMS
+  #define MENU_DEBUG    9      //DEBUG
+  #define MAXPAGE       MENU_DEBUG
 #endif
 
 #if defined (RACEFLIGHT)
@@ -305,7 +316,8 @@
   #define MENU_DISPLAY  5       //DISPLAY
   #define MENU_ADVANCED 6       //ADVANCED
   #define MENU_ALARMS   7       //ALARMS
-  #define MAXPAGE MENU_ALARMS
+  #define MENU_DEBUG    8      //DEBUG
+  #define MAXPAGE       MENU_DEBUG
 #endif
 
 #if defined (MULTIWII_V24)
@@ -321,7 +333,8 @@
   #define MENU_ADVANCED 7       //ADVANCED
   #define MENU_GPS_TIME 8       //GPS TIME
   #define MENU_ALARMS   9       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+  #define MENU_DEBUG    10      //DEBUG
+  #define MAXPAGE       MENU_DEBUG
 #endif
 
 #if defined (MULTIWII_V23)
@@ -334,7 +347,8 @@
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
   #define MENU_ALARMS   8       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+  #define MENU_DEBUG    9      //DEBUG
+  #define MAXPAGE       MENU_DEBUG
 #endif
 
 #if defined (MULTIWII_V21)
@@ -348,7 +362,8 @@
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
   #define MENU_ALARMS   8       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+  #define MENU_DEBUG    9      //DEBUG
+  #define MAXPAGE       MENU_DEBUG
 #endif
 
 #if defined(TAULABS)
@@ -364,7 +379,8 @@
   #define MENU_DISPLAY  6       //DISPLAY
   #define MENU_ADVANCED 7       //ADVANCED
   #define MENU_ALARMS   8       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+  #define MENU_DEBUG    9      //DEBUG
+  #define MAXPAGE       MENU_DEBUG
 #endif
 
 #if defined(APM)
@@ -375,7 +391,8 @@
   #define MENU_DISPLAY  4       //DISPLAY
   #define MENU_ADVANCED 5       //ADVANCED
   #define MENU_ALARMS   6       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+  #define MENU_DEBUG    7      //DEBUG
+  #define MAXPAGE       MENU_DEBUG
   #define PROTOCOL_MAVLINK
   #define AMPERAGE_DIV 10
 #endif
@@ -388,7 +405,8 @@
   #define MENU_DISPLAY  4       //DISPLAY
   #define MENU_ADVANCED 5       //ADVANCED
   #define MENU_ALARMS   6       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+  #define MENU_DEBUG    7      //DEBUG
+  #define MAXPAGE       MENU_DEBUG
   #define PROTOCOL_KISS
   #define AMPERAGE_DIV 10
 #endif

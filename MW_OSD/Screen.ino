@@ -1423,18 +1423,25 @@ void displayCursor(void)
 #ifdef MENU_PROFILE
     if(configPage==MENU_PROFILE)
     {  
-#ifdef CORRECTLOOPTIME
+  #ifdef CORRECTLOOPTIME
       if (ROW==9) ROW=3;
       if (ROW==4) ROW=10;
-#else
+  #else
       if (ROW==9) ROW=2;
       if (ROW==3) ROW=10;
-#endif
-
+  #endif
       COL=3;
       cursorpos=(ROW+2)*30+10+6+6;
     }
-#endif     
+#endif 
+#ifdef MENU_DEBUG
+    if(configPage==MENU_DEBUG)
+    {  
+      COL=3;
+      ROW=10;
+    }
+#endif
+    
   }
   if(timer.Blink10hz)
     screen[cursorpos] = SYM_CURSOR;
@@ -1787,8 +1794,16 @@ void displayConfigScreen(void)
     }
   }
 #endif  
-  if(configPage > MAXPAGE)configPage=MINPAGE;
 
+#ifdef MENU_DEBUG
+  if(configPage==MENU_DEBUG){
+    #ifdef DEBUGMENU
+      displayDebug();
+    #endif //DEBUGMENU  
+  }
+#endif  
+
+  if(configPage > MAXPAGE)configPage=MINPAGE;
   displayCursor();
 }
 
@@ -1810,6 +1825,7 @@ void displayDebug(void)
  for(uint16_t xx=0;xx<MAX_screen_size;++xx){ // clear screen
    screen[xx] = ' ';
  }
+#endif //(DEBUG)||defined (DEBUGMW)||defined (FORCEDEBUG)
  
 #ifdef DEBUGDPOSRCDATA
   MAX7456_WriteString("RC",DEBUGDPOSRCDATA);
@@ -1875,10 +1891,6 @@ void displayDebug(void)
   #endif
 #endif  
 
-  displayVoltage();
-  displayDirectionToHome();
-
-#endif //(DEBUG)||defined (DEBUGMW)||defined (FORCEDEBUG)
 }
 
 void displayCells(void){

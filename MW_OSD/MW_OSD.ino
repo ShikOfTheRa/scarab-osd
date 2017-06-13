@@ -622,7 +622,9 @@ void loop()
         if(MwSensorPresent)
           displayCells();
 #endif
+#ifdef DEBUG
         displayDebug();
+#endif
 #ifdef HAS_ALARMS
         displayAlarms();
 #endif
@@ -707,7 +709,9 @@ void loop()
   }
 //  setMspRequests();
   serialMSPreceive(1);
-//  delay(1);
+  #ifdef FIXEDLOOP
+    delay(1);
+  #endif
 
 }  // End of main loop
 #endif //main loop
@@ -792,11 +796,13 @@ void resetFunc(void)
 #ifdef I2C_UB_SUPPORT
   WireUB.end();
 #endif
-#ifdef HARDRESET
+#if defined HARDRESET
   MCUSR &= ~(1<<WDRF);
   WDTCSR |= (1<<WDCE) | (1<<WDE) | (1<<WDIE);
   WDTCSR = (1<<WDIE) | (0<<WDE) | (0<<WDP3) | (0<<WDP2) | (0<<WDP1) | (1<<WDP0);
   while(1);
+#elif defined BOOTRESET
+  asm volatile ("  jmp 0x3800");
 #else
   asm volatile ("  jmp 0");
 #endif
