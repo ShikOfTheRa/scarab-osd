@@ -720,6 +720,8 @@ uint32_t distanceMAX=0;
 uint16_t ampMAX=0;
 uint32_t trip=0;
 uint16_t flyingTime=0; 
+uint16_t voltageMIN=254;
+int16_t rssiMIN=100;
 
 
 // For GPSOSD
@@ -961,6 +963,8 @@ const char configMsg04[] PROGMEM = "MAX ALTITUDE";
 const char configMsg05[] PROGMEM = "MAX SPEED";
 const char configMsg06[] PROGMEM = "MAH USED";
 const char configMsg07[] PROGMEM = "MAX AMPS";
+const char configMsg08[] PROGMEM = "VOLTAGE MIN";
+const char configMsg09[] PROGMEM = "RSSI MIN";
 //-----------------------------------------------------------Page1
 const char configMsg10[] PROGMEM = "PID CONFIG";
 
@@ -1157,6 +1161,8 @@ const PROGMEM char * const menu_stats_item[] =
   configMsg05,
   configMsg06,
   configMsg07,
+  configMsg08,
+  configMsg09,
 };
 
 #ifdef USE_MSP_PIDNAMES
