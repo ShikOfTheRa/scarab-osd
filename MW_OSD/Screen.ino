@@ -2150,7 +2150,7 @@ void displayfwglidescope(void){
   int8_t GS_deviation_scale   = 0;
   if (GPS_distanceToHome>0){ //watch div 0!!
     int16_t gs_angle          =(573*atan((float)MwAltitude/10/GPS_distanceToHome));
-    int16_t GS_target_delta   = gs_angle-USEGLIDESCOPE;
+    int16_t GS_target_delta   = gs_angle-GLIDEANGLE;
     GS_target_delta           = constrain(GS_target_delta,-400,400); 
     GS_deviation_scale        = map(GS_target_delta,400,-400,0,8);
   }

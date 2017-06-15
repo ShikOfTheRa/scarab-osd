@@ -536,6 +536,9 @@
     #undef USEGPSALTITUDE
   #endif
   #define FORCESENSORS
+  #ifndef USEGLIDESCOPE 
+    #define USEGLIDESCOPE
+  #endif
 #endif
 
 /********************  HARDWARE PINS definitions  *********************/

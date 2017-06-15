@@ -149,9 +149,10 @@
 // **ONLY** valid when using fixed wing
 //#define USEMAGHEADING             // Undefine this to use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
 //#define USEBAROALTITUDE           // Undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) ** Recommended **
-//#define USEGLIDESCOPE 40          // Enables ILS glidescope where 40 = 4.0° glidescope. 1.0 deg gradiented scope scale requires enabling in layouts
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft. Auto enabled for FIXEDWING
+//#define USEGLIDESCOPE             // Enables ILS glidescope
+#define GLIDEANGLE 40               // ILS glidescope angle where 40 = 4.0° - 1.0 deg gradiented scope scale requires enabling in layouts. Auto enabled for FIXEDWING
 
 
 /******************** Serial speed settings *********************/

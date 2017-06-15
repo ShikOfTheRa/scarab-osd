@@ -639,6 +639,7 @@ int32_t GPS_altitude;
 int32_t GPS_home_altitude;
 int16_t previousfwaltitude=0;
 int16_t interimfwaltitude=0;
+uint16_t AIR_speed;
 uint16_t GPS_speed;
 int16_t  GPS_ground_course;
 uint16_t old_GPS_speed;
