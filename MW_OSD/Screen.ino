@@ -1085,6 +1085,11 @@ void displayNumberOfSat(void)
 void displayGPS_speed(void)
 {
   if(!GPS_fix) return;
+
+ #ifdef USEAIRSPEED
+  GPS_speed=AIR_speed;
+ #endif
+  
   if(!armed) GPS_speed=0;
   uint16_t xx;
   if(!Settings[S_UNITSYSTEM])

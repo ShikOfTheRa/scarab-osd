@@ -170,7 +170,7 @@
 #define MAV_COM_ID 1                // Component ID of MAV.
 //#define MAV_ARMED                 // Forces OSD to be always armed (for when MAV does not send armed status in heartbeat).
 //#define MAV_RESET_HOME            // Resets home position when not armed. When enabled, note that RX glitch etc. could potentially reset home position.
-
+//#define USEAIRSPEED               // Uses air sensor speed instead of GPS speed 
 
 /******************** Serial MSP speed settings *********************/
 // Choose ONLY ONE option: increases speeds of serial update - but with impact to flight controller 
@@ -257,7 +257,7 @@
 #define TX_CHAN_HIGH 1600           // Value for determining RC SWITCH MID / HIGH transition
 
 /********************       Airspeed Settings         ************************/
-// Completely UNTESTED for future integration of support for airspeed sensor
+// Completely UNTESTED for future integration of support for airspeed sensor connected direct to OSD
 // Uses temp pin
 // Overrides GPS speed
 //#define USE_AIRSPEED_SENSOR

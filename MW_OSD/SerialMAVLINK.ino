@@ -179,6 +179,7 @@ void serialMAVCheck(){
 #endif //MAVLINKREQ
     break;
   case MAVLINK_MSG_ID_VFR_HUD:
+    AIR_speed=(int16_t)serialbufferfloat(0)*100;    // m/s-->cm/s 
     GPS_speed=(int16_t)serialbufferfloat(4)*100;    // m/s-->cm/s 
     GPS_altitude=(int16_t)serialbufferfloat(8);     // m-->m
     GPS_altitude=GPS_altitude - GPS_altitude_home;
