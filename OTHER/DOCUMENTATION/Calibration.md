@@ -49,11 +49,9 @@ NOTE: if use Flight Controller voltage, then ALL adjustments are made on the FC.
   Click "WRITE" to save settings to OSD
 
 **Use flight controller method - Current sensor connected directly to flight controller**
-1. Select `Use Flight Controller Amperage`
-1. Set `Amps Adjust` to `1`
-1. Set `Amps Zero Adjust` to `0`
-1. Save settings - Click "WRITE" to save settings to OSD
-1. Calibrate current sensor according to flight controller firmware documentation. (ie. [Cleanflight / Betaflight](https://github.com/cleanflight/cleanflight/blob/master/docs/Battery.md))
+  1. Select `Use Flight Controller Amperage`
+  1. Save settings - Click "WRITE" to save settings to OSD
+  1. Calibrate current sensor according to flight controller firmware documentation. (ie. [Cleanflight / Betaflight](https://github.com/cleanflight/cleanflight/blob/master/docs/Battery.md))
 
 NOTE: If using a hardware sensor connected to the Flight Controller, then ALL adjustments beyond the defaults shown above are made on the FC.
 
