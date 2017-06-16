@@ -174,20 +174,7 @@ void MAX7456Setup(void)
   MAX7456ENABLE
 
 #ifdef AUTOCAM 
-  uint8_t srdata=0;
-
-#if defined AUTOCAMWAIT 
-    while ((B00000011 & srdata) == 0){
-      spi_transfer(0xa0);
-      srdata = spi_transfer(0xFF); 
-      delay(100);
-    }
-  #else  
-    spi_transfer(0xa0);
-    srdata = spi_transfer(0xFF); 
-#endif //AUTOCAMWAIT  
-  
-
+  uint8_t srdata;
 
   delay(1000/10); // Extra delay for input sync detection. 4 frames
 
