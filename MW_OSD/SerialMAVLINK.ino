@@ -49,7 +49,7 @@ void GPS_reset_home_position() {
   GPS_home[LAT] = GPS_latitude;
   GPS_home[LON] = GPS_longitude;
   //GPS_altitude_home = GPS_altitude;
-  //GPS_calc_longitude_scaling(GPS_home[LAT]);
+  GPS_calc_longitude_scaling(GPS_home[LAT]);
 }
 
 
