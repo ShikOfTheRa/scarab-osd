@@ -1179,6 +1179,8 @@ void displayClimbRate(void)
   if(!Settings[S_VARIO])
     return;
   uint16_t position = getPosition(MwClimbRatePosition);
+
+#ifdef DISPLAYVARIO // Graphical VARIO slider 
   for(int8_t X=-1; X<=1; X++) {
     screen[position+(X*LINE)] =  SYM_VARIO;
   }
@@ -1189,6 +1191,19 @@ void displayClimbRate(void)
   int8_t varline=(xx/6)-1;
   int8_t varsymbol=xx%6;
   screen[position+(varline*LINE)] = 0x8F-varsymbol;
+#endif // DISPLAYVARIO
+
+#ifdef DISPLAYCLIMBRATE // CLIMB RATE value 
+  int16_t climbrate;
+  if(Settings[S_UNITSYSTEM])
+    climbrate = MwVario * 0.032808;       // ft/sec
+  else
+    climbrate = MwVario / 100;            // mt/sec
+  screenBuffer[0]=varioUnitAdd[Settings[S_UNITSYSTEM]];
+  itoa(climbrate, screenBuffer+1, 10);
+  MAX7456_WriteString(screenBuffer,getPosition(MwClimbRatePosition));
+#endif // DISPLAYCLIMBRATE
+  
 }
 
 

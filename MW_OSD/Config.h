@@ -246,6 +246,11 @@
 //#define DISPLAYMAHMIN             // Enable this to display average mAh/minKMh (if Watts selected in layouts). Select one of WATTS/MAHMIN/EFFICIENCY
 
 
+/********************       Vario / climbrate Settings         ************************/
+#define DISPLAYVARIO                // Enable this to display Vario slider (if climb rate selected in layouts)
+//#define DISPLAYCLIMBRATE          // Enable this to display climb rate (if climb rate selected in layouts)
+
+
 /********************   RC TX Settings     *********************/
 //#define TX_MODE1                  // Enable this if wish to use cursor controls on same stick - for MODE 1 TX users
 //#define TX_CHANNELS 8             // Amend if require up to 16 RC channels (Only use for GPSOSD/NAZA/APM/PIXHAWK/MAVLINK)

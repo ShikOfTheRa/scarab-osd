@@ -1108,6 +1108,9 @@ const char configMsg150[] PROGMEM = "DEBUG DISABLED";
 const unsigned char speedUnitAdd[2] ={
   SYM_KMH,SYM_MPH} ; // [0][0] and [0][1] = Km/h   [1][0] and [1][1] = Mph
 
+const unsigned char varioUnitAdd[2] ={
+  SYM_MS,SYM_FTS} ; // [0][0] and [0][1] = m/s   [1][0] and [1][1] = ft/s
+
 const unsigned char temperatureUnitAdd[2] ={
   SYM_TEMP_C,SYM_TEMP_F};
 
