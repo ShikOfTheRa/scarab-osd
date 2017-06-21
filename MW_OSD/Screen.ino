@@ -1178,6 +1178,14 @@ void displayClimbRate(void)
     return;
   if(!Settings[S_VARIO])
     return;
+
+#ifdef VARIOALARM
+  if (((MwVario>VARIOALARM) or (MwVario<(0-VARIOALARM))) &&(timer.Blink2hz)){
+       return;
+  }
+#endif // VARIOALARM
+  
+  
   uint16_t position = getPosition(MwClimbRatePosition);
 
 #ifdef DISPLAYVARIO // Graphical VARIO slider 
