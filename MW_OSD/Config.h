@@ -250,7 +250,7 @@
 #define DISPLAYVARIO                // Enable this to display Vario slider (if climb rate selected in layouts)
 //#define DISPLAYCLIMBRATE          // Enable this to display climb rate (if climb rate selected in layouts)
 //#define VARIOALARM 150            // Enable this to for flashing climb rate warning. Value in cm/sec (if climb rate selected in layouts)
-#define AUDIOVARIO A3               // Enable this for audio vario on RSSI pin A3
+//#define AUDIOVARIO A3               // Enable this for audio vario on RSSI pin A3
 //#define AUDIOVARIORC 1200         // Enable this to disable audio vario for throttle values above x uS
 
 
