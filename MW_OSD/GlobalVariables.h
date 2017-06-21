@@ -129,6 +129,8 @@ struct  __timer {
   uint16_t  packetcount;
   uint16_t  serialrxrate;
   uint32_t alarms;                            // Alarm length timer
+  uint32_t vario;                             
+
 }
 timer;
 
@@ -137,6 +139,7 @@ struct __flags {
   uint8_t box;
   uint8_t reset;
   uint8_t signaltype;
+  uint8_t vario;  
 }
 flags;
 
@@ -198,6 +201,7 @@ uint16_t pwmval1=0;
 uint16_t pwmval2=0;
 uint8_t debugtext=0;
 uint8_t MSP_home_set=0;
+uint8_t variopitch=0;
 #if defined CORRECT_MSP_BF1
   uint8_t bfconfig[25];
 #endif

@@ -1211,7 +1211,48 @@ void displayClimbRate(void)
   itoa(climbrate, screenBuffer+1, 10);
   MAX7456_WriteString(screenBuffer,getPosition(MwClimbRatePosition));
 #endif // DISPLAYCLIMBRATE
+
+#ifdef AUDIOVARIO  
+  #define VARIOFREQCLIMB 800      // Climb tone Hz
+  #define VARIOFREQSINK 600       // Sink tone Hz
+  #define VARIOTHRESHOLDCLIMB 10  // Threshold at which climbing is indicated cm/s
+  #define VARIOTHRESHOLDSINK  20  // Threshold at which sinking is indicated cm/s
+  #define VARIOHZ    40           // 20cm/s = 1hz --> 200cm/s = 10hz
+
+  #define VARIOMAXCLIMB  200      // Maximum climb rate for maximum hz
+  #define VARIOMAXHZ    5         // Maximum hz for max climbrate
+
+  #ifdef AUDIOVARIORC // no audio vario when throttle on
+  if (MwRcData[THROTTLESTICK]> AUDIOVARIORC) {
+    return; 
+  }
+  #endif //AUDIOVARIORC
   
+  int16_t AudioVario=constrain(MwVario,-VARIOMAXCLIMB,VARIOMAXCLIMB); 
+  int16_t ABSAudioVario=abs(AudioVario); 
+  int16_t lowhz = map( ABSAudioVario, 0,VARIOMAXCLIMB,1000,1000/VARIOMAXHZ);
+  
+  if (millis()>timer.vario){
+    timer.vario+= lowhz;
+    flags.vario!= flags.vario;
+  }
+  if (flags.vario){
+    noTone(AUDIOVARIO);
+  }
+  else if (MwVario > VARIOTHRESHOLDCLIMB){
+    tone(AUDIOVARIO, VARIOFREQCLIMB + AudioVario);  
+    debug[0]++;
+  }
+  else if (MwVario > VARIOTHRESHOLDCLIMB){
+    tone(AUDIOVARIO, VARIOFREQSINK + AudioVario);  
+    debug[0]--;
+  }
+  else{
+    noTone(AUDIOVARIO);
+    debug[0]=0;
+  }
+#endif // AUDIOVARIO
+
 }
 
 
