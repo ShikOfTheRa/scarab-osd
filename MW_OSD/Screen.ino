@@ -1221,6 +1221,7 @@ void displayClimbRate(void)
 
   #define VARIOMAXCLIMB  200      // Maximum climb rate for maximum hz
   #define VARIOMAXHZ    10        // Maximum hz for max climbrate
+  #define VARIOMINHZ    2         // Minimum hz for min climbrate
 
   #ifdef AUDIOVARIORC // no audio vario when throttle on
   if (MwRcData[THROTTLESTICK]> AUDIOVARIORC) {
@@ -1231,7 +1232,7 @@ void displayClimbRate(void)
   int16_t AudioVario=constrain(MwVario,-VARIOMAXCLIMB,VARIOMAXCLIMB); 
   debug[2]=AudioVario;
   int16_t ABSAudioVario=abs(AudioVario); 
-  int16_t lowhz = map( ABSAudioVario, 0,VARIOMAXCLIMB,1000,1000/VARIOMAXHZ);
+  int16_t lowhz = map( ABSAudioVario, 0,VARIOMAXCLIMB,1000/VARIOMINHZ,1000/VARIOMAXHZ);
   debug[3]=lowhz;
 
   if (millis()>timer.vario){
