@@ -68,7 +68,7 @@
 
 
 /********************       Debug      *********************/
-#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+//#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
 #define DEBUGMENU                   // Enable to display debug values in OSD menu 
 
 
@@ -250,7 +250,7 @@
 #define DISPLAYVARIO                // Enable this to display Vario slider (if climb rate selected in layouts)
 //#define DISPLAYCLIMBRATE          // Enable this to display climb rate (if climb rate selected in layouts)
 //#define VARIOALARM 150            // Enable this to for flashing climb rate warning. Value in cm/sec (if climb rate selected in layouts)
-#define AUDIOVARIO A3               // Enable this for audio vario on RSSI pin A3
+//#define AUDIOVARIO A3               // Enable this for audio vario on RSSI pin A3
 //#define AUDIOVARIORC 1200         // Enable this to disable audio vario for throttle values above 1200 uS
 
 
