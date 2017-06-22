@@ -251,7 +251,7 @@
 //#define DISPLAYCLIMBRATE          // Enable this to display climb rate (if climb rate selected in layouts)
 //#define VARIOALARM 150            // Enable this to for flashing climb rate warning. Value in cm/sec (if climb rate selected in layouts)
 //#define AUDIOVARIO A3               // Enable this for audio vario on RSSI pin A3
-//#define AUDIOVARIORC 1200         // Enable this to disable audio vario for throttle values above x uS
+//#define AUDIOVARIORC 1200         // Enable this to disable audio vario for throttle values above 1200 uS
 
 
 /********************   RC TX Settings     *********************/
@@ -339,6 +339,7 @@
 //#define SHOW_MAX_SPEED                 // Enable to display MAX speed achieved on line below current speed
 //#define SHOW_MAX_ALTITUDE              // Enable to display MAX altitude achieved on line below current altitude
 //#define SHOW_MAX_DISTANCE              // Enable to display MAX distance achieved on line below current distance
+//#define SHOW_TOTAL_DISTANCE            // Enable to display TOTAL distance achieved on line below current distance
 
 
 /********************  THROTTLE calibration  settings      *********************/

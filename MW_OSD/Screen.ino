@@ -1216,7 +1216,7 @@ void displayClimbRate(void)
   #define VARIOFREQCLIMB 800      // Climb tone Hz
   #define VARIOFREQSINK 600       // Sink tone Hz
   #define VARIOTHRESHOLDCLIMB 10  // Threshold at which climbing is indicated cm/s
-  #define VARIOTHRESHOLDSINK  20  // Threshold at which sinking is indicated cm/s
+  #define VARIOTHRESHOLDSINK -20  // Threshold at which sinking is indicated cm/s
   #define VARIOHZ    40           // 20cm/s = 1hz --> 200cm/s = 10hz
 
   #define VARIOMAXCLIMB  200      // Maximum climb rate for maximum hz
@@ -1229,6 +1229,8 @@ void displayClimbRate(void)
   #endif //AUDIOVARIORC
   
   int16_t AudioVario=constrain(MwVario,-VARIOMAXCLIMB,VARIOMAXCLIMB); 
+  debug[2]=AudioVario;
+  debug[3]=MwVario;
   int16_t ABSAudioVario=abs(AudioVario); 
   int16_t lowhz = map( ABSAudioVario, 0,VARIOMAXCLIMB,1000,1000/VARIOMAXHZ);
   
@@ -1238,18 +1240,22 @@ void displayClimbRate(void)
   }
   if (flags.vario){
     noTone(AUDIOVARIO);
+    debug[1]=0;
   }
   else if (MwVario > VARIOTHRESHOLDCLIMB){
     tone(AUDIOVARIO, VARIOFREQCLIMB + AudioVario);  
     debug[0]++;
+    debug[1]= VARIOFREQCLIMB + AudioVario;
   }
-  else if (MwVario > VARIOTHRESHOLDCLIMB){
+  else if (MwVario < VARIOTHRESHOLDSINK){
     tone(AUDIOVARIO, VARIOFREQSINK + AudioVario);  
     debug[0]--;
+    debug[1]= VARIOFREQCLIMB + AudioVario;
   }
   else{
     noTone(AUDIOVARIO);
     debug[0]=0;
+    debug[1]= 0;
   }
 #endif // AUDIOVARIO
 
@@ -1285,6 +1291,11 @@ void displayDistanceToHome(void)
     formatDistance(distanceMAX,1,2);
     MAX7456_WriteString(screenBuffer,LINE+getPosition(GPS_distanceToHomePosition));
   #endif //SHOW_MAX_DISTANCE
+  #if defined SHOW_TOTAL_DISTANCE
+    formatDistance(trip,1,2);
+    MAX7456_WriteString(screenBuffer,LINE+getPosition(GPS_distanceToHomePosition));
+  #endif //SHOW_TOTAL_DISTANCE
+
 }
 
 
