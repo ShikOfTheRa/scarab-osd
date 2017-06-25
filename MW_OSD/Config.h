@@ -4,7 +4,7 @@
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
-//#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
+#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
 //#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
 //#define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
 //#define RTFQV1                    // Uncomment this if using standard RTFQ/Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.  
@@ -31,7 +31,7 @@
 // latest release...
 //#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.0 at time of this MWOSD release)
-//#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
+#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define APM                       // Uncomment this if you are using APM MAVLINK 1.0 compatible FC
 //#define PIXHAWK                   // Uncomment this if you are using PIXHAWK MAVLINK 1.0 compatible FC
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
@@ -63,8 +63,8 @@
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
-//#define ROTORCRAFT                // Default for multirotors etc. 
-//#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight 
+//#define ROTORCRAFT                // Default for multirotors etc.
+#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight 
 
 
 /********************       Debug      *********************/
@@ -148,10 +148,10 @@
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
 // **ONLY** valid when using fixed wing
 //#define USEMAGHEADING             // Undefine this to use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
-//#define USEBAROALTITUDE           // Undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) ** Recommended **
+#define USEBAROALTITUDE           // Undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) ** Recommended **
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft. Auto enabled for FIXEDWING
-//#define USEGLIDESCOPE             // Enables ILS glidescope
+#define USEGLIDESCOPE             // Enables ILS glidescope
 #define GLIDEANGLE 40               // ILS glidescope angle where 40 = 4.0° - 1.0 deg gradiented scope scale requires enabling in layouts. Auto enabled for FIXEDWING
 
 
@@ -159,7 +159,7 @@
 // Overides defaults if required (57.6k for MAVLINK based or 115k for all others). 
 //#define BAUDRATE 115200
 //#define BAUDRATE 57600
-//#define BAUDRATE 38400
+#define BAUDRATE 38400
 //#define BAUDRATE 19200
 //#define BAUDRATE 9600
 
@@ -241,16 +241,16 @@
 
 
 /********************       Power / efficiency display Settings         ************************/
-#define DISPLAYWATTS                // Enable this to display Watts (if Watts selected in layouts). Select one of WATTS/MAHMIN/EFFICIENCY
-//#define DISPLAYEFFICIENCY         // Enable this to display Watts/KMh or Mph for efficiency (if Watts selected in layouts). Select one of WATTS/MAHMIN/EFFICIENCY
+//#define DISPLAYWATTS                // Enable this to display Watts (if Watts selected in layouts). Select one of WATTS/MAHMIN/EFFICIENCY
+#define DISPLAYEFFICIENCY         // Enable this to display Watts/KMh or Mph for efficiency (if Watts selected in layouts). Select one of WATTS/MAHMIN/EFFICIENCY
 //#define DISPLAYMAHMIN             // Enable this to display average mAh/minKMh (if Watts selected in layouts). Select one of WATTS/MAHMIN/EFFICIENCY
 
 
 /********************       Vario / climbrate Settings         ************************/
 #define DISPLAYVARIO                // Enable this to display Vario slider (if climb rate selected in layouts)
-//#define DISPLAYCLIMBRATE          // Enable this to display climb rate (if climb rate selected in layouts)
+#define DISPLAYCLIMBRATE          // Enable this to display climb rate (if climb rate selected in layouts)
 //#define VARIOALARM 150            // Enable this to for flashing climb rate warning. Value in cm/sec (if climb rate selected in layouts)
-//#define AUDIOVARIO A3               // Enable this for audio vario on RSSI pin A3
+#define AUDIOVARIO A3               // Enable this for audio vario on RSSI pin A3
 //#define AUDIOVARIORC 1200         // Enable this to disable audio vario for throttle values above 1200 uS
 
 
@@ -282,7 +282,7 @@
 
 
 /********************       Voltage Warning Settings         ************************/
-//#define AUTOCELL                  // Uncomment this to use varying cell count batteries. Overrides GUI/OSD voltage warning settings. Uses CELL_VOLTS_* below unless AUTOCELL_ALARM defined
+#define AUTOCELL                  // Uncomment this to use varying cell count batteries. Overrides GUI/OSD voltage warning settings. Uses CELL_VOLTS_* below unless AUTOCELL_ALARM defined
 //#define AUTOCELL_ALARM            // Use with Autocell - uses the Main battery Alarm value on GUI OSD instead of CELL_VOLTS_WARN. Main battery Alarm is a per cell value instead of full battery. i.e. 3.4 = 10.2v on a 3s 
 //The following variables are available for adjustment unless using FC_VOLTAGE_CONFIG 
 #define CELL_VOLTS_WARN 35          // Specify the cell voltage level at which low voltage warning takes place eg. 35 = 3.5 volts per cell
