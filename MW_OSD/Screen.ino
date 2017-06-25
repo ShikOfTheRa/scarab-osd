@@ -1213,16 +1213,20 @@ void displayClimbRate(void)
 #endif // DISPLAYCLIMBRATE
 
 #ifdef AUDIOVARIO  
-  #define VARIOFREQCLIMB 800      // Climb tone Hz
-  #define VARIOFREQSINK 600       // Sink tone Hz
-  #define VARIOTHRESHOLDCLIMB 10  // Threshold at which climbing is indicated cm/s
-  #define VARIOTHRESHOLDSINK -20  // Threshold at which sinking is indicated cm/s
-  #define VARIOHZ    40           // 20cm/s = 1hz --> 200cm/s = 10hz
+  #define VARIOFREQCLIMB       1000  // Climb tone Hz
+  #define VARIOFREQSINK        600   // Sink tone Hz
+  #define VARIOTHRESHOLDCLIMB  10    // Threshold at which climbing is indicated cm/s
+  #define VARIOTHRESHOLDSINK  -20    // Threshold at which sinking is indicated cm/s
+  #define VARIOHZ              40    // 20cm/s = 1hz --> 200cm/s = 10hz
 
-  #define VARIOMAXCLIMB  200      // Maximum climb rate for maximum hz
-  #define VARIOMAXHZ    10        // Maximum hz for max climbrate
-  #define VARIOMINHZ    2         // Minimum hz for min climbrate
+  #define VARIOMAXCLIMB   200        // Maximum climb rate for maximum hz
+  #define VARIOMAXHZ      10         // Maximum hz for max climbrate
+  #define VARIOMINHZ      1          // Minimum hz for min climbrate
+  #define VARIORISESCALE  2          // Increase will show greater frequency rise for increase sink/climb
 
+  #define VARIOBEEP
+  //#define VARIONEW
+  
   #ifdef AUDIOVARIORC // no audio vario when throttle on
   if (MwRcData[THROTTLESTICK]> AUDIOVARIORC) {
     return; 
@@ -1232,32 +1236,27 @@ void displayClimbRate(void)
   int16_t AudioVario=constrain(MwVario,-VARIOMAXCLIMB,VARIOMAXCLIMB); 
   debug[2]=AudioVario;
   int16_t ABSAudioVario=abs(AudioVario); 
-  int16_t lowhz = map( ABSAudioVario, 0,VARIOMAXCLIMB,1000/VARIOMINHZ,1000/VARIOMAXHZ);
-  debug[3]=lowhz;
+  AudioVario = constrain (AudioVario*VARIORISESCALE,50,10000);
 
+ #ifdef VARIOBEEP
   if (millis()>timer.vario){
-    timer.vario = millis()+lowhz;
     flags.vario = !flags.vario;
   }
   if (flags.vario){
     noTone(AUDIOVARIO);
-    debug[1]=0;
-    debug[0]++;
   }
   else if (MwVario > VARIOTHRESHOLDCLIMB){
-    tone(AUDIOVARIO, VARIOFREQCLIMB + AudioVario);  
-    debug[1]= VARIOFREQCLIMB + AudioVario;
+    tone(AUDIOVARIO, VARIOFREQCLIMB + AudioVario);      
   }
   else if (MwVario < VARIOTHRESHOLDSINK){
     tone(AUDIOVARIO, VARIOFREQSINK + AudioVario);  
-    debug[1]= VARIOFREQCLIMB + AudioVario;
   }
   else{
     noTone(AUDIOVARIO);
-    debug[1]= 0;
   }
+ #endif //VARIOBEEP
+ 
 #endif // AUDIOVARIO
-
 }
 
 
