@@ -589,7 +589,7 @@
 
 
 #ifdef AEROMAX
-    #define TEMPPIN       A6  // also used for airspeed         
+    #define TEMPPIN       A3  // also used for airspeed         
     #define INTD5     
 #endif
 
@@ -598,6 +598,10 @@
     #define SWAPVOLTAGEPINS
 #endif
 
+#ifdef AUDIOVARIO // temporary reassign RSSI / Temp to be same as current to avoid issues
+  #define TEMPPIN       A1  // also used for airspeed         
+  #define RSSIPIN       A1              
+#endif
 
 #ifdef ANDROMEDA
     #define MAX_SOFTRESET

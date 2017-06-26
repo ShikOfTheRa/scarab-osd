@@ -1213,19 +1213,8 @@ void displayClimbRate(void)
 #endif // DISPLAYCLIMBRATE
 
 #ifdef AUDIOVARIO  
-  #define VARIOFREQCLIMB       1000  // Climb tone Hz
-  #define VARIOFREQSINK        600   // Sink tone Hz
-  #define VARIOTHRESHOLDCLIMB  10    // Threshold at which climbing is indicated cm/s
-  #define VARIOTHRESHOLDSINK  -20    // Threshold at which sinking is indicated cm/s
-  #define VARIOHZ              40    // 20cm/s = 1hz --> 200cm/s = 10hz
-
-  #define VARIOMAXCLIMB   200        // Maximum climb rate for maximum hz
-  #define VARIOMAXHZ      10         // Maximum hz for max climbrate
-  #define VARIOMINHZ      1          // Minimum hz for min climbrate
-  #define VARIORISESCALE  2          // Increase will show greater frequency rise for increase sink/climb
-
-  #define VARIOBEEP
-  //#define VARIONEW
+//test when using non RSSI output
+//MwVario = map(rssi,0,100,-VARIOMAXCLIMB,VARIOMAXCLIMB); 
   
   #ifdef AUDIOVARIORC // no audio vario when throttle on
   if (MwRcData[THROTTLESTICK]> AUDIOVARIORC) {
@@ -1233,29 +1222,86 @@ void displayClimbRate(void)
   }
   #endif //AUDIOVARIORC
   
-  int16_t AudioVario=constrain(MwVario,-VARIOMAXCLIMB,VARIOMAXCLIMB); 
-  debug[2]=AudioVario;
-  int16_t ABSAudioVario=abs(AudioVario); 
-  AudioVario = constrain (AudioVario*VARIORISESCALE,50,10000);
+#ifdef AUDIOVARIOTYPE1
+  #define AUDIOVARIOFREQ       800   // Climb tone Hz
+  #define AUDIOVARIOHZ         40    // 20cm/s = 1hz --> 200cm/s = 10hz
+  #define AUDIOVARIOMAXHZ      10    // Maximum hz for max climbrate
+  #define AUDIOVARIOMINHZ      1     // Minimum hz for min climbrate
+  #define AUDIOVARIOMAXCLIMB   200   // Maximum climb/sink rate
+  #define AUDIOVARIOMINFREQ    200   // Minimum audio frequency
+  #define AUDIOVARIOMAXFREQ    1600  // Maximum audio frequency
 
- #ifdef VARIOBEEP
+  int16_t AudioVario    = constrain (MwVario,-AUDIOVARIOMAXCLIMB,AUDIOVARIOMAXCLIMB); 
+  int16_t ABSAudioVario = abs(AudioVario); 
+  int16_t lowhz         = map(ABSAudioVario, 0,AUDIOVARIOMAXCLIMB,1000/AUDIOVARIOMINHZ,1000/AUDIOVARIOMAXHZ);
+  AudioVario            = map(AudioVario, -AUDIOVARIOMAXCLIMB,AUDIOVARIOMAXCLIMB,AUDIOVARIOMINFREQ,AUDIOVARIOMAXFREQ);
+  AudioVario            = constrain (AudioVario,AUDIOVARIOMINFREQ,AUDIOVARIOMAXFREQ);
+
   if (millis()>timer.vario){
+    timer.vario = millis()+lowhz;
     flags.vario = !flags.vario;
   }
   if (flags.vario){
     noTone(AUDIOVARIO);
   }
-  else if (MwVario > VARIOTHRESHOLDCLIMB){
-    tone(AUDIOVARIO, VARIOFREQCLIMB + AudioVario);      
+  else if (MwVario > AUDIOVARIOTHRESHOLDCLIMB){
+    tone(AUDIOVARIO, AudioVario);      
   }
-  else if (MwVario < VARIOTHRESHOLDSINK){
-    tone(AUDIOVARIO, VARIOFREQSINK + AudioVario);  
+  else if (MwVario < AUDIOVARIOTHRESHOLDSINK){
+    tone(AUDIOVARIO, AudioVario);  
+  }
+  else{
+   #ifdef AUDIOVARIOSILENTDEADBAND
+    noTone(AUDIOVARIO);
+   #else
+    tone(AUDIOVARIO, AudioVario);  
+   #endif // AUDIOVARIOSILENTDEADBAND
+  }
+#endif //AUDIOVARIOTYPE1
+
+#ifdef AUDIOVARIOTYPE2
+
+  #define AUDIOVARIOMINFREQ    200  // Minimum audio frequency
+  #define AUDIOVARIOMAXFREQ    1600 // Maximum audio frequency
+  #define AUDIOVARIOMAXCLIMB   200  // Maximum climb/sink rate
+  int16_t ConstrainedVario   = constrain(MwVario,-AUDIOVARIOMAXCLIMB,AUDIOVARIOMAXCLIMB); 
+  int16_t AudioVarioTone     = map(ConstrainedVario,-AUDIOVARIOMAXCLIMB,AUDIOVARIOMAXCLIMB,AUDIOVARIOMINFREQ,AUDIOVARIOMAXFREQ);
+  int16_t MarkSpaceRatio     = map(ConstrainedVario,-AUDIOVARIOMAXCLIMB,AUDIOVARIOMAXCLIMB,2000,50);
+
+  if (millis()>timer.vario){   
+    if (flags.vario){ // notone
+      timer.vario=millis()+(100);
+      flags.vario=0;
+    }
+    else{ // tone
+      timer.vario=millis()+(MarkSpaceRatio); 
+      flags.vario=1;     
+    }
+  }
+
+  if (MwVario > AUDIOVARIOTHRESHOLDCLIMB){
+    if (flags.vario==0){
+      AudioVarioTone = 0;
+    }
+  }
+  else if (MwVario < AUDIOVARIOTHRESHOLDSINK){
+    if (flags.vario==0){
+      AudioVarioTone = 0;
+    }
+  }
+  else{   
+   #ifdef AUDIOVARIOSILENTDEADBAND
+    AudioVarioTone = 0;
+   #endif // AUDIOVARIOSILENTDEADBAND
+  }
+
+  if (AudioVarioTone>0){
+    tone(AUDIOVARIO, AudioVarioTone);    
   }
   else{
     noTone(AUDIOVARIO);
-  }
- #endif //VARIOBEEP
- 
+  } 
+#endif //AUDIOVARIOTYPE2
 #endif // AUDIOVARIO
 }
 
