@@ -130,6 +130,7 @@ struct  __timer {
   uint16_t  serialrxrate;
   uint32_t alarms;                            // Alarm length timer
   uint32_t vario;                             
+  uint32_t audiolooptimer;                             
 
 }
 timer;

@@ -251,14 +251,16 @@
 //#define DISPLAYCLIMBRATE          // Enable this to display climb rate (if climb rate selected in layouts)
 //#define VARIOALARM 150            // Enable this to for flashing climb rate warning. Value in cm/sec (if climb rate selected in layouts)
 
+
 /********************       Audio Vario / climbrate Settings         ************************/
-//#define AUDIOVARIO A3                // Enable this for audio vario on RSSI pin A3
+//#define AUDIOVARIO A3                // Enable this for audio vario on RSSI pin A3. Uses BARO data from FC or GPS
+//#define KKAUDIOVARIO A3              // Enable this for audio vario on RSSI pin A3. Uses MS5611 pressure sensor conencted by I2C. 
 //#define AUDIOVARIORC 1200            // Enable this to disable audio vario for throttle values above 1200 uS
-#define AUDIOVARIOTHRESHOLDCLIMB  10   // Threshold at which audio signal beep indicator starts for climbing (cm/s)
-#define AUDIOVARIOTHRESHOLDSINK  -20   // Threshold at which audio signal beep indicator starts for sinking (cm/s) 
+#define AUDIOVARIOTHRESHOLDCLIMB  10   // Threshold for climbing (cm/s)
+#define AUDIOVARIOTHRESHOLDSINK  -20   // Threshold for sinking (cm/s) 
 #define AUDIOVARIOSILENTDEADBAND       // Enable for silent deadband otherwise will hear near thermal tone
-//#define AUDIOVARIOTYPE1              // Simple beep indicator
-#define AUDIOVARIOTYPE2                // Complex variable pulse / frequency / indicator
+//#define AUDIOVARIOTYPE1              // Simple beep indicator (std AudioVario)
+#define AUDIOVARIOTYPE2                // Complex variable pulse / frequency / indicator  (std AudioVario)
 
 
 /********************   RC TX Settings     *********************/

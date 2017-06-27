@@ -199,6 +199,11 @@ void setup()
     armed=1;
   #endif //ALWAYSARMED
 
+  #ifdef KKAUDIOVARIO
+    AudioVarioInit();
+  #endif //KKAUDIOVARIO
+
+
 }
 
 //------------------------------------------------------------------------
@@ -240,6 +245,9 @@ void loop()
 //------------------------------------------------------------------------
 void loop()
 {
+  #ifdef KKAUDIOVARIO
+    AudioVarioUpdate();
+  #endif //KKAUDIOVARIO
   alarms.active=0;
   timer.loopcount++;
   if (flags.reset){
@@ -286,6 +294,11 @@ void loop()
 
   //---------------  Start Timed Service Routines  ---------------------------------------
   unsigned long currentMillis = millis();
+
+if (millis()>timer.audiolooptimer){
+  timer.audiolooptimer+=20;
+  AudioVarioUpdate();  
+}
 
 #ifdef MSP_SPEED_HIGH
   if((currentMillis - previous_millis_sync) >= sync_speed_cycle)  // (Executed > NTSC/PAL hz 33ms)
