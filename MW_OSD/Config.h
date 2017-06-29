@@ -148,10 +148,10 @@
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
 // **ONLY** valid when using fixed wing
 //#define USEMAGHEADING             // Undefine this to use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
-#define USEBAROALTITUDE           // Undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) ** Recommended **
+  #define USEBAROALTITUDE           // Undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) ** Recommended **
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft. Auto enabled for FIXEDWING
-#define USEGLIDESCOPE             // Enables ILS glidescope
+  #define USEGLIDESCOPE             // Enables ILS glidescope
 #define GLIDEANGLE 40               // ILS glidescope angle where 40 = 4.0° - 1.0 deg gradiented scope scale requires enabling in layouts. Auto enabled for FIXEDWING
 
 
@@ -215,18 +215,19 @@
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 //#define HIDESUMMARY               // Enable to suspend display of summary screen when disarming
 //#define SHORTSUMMARY              // Display only timer on flight summary 
-#define MINSUMMARY                // Hide summary screen values that are 0
+#define MINSUMMARY                  // Hide summary screen values that are 0
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
 //#define WHITEBRIGHTNESS 0x01      // Optional change from default 0x00=120%,0x01=100%,0x10=90%,0x11=80%  default is 0x01=100%
 //#define BLACKBRIGHTNESS 0x00      // Optional change from default 0x00=0%,0x01=10%,0x10=20%0x11=30%  default is 0x00=0%
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
 //#define NOTHROTTLESPACE           // Enable to remove space between throttle symbol and the data
 #define DISPLAY_PR                  // Display pitch / roll angles. Requires relevant layout ppositions to be enabled
-//#define INVERT_PITCH              // Invert the sign of the displayed numeric value for the pitch angle (ex: pitch up = positive )
-//#define INVERT_ROLL               // Invert the sign of the displayed numeric value for the roll angle (ex: roll right = negative )
-//#define FULLAHI                   // Enable to display a slightly longer AHI line
-//#define REVERSEAHI                // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
+//#define REVERSE_AHI_PITCH         // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
+//#define REVERSE_AHI_ROLL          // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
 //#define AHICORRECT 10             // Enable to adjust AHI on display to match horizon. -10 = -1 degree
+//#define INVERT_PITCH_SIGN         // Invert the sign of the displayed numeric value for the pitch angle (ex: pitch up = positive )
+//#define INVERT_ROLL_SIGN          // Invert the sign of the displayed numeric value for the roll angle (ex: roll right = negative )
+//#define FULLAHI                   // Enable to display a slightly longer AHI line
 #define AHIPITCHMAX 200             // Specify maximum AHI pitch value displayed. Default 200 = 20.0 degrees
 #define AHIROLLMAX  400             // Specify maximum AHI roll value displayed. Default 400 = 40.0 degrees 
 //#define AHIPITCHSCALE 100         // Specify scaling sensitvity for Pitch. Higher number = pitches more on OSD         

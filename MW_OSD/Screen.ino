@@ -457,7 +457,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
   screenBuffer[0]=0x50;
   int16_t xx=abs(pitchAngle/10);
   uint8_t offset=1;
-#ifdef INVERT_PITCH
+#ifdef INVERT_PITCH_SIGN
   if(pitchAngle>0) 
 #else
   if(pitchAngle<0)
@@ -472,7 +472,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
   screenBuffer[0]=0x52;
   offset=1;
   xx=abs(rollAngle/10);
-#ifdef INVERT_ROLL
+#ifdef INVERT_ROLL_SIGN
   if(rollAngle>0) 
 #else
   if(rollAngle<0) 
@@ -544,14 +544,17 @@ void displayHorizon(int rollAngle, int pitchAngle)
  rollAngle=rollAngle*AHIROLLSCALE/100;
 #endif 
   
+#if defined REVERSE_AHI_PITCH
+  pitchAngle=-pitchAngle;
+#endif //REVERSE_AHI_PITCH
+#if defined REVERSE_AHI_ROLL
+  pitchAngle=-pitchAngle;
+#endif //REVERSE_AHI_ROLL
+
 #ifndef AHICORRECT
-#define AHICORRECT 10
+  #define AHICORRECT 10
 #endif
   pitchAngle=pitchAngle+AHICORRECT;
-#if defined REVERSEAHI
-  pitchAngle=-pitchAngle;
-  rollAngle=-rollAngle;
-#endif //REVERSEAHI
 
   if(Settings[S_DISPLAY_HORIZON_BR]&fieldIsVisible(horizonPosition)){
 
