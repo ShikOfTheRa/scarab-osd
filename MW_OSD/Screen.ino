@@ -541,17 +541,20 @@ void displayHorizon(int rollAngle, int pitchAngle)
   pitchAngle=pitchAngle*AHIPITCHSCALE/100;
 #endif
 #ifdef AHIROLLSCALE
- rollAngle=rollAngle*AHIROLLSCALE/100;
+  rollAngle=rollAngle*AHIROLLSCALE/100;
 #endif 
   
+#if defined REVERSEAHIPITCH
+  pitchAngle=-pitchAngle;
+#endif //REVERSEAHIPITCH
+#if defined REVERSEAHIROLL
+  rollAngle=-rollAngle;
+#endif //REVERSEAHIROLL
+
 #ifndef AHICORRECT
-#define AHICORRECT 10
+  #define AHICORRECT 10
 #endif
   pitchAngle=pitchAngle+AHICORRECT;
-#if defined REVERSEAHI
-  pitchAngle=-pitchAngle;
-  rollAngle=-rollAngle;
-#endif //REVERSEAHI
 
   if(Settings[S_DISPLAY_HORIZON_BR]&fieldIsVisible(horizonPosition)){
 

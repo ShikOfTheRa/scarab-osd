@@ -225,7 +225,8 @@
 //#define INVERT_PITCH              // Invert the sign of the displayed numeric value for the pitch angle (ex: pitch up = positive )
 //#define INVERT_ROLL               // Invert the sign of the displayed numeric value for the roll angle (ex: roll right = negative )
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
-//#define REVERSEAHI                // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
+//#define REVERSEAHIPITCH           // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
+//#define REVERSEAHIROLL            // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
 //#define AHICORRECT 10             // Enable to adjust AHI on display to match horizon. -10 = -1 degree
 #define AHIPITCHMAX 200             // Specify maximum AHI pitch value displayed. Default 200 = 20.0 degrees
 #define AHIROLLMAX  400             // Specify maximum AHI roll value displayed. Default 400 = 40.0 degrees 
