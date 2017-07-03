@@ -752,6 +752,10 @@
 
 /********************  other paramters  *********************/
 
+#ifdef PIODEBUG // This is for travis build only
+  #define DEBUG 4 // Display debug secreen at boot
+#endif
+
 #ifdef PWM_THROTTLE
   #define ALWAYSARMED  // starts OSD in armed mode
 #endif
