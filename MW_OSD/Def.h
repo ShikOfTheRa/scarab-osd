@@ -28,11 +28,6 @@
 //#define HARDRESET                        // Enables watchdog timer reset rather than fixed memory jmp 
 #define BOOTRESET                          // Enables reset from default Atmega 328 bootloader address (instead of 0) 
 
-#ifdef PIODEBUG // This is for travis build only
-  #define DEBUG 4 // Display debug secreen at boot
-#endif
-
-
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
 
 /********************       OSD SCREEN SWITCH settings      *********************/
