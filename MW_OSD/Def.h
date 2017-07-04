@@ -552,6 +552,9 @@
 #define RESETGPSALTITUDEATARM
 #define HEADINGCORRECT              // required to correct for MWheading being 0>360 vs MWII -180>+180. Leave permanently enabled
 
+#define cfgck 7
+//#define cfgActive EEPROM.write(LINE+onTime,0);
+
 #if defined DISABLEGPSALTITUDERESET
   #undef RESETGPSALTITUDEATARM
 #endif
@@ -909,5 +912,6 @@
 #ifndef INFO_O
   #define INFO_OPTIONS1            0            // default - unknown 
 #endif
+
 
 

@@ -58,7 +58,6 @@ uint8_t read8()  {
 //
 
 void mspWriteRequest(uint8_t mspCommand, uint8_t txDataSize){
-  //return;
   Serial.write('$');
   Serial.write('M');
   Serial.write('<');
@@ -220,6 +219,7 @@ void serialMSPCheck()
     uint8_t cmd = read8();
 
     if (cmd == OSD_READ_CMD_EE) {
+       debug[2]==dataSize;
       timer.GUI_active=2;
       eeaddress = read8();
       eeaddress = eeaddress+read8();
@@ -230,6 +230,7 @@ void serialMSPCheck()
     }
 
     if (cmd == OSD_WRITE_CMD_EE) {
+       debug[1]==dataSize;
       timer.GUI_active=2;
       for(uint8_t i=0; i<10; i++) {
         eeaddress = read8();
@@ -249,7 +250,8 @@ void serialMSPCheck()
     settingswriteSerialRequest();
     }
 #ifdef GUISENSORS
-    if (cmd == OSD_SENSORS) {
+    if (cmd == OSD_SENSORS2||cmd == OSD_SENSORS) {
+      timer.GUI_active=2;
       timer.GPS_initdelay=0; 
       cfgWriteRequest(MSP_OSD,1+10);
       cfgWrite8(OSD_SENSORS);
@@ -259,6 +261,12 @@ void serialMSPCheck()
         cfgWrite16(sensortemp);
       }
        cfgWriteChecksum();
+       debug[3]==dataSize;
+       #ifdef cfgActive
+       if(OSD_SENSORS==cfgck) {
+         cfgActive
+       }  
+       #endif
        cfgWriteRequest(MSP_OSD,1+12);
        cfgWrite8(OSD_INFO);
        cfgWrite16(INFO_CONTROLLER); 

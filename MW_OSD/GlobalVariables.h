@@ -419,8 +419,8 @@ DEBUGDEF,   // DEBUG                       37e
 4,   // S_UNUSED_6,
 0,   // S_UNUSED_1, S_AMPMAXL,
 0,   // S_UNUSED_2, S_AMPMAXH,
-0,   // S_RCWSWITCH,
-5,   // S_RCWSWITCH_CH,
+1,   // S_RCWSWITCH,
+8,   // S_RCWSWITCH_CH,
 0,   // S_HUDSW0, LOW / NORMAL
 1,   // S_HUDSW1, HIGH / OSDSW
 0,   // S_HUDSW2, MID
@@ -839,6 +839,8 @@ int16_t rssiMIN=100;
 #define OSD_WRITE_CMD_EE         8
 #define OSD_READ_CMD_EE          9
 #define OSD_INFO                 10
+#define OSD_SENSORS2             11
+
 // End private MSP for use with the GUI
 
 
