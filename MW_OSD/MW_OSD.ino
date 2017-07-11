@@ -99,9 +99,11 @@ uint16_t UntouchedStack(void)
 #elif defined LOADFONT_BOLD 
   #include "fontB.h"
 #endif
-
 #ifdef I2C_UB_SUPPORT
-#include "WireUB.h"
+  #include "WireUB.h"
+#endif
+#ifdef KKAUDIOVARIO
+  #include <Wire.h>
 #endif
 
 char screen[480];          // Main screen ram for MAX7456
@@ -123,6 +125,13 @@ uint8_t fontStatus=0;
 boolean ledstatus=HIGH;
 //uint8_t fontData[54];
 //uint8_t Settings[1];
+#endif
+
+#ifdef KKAUDIOVARIO
+unsigned int calibrationData[7];
+unsigned long time = 0;
+float toneFreq, toneFreqLowpass, pressure, lowpassFast, lowpassSlow ;
+int ddsAcc;
 #endif
 
 
@@ -181,7 +190,7 @@ void setup()
   MAX7456Setup();
   #if defined GPSOSD
     timer.GPS_initdelay=10; 
-    //GPS_SerialInit();
+    //GPS_SerialInit(); 
   #else
   #endif
 #if defined FORECSENSORACC
@@ -200,10 +209,11 @@ void setup()
   #endif //ALWAYSARMED
 
   #ifdef KKAUDIOVARIO
-    AudioVarioInit();
+    Wire.begin();
+    setupSensor();
+    pressure = getPressure();
+    lowpassFast = lowpassSlow = pressure;
   #endif //KKAUDIOVARIO
-
-
 }
 
 //------------------------------------------------------------------------

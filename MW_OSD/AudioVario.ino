@@ -2,68 +2,41 @@
 
 /*
   KK AUDIO VARIO components by 
-  By Rolf R Bakke (kapeteinkuk
+  By Rolf R Bakke (kapeteinkuk)
   Modified by Shiki for MWOSD
 */
 
-
-#include <Wire.h>
-
-const byte led = 13;
-unsigned int calibrationData[7];
-unsigned long time = 0;
-float toneFreq, toneFreqLowpass, pressure, lowpassFast, lowpassSlow ;
-int ddsAcc;
-
-
-void AudioVarioInit()
-{
-  Wire.begin();
-  setupSensor();  
-  pressure = getPressure();
-  lowpassFast = lowpassSlow = pressure;
-}
-
-
 void AudioVarioUpdate()
 {
-  #ifdef AUDIOVARIORC // no audio vario when throttle on
+#ifdef AUDIOVARIOSWITCH
+  if(!fieldIsVisible(MwClimbRatePosition))
+    return;
+  if(!Settings[S_VARIO])
+    return;
+#endif //AUDIOVARIOSWITCH
+#ifdef AUDIOVARIORC // no audio vario when throttle on
   if (MwRcData[THROTTLESTICK]> AUDIOVARIORC) {
     return; 
   }
-  #endif //AUDIOVARIORC
+#endif //AUDIOVARIORC
 
-  int deadband=0;
-
+  
   pressure = getPressure();
-   
   lowpassFast = lowpassFast + (pressure - lowpassFast) * 0.1;
   lowpassSlow = lowpassSlow + (pressure - lowpassSlow) * 0.05;
   
-  toneFreq = (lowpassSlow - lowpassFast) * 50;
-  
+  toneFreq = (lowpassSlow - lowpassFast) * 50;  
   toneFreqLowpass = toneFreqLowpass + (toneFreq - toneFreqLowpass) * 0.1;
-   
+
   toneFreq = constrain(toneFreqLowpass, -500, 500);
-  
   ddsAcc += toneFreq * 100 + 2000;
-
-  #ifdef AUDIOVARIOSILENTDEADBAND
-  if (toneFreq > AUDIOVARIOTHRESHOLDCLIMB*2){
-    deadband == 1;
-  }
-  else if (toneFreq < AUDIOVARIOTHRESHOLDSINK*2){
-    deadband == 1;
-  }
-  #endif AUDIOVARIOSILENTDEADBAND
-
   
-  if (deadband == 0){
-    if (toneFreq < 0 || ddsAcc > 0 ) {
-      tone(KKAUDIOVARIO, toneFreq + 510);
-    }
+  if ((toneFreq < KKDEADBANDLOW) ||  ((toneFreq > KKDEADBANDHIGH)  && (ddsAcc > 0))) 
+  {
+    tone(KKAUDIOVARIO, toneFreq + 510);  
   }
-  else{
+  else
+  {
     noTone(KKAUDIOVARIO);
   }
 }
@@ -95,6 +68,7 @@ long getData(byte command, byte del)
   delay(del);
   twiSendCommand(0x77, 0x00);
   Wire.requestFrom(0x77, 3);
+  if(Wire.available()!=3) ; //Serial.println("Error: raw data not available");
   for (int i = 0; i <= 2; i++)
   {
     result = (result<<8) | Wire.read(); 
@@ -114,9 +88,14 @@ void setupSensor()
 
     twiSendCommand(0x77, 0xa0 + i * 2);
     Wire.requestFrom(0x77, 2);
+    if(Wire.available()!=2) ; //Serial.println("Error: calibration data not available");
     high = Wire.read();
     low = Wire.read();
     calibrationData[i] = high<<8 | low;
+//    Serial.print("calibration data #");
+//    Serial.print(i);
+//    Serial.print(" = ");
+//    Serial.println( calibrationData[i] ); 
   }
 }
 
@@ -124,11 +103,13 @@ void setupSensor()
 void twiSendCommand(byte address, byte command)
 {
   Wire.beginTransmission(address);
+  if (!Wire.write(command)) ; //Serial.println("Error: write()");
   if (Wire.endTransmission()) 
   {
+//    Serial.print("Error when sending command: ");
+//    Serial.println(command, HEX);
   }
 }
-
 #endif KKAUDIOVARIO
 
 

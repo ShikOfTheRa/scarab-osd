@@ -1,12 +1,12 @@
  
 #if defined PROTOCOL_MAVLINK
-  #define SERIALBUFFERSIZE 150
+  #define SERIALBUFFERSIZE 100
 #elif defined NAZA
   #define SERIALBUFFERSIZE 250
 #elif defined GPSOSD
-  #define SERIALBUFFERSIZE 250
+  #define SERIALBUFFERSIZE 100
 #else
-  #define SERIALBUFFERSIZE 150
+  #define SERIALBUFFERSIZE 100
 #endif
 
 static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string

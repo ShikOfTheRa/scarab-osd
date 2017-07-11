@@ -255,13 +255,23 @@
 
 /********************       Audio Vario / climbrate Settings         ************************/
 //#define AUDIOVARIO A3                // Enable this for audio vario on RSSI pin A3. Uses BARO data from FC or GPS
-//#define KKAUDIOVARIO A3              // Enable this for audio vario on RSSI pin A3. Uses MS5611 pressure sensor conencted by I2C. 
 //#define AUDIOVARIORC 1200            // Enable this to disable audio vario for throttle values above 1200 uS
 #define AUDIOVARIOTHRESHOLDCLIMB  10   // Threshold for climbing (cm/s)
-#define AUDIOVARIOTHRESHOLDSINK  -20   // Threshold for sinking (cm/s) 
+#define AUDIOVARIOTHRESHOLDSINK  -20   // Threshold for sinking  (cm/s) 
 #define AUDIOVARIOSILENTDEADBAND       // Enable for silent deadband otherwise will hear near thermal tone
 //#define AUDIOVARIOTYPE1              // Simple beep indicator (std AudioVario)
 #define AUDIOVARIOTYPE2                // Complex variable pulse / frequency / indicator  (std AudioVario)
+
+
+/********************       KK Audio Vario / climbrate Settings         ************************/
+// A highly accurate / sensitive Audio Vario from KapeteinKuk
+// Uses MS5611 pressure sensor connected by I2C
+// Only supported by VIRTUALPILOT AEROMAX hardware unless able to carry out very fine soldering  
+//#define KKAUDIOVARIO A3              // Enable this for audio vario on Arduino pin XX 
+//#define AUDIOVARIORC 1200            // Enable this to disable audio vario for throttle values above 1200 uS
+//#define AUDIOVARIOSWITCH             // Enable this to use screen layouts to enable/diable vario. If visual vario is displayed, the audio vario is on
+#define KKDEADBANDLOW  -40             // Deadband threshold for sinking (Set to -500 to disable sink tones). 0 for no deadband
+#define KKDEADBANDHIGH  15             // Deadband threshold for climbing. 0 for no deadband 
 
 
 /********************   RC TX Settings     *********************/
