@@ -608,7 +608,8 @@
 #if defined  KKAUDIOVARIO 
   #undef FIXEDLOOP
 //  #define TEMPPIN       A1  // also used for airspeed         
-//  #define RSSIPIN       A1              #endif
+//  #define RSSIPIN       A1              
+#endif
 
 #ifdef ANDROMEDA
     #define MAX_SOFTRESET
