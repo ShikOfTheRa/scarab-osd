@@ -1153,7 +1153,7 @@ void ProcessSensors(void) {
   if(!Settings[S_MWAMPERAGE]) {
     if (!Settings[S_AMPERAGE_VIRTUAL]) { // Analogue
       amperage = sensorfilter[2][SENSORFILTERSIZE]>>3;
-      amperage = map(amperage, Settings16[S16_AMPZERO], 1024, 0, Settings16[S16_AMPDIVIDERRATIO]);
+      amperage = map(amperage, Settings16[S16_AMPZERO], AMPCALHIGH, AMPCALLOW, Settings16[S16_AMPDIVIDERRATIO]);
       if (amperage < 0) amperage=0;
     }  
     else {  // Virtual

@@ -369,10 +369,18 @@
 #define HIGHTHROTTLE 1900                // Maximum recognised value for throttle 
 #define LOWTHROTTLE  1100                // Minimum recognised value for throttle
 
+
+/********************  AMPERAGE calibration  settings      *********************/
+// This is used for those who want to specify non default amperage calibration values. 
+// These should only be used if unable to calibrate within limits on GUI. 
+#define AMPCALLOW  0                     
+#define AMPCALHIGH 1023                  
+
+
 /********************  Advanced parameters  settings      *********************/
 // This is to enable rarely used advanced parameter saving. Off by default to minimise risk 
 // Enabling may create ability to write invalid data to FC
 //#define ADVANCEDSAVE                   // Enables saving of advanced paramters where supported (Looptime/profile)
-#define FIXEDLOOP                        // Enables 1ms loop max for consistency
+//#define FIXEDLOOP                        // Enables 1ms loop max for consistency
 
 
