@@ -915,8 +915,7 @@ void setMspRequests() {
 #endif
   }
  
-  if(Settings[S_MAINVOLTAGE_VBAT] ||
-    Settings[S_MWRSSI]) {
+  if(Settings[S_MAINVOLTAGE_VBAT] || Settings[S_AMPERAGE] || Settings[S_MWRSSI]) {
     modeMSPRequests |= REQ_MSP_ANALOG;
     
 #ifdef USE_FC_VOLTS_CONFIG
