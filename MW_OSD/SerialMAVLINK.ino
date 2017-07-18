@@ -227,6 +227,12 @@ void serialMAVCheck(){
       MwRcData[i+1] = (int16_t)(serialBuffer[4+(i*2)]|(serialBuffer[5+(i*2)]<<8));
     handleRawRC();
     break;
+  case MAVLINK_MSG_ID_RC_CHANNELS:
+    MwRssi=(uint16_t)(((103)*serialBuffer[41])/10);
+    for(uint8_t i=0;i<8;i++)
+      MwRcData[i+1] = (int16_t)(serialBuffer[4+(i*2)]|(serialBuffer[5+(i*2)]<<8));
+    handleRawRC();
+    break;
   case MAVLINK_MSG_ID_SYS_STATUS:
     mode.stable = (1<<1);
     mode.baro   = (1<<2);
