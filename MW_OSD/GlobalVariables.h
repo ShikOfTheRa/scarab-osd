@@ -1521,7 +1521,7 @@ const PROGMEM char * const mav_mode_index[] =
  mav_mode_PX4,  //11
 };
 #define MAV_MODE_MAX 17
-#elif FIXEDWING // within MAVLINK
+#elif defined FIXEDWING // within MAVLINK
 const char mav_mode_MANU[] PROGMEM   = "MANU"; //Manual
 const char mav_mode_TRNG[] PROGMEM   = "TRNG"; //Training
 const char mav_mode_FBWA[] PROGMEM   = "FBWA"; //Fly-by-wire A
