@@ -1463,6 +1463,9 @@ const PROGMEM char * const msp_mode_index[] =
 #define MAVLINK_MSG_ID_RC_CHANNELS_RAW 35
 #define MAVLINK_MSG_ID_RC_CHANNELS_RAW_MAGIC 244
 #define MAVLINK_MSG_ID_RC_CHANNELS_RAW_LEN 22    
+#define MAVLINK_MSG_ID_RC_CHANNELS 65
+#define MAVLINK_MSG_ID_RC_CHANNELS_MAGIC 118
+#define MAVLINK_MSG_ID_RC_CHANNELS_LEN 42    
 #define MAVLINK_MSG_ID_SYS_STATUS 1
 #define MAVLINK_MSG_ID_SYS_STATUS_MAGIC 124
 #define MAVLINK_MSG_ID_SYS_STATUS_LEN 31  
@@ -1479,7 +1482,7 @@ const PROGMEM char * const msp_mode_index[] =
 #define  LAT  0
 #define  LON  1
 
-const char mav_mode_APM[] PROGMEM    = "APM "; //Unknown APM mode
+const char mav_mode_APM[]  PROGMEM   = "APM "; //Unknown APM mode
 const char mav_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
 const char mav_mode_ACRO[] PROGMEM   = "ACRO"; //Acrobatic: rate control
 const char mav_mode_AUTO[] PROGMEM   = "AUTO"; //Auto: auto control
@@ -1488,7 +1491,37 @@ const char mav_mode_RETL[] PROGMEM   = "RETL"; //Return to Launch: auto control
 const char mav_mode_CIRC[] PROGMEM   = "CIRC"; //Circle: auto control
 const char mav_mode_ATUN[] PROGMEM   = "ATUN"; //Auto Tune: autotune the vehicle's roll and pitch gains
 const char mav_mode_GUID[] PROGMEM   = "GUID"; //Guided: auto control
-#ifdef FIXEDWING // within MAVLINK
+#ifdef PX4 // within MAVLINK
+const char mav_mode_PX4[]  PROGMEM   = "PX4 "; // Unknown PX4 mode
+const char mav_mode_MANU[] PROGMEM   = "MANU"; // Manual
+const char mav_mode_ALTC[] PROGMEM   = "ALTC"; // Altitude control
+const char mav_mode_POSC[] PROGMEM   = "POSC"; // Position control
+//const char mav_mode_AUTO[] PROGMEM   = "AUTO"; // Auto: auto control
+const char mav_mode_TKOF[] PROGMEM   = "TKOF"; // Takeoff
+//const char mav_mode_LOIT[] PROGMEM   = "LOIT"; // Loiter: hold a single location
+const char mav_mode_MISS[] PROGMEM   = "MISS"; // Mission
+//const char mav_mode_RETL[] PROGMEM   = "RETL"; // Return to Launch: auto control
+const char mav_mode_LAND[] PROGMEM   = "LAND"; // Landing
+//const char mav_mode_ACRO[] PROGMEM   = "ACRO"; // Acrobatic: rate control
+const char mav_mode_OFFB[] PROGMEM   = "OFFB"; // Offboard control
+//const char mav_mode_STAB[] PROGMEM   = "STAB"; // Stabilize: hold level position
+const PROGMEM char * const mav_mode_index[] = 
+{   
+ mav_mode_MANU, //0
+ mav_mode_ALTC,
+ mav_mode_POSC,
+ mav_mode_TKOF,
+ mav_mode_LOIT,
+ mav_mode_MISS,
+ mav_mode_RETL,
+ mav_mode_LAND,
+ mav_mode_ACRO,
+ mav_mode_OFFB,
+ mav_mode_STAB, //10
+ mav_mode_PX4,  //11
+};
+#define MAV_MODE_MAX 17
+#elif defined FIXEDWING // within MAVLINK
 const char mav_mode_MANU[] PROGMEM   = "MANU"; //Manual
 const char mav_mode_TRNG[] PROGMEM   = "TRNG"; //Training
 const char mav_mode_FBWA[] PROGMEM   = "FBWA"; //Fly-by-wire A

@@ -100,7 +100,7 @@
   #define MULTIWII_V24
 #endif
 
-#ifdef PIXHAWK   //set up latest at time of release
+#ifdef PX4   //set up latest at time of release
   #define APM
 #endif
 
@@ -736,12 +736,12 @@
   #define PITCHSTICK       3
   #define YAWSTICK         4
   #define THROTTLESTICK    1
-#elif defined PIXHAWK        //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For Pixhawk mavlink
+#elif defined PX4            //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For PX4
   #define ROLLSTICK        1
   #define PITCHSTICK       2
   #define YAWSTICK         4
   #define THROTTLESTICK    3
-#elif defined APM            //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For APM mavlink
+#elif defined APM            //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For APM
   #define ROLLSTICK        1
   #define PITCHSTICK       2
   #define YAWSTICK         4
@@ -833,7 +833,7 @@
 #ifdef APM
   #define INFO_CONTROLLER 14
 #endif
-#ifdef PIXHAWK
+#ifdef PX4
   #define INFO_CONTROLLER 15
 #endif
 #ifdef SKYTRACK
