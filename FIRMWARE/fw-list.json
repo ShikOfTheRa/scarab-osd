@@ -142,6 +142,7 @@
   "version": "1.7.2",
   "board": "VirtualPilot AeroMax"                
 },
+{
   "name": "Fixedwing PIXHAWK PX4",
   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/aeromax.px4.aero.hex",
   "version": "1.7.2",
