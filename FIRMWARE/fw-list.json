@@ -2,92 +2,98 @@
                                                               
 {
   "name": "Betaflight",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.betaflight.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.betaflight.hex",
+  "version": "1.7.2",
   "board": "Default minim"                
 },
 {
   "name": "Cleanflight",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.cleanflight.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.cleanflight.hex",
+  "version": "1.7.2",
   "board": "Default minim"                
 },
 {
   "name": "iNAV",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.inav.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.inav.hex",
+  "version": "1.7.2",
   "board": "Default minim"                
 },
 {
-  "name": "APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.mavlink.hex",
-  "version": "1.7.1",
+  "name": "APM mavlink",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.mavlink.hex",
+  "version": "1.7.2",
+  "board": "Default minim"                
+},
+{
+  "name": "PIXHAWK PX4 mavlink",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.px4.hex",
+  "version": "1.7.2",
   "board": "Default minim"                
 },
 {
   "name": "MultiWii",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.multiwii.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.multiwii.hex",
+  "version": "1.7.2",
   "board": "Default minim"                
 },
 {
   "name": "KISS",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.kiss.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.kiss.hex",
+  "version": "1.7.2",
   "board": "Default minim"                
 },
 {
   "name": "Dronin",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.dronin.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.dronin.hex",
+  "version": "1.7.2",
   "board": "Default minim"                
 },
 {
   "name": "Librepilot",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.librepilot.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.librepilot.hex",
+  "version": "1.7.2",
   "board": "Default minim"                
 },
 {
   "name": "Raceflight",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.raceflight.hex",
-  "version": "1.7.1",
-  "board": "Default minim"                
-},
-{
-  "name": "Naza",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.naza.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.raceflight.hex",
+  "version": "1.7.2",
   "board": "Default minim"                
 },
 {
   "name": "Fixedwing iNAV ",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.inav.aero.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.inav.aero.hex",
+  "version": "1.7.2",
   "board": "Default minim"                
 },
 {
-  "name": "Fixedwing APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.mavlink.aero.hex",
-  "version": "1.7.1",
+  "name": "Fixedwing APM mavlink",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.mavlink.aero.hex",
+  "version": "1.7.2",
+  "board": "Default minim"                
+},
+{
+  "name": "Fixedwing PIXHAWK PX4",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.px4.aero.hex",
+  "version": "1.7.2",
   "board": "Default minim"                
 },
 {
   "name": "Fixedwing PatrikE BF",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.baseflight.aero.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.baseflight.aero.hex",
+  "version": "1.7.2",
   "board": "Default minim"                
 },
 {
   "name": "Standard GPS OSD - UBLOX",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.ublox.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.ublox.hex",
+  "version": "1.7.2",
   "board": "Default minim"                
 },
 {
   "name": "Basic OSD - no GPS",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.nocontroller.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.nocontroller.hex",
+  "version": "1.7.2",
   "board": "Default minim"                
 },
 
@@ -96,57 +102,117 @@
 
 {
   "name": "Betaflight",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.betaflight.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/aeromax.betaflight.hex",
+  "version": "1.7.2",
   "board": "VirtualPilot AeroMax"                
 },
 {
   "name": "Cleanflight",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.cleanflight.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/aeromax.cleanflight.hex",
+  "version": "1.7.2",
   "board": "VirtualPilot AeroMax"                
 },
 {
   "name": "iNAV",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.inav.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/aeromax.inav.hex",
+  "version": "1.7.2",
   "board": "VirtualPilot AeroMax"                
 },
 {
-  "name": "APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.mavlink.hex",
-  "version": "1.7.1",
+  "name": "APM mavlink",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/aeromax.mavlink.hex",
+  "version": "1.7.2",
   "board": "VirtualPilot AeroMax"                
 },
 {
-  "name": "MultiWii",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.multiwii.hex",
-  "version": "1.7.1",
+  "name": "PIXHAWK PX4",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/aeromax.px4.hex",
+  "version": "1.7.2",
   "board": "VirtualPilot AeroMax"                
 },
 {
-  "name": "KISS",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.kiss.hex",
-  "version": "1.7.1",
+  "name": "Fixedwing iNAV ",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/aeromax.inav.aero.hex",
+  "version": "1.7.2",
   "board": "VirtualPilot AeroMax"                
 },
 {
-  "name": "Dronin",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.dronin.hex",
-  "version": "1.7.1",
+  "name": "Fixedwing APM mavlink",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/aeromax.mavlink.aero.hex",
+  "version": "1.7.2",
+  "board": "VirtualPilot AeroMax"                
+},
+  "name": "Fixedwing PIXHAWK PX4",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/aeromax.px4.aero.hex",
+  "version": "1.7.2",
   "board": "VirtualPilot AeroMax"                
 },
 {
-  "name": "Librepilot",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.librepilot.hex",
-  "version": "1.7.1",
+  "name": "Fixedwing PatrikE BF",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/aeromax.baseflight.aero.hex",
+  "version": "1.7.2",
   "board": "VirtualPilot AeroMax"                
 },
 {
-  "name": "Raceflight",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.raceflight.hex",
-  "version": "1.7.1",
+  "name": "Standard GPS OSD - UBLOX",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/aeromax.ublox.hex",
+  "version": "1.7.2",
   "board": "VirtualPilot AeroMax"                
+},
+
+
+
+{
+  "name": "Betaflight",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/andromeda.betaflight.hex",
+  "version": "1.7.2",
+  "board": "Andromeda"                
+},
+{
+  "name": "iNAV",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/andromeda.inav.hex",
+  "version": "1.7.2",
+  "board": "Andromeda"                
+},
+{
+  "name": "APM mavlink",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/andromeda.mavlink.hex",
+  "version": "1.7.2",
+  "board": "Andromeda"                
+},
+{
+  "name": "PIXHAWK PX4",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/andromeda.px4.hex",
+  "version": "1.7.2",
+  "board": "Andromeda"                
+},
+{
+  "name": "Fixedwing iNAV ",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/andromeda.inav.aero.hex",
+  "version": "1.7.2",
+  "board": "Andromeda"                
+},
+{
+  "name": "Fixedwing APM PIXHAWK",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/andromeda.mavlink.aero.hex",
+  "version": "1.7.2",
+  "board": "Andromeda"                
+},
+{
+  "name": "Fixedwing PIXHAWK PX4",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/andromeda.px4.aero.hex",
+  "version": "1.7.2",
+  "board": "Andromeda"                
+},
+
+
+
+
+{
+  "name": "Naza",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.naza.hex",
+  "version": "1.7.1",
+  "board": "Default minim"                
 },
 {
   "name": "Naza",
@@ -156,112 +222,35 @@
 },
 
 
-{
-  "name": "Fixedwing iNAV ",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.inav.aero.hex",
-  "version": "1.7.1",
-  "board": "VirtualPilot AeroMax"                
-},
-{
-  "name": "Fixedwing APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.mavlink.aero.hex",
-  "version": "1.7.1",
-  "board": "VirtualPilot AeroMax"                
-},
-{
-  "name": "Fixedwing PatrikE BF",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/minim.baseflight.aero.hex",
-  "version": "1.7.1",
-  "board": "VirtualPilot AeroMax"                
-},
-{
-  "name": "Standard GPS OSD - UBLOX",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/aeromax.ublox.hex",
-  "version": "1.7.1",
-  "board": "VirtualPilot AeroMax"                
-},
-
-
-{
-  "name": "Betaflight",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/andromeda.betaflight.hex",
-  "version": "1.7.1",
-  "board": "Andromeda"                
-},
-{
-  "name": "iNAV",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/andromeda.inav.hex",
-  "version": "1.7.1",
-  "board": "Andromeda"                
-},
-{
-  "name": "APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/andromeda.mavlink.hex",
-  "version": "1.7.1",
-  "board": "Andromeda"                
-},
-{
-  "name": "Fixedwing iNAV ",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/andromeda.inav.aero.hex",
-  "version": "1.7.1",
-  "board": "Andromeda"                
-},
-{
-  "name": "Fixedwing APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/andromeda.mavlink.aero.hex",
-  "version": "1.7.1",
-  "board": "Andromeda"                
-},
-
-
-
-{
-  "name": "Standard GPS OSD - UBLOX",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/test.ublox.hex",
-  "version": "1.7.1",
-  "board": "Test"                
-},
-{
-  "name": "Test Fixedwing APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/test.mavlink.aero.hex",
-  "version": "1.7.1",
-  "board": "Test"                
-},
-{
-  "name": "Test MultiRotor APM PIXHAWK",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/test.mavlink.hex",
-  "version": "1.7.1",
-  "board": "Test"                
-},
   
 {
   "name": "DEBUG",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/DEBUG.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/DEBUG.hex",
+  "version": "1.7.2",
   "board": "Utilities"                
 },
 {
   "name": "Clear EEprom",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/EEPROM.CLEAR.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/EEPROM.CLEAR.hex",
+  "version": "1.7.2",
   "board": "Utilities"                
 },
 {
    "name": "Bold font installer",
-   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/FONT.BOLD.hex",
-   "version": "1.7.1",
+   "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/FONT.BOLD.hex",
+   "version": "1.7.2",
    "board": "Utilities"                
 },
 {
   "name": "Default font installer",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/FONT.DEFAULT.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/FONT.DEFAULT.hex",
+  "version": "1.7.2",
   "board": "Utilities"                
 },
 {
   "name": "Large font installer",
-  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/master/FIRMWARE/1.7.1/FONT.LARGE.hex",
-  "version": "1.7.1",
+  "url" : "https://raw.githubusercontent.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/FONT.LARGE.hex",
+  "version": "1.7.2",
   "board": "Utilities"                
 }  
 ]
