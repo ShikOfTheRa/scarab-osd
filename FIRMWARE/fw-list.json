@@ -25,7 +25,7 @@
   "board": "Default minim"                
 },
 {
-  "name": "PIXHAWK PX4 mavlink",
+  "name": "PIXHAWK PX4",
   "url" : "https://github.com/ShikOfTheRa/scarab-osd/releases/download/1.7.2.0/minim.px4.hex",
   "version": "1.7.2",
   "board": "Default minim"                
