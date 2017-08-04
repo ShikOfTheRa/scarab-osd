@@ -34,7 +34,8 @@ MWOSD also provides support a number of other configurations:
 <li>NAZA - test only</li>
 </ul>
 
-<a href='http://www.mwosd.com' target='_blank'>Click here to DOWNLOAD or find out more</a><br>
+<a href='https://chrome.google.com/webstore/detail/mwosd-configurator/jdfbjgomfcfpgkdjfnmekbkhkbgfminf?hl=en' target='_blank'>Click here GUI Configurator with easy install firmware (Chrome extension)</a><br>
+<a href='https://www.virtualpilot.co.uk/index.php?route=product/product&path=62&product_id=53' target='_blank'>Click here GUI Configurator with easy install firmware (alternative Windows PC client)</a><br>
 
 <br>
 <hr />
