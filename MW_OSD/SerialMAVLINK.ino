@@ -402,6 +402,10 @@ void serialMAVreceive(uint8_t c)
         mav_magic = MAVLINK_MSG_ID_RC_CHANNELS_RAW_MAGIC;
         mav_len = MAVLINK_MSG_ID_RC_CHANNELS_RAW_LEN;
         break;
+      case MAVLINK_MSG_ID_RC_CHANNELS:
+        mav_magic = MAVLINK_MSG_ID_RC_CHANNELS_MAGIC;
+        mav_len = MAVLINK_MSG_ID_RC_CHANNELS_LEN;
+        break;
       case MAVLINK_MSG_ID_SYS_STATUS:
         mav_magic = MAVLINK_MSG_ID_SYS_STATUS_MAGIC;
         mav_len = MAVLINK_MSG_ID_SYS_STATUS_LEN;
