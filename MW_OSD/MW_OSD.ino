@@ -181,7 +181,20 @@ void setup()
     #define STARTUPDELAY 500
   #endif
   delay(STARTUPDELAY);
- 
+
+ #ifdef VTX_RTC6705
+  vtx_init();
+  #ifdef IMPULSERC_HELIX
+    vtx_flash_led(5);
+  # endif
+#endif
+
+#ifdef IMPULSERC_HELIX
+  //Ignore setting because this is critical to making sure we can detect the
+  //VTX power jumper being installed. If we aren't using 5V ref there is
+  //the chance we will power up on wrong frequency.
+  Settings[S_VREFERENCE]=1;
+#endif //IMPULSERC_HELIX 
   if (Settings[S_VREFERENCE])
     analogReference(DEFAULT);
   else
@@ -302,6 +315,10 @@ void loop()
 
   //---------------  Start Timed Service Routines  ---------------------------------------
   unsigned long currentMillis = millis();
+
+#ifdef IMPULSERC_HELIX
+  vtx_process_state(currentMillis, vtxBand, vtxChannel);
+#endif //IMPULSERC_HELIX
 
 #ifdef KKAUDIOVARIO 
   if (millis()>timer.audiolooptimer){
@@ -658,6 +675,15 @@ void loop()
   if(timer.halfSec >= 5) {
     timer.halfSec = 0;
     timer.Blink2hz =! timer.Blink2hz;
+
+#if 0
+    // XXX What is this for? On-Arm power setting?
+    // XXX May be "Power up at minimum power, then goto stored power on-arming."for stick based blind operation or something similar
+    // XXX Leave commented out until intension is known.
+    #ifdef VTX_RTC6705
+      vtx_set_power(armed ? vtxPower : 0);
+    #endif // VTX_RTC6705
+#endif    
   }
 
   if(millis() > timer.seconds+1000)     // this execute 1 time a second

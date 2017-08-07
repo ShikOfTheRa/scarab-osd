@@ -93,6 +93,68 @@
 #define GPSSENSOR      8//0b00001000
 //#define SONAR         16//0b00010000
 
+/********************       VTX      *********************/
+
+#ifdef VTX_RTC6705
+
+uint8_t vtxPower;
+uint8_t vtxBand;
+uint8_t vtxChannel;
+
+#define VTX_STICK_CMD_DELAY                   2
+
+#ifdef VTX_REGION_UNRESTRICTED
+
+  #define VTX_DEFAULT_CHANNEL                 0
+  #define VTX_DEFAULT_BAND                    3
+  #define VTX_DEFAULT_POWER                   0
+  
+  #define VTX_BAND_COUNT                      5
+  #define VTX_CHANNEL_COUNT                   8
+
+  // XXX Kludge
+  // We take advantage of the co-inciddence that Innova's power selection is 25-200mW.
+  // So boring to do this {Hardwares} x {Regulatory woes} correctly.
+
+# ifdef FFPV_INNOVA
+#   define VTX_POWER_COUNT                    2
+# else
+#   define VTX_POWER_COUNT                    3
+# endif
+  
+  const PROGMEM uint16_t vtx_frequencies[VTX_BAND_COUNT][VTX_CHANNEL_COUNT] = {
+    { 5865, 5845, 5825, 5805, 5785, 5765, 5745, 5725 }, //A
+    { 5733, 5752, 5771, 5790, 5809, 5828, 5847, 5866 }, //B
+    { 5705, 5685, 5665, 5645, 5885, 5905, 5925, 5945 }, //E
+    { 5740, 5760, 5780, 5800, 5820, 5840, 5860, 5880 }, //F
+    { 5658, 5695, 5732, 5769, 5806, 5843, 5880, 5917 }  //R
+  };
+  
+#elif defined(VTX_REGION_AUSTRALIA)
+
+  #define VTX_DEFAULT_CHANNEL                 0
+  #define VTX_DEFAULT_BAND                    2
+  #define VTX_DEFAULT_POWER                   0
+  
+  #define VTX_BAND_COUNT                      4
+  #define VTX_CHANNEL_COUNT                   8
+
+  // XXX Kludge Here, we again take advantage of the co-incidence that
+  // Helix and Innova has the same and only power selection for this region.
+  #define VTX_POWER_COUNT                     1
+  
+  const PROGMEM uint16_t vtx_frequencies[VTX_BAND_COUNT][VTX_CHANNEL_COUNT] = {
+    { 5865, 5845, 5825, 5805, 5785, 5765, 5745, 5725 }, //A
+    { 5733, 5752, 5771, 5790, 5809, 5828, 5847, 5866 }, //B
+    { 5740, 5760, 5780, 5800, 5820, 5840, 5860, 5860 }, //F
+    { 5732, 5732, 5732, 5769, 5806, 5843, 5843, 5843 }  //R
+  };
+#endif //VTX_REGION_XXXXX
+
+#endif // VTX_RTC6705
+
+
+
 #if defined (DEVELOPMENT)
 #define DEBUGDEF 1
 #else
@@ -327,9 +389,9 @@ enum Setting_ {
   S_TIMER,
   S_MODESENSOR,
   S_SIDEBARTOPS,
-  S_UNUSED_6,
-  S_UNUSED_1, //S_AMPMAXL,
-  S_UNUSED_2, //S_AMPMAXH,
+  S_VTX_POWER,
+  S_VTX_BAND,
+  S_VTX_CHANNEL,
   S_RCWSWITCH,
   S_RCWSWITCH_CH,
   S_HUDSW0,
@@ -416,9 +478,15 @@ DEBUGDEF,   // DEBUG                       37e
 1,   // S_TIMER                     41h
 1,   // S_MODESENSOR                42h
 0,   // S_SIDEBARTOPS               43h
-4,   // S_UNUSED_6,
-0,   // S_UNUSED_1, S_AMPMAXL,
-0,   // S_UNUSED_2, S_AMPMAXH,
+#ifdef VTX_RTC6705
+VTX_DEFAULT_POWER,    // S_VTX_POWER
+VTX_DEFAULT_BAND,     // S_VTX_BAND
+VTX_DEFAULT_CHANNEL,  // S_VTX_CHANNEL
+#else
+0,   // S_VTX_POWER
+0,   // S_VTX_BAND
+0,   // S_VTX_CHANNEL
+#endif
 1,   // S_RCWSWITCH,
 8,   // S_RCWSWITCH_CH,
 0,   // S_HUDSW0, LOW / NORMAL
@@ -1110,6 +1178,68 @@ const char configMsg150[] PROGMEM = " ";
 #else
 const char configMsg150[] PROGMEM = "DEBUG DISABLED";
 #endif
+//-----------------------------------------------------------VTX Page
+#ifdef USE_MENU_VTX
+const char configMsg160[] PROGMEM = "VTX";
+const char configMsg161[] PROGMEM = "POWER";
+const char configMsg162[] PROGMEM = "BAND";
+const char configMsg163[] PROGMEM = "CHANNEL";
+const char configMsg164[] PROGMEM = "";
+const char configMsg1610[] PROGMEM = "25";
+const char configMsg1611[] PROGMEM = "200";
+const char configMsg1612[] PROGMEM = "500";
+const char configMsg1620[] PROGMEM = "BOSCAM A";
+const char configMsg1621[] PROGMEM = "BOSCAM B";
+const char configMsg1622[] PROGMEM = "BOSCAM E";
+const char configMsg1623[] PROGMEM = "FATSHARK";
+const char configMsg1624[] PROGMEM = "RACE";
+
+  #ifdef VTX_REGION_UNRESTRICTED
+  // Menu selections
+  const PROGMEM char * const vtxPowerNames[] =
+  {   
+    configMsg1610,
+    configMsg1611,
+    configMsg1612
+  };
+  // Menu selections
+  const PROGMEM char * const vtxBandNames[] =
+  {   
+    configMsg1620,
+    configMsg1621,
+    configMsg1622,
+    configMsg1623,
+    configMsg1624
+  };
+  const PROGMEM char vtxBandLetters[] = "ABEFR";
+
+  #elif defined(VTX_REGION_AUSTRALIA)
+
+  // Menu selections
+  const PROGMEM char * const vtxPowerNames[] =
+  {   
+    configMsg1610
+  };
+  // Menu selections
+  const PROGMEM char * const vtxBandNames[] =
+  {   
+    configMsg1620,
+    configMsg1621,
+    configMsg1623,
+    configMsg1624
+  };
+  const PROGMEM char vtxBandLetters[] = "ABFR";
+  #endif //VTX_REGION_XXXX
+
+const PROGMEM char * const menu_vtx[] = 
+{   
+  configMsg161,
+  configMsg162,
+  configMsg163,
+  configMsg164,
+};
+#endif //MENU_VTX
+//-----------------------------------------------------------MENU END
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
 const unsigned char speedUnitAdd[2] ={
@@ -1400,6 +1530,9 @@ const PROGMEM char * const menutitle_item[] =
 #endif
 #ifdef MENU_DEBUG
   configMsg150,
+#endif
+#ifdef USE_MENU_VTX
+  configMsg160,
 #endif
 };
 

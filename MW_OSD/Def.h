@@ -41,6 +41,34 @@
 
 
 
+/********************  HARDWARE rule definitions  **********************/
+
+// VTX_RTC6705 Support for RTC6705 based VTX
+// VTX_RC      Support for SINGULARITY-style direct RC stick command
+// VTX_LED     Support for dedicated single status LED (not a LED strip support)
+// MENU_VTX    Support for VTX page in MWOSD MENU
+
+#ifdef IMPULSERC_HELIX
+//  #define RUSHDUINO
+  #define VTX_RTC6705
+  #define VTX_RC
+  #define VTX_LED
+  #define USE_MENU_VTX
+  #define INFO_OPTIONS1 1<<4
+#endif
+
+#ifdef FFPV_INNOVA
+  #define MINIMOSD
+  #define VTX_RTC6705
+  //#define VTX_RC    // Can be turned on, hard to use without VTX_LED
+  //#define VTX_LED   // Needs VTXLED_* definitions in RTC6705.ino
+  #define USE_MENU_VTX
+  #define INFO_OPTIONS1 1<<4
+#endif
+
+
+
+
 /********************  CONTROLLER rule definitions  **********************/
 
 #ifdef MULTIWII       //set up latest at time of release
@@ -512,6 +540,22 @@
   #define MAXPAGE       MENU_ALARMS
 #endif
 
+#define GTMP1 MAXPAGE +1
+
+#ifdef USE_MENU_VTX
+  const uint8_t MENU_vtx_tmp = MAXPAGE+1;
+  #define MENU_VTX MENU_vtx_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_VTX 
+#endif
+
+/*
+enum {
+    EMENU_VTX,
+}
+*/
+
+
 #ifdef HAS_ALARMS
   #define MAX_ALARM_LEN 30
 #endif
@@ -792,18 +836,28 @@
 #endif
 
 #ifdef MULTIWII
+  #ifdef INFO_CONTROLLER
+   #undef INFO_CONTROLLER
+  #endif;  
+  #undef  INTRO_MENU
   #define INFO_CONTROLLER 1
 #endif
 #ifdef BASEFLIGHT
   #define INFO_CONTROLLER 2
 #endif
-#ifdef LIBREPILOT
-  #define INFO_CONTROLLER 3
-#endif
 #ifdef TAULABS
   #define INFO_CONTROLLER 4
 #endif
+#ifdef LIBREPILOT
+  #ifdef INFO_CONTROLLER
+   #undef INFO_CONTROLLER
+  #endif;  
+  #define INFO_CONTROLLER 3
+#endif
 #ifdef DRONIN
+  #ifdef INFO_CONTROLLER
+   #undef INFO_CONTROLLER
+  #endif;  
   #define INFO_CONTROLLER 5
 #endif
 #ifdef CLEANFLIGHT
@@ -831,21 +885,36 @@
   #define INFO_CONTROLLER 13
 #endif
 #ifdef APM
+  #ifdef INFO_CONTROLLER
+   #undef INFO_CONTROLLER
+  #endif;  
   #define INFO_CONTROLLER 14
 #endif
 #ifdef PX4
+  #ifdef INFO_CONTROLLER
+   #undef INFO_CONTROLLER
+  #endif;  
   #define INFO_CONTROLLER 15
 #endif
 #ifdef SKYTRACK
   #define INFO_CONTROLLER 16
 #endif
 #ifdef GPSOSD_UBLOX
+  #ifdef INFO_CONTROLLER
+   #undef INFO_CONTROLLER
+  #endif;  
   #define INFO_CONTROLLER 17
 #endif
 #ifdef GPSOSD_NMEA
+  #ifdef INFO_CONTROLLER
+   #undef INFO_CONTROLLER
+  #endif;  
   #define INFO_CONTROLLER 18
 #endif
 #ifdef GPSOSD_NMEA
+  #ifdef INFO_CONTROLLER
+   #undef INFO_CONTROLLER
+  #endif;  
   #define INFO_CONTROLLER 19
 #endif
 #ifdef NOCONTROLLER
@@ -914,7 +983,7 @@
   #define INFO_AIRCRAFT            0            // default - unknown 
 #endif
 
-#ifndef INFO_O
+#ifndef INFO_OPTIONS1
   #define INFO_OPTIONS1            0            // default - unknown 
 #endif
 

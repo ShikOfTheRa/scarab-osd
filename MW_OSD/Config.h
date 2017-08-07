@@ -13,6 +13,8 @@
 //#define KYLIN250PDB               // Uncomment this if using a Kylin 250 FPV PDB (Using A6 as VOLTAGEPIN)
 //#define AIRBOTMICRO               // Uncomment this if using an airbot MicroOSD
 //#define ANDROMEDA                 // Uncomment this if using an Andromeda (http://www.multiwiicopter.com/)
+//#define IMPULSERC_HELIX           // Uncomment this if using an ImpulseRC integrated OSD/VTX (STILL UNDER DEVELOPMENT PENDING TESTING)
+//#define FFPV_INNOVA               // Uncomment this if using a FURIOUS FPV Innova integrated OSD/VTX (STILL UNDER DEVELOPMENT PENDING TESTING)
 
 // NOTE-some boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct: 
@@ -378,10 +380,17 @@
 #define AMPCALHIGH 1023                  
 
 
+/********************           VTX settings           *********************/
+// Regional RF frequency regulations: Choose ONLY ONE option:
+#define VTX_REGION_UNRESTRICTED          // Enable for all 40 channels
+//#define VTX_REGION_AUSTRALIA           // Enable for AU legal channels and power level only
+#define DISPLAY_VTX_INFO               // Enable to show frequency in menu display. 
+
+
 /********************  Advanced parameters  settings      *********************/
 // This is to enable rarely used advanced parameter saving. Off by default to minimise risk 
 // Enabling may create ability to write invalid data to FC
 //#define ADVANCEDSAVE                   // Enables saving of advanced paramters where supported (Looptime/profile)
-//#define FIXEDLOOP                        // Enables 1ms loop max for consistency
+//#define FIXEDLOOP                      // Enables 1ms loop max for consistency
 
 
