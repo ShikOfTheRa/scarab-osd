@@ -1391,6 +1391,13 @@ void displayCursor(void)
   }
   if(ROW<10)
   {
+#ifdef USE_MENU_VTX
+    if (configPage == MENU_VTX) {
+      if (ROW==5) ROW=10;
+      if (ROW==9) ROW=4;
+      cursorpos=(ROW+2)*30+16;
+    }
+#endif
 #ifdef MENU_PID
     if(configPage==MENU_PID){
 #ifdef MENU_PID_VEL
@@ -1575,7 +1582,15 @@ void displayCursor(void)
       ROW=10;
     }
 #endif
-    
+#ifdef USE_MENUVTX  
+    if(configPage==MENUVTX)
+      {  
+        COL=3;
+        if (ROW==9) ROW=3;
+        if (ROW==4) ROW=10;
+        cursorpos=(ROW+2)*30+10+6+6;
+      }
+#endif             
   }
   if(timer.Blink10hz)
     screen[cursorpos] = SYM_CURSOR;
@@ -1955,6 +1970,27 @@ void displayConfigScreen(void)
   }
 #endif  
 
+#ifdef USE_MENU_VTX
+  if(configPage == MENU_VTX) {
+    
+    for(uint8_t X=0; X<=2; X++)
+      MAX7456_WriteString_P(PGMSTR(&(menu_vtx[X])), ROLLT+ (X*30));
+    // Power
+    MAX7456_WriteString_P(PGMSTR(&(vtxPowerNames[Settings[S_VTX_POWER]])) ,ROLLI);
+    // Band
+    MAX7456_WriteString_P(PGMSTR(&(vtxBandNames[Settings[S_VTX_BAND]])) ,PITCHI);
+    // Channel
+    MAX7456_WriteString(itoa(Settings[S_VTX_CHANNEL] + 1, screenBuffer, 10), YAWI);
+    // Set
+    MAX7456_WriteString("SET", ALTI);
+
+#ifdef DISPLAY_VTX_INFO
+    updateVtxStatus();
+#endif //DISPLAY_VTX_INFO
+    
+  }
+#endif
+
 #ifdef MENU_DEBUG
   if(configPage==MENU_DEBUG){
     #ifdef DEBUGMENU
@@ -1967,6 +2003,21 @@ void displayConfigScreen(void)
   displayCursor();
 }
 
+
+#ifdef USE_MENU_VTX
+void updateVtxStatus(void)
+{
+  if (configPage == MENU_VTX) {
+    char tmp[2];
+    tmp[0] = (char)pgm_read_byte(&vtxBandLetters[vtxBand]);
+    tmp[1] = 0;
+    MAX7456_WriteString(tmp, 12 + 30);
+    MAX7456_WriteString(itoa(vtxChannel + 1, screenBuffer, 10), 14 + 30);
+    MAX7456_WriteString_P(PGMSTR(&(vtxPowerNames[vtxPower])), 16 + 30);
+    MAX7456_WriteString(itoa((uint16_t)pgm_read_word(&vtx_frequencies[vtxBand][vtxChannel]), screenBuffer, 10), 20 + 30);
+  }
+}
+#endif
 
 
 void displayDebug(void)
