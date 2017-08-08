@@ -175,11 +175,13 @@
 //#define USEAIRSPEED               // Uses air sensor speed instead of GPS speed 
 
 /******************** Serial MSP speed settings *********************/
-// Choose ONLY ONE option: increases speeds of serial update - but with impact to flight controller 
+// Choose ONLY ONE SPEED option: increases speeds of serial update - but with impact to flight controller 
 //#define MSP_SPEED_LOW     // Enable for soft serial / slow baud rates.
 #define MSP_SPEED_MED       // Default
 //#define MSP_SPEED_HIGH    // Enable for faster AHI and speed updates. Requires higher baud rates and increases overhead on the FC to process
-
+#define MSP_USE_BARO        // Disable if not used to increase serial speed update for MSP based FC: Baro IC data such as  altitude
+#define MSP_USE_GPS         // Disable if not used to increase serial speed update for MSP based FC: GPS data such as speed , distance
+#define MSP_USE_ANALOG      // Disable if not used to increase serial speed update for MSP based FC: Voltage, Amperage or RSSI from the FC
 
 /********************       CALLSIGN settings      *********************/
 #define   CALLSIGNINTERVAL 60      // How frequently to display Callsign (in seconds)

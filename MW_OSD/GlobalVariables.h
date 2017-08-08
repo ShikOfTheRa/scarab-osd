@@ -198,7 +198,6 @@ struct  __timer {
 timer;
 
 struct __flags {
-  uint8_t ident;
   uint8_t box;
   uint8_t reset;
   uint8_t signaltype;
@@ -697,7 +696,6 @@ int16_t sensorfilter[SENSORTOTAL][SENSORFILTERSIZE+2];
 
 uint16_t  MwSensorPresent=0;
 uint32_t  MwSensorActive=0;
-uint8_t MwVersion=0;
 uint8_t MwVBat=0;
 int16_t MwVario=0;
 uint8_t armed=0;

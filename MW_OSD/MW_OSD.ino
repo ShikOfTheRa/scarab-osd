@@ -389,9 +389,6 @@ void loop()
       uint32_t req = queuedMSPRequests & -queuedMSPRequests;
       queuedMSPRequests &= ~req;
       switch(req) {
-      case REQ_MSP_IDENT:
-       MSPcmdsend = MSP_IDENT;
-        break;
       case REQ_MSP_STATUS:
         MSPcmdsend = MSP_STATUS;
         break;
@@ -864,16 +861,14 @@ void setMspRequests() {
   }
   else if(configMode) {
     modeMSPRequests = 
-      REQ_MSP_IDENT|
       REQ_MSP_STATUS|
       REQ_MSP_RAW_GPS|
-#ifdef MSP_SPEED_LOW
       REQ_MSP_ATTITUDE|
-#endif
       REQ_MSP_RAW_IMU|
       REQ_MSP_ALTITUDE|
       REQ_MSP_RC_TUNING|
       REQ_MSP_PID_CONTROLLER|
+      REQ_MSP_ANALOG|
 #ifdef USE_MSP_PIDNAMES
       REQ_MSP_PIDNAMES|
 #endif
@@ -899,61 +894,55 @@ void setMspRequests() {
 #ifdef MENU_FIXEDWING
       REQ_MSP_FW_CONFIG|
 #endif
+#ifdef USE_FC_VOLTS_CONFIG
+  #if defined(CLEANFLIGHT) || defined(BETAFLIGHT)
+      REQ_MSP_VOLTAGE_METER_CONFIG|
+  #else
+      REQ_MSP_MISC|
+  #endif
+#endif
       REQ_MSP_RC;
   }
   else {
-//wtf:?? try deleting next 4 lines and what happens to memory. is it local vs global in some way?
-//    MwSensorPresent |=GPSSENSOR;
-//    MwSensorPresent |=BAROMETER;
-//    MwSensorPresent |=MAGNETOMETER;
-//    MwSensorPresent |=ACCELEROMETER;
-
     modeMSPRequests = 
       REQ_MSP_STATUS|
-      REQ_MSP_RC|
      #ifdef DEBUGMW
       REQ_MSP_DEBUG|
      #endif
      #ifdef SPORT      
       REQ_MSP_CELLS|
      #endif
+     #ifdef MSP_USE_GPS
+      REQ_MSP_RAW_GPS| 
+      REQ_MSP_COMP_GPS|
+     #endif //MSP_USE_GPS
+     #ifdef MSP_USE_BARO
+      REQ_MSP_ALTITUDE|
+     #endif //MSP_USE_BARO
      #ifdef HAS_ALARMS
       REQ_MSP_ALARMS|
      #endif
-#ifdef MSP_SPEED_LOW
+     #ifdef MSP_SPEED_LOW
       REQ_MSP_ATTITUDE|
-#endif
-      0; // Sigh...
-
-    if(MwSensorPresent&BAROMETER){ 
-      modeMSPRequests |= REQ_MSP_ALTITUDE;
-    }
-    if(flags.ident!=1){
-      modeMSPRequests |= REQ_MSP_IDENT;
-    }
-    if(MwSensorPresent&GPSSENSOR) 
-      modeMSPRequests |= REQ_MSP_RAW_GPS| REQ_MSP_COMP_GPS;
+     #endif
+     #ifdef MSP_USE_ANALOG
+      REQ_MSP_ANALOG|
+     #endif //MSP_USE_ANALOG     
+     #ifdef USE_FC_VOLTS_CONFIG
+       #if defined(CLEANFLIGHT) || defined(BETAFLIGHT)
+         REQ_MSP_VOLTAGE_METER_CONFIG|
+       #else
+         REQ_MSP_MISC|
+       #endif
+     #endif
+      REQ_MSP_RC;
     if(mode.armed == 0)
       modeMSPRequests |=REQ_MSP_BOX;
 #if defined MULTIWII_V24
     if(MwSensorActive&mode.gpsmission)
     modeMSPRequests |= REQ_MSP_NAV_STATUS;
 #endif
-  }
- 
-  if(Settings[S_MAINVOLTAGE_VBAT] || Settings[S_AMPERAGE] || Settings[S_MWRSSI]) {
-    modeMSPRequests |= REQ_MSP_ANALOG;
-    
-#ifdef USE_FC_VOLTS_CONFIG
-  #if defined(CLEANFLIGHT) || defined(BETAFLIGHT)
-    modeMSPRequests |= REQ_MSP_VOLTAGE_METER_CONFIG;
-  #else
-    modeMSPRequests |= REQ_MSP_MISC;
-  #endif
-#endif
-
-  }
-
+  }     
   queuedMSPRequests &= modeMSPRequests;   // so we do not send requests that are not needed.
 }
 
