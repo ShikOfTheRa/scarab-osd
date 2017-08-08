@@ -17,7 +17,7 @@ An Multipurpose Open Source OSD software with support for:
 <li>iNAV</li>
 <li>KISS</li>
 <li>APM</li>
-<li>PIXHAWK</li>
+<li>PX4</li>
 <li>MULTIWII</li>
 <li>dRonin</li>
 <li>LIBREPILOT</li>
