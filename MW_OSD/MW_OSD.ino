@@ -303,7 +303,7 @@ void loop()
   #endif
   
   if (screenlayout!=oldscreenlayout){
-    readEEPROM_screenlayout();
+    readEEPROM();
   }
   oldscreenlayout=screenlayout;
     
@@ -990,13 +990,7 @@ void readEEPROM(void)
      Settings16[en] = Settings16[en]+(xx<<8);
   }
 
-  readEEPROM_screenlayout();
-}
-
-
-void readEEPROM_screenlayout(void)
-{
-
+  // Read screen layouts
   uint16_t EEPROMscreenoffset=EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(screenlayout*POSITIONS_SETTINGS*2);
   for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
     uint16_t pos=(en*2)+EEPROMscreenoffset;
