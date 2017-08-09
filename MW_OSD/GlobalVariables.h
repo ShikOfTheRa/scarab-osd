@@ -488,8 +488,8 @@ VTX_DEFAULT_CHANNEL,  // S_VTX_CHANNEL
 #endif
 1,   // S_RCWSWITCH,
 8,   // S_RCWSWITCH_CH,
-0,   // S_HUDSW0, LOW / NORMAL
-1,   // S_HUDSW1, HIGH / OSDSW
+0,   // S_HUDSW0, LOW   // NORMAL
+0,   // S_HUDSW1, HIGH  // OSDSW
 0,   // S_HUDSW2, MID
 0,   // S_DISTANCE_ALARM,
 0,   // S_ALTITUDE_ALARM,
@@ -615,51 +615,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 };
 
 
-PROGMEM const uint16_t SCREENLAYOUT_DEFAULT_OSDSW[POSITIONS_SETTINGS] = {
 
-(LINE02+2)|DISPLAY_NEVER,  // GPS_numSatPosition
-(LINE13+19)|DISPLAY_ALWAYS,   // GPS_directionToHomePosition
-(LINE02+12)|DISPLAY_NEVER,   // GPS_distanceToHomePosition
-(LINE02+3)|DISPLAY_NEVER,   // speedPosition
-(LINE05+24)|DISPLAY_NEVER,   // GPS_angleToHomePosition
-(LINE03+24)|DISPLAY_NEVER,   // MwGPSAltPosition
-(LINE02+6)|DISPLAY_NEVER,   // sensorPosition
-(LINE04+24)|DISPLAY_NEVER,   // MwHeadingPosition
-(LINE02+9)|DISPLAY_NEVER,   // MwHeadingGraphPosition
-(LINE02+23)|DISPLAY_NEVER,   // MwAltitudePosition
-(LINE07+23)|DISPLAY_NEVER,   // MwClimbRatePosition
-(LINE12+22)|DISPLAY_NEVER,   // CurrentThrottlePosition
-(LINE13+22)|DISPLAY_ALWAYS,   // UNUSED flyTimePosition
-(LINE13+22)|DISPLAY_ALWAYS,   // onTimePosition
-(LINE11+11)|DISPLAY_ALWAYS,   // motorArmedPosition
-(LINE10+2)|DISPLAY_NEVER,   // pitchAnglePosition
-(LINE10+15)|DISPLAY_NEVER,   // rollAnglePosition
-(LINE01+2)|DISPLAY_NEVER,   // MwGPSLatPositionTop      // On top of screen
-(LINE01+15)|DISPLAY_NEVER,   // MwGPSLonPositionTop      // On top of screen
-(LINE12+2)|DISPLAY_NEVER,   // rssiPosition
-(LINE09+2)|DISPLAY_NEVER,   // temperaturePosition
-(LINE13+3)|DISPLAY_ALWAYS,  // voltagePosition
-(LINE11+3)|DISPLAY_ALWAYS,   // vidvoltagePosition
-(LINE13+13)|DISPLAY_NEVER,   // amperagePosition
-(LINE13+23)|DISPLAY_NEVER,   // pMeterSumPosition
-(LINE07+14)|DISPLAY_NEVER,   // AHIPosition
-(LINE07+7)|DISPLAY_NEVER,   // horizonPosition
-(LINE07+7)|DISPLAY_NEVER,   // SideBarPosition
-(3)|DISPLAY_NEVER,   // SideBarHeight Position
-(7)|DISPLAY_NEVER,   // SideBarWidth Position
-(LINE05+2)|DISPLAY_NEVER,   // Gimbal Position
-(LINE12+11)|DISPLAY_NEVER,  // GPS_time Position
-(LINE09+22)|DISPLAY_NEVER,   // SportPosition
-(LINE04+2)|DISPLAY_NEVER,   // modePosition
-(LINE02+22)|DISPLAY_NEVER,   // MapModePosition
-(LINE07+17)|DISPLAY_NEVER,   // MapCenterPosition
-(LINE04+10)|DISPLAY_NEVER,   // APstatusPosition
-(LINE12+13)|DISPLAY_NEVER,   // wattPosition
-(LINE07+6)|DISPLAY_NEVER,   // glidescopePosition
-(LINE10+10)|DISPLAY_NEVER,   // CallSign Position
-(LINE08+10)|DISPLAY_ALWAYS,   // Debug Position
-
-};
 
 static uint8_t P8[PIDITEMS], I8[PIDITEMS], D8[PIDITEMS];
 

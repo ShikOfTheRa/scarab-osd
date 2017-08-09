@@ -301,7 +301,7 @@ void serialMSPCheck()
       flags.reset=1;
     }
     if(cmd == OSD_RESET) {
-        flags.reset=1;
+      flags.reset=1;
     }
                     
   }

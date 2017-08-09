@@ -966,9 +966,9 @@ void writeEEPROM(void) // OSD will only change 8 bit values. GUI changes directl
     EEPROM.write(en,Settings[en]);
   } 
   for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
-    uint16_t pos=EEPROM_SETTINGS+(en*2);
-    EEPROM.write(pos,Settings16[en]&0xFF);
-    EEPROM.write(pos+1,Settings16[en]>>8);
+    uint16_t pos  = EEPROM_SETTINGS+(en*2);
+    uint16_t data = Settings16[en];
+    write16EEPROM(pos, data);
   } 
   EEPROM.write(0,EEPROMVER);
 }
@@ -1024,41 +1024,28 @@ void checkEEPROM(void)
       EEPROM.write(en,pgm_read_byte(&EEPROM_DEFAULT[en]));
     }
     for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
-      uint16_t pos=EEPROM_SETTINGS+(en*2);
-      uint16_t w = pgm_read_word(&EEPROM16_DEFAULT[en]);
-      EEPROM.write(pos, w & 0xff);
-      EEPROM.write(pos+1, w >> 8);
+      uint16_t pos  = EEPROM_SETTINGS+(en*2);
+      uint16_t data = pgm_read_word(&EEPROM16_DEFAULT[en]);
+      write16EEPROM(pos, data);
     }
-
-#define L0START EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)
-#define L1START EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*2)
-#define L2START EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*4)
-
-    for(uint8_t en=0;en<POSITIONS_SETTINGS*2;en++){
-      uint16_t w;
-      w = pgm_read_word(&SCREENLAYOUT_DEFAULT[en]);
-      EEPROM.write(L0START+(en*2), w & 0xff);
-      EEPROM.write(L0START+(en*2)+1, w >> 8);
-
-      w = pgm_read_word(&SCREENLAYOUT_DEFAULT_OSDSW[en]);
-      EEPROM.write(L1START+(en*2), w & 0xff);
-      EEPROM.write(L1START+(en*2)+1, w >> 8);
-
-      w = pgm_read_word(&SCREENLAYOUT_DEFAULT[en]);
-      EEPROM.write(L2START+(en*2), w & 0xff);
-      EEPROM.write(L2START+(en*2)+1, w >> 8);
-    }
-/*
-    for(uint8_t osd_switch_pos=0;osd_switch_pos<3;osd_switch_pos++){
-      for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
-        EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*osd_switch_pos)+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]&0xFF);
-        EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*osd_switch_pos)+1+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]>>8);
+    uint16_t base = EEPROM_SETTINGS+(EEPROM16_SETTINGS*2);
+    for(uint8_t ilayout=0;ilayout<3;ilayout++){
+      for(uint8_t en=0;en<POSITIONS_SETTINGS*2;en++){
+        uint16_t pos  = base + (en*2);
+        uint16_t data = pgm_read_word(&SCREENLAYOUT_DEFAULT[en]);
+        write16EEPROM(pos, data);
       }
-    }    
-*/
+      base+=POSITIONS_SETTINGS*2;
+    }  
   }
 }
 
+
+void write16EEPROM(uint16_t pos, uint16_t data)
+{
+  EEPROM.write(pos  , data & 0xff);
+  EEPROM.write(pos+1, data >> 8  );
+}
 
 
 void gpsdistancefix(void){
