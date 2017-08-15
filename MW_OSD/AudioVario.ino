@@ -48,13 +48,16 @@ ISR(TIMER1_COMPA_vect) { // Timer interrupt vector.
 void AudioVarioUpdate()
 {
 #ifdef AUDIOVARIOSWITCH
-  if(!fieldIsVisible(MwClimbRatePosition))
+  if(!fieldIsVisible(MwClimbRatePosition)){
+    noTone(KKAUDIOVARIO);
+//    noNewTone(KKAUDIOVARIO);
     return;
-  if(!Settings[S_VARIO])
-    return;
+  }
 #endif //AUDIOVARIOSWITCH
 #ifdef AUDIOVARIORC // no audio vario when throttle on
   if (MwRcData[THROTTLESTICK]> AUDIOVARIORC) {
+    noTone(KKAUDIOVARIO);
+//    noNewTone(KKAUDIOVARIO);
     return; 
   }
 #endif //AUDIOVARIORC
