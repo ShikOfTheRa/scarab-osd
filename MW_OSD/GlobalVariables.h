@@ -19,7 +19,6 @@
 #define KMH 0
 #define METRIC 0
 #define IMPERIAL 1
-
 #define lo_speed_cycle  100
 #define sync_speed_cycle  33
 
@@ -170,6 +169,31 @@ uint8_t vtxChannel;
 #define NAZA_PWM_LOW  1000
 #define NAZA_PMW_MED  1400
 #define NAZA_PMW_HIGH 1600
+
+char screen[480];          // Main screen ram for MAX7456
+#ifdef INVERTED_CHAR_SUPPORT
+uint8_t screenAttr[480/8]; // Attribute (INV) bits for each char in screen[]
+#endif
+char screenBuffer[20]; 
+uint32_t modeMSPRequests;
+uint32_t queuedMSPRequests;
+uint8_t sensorpinarray[]={VOLTAGEPIN,VIDVOLTAGEPIN,AMPERAGEPIN,TEMPPIN,RSSIPIN};  
+unsigned long previous_millis_low=0;
+unsigned long previous_millis_high =0;
+unsigned long previous_millis_sync =0;
+unsigned long previous_millis_rssi =0;
+
+#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
+uint8_t fontStatus=0;
+boolean ledstatus=HIGH;
+#endif
+
+#ifdef KKAUDIOVARIO
+unsigned int calibrationData[7];
+unsigned long time = 0;
+float toneFreq, toneFreqLowpass, pressure, lowpassFast, lowpassSlow ;
+int ddsAcc;
+#endif
 
 //General use variables
 struct  __timer {
@@ -747,6 +771,7 @@ int16_t altitudeMAX=0;
 uint32_t distanceMAX=0;
 uint16_t ampMAX=0;
 uint32_t trip=0;
+float tripSum = 0;
 uint16_t flyingTime=0; 
 uint16_t voltageMIN=254;
 int16_t rssiMIN=100;

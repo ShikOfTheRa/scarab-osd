@@ -227,7 +227,7 @@ void MAX7456Setup(void)
     EICRA |= (1 << ISC01); // interrupt at the falling edge
   }
 #endif
-  readEEPROM_screenlayout();
+// readEEPROM_screenlayout();
 }
 
 // Copy string from ram into screen buffer

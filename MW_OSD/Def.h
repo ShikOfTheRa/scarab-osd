@@ -25,8 +25,8 @@
 //#define ENABLEDEBUGTEXT
 #define DEBUGTEXT "DEBUG"    // Set text you wish to display when debug text message required. Must be CAPSLOCK text
 
-//#define HARDRESET                        // Enables watchdog timer reset rather than fixed memory jmp 
-#define BOOTRESET                          // Enables reset from default Atmega 328 bootloader address (instead of 0) 
+#define HARDRESET            // Enables watchdog timer reset rather than fixed memory jmp 
+//#define BOOTRESET          // Enables reset from default Atmega 328 bootloader address (instead of 0) 
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
 

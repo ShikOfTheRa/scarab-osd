@@ -106,34 +106,6 @@ uint16_t UntouchedStack(void)
   #include <Wire.h>
 #endif
 
-char screen[480];          // Main screen ram for MAX7456
-#ifdef INVERTED_CHAR_SUPPORT
-uint8_t screenAttr[480/8]; // Attribute (INV) bits for each char in screen[]
-#endif
-char screenBuffer[20]; 
-uint32_t modeMSPRequests;
-uint32_t queuedMSPRequests;
-uint8_t sensorpinarray[]={VOLTAGEPIN,VIDVOLTAGEPIN,AMPERAGEPIN,TEMPPIN,RSSIPIN};  
-unsigned long previous_millis_low=0;
-unsigned long previous_millis_high =0;
-unsigned long previous_millis_sync =0;
-unsigned long previous_millis_rssi =0;
-
-#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
-uint8_t fontStatus=0;
-//uint16_t MAX_screen_size;
-boolean ledstatus=HIGH;
-//uint8_t fontData[54];
-//uint8_t Settings[1];
-#endif
-
-#ifdef KKAUDIOVARIO
-unsigned int calibrationData[7];
-unsigned long time = 0;
-float toneFreq, toneFreqLowpass, pressure, lowpassFast, lowpassSlow ;
-int ddsAcc;
-#endif
-
 
 
 //------------------------------------------------------------------------
@@ -352,7 +324,15 @@ void loop()
     timer.tenthSec++;
     timer.halfSec++;
     timer.Blink10hz=!timer.Blink10hz;
-    calculateTrip();
+
+    if(GPS_fix && armed){
+      if(Settings[S_UNITSYSTEM])
+        tripSum += GPS_speed *0.0032808;     //  100/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
+      else
+        tripSum += GPS_speed *0.0010;        //  100/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)      
+      trip = (uint32_t) tripSum;
+    }
+    
     if (Settings[S_AMPER_HOUR]) 
     {
       #ifndef KISS
@@ -944,19 +924,6 @@ void setMspRequests() {
 #endif
   }     
   queuedMSPRequests &= modeMSPRequests;   // so we do not send requests that are not needed.
-}
-
-
-void calculateTrip(void)
-{
-  static float tripSum = 0; 
-  if(GPS_fix && armed && (GPS_speed>0)) {
-    if(Settings[S_UNITSYSTEM])
-      tripSum += GPS_speed *0.0032808;     //  100/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
-    else
-      tripSum += GPS_speed *0.0010;        //  100/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)      
-  }
-  trip = (uint32_t) tripSum;
 }
 
 
