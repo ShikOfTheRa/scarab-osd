@@ -140,7 +140,7 @@ void setup()
   pinMode(A6, INPUT);
   pinMode(RSSIPIN, INPUT);
   pinMode(TEMPPIN, INPUT);
-  pinMode(LEDPIN,OUTPUT);
+  LEDINIT
   
   initPulseInts();  // initialise PWM / PPM inputs
 
@@ -226,7 +226,7 @@ void loop()
       fontStatus++;
       break;
   }
-  digitalWrite(LEDPIN,LOW);
+  LEDOFF
 }
 #else
 
@@ -277,9 +277,9 @@ void loop()
     
   // Blink Basic Sanity Test Led at 0.5hz
   if(timer.tenthSec>5)
-    digitalWrite(LEDPIN,HIGH);
+    LEDON
   else
-    digitalWrite(LEDPIN,LOW);
+    LEDOFF
 
   //---------------  Start Timed Service Routines  ---------------------------------------
   unsigned long currentMillis = millis();

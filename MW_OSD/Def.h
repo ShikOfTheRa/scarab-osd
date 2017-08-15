@@ -613,6 +613,9 @@ enum {
     # define MAX7456HWRESET   digitalWrite(MAX7456RESET,LOW);delay(60);digitalWrite(MAX7456RESET,HIGH);delay(40);
     # define MAX7456ENABLE    digitalWrite(MAX7456SELECT,LOW); 
     # define MAX7456DISABLE   digitalWrite(MAX7456SELECT,HIGH); 
+    # define LEDINIT          pinMode(LEDPIN,OUTPUT);
+    # define LEDON            digitalWrite(LEDPIN,HIGH);
+    # define LEDOFF           digitalWrite(LEDPIN,LOW); 
 #elif defined ARDUINO_OSD // Example for Arduino guys                     
     # define DATAOUT          11 // MOSI
     # define DATAIN           12 // MISO
@@ -624,11 +627,17 @@ enum {
     # define MAX7456HWRESET   digitalWrite(MAX7456RESET,LOW);delay(60);digitalWrite(MAX7456RESET,HIGH);delay(40);
     # define MAX7456ENABLE    digitalWrite(MAX7456SELECT,LOW); 
     # define MAX7456DISABLE   digitalWrite(MAX7456SELECT,HIGH); 
+    # define LEDINIT          pinMode(LEDPIN,OUTPUT);
+    # define LEDON            digitalWrite(LEDPIN,HIGH);
+    # define LEDOFF           digitalWrite(LEDPIN,LOW);
 #else                                  
     # define MAX7456ENABLE    PORTD&=B10111111; 
     # define MAX7456DISABLE   PORTD|=B01000000; 
     # define MAX7456SETHARDWAREPORTS  DDRB|=B00101100;DDRB&=B11101111;DDRD|=B01000000;DDRD&=B11111011;
     # define MAX7456HWRESET   PORTB&=B11111011;delay(100);PORTB|=B00000100;
+    # define LEDINIT          DDRD = DDRD|B10000000;
+    # define LEDON            PORTD|=B10000000;
+    # define LEDOFF           PORTD&=B01111111;
 #endif
 
 #ifdef AEROMAX
