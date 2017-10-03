@@ -276,7 +276,7 @@ void loop()
   oldscreenlayout=screenlayout;
     
   // Blink Basic Sanity Test Led at 0.5hz
-  if(timer.tenthSec>5)
+  if(timer.Blink2hz)
     LEDON
   else
     LEDOFF
@@ -596,7 +596,8 @@ void loop()
         if ( (onTime > (timer.lastCallSign+CALLSIGNINTERVAL)))
        {
            // Displays 4 sec every 5min (no blink during flight)
-        if ( onTime > (timer.lastCallSign+CALLSIGNINTERVAL+CALLSIGNDURATION)) timer.lastCallSign = onTime; 
+        if ( onTime > (timer.lastCallSign+CALLSIGNINTERVAL+CALLSIGNDURATION)) 
+          timer.lastCallSign = onTime; 
         if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition));      
        }
 #endif
