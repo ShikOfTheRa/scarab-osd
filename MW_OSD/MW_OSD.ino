@@ -554,9 +554,7 @@ void loop()
 #if defined FORCECROSSHAIR
         displayForcedCrosshair();
 #endif //FORCECROSSHAIR
-        if(Settings[S_DISPLAYVOLTAGE])
           displayVoltage();
-        if (Settings[S_VIDVOLTAGE])
           displayVidVoltage();
         if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz)))
           displayRSSI();

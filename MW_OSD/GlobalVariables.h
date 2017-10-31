@@ -365,7 +365,7 @@ enum Setting_ {
   S_DISPLAYRSSI,
   S_MWRSSI,
   S_PWMRSSI,
-  S_DISPLAYVOLTAGE,
+  S_DISPLAYVOLTAGETEMP,
   S_VOLTAGEMIN,
   S_BATCELLS,
   S_DIVIDERRATIO,
@@ -375,7 +375,7 @@ enum Setting_ {
   S_AMPER_HOUR,
   S_AMPERAGE_VIRTUAL,
   S_ALARMS_TEXT,
-  S_VIDVOLTAGE,
+  S_VIDVOLTAGETEMP,
   S_VIDDIVIDERRATIO,
   S_THROTTLE_PWM,
   S_AMPER_HOUR_ALARM,
@@ -616,7 +616,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE12+3)|DISPLAY_ALWAYS,   // rssiPosition
 (LINE09+3)|DISPLAY_ALWAYS,   // temperaturePosition
 (LINE13+3)|DISPLAY_ALWAYS,  // voltagePosition
-(LINE11+3)|DISPLAY_ALWAYS,   // vidvoltagePosition
+(LINE11+3)|DISPLAY_NEVER,   // vidvoltagePosition
 (LINE13+9)|DISPLAY_ALWAYS,   // amperagePosition
 (LINE13+16)|DISPLAY_ALWAYS,   // pMeterSumPosition
 (LINE07+14)|DISPLAY_ALWAYS,   // horizonPosition
@@ -980,16 +980,21 @@ const PROGMEM char * const intro_item[] =
 };
 
 #ifdef AUTOCAM 
-const char signaltext0[]  PROGMEM = "AUTO-NTSC";
-const char signaltext1[]  PROGMEM = "AUTO-PAL";
-const char signaltext2[]  PROGMEM = "NOT DETECTED-NTSC";
-const char signaltext3[]  PROGMEM = "NOT DETECTED-PAL";
-#else
 const char signaltext0[]  PROGMEM = "NTSC";
 const char signaltext1[]  PROGMEM = "PAL";
-const char signaltext2[]  PROGMEM = "";
-const char signaltext3[]  PROGMEM = "";
-#endif
+const char signaltext2[]  PROGMEM = "NOT DETECTED";
+const PROGMEM char * const signal_type[] =
+{   
+  signaltext0,
+  signaltext1,
+  signaltext2,
+  signaltext2,
+};
+#elif AUTOCAMFULL // FOr testing
+const char signaltext0[]  PROGMEM = "NTSC";
+const char signaltext1[]  PROGMEM = "PAL";
+const char signaltext2[]  PROGMEM = "NOT DETECTED-NTSC";
+const char signaltext3[]  PROGMEM = "NOT DETECTED-PAL";
 const PROGMEM char * const signal_type[] =
 {   
   signaltext0,
@@ -997,6 +1002,18 @@ const PROGMEM char * const signal_type[] =
   signaltext2,
   signaltext3,
 };
+#else
+const char signaltext0[]  PROGMEM = "NTSC";
+const char signaltext1[]  PROGMEM = "PAL";
+const char signaltext2[]  PROGMEM = "";
+const PROGMEM char * const signal_type[] =
+{   
+  signaltext0,
+  signaltext1,
+  signaltext2,
+  signaltext2,
+};
+#endif
 
 // For Config menu common
 const char configMsgON[]   PROGMEM = "ON";
@@ -1055,51 +1072,28 @@ const char configMsg27[] PROGMEM = "THROTTLE EXPO";
 #endif
 //-----------------------------------------------------------Page3
 const char configMsg30[] PROGMEM = "VOLTAGE";
-const char configMsg31[] PROGMEM = "DISPLAY MAIN VOLTS";
-const char configMsg32[] PROGMEM = "ADJUST VOLTS";
-const char configMsg33[] PROGMEM = "MAIN VOLTS ALARM";
-const char configMsg34[] PROGMEM = "DISPLAY VID VOLTS";
-const char configMsg35[] PROGMEM = "ADJUST VOLTS";
-const char configMsg36[] PROGMEM = "CELLS";
-const char configMsg37[] PROGMEM = "USE FC";
+const char configMsg31[] PROGMEM = "MAIN VOLTS ALARM";
+const char configMsg32[] PROGMEM = "ADJUST MAIN";
+const char configMsg33[] PROGMEM = "ADJUST VID";
+const char configMsg34[] PROGMEM = "CELLS";
 
 //-----------------------------------------------------------Page4
 const char configMsg40[] PROGMEM = "RSSI";
-const char configMsg42[] PROGMEM = "DISPLAY RSSI";
-const char configMsg43[] PROGMEM = "SET RSSI";
-const char configMsg44[] PROGMEM = "SET RSSI MAX";
-const char configMsg45[] PROGMEM = "SET RSSI MIN";
-const char configMsg46[] PROGMEM = "USE PWM";
+const char configMsg41[] PROGMEM = "CAL RSSI";
+const char configMsg42[] PROGMEM = "SET RSSI MAX";
+const char configMsg43[] PROGMEM = "SET RSSI MIN";
 
 //-----------------------------------------------------------Page5
 const char configMsg50[] PROGMEM = "CURRENT";
-const char configMsg51[] PROGMEM = "DISPLAY AMPS";
-const char configMsg52[] PROGMEM = "DISPLAY MAH";
-const char configMsg53[] PROGMEM = "USE VIRTUAL SENSOR";
-const char configMsg54[] PROGMEM = "ADJUST AMPS";
-const char configMsg55[] PROGMEM = "ADJUST ZERO";
+const char configMsg51[] PROGMEM = "ADJUST AMPS";
+const char configMsg52[] PROGMEM = "ADJUST ZERO";
 //-----------------------------------------------------------Page6
 const char configMsg60[] PROGMEM = "DISPLAY";
-const char configMsg61[] PROGMEM = "HORIZON";
-const char configMsg62[] PROGMEM = "SIDE BARS";
-const char configMsg63[] PROGMEM = "SCROLLING BARS";
-const char configMsg64[] PROGMEM = "THROTTLE";
-const char configMsg65[] PROGMEM = "GPS COORDS";
-const char configMsg66[] PROGMEM = "SENSORS";
-const char configMsg67[] PROGMEM = "GIMBAL";
-const char configMsg68[] PROGMEM = "MAP MODE";
+const char configMsg61[] PROGMEM = "MAP MODE";
 //-----------------------------------------------------------Page7
 const char configMsg70[]  PROGMEM = "ADVANCED";
-const char configMsg71[]  PROGMEM = "UNITS";
-const char configMsg710[] PROGMEM = "MET";
-const char configMsg711[] PROGMEM = "IMP";
-const char configMsg73[]  PROGMEM = "V REF";
-const char configMsg730[] PROGMEM = "5V";
-const char configMsg731[] PROGMEM = "1.1V";
-const char configMsg74[]  PROGMEM = "DEBUG";
-const char configMsg75[]  PROGMEM = "MAG CAL";
-const char configMsg76[]  PROGMEM = "OSD TX CH";
-const char configMsg77[]  PROGMEM = "THROTTLE PWM";
+const char configMsg71[]  PROGMEM = "MAG CAL";
+const char configMsg72[]  PROGMEM = "THROTTLE PWM";
 //-----------------------------------------------------------Page8
 const char configMsg80[] PROGMEM = "GPS TIME";
 const char configMsg81[] PROGMEM = "DISPLAY";
@@ -1145,12 +1139,12 @@ const char configMsg130[] PROGMEM = "RC TUNING 2";
 const char configMsg131[] PROGMEM = "TPA BREAKPOINT";
 const char configMsg132[] PROGMEM = "YAW RC EXPO";
 //-----------------------------------------------------------INFO Page
-const char configMsg140[] PROGMEM = "ACCESS ALL SETTINGS";
+const char configMsg140[] PROGMEM = "ACCESS FC SETTINGS";
 const char configMsg141[] PROGMEM = "TX  :THRT MIDDLE";
 const char configMsg142[] PROGMEM = "    +YAW LEFT";
 const char configMsg143[] PROGMEM = "    +PITCH FULL";
 const char configMsg144[] PROGMEM = " ";
-const char configMsg145[] PROGMEM = "F3 CONTROLLERS ONLY";
+const char configMsg145[] PROGMEM = "IF FC SUPPORTS CMS";
 //-----------------------------------------------------------DEBUG Page
 #ifdef DEBUGMENU
 const char configMsg150[] PROGMEM = " ";
@@ -1259,16 +1253,7 @@ const unsigned char UnitsIcon[8]={
 #define REQ_MSP_SERVO_CONF     (1L<<22)
 #define REQ_MSP_VOLTAGE_METER_CONFIG (1L<<23)
 // Menu selections
-const PROGMEM char * const menu_choice_unit[] =
-{   
-  configMsg710,
-  configMsg711,
-};
-const PROGMEM char * const menu_choice_ref[] =
-{   
-  configMsg731,
-  configMsg730,
-};
+
 
 // Menu
 //PROGMEM const char *menu_stats_item[] =
@@ -1350,50 +1335,30 @@ const PROGMEM char * const menu_bat[] =
   configMsg32,
   configMsg33,
   configMsg34,
-  configMsg32,
-  configMsg36,
-  configMsgMWII,
 };
 
 const PROGMEM char * const menu_rssi[] = 
 {   
+  configMsg41,
   configMsg42,
   configMsg43,
-  configMsgMWII,
-  configMsg46,
-  configMsg44,
-  configMsg45,
 };
 
 const PROGMEM char * const menu_amps[] = 
 {   
   configMsg51,
   configMsg52,
-  configMsg53,
-  configMsg54,
-  configMsg55,
 };
 
 const PROGMEM char * const menu_display[] = 
 {   
   configMsg61,
-  configMsg62,
-  configMsg63,
-  configMsg64,
-  configMsg65,
-  configMsg66,
-  configMsg67,
-  configMsg68,
 };
 
 const PROGMEM char * const menu_advanced[] = 
 {   
   configMsg71,
-  configMsg73,
-  configMsg74,
-  configMsg75,
-  configMsg76,
-  configMsg77,
+  configMsg72,
 };
 
 const PROGMEM char * const menu_gps_time[] = 

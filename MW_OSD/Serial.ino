@@ -1,10 +1,6 @@
- 
-#if defined PROTOCOL_MAVLINK
-  #define SERIALBUFFERSIZE 100
-#elif defined NAZA
+
+#if defined NAZA
   #define SERIALBUFFERSIZE 250
-#elif defined GPSOSD
-  #define SERIALBUFFERSIZE 100
 #else
   #define SERIALBUFFERSIZE 100
 #endif
@@ -1174,13 +1170,10 @@ void serialMenuCommon()
 #ifdef MENU_VOLTAGE
   if (configPage == MENU_VOLTAGE && COL == 3) {
     switch(ROW) {
-    case 1: ReverseSetting(S_DISPLAYVOLTAGE)
+    case 1: ModifySetting(S_VOLTAGEMIN)
     case 2: ModifySetting(S_DIVIDERRATIO)
-    case 3: ModifySetting(S_VOLTAGEMIN)
-    case 4: ReverseSetting(S_VIDVOLTAGE)
-    case 5: ModifySetting(S_VIDDIVIDERRATIO)
-    case 6: ModifySetting(S_BATCELLS)
-    case 7: ReverseSetting(S_MAINVOLTAGE_VBAT)
+    case 3: ModifySetting(S_VIDDIVIDERRATIO)
+    case 4: ModifySetting(S_BATCELLS)
     }
   }
 #endif
@@ -1188,12 +1181,9 @@ void serialMenuCommon()
 #ifdef MENU_RSSI
   if (configPage == MENU_RSSI && COL == 3) {
     switch(ROW) {
-    case 1: ReverseSetting(S_DISPLAYRSSI)
-    case 2: timer.rssiTimer=15; break; // 15 secs to turn off tx anwait to read min RSSI
-    case 3: ReverseSetting(S_MWRSSI)
-    case 4: ReverseSetting(S_PWMRSSI)
-    case 5: ModifySetting16(S16_RSSIMAX)
-    case 6: ModifySetting16(S16_RSSIMIN)
+    case 1: timer.rssiTimer=15; break; // 15 secs to turn off tx and wait to read min RSSI
+    case 2: ModifySetting16(S16_RSSIMAX)
+    case 3: ModifySetting16(S16_RSSIMIN)
     }
   }
 #endif
@@ -1201,11 +1191,8 @@ void serialMenuCommon()
 #ifdef MENU_CURRENT
   if (configPage == MENU_CURRENT && COL == 3) {
     switch(ROW) {
-    case 1: ReverseSetting(S_AMPERAGE)
-    case 2: ReverseSetting(S_AMPER_HOUR)
-    case 3: ReverseSetting(S_AMPERAGE_VIRTUAL)
-    case 4: ModifySetting16(S16_AMPDIVIDERRATIO)
-    case 5: ModifySetting16(S16_AMPZERO)
+    case 1: ModifySetting16(S16_AMPDIVIDERRATIO)
+    case 2: ModifySetting16(S16_AMPZERO)
     }
   }
 #endif
@@ -1213,14 +1200,7 @@ void serialMenuCommon()
 #ifdef MENU_DISPLAY
   if (configPage == MENU_DISPLAY && COL == 3) {
     switch(ROW) {
-    case 1: ReverseSetting(S_DISPLAY_HORIZON_BR)
-    case 2: ReverseSetting(S_WITHDECORATION)
-    case 3: ReverseSetting(S_SCROLLING)
-    case 4: ReverseSetting(S_THROTTLEPOSITION)
-    case 5: ReverseSetting(S_COORDINATES)
-    case 6: ReverseSetting(S_MODESENSOR)
-    case 7: ReverseSetting(S_GIMBAL)
-    case 8: ModifySetting(S_MAPMODE)
+    case 1: ModifySetting(S_MAPMODE)
     }
   }
 #endif
@@ -1228,12 +1208,8 @@ void serialMenuCommon()
 #ifdef MENU_ADVANCED
   if (configPage == MENU_ADVANCED && COL == 3) {
     switch(ROW) {
-    case 1: ReverseSetting(S_UNITSYSTEM)
-    case 2: ReverseSetting(S_VREFERENCE)
-    case 3: ReverseSetting(S_DEBUG)
-    case 4: timer.magCalibrationTimer=CALIBRATION_DELAY; break;
-    case 5: ModifySetting(S_RCWSWITCH_CH)
-    case 6: ReverseSetting(S_THROTTLE_PWM)
+    case 1: timer.magCalibrationTimer=CALIBRATION_DELAY; break;
+    case 2: ReverseSetting(S_THROTTLE_PWM)
     }
   }
 #endif
