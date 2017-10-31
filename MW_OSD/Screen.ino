@@ -1338,10 +1338,14 @@ void displayDistanceToHome(void)
     formatDistance(distanceMAX,1,2);
     MAX7456_WriteString(screenBuffer,LINE+getPosition(GPS_distanceToHomePosition));
   #endif //SHOW_MAX_DISTANCE
-  #if defined SHOW_TOTAL_DISTANCE
-    formatDistance(trip,1,2);
-    MAX7456_WriteString(screenBuffer,LINE+getPosition(GPS_distanceToHomePosition));
-  #endif //SHOW_TOTAL_DISTANCE
+  #if defined SHOW_TOTAL_DISTANCE                                              
+    formatDistance(trip,1,2);                                                   
+    #if defined SHOW_MAX_DISTANCE                                               
+    MAX7456_WriteString(screenBuffer,LINE+LINE+getPosition(GPS_distanceToHomePosition));                                                                       
+    #else                                                                       
+    MAX7456_WriteString(screenBuffer,LINE+getPosition(GPS_distanceToHomePosition));                                                                            
+    #endif //two lines if max distance is there                                 
+  #endif //SHOW_TOTAL_DISTANCE  
 
 }
 

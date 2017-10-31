@@ -275,7 +275,7 @@
 //#define KKAUDIOVARIO A3              // Enable this for audio vario on Arduino pin XX 
 //#define AUDIOVARIORC 1200            // Enable this to disable audio vario for throttle values above 1200 uS
 //#define AUDIOVARIOSWITCH             // Enable this to use screen layouts to enable/diable vario. If visual vario is displayed, the audio vario is on
-#define KKDEADBANDLOW  -40             // Deadband threshold for sinking (Set to -500 to disable sink tones). 0 for no deadband
+#define KKDEADBANDLOW  -25             // Deadband threshold for sinking (Set to -500 to disable sink tones). 0 for no deadband
 #define KKDEADBANDHIGH  15             // Deadband threshold for climbing. 0 for no deadband 
 
 
