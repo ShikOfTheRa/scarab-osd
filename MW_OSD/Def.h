@@ -159,7 +159,7 @@
   #define MENU_STAT
   #define MENU_PID
   #define MENU_RC
-  #define MENU_RC_2
+  #define MENU_2RC
   #define MENU_VOLTAGE
   #define MENU_RSSI
   #define MENU_CURRENT
@@ -179,7 +179,7 @@
   #define MENU_STAT
   #define MENU_PID
   #define MENU_RC
-  #define MENU_RC_2
+  #define MENU_2RC
   #define MENU_INFO
   #define MENU_VOLTAGE
   #define MENU_RSSI
@@ -203,7 +203,7 @@
   #define MENU_STAT
   #define MENU_PID
   #define MENU_RC
-  #define MENU_RC_2
+  #define MENU_2RC
   #define MENU_VOLTAGE
   #define MENU_RSSI
   #define MENU_CURRENT
@@ -549,6 +549,15 @@
   #define MAXPAGE MENU_RC 
 #endif
 
+#ifdef MENU_2RC
+  const uint8_t MENU_2RC_tmp = MAXPAGE+1;
+  #define MENU_2RC MENU_2RC_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_2RC 
+#endif
+
+#warning "AMPERAGE_DIV"
+
 #ifdef MENU_SERVO
   const uint8_t MENU_SERVO_tmp = MAXPAGE+1;
   #define MENU_SERVO MENU_SERVO_tmp
@@ -561,6 +570,13 @@
   #define MENU_FIXEDWING MENU_FIXEDWING_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_FIXEDWING 
+#endif
+
+#ifdef MENU_INFO
+  const uint8_t MENU_INFO_tmp = MAXPAGE+1;
+  #define MENU_INFO MENU_INFO_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_INFO 
 #endif
 
 #ifdef MENU_VOLTAGE

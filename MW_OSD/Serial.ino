@@ -1091,8 +1091,8 @@ void serialMenuCommon()
   }
 #endif
 
-#ifdef MENU_RC_2
-  if(configPage == MENU_RC_2 && COL == 3) {    
+#ifdef MENU_2RC
+  if(configPage == MENU_2RC && COL == 3) {    
     switch(ROW) {
       case 1: tpa_breakpoint16 += menudir; break;
       case 2: rcYawExpo8 += menudir; break;

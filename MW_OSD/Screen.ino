@@ -1420,8 +1420,8 @@ void displayCursor(void)
     }
 #endif
 
-#ifdef MENU_RC_2
-    if(configPage==MENU_RC_2){
+#ifdef MENU_2RC
+    if(configPage==MENU_2RC){
       if (ROW==3) ROW=10;
       if (ROW==9) ROW=2;
       cursorpos=(ROW+2)*30+10+6+6;
@@ -1710,8 +1710,8 @@ void displayConfigScreen(void)
     MAX7456_WriteString("D",83);
   }
 #endif
-#ifdef MENU_RC_2
-  if(configPage==MENU_RC_2)
+#ifdef MENU_2RC
+  if(configPage==MENU_2RC)
   {   
     MenuBuffer[0]=tpa_breakpoint16;
     MenuBuffer[1]=rcYawExpo8;
