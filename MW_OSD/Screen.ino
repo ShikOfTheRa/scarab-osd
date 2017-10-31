@@ -1956,9 +1956,7 @@ void displayConfigScreen(void)
 
 #ifdef MENU_DEBUG
   if(configPage==MENU_DEBUG){
-    #ifdef DEBUGMENU
-      displayDebug();
-    #endif //DEBUGMENU  
+    displayDebug();
   }
 #endif  
 
