@@ -614,6 +614,13 @@
   #define MAXPAGE MENU_ADVANCED 
 #endif
 
+#ifdef MENU_GPS_TIME
+  const uint8_t MENU_GPS_TIME_tmp = MAXPAGE+1;
+  #define MENU_GPS_TIME MENU_GPS_TIME_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_GPS_TIME 
+#endif
+
 #ifdef MENU_ALARMS
   const uint8_t MENU_ALARMS_tmp = MAXPAGE+1;
   #define MENU_ALARMS MENU_ALARMS_tmp
