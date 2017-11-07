@@ -3,12 +3,13 @@
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 
-/*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
+/*----------------------------------------------       Developer / debug parameters      ----------------------------------------------------*/
 //#define ALWAYSARMED
-//#define FORCESENSORS
+#define FORCESENSORS
 
 // Display Debug screen display options
 //#define DEBUGMW            // Enable to display MSP debug values (assumes debug[x] values are not set elsewhere) 
+#define DEBUGDPOSMENU 3      // dispaly debug title at position X
 #define DEBUGDPOSRCDATA 33   // display RCDATA values at position X
 #define DEBUGDPOSANAL 84     // display sensor values at position X
 #define DEBUGDPOSPWM 264     // display PWM values at position X
@@ -22,8 +23,7 @@
 
 // Display Debug text message in standard screen text warning message area
 // Enable and set debugtext=1 in code when required 
-//#define ENABLEDEBUGTEXT
-#define DEBUGTEXT "DEBUG"    // Set text you wish to display when debug text message required. Must be CAPSLOCK text
+//#define DEBUGTEXT "DEBUG"    // Set text you wish to display when debug text message required. Must be CAPSLOCK text
 
 #define HARDRESET            // Enables watchdog timer reset rather than fixed memory jmp 
 //#define BOOTRESET          // Enables reset from default Atmega 328 bootloader address (instead of 0) 
@@ -98,6 +98,7 @@
 #endif
 
 #ifdef iNAV    //set up latest at time of release
+  #define CANVAS_SUPPORT
   #define CLEANFLIGHT190
 #endif
 
@@ -493,7 +494,7 @@
 
 // Flight Controller Software types to be added before here...
 
-#ifndef MAXPAGE
+#ifndef ANYCONTROLLER // default
   #define INFO_CONTROLLER 0
   #define MENU_STAT
   #define MENU_VOLTAGE
@@ -504,9 +505,6 @@
   #define MENU_ALARMS
 #endif
 
-#ifdef DEBUGMENU
-  #define MENU_DEBUG
-#endif
 
 /*
   #define MENU_STAT          0       //STATISTICS
@@ -529,9 +527,8 @@
 #define MAXPAGE 0
 
 #ifdef MENU_STAT
-  const uint8_t MENU_STAT_tmp = MAXPAGE+1;
+  const uint8_t MENU_STAT_tmp = 0;
   #define MENU_STAT MENU_STAT_tmp
-  #undef  MAXPAGE
   #define MAXPAGE MENU_STAT 
 #endif
 

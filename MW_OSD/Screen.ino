@@ -174,16 +174,17 @@ void displayVirtualNose(void)
 }
 #endif
 
-void displayTemperature(void)        // DEPRECATED RUSHDUINO SUPPORT
+
+void displayTemperature(void)        
 {
+  if(!fieldIsVisible(temperaturePosition))
+    return;
+
   int xxx;
   if (Settings[S_UNITSYSTEM])
     xxx = temperature*1.8+32;       //Fahrenheit conversion for imperial system.
   else
     xxx = temperature;
-
-  //  if(!fieldIsVisible(temperaturePosition))
-  //    return;
 
   itoa(xxx,screenBuffer,10);
   uint8_t xx = FindNull();   // find the NULL
@@ -223,14 +224,14 @@ void displayMode(void)
   #endif
   uint8_t xx = 0;
 
-  if((MwSensorActive&mode.camstab)&&Settings[S_GIMBAL]){
+  if((MwSensorActive&mode.camstab)){
     screenBuffer[2]=0;
     screenBuffer[0]=SYM_GIMBAL;
     screenBuffer[1]=SYM_GIMBAL1;  
     if(fieldIsVisible(gimbalPosition))
       MAX7456_WriteString(screenBuffer,getPosition(gimbalPosition));
   }
-  if(Settings[S_MODESENSOR]){
+
     xx = 0;
     if(MwSensorActive&mode.stable||MwSensorActive&mode.horizon){
       screenBuffer[xx] = SYM_ACC;
@@ -248,7 +249,6 @@ void displayMode(void)
     if(fieldIsVisible(sensorPosition)){
       MAX7456_WriteString(screenBuffer,getPosition(sensorPosition));
     }
-  }  
 
 #ifdef PROTOCOL_MAVLINK // override MWOSD mode icons
   strcpy_P(screenBuffer, (char*)pgm_read_word(&(mav_mode_index[mw_mav.mode])));
@@ -403,7 +403,6 @@ void displayMode(void)
     #endif //ACROPLUS
   }
 #endif //PROTOCOL_MAVLINK/KISS/LTM
-  if(Settings[S_MODEICON]){
     if(fieldIsVisible(ModePosition)){
       MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
 #ifdef AIRMODE
@@ -417,7 +416,6 @@ void displayMode(void)
 #endif //TEXTMODE
 #endif //AIRMODE  
     }  
-  }
 
 #ifdef APINDICATOR
   if(timer.Blink2hz)
@@ -487,7 +485,6 @@ void displayHorizon(int rollAngle, int pitchAngle)
 #endif
 
 #ifdef HORIZON
-  if (Settings[S_SCROLLING]||Settings[S_SIDEBARTOPS]){
     if(!armed) GPS_speed=0;
     // Scrolling decoration
     if ((GPS_speed+15) < old_GPS_speed){
@@ -523,9 +520,8 @@ void displayHorizon(int rollAngle, int pitchAngle)
       if (SYM_AH_DECORATION_RIGHT>0x15)
         SYM_AH_DECORATION_RIGHT=0x10;
     }
-  }
 
-  if (!Settings[S_SCROLLING]){
+  if (!getPosition(SideBarPosition)){
     SYM_AH_DECORATION_LEFT=0x13;
     SYM_AH_DECORATION_RIGHT=0x13;
   } 
@@ -556,7 +552,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
 #endif
   pitchAngle=pitchAngle+AHICORRECT;
 
-  if(Settings[S_DISPLAY_HORIZON_BR]&fieldIsVisible(horizonPosition)){
+  if(fieldIsVisible(horizonPosition)){
 
 #ifdef NOAHI
 #elif defined FULLAHI
@@ -569,14 +565,12 @@ void displayHorizon(int rollAngle, int pitchAngle)
         uint16_t pos = position -9 + LINE*(Y/9) + 3 - 4*LINE + X;
         if (pos < 480)
           screen[pos] = SYM_AH_BAR9_0+(Y%9);
-        if (Settings[S_HORIZON_ELEVATION]){ 
           if(X >= 4 && X <= 8) {
             if ((pos-3*LINE) < 480)
               screen[pos-3*LINE] = SYM_AH_BAR9_0+(Y%9);
             if ((pos+3*LINE) < 480)
               screen[pos+3*LINE] = SYM_AH_BAR9_0+(Y%9);
           }
-        }
       }
     }
 #else //FULLAHI
@@ -589,28 +583,24 @@ void displayHorizon(int rollAngle, int pitchAngle)
         uint16_t pos = position -7 + LINE*(Y/9) + 3 - 4*LINE + X;
         if (pos < 480)
           screen[pos] = SYM_AH_BAR9_0+(Y%9);
-        if (Settings[S_HORIZON_ELEVATION]){ 
           if(X >= 2 && X <= 6) {
             if ((pos-3*LINE) < 480)
               screen[pos-3*LINE] = SYM_AH_BAR9_0+(Y%9);
             if ((pos+3*LINE) < 480)
               screen[pos+3*LINE] = SYM_AH_BAR9_0+(Y%9);
           }
-        }            
       }
     }
 #endif //FULLAHI
 
     if(!fieldIsVisible(MapModePosition)){
-      if(Settings[S_DISPLAY_HORIZON_BR]){
         screen[position-1] = SYM_AH_CENTER_LINE;
         screen[position+1] = SYM_AH_CENTER_LINE_RIGHT;
         screen[position] =   SYM_AH_CENTER;
-      }
     }
   }
 
-  if (Settings[S_WITHDECORATION]&&fieldIsVisible(SideBarPosition)){
+  if (fieldIsVisible(SideBarPosition)){
     // Draw AH sides
     int8_t hudwidth=  getPosition(SideBarWidthPosition)&0x0F;
     int8_t hudheight= getPosition(SideBarHeightPosition)&0x0F;
@@ -624,14 +614,12 @@ void displayHorizon(int rollAngle, int pitchAngle)
 #endif //AHILEVEL
 
 #if defined(USEGLIDESCOPE) && defined(FIXEDWING)                     
-    if(Settings[S_DISPLAYGPS]){
       displayfwglidescope();
-    }
 #endif //USEGLIDESCOPE  
 
 #ifdef SBDIRECTION
 
-    if (Settings[S_SIDEBARTOPS]&&fieldIsVisible(SideBarScrollPosition)) {
+    if (fieldIsVisible(SideBarScrollPosition)) {
       if (millis()<(sidebarsMillis + 1000)) {
         if (sidebarsdir == 2){
           screen[position-(hudheight*LINE)-hudwidth] = SYM_AH_DECORATION_UP;
@@ -785,8 +773,6 @@ void displayCurrentThrottle(void)
 
 void displayTime(void) 
 { 
-  if(!Settings[S_TIMER])
-    return;
   if (screenPosition[onTimePosition]<512)
     return;
 
@@ -849,9 +835,9 @@ void displayWatt(void)
 
 void displayEfficiency(void)
 {
-  if(!fieldIsVisible(wattPosition))
+  if(!fieldIsVisible(efficiencyPosition))
     return;
-  uint16_t WhrPosition = getPosition(wattPosition);
+  uint16_t effPosition = getPosition(efficiencyPosition);
   uint16_t xx;
   if(!Settings[S_UNITSYSTEM])
     xx = GPS_speed * 0.036;           // From MWii cm/sec to Km/h
@@ -869,15 +855,15 @@ void displayEfficiency(void)
   screenBuffer[5] = 0x2A;
   screenBuffer[6] = 0;
   if (eff < 999)
-    MAX7456_WriteString(screenBuffer,WhrPosition);
+    MAX7456_WriteString(screenBuffer,effPosition);
 }
 
 
 void displaymAhmin(void)
 {
-  if(!fieldIsVisible(wattPosition))
+  if(!fieldIsVisible(mAhPosition))
     return;
-  uint16_t WhrPosition = getPosition(wattPosition);
+  uint16_t effPosition = getPosition(mAhPosition);
   uint16_t mAhmin = 0;
   if (flyingTime>0)
     mAhmin = (uint32_t) amperagesum/(flyingTime*6);
@@ -886,7 +872,7 @@ void displaymAhmin(void)
   screenBuffer[0] = SYM_BLANK;
   screenBuffer[5] = 0x2A;
   screenBuffer[6] = 0;
-  MAX7456_WriteString(screenBuffer,WhrPosition);
+  MAX7456_WriteString(screenBuffer,effPosition);
 }
 
 
@@ -951,7 +937,6 @@ void displayHeading(void)
 {
   if(!fieldIsVisible(MwHeadingPosition))
     return;
-  if (Settings[S_SHOWHEADING]) {  
     int16_t heading = MwHeading;
     if (Settings[S_HEADING360]) {
       if(heading < 0)
@@ -966,15 +951,12 @@ void displayHeading(void)
       screenBuffer[5]=0;
     }
     MAX7456_WriteString(screenBuffer,getPosition(MwHeadingPosition));
-  }  
 }
 
 
 void displayHeadingGraph(void)
 {
   if (!fieldIsVisible(MwHeadingGraphPosition))
-    return;
-  if (!Settings[S_COMPASS])
     return;
   int xx;
   xx = MwHeading * 4;
@@ -1037,7 +1019,7 @@ void displayGPSPosition(void)
     return;
   if (!MwSensorActive&mode.gpshome)
     return;
-  if(Settings[S_COORDINATES]|(MwSensorActive&mode.gpshome)){
+  if((MwSensorActive&mode.gpshome)){
     position = getPosition(MwGPSLatPositionTop);  
     screenBuffer[0] = SYM_LAT;
     FormatGPSCoord(GPS_latitude,screenBuffer+1,4,'N','S');
@@ -1052,7 +1034,6 @@ void displayGPSPosition(void)
 
 
 void displayGPSAltitude(void){
-  if(Settings[S_GPSALTITUDE]){
     if(!fieldIsVisible(MwGPSAltPosition))
       return;
     int32_t xx;
@@ -1067,7 +1048,6 @@ void displayGPSAltitude(void){
     }
     formatDistance(xx,1,0);
     MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
-  }
 }
 
 
@@ -1159,8 +1139,6 @@ void displayAltitude(void)
     altitudeMAX = altitude;
   if(!fieldIsVisible(MwAltitudePosition))
     return;
-  if(!Settings[S_BAROALT])
-    return;
   if (Settings[S_ALTITUDE_ALARM]>0){
     if(((altitude/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
       return;   
@@ -1179,8 +1157,6 @@ void displayClimbRate(void)
 {
   if(!fieldIsVisible(MwClimbRatePosition))
     return;
-  if(!Settings[S_VARIO])
-    return;
 
 #ifdef VARIOALARM
   if (((MwVario>VARIOALARM) or (MwVario<(0-VARIOALARM))) &&(timer.Blink2hz)){
@@ -1191,7 +1167,6 @@ void displayClimbRate(void)
   
   uint16_t position = getPosition(MwClimbRatePosition);
 
-#ifdef DISPLAYVARIO // Graphical VARIO slider 
   for(int8_t X=-1; X<=1; X++) {
     screen[position+(X*LINE)] =  SYM_VARIO;
   }
@@ -1202,9 +1177,8 @@ void displayClimbRate(void)
   int8_t varline=(xx/6)-1;
   int8_t varsymbol=xx%6;
   screen[position+(varline*LINE)] = 0x8F-varsymbol;
-#endif // DISPLAYVARIO
 
-#ifdef DISPLAYCLIMBRATE // CLIMB RATE value 
+#if defined V14 // CLIMB RATE text value 
   int16_t climbrate;
   if(Settings[S_UNITSYSTEM])
     climbrate = MwVario * 0.032808;       // ft/sec
@@ -1212,8 +1186,8 @@ void displayClimbRate(void)
     climbrate = MwVario / 100;            // mt/sec
   screenBuffer[0]=varioUnitAdd[Settings[S_UNITSYSTEM]];
   itoa(climbrate, screenBuffer+1, 10);
-  MAX7456_WriteString(screenBuffer,getPosition(MwClimbRatePosition));
-#endif // DISPLAYCLIMBRATE
+  MAX7456_WriteString(screenBuffer,getPosition(climbratevaluePosition));
+#endif // V14
 
 #ifdef AUDIOVARIO  
 //test when using non RSSI output
@@ -1356,12 +1330,10 @@ void displayAngleToHome(void)
     return;
   if(!fieldIsVisible(GPS_angleToHomePosition))
     return;
-  if(Settings[S_ANGLETOHOME]){
     ItoaPadded(GPS_directionToHome,screenBuffer,3,0);
     screenBuffer[3] = SYM_DEGREES;
     screenBuffer[4] = 0;
     MAX7456_WriteString(screenBuffer,getPosition(GPS_angleToHomePosition));
-  }
 }
 
 
@@ -1621,7 +1593,7 @@ void displayConfigScreen(void)
 #else // SHORTSUMMARY
 
 #ifdef MINSUMMARY      
-      if(!fieldIsVisible(rssiPosition) | !Settings[S_DISPLAYRSSI]){
+      if(!fieldIsVisible(rssiPosition)){
         rssiMIN = 0;
       }
 #endif //MINSUMMARY      
@@ -1999,6 +1971,9 @@ void displayDebug(void)
  }
 #endif //(DEBUG)||defined (DEBUGMW)||defined (FORCEDEBUG)
  
+#ifdef DEBUGDPOSMENU
+  MAX7456_WriteString("DEBUGGING INFORMATION",DEBUGDPOSMENU);
+#endif
 #ifdef DEBUGDPOSRCDATA
   MAX7456_WriteString("RC",DEBUGDPOSRCDATA);
   for(uint8_t X=1; X<=8; X++) {
@@ -2344,7 +2319,7 @@ void displayArmed(void)
     }
   }
 
-#ifdef ENABLEDEBUGTEXT
+#ifdef DEBUGTEXT
     if (debugtext==1)
       alarms.active|=(1<<7);
 #endif

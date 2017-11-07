@@ -152,14 +152,6 @@ uint8_t vtxChannel;
 
 #endif // VTX_RTC6705
 
-
-
-#if defined (DEVELOPMENT)
-#define DEBUGDEF 1
-#else
-#define DEBUGDEF 0   
-#endif
-
 #if defined (ALARM_MSP)
 #define DATA_MSP ALARM_MSP
 #else
@@ -359,59 +351,59 @@ enum Setting16_ {
 // Settings Locations
 enum Setting_ {
   S_CHECK_,		// used for check
-  S_UNUSED_5,
+  S_UNUSED_5, //spare
   S_VIDVOLTAGEMIN,
   S_RSSI_ALARM,
-  S_DISPLAYRSSI,
+  S_DISPLAYRSSITEMP, //spare
   S_MWRSSI,
   S_PWMRSSI,
-  S_DISPLAYVOLTAGETEMP,
+  S_DISPLAYVOLTAGETEMP, //spare
   S_VOLTAGEMIN,
   S_BATCELLS,
   S_DIVIDERRATIO,
   S_MAINVOLTAGE_VBAT,
-  S_AMPERAGE,
+  S_AMPERAGETEMP,
   S_MWAMPERAGE,
-  S_AMPER_HOUR,
+  S_AMPER_HOURTEMP, //spare
   S_AMPERAGE_VIRTUAL,
   S_ALARMS_TEXT,
-  S_VIDVOLTAGETEMP,
+  S_VIDVOLTAGETEMP, //spare
   S_VIDDIVIDERRATIO,
   S_THROTTLE_PWM,
   S_AMPER_HOUR_ALARM,
   S_AMPERAGE_ALARM,
-  S_DISPLAYGPS,
-  S_COORDINATES,
+  S_DISPLAYGPSTEMP, //spare
+  S_COORDINATESTEMP, //spare
   S_GPSCOORDTOP, //spare
-  S_GPSALTITUDE,
-  S_ANGLETOHOME,
-  S_SHOWHEADING,
+  S_GPSALTITUDETEMP,//spare
+  S_ANGLETOHOMETEMP, //spare
+  S_SHOWHEADINGTEMP, //spare
   S_HEADING360,
   S_UNITSYSTEM,
   S_VIDEOSIGNALTYPE,
-  S_THROTTLEPOSITION,
-  S_DISPLAY_HORIZON_BR,
-  S_WITHDECORATION,
+  S_THROTTLEPOSITIONTEMP, //spare
+  S_DISPLAY_HORIZON_BRTEMP, //spare
+  S_WITHDECORATIONTEMP, //spare
   S_SHOWBATLEVELEVOLUTION,
   S_RESETSTATISTICS,
   S_MAPMODE,
   S_VREFERENCE,
   S_USE_BOXNAMES,
-  S_MODEICON,
-  S_DISPLAY_CS,
+  S_MODEICONTEMP, // spare
+  S_DISPLAY_CSTEMP, // spare
   S_GPSTIME,
   S_GPSTZAHEAD,
   S_GPSTZ,
-  S_DEBUG,
-  S_SCROLLING,
-  S_GIMBAL,
-  S_VARIO,
-  S_BAROALT, //50
-  S_COMPASS,
-  S_HORIZON_ELEVATION,
-  S_TIMER,
-  S_MODESENSOR,
-  S_SIDEBARTOPS,
+  S_DEBUGTEMP, //spare
+  S_SCROLLINGTEMP, //spare
+  S_GIMBALTEMP, //spare
+  S_VARIOTEMP, //spare
+  S_BAROALTTEMP, //50 //spare
+  S_COMPASSTEMP, //spare
+  S_HORIZON_ELEVATIONTEMP, //spare
+  S_TIMERTEMP, //spare
+  S_MODESENSORTEMP, //spare
+  S_SIDEBARTOPSTEMP, //spare
   S_VTX_POWER,
   S_VTX_BAND,
   S_VTX_CHANNEL,
@@ -491,7 +483,7 @@ EEPROMVER,   // used for check              0
 0,   // GPStime                     37a
 0,   // GPSTZ +/-                   37b
 0,   // GPSTZ                       37c
-DEBUGDEF,   // DEBUG                       37e
+0,   // DEBUG                       37e
 1,   // SCROLLING LADDERS           37f
 1,   // SHOW GIMBAL ICON            37g
 1,   // SHOW VARIO                  37h
@@ -586,21 +578,34 @@ enum Positions {
   glidescopePosition,
   callSignPosition,
   debugPosition,
+#ifdef V14
+  climbratevaluePosition,
+  efficiencyPosition,
+  mAhPosition,
+#endif  
 
   POSITIONS_SETTINGS
 };
+
+#ifndef V14
+enum V14Positions {
+  climbratevaluePosition,
+  efficiencyPosition,
+  mAhPosition,
+};
+#endif  
 
 uint16_t screenPosition[POSITIONS_SETTINGS];
 
 PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 
-(LINE02+2)|DISPLAY_ALWAYS,  // GPS_numSatPosition
+(LINE02+2)|DISPLAY_ALWAYS,    // GPS_numSatPosition
 (LINE02+22)|DISPLAY_ALWAYS,   // GPS_directionToHomePosition
 (LINE02+24)|DISPLAY_ALWAYS,   // GPS_distanceToHomePosition
-(LINE07+3)|DISPLAY_ALWAYS,   // speedPosition
+(LINE07+3)|DISPLAY_ALWAYS,    // speedPosition
 (LINE05+24)|DISPLAY_ALWAYS,   // GPS_angleToHomePosition
 (LINE03+24)|DISPLAY_ALWAYS,   // MwGPSAltPosition
-(LINE02+6)|DISPLAY_ALWAYS,   // sensorPosition
+(LINE02+6)|DISPLAY_ALWAYS,    // sensorPosition
 (LINE04+24)|DISPLAY_ALWAYS,   // MwHeadingPosition
 (LINE02+10)|DISPLAY_ALWAYS,   // MwHeadingGraphPosition
 (LINE07+23)|DISPLAY_ALWAYS,   // MwAltitudePosition
@@ -609,32 +614,37 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE13+22)|DISPLAY_ALWAYS,   // UNUSED flyTimePosition
 (LINE13+22)|DISPLAY_ALWAYS,   // onTimePosition
 (LINE11+11)|DISPLAY_ALWAYS,   // motorArmedPosition
-(LINE10+2)|DISPLAY_NEVER,   // pitchAnglePosition
-(LINE10+15)|DISPLAY_NEVER,   // rollAnglePosition
-(LINE01+2)|DISPLAY_ALWAYS,   // MwGPSLatPositionTop      // On top of screen
+(LINE10+22)|DISPLAY_ALWAYS,     // pitchAnglePosition
+(LINE11+22)|DISPLAY_ALWAYS,    // rollAnglePosition
+(LINE01+2)|DISPLAY_ALWAYS,    // MwGPSLatPositionTop      // On top of screen
 (LINE01+15)|DISPLAY_ALWAYS,   // MwGPSLonPositionTop      // On top of screen
-(LINE12+3)|DISPLAY_ALWAYS,   // rssiPosition
-(LINE09+3)|DISPLAY_ALWAYS,   // temperaturePosition
-(LINE13+3)|DISPLAY_ALWAYS,  // voltagePosition
-(LINE11+3)|DISPLAY_NEVER,   // vidvoltagePosition
-(LINE13+9)|DISPLAY_ALWAYS,   // amperagePosition
+(LINE12+3)|DISPLAY_ALWAYS,    // rssiPosition
+(LINE05+3)|DISPLAY_ALWAYS,    // temperaturePosition
+(LINE13+3)|DISPLAY_ALWAYS,    // voltagePosition
+(LINE11+3)|DISPLAY_ALWAYS,     // vidvoltagePosition
+(LINE13+9)|DISPLAY_ALWAYS,    // amperagePosition
 (LINE13+16)|DISPLAY_ALWAYS,   // pMeterSumPosition
 (LINE07+14)|DISPLAY_ALWAYS,   // horizonPosition
-(LINE07+7)|DISPLAY_ALWAYS,   // SideBarPosition
-(LINE07+7)|DISPLAY_ALWAYS,   // SideBarScrollPosition
-(3)|DISPLAY_NEVER,   // SideBarHeight Position
-(7)|DISPLAY_NEVER,   // SideBarWidth Position
-(LINE05+2)|DISPLAY_ALWAYS,   // Gimbal Position
-(LINE12+11)|DISPLAY_ALWAYS,  // GPS_time Position
+(LINE07+7)|DISPLAY_ALWAYS,    // SideBarPosition
+(LINE07+7)|DISPLAY_ALWAYS,    // SideBarScrollPosition
+(LINE01+3)|DISPLAY_NEVER,     // SideBarHeight Position
+(LINE01+7)|DISPLAY_NEVER,     // SideBarWidth Position
+(LINE05+2)|DISPLAY_ALWAYS,    // Gimbal Position
+(LINE12+11)|DISPLAY_ALWAYS,   // GPS_time Position
 (LINE09+22)|DISPLAY_ALWAYS,   // SportPosition
-(LINE04+2)|DISPLAY_ALWAYS,   // modePosition
-(LINE02+22)|DISPLAY_NEVER,   // MapModePosition
-(LINE07+15)|DISPLAY_NEVER,   // MapCenterPosition
+(LINE04+2)|DISPLAY_ALWAYS,    // modePosition
+(LINE02+22)|DISPLAY_NEVER,    // MapModePosition
+(LINE07+15)|DISPLAY_NEVER,    // MapCenterPosition
 (LINE04+10)|DISPLAY_ALWAYS,   // APstatusPosition
-(LINE12+9)|DISPLAY_NEVER,   // wattPosition
-(LINE07+6)|DISPLAY_NEVER,   // glidescopePosition
+(LINE10+0)|DISPLAY_ALWAYS,     // wattPosition
+(LINE07+6)|DISPLAY_ALWAYS,     // glidescopePosition
 (LINE10+10)|DISPLAY_ALWAYS,   // CallSign Position
 (LINE08+10)|DISPLAY_ALWAYS,   // Debug Position
+#ifdef V14
+(LINE07+23)|DISPLAY_ALWAYS,   // climbratevaluePosition,
+(LINE08+0)|DISPLAY_ALWAYS,    // efficiencyPosition,
+(LINE09+0)|DISPLAY_ALWAYS,    // mAhPosition,
+#endif  
 
 };
 
@@ -902,8 +912,11 @@ const char APRTHtext[]      PROGMEM = "AUTO RTH";
 const char APHOLDtext[]     PROGMEM = "AUTO HOLD";
 const char APWAYPOINTtext[] PROGMEM = " MISSION";
 const char lowvolts_text[]  PROGMEM = "LOW VOLTS";
+#if defined DEBUGTEXT
 const char debug_text[]     PROGMEM = DEBUGTEXT;
-
+#else
+const char debug_text[]     PROGMEM = " ";
+#endif
 // For Alarm / Message text
 const PROGMEM char * const message_text[] =
 {   
@@ -1146,11 +1159,7 @@ const char configMsg143[] PROGMEM = "    +PITCH FULL";
 const char configMsg144[] PROGMEM = " ";
 const char configMsg145[] PROGMEM = "IF FC SUPPORTS CMS";
 //-----------------------------------------------------------DEBUG Page
-#ifdef DEBUGMENU
 const char configMsg150[] PROGMEM = " ";
-#else
-const char configMsg150[] PROGMEM = "DEBUG DISABLED";
-#endif
 //-----------------------------------------------------------VTX Page
 #ifdef USE_MENU_VTX
 const char configMsg160[] PROGMEM = "VTX";

@@ -71,8 +71,8 @@
 
 /********************       Debug      *********************/
 //#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
-//#define DEBUGMENU                 // Enable to display debug values in OSD menu 
-
+#define MENU_DEBUG                // Enable to display debug values in OSD menu 
+#define V14
 
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
@@ -81,7 +81,7 @@
 // Once the initialisation has completed, all sections should be commented and the sketch re-uploaded.
 // Font upload will take 90 seconds after upload is completed. If connected to a camera, you will see teh font table displayed.
 
-//#define EEPROM_CLEAR             // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
+#define EEPROM_CLEAR             // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
 //#define LOADFONT_DEFAULT         // Uncomment to force an upload of default font instead of using GUI
 //#define LOADFONT_LARGE           // Uncomment to force an upload of large font instead of using GUI
 //#define LOADFONT_BOLD            // Uncomment to force an upload of bold font instead of using GUI
@@ -152,8 +152,7 @@
 //#define USEMAGHEADING             // Undefine this to use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
 //#define USEBAROALTITUDE           // Undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) ** Recommended **
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
-//#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft. Auto enabled for FIXEDWING
-//#define USEGLIDESCOPE             // Enables ILS glidescope
+#define USEGLIDESCOPE             // Enables ILS glidescope
 #define GLIDEANGLE 40               // ILS glidescope angle where 40 = 4.0° - 1.0 deg gradiented scope scale requires enabling in layouts. Auto enabled for FIXEDWING
 
 
@@ -239,7 +238,7 @@
 #define AHILEVEL                    // Enable to display AHI level indicators on sidebars 
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 #define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
-//#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft
+//#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft. Auto enabled for FIXEDWING
 #define AIRMODE 2                   // Enable this to display airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
 //#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
 //#define TEXTMODE                  // Enable to display the flyingmode as text instead of symbols
@@ -247,14 +246,12 @@
 
 
 /********************       Power / efficiency display Settings         ************************/
-#define DISPLAYWATTS                // Enable this to display Watts (if Watts selected in layouts). Select one of WATTS/MAHMIN/EFFICIENCY
-//#define DISPLAYEFFICIENCY         // Enable this to display Watts/KMh or Mph for efficiency (if Watts selected in layouts). Select one of WATTS/MAHMIN/EFFICIENCY
-//#define DISPLAYMAHMIN             // Enable this to display average mAh/minKMh (if Watts selected in layouts). Select one of WATTS/MAHMIN/EFFICIENCY
+#define DISPLAYWATTS                // Enable this to display Watts
+#define DISPLAYEFFICIENCY           // Enable this to display Watts/KMh or Mph for efficiency
+#define DISPLAYMAHMIN               // Enable this to display average mAh/minKMh
 
 
 /********************       Visual Vario / climbrate Settings         ************************/
-#define DISPLAYVARIO                // Enable this to display Vario slider (if climb rate selected in layouts)
-//#define DISPLAYCLIMBRATE          // Enable this to display climb rate (if climb rate selected in layouts)
 //#define VARIOALARM 150            // Enable this to for flashing climb rate warning. Value in cm/sec (if climb rate selected in layouts)
 
 
@@ -324,10 +321,6 @@
 //#define BATTERYICONAMPS           //Enable to use with mAh used percentage of AMPHR alarm limit. Warning will now be at 80% of that GUI value
 
 
-/********************       I2C support         ************************/
-//#define I2C_UB_SUPPORT
-
-
 /********************       Headtracker support         ************************/
 //#define VIRTUAL_NOSE    // Enables the use of a virtual nose for headtracker users where aircraft nose is not visible
 #define HTCHANNEL   3     // RC channel uses ch 1 - 8/16
@@ -353,9 +346,9 @@
 
 /********************  TEMPERATURE  settings      *********************/
 //#define TEMPSENSOR                // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
-#define TEMPERATUREMAX 50           // Temperature warning value
+#define TEMPERATUREMAX 250          // Temperature warning value
 #define TEMPZERO 0                  // Temperature Zero calibration (range = 0-1024 :512 = 2.5v with vref of 5v and 0.55v for vref of 1.1v) 
-#define TEMPMAX  500                // Temperature when at sensor output at VCC. Might be  atheoreticla value 
+#define TEMPMAX  500                // Temperature when at sensor output at VCC. Might be  a theoretical value 
 
 
 /********************  RECORD CAPTURE  settings      *********************/

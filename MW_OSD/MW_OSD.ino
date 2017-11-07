@@ -81,7 +81,7 @@ uint16_t UntouchedStack(void)
 //------------------------------------------------------------------------
 #define MWVERS "MW-OSD - R1.7.2.2"
 #define MWOSDVERSION 1722 // 1660=1.6.6.0 for GUI
-#define EEPROMVER 13      // for eeprom layout verification
+#define EEPROMVER 14      // for eeprom layout verification
 #include <avr/pgmspace.h>
 #undef PROGMEM
 #define PROGMEM __attribute__(( section(".progmem.data") ))
@@ -329,15 +329,12 @@ void loop()
       trip = (uint32_t) tripSum;
     }
     
-    if (Settings[S_AMPER_HOUR]) 
-    {
       #ifndef KISS
         amperagesum += amperage;
       #else 
         if (!Settings[S_MWAMPERAGE]) 
           amperagesum += amperage;
       #endif   // KISS
-    }
     #ifndef GPSOSD 
       #ifdef MSP_SPEED_MED
         #ifdef CANVAS_SUPPORT
@@ -556,21 +553,25 @@ void loop()
 #endif //FORCECROSSHAIR
           displayVoltage();
           displayVidVoltage();
-        if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz)))
+        if((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz))
           displayRSSI();
-        if(Settings[S_AMPERAGE]&&(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz)))
+        if(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz))
           displayAmperage();
-        if(Settings[S_AMPER_HOUR] && ((!ampAlarming()) || timer.Blink2hz))
+        if(((!ampAlarming()) || timer.Blink2hz))
           displaypMeterSum();
         displayTime();
 #if defined (DISPLAYWATTS)
         displayWatt();
 #endif //DISPLAYWATTS
 #if defined (DISPLAYEFFICIENCY)
+      #if defined V14 
         displayEfficiency();
+      #endif
 #endif //DISPLAYEFFICIENCY
 #if defined (DISPLAYMAHMIN)
+      #if defined V14 
         displaymAhmin();
+      #endif
 #endif //DISPLAYMAHMIN
 #ifdef TEMPSENSOR
         if(((temperature<Settings[TEMPERATUREMAX])||(timer.Blink2hz))) displayTemperature();
@@ -582,10 +583,9 @@ void loop()
         displayDOP();
 #endif
         displayArmed();
-        if (Settings[S_THROTTLEPOSITION])
-          displayCurrentThrottle();
+        displayCurrentThrottle();
 #ifdef CALLSIGNALWAYS
-        if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition)); 
+        displayCallsign(getPosition(callSignPosition)); 
 #elif  FREETEXTLLIGHTS
         if (MwSensorActive&mode.llights) displayCallsign(getPosition(callSignPosition)); 
 #elif  FREETEXTGIMBAL
@@ -596,7 +596,7 @@ void loop()
            // Displays 4 sec every 5min (no blink during flight)
         if ( onTime > (timer.lastCallSign+CALLSIGNINTERVAL+CALLSIGNDURATION)) 
           timer.lastCallSign = onTime; 
-        if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition));      
+        displayCallsign(getPosition(callSignPosition));      
        }
 #endif
         if(MwSensorPresent&MAGNETOMETER) {
@@ -608,7 +608,6 @@ void loop()
           displayClimbRate();
         }
         if(MwSensorPresent&GPSSENSOR) 
-        if(Settings[S_DISPLAYGPS]){
           displayNumberOfSat();
           displayDirectionToHome();
           displayDistanceToHome();
@@ -625,7 +624,6 @@ void loop()
 #ifdef MAPMODE
           mapmode();
 #endif
-        }
         displayMode();       
 #ifdef I2CERROR
         displayI2CError();
@@ -1132,7 +1130,6 @@ void ProcessSensors(void) {
   }
 
 //-------------- RSSI
-  if (Settings[S_DISPLAYRSSI]) {           
     rssi = sensorfilter[4][SENSORFILTERSIZE]>>3; // filter and remain 16 bit
     if (configMode){
       if((timer.rssiTimer==15)) {
@@ -1145,7 +1142,6 @@ void ProcessSensors(void) {
     }
     rssi = map(rssi, Settings16[S16_RSSIMIN], Settings16[S16_RSSIMAX], 0, 100);
     rssi=constrain(rssi,0,100);
-  }
 
 //-------------- For filter support
   sensorindex++;                    
