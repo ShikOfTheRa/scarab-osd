@@ -514,7 +514,10 @@ For sub-command 3 (draw string):
     pMeterSum=read16();
     MwRssi = read16();
     MWAmperage = (int16_t)read16();
- }
+    if(!Settings[S_MWAMPERAGE]) {
+      pMeterSum=0;
+    }
+  }
 
 #ifdef MENU_SERVO  
   if (cmdMSP==MSP_SERVO_CONF)
