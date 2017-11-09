@@ -579,7 +579,7 @@ bool GPS_UBLOX_newFrame(uint8_t data) {
       _step++;
       _ck_b += (_ck_a += data);  // checksum byte
       _payload_length += (uint16_t)(data << 8);
-      if (_payload_length > 512) {
+      if (_payload_length > 512)||(_payload_length == 0) {
         _payload_length = 0;
         _step = 0;
       }
