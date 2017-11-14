@@ -33,7 +33,7 @@
 // latest release...
 //#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.0 at time of this MWOSD release)
-//#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
+#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define APM                       // Uncomment this if you are using APM MAVLINK 1.0 compatible FC
 //#define PX4                       // Uncomment this if you are using PIXHAWK with PX4 stack
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)

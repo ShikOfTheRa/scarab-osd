@@ -219,7 +219,6 @@ void serialMSPCheck()
     uint8_t cmd = read8();
 
     if (cmd == OSD_READ_CMD_EE) {
-       debug[2]==dataSize;
       timer.GUI_active=2;
       eeaddress = read8();
       eeaddress = eeaddress+read8();
@@ -230,7 +229,6 @@ void serialMSPCheck()
     }
 
     if (cmd == OSD_WRITE_CMD_EE) {
-       debug[1]==dataSize;
       timer.GUI_active=2;
       for(uint8_t i=0; i<10; i++) {
         eeaddress = read8();
@@ -261,7 +259,6 @@ void serialMSPCheck()
         cfgWrite16(sensortemp);
       }
        cfgWriteChecksum();
-       debug[3]==dataSize;
        #ifdef cfgActive
        if(OSD_SENSORS==cfgck) {
          cfgActive
@@ -399,6 +396,9 @@ For sub-command 3 (draw string):
     I2CError=read16();
     MwSensorPresent = read16();
     MwSensorActive = read32();
+    debug[0]=(uint32_t)MwSensorActive&0xffff;
+    debug[1]=(uint32_t)MwSensorActive>>16;
+    
     #if defined FORCESENSORS
       MwSensorPresent=GPSSENSOR|BAROMETER|MAGNETOMETER|ACCELEROMETER;
     #endif  
