@@ -171,7 +171,6 @@
 #define MAV_COM_ID 1                // Component ID of MAV.
 //#define MAV_ARMED                 // Forces OSD to be always armed (for when MAV does not send armed status in heartbeat).
 //#define MAV_RESET_HOME            // Resets home position when not armed. When enabled, note that RX glitch etc. could potentially reset home position.
-//#define USEAIRSPEED               // Uses air sensor speed instead of GPS speed 
 
 /******************** Serial MSP speed settings *********************/
 // Choose ONLY ONE SPEED option: increases speeds of serial update - but with impact to flight controller 
@@ -355,7 +354,7 @@
 // This is used for those who are attempting records to always show the maximum achieved.
 // Maximum values (as shown on statistics summary screen will be displayed on line IMMEDAITELY BELOW where current live data is displayed
 // It may require layouts to be amended to show data without overwriting other information
-//#define SHOW_MAX_SPEED                 // Enable to display MAX speed achieved on line below current speed
+//#define SHOW_MAX_SPEED                 // Enable to display MAX speed
 //#define SHOW_MAX_ALTITUDE              // Enable to display MAX altitude achieved on line below current altitude
 //#define SHOW_MAX_DISTANCE              // Enable to display MAX distance achieved on line below current distance
 //#define SHOW_TOTAL_DISTANCE            // Enable to display TOTAL distance achieved on line below current distance

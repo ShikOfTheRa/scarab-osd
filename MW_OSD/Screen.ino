@@ -1065,25 +1065,19 @@ void displayNumberOfSat(void)
 }
 
 
-void displayGPS_speed(void)
+void display_speed(uint16_t t_value, uint8_t t_position)
 {
-  if(!GPS_fix) return;
-
- #ifdef USEAIRSPEED
-  GPS_speed=AIR_speed;
- #endif
-  
-  if(!armed) GPS_speed=0;
+  if(!armed) t_value=0;
   uint16_t xx;
   if(!Settings[S_UNITSYSTEM])
-    xx = GPS_speed * 0.036;           // From MWii cm/sec to Km/h
+    xx = t_value * 0.036;           // From MWii cm/sec to Km/h
   else
-    xx = GPS_speed * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
+    xx = t_value * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
   if(xx > (speedMAX+20)) // simple GPS glitch limit filter
     speedMAX+=20; 
   else if(xx > speedMAX)
     speedMAX=xx; 
-  if(!fieldIsVisible(speedPosition))
+  if(!fieldIsVisible(t_position))
     return;
   if (Settings[S_SPEED_ALARM]>0){
     if((xx>Settings[S_SPEED_ALARM])&&(timer.Blink2hz))
@@ -1091,11 +1085,15 @@ void displayGPS_speed(void)
   }    
   screenBuffer[0]=speedUnitAdd[Settings[S_UNITSYSTEM]];
   itoa(xx,screenBuffer+1,10);
-  MAX7456_WriteString(screenBuffer,getPosition(speedPosition));
-#ifdef SHOW_MAX_SPEED
-  itoa(speedMAX,screenBuffer+1,10);
-  MAX7456_WriteString(screenBuffer,getPosition(speedPosition)+LINE);
-#endif //SHOW_MAX_SPEED
+  MAX7456_WriteString(screenBuffer,getPosition(t_position));
+}
+
+
+void display_max(uint16_t t_value, uint8_t t_position)
+{
+  screenBuffer[0]=speedUnitAdd[Settings[S_UNITSYSTEM]];
+  itoa(t_value,screenBuffer+1,10);
+  MAX7456_WriteString(screenBuffer,getPosition(t_position));
 }
 
 

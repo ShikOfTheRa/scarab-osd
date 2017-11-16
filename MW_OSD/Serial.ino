@@ -438,6 +438,7 @@ For sub-command 3 (draw string):
     #else
       GPS_speed = read16();
     #endif // I2CGPS_SPEED
+    AIR_speed=GPS_speed;
     GPS_ground_course = read16();
   }
 

@@ -545,7 +545,7 @@ enum Positions {
   GPS_numSatPosition,
   GPS_directionToHomePosition,
   GPS_distanceToHomePosition,
-  speedPosition,
+  GPS_speedPosition,
   GPS_angleToHomePosition,
   MwGPSAltPosition,
   sensorPosition,
@@ -587,6 +587,8 @@ enum Positions {
   climbratevaluePosition,
   efficiencyPosition,
   mAhPosition,
+  AIR_speedPosition,
+  MAX_speedPosition,
 #endif  
 
   POSITIONS_SETTINGS
@@ -597,6 +599,8 @@ enum V14Positions {
   climbratevaluePosition,
   efficiencyPosition,
   mAhPosition,
+  AIR_speedPosition,
+  MAX_speedPosition,
 };
 #endif  
 
@@ -607,7 +611,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE02+2)|DISPLAY_ALWAYS,    // GPS_numSatPosition
 (LINE02+22)|DISPLAY_ALWAYS,   // GPS_directionToHomePosition
 (LINE02+24)|DISPLAY_ALWAYS,   // GPS_distanceToHomePosition
-(LINE07+3)|DISPLAY_ALWAYS,    // speedPosition
+(LINE07+3)|DISPLAY_ALWAYS,    // GPS_speedPosition
 (LINE05+24)|DISPLAY_ALWAYS,   // GPS_angleToHomePosition
 (LINE03+24)|DISPLAY_ALWAYS,   // MwGPSAltPosition
 (LINE02+6)|DISPLAY_ALWAYS,    // sensorPosition
@@ -649,6 +653,8 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE07+23)|DISPLAY_ALWAYS,   // climbratevaluePosition,
 (LINE08+0)|DISPLAY_ALWAYS,    // efficiencyPosition,
 (LINE09+0)|DISPLAY_ALWAYS,    // mAhPosition,
+(LINE08+8)|DISPLAY_ALWAYS,    // AIR_speedposition,
+(LINE09+8)|DISPLAY_ALWAYS,    // MAX_speedposition,
 #endif  
 
 };

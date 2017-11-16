@@ -615,7 +615,9 @@ void loop()
           #ifdef USEGLIDESCOPE
             // displayfwglidescope(); //note hook for this is in display horizon function
           #endif //USEGLIDESCOPE  
-          displayGPS_speed();
+          display_speed(GPS_speed,GPS_speedPosition);
+          display_speed(AIR_speed,AIR_speedPosition);
+          display_max(speedMAX,MAX_speedPosition);
           displayGPSPosition();  
       
 #ifdef GPSTIME
