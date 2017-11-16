@@ -134,6 +134,8 @@ void serialMAVCheck() {
   static uint8_t armedglitchprotect = 0;
   switch (mw_mav.message_cmd) {
     case MAVLINK_MSG_ID_HEARTBEAT:
+      debug[3]|=1<<0;
+      debug[0]++;
       mode.armed      = (1 << 0);
       mode.gpshome    = (1 << 4);
       mode.gpshold    = (1 << 5);
@@ -220,6 +222,7 @@ void serialMAVCheck() {
 #endif //MAVLINKREQ
       break;
     case MAVLINK_MSG_ID_VFR_HUD:
+      debug[3]|=1<<1;
       AIR_speed = (int16_t)serialbufferfloat(0) * 100; // m/s-->cm/s
       GPS_speed = (int16_t)serialbufferfloat(4) * 100; // m/s-->cm/s
       GPS_altitude = (int16_t)serialbufferfloat(8);   // m-->m
@@ -237,10 +240,12 @@ void serialMAVCheck() {
       }
       break;
     case MAVLINK_MSG_ID_ATTITUDE:
+      debug[3]|=1<<2;
       MwAngle[0] = (int16_t)(serialbufferfloat(4) * 57.2958 * 10);  // rad-->0.1deg
       MwAngle[1] = (int16_t)(serialbufferfloat(8) * 57.2958 * -10); // rad-->0.1deg
       break;
     case MAVLINK_MSG_ID_GPS_RAW_INT:
+      debug[3]|=1<<3;
 #ifdef ALARM_GPS
       timer.GPS_active = ALARM_GPS;
 #endif //ALARM_GPS
@@ -263,18 +268,21 @@ void serialMAVCheck() {
 
       break;
     case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
+      debug[3]|=1<<4;
       MwRssi = (uint16_t)(((103) * serialBuffer[21]) / 10);
       for (uint8_t i = 0; i < 8; i++)
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
       handleRawRC();
       break;
     case MAVLINK_MSG_ID_RC_CHANNELS:
+      debug[3]|=1<<5;
       MwRssi = (uint16_t)(((103) * serialBuffer[41]) / 10);
       for (uint8_t i = 0; i < 8; i++)
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
       handleRawRC();
       break;
     case MAVLINK_MSG_ID_SYS_STATUS:
+      debug[3]|=1<<6;
       mode.stable = (1 << 1);
       mode.baro   = (1 << 2);
       mode.mag    = (1 << 3);
