@@ -570,8 +570,8 @@ enum Positions {
   horizonPosition,
   SideBarPosition,
   SideBarScrollPosition,
-  SideBarHeightPosition,
-  SideBarWidthPosition,
+  SideBarHeight,           // special function
+  SideBarWidth,            // special function
   gimbalPosition,
   GPS_timePosition,
   SportPosition,
@@ -636,8 +636,8 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE07+14)|DISPLAY_ALWAYS,   // horizonPosition
 (LINE07+7)|DISPLAY_ALWAYS,    // SideBarPosition
 (LINE07+7)|DISPLAY_ALWAYS,    // SideBarScrollPosition
-(LINE01+3)|DISPLAY_NEVER,     // SideBarHeight Position
-(LINE01+7)|DISPLAY_NEVER,     // SideBarWidth Position
+(LINE01+3)|DISPLAY_NEVER,     // SideBarHeight
+(LINE01+7)|DISPLAY_NEVER,     // SideBarWidth
 (LINE05+2)|DISPLAY_ALWAYS,    // Gimbal Position
 (LINE12+11)|DISPLAY_ALWAYS,   // GPS_time Position
 (LINE09+22)|DISPLAY_ALWAYS,   // SportPosition
