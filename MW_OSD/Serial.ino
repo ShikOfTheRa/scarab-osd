@@ -794,6 +794,9 @@ For sub-command 3 (draw string):
 
     while(remaining > 0) {
       char c = read8();
+      #ifdef DEBUGDPOSMSPID    
+        boxidarray[dataSize-remaining]=c;
+      #endif  
       switch(c) {
       case 0:
         mode.armed |= bit;

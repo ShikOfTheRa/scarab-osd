@@ -2030,6 +2030,24 @@ void displayDebug(void)
   itoa(serialrxrate,screenBuffer,10);
   MAX7456_WriteString(screenBuffer,DEBUGDPOSRX+5);
 #endif
+#ifdef DEBUGDPOSMSPID    
+  MAX7456_WriteString("MSP ID",DEBUGDPOSMSPID);
+  for(uint8_t id_row=0; id_row<=6; id_row++){
+    for(uint8_t id_col=0; id_col<=4; id_col++){
+      itoa(boxidarray[(id_row*5)+(id_col)],screenBuffer,10);
+      MAX7456_WriteString(screenBuffer,DEBUGDPOSMSPID+5 + LINE + (id_row*LINE)+(id_col*3));
+    }
+  }
+  for(uint8_t id_bit_2=0; id_bit_2<=1; id_bit_2++){
+      itoa(id_bit_2,screenBuffer,10);
+      MAX7456_WriteString(screenBuffer,DEBUGDPOSMSPID+3+(LINE*9+(id_bit_2*LINE)));
+   for(uint8_t id_bit=0; id_bit<=16; id_bit++){
+      uint8_t active = (MwSensorActive & (1UL<<(id_bit+(id_bit_2*16)))) != 0;
+      itoa(active,screenBuffer,10);
+      MAX7456_WriteString(screenBuffer,DEBUGDPOSMSPID+5+(LINE*9+(id_bit_2*LINE))+(id_bit));
+    }
+  }
+#endif
 #if defined (MEMCHECK)
   #ifdef DEBUGDPOSMEMORY    
     MAX7456_WriteString("MEM",DEBUGDPOSMEMORY);
