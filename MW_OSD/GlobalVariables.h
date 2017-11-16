@@ -261,7 +261,12 @@ servo;
 #endif //MENU_SERVO  
 
 
-uint16_t debug[4];   // int32_t ?...
+/********************       Development/ test parameters      *********************/
+uint16_t debug[4];
+#ifdef DEBUGDPOSMSPID    
+  uint8_t boxidarray[50];
+#endif
+
 int8_t menudir;
 unsigned int allSec=0;
 unsigned int menuSec=0;
