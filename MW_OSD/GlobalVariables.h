@@ -155,11 +155,6 @@ uint8_t vtxChannel;
 
 
 
-#if defined (DEVELOPMENT)
-#define DEBUGDEF 1
-#else
-#define DEBUGDEF 0   
-#endif
 
 #if defined (ALARM_MSP)
 #define DATA_MSP ALARM_MSP
@@ -246,7 +241,17 @@ servo;
 #endif //MENU_SERVO  
 
 
-uint16_t debug[4];   // int32_t ?...
+/********************       Development/ test parameters      *********************/
+uint16_t debug[4];
+#ifdef DEBUGDPOSMSPID    
+  uint8_t boxidarray[50];
+#endif
+#if defined (DEVELOPMENT) // to be removed when debug switch disabled
+ #define DEBUGDEF 1
+#else
+ #define DEBUGDEF 0   
+#endif
+
 int8_t menudir;
 unsigned int allSec=0;
 unsigned int menuSec=0;

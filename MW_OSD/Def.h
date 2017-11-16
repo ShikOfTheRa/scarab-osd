@@ -19,6 +19,7 @@
 #define DEBUGDPOSPACKET 280  // display serial packet rate rate value at position X
 #define DEBUGDPOSMEMORY 310  // display free heap/stack memory at position X. Requires MEMCHECK and not valid in latest Arduino versions
 #define DEBUGDPOSRX 220      // display serial data rate at position X
+//#define DEBUGDPOSMSPID 33  // display MSP ID received
 
 // Display Debug text message in standard screen text warning message area
 // Enable and set debugtext=1 in code when required 
