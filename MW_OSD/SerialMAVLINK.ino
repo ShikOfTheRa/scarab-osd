@@ -274,6 +274,10 @@ void serialMAVCheck() {
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
       handleRawRC();
       break;
+    case MAVLINK_MSG_ID_WIND:
+      WIND_direction = (int16_t)(serialBuffer[0]) | (serialBuffer[1] << 8);
+      WIND_speed     = (int16_t)(serialBuffer[2]) | (serialBuffer[3] << 8);
+      break;
     case MAVLINK_MSG_ID_SYS_STATUS:
       mode.stable = (1 << 1);
       mode.baro   = (1 << 2);

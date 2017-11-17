@@ -602,6 +602,7 @@ void loop()
         if(MwSensorPresent&MAGNETOMETER) {
           displayHeadingGraph();
           displayHeading();
+          displayWindDirection();
         }
         if(MwSensorPresent&BAROMETER) {
           displayAltitude();

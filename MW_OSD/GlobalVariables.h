@@ -589,18 +589,20 @@ enum Positions {
   mAhPosition,
   AIR_speedPosition,
   MAX_speedPosition,
+  WindDirectionPosition,
 #endif  
 
   POSITIONS_SETTINGS
 };
 
-#ifndef V14
+#ifndef V14 
 enum V14Positions {
   climbratevaluePosition,
   efficiencyPosition,
   mAhPosition,
   AIR_speedPosition,
   MAX_speedPosition,
+  WindDirectionPosition,
 };
 #endif  
 
@@ -655,6 +657,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE09+0)|DISPLAY_ALWAYS,    // mAhPosition,
 (LINE08+8)|DISPLAY_ALWAYS,    // AIR_speedposition,
 (LINE09+8)|DISPLAY_ALWAYS,    // MAX_speedposition,
+(LINE03+22)|DISPLAY_ALWAYS,   // WindDirectionPosition
 #endif  
 
 };
@@ -723,6 +726,8 @@ uint8_t GPS_waypoint_step=0;
 uint16_t pMeterSum=0;
 uint16_t MwRssi=0;
 uint32_t GPS_time = 0;        //local time of coord calc - haydent
+uint16_t WIND_direction = 0;
+uint16_t WIND_speed = 0;
 
 #ifdef HAS_ALARMS
 #define ALARM_OK 0
@@ -1569,6 +1574,9 @@ const PROGMEM char * const msp_mode_index[] =
 #define MAVLINK_MSG_ID_REQUEST_DATA_STREAM 66
 #define MAVLINK_MSG_ID_REQUEST_DATA_STREAM_MAGIC 148
 #define MAVLINK_MSG_ID_REQUEST_DATA_STREAM_LEN 6
+#define MAVLINK_MSG_ID_WIND 168
+#define MAVLINK_MSG_ID_WIND_MAGIC 1
+#define MAVLINK_MSG_ID_WIND_LEN 12
 
 #define MAV_DATA_STREAM_RAW_SENSORS 1
 #define MAV_DATA_STREAM_EXTENDED_STATUS 2

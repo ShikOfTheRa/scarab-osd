@@ -1337,8 +1337,6 @@ void displayAngleToHome(void)
 
 void displayDirectionToHome(void)
 {
-  if(!GPS_fix)
-    return;
   if(!fieldIsVisible(GPS_directionToHomePosition))
     return;
 
@@ -1352,6 +1350,37 @@ void displayDirectionToHome(void)
   screenBuffer[0] = SYM_ARROW_SOUTH + d;
   screenBuffer[1] = 0;
   MAX7456_WriteString(screenBuffer,position);
+}
+
+
+void displayWindDirection(void)
+{
+  if(!fieldIsVisible(WindDirectionPosition))
+    return;
+  uint16_t position=getPosition(WindDirectionPosition);
+  int16_t d;
+  #ifdef MAVLINK
+    d = WIND_direction + 180;
+    d *= 4;
+    d += 45;
+    d = (d/90)%16;
+  #else
+    //#ifndef FIXEDWING // only applicable to fixedwing
+    //  return;
+    //#endif  
+    d = GPS_ground_course/10 + 180 + 360 - MwHeading;
+    d *= 4;
+    d += 45;
+    d = (d/90)%16;
+    if (d>1)
+      WIND_speed=1;
+    else
+      WIND_speed=0;                 
+  #endif
+  screenBuffer[0] = SYM_ARROW_SOUTH + d;
+  screenBuffer[1] = 0;
+  if (WIND_speed > 0)
+   MAX7456_WriteString(screenBuffer,position);
 }
 
 
@@ -2458,7 +2487,7 @@ void displayItem(uint16_t t_position, int16_t t_value, uint8_t t_leadicon, uint8
       t_offset = 1;
     }
     if (t_psize>1){ // right justified value. Do we really need RJV ??
-      ItoaPadded(t_value,screenBuffer[t_offset],t_psize,t_pdec);  
+      ItoaPadded(t_value,screenBuffer,t_psize,t_pdec);  
       screenBuffer[t_psize+t_offset] = 0;         
     }
     else{ // left justified value
