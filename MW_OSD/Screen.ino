@@ -2444,3 +2444,33 @@ void formatDistance(int32_t d2f, uint8_t units, uint8_t type ) {
   }
 }
 
+
+void displayItem(uint16_t t_position, int16_t t_value, uint8_t t_leadicon, uint8_t t_trailicon, uint8_t t_psize, uint8_t t_pdec )
+{
+  /*  This is potential future function to reduce memeory have single display write function.
+   *  It may require more memeory so is hure for reference only
+   */
+  uint8_t t_offset = 0;
+  if(!fieldIsVisible(t_position))
+    return;
+    if (t_leadicon>0){ // has a lead icon
+      screenBuffer[0]=t_leadicon;
+      t_offset = 1;
+    }
+    if (t_psize>1){ // right justified value. Do we really need RJV ??
+      ItoaPadded(t_value,screenBuffer[t_offset],t_psize,t_pdec);  
+      screenBuffer[t_psize+t_offset] = 0;         
+    }
+    else{ // left justified value
+      itoa(t_value,screenBuffer+t_offset,10);  
+      screenBuffer[t_psize] = 0;    
+    }
+    if (t_trailicon>0){ // has a trailing icon
+      t_offset = FindNull();
+      screenBuffer[t_offset++] = t_trailicon;
+      screenBuffer[t_offset] = 0;
+    }
+    MAX7456_WriteString(screenBuffer,getPosition(t_position));
+}
+
+
