@@ -102,7 +102,7 @@
 #endif
 
 #ifdef iNAV    //set up latest at time of release
-  #define CLEANFLIGHT190
+//  #define iNAV
 #endif
 
 #ifdef BASEFLIGHT     //set up latest at time of release
@@ -186,7 +186,7 @@
   #define MENU_PID      1       //PID CONFIG
   #define MENU_RC       2       //RC TUNING
   #define MENU_RC_2     3       //RC TUNING PAGE 2
-  #define MENU_INFO     4       //RC TUNING PAGE 2
+  #define MENU_INFO     4       //RC TUNING FC
   #define MENU_VOLTAGE  5       //VOLTAGE
   #define MENU_RSSI     6       //RSSI
   #define MENU_CURRENT  7       //CURRENT
@@ -219,6 +219,30 @@
   #define MENU_ALARMS   9       //ALARMS
   #define MENU_PROFILE  10      //PROFILE+PID CONTROLLER
   #define MENU_DEBUG    11
+  #define MAXPAGE       MENU_DEBUG
+#endif
+
+#if defined iNAV // same as CLEANFLIGHT190 + CMS
+  #define AMPERAGE_DIV 10
+  #define CORRECT_MSP_CF2
+  #define CORRECT_MENU_RCT2
+  #define ENABLE_MSP_SAVE_ADVANCED
+  #define CORRECTLOOPTIME
+  #define CANVAS_SUPPORT
+
+  #define MENU_STAT     0       //STATISTICS
+  #define MENU_PID      1       //PID CONFIG
+  #define MENU_RC       2       //RC TUNING
+  #define MENU_RC_2     3       //RC TUNING PAGE 2
+  #define MENU_INFO     4       //RC TUNING FC
+  #define MENU_VOLTAGE  5       //VOLTAGE
+  #define MENU_RSSI     6       //RSSI
+  #define MENU_CURRENT  7       //CURRENT
+  #define MENU_DISPLAY  8       //DISPLAY
+  #define MENU_ADVANCED 9       //ADVANCED
+  #define MENU_ALARMS   10       //ALARMS
+  #define MENU_PROFILE  11      //PROFILE+PID CONTROLLER
+  #define MENU_DEBUG    12
   #define MAXPAGE       MENU_DEBUG
 #endif
 

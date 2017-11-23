@@ -1171,12 +1171,12 @@ const char configMsg130[] PROGMEM = "RC TUNING 2";
 const char configMsg131[] PROGMEM = "TPA BREAKPOINT";
 const char configMsg132[] PROGMEM = "YAW RC EXPO";
 //-----------------------------------------------------------INFO Page
-const char configMsg140[] PROGMEM = "ACCESS ALL SETTINGS";
+const char configMsg140[] PROGMEM = "ACCESS FC SETTINGS";
 const char configMsg141[] PROGMEM = "TX  :THRT MIDDLE";
 const char configMsg142[] PROGMEM = "    +YAW LEFT";
 const char configMsg143[] PROGMEM = "    +PITCH FULL";
 const char configMsg144[] PROGMEM = " ";
-const char configMsg145[] PROGMEM = "F3 CONTROLLERS ONLY";
+const char configMsg145[] PROGMEM = "IF SUPPORTED";
 //-----------------------------------------------------------DEBUG Page
 #ifdef DEBUGMENU
 const char configMsg150[] PROGMEM = " ";
