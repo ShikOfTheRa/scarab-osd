@@ -833,6 +833,10 @@ enum {
   #define DEBUG 4 // Display debug secreen at boot
 #endif
 
+#ifdef PIOAUDIOVARIO // This is for travis build only
+  #define AUDIOVARIO A3 // Enable AUDIOVARIO on RSSI
+#endif
+
 #ifdef PWM_THROTTLE
   #define ALWAYSARMED  // starts OSD in armed mode
 #endif
