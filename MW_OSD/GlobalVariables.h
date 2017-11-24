@@ -292,7 +292,6 @@ uint8_t variopitch=0;
 // Canvas mode
 #ifdef CANVAS_SUPPORT
 bool canvasMode = false;
-bool canvasFirst = true;
 uint32_t lastCanvas = 0;
 #define CANVAS_TIMO 2000  // Canvas mode timeout in msec.
 #endif
@@ -1173,7 +1172,7 @@ const char configMsg141[] PROGMEM = "TX  :THRT MIDDLE";
 const char configMsg142[] PROGMEM = "    +YAW LEFT";
 const char configMsg143[] PROGMEM = "    +PITCH FULL";
 const char configMsg144[] PROGMEM = " ";
-const char configMsg145[] PROGMEM = "IF FC SUPPORTS CMS";
+const char configMsg145[] PROGMEM = "IF SUPPORTED";
 //-----------------------------------------------------------DEBUG Page
 const char configMsg150[] PROGMEM = " ";
 //-----------------------------------------------------------VTX Page

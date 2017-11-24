@@ -99,8 +99,7 @@
 #endif
 
 #ifdef iNAV    //set up latest at time of release
-  #define CANVAS_SUPPORT
-  #define CLEANFLIGHT190
+//  #define iNAV
 #endif
 
 #ifdef BASEFLIGHT     //set up latest at time of release
@@ -177,6 +176,7 @@
   #define CORRECT_MENU_RCT2
   #define ENABLE_MSP_SAVE_ADVANCED
   #define ACROPLUS
+  #define CANVAS_SUPPORT
 
   #define MENU_STAT
   #define MENU_PID
@@ -190,9 +190,6 @@
   #define MENU_ADVANCED
   #define MENU_ALARMS
   #define MENU_PROFILE
-
-
-  #define CANVAS_SUPPORT
 #endif
 
 #if defined CLEANFLIGHT190
@@ -213,7 +210,27 @@
   #define MENU_ADVANCED
   #define MENU_ALARMS
   #define MENU_PROFILE
+#endif
 
+#if defined iNAV // same as CLEANFLIGHT190 + CMS
+  #define AMPERAGE_DIV 10
+  #define CORRECT_MSP_CF2
+  #define CORRECT_MENU_RCT2
+  #define ENABLE_MSP_SAVE_ADVANCED
+  #define CORRECTLOOPTIME
+  #define CANVAS_SUPPORT
+
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_RC
+  #define MENU_2RC
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
+  #define MENU_PROFILE
 #endif
 
 #if defined CLEANFLIGHT180
@@ -913,6 +930,10 @@ enum {
 
 #ifdef PIODEBUG // This is for travis build only
   #define DEBUG 4 // Display debug secreen at boot
+#endif
+
+#ifdef PIOAUDIOVARIO // This is for travis build only
+  #define AUDIOVARIO A3 // Enable AUDIOVARIO on RSSI
 #endif
 
 #ifdef PWM_THROTTLE

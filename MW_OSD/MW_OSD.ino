@@ -79,9 +79,10 @@ uint16_t UntouchedStack(void)
 #define PGMSTR(p) (char *)pgm_read_word(p)
 
 //------------------------------------------------------------------------
-#define MWVERS "MW-OSD - R1.7.2.2"
-#define MWOSDVERSION 1722 // 1660=1.6.6.0 for GUI
-#define EEPROMVER 14      // for eeprom layout verification
+#define MWVERS "MW-OSD - R1.7.3.0"
+#define MWOSDVERSION 1730 // 1660=1.6.6.0 for GUI
+#define EEPROMVER 13      // for eeprom layout verification
+
 #include <avr/pgmspace.h>
 #undef PROGMEM
 #define PROGMEM __attribute__(( section(".progmem.data") ))
@@ -525,18 +526,6 @@ void loop()
         if (lastCanvas + CANVAS_TIMO < currentMillis) {
           MAX7456_ClearScreen();
           canvasMode = false;
-        }
-
-        // Place a small indicator for canvas mode to detect spurious 
-        // canvas requests.
-        // In a normal situation, It should go away on the very first
-        // clear screen request, but may remain until next clear screen
-        // if the begin and the first clear request comes in back-to-back
-        // before the indicator is drawn.
-
-        if (canvasFirst) {
-          MAX7456_WriteString("*", (LINE01+01));
-          canvasFirst = false;
         }
       }
 #endif

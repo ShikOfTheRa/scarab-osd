@@ -113,10 +113,12 @@
 
 
 /********************       GPS OSD settings (GPS / NAZA)      *********************/
-#define GPSHOMEFIX 50               // Number of consecutive valid fixes before home will be set. 50@ 10hz = 5 seconds of valid fixes.
-#define HOMESATFIX 6                // Minimum number of sats required when setting initial home location. 
-#define GPSOSDARMDISTANCE 20        // distance from home in meters when GPSOSD arms. Starts flight timer etc.
+#define GPSHOMEFIX         50       // Number of consecutive valid fixes before home will be set. 50@ 10hz = 5 seconds of valid fixes.
+#define HOMESATFIX          6       // Minimum number of sats required when setting initial home location. 
+#define GPSOSDARMDISTANCE  20       // distance from home in meters when GPSOSD arms. Starts flight timer etc.
 #define GPSOSDHOMEDISTANCE 40       // distance from home in meters when GPSOSD is home. When speed is low it disarms and displays summary screen.
+#define GPSOSDSUMMARY      60       // seconds summary is displayed for after landing.
+#define GPSOSDLANDED        7       // seconds OSD needs to have landed (within home distance and speed less than xxx) before triggering summary.
 //#define GPSDOP 300                // UBLOX only - minimum PDOP required for sat fix. A DOP of 2.00 is considered good 
 //#define DISPLAYDOP                // UBLOX only - display DOP when its bad - above GPSDOP. Uses and requires temperature position to be enabled
 //#define PWM_OSD_SWITCH            // Enables 3 way screen switch using a TX channel via a RX channel connected to the OSD PWM input pin (RSSI pin on basic MINIM hardware). 
