@@ -557,18 +557,6 @@ void loop()
           MAX7456_ClearScreen();
           canvasMode = false;
         }
-
-        // Place a small indicator for canvas mode to detect spurious 
-        // canvas requests.
-        // In a normal situation, It should go away on the very first
-        // clear screen request, but may remain until next clear screen
-        // if the begin and the first clear request comes in back-to-back
-        // before the indicator is drawn.
-
-        if (canvasFirst) {
-          MAX7456_WriteString("*", (LINE01+01));
-          canvasFirst = false;
-        }
       }
 #endif
       else

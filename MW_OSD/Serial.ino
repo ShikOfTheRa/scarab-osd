@@ -357,7 +357,6 @@ For sub-command 3 (draw string):
 
     case 1: // Exit canvas mode
       canvasMode = false;
-      canvasFirst = true;
       break;
 
     case 2: // Clear canvas
