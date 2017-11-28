@@ -433,7 +433,7 @@ void MAX7456CheckStatus(void){
 }
 #endif
 
-#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
+#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD || defined DISPLAYFONTS
 void displayFont()
 {
   for(uint8_t x = 0; x < 255; x++) {
@@ -441,6 +441,7 @@ void displayFont()
   }
 }
 
+#ifndef DISPLAYFONTS
 void updateFont()
 { 
   for(uint8_t x = 0; x < 255; x++){
@@ -458,4 +459,5 @@ void updateFont()
     delay(20); // Shouldn't be needed due to status reg wait.
   }
 }
+#endif
 #endif
