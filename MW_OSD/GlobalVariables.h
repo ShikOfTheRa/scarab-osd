@@ -298,19 +298,19 @@ uint8_t retransmitQueue;
 uint16_t eeaddress = 0;
 uint8_t eedata = 0;
 uint8_t settingsMode=0;
-uint32_t MSP_OSD_timer=0;
+//uint32_t MSP_OSD_timer=0;
 uint16_t framerate = 0;
 uint16_t packetrate = 0;
 uint16_t serialrxrate = 0;
 
 // Mode bits
 struct __mode {
-  uint8_t armed;
-  uint8_t stable;
-  uint8_t horizon;
-  uint8_t baro;
-  uint8_t mag;
-  uint16_t camstab;
+  uint32_t armed;
+  uint32_t stable;
+  uint32_t horizon;
+  uint32_t baro;
+  uint32_t mag;
+  uint32_t camstab;
   uint32_t gpshome;
   uint32_t gpshold;
   uint32_t passthru;

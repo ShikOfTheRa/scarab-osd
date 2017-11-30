@@ -225,7 +225,7 @@ void serialMSPCheck()
       eeaddress = eeaddress+read8();
       eedata = read8();
       settingsMode=1;
-      MSP_OSD_timer=3000+millis();
+//      MSP_OSD_timer=3000+millis();
       settingsSerialRequest();
     }
 
@@ -237,7 +237,7 @@ void serialMSPCheck()
         eeaddress = eeaddress+(read8()<<8);
         eedata = read8();
         settingsMode=1;
-        MSP_OSD_timer=3000+millis();
+ //       MSP_OSD_timer=3000+millis();
         EEPROM.write(eeaddress,eedata);
 //        if (eeaddress==0){
           EEPROM.write(0,EEPROMVER);
