@@ -1630,7 +1630,7 @@ void displayConfigScreen(void)
         rssiMIN = 0;
       }
 #endif //MINSUMMARY      
-
+    MaxMenuBuffer[0]=1;
     MaxMenuBuffer[1]=trip;
     MaxMenuBuffer[2]=distanceMAX;
     MaxMenuBuffer[3]=altitudeMAX;

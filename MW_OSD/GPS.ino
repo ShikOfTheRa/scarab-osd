@@ -170,7 +170,7 @@ void GPS_updateGGA() {
     GPS_fix = 1;
   }
   GPS_numSat = GPS_parse.GPS_numSat;
-  GPS_altitude = GPS_parse.GPS_altitude;
+  GPS_altitude_ASL = GPS_parse.GPS_altitude;
   GPS_coord[LAT] = GPS_parse.GPS_coord[LAT];
   GPS_coord[LON] = GPS_parse.GPS_coord[LON];
   GPS_Present = GPS_parse.GPS_Present;
@@ -178,84 +178,11 @@ void GPS_updateGGA() {
 }
 
 
-void GPS_NewData() {
-  static uint8_t GPS_fix_HOME_validation = GPSHOMEFIX;
-
-  if (GPS_fix && (GPS_numSat >= MINSATFIX)) {
-    if (GPS_fix_HOME_validation > 0) {
-#if defined HOMESATFIX
-      if (GPS_numSat >= HOMESATFIX)
-#endif // HOMESATFIX
-        GPS_fix_HOME_validation--;
-      GPS_numSat = 1;
-    }
-    else {
-      if (GPS_fix_HOME == 0) {
-        GPS_reset_home_position();
-        GPS_fix_HOME = 1;
-      }
-      else {
-        //calculate distance. bearings etc
-        uint32_t dist;
-        int32_t  dir;
-        GPS_distance_cm_bearing(&GPS_coord[LAT], &GPS_coord[LON], &GPS_home[LAT], &GPS_home[LON], &dist, &dir);
-        GPS_distanceToHome = dist / 100;
-        GPS_directionToHome = dir / 100;
-        GPS_altitude =  GPS_altitude - GPS_altitude_home;
-        MwAltitude = (int32_t)GPS_altitude * 100;
-        GPS_latitude = GPS_coord[LAT];
-        GPS_longitude = GPS_coord[LON];
-        int16_t MwHeading360 = GPS_ground_course / 10;
-        if (MwHeading360 > 180)
-          MwHeading360 = MwHeading360 - 360;
-        MwHeading   = MwHeading360;
-
-        if (GPS_armedangleset == 0)
-          armedangle = MwHeading;
-        if (GPS_distanceToHome > GPSOSDARMDISTANCE) {
-          GPS_armedangleset = 1;
-          armed = 1;
-        }
-
-        if (GPS_armedangleset == 1) {
-          if ((GPS_distanceToHome < GPSOSDHOMEDISTANCE) && (GPS_speed < 75)) {
-            if ((GPS_home_timer + (GPSOSDLANDED*1000)) > millis()) {
-            }
-            else if ((GPS_home_timer + (GPSOSDSUMMARY*1000)) > millis()) {
-              configPage = 0;
-              armed = 0;
-            }
-            else {
-              configMode = 0;
-              GPS_armedangleset = 0;
-              previousarmedstatus = 0;
-            }
-          }
-          else {
-            GPS_home_timer = millis();
-          }
-        }
-      }
-    }
-  }
-  else {
-    GPS_fix_HOME_validation = GPSHOMEFIX;
-    /*
-          GPS_distanceToHome = 0;
-          GPS_directionToHome = 0;
-          GPS_altitude = 0;
-          MwAltitude = 0;
-    */
-  }
-
-}
-
-
-void GPS_reset_home_position() {
+void GPS_reset_home_position() { 
   if (GPS_fix && GPS_numSat >= MINSATFIX) {
-    GPS_home[LAT] = GPS_coord[LAT];
-    GPS_home[LON] = GPS_coord[LON];
-    GPS_altitude_home = GPS_altitude;
+    GPS_home[LAT+2] = GPS_coord[LAT];
+    GPS_home[LON+2] = GPS_coord[LON];
+    GPS_altitude_home = GPS_altitude_ASL;
     GPS_calc_longitude_scaling(GPS_coord[LAT]);  //need an initial value for distance and bearing calc
     GPS_fix_HOME = 1;
   }
@@ -614,9 +541,9 @@ bool UBLOX_parse_gps(void) {
     case MSG_POSLLH:
       //i2c_dataset.time                = _buffer.posllh.time;
       if (_fix_ok) {
-        GPS_coord[LON] = _buffer.posllh.longitude;
-        GPS_coord[LAT] = _buffer.posllh.latitude;
-        GPS_altitude   = _buffer.posllh.altitude_msl / 1000;      //alt in m
+        GPS_coord[LON]   = _buffer.posllh.longitude;
+        GPS_coord[LAT]   = _buffer.posllh.latitude;
+        GPS_altitude_ASL = _buffer.posllh.altitude_msl / 1000;      //alt in m
         gpsvario();
       }
       GPS_fix = _fix_ok;
@@ -793,7 +720,7 @@ restart:
       GPS_coord[LAT]              = _buffer.msg.latitude;         // With 1.9 now we have real 10e7 precision
       GPS_coord[LON]              = _buffer.msg.longitude;
 #endif
-      GPS_altitude                = _buffer.msg.altitude / 100;   // altitude in meter
+      GPS_altitude_ASL            = _buffer.msg.altitude / 100;   // altitude in meter
       gpsvario();
       GPS_speed                   = _buffer.msg.ground_speed;     // in m/s * 100 == in cm/s
       GPS_ground_course           = _buffer.msg.ground_course / 100; //in degrees
@@ -806,7 +733,23 @@ restart:
 }
 #endif //MTK
 
-#endif // GPS
+
+void     GPSOSDcalculate(){
+  //calculate distance. bearings etc
+  uint32_t dist;
+  int32_t  dir;
+  GPS_distance_cm_bearing(&GPS_coord[LAT], &GPS_coord[LON], &GPS_home[LAT], &GPS_home[LON], &dist, &dir);
+  GPS_distanceToHome = dist / 100;
+  GPS_directionToHome = dir / 100;
+  GPS_altitude =  GPS_altitude_ASL - GPS_altitude_home;
+  MwAltitude = (int32_t)GPS_altitude * 100;
+  GPS_latitude = GPS_coord[LAT];
+  GPS_longitude = GPS_coord[LON];
+  int16_t MwHeading360 = GPS_ground_course / 10;
+  if (MwHeading360 > 180)
+  MwHeading360 = MwHeading360 - 360;
+  MwHeading   = MwHeading360;
+}
 
 void gpsvario() {
   if (millis() > timer.fwAltitudeTimer) { // To make vario from GPS altitude
@@ -816,6 +759,83 @@ void gpsvario() {
     MwVario = (GPS_altitude - previousfwaltitude) * 20;
   }
 }
+
+void GPS_NewData() {
+
+static uint8_t GPS_fix_HOME_validation = GPSHOMEFIX;
+static uint8_t GPSOSD_state=0;
+
+  if (GPS_numSat >= MINSATFIX) {
+    GPSOSDcalculate();
+  }
+  
+  switch (GPSOSD_state) {
+    case 1: // waiting enough fixes to set home
+     alarms.active|=1<<3;
+     if (GPS_numSat >= HOMESATFIX){
+         GPS_fix_HOME_validation--;          
+      }
+      else{
+        GPS_fix_HOME_validation = GPSHOMEFIX; 
+      }
+      if (GPS_fix_HOME_validation == 0) { 
+        GPS_reset_home_position();
+        GPS_home[LAT] = GPS_home[LAT+2];
+        GPS_home[LON] = GPS_home[LON+2];
+        configMode = 0;
+        GPS_armedangleset = 0;
+        previousarmedstatus = 0;
+        timer.resethome=millis();
+        GPSOSD_state++;             
+      }
+       break;
+
+    case 2: // waiting for launch and reset home to improve accuracy
+       armedangle = MwHeading;
+        if ((GPS_distanceToHome > GPSOSDARMDISTANCE)) { // To determine launch direction optional "&& (GPS_speed > 75)"
+          GPS_armedangleset = 1;
+          armed = 1;
+          GPSOSD_state++;     
+        }  
+        else if (millis() > (10000+timer.resethome)){ //Reset home with position from 10 secs ago if no significant movement to improve home accuracy.
+          GPS_home[LAT] = GPS_home[LAT+2];
+          GPS_home[LON] = GPS_home[LON+2];
+          GPS_reset_home_position();
+          timer.resethome=millis();
+        } 
+      break;
+
+    case 3: // in active flight
+      if ((GPS_distanceToHome < GPSOSDHOMEDISTANCE) && (GPS_speed < 75)) { // check if potentially home 
+        if (millis() > (GPS_home_timer + (GPSOSDLANDED*1000)))  {
+          configPage = 0;
+          armed=0;
+          GPSOSD_state++;     
+        }
+      }
+      else{ // not home - resume active OSD mode
+        GPS_home_timer= millis();
+      }
+      break;
+
+    case 4: // confirm landed. Display stats
+
+      if (millis() > (GPS_home_timer + (GPSOSDLANDED*1000)+ (GPSOSDSUMMARY*1000))) {
+        configExit();
+        GPS_armedangleset = 0;
+        GPSOSD_state=2;  
+      }
+      break;
+     
+    default: // case 0 – Waiting GPS fix
+      if (GPS_fix && (GPS_numSat >= MINSATFIX))
+        GPSOSD_state=1;     
+      break;
+  }
+}
+
+#endif // GPS
+
 
 #if defined NAZA
 #include "Naza.h"

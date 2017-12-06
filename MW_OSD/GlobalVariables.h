@@ -187,7 +187,8 @@ struct  __timer {
   uint16_t  serialrxrate;
   uint32_t alarms;                            // Alarm length timer
   uint32_t vario;                             
-  uint32_t audiolooptimer;                             
+  uint32_t audiolooptimer;
+  uint32_t resethome;                             
 
 }
 timer;
@@ -713,6 +714,7 @@ uint8_t GPS_frame_timer=0;
 int32_t GPS_latitude;
 int32_t GPS_longitude;
 int32_t GPS_altitude;
+int32_t GPS_altitude_ASL;
 int32_t GPS_home_altitude;
 int16_t previousfwaltitude=0;
 int16_t interimfwaltitude=0;
@@ -809,7 +811,7 @@ int16_t rssiMIN=100;
   #define  GPS_BAUD BAUDRATE
   uint32_t GPS_home_timer=0;
   int32_t  GPS_coord[2];
-  int32_t  GPS_home[2];
+  int32_t  GPS_home[4];
 //  uint16_t GPS_ground_course = 0;                       
   int16_t  GPS_altitude_home;                            
   uint8_t  GPS_Present = 0;                             
@@ -928,6 +930,7 @@ const char APHOLDtext[]     PROGMEM = "AUTO HOLD";
 const char APWAYPOINTtext[] PROGMEM = " MISSION";
 const char lowvolts_text[]  PROGMEM = "LOW VOLTS";
 const char debug_text[]     PROGMEM = DEBUGTEXT;
+const char satwait_text[]   PROGMEM = "WAIT SATS";
 
 // For Alarm / Message text
 const PROGMEM char * const message_text[] =
@@ -944,7 +947,11 @@ const PROGMEM char * const alarm_text[] =
   blank_text,     //0
   disarmed_text,  //1
   armed_text,     //2
-  nodata_text,    //3
+  #if defined(GPSOSD)
+    satwait_text,    //3
+  #else
+    nodata_text,    //3
+  #endif
   nogps_text,     //4
   satlow_text,    //5
   lowvolts_text,  //6
