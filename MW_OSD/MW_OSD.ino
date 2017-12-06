@@ -229,6 +229,13 @@ void loop()
   }
   LEDOFF
 }
+#elif defined DISPLAYFONTS
+void loop()
+{
+  MAX7456Setup(); 
+  displayFont();  
+  MAX7456_DrawScreen();
+}
 #else
 
 // ampAlarming returns true if the total consumed mAh is greater than

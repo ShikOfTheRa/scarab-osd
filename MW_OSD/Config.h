@@ -85,7 +85,7 @@
 //#define LOADFONT_DEFAULT         // Uncomment to force an upload of default font instead of using GUI
 //#define LOADFONT_LARGE           // Uncomment to force an upload of large font instead of using GUI
 //#define LOADFONT_BOLD            // Uncomment to force an upload of bold font instead of using GUI
-
+//#define DISPLAYFONTS             // Uncomment to display installed fonts for testing
 
 
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
@@ -117,8 +117,8 @@
 #define HOMESATFIX          6       // Minimum number of sats required when setting initial home location. 
 #define GPSOSDARMDISTANCE  20       // distance from home in meters when GPSOSD arms. Starts flight timer etc.
 #define GPSOSDHOMEDISTANCE 40       // distance from home in meters when GPSOSD is home. When speed is low it disarms and displays summary screen.
-#define GPSOSDSUMMARY      60       // seconds summary is displayed for after landing.
-#define GPSOSDLANDED        7       // seconds OSD needs to have landed (within home distance and speed less than xxx) before triggering summary.
+#define GPSOSDSUMMARY      30       // seconds summary is displayed for after landing.
+#define GPSOSDLANDED        8       // seconds OSD needs to have landed (within home distance and speed less than xxx) before triggering summary.
 //#define GPSDOP 300                // UBLOX only - minimum PDOP required for sat fix. A DOP of 2.00 is considered good 
 //#define DISPLAYDOP                // UBLOX only - display DOP when its bad - above GPSDOP. Uses and requires temperature position to be enabled
 //#define PWM_OSD_SWITCH            // Enables 3 way screen switch using a TX channel via a RX channel connected to the OSD PWM input pin (RSSI pin on basic MINIM hardware). 
