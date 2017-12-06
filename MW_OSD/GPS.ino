@@ -751,14 +751,6 @@ void     GPSOSDcalculate(){
   MwHeading   = MwHeading360;
 }
 
-void gpsvario() {
-  if (millis() > timer.fwAltitudeTimer) { // To make vario from GPS altitude
-    timer.fwAltitudeTimer += 1000;
-    previousfwaltitude = interimfwaltitude;
-    interimfwaltitude = GPS_altitude;
-    MwVario = (GPS_altitude - previousfwaltitude) * 20;
-  }
-}
 
 void GPS_NewData() {
 
@@ -835,6 +827,16 @@ static uint8_t GPSOSD_state=0;
 }
 
 #endif // GPS
+
+
+void gpsvario() {
+  if (millis() > timer.fwAltitudeTimer) { // To make vario from GPS altitude
+    timer.fwAltitudeTimer += 1000;
+    previousfwaltitude = interimfwaltitude;
+    interimfwaltitude = GPS_altitude;
+    MwVario = (GPS_altitude - previousfwaltitude) * 20;
+  }
+}
 
 
 #if defined NAZA
