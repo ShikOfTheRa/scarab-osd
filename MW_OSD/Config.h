@@ -145,7 +145,7 @@
 #define ALARM_SATS                  // Text alerts if sats below MINSATFIX - in addition to flashing sat indicator
 #define ALARM_GPS 5                 // Text alerts if no GPS data for more than x secs. Sets GPS sats to zero
 #define ALARM_MSP 3                 // Text alerts if no Flight controller data for more than x secs. 
-#define FORCE_DISP_LOW_VOLTS        // Enable display low voltage warning override for screen layouts where its disabled
+//#define FORCE_DISP_LOW_VOLTS      // Enable display low voltage warning override for screen layouts where its disabled
 //#define FORCE_DISP_LOW_VID_VOLTS  // Enable display low VIDEO voltage warning override for screen layouts where its disabled
 
 

@@ -2412,7 +2412,7 @@ void displayArmed(void)
   if (GPSOSD_state==1) {
     alarms.active|=(1<<3);      
   }
-  else if (GPSOSD_state==2) {
+  if ((GPSOSD_state==2)&&(GPS_numSat>=MINSATFIX)) {
     alarms.active|=(1<<1);      
   }  
 #endif
