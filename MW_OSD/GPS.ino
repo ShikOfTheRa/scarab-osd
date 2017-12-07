@@ -559,7 +559,7 @@ bool UBLOX_parse_gps(void) {
 #ifdef DISPLAYDOP
       GPS_pdop = _buffer.solution.position_DOP;
       if ((GPS_fix_HOME == 0) && (GPS_pdop > GPSDOP)) {
-        GPS_numSat = MINSATFIX - 1;
+        GPS_numSat = MINSATFIX;
       }
 #endif
       break;
@@ -754,65 +754,68 @@ void     GPSOSDcalculate(){
 
 void GPS_NewData() {
 
-static uint8_t GPS_fix_HOME_validation = GPSHOMEFIX;
-static uint8_t GPSOSD_state=0;
+/*
+  for(uint8_t X=0; X<4; X++) {
+    ItoaPadded(debug[X], screenBuffer+2,7,0);     
+    screenBuffer[0] = 0x44;
+    screenBuffer[1] = 0x30+X;
+    screenBuffer[2] = 0X3A;
+    MAX7456_WriteString(screenBuffer,DEBUGDPOSVAL + LINE + (X*LINE));
+  } 
+*/
 
-  if (GPS_numSat >= MINSATFIX) {
+  if (GPS_numSat >= MINSATFIX){
     GPSOSDcalculate();
   }
   
   switch (GPSOSD_state) {
-    case 1: // waiting enough fixes to set home
-     alarms.active|=1<<3;
-     if (GPS_numSat >= HOMESATFIX){
-         GPS_fix_HOME_validation--;          
-      }
-      else{
-        GPS_fix_HOME_validation = GPSHOMEFIX; 
-      }
-      if (GPS_fix_HOME_validation == 0) { 
+    case 1: // waiting for steady state fix - (enough sats for a consecutive period without glitch). Default: 6 sats for 15 seconds)
+      if (GPS_numSat >= HOMESATFIX){
         GPS_reset_home_position();
         GPS_home[LAT] = GPS_home[LAT+2];
         GPS_home[LON] = GPS_home[LON+2];
-        configMode = 0;
-        GPS_armedangleset = 0;
-        previousarmedstatus = 0;
-        timer.resethome=millis();
-        GPSOSD_state++;             
-      }
-       break;
-
-    case 2: // waiting for launch and reset home to improve accuracy
-       armedangle = MwHeading;
-        if ((GPS_distanceToHome > GPSOSDARMDISTANCE)) { // To determine launch direction optional "&& (GPS_speed > 75)"
-          GPS_armedangleset = 1;
-          armed = 1;
+        if (millis() > (timer.GPSOSDstate + (GPSHOMEFIX*1000)))  { 
+          timer.GPSOSDstate=millis();          
           GPSOSD_state++;     
-        }  
-        else if (millis() > (10000+timer.resethome)){ //Reset home with position from 10 secs ago if no significant movement to improve home accuracy.
-          GPS_home[LAT] = GPS_home[LAT+2];
-          GPS_home[LON] = GPS_home[LON+2];
-          GPS_reset_home_position();
-          timer.resethome=millis();
-        } 
+        }
+        
+      }
+      else{
+        timer.GPSOSDstate=millis();
+      }
+      break;
+
+    case 2: // waiting for launch. Continually reset home to improve accuracy
+      armedangle = MwHeading;
+      if ((GPS_distanceToHome > GPSOSDARMDISTANCE)) { // To determine launch direction optional "&& (GPS_speed > 75)"
+        GPS_armedangleset = 1;
+        armed = 1;
+        GPSOSD_state++;     
+      }  
+      else if (millis() > (10000+timer.GPSOSDstate)){ //Reset home position every 10 secs ago if launch not detected to improve home accuracy.
+        GPS_home[LAT] = GPS_home[LAT+2];
+        GPS_home[LON] = GPS_home[LON+2];
+        GPS_reset_home_position();
+        timer.GPSOSDstate=millis();
+      } 
       break;
 
     case 3: // in active flight
-      if ((GPS_distanceToHome < GPSOSDHOMEDISTANCE) && (GPS_speed < 75)) { // check if potentially home 
-        if (millis() > (GPS_home_timer + (GPSOSDLANDED*1000)))  {
+      if ((GPS_distanceToHome < GPSOSDHOMEDISTANCE) && (GPS_speed < 75)) { // Detected potential landed 
+        if (millis() > (timer.GPSOSDstate + (GPSOSDLANDED*1000)))  { // Confirmed landed
           configPage = 0;
           armed=0;
+          timer.GPSOSDstate=millis();
           GPSOSD_state++;     
         }
       }
-      else{ // not home - resume active OSD mode
-        GPS_home_timer= millis();
+      else{ // not landed - resume active OSD mode
+        timer.GPSOSDstate=millis();
       }
       break;
 
     case 4: // confirm landed. Display stats
-
-      if (millis() > (GPS_home_timer + (GPSOSDLANDED*1000)+ (GPSOSDSUMMARY*1000))) {
+      if (millis() > (timer.GPSOSDstate + (GPSOSDSUMMARY*1000))) {
         configExit();
         GPS_armedangleset = 0;
         GPSOSD_state=2;  
@@ -820,8 +823,10 @@ static uint8_t GPSOSD_state=0;
       break;
      
     default: // case 0 – Waiting GPS fix
-      if (GPS_fix && (GPS_numSat >= MINSATFIX))
+      if ((GPS_fix) && (GPS_numSat >= MINSATFIX)){
         GPSOSD_state=1;     
+        timer.GPSOSDstate=millis();
+      }
       break;
   }
 }

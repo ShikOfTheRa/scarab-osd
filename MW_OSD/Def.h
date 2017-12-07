@@ -538,7 +538,7 @@
   #undef  DISPLAY_PR
   #define NOAHI
   
-  #define HIDEARMEDSTATUS
+//  #define HIDEARMEDSTATUS
   #define ALARM_GPS 5
 
   #define MENU_STAT     0       //STATISTICS
