@@ -2349,7 +2349,9 @@ void displayArmed(void)
 #endif
 
   if(!armed){
+#ifndef GPSOSD
     alarms.active|=(1<<1);
+#endif    
     armedtimer=30;
   }
   else{
@@ -2364,7 +2366,21 @@ void displayArmed(void)
     }
   }
 
+<<<<<<< HEAD
 #ifdef DEBUGTEXT
+=======
+
+#if defined GPSOSD
+  if (GPSOSD_state==1) {
+    alarms.active|=(1<<3);      
+  }
+  else if (GPSOSD_state==2) {
+    alarms.active|=(1<<1);      
+  }  
+#endif
+  
+#ifdef ENABLEDEBUGTEXT
+>>>>>>> refs/remotes/origin/master
     if (debugtext==1)
       alarms.active|=(1<<7);
 #endif

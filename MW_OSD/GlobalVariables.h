@@ -209,7 +209,7 @@ struct  __timer {
   uint32_t alarms;                            // Alarm length timer
   uint32_t vario;                             
   uint32_t audiolooptimer;
-  uint32_t resethome;                             
+  uint32_t GPSOSDstate;                             
 
 }
 timer;
@@ -821,6 +821,7 @@ int16_t rssiMIN=100;
   uint8_t  GPS_fix_HOME=0;
   uint16_t GPS_pdop=100;
   const char satnogps_text[] PROGMEM = " NO GPS ";
+  uint8_t  GPSOSD_state=0;
 #endif
 
 
@@ -931,10 +932,16 @@ const char APWAYPOINTtext[] PROGMEM = " MISSION";
 const char lowvolts_text[]  PROGMEM = "LOW VOLTS";
 #if defined DEBUGTEXT
 const char debug_text[]     PROGMEM = DEBUGTEXT;
+<<<<<<< HEAD
 #else
 const char debug_text[]     PROGMEM = " ";
 #endif
 const char satwait_text[]   PROGMEM = "WAIT SATS";
+=======
+const char satwait_text[]   PROGMEM = "  WAIT";
+const char launch_text[]    PROGMEM = " LAUNCH";
+const char ready_text[]     PROGMEM = " READY";
+>>>>>>> refs/remotes/origin/master
 
 // For Alarm / Message text
 const PROGMEM char * const message_text[] =
@@ -949,12 +956,14 @@ const PROGMEM char * const message_text[] =
 const PROGMEM char * const alarm_text[] =
 {   
   blank_text,     //0
-  disarmed_text,  //1
-  armed_text,     //2
   #if defined(GPSOSD)
+    ready_text,  //1
+    launch_text,     //2
     satwait_text,    //3
   #else
-    nodata_text,    //3
+   disarmed_text,  //1
+   armed_text,     //2
+   nodata_text,    //3
   #endif
   nogps_text,     //4
   satlow_text,    //5
