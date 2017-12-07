@@ -932,16 +932,12 @@ const char APWAYPOINTtext[] PROGMEM = " MISSION";
 const char lowvolts_text[]  PROGMEM = "LOW VOLTS";
 #if defined DEBUGTEXT
 const char debug_text[]     PROGMEM = DEBUGTEXT;
-<<<<<<< HEAD
 #else
 const char debug_text[]     PROGMEM = " ";
 #endif
-const char satwait_text[]   PROGMEM = "WAIT SATS";
-=======
 const char satwait_text[]   PROGMEM = "  WAIT";
 const char launch_text[]    PROGMEM = " LAUNCH";
 const char ready_text[]     PROGMEM = " READY";
->>>>>>> refs/remotes/origin/master
 
 // For Alarm / Message text
 const PROGMEM char * const message_text[] =
