@@ -792,17 +792,22 @@ enum {
     #define SWAPVOLTAGEPINS
 #endif
 
+#ifdef KYLIN250PDB
+    #undef VOLTAGEPIN
+    #define VOLTAGEPIN    A6
+#endif
+
+#ifdef HOLYBROPDB
+    #undef VOLTAGEPIN
+    #define VOLTAGEPIN    A6
+#endif
+
 #ifdef SWAPVOLTAGEPINS                     
     #define VOLTAGEPIN    A2
     #define VIDVOLTAGEPIN A0
 #else                                  
     #define VOLTAGEPIN    A0
     #define VIDVOLTAGEPIN A2
-#endif
-
-#ifdef KYLIN250PDB
-    #undef VOLTAGEPIN
-    #define VOLTAGEPIN    A6
 #endif
 
 #ifdef ALTERNATEDIVIDERS
@@ -1079,6 +1084,9 @@ enum {
 #endif
 #ifdef ANDROMEDA
   #define INFO_HARDWARE 9
+#endif
+#ifdef ANDROMEDA
+  #define HOLYBROPDB 10
 #endif
 
 

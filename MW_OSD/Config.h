@@ -12,7 +12,8 @@
 //#define RUSHDUINO                 // Uncomment this if using Rushduino
 //#define KYLIN250PDB               // Uncomment this if using a Kylin 250 FPV PDB (Using A6 as VOLTAGEPIN)
 //#define AIRBOTMICRO               // Uncomment this if using an airbot MicroOSD
-//#define ANDROMEDA                 // Uncomment this if using an Andromeda (http://www.multiwiicopter.com/)
+//#define ANDROMEDA                 // Uncomment this if using an Andromeda http://www.multiwiicopter.com/
+//#define HOLYBROPDB                // Uncomment this if using a HOLYBRO PDB (Using A6 as VOLTAGEPIN) http://www.holybro.com/
 //#define IMPULSERC_HELIX           // Uncomment this if using an ImpulseRC integrated OSD/VTX (STILL UNDER DEVELOPMENT PENDING TESTING)
 //#define FFPV_INNOVA               // Uncomment this if using a FURIOUS FPV Innova integrated OSD/VTX (STILL UNDER DEVELOPMENT PENDING TESTING)
 
