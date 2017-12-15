@@ -16,7 +16,13 @@
 #define SYM_DEGREES 0XBD
 
 // Direction arrows 
-#define SYM_ARROW_SOUTH 0X60
+#ifdef V14
+  #define SYM_ARROW_HOME 0X60
+  #define SYM_ARROW_SOUTH 0X60
+#else  
+  #define SYM_ARROW_HOME 0X60
+  #define SYM_ARROW_SOUTH 0X60
+#endif
 #define SYM_ARROW_2 0X61
 #define SYM_ARROW_3 0X62
 #define SYM_ARROW_4 0X63

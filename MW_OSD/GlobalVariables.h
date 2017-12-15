@@ -590,6 +590,7 @@ enum Positions {
   AIR_speedPosition,
   MAX_speedPosition,
   WindDirectionPosition,
+  WIND_speedPosition,
 #endif  
 
   POSITIONS_SETTINGS
@@ -603,6 +604,7 @@ enum V14Positions {
   AIR_speedPosition,
   MAX_speedPosition,
   WindDirectionPosition,
+  WIND_speedPosition,
 };
 #endif  
 
@@ -625,14 +627,14 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE13+22)|DISPLAY_ALWAYS,   // UNUSED flyTimePosition
 (LINE13+22)|DISPLAY_ALWAYS,   // onTimePosition
 (LINE11+11)|DISPLAY_ALWAYS,   // motorArmedPosition
-(LINE10+22)|DISPLAY_ALWAYS,     // pitchAnglePosition
-(LINE11+22)|DISPLAY_ALWAYS,    // rollAnglePosition
+(LINE10+22)|DISPLAY_ALWAYS,   // pitchAnglePosition
+(LINE11+22)|DISPLAY_ALWAYS,   // rollAnglePosition
 (LINE01+2)|DISPLAY_ALWAYS,    // MwGPSLatPositionTop      // On top of screen
 (LINE01+15)|DISPLAY_ALWAYS,   // MwGPSLonPositionTop      // On top of screen
 (LINE12+3)|DISPLAY_ALWAYS,    // rssiPosition
 (LINE05+3)|DISPLAY_ALWAYS,    // temperaturePosition
 (LINE13+3)|DISPLAY_ALWAYS,    // voltagePosition
-(LINE11+3)|DISPLAY_ALWAYS,     // vidvoltagePosition
+(LINE11+3)|DISPLAY_ALWAYS,    // vidvoltagePosition
 (LINE13+9)|DISPLAY_ALWAYS,    // amperagePosition
 (LINE13+16)|DISPLAY_ALWAYS,   // pMeterSumPosition
 (LINE07+14)|DISPLAY_ALWAYS,   // horizonPosition
@@ -647,8 +649,8 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE02+22)|DISPLAY_NEVER,    // MapModePosition
 (LINE07+15)|DISPLAY_NEVER,    // MapCenterPosition
 (LINE04+10)|DISPLAY_ALWAYS,   // APstatusPosition
-(LINE10+0)|DISPLAY_ALWAYS,     // wattPosition
-(LINE07+6)|DISPLAY_ALWAYS,     // glidescopePosition
+(LINE10+0)|DISPLAY_ALWAYS,    // wattPosition
+(LINE07+6)|DISPLAY_ALWAYS,    // glidescopePosition
 (LINE10+10)|DISPLAY_ALWAYS,   // CallSign Position
 (LINE08+10)|DISPLAY_ALWAYS,   // Debug Position
 #ifdef V14
@@ -658,6 +660,8 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE08+8)|DISPLAY_ALWAYS,    // AIR_speedposition,
 (LINE09+8)|DISPLAY_ALWAYS,    // MAX_speedposition,
 (LINE03+22)|DISPLAY_ALWAYS,   // WindDirectionPosition
+(LINE10+8)|DISPLAY_ALWAYS,    // WIND_speedposition,
+
 #endif  
 
 };

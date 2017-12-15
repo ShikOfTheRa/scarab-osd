@@ -614,6 +614,7 @@ void loop()
           #endif //USEGLIDESCOPE  
           display_speed(GPS_speed,GPS_speedPosition);
           display_speed(AIR_speed,AIR_speedPosition);
+  //        display_speed(WIND_speed,WIND_speedPosition);
           display_max(speedMAX,MAX_speedPosition);
           displayGPSPosition();  
       

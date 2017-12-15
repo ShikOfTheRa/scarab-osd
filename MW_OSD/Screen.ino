@@ -1347,7 +1347,7 @@ void displayDirectionToHome(void)
   d *= 4;
   d += 45;
   d = (d/90)%16;
-  screenBuffer[0] = SYM_ARROW_SOUTH + d;
+  screenBuffer[0] = SYM_ARROW_HOME + d;
   screenBuffer[1] = 0;
   MAX7456_WriteString(screenBuffer,position);
 }
@@ -1359,6 +1359,9 @@ void displayWindDirection(void)
     return;
   uint16_t position=getPosition(WindDirectionPosition);
   int16_t d;
+
+  GPS_ground_course=45;
+  MwHeading=0;
   #ifdef MAVLINK
     d = WIND_direction + 180;
     d *= 4;
@@ -1368,19 +1371,21 @@ void displayWindDirection(void)
     //#ifndef FIXEDWING // only applicable to fixedwing
     //  return;
     //#endif  
-    d = GPS_ground_course/10 + 180 + 360 - MwHeading;
+    d = GPS_ground_course/10 + 180 + 360 + - MwHeading;
     d *= 4;
     d += 45;
     d = (d/90)%16;
-    if (d>1)
+    if (d>0)
       WIND_speed=1;
+    else if (d<0)
+      WIND_speed=-1;                 
     else
       WIND_speed=0;                 
   #endif
-  screenBuffer[0] = SYM_ARROW_SOUTH + d;
-  screenBuffer[1] = 0;
-  if (WIND_speed > 0)
-   MAX7456_WriteString(screenBuffer,position);
+
+//  if (WIND_speed > 0){
+   displayItem(WindDirectionPosition, WIND_speed, SYM_ARROW_SOUTH + d, speedUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
+//  }
 }
 
 
@@ -2487,9 +2492,19 @@ void formatDistance(int32_t d2f, uint8_t units, uint8_t type ) {
 
 void displayItem(uint16_t t_position, int16_t t_value, uint8_t t_leadicon, uint8_t t_trailicon, uint8_t t_psize, uint8_t t_pdec )
 {
-  /*  This is potential future function to reduce memeory have single display write function.
-   *  It may require more memeory so is hure for reference only
-   */
+  /*
+   *  t_position  = screen position
+   *  t_value     = numerical value
+   *  t_leadicon  = hex position of leading character. 0 = no leading character.
+   *  t_trailicon = hex position of trailing character. 0 = no trailing character.
+   *  t_psize     = number of characters to right justify value into. 0 = left justified with no padding.
+   *  t_dec       = char position of decimal point within right justified psize. e.g for 16.1 use t_psize=4,t_dec=3
+  */
+  /*
+   *  This is potential future function to reduce memory have single display write function.
+   *  It may require more memeory to actually implement so is here for reference only
+  */
+  
   uint8_t t_offset = 0;
   if(!fieldIsVisible(t_position))
     return;
@@ -2503,7 +2518,7 @@ void displayItem(uint16_t t_position, int16_t t_value, uint8_t t_leadicon, uint8
     }
     else{ // left justified value
       itoa(t_value,screenBuffer+t_offset,10);  
-      screenBuffer[t_psize] = 0;    
+ //     screenBuffer[t_psize] = 0;    
     }
     if (t_trailicon>0){ // has a trailing icon
       t_offset = FindNull();
