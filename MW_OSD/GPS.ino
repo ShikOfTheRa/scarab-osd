@@ -823,9 +823,9 @@ void GPS_NewData() {
       break;
      
     default: // case 0 – Waiting GPS fix
+      timer.GPSOSDstate=millis();
       if ((GPS_fix) && (GPS_numSat >= MINSATFIX)){
         GPSOSD_state=1;     
-        timer.GPSOSDstate=millis();
       }
       break;
   }
