@@ -731,6 +731,8 @@ void     GPSOSDcalculate(){
   //calculate distance. bearings etc
   uint32_t dist;
   int32_t  dir;
+  if (GPS_numSat < 5)
+    return;
   GPS_distance_cm_bearing(&GPS_coord[LAT], &GPS_coord[LON], &GPS_home[LAT], &GPS_home[LON], &dist, &dir);
   GPS_distanceToHome = dist / 100;
   GPS_directionToHome = dir / 100;
@@ -757,7 +759,7 @@ void GPS_NewData() {
   } 
 */
 
-  if (GPS_numSat >= MINSATFIX){
+  if (GPSOSD_state>1){
     GPSOSDcalculate();
   }
   
@@ -767,11 +769,10 @@ void GPS_NewData() {
         GPS_reset_home_position();
         GPS_home[LAT] = GPS_home[LAT+2];
         GPS_home[LON] = GPS_home[LON+2];
-        if (millis() > (timer.GPSOSDstate + (GPSHOMEFIX*1000)))  { 
+        if (millis() > (timer.GPSOSDstate + (GPSHOMEFIX*1000))){ 
           timer.GPSOSDstate=millis();          
           GPSOSD_state++;     
-        }
-        
+        }       
       }
       else{
         timer.GPSOSDstate=millis();
