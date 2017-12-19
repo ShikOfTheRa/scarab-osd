@@ -17,17 +17,12 @@ uint32_t ltmread_u32() {
   return t;
 }
 
-void GPS_calc_longitude_scaling(int32_t lat) {
-  float rads       = (abs((float)lat) / 10000000.0) * 0.0174532925;
-  mw_ltm.GPS_scaleLonDown = cos(rads);
-}
-
 void GPS_distance_cm_bearing(int32_t* lat1, int32_t* lon1, int32_t* lat2, int32_t* lon2,uint32_t* dist, int32_t* bearing) {
-  float dLat = *lat2 - *lat1;                                 // difference of latitude in 1/10 000 000 degrees
-  float dLon = (float)(*lon2 - *lon1) * mw_ltm.GPS_scaleLonDown;
+  float rads = (abs((float)*lat1) / 10000000.0) * 0.0174532925;
+  float dLat = *lat2 - *lat1;                                    // difference of latitude in 1/10 000 000 degrees
+  float dLon = (float)(*lon2 - *lon1) * cos(rads);
   *dist = sqrt(sq(dLat) + sq(dLon)) * 1.113195;
-
-  *bearing = 9000.0f + atan2(-dLat, dLon) * 5729.57795f;      //Convert the output radians to 100xdeg
+  *bearing = 9000.0f + atan2(-dLat, dLon) * 5729.57795f;      //Convert the output redians to 100xdeg
   if (*bearing < 0) *bearing += 36000;
 }
 
@@ -37,7 +32,6 @@ void GPS_reset_home_position() {
     GPS_home[LON] = GPS_longitude;
     if (!MSP_home_set)
       mw_ltm.GPS_altitude_home = GPS_altitude;
-    GPS_calc_longitude_scaling(GPS_latitude);  //need an initial value for distance and bearing calc
   }
 }
 

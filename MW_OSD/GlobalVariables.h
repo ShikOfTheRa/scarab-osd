@@ -1740,7 +1740,6 @@ struct __mw_mav {
   uint8_t  sequence;
   uint16_t serial_checksum;
   uint16_t tx_checksum;
-  float    GPS_scaleLonDown;
 }mw_mav;
 
 int32_t  GPS_home[2];
@@ -1819,7 +1818,6 @@ struct __mw_ltm {
   uint8_t LTMframelength;
   uint16_t GPS_altitude_home;
   uint16_t batUsedCapacity;  
-  float    GPS_scaleLonDown;  
 }mw_ltm;
 
 #endif // PROTOCOL_LTM
