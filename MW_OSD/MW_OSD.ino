@@ -598,7 +598,6 @@ void loop()
         if(MwSensorPresent&MAGNETOMETER) {
           displayHeadingGraph();
           displayHeading();
-          displayWindDirection();
         }
         if(MwSensorPresent&BAROMETER) {
           displayAltitude();
@@ -612,9 +611,10 @@ void loop()
           #ifdef USEGLIDESCOPE
             // displayfwglidescope(); //note hook for this is in display horizon function
           #endif //USEGLIDESCOPE  
-          display_speed(GPS_speed,GPS_speedPosition);
-          display_speed(AIR_speed,AIR_speedPosition);
-  //        display_speed(WIND_speed,WIND_speedPosition);
+          display_speed(GPS_speed,GPS_speedPosition,0);
+          display_speed(AIR_speed,AIR_speedPosition,1);
+//          display_speed(WIND_speed,WIND_speedPosition);
+          displayWindSpeed(); // also windspeed if available
           display_max(speedMAX,MAX_speedPosition);
           displayGPSPosition();  
       

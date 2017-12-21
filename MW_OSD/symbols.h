@@ -15,13 +15,21 @@
 // Degrees Icon for HEADING/DIRECTION HOME
 #define SYM_DEGREES 0XBD
 
+
+#define SYM_ANGLE_RTH     0XF3
+#define SYM_ANGLE_HDG     0XF3
+#define SYM_HDOP          0XF4
+#define SYM_SPEED_GND     0XF5 
+#define SYM_SPEED_AIR     0XF6 //GND +1
+
+
 // Direction arrows 
 #ifdef V14
   #define SYM_ARROW_HOME 0X60
-  #define SYM_ARROW_SOUTH 0X60
+  #define SYM_ARROW_DIR 0XE0
 #else  
   #define SYM_ARROW_HOME 0X60
-  #define SYM_ARROW_SOUTH 0X60
+  #define SYM_ARROW_DIR 0X60
 #endif
 #define SYM_ARROW_2 0X61
 #define SYM_ARROW_3 0X62

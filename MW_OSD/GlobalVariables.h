@@ -589,8 +589,8 @@ enum Positions {
   mAhPosition,
   AIR_speedPosition,
   MAX_speedPosition,
-  WindDirectionPosition,
-  WIND_speedPosition,
+  Available1, // not used ..
+  WIND_speedPosition, //
 #endif  
 
   POSITIONS_SETTINGS
@@ -603,7 +603,7 @@ enum V14Positions {
   mAhPosition,
   AIR_speedPosition,
   MAX_speedPosition,
-  WindDirectionPosition,
+  Available1,
   WIND_speedPosition,
 };
 #endif  
@@ -659,8 +659,8 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE09+0)|DISPLAY_ALWAYS,    // mAhPosition,
 (LINE08+8)|DISPLAY_ALWAYS,    // AIR_speedposition,
 (LINE09+8)|DISPLAY_ALWAYS,    // MAX_speedposition,
-(LINE03+22)|DISPLAY_ALWAYS,   // WindDirectionPosition
-(LINE10+8)|DISPLAY_ALWAYS,    // WIND_speedposition,
+(LINE03+22)|DISPLAY_NEVER,   // Available1
+(LINE03+22)|DISPLAY_ALWAYS,    // WIND_speedposition,
 
 #endif  
 

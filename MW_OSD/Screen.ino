@@ -933,40 +933,6 @@ void displayRSSI(void)
 }
 
 
-void displayHeading(void)
-{
-  if(!fieldIsVisible(MwHeadingPosition))
-    return;
-    int16_t heading = MwHeading;
-    if (Settings[S_HEADING360]) {
-      if(heading < 0)
-        heading += 360;
-      ItoaPadded(heading,screenBuffer,3,0);
-      screenBuffer[3]=SYM_DEGREES;
-      screenBuffer[4]=0;
-    }
-    else {
-      ItoaPadded(heading,screenBuffer,4,0);
-      screenBuffer[4]=SYM_DEGREES;
-      screenBuffer[5]=0;
-    }
-    MAX7456_WriteString(screenBuffer,getPosition(MwHeadingPosition));
-}
-
-
-void displayHeadingGraph(void)
-{
-  if (!fieldIsVisible(MwHeadingGraphPosition))
-    return;
-  int xx;
-  xx = MwHeading * 4;
-  xx = xx + 720 + 45;
-  xx = xx / 90;
-  uint16_t pos = getPosition(MwHeadingGraphPosition);
-  memcpy_P(screen+pos, headGraph+xx+1, 9);
-}
-
-
 void displayIntro(void)
 {
   for(uint8_t X=0; X<=7; X++) {
@@ -1065,7 +1031,7 @@ void displayNumberOfSat(void)
 }
 
 
-void display_speed(uint16_t t_value, uint8_t t_position)
+void display_speed(uint16_t t_value, uint8_t t_position, uint8_t t_type)
 {
   if(!armed) t_value=0;
   uint16_t xx;
@@ -1077,15 +1043,22 @@ void display_speed(uint16_t t_value, uint8_t t_position)
     speedMAX+=20; 
   else if(xx > speedMAX)
     speedMAX=xx; 
-  if(!fieldIsVisible(t_position))
-    return;
+//  if(!fieldIsVisible(t_position))
+//    return;
   if (Settings[S_SPEED_ALARM]>0){
     if((xx>Settings[S_SPEED_ALARM])&&(timer.Blink2hz))
       return;
   }    
-  screenBuffer[0]=speedUnitAdd[Settings[S_UNITSYSTEM]];
-  itoa(xx,screenBuffer+1,10);
-  MAX7456_WriteString(screenBuffer,getPosition(t_position));
+//  screenBuffer[0]=speedUnitAdd[Settings[S_UNITSYSTEM]];
+//  itoa(xx,screenBuffer+1,10);
+//  MAX7456_WriteString(screenBuffer,getPosition(t_position));
+
+  #ifdef PROTOCOL_MAVLINK
+    displayItem(t_position, t_value, SYM_SPEED_GND+t_type, speedUnitAdd[Settings[S_UNITSYSTEM]], 0,  0 );
+  #else
+    displayItem(t_position, t_value, speedUnitAdd[Settings[S_UNITSYSTEM]], 0 , 0,  0 );
+  #endif
+
 }
 
 
@@ -1322,8 +1295,49 @@ void displayDistanceToHome(void)
 }
 
 
+void displayHeadingGraph(void)
+{
+  if (!fieldIsVisible(MwHeadingGraphPosition))
+    return;
+  int xx;
+  xx = MwHeading * 4;
+  xx = xx + 720 + 45;
+  xx = xx / 90;
+  uint16_t pos = getPosition(MwHeadingGraphPosition);
+  memcpy_P(screen+pos, headGraph+xx+1, 9);
+}
+
+
+void displayHeading(void)
+{
+/*
+  int16_t heading = MwHeading;
+  if (Settings[S_HEADING360]) {
+    if(heading < 0)
+      heading += 360;
+    ItoaPadded(heading,screenBuffer,3,0);
+    screenBuffer[3]=SYM_DEGREES;
+    screenBuffer[4]=0;
+  }
+  else {
+    ItoaPadded(heading,screenBuffer,4,0);
+    screenBuffer[4]=SYM_DEGREES;
+    screenBuffer[5]=0;
+  }
+  MAX7456_WriteString(screenBuffer,getPosition(MwHeadingPosition));
+*/
+  int16_t heading = MwHeading;
+  if (Settings[S_HEADING360]) {
+    if(heading < 0)
+      heading += 360;
+  }
+  displayItem(MwHeadingPosition, heading, SYM_ANGLE_HDG, SYM_DEGREES, 0,  0 );
+}
+
+
 void displayAngleToHome(void)
 {
+/*
   if(!GPS_fix)
     return;
   if(!fieldIsVisible(GPS_angleToHomePosition))
@@ -1332,6 +1346,9 @@ void displayAngleToHome(void)
     screenBuffer[3] = SYM_DEGREES;
     screenBuffer[4] = 0;
     MAX7456_WriteString(screenBuffer,getPosition(GPS_angleToHomePosition));
+*/
+    displayItem(GPS_angleToHomePosition, GPS_directionToHome, SYM_ANGLE_RTH, SYM_DEGREES, 0,  0 );
+
 }
 
 
@@ -1339,53 +1356,42 @@ void displayDirectionToHome(void)
 {
   if(!fieldIsVisible(GPS_directionToHomePosition))
     return;
-
-  if(GPS_distanceToHome <= 2 && timer.Blink2hz)
-    return;
+//if(GPS_distanceToHome <= 2 && timer.Blink2hz)
+//  return;
   uint16_t position=getPosition(GPS_directionToHomePosition);
-  int16_t d = MwHeading + 180 + 360 - GPS_directionToHome;
+    int16_t d = MwHeading + 180 + 360 - GPS_directionToHome;
   d *= 4;
   d += 45;
   d = (d/90)%16;
   screenBuffer[0] = SYM_ARROW_HOME + d;
   screenBuffer[1] = 0;
-  MAX7456_WriteString(screenBuffer,position);
+  MAX7456_WriteString(screenBuffer,position);  
 }
 
 
-void displayWindDirection(void)
+void displayWindSpeed(void)
 {
-  if(!fieldIsVisible(WindDirectionPosition))
+  if(!fieldIsVisible(WIND_speedPosition))
     return;
-  uint16_t position=getPosition(WindDirectionPosition);
+  uint16_t position=getPosition(WIND_speedPosition);
   int16_t d;
-
-  GPS_ground_course=45;
-  MwHeading=0;
-  #ifdef MAVLINK
+  #ifdef PROTOCOL_MAVLINK
     d = WIND_direction + 180;
     d *= 4;
     d += 45;
     d = (d/90)%16;
-  #else
-    //#ifndef FIXEDWING // only applicable to fixedwing
-    //  return;
-    //#endif  
-    d = GPS_ground_course/10 + 180 + 360 + - MwHeading;
+    // if (WIND_speed > 0){
+      displayItem(WIND_speedPosition, WIND_speed, SYM_ARROW_DIR + d, speedUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
+    // }
+ #else
+    d = (MwHeading+360+360+180)- GPS_ground_course/10 ;
     d *= 4;
     d += 45;
     d = (d/90)%16;
-    if (d>0)
-      WIND_speed=1;
-    else if (d<0)
-      WIND_speed=-1;                 
-    else
-      WIND_speed=0;                 
+    screenBuffer[0]=SYM_ARROW_DIR + d;
+    screenBuffer[1]=0;
+    MAX7456_WriteString(screenBuffer,getPosition(WIND_speedPosition));
   #endif
-
-//  if (WIND_speed > 0){
-   displayItem(WindDirectionPosition, WIND_speed, SYM_ARROW_SOUTH + d, speedUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
-//  }
 }
 
 
