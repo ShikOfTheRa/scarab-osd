@@ -615,7 +615,8 @@ void loop()
           display_speed(AIR_speed,AIR_speedPosition,1);
 //          display_speed(WIND_speed,WIND_speedPosition);
           displayWindSpeed(); // also windspeed if available
-          display_max(speedMAX,MAX_speedPosition);
+//          display_max(speedMAX,MAX_speedPosition);
+          displayItem(MAX_speedPosition, speedMAX, SYM_MAX, speedUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
           displayGPSPosition();  
       
 #ifdef GPSTIME

@@ -16,11 +16,14 @@
 #define SYM_DEGREES 0XBD
 
 
-#define SYM_ANGLE_RTH     0XF3
+#define SYM_ANGLE_RTH     0XF2
 #define SYM_ANGLE_HDG     0XF3
 #define SYM_HDOP          0XF4
-#define SYM_SPEED_GND     0XF5 
-#define SYM_SPEED_AIR     0XF6 //GND +1
+#define SYM_SPEED_GPS     0XF5 
+#define SYM_SPEED_AIR     0XF6 //GPS +1
+#define SYM_MAX           0XF7 
+#define SYM_VARIO         0XF8 
+#define SYM_EFF           0XF9 
 
 
 // Direction arrows 
@@ -154,10 +157,10 @@
 #define SYM_BATT_EMPTY 0X96
 
 // Vario
-#define SYM_VARIO 0x7F
+#define SYM_VARIO 0x78
 
 // Glidescope
-#define SYM_GLIDESCOPE 0xE0
+#define SYM_GLIDESCOPE 0xDC
 
 // Batt Icon´s
 #define SYM_MAIN_BATT 0X97

@@ -820,23 +820,13 @@ void displayAmperage(void)
 
 void displayWatt(void)
 {
-  if(!fieldIsVisible(wattPosition))
-    return;
-  uint16_t WhrPosition = getPosition(wattPosition);
   uint16_t watts = amperage*voltage/100; // Watts
-  
-  ItoaPadded(watts, screenBuffer+1 , 5, 5);
-  screenBuffer[0] = SYM_BLANK;
-  screenBuffer[5] = SYM_WATT;
-  screenBuffer[6] = 0;
-  MAX7456_WriteString(screenBuffer,WhrPosition);
+  displayItem(wattPosition, watts, SYM_EFF, 0, 0,  0 );
 }
 
 
 void displayEfficiency(void)
 {
-  if(!fieldIsVisible(efficiencyPosition))
-    return;
   uint16_t effPosition = getPosition(efficiencyPosition);
   uint16_t xx;
   if(!Settings[S_UNITSYSTEM])
@@ -850,12 +840,8 @@ void displayEfficiency(void)
   else{
     eff = 999;
   }
-  ItoaPadded(eff, screenBuffer+1 , 4, 3);
-  screenBuffer[0] = SYM_BLANK;
-  screenBuffer[5] = 0x2A;
-  screenBuffer[6] = 0;
   if (eff < 999)
-    MAX7456_WriteString(screenBuffer,effPosition);
+    displayItem(effPosition, eff, 0, SYM_WATT, 0,  0 );
 }
 
 
@@ -1033,6 +1019,7 @@ void displayNumberOfSat(void)
 
 void display_speed(uint16_t t_value, uint8_t t_position, uint8_t t_type)
 {
+  // t_type = 0 - GPS, 1 - AIR, 
   if(!armed) t_value=0;
   uint16_t xx;
   if(!Settings[S_UNITSYSTEM])
@@ -1054,7 +1041,7 @@ void display_speed(uint16_t t_value, uint8_t t_position, uint8_t t_type)
 //  MAX7456_WriteString(screenBuffer,getPosition(t_position));
 
   #ifdef PROTOCOL_MAVLINK
-    displayItem(t_position, t_value, SYM_SPEED_GND+t_type, speedUnitAdd[Settings[S_UNITSYSTEM]], 0,  0 );
+    displayItem(t_position, t_value, SYM_SPEED_GPS+t_type, speedUnitAdd[Settings[S_UNITSYSTEM]], 0,  0 );
   #else
     displayItem(t_position, t_value, speedUnitAdd[Settings[S_UNITSYSTEM]], 0 , 0,  0 );
   #endif
@@ -1062,12 +1049,12 @@ void display_speed(uint16_t t_value, uint8_t t_position, uint8_t t_type)
 }
 
 
-void display_max(uint16_t t_value, uint8_t t_position)
+/*void display_max(uint16_t t_value, uint8_t t_position)
 {
   screenBuffer[0]=speedUnitAdd[Settings[S_UNITSYSTEM]];
   itoa(t_value,screenBuffer+1,10);
   MAX7456_WriteString(screenBuffer,getPosition(t_position));
-}
+}*/
 
 
 void displayGPS_time(void)       //local time of coord calc - haydent
@@ -1155,9 +1142,7 @@ void displayClimbRate(void)
     climbrate = MwVario * 0.032808;       // ft/sec
   else
     climbrate = MwVario / 100;            // mt/sec
-  screenBuffer[0]=varioUnitAdd[Settings[S_UNITSYSTEM]];
-  itoa(climbrate, screenBuffer+1, 10);
-  MAX7456_WriteString(screenBuffer,getPosition(climbratevaluePosition));
+  displayItem(climbratevaluePosition, climbrate, SYM_VARIO, varioUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
 #endif // V14
 
 #ifdef AUDIOVARIO  
