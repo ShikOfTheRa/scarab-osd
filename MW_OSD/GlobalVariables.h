@@ -34,7 +34,7 @@
 // STICK POSITION
 #define MAXSTICK         1850
 #define MINSTICK         1150
-#define MINHROTTLE       1000
+#define MINTHROTTLE      1000
 
 // FOR POSITION OF PID CONFIG VALUE
 #define ROLLT 93
@@ -693,7 +693,7 @@ int16_t MwAngle[2]={0,0};           // Those will hold Accelerometer Angle
 static uint16_t MwRcData[1+16]={   // This hold receiver pulse signal
   1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500} ;
 
-MwRcData[THROTTLESTICK]=MINTHROTTLE;
+
 
 // for analogue / PWM sensor filtering 
 #define SENSORFILTERSIZE 8

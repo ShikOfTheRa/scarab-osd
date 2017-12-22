@@ -800,6 +800,7 @@ void GPS_NewData() {
           configPage = 0;
           armed=0;
           timer.GPSOSDstate=millis();
+          MwRcData[THROTTLESTICK]=MINTHROTTLE;
           GPSOSD_state++;     
         }
       }
