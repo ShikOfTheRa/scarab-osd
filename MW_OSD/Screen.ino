@@ -2392,7 +2392,7 @@ void displayArmed(void)
 #endif
 
 #ifdef ALARM_VOLTAGE
-    if (voltage<=voltageWarning)
+    if (voltage<voltageWarning)
       alarms.active|=(1<<6);
 #endif
 
