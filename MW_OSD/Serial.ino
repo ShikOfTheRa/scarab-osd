@@ -219,18 +219,15 @@ void serialMSPCheck()
     uint8_t cmd = read8();
 
     if (cmd == OSD_READ_CMD_EE) {
-       debug[2]==dataSize;
       timer.GUI_active=2;
       eeaddress = read8();
       eeaddress = eeaddress+read8();
       eedata = read8();
       settingsMode=1;
-//      MSP_OSD_timer=3000+millis();
       settingsSerialRequest();
     }
 
     if (cmd == OSD_WRITE_CMD_EE) {
-       debug[1]==dataSize;
       timer.GUI_active=2;
       for(uint8_t i=0; i<10; i++) {
         eeaddress = read8();
@@ -261,7 +258,6 @@ void serialMSPCheck()
         cfgWrite16(sensortemp);
       }
        cfgWriteChecksum();
-       debug[3]==dataSize;
        #ifdef cfgActive
        if(OSD_SENSORS==cfgck) {
          cfgActive
@@ -943,12 +939,14 @@ if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THR
     else if(configMode) {
       int8_t oldmenudir=constrain(menudir,-5,5);
       menudir=0;
+#ifndef GPSOSD 
       if(previousarmedstatus&&(MwRcData[THROTTLESTICK]>1300))
       {
 	// EXIT from SHOW STATISTICS AFTER DISARM (push throttle up)
 	waitStick = 2;
 	configExit();
       }
+#endif // GPSOSD 
 #ifdef TX_MODE1
       if(configMode&&(MwRcData[YAWSTICK]>MAXSTICK)) // MOVE RIGHT
 #else

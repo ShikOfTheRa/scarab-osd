@@ -29,6 +29,15 @@
 //#define HARDRESET                        // Enables watchdog timer reset rather than fixed memory jmp 
 #define BOOTRESET                          // Enables reset from default Atmega 328 bootloader address (instead of 0) 
 
+#ifdef DEVELOPMENT                  // Developement pre-set test paramters only 
+  #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
+  #define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+  #define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
+  #define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
+#endif
+
+
+
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
 
 /********************       OSD SCREEN SWITCH settings      *********************/

@@ -1,6 +1,7 @@
 /*--------------------------       MANDATORY configurable parameters      ----------------------------------------------------*/
 /*--------------------------       MANDATORY configurable parameters      ----------------------------------------------------*/
 
+//#define DEVELOPMENT               // For developemnt set only 
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
@@ -82,11 +83,11 @@
 // Once the initialisation has completed, all sections should be commented and the sketch re-uploaded.
 // Font upload will take 90 seconds after upload is completed. If connected to a camera, you will see teh font table displayed.
 
-//#define EEPROM_CLEAR             // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
-//#define LOADFONT_DEFAULT         // Uncomment to force an upload of default font instead of using GUI
-//#define LOADFONT_LARGE           // Uncomment to force an upload of large font instead of using GUI
-//#define LOADFONT_BOLD            // Uncomment to force an upload of bold font instead of using GUI
-//#define DISPLAYFONTS             // Uncomment to display installed fonts for testing
+//#define EEPROM_CLEAR              // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
+//#define LOADFONT_DEFAULT          // Uncomment to force an upload of default font instead of using GUI
+//#define LOADFONT_LARGE            // Uncomment to force an upload of large font instead of using GUI
+//#define LOADFONT_BOLD             // Uncomment to force an upload of bold font instead of using GUI
+//#define DISPLAYFONTS              // Uncomment to display installed fonts for testing
 
 
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
@@ -96,11 +97,11 @@
 /********************       FEATURES      *********************/
 // Disable features if you require memory for other features
 // Further configuration may be require elsewhere in config.h + option enabled on GUI
-#define SBDIRECTION     // Enable/disable sidebar indicators (changes in speed or altitude)
-#define HORIZON         // Enable/disable HORIZON indicator
-#define MAPMODE         // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
-//#define GPSTIME       // Enable/disable GPS Time functions
-//#define SPORT         // Enable/disable FRSKY S.PORT cell code
+#define SBDIRECTION                 // Enable/disable sidebar indicators (changes in speed or altitude)
+#define HORIZON                     // Enable/disable HORIZON indicator
+#define MAPMODE                     // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
+//#define GPSTIME                   // Enable/disable GPS Time functions
+//#define SPORT                     // Enable/disable FRSKY S.PORT cell code
 
 //#define CANVAS_SUPPORT            // Enable CANVAS mode support for post betaflight 3.1.0 CMS
 //#define INVERTED_CHAR_SUPPORT     // Enable inverted char support
@@ -179,17 +180,17 @@
 
 /******************** Serial MSP speed settings *********************/
 // Choose ONLY ONE option: increases speeds of serial update - but with impact to flight controller 
-//#define MSP_SPEED_LOW     // Enable for soft serial / slow baud rates.
-#define MSP_SPEED_MED       // Default
-//#define MSP_SPEED_HIGH    // Enable for faster AHI and speed updates. Requires higher baud rates and increases overhead on the FC to process
+//#define MSP_SPEED_LOW             // Enable for soft serial / slow baud rates.
+#define MSP_SPEED_MED               // Default
+//#define MSP_SPEED_HIGH            // Enable for faster AHI and speed updates. Requires higher baud rates and increases overhead on the FC to process
 
 
 /********************       CALLSIGN settings      *********************/
-#define   CALLSIGNINTERVAL 60      // How frequently to display Callsign (in seconds)
-#define   CALLSIGNDURATION 4       // How long to display Callsign (in seconds)
-//#define CALLSIGNALWAYS           // Alternative option - enable to permanently display callsign.
-//#define FREETEXTLLIGHTS          // Alternative option - enable to display freetext (or callsign) when LLIGHTS Switch active on TX.
-//#define FREETEXTGIMBAL           // Alternative option - enable to display freetext (or callsign) when GIMBAL Switch active on TX.
+#define   CALLSIGNINTERVAL 60       // How frequently to display Callsign (in seconds)
+#define   CALLSIGNDURATION 4        // How long to display Callsign (in seconds)
+//#define CALLSIGNALWAYS            // Alternative option - enable to permanently display callsign.
+//#define FREETEXTLLIGHTS           // Alternative option - enable to display freetext (or callsign) when LLIGHTS Switch active on TX.
+//#define FREETEXTGIMBAL            // Alternative option - enable to display freetext (or callsign) when GIMBAL Switch active on TX.
 
 /********************       STARTUP settings      *********************/
 //#define INTRO_VERSION               "MWOSD - 1.7" // Call the OSD something else if you prefer. 
@@ -243,6 +244,7 @@
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft
 #define AIRMODE 2                   // Enable this to display airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
 //#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
+//#define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
 //#define TEXTMODE                  // Enable to display the flyingmode as text instead of symbols
 
 
@@ -272,11 +274,11 @@
 // A highly accurate / sensitive Audio Vario from KapeteinKuk
 // Uses MS5611 pressure sensor connected by I2C
 // Only supported by VIRTUALPILOT AEROMAX hardware unless able to carry out very fine soldering  
-//#define KKAUDIOVARIO A3              // Enable this for audio vario on Arduino pin XX 
-//#define AUDIOVARIORC 1200            // Enable this to disable audio vario for throttle values above 1200 uS
-//#define AUDIOVARIOSWITCH             // Enable this to use screen layouts to enable/diable vario. If visual vario is displayed, the audio vario is on
-#define KKDEADBANDLOW  -25             // Deadband threshold for sinking (Set to -500 to disable sink tones). 0 for no deadband
-#define KKDEADBANDHIGH  15             // Deadband threshold for climbing. 0 for no deadband 
+//#define KKAUDIOVARIO A3           // Enable this for audio vario on Arduino pin XX 
+//#define AUDIOVARIORC 1200         // Enable this to disable audio vario for throttle values above 1200 uS
+//#define AUDIOVARIOSWITCH          // Enable this to use screen layouts to enable/diable vario. If visual vario is displayed, the audio vario is on
+#define KKDEADBANDLOW  -25          // Deadband threshold for sinking (Set to -500 to disable sink tones). 0 for no deadband
+#define KKDEADBANDHIGH  15          // Deadband threshold for climbing. 0 for no deadband 
 
 
 /********************   RC TX Settings     *********************/
@@ -329,16 +331,16 @@
 
 
 /********************       Headtracker support         ************************/
-//#define VIRTUAL_NOSE    // Enables the use of a virtual nose for headtracker users where aircraft nose is not visible
-#define HTCHANNEL   3     // RC channel uses ch 1 - 8/16
-#define HTSCALE     10    // Scaling of Pan Axis - Max of 10
-#define HTLINE      11    // Row on which Headtracker info is displayed
-#define HTDIRECTION +     // Reverses direction of pan action
+//#define VIRTUAL_NOSE               // Enables the use of a virtual nose for headtracker users where aircraft nose is not visible
+#define HTCHANNEL   3                // RC chanel uses ch 1 - 8/16
+#define HTSCALE     10               // Scaling of Pan Axis - Max of 10
+#define HTLINE      11               // Row on which Headtracker info is displayed
+#define HTDIRECTION +                // Reverses direction of pan action
 
 
 /********************       Vendor support         ************************/
 // This is for vendor use only for custom GUI support
-#define VENDOR   1        // For vendor use for custom GUI
+#define VENDOR   1                   // For vendor use for custom GUI
 
 
 /********************       FrSky S.Port settings      *********************/
@@ -352,28 +354,28 @@
 
 
 /********************  TEMPERATURE  settings      *********************/
-//#define TEMPSENSOR                // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
-#define TEMPERATUREMAX 50           // Temperature warning value
-#define TEMPZERO 0                  // Temperature Zero calibration (range = 0-1024 :512 = 2.5v with vref of 5v and 0.55v for vref of 1.1v) 
-#define TEMPMAX  500                // Temperature when at sensor output at VCC. Might be  atheoreticla value 
+//#define TEMPSENSOR                 // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
+#define TEMPERATUREMAX 50            // Temperature warning value
+#define TEMPZERO 0                   // Temperature Zero calibration (range = 0-1024 :512 = 2.5v with vref of 5v and 0.55v for vref of 1.1v) 
+#define TEMPMAX  500                 // Temperature when at sensor output at VCC. Might be  atheoreticla value 
 
 
 /********************  RECORD CAPTURE  settings      *********************/
 // This is used for those who are attempting records to always show the maximum achieved.
 // Maximum values (as shown on statistics summary screen will be displayed on line IMMEDAITELY BELOW where current live data is displayed
 // It may require layouts to be amended to show data without overwriting other information
-//#define SHOW_MAX_SPEED                 // Enable to display MAX speed achieved on line below current speed
-//#define SHOW_MAX_ALTITUDE              // Enable to display MAX altitude achieved on line below current altitude
-//#define SHOW_MAX_DISTANCE              // Enable to display MAX distance achieved on line below current distance
-//#define SHOW_TOTAL_DISTANCE            // Enable to display TOTAL distance achieved on line below current distance
+//#define SHOW_MAX_SPEED             // Enable to display MAX speed achieved on line below current speed
+//#define SHOW_MAX_ALTITUDE          // Enable to display MAX altitude achieved on line below current altitude
+//#define SHOW_MAX_DISTANCE          // Enable to display MAX distance achieved on line below current distance
+//#define SHOW_TOTAL_DISTANCE        // Enable to display TOTAL distance achieved on line below current distance
 
 
 /********************  THROTTLE calibration  settings      *********************/
 // This is used for those who want to specify non default throttle calibration values. 
 // To use comment out AUTOTHROTTLE and adjusts the maximum and minimum throttle values 
 #define AUTOTHROTTLE 
-#define HIGHTHROTTLE 1900                // Maximum recognised value for throttle 
-#define LOWTHROTTLE  1100                // Minimum recognised value for throttle
+#define HIGHTHROTTLE 1900            // Maximum recognised value for throttle 
+#define LOWTHROTTLE  1100            // Minimum recognised value for throttle
 
 
 /********************  AMPERAGE calibration  settings      *********************/
@@ -385,15 +387,15 @@
 
 /********************           VTX settings           *********************/
 // Regional RF frequency regulations: Choose ONLY ONE option:
-#define VTX_REGION_UNRESTRICTED          // Enable for all 40 channels
-//#define VTX_REGION_AUSTRALIA           // Enable for AU legal channels and power level only
-#define DISPLAY_VTX_INFO               // Enable to show frequency in menu display. 
+#define VTX_REGION_UNRESTRICTED      // Enable for all 40 channels
+//#define VTX_REGION_AUSTRALIA       // Enable for AU legal channels and power level only
+#define DISPLAY_VTX_INFO             // Enable to show frequency in menu display. 
 
 
 /********************  Advanced parameters  settings      *********************/
 // This is to enable rarely used advanced parameter saving. Off by default to minimise risk 
 // Enabling may create ability to write invalid data to FC
-//#define ADVANCEDSAVE                   // Enables saving of advanced paramters where supported (Looptime/profile)
-//#define FIXEDLOOP                      // Enables 1ms loop max for consistency
+//#define ADVANCEDSAVE               // Enables saving of advanced paramters where supported (Looptime/profile)
+//#define FIXEDLOOP                  // Enables 1ms loop max for consistency
 
 
