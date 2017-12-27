@@ -752,16 +752,15 @@ void GPS_NewData() {
   if (GPSOSD_state>1){
     GPSOSDcalculate();
   }
-  
+
   switch (GPSOSD_state) {
-    case 1: // waiting for steady state fix - (enough sats for a consecutive period without glitch). Default: 6 sats for 15 seconds)
+    case 1: // waiting for steady state fix - (enough sats for a consecutive period without glitch). Default: 6 sats for 10 seconds)
       if (GPS_numSat >= HOMESATFIX){
         GPS_reset_home_position();
         GPS_home[LAT] = GPS_home[LAT+2];
         GPS_home[LON] = GPS_home[LON+2];
-        GPS_altitude_home = GPS_altitude_home_2;
-        
-        if (millis() > (timer.GPSOSDstate + (GPSHOMEFIX*1000))){ 
+        GPS_altitude_home = GPS_altitude_home_2;        
+        if (millis() > GPSHOMEFIX*1000+timer.GPSOSDstate){ 
           timer.GPSOSDstate=millis();          
           GPSOSD_state=2;     
         }       
@@ -773,24 +772,24 @@ void GPS_NewData() {
 
     case 2: // waiting for launch. Continually reset home to improve accuracy
       armedangle = MwHeading;
-      if ((GPS_distanceToHome > GPSOSDARMDISTANCE+5)&& (GPS_speed > 75)) { // To determine launch. Optional "&& (GPS_speed > 75)"
-        GPS_armedangleset = 1;
-        armed = 1;
-        GPSOSD_state=3; 
-        timer.GPSOSDstate=millis();    
-      }  
-      else if (millis() > (10000+timer.GPSOSDstate)){ //Reset home position every 10 secs ago if launch not detected to improve home accuracy.
+      if (millis() > 10000+timer.GPSOSDstate){ //Reset home position every 10 secs ago if launch not detected to improve home accuracy.
         GPS_home[LAT] = GPS_home[LAT+2];
         GPS_home[LON] = GPS_home[LON+2];
         GPS_altitude_home = GPS_altitude_home_2;
         GPS_reset_home_position();
         timer.GPSOSDstate=millis();
       } 
+      else if (GPS_distanceToHome > GPSOSDARMDISTANCE) { // To determine launch. Optional "&& (GPS_speed > 75)"
+        GPS_armedangleset = 1;
+        armed = 1;
+        GPSOSD_state=3; 
+        timer.GPSOSDstate=millis();    
+      }        
       break;
 
     case 3: // in active flight
       if ((GPS_distanceToHome < GPSOSDHOMEDISTANCE) && (GPS_speed < 75)) { // Detected potential landed 
-        if (millis() > (timer.GPSOSDstate + (GPSOSDLANDED*1000)))  { // Confirmed landed
+        if (millis() > GPSOSDLANDED*1000+timer.GPSOSDstate)  { // Confirmed landed
           configPage = 0;
           armed=0;
           timer.GPSOSDstate=millis();
@@ -803,7 +802,7 @@ void GPS_NewData() {
       break;
 
     case 4: // confirm landed. Display stats
-      if (millis() > (timer.GPSOSDstate + (GPSOSDSUMMARY*1000))) {
+      if (millis() > GPSOSDSUMMARY*1000+timer.GPSOSDstate) { // Confirmed landed
         configExit();
         GPS_armedangleset = 0;
         GPSOSD_state=2;  
