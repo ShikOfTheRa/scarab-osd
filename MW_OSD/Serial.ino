@@ -220,7 +220,6 @@ void serialMSPCheck()
       eeaddress = eeaddress+read8();
       eedata = read8();
       settingsMode=1;
-//      MSP_OSD_timer=3000+millis();
       settingsSerialRequest();
     }
 
@@ -941,12 +940,14 @@ if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THR
     else if(configMode) {
       int8_t oldmenudir=constrain(menudir,-5,5);
       menudir=0;
+#ifndef GPSOSD 
       if(previousarmedstatus&&(MwRcData[THROTTLESTICK]>1300))
       {
 	// EXIT from SHOW STATISTICS AFTER DISARM (push throttle up)
 	waitStick = 2;
 	configExit();
       }
+#endif // GPSOSD 
 #ifdef TX_MODE1
       if(configMode&&(MwRcData[YAWSTICK]>MAXSTICK)) // MOVE RIGHT
 #else

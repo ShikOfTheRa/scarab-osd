@@ -939,7 +939,7 @@ void displayIntro(void)
 
 
 #ifdef CROPGPSPOSITION
-void displayGPSPosition(void)     //Truglodite: Crop GPS coordinates to simply ".DDDDDDD"
+void displayGPSPosition(void)     //Truglodite: Crop GPS coordinates to simply ".DDDDDDD" 63 93
 {
   uint16_t position;
   if(!GPS_fix)
@@ -975,10 +975,20 @@ void displayGPSPosition(void)
     position = getPosition(MwGPSLatPositionTop);  
     screenBuffer[0] = SYM_LAT;
     FormatGPSCoord(GPS_latitude,screenBuffer+1,4,'N','S');
+#ifdef MASKGPSLOCATION
+    screenBuffer[1] = '0';
+    screenBuffer[2] = '6';
+    screenBuffer[3] = '3';
+#endif // MASKGPSLOCATION
     MAX7456_WriteString(screenBuffer, position);  
     position = getPosition(MwGPSLonPositionTop);  
     screenBuffer[0] = SYM_LON;
     FormatGPSCoord(GPS_longitude,screenBuffer+1,4,'E','W');
+#ifdef MASKGPSLOCATION
+    screenBuffer[1] = '0';
+    screenBuffer[2] = '9';
+    screenBuffer[3] = '3';
+#endif // MASKGPSLOCATION
     MAX7456_WriteString(screenBuffer, position);  
   }
 }

@@ -33,7 +33,7 @@
 // STICK POSITION
 #define MAXSTICK         1850
 #define MINSTICK         1150
-#define MINHROTTLE       1000
+#define MINTHROTTLE      1000
 
 // FOR POSITION OF PID CONFIG VALUE
 #define ROLLT 93
@@ -267,6 +267,12 @@ uint16_t debug[4];
 #ifdef DEBUGDPOSMSPID    
   uint8_t boxidarray[50];
 #endif
+<<<<<<< HEAD
+=======
+#ifndef DEBUGDEF
+ #define DEBUGDEF 0   
+#endif
+>>>>>>> refs/remotes/origin/master
 
 int8_t menudir;
 unsigned int allSec=0;
@@ -695,7 +701,7 @@ int16_t MwAngle[2]={0,0};           // Those will hold Accelerometer Angle
 static uint16_t MwRcData[1+16]={   // This hold receiver pulse signal
   1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500} ;
 
-MwRcData[THROTTLESTICK]=MINTHROTTLE;
+
 
 // for analogue / PWM sensor filtering 
 #define SENSORFILTERSIZE 8
@@ -820,6 +826,7 @@ int16_t rssiMIN=100;
   int32_t  GPS_home[4];
 //  uint16_t GPS_ground_course = 0;                       
   int16_t  GPS_altitude_home;                            
+  int16_t  GPS_altitude_home_2;                            
   uint8_t  GPS_Present = 0;                             
 //  uint8_t  GPS_SerialInitialised=5;
   uint8_t  GPS_armedangleset = 0;
