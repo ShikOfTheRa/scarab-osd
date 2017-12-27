@@ -22,8 +22,10 @@
 #define SYM_SPEED_GPS     0XF5 
 #define SYM_SPEED_AIR     0XF6 //GPS +1
 #define SYM_MAX           0XF7 
-#define SYM_VARIO         0XF8 
+#define SYM_CLIMBRATE     0XF8 
 #define SYM_EFF           0XF9 
+#define SYM_PITCH         0XFA 
+#define SYM_ROLL          0XFB 
 
 
 // Direction arrows 
@@ -200,7 +202,7 @@
 #define SYM_HORIZON1 0XC5
 #define SYM_PASS 0XAA
 #define SYM_PASS1 0XAB
-#define SYM_AIR 0XEA
+#define SYM_AIR 0XC0
 #define SYM_AIR1 0XEB
 #define SYM_PLUS 0X89
 

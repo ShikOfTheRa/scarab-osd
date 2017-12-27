@@ -1,7 +1,7 @@
 /*--------------------------       MANDATORY configurable parameters      ----------------------------------------------------*/
 /*--------------------------       MANDATORY configurable parameters      ----------------------------------------------------*/
 
-//#define DEVELOPMENT               // For developemnt set only 
+#define DEVELOPMENT               // For development set only 
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
@@ -36,7 +36,7 @@
 //#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.0 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-#define APM                       // Uncomment this if you are using APM MAVLINK 1.0 compatible FC
+//#define APM                       // Uncomment this if you are using APM MAVLINK 1.0 compatible FC
 //#define PX4                       // Uncomment this if you are using PIXHAWK with PX4 stack
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
 //#define MULTIWII                  // Uncomment this if you are using latest 2.4 MULTIWII
@@ -68,13 +68,12 @@
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
 //#define ROTORCRAFT                // Default for multirotors etc.
-#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight 
+//#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight 
 
 
 /********************       Debug      *********************/
 //#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
-#define MENU_DEBUG                // Enable to display debug values in OSD menu 
-#define V14
+#define MENU_DEBUG                  // Enable to display debug values in OSD menu 
 
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
@@ -83,19 +82,12 @@
 // Once the initialisation has completed, all sections should be commented and the sketch re-uploaded.
 // Font upload will take 90 seconds after upload is completed. If connected to a camera, you will see teh font table displayed.
 
-<<<<<<< HEAD
-#define EEPROM_CLEAR             // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
+//#define EEPROM_CLEAR             // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
 //#define LOADFONT_DEFAULT         // Uncomment to force an upload of default font instead of using GUI
 //#define LOADFONT_LARGE           // Uncomment to force an upload of large font instead of using GUI
 //#define LOADFONT_BOLD            // Uncomment to force an upload of bold font instead of using GUI
 //#define DISPLAYFONTS             // Uncomment to display installed fonts for testing
-=======
-//#define EEPROM_CLEAR              // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
-//#define LOADFONT_DEFAULT          // Uncomment to force an upload of default font instead of using GUI
-//#define LOADFONT_LARGE            // Uncomment to force an upload of large font instead of using GUI
-//#define LOADFONT_BOLD             // Uncomment to force an upload of bold font instead of using GUI
-//#define DISPLAYFONTS              // Uncomment to display installed fonts for testing
->>>>>>> refs/remotes/origin/master
+
 
 
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
@@ -185,7 +177,6 @@
 //#define MAV_RESET_HOME            // Resets home position when not armed. When enabled, note that RX glitch etc. could potentially reset home position.
 
 /******************** Serial MSP speed settings *********************/
-<<<<<<< HEAD
 // Choose ONLY ONE SPEED option: increases speeds of serial update - but with impact to flight controller 
 //#define MSP_SPEED_LOW     // Enable for soft serial / slow baud rates.
 #define MSP_SPEED_MED       // Default
@@ -193,13 +184,7 @@
 #define MSP_USE_BARO        // Disable if not used to increase serial speed update for MSP based FC: Baro IC data such as  altitude
 #define MSP_USE_GPS         // Disable if not used to increase serial speed update for MSP based FC: GPS data such as speed , distance
 #define MSP_USE_ANALOG      // Disable if not used to increase serial speed update for MSP based FC: Voltage, Amperage or RSSI from the FC
-=======
-// Choose ONLY ONE option: increases speeds of serial update - but with impact to flight controller 
-//#define MSP_SPEED_LOW             // Enable for soft serial / slow baud rates.
-#define MSP_SPEED_MED               // Default
-//#define MSP_SPEED_HIGH            // Enable for faster AHI and speed updates. Requires higher baud rates and increases overhead on the FC to process
 
->>>>>>> refs/remotes/origin/master
 
 /********************       CALLSIGN settings      *********************/
 #define   CALLSIGNINTERVAL 60       // How frequently to display Callsign (in seconds)
@@ -365,34 +350,20 @@
 
 
 /********************  TEMPERATURE  settings      *********************/
-<<<<<<< HEAD
-//#define TEMPSENSOR                // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
-#define TEMPERATUREMAX 250          // Temperature warning value
-#define TEMPZERO 0                  // Temperature Zero calibration (range = 0-1024 :512 = 2.5v with vref of 5v and 0.55v for vref of 1.1v) 
-#define TEMPMAX  500                // Temperature when at sensor output at VCC. Might be  a theoretical value 
-=======
 //#define TEMPSENSOR                 // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
 #define TEMPERATUREMAX 50            // Temperature warning value
 #define TEMPZERO 0                   // Temperature Zero calibration (range = 0-1024 :512 = 2.5v with vref of 5v and 0.55v for vref of 1.1v) 
 #define TEMPMAX  500                 // Temperature when at sensor output at VCC. Might be  atheoreticla value 
->>>>>>> refs/remotes/origin/master
 
 
 /********************  RECORD CAPTURE  settings      *********************/
 // This is used for those who are attempting records to always show the maximum achieved.
 // Maximum values (as shown on statistics summary screen will be displayed on line IMMEDAITELY BELOW where current live data is displayed
 // It may require layouts to be amended to show data without overwriting other information
-<<<<<<< HEAD
-//#define SHOW_MAX_SPEED                 // Enable to display MAX speed
-//#define SHOW_MAX_ALTITUDE              // Enable to display MAX altitude achieved on line below current altitude
-//#define SHOW_MAX_DISTANCE              // Enable to display MAX distance achieved on line below current distance
-//#define SHOW_TOTAL_DISTANCE            // Enable to display TOTAL distance achieved on line below current distance
-=======
 //#define SHOW_MAX_SPEED             // Enable to display MAX speed achieved on line below current speed
 //#define SHOW_MAX_ALTITUDE          // Enable to display MAX altitude achieved on line below current altitude
 //#define SHOW_MAX_DISTANCE          // Enable to display MAX distance achieved on line below current distance
 //#define SHOW_TOTAL_DISTANCE        // Enable to display TOTAL distance achieved on line below current distance
->>>>>>> refs/remotes/origin/master
 
 
 /********************  THROTTLE calibration  settings      *********************/

@@ -452,7 +452,7 @@ void displayCallsign(int cposition)
 void displayHorizon(int rollAngle, int pitchAngle)
 {
 #ifdef DISPLAY_PR
-  screenBuffer[0]=0x50;
+  screenBuffer[0]=SYM_PITCH;
   int16_t xx=abs(pitchAngle/10);
   uint8_t offset=1;
 #ifdef INVERT_PITCH_SIGN
@@ -467,7 +467,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
   itoa(xx, screenBuffer+offset,10);     
   if(fieldIsVisible(pitchAnglePosition))
     MAX7456_WriteString(screenBuffer,getPosition(pitchAnglePosition));
-  screenBuffer[0]=0x52;
+  screenBuffer[0]=SYM_ROLL;
   offset=1;
   xx=abs(rollAngle/10);
 #ifdef INVERT_ROLL_SIGN
@@ -1152,7 +1152,7 @@ void displayClimbRate(void)
     climbrate = MwVario * 0.032808;       // ft/sec
   else
     climbrate = MwVario / 100;            // mt/sec
-  displayItem(climbratevaluePosition, climbrate, SYM_VARIO, varioUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
+  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
 #endif // V14
 
 #ifdef AUDIOVARIO  

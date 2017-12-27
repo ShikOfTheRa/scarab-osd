@@ -31,10 +31,13 @@
 
 #ifdef DEVELOPMENT                  // Developement pre-set test paramters only 
   #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
-  #define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
+  //#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
   //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+  #define PX4                       // Uncomment this if you are using PIXHAWK with PX4 stack
   #define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
   #define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
+  #define V14
+  #define EEPROM_CLEAR             // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
 #endif
 
 

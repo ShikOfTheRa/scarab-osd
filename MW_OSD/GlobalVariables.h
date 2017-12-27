@@ -267,12 +267,6 @@ uint16_t debug[4];
 #ifdef DEBUGDPOSMSPID    
   uint8_t boxidarray[50];
 #endif
-<<<<<<< HEAD
-=======
-#ifndef DEBUGDEF
- #define DEBUGDEF 0   
-#endif
->>>>>>> refs/remotes/origin/master
 
 int8_t menudir;
 unsigned int allSec=0;
