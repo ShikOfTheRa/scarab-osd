@@ -1042,16 +1042,15 @@ void display_speed(uint16_t t_value, uint8_t t_position, uint8_t t_type)
     if((xx>Settings[S_SPEED_ALARM])&&(timer.Blink2hz))
       return;
   }    
-//  screenBuffer[0]=speedUnitAdd[Settings[S_UNITSYSTEM]];
-//  itoa(xx,screenBuffer+1,10);
-//  MAX7456_WriteString(screenBuffer,getPosition(t_position));
 
+  displayItem(t_position, t_value, SYM_SPEED_GPS+t_type, speedUnitAdd[Settings[S_UNITSYSTEM]], 0,  0 );
+/*
   #ifdef PROTOCOL_MAVLINK
     displayItem(t_position, t_value, SYM_SPEED_GPS+t_type, speedUnitAdd[Settings[S_UNITSYSTEM]], 0,  0 );
   #else
     displayItem(t_position, t_value, speedUnitAdd[Settings[S_UNITSYSTEM]], 0 , 0,  0 );
   #endif
-
+*/
 }
 
 
