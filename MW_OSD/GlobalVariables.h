@@ -222,6 +222,11 @@ struct __flags {
 }
 flags;
 
+struct __display {
+  uint32_t distance;
+}
+display;
+
 struct __cfg {
     uint8_t  fw_althold_dir;
     uint16_t fw_gps_maxcorr;                    // Degrees banking Allowed by GPS.
@@ -552,7 +557,7 @@ enum Positions {
   MwHeadingPosition,
   MwHeadingGraphPosition,
   MwAltitudePosition,
-  MwClimbRatePosition,
+  MwVarioPosition,
   CurrentThrottlePosition,
   flyTimePosition,
   onTimePosition,
@@ -589,23 +594,25 @@ enum Positions {
   mAhPosition,
   AIR_speedPosition,
   MAX_speedPosition,
-  Available1, // not used ..
-  WIND_speedPosition, //
+  TotalDistanceposition,
+  WIND_speedPosition,
+  MaxDistanceposition,
+  DOPposition,
 #endif  
 
   POSITIONS_SETTINGS
 };
 
 #ifndef V14 
-enum V14Positions {
-  climbratevaluePosition,
-  efficiencyPosition,
-  mAhPosition,
-  AIR_speedPosition,
-  MAX_speedPosition,
-  Available1,
-  WIND_speedPosition,
-};
+uint16_t climbratevaluePosition = 600|DISPLAY_NEVER;
+uint16_t efficiencyPosition = 600|DISPLAY_NEVER;
+uint16_t mAhPosition = 600|DISPLAY_NEVER;
+uint16_t AIR_speedPosition = 600|DISPLAY_NEVER;
+uint16_t MAX_speedPosition = 600|DISPLAY_NEVER;
+uint16_t TotalDistanceposition = 600|DISPLAY_NEVER;
+uint16_t WIND_speedPosition = 600|DISPLAY_NEVER;
+uint16_t MaxDistanceposition = 600|DISPLAY_NEVER;
+uint16_t DOPposition = 600|DISPLAY_NEVER;
 #endif  
 
 uint16_t screenPosition[POSITIONS_SETTINGS];
@@ -615,14 +622,14 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE02+2)|DISPLAY_ALWAYS,    // GPS_numSatPosition
 (LINE02+22)|DISPLAY_ALWAYS,   // GPS_directionToHomePosition
 (LINE02+24)|DISPLAY_ALWAYS,   // GPS_distanceToHomePosition
-(LINE07+3)|DISPLAY_ALWAYS,    // GPS_speedPosition
+(LINE07+2)|DISPLAY_ALWAYS,    // GPS_speedPosition
 (LINE05+24)|DISPLAY_ALWAYS,   // GPS_angleToHomePosition
-(LINE03+24)|DISPLAY_ALWAYS,   // MwGPSAltPosition
+(LINE06+23)|DISPLAY_ALWAYS,   // MwGPSAltPosition
 (LINE02+6)|DISPLAY_ALWAYS,    // sensorPosition
 (LINE04+24)|DISPLAY_ALWAYS,   // MwHeadingPosition
 (LINE02+10)|DISPLAY_ALWAYS,   // MwHeadingGraphPosition
 (LINE07+23)|DISPLAY_ALWAYS,   // MwAltitudePosition
-(LINE07+22)|DISPLAY_ALWAYS,   // MwClimbRatePosition
+(LINE07+22)|DISPLAY_ALWAYS,   // MwVarioPosition
 (LINE12+22)|DISPLAY_ALWAYS,   // CurrentThrottlePosition
 (LINE13+22)|DISPLAY_ALWAYS,   // UNUSED flyTimePosition
 (LINE13+22)|DISPLAY_ALWAYS,   // onTimePosition
@@ -649,19 +656,20 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE02+22)|DISPLAY_NEVER,    // MapModePosition
 (LINE07+15)|DISPLAY_NEVER,    // MapCenterPosition
 (LINE04+10)|DISPLAY_ALWAYS,   // APstatusPosition
-(LINE10+0)|DISPLAY_ALWAYS,    // wattPosition
+(LINE09+2)|DISPLAY_ALWAYS,    // wattPosition
 (LINE07+6)|DISPLAY_ALWAYS,    // glidescopePosition
 (LINE10+10)|DISPLAY_ALWAYS,   // CallSign Position
 (LINE08+10)|DISPLAY_ALWAYS,   // Debug Position
 #ifdef V14
-(LINE07+23)|DISPLAY_ALWAYS,   // climbratevaluePosition,
-(LINE08+0)|DISPLAY_ALWAYS,    // efficiencyPosition,
-(LINE09+0)|DISPLAY_ALWAYS,    // mAhPosition,
-(LINE08+8)|DISPLAY_ALWAYS,    // AIR_speedposition,
-(LINE09+8)|DISPLAY_ALWAYS,    // MAX_speedposition,
-(LINE03+22)|DISPLAY_NEVER,   // Available1
-(LINE03+22)|DISPLAY_ALWAYS,    // WIND_speedposition,
-
+(LINE08+23)|DISPLAY_ALWAYS,   // climbratevaluePosition,
+(LINE08+2)|DISPLAY_ALWAYS,    // efficiencyPosition,
+(LINE10+2)|DISPLAY_ALWAYS,    // mAhPosition,
+(LINE06+2)|DISPLAY_ALWAYS,    // AIR_speedposition,
+(LINE05+8)|DISPLAY_ALWAYS,    // MAX_speedposition,
+(LINE08+8)|DISPLAY_ALWAYS,    // TotalDistanceposition
+(LINE03+22)|DISPLAY_ALWAYS,   // WIND_speedposition,
+(LINE06+8)|DISPLAY_ALWAYS,    // MaxDistanceposition
+(LINE02+6)|DISPLAY_ALWAYS,    // DOPposition
 #endif  
 
 };
@@ -727,6 +735,7 @@ int16_t  GPS_ground_course;
 uint16_t old_GPS_speed;
 int16_t GPS_directionToHome=0;
 uint8_t GPS_numSat=0;
+uint16_t GPS_dop=0;
 uint8_t GPS_waypoint_step=0;
 //uint16_t I2CError=0;
 //uint16_t cycleTime=0;
@@ -826,7 +835,6 @@ int16_t rssiMIN=100;
   uint8_t  GPS_armedangleset = 0;
   uint8_t  GPS_active=5; 
   uint8_t  GPS_fix_HOME=0;
-  uint16_t GPS_pdop=100;
   const char satnogps_text[] PROGMEM = " NO GPS ";
   uint8_t  GPSOSD_state=0;
 #endif
@@ -1269,7 +1277,8 @@ const unsigned char temperatureUnitAdd[2] ={
   SYM_TEMP_C,SYM_TEMP_F};
 
 const unsigned char UnitsIcon[8]={
-  SYM_ALTM,SYM_ALTFT,SYM_DISTHOME_M,SYM_DISTHOME_FT,SYM_ALTKM,SYM_ALTMI,SYM_DISTHOME_KM,SYM_DISTHOME_MI};
+  SYM_M,SYM_FT,SYM_M,SYM_FT,SYM_KM,SYM_M,SYM_KM,SYM_M};
+//  SYM_ALTM,SYM_ALTFT,SYM_DISTHOME_M,SYM_DISTHOME_FT,SYM_ALTKM,SYM_ALTMI,SYM_DISTHOME_KM,SYM_DISTHOME_MI};
 
 #define REQ_MSP_IDENT     (1 <<  0)
 #define REQ_MSP_STATUS    (1 <<  1)

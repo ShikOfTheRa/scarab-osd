@@ -38,6 +38,8 @@
   #define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
   #define V14
   #define EEPROM_CLEAR             // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
+  #define INTRO_DELAY 1
+
 #endif
 
 

@@ -194,21 +194,6 @@ void displayTemperature(void)
 }
 
 
-#ifdef DISPLAYDOP
-void displayDOP(void)        // Display stas DOP
-{
-  if(!fieldIsVisible(temperaturePosition))
-    return;
-
-  ItoaPadded(GPS_pdop/10, screenBuffer+1 , 4, 3);
-  screenBuffer[0] = SYM_BLANK;
-  screenBuffer[5] = 0x2B;
-  screenBuffer[6] = 0;
-  if (GPS_pdop>GPSDOP)
-    MAX7456_WriteString(screenBuffer,getPosition(temperaturePosition));
-}
-#endif
-
 void displayMode(void)
 {
   #ifdef NAZAMODECONTROL
@@ -363,6 +348,27 @@ void displayMode(void)
       screenBuffer[1]=SYM_HORIZON1;
     #endif
   }
+ #if defined AIRMODE
+  else if(MwSensorActive&mode.air){
+    #ifdef TEXTMODE
+    strcpy(screenBuffer, "AIR");
+    #else
+      screenBuffer[2]=0;
+      screenBuffer[0]=SYM_AIR;
+      screenBuffer[1]=SYM_AIR1;
+    #endif
+  }
+ #endif //AIRMODE 
+ #if defined ACROPLUS
+  else if((MwSensorActive)&(mode.acroplus)){
+    #ifdef TEXTMODE
+    strcpy(screenBuffer, "PLUS");
+    #else
+      screenBuffer[1]=SYM_PLUS;
+      screenBuffer[0]=SYM_ACRO;
+ #endif // ACROPLUS
+  }
+    #endif //ACROPLUS
   else{
     #ifndef TEXTMODE
       screenBuffer[2]=0;
@@ -383,14 +389,6 @@ void displayMode(void)
     #ifndef TEXTMODE
       screenBuffer[1]=SYM_ACRO1;
     #endif
-
-    #ifdef AIRMODE
-    #ifdef TEXTMODE
-	  if ((MwSensorActive)&(mode.air)) {
-		  strcpy(screenBuffer, "AIR");
-	  }
-    #endif //TEXTMODE
-    #endif //AIRMODE  
     #if defined ACROPLUS
       if((MwSensorActive)&(mode.acroplus)){
         #ifdef TEXTMODE
@@ -405,16 +403,6 @@ void displayMode(void)
 #endif //PROTOCOL_MAVLINK/KISS/LTM
     if(fieldIsVisible(ModePosition)){
       MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
-#ifdef AIRMODE
-#ifndef TEXTMODE
-      if((MwSensorActive)&(mode.air)){
-        screenBuffer[0]=SYM_AIR;
-        screenBuffer[1]=SYM_AIR1;
-        screenBuffer[2]=0;
-        MAX7456_WriteString(screenBuffer,getPosition(ModePosition)+AIRMODE);
-      }
-#endif //TEXTMODE
-#endif //AIRMODE  
     }  
 
 #ifdef APINDICATOR
@@ -821,14 +809,13 @@ void displayAmperage(void)
 void displayWatt(void)
 {
   uint16_t watts = amperage*voltage/100; // Watts
-  displayItem(wattPosition, watts, SYM_EFF, 0, 0,  0 );
+  displayItem(wattPosition, watts, SYM_POWER, SYM_WATT, 0,  0 );
 }
 
 
 void displayEfficiency(void)
 {
-  uint16_t effPosition = getPosition(efficiencyPosition);
-  uint16_t xx;
+   uint16_t xx;
   if(!Settings[S_UNITSYSTEM])
     xx = GPS_speed * 0.036;           // From MWii cm/sec to Km/h
   else
@@ -840,25 +827,18 @@ void displayEfficiency(void)
   else{
     eff = 999;
   }
+  eff=888;
   if (eff < 999)
-    displayItem(effPosition, eff, 0, SYM_WATT, 0,  0 );
+    displayItem(efficiencyPosition, eff, SYM_EFF, 0, 0,  0 );
 }
 
 
 void displaymAhmin(void)
 {
-  if(!fieldIsVisible(mAhPosition))
-    return;
-  uint16_t effPosition = getPosition(mAhPosition);
-  uint16_t mAhmin = 0;
+  uint16_t t_mAhmin = 0;
   if (flyingTime>0)
-    mAhmin = (uint32_t) amperagesum/(flyingTime*6);
-  
-  ItoaPadded(mAhmin, screenBuffer+1 , 5, 5);
-  screenBuffer[0] = SYM_BLANK;
-  screenBuffer[5] = 0x2A;
-  screenBuffer[6] = 0;
-  MAX7456_WriteString(screenBuffer,effPosition);
+    t_mAhmin = (uint32_t) amperagesum/(flyingTime*6);
+  displayItem(mAhPosition, t_mAhmin, SYM_AVG_EFF, 0, 0,  0 );
 }
 
 
@@ -942,14 +922,13 @@ void displayIntro(void)
 void displayGPSPosition(void)     //Truglodite: Crop GPS coordinates to simply ".DDDDDDD" 63 93
 {
   uint16_t position;
-  if(!GPS_fix)
-    return;
-  displayGPSAltitude();
-  if(!fieldIsVisible(MwGPSLatPositionTop))
-    return;
-  if (!MwSensorActive&mode.gpshome)
-    return;
-  if(Settings[S_COORDINATES]|(MwSensorActive&mode.gpshome)){
+//  if(!GPS_fix)
+//    return;
+//  if(!fieldIsVisible(MwGPSLatPositionTop))
+//    return;
+//  if (!MwSensorActive&mode.gpshome)
+//    return;
+  if(fieldIsVisible(MwGPSLatPositionTop)|(MwSensorActive&mode.gpshome)){
     position = getPosition(MwGPSLatPositionTop);  
     screenBuffer[0] = SYM_LAT;
     FormatGPSCoord(GPS_latitude,screenBuffer,3,'N','S');    
@@ -964,14 +943,14 @@ void displayGPSPosition(void)     //Truglodite: Crop GPS coordinates to simply "
 void displayGPSPosition(void)
 {
   uint16_t position;
-  if(!GPS_fix)
-    return;
-  displayGPSAltitude();
-  if(!fieldIsVisible(MwGPSLatPositionTop))
-    return;
-  if (!MwSensorActive&mode.gpshome)
-    return;
-  if((MwSensorActive&mode.gpshome)){
+//  if(!GPS_fix)
+//    return;
+//  displayGPSAltitude();
+//  if(!fieldIsVisible(MwGPSLatPositionTop))
+//    return;
+//  if (!MwSensorActive&mode.gpshome)
+//    return;
+  if(fieldIsVisible(MwGPSLatPositionTop)|(MwSensorActive&mode.gpshome)){
     position = getPosition(MwGPSLatPositionTop);  
     screenBuffer[0] = SYM_LAT;
     FormatGPSCoord(GPS_latitude,screenBuffer+1,4,'N','S');
@@ -1008,7 +987,7 @@ void displayGPSAltitude(void){
       if(((xx/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
         return;
     }
-    formatDistance(xx,1,0);
+    formatDistance(xx,1,0,SYM_ALT);
     MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
 }
 
@@ -1024,6 +1003,23 @@ void displayNumberOfSat(void)
   screenBuffer[1] = SYM_SAT_R;
   itoa(GPS_numSat,screenBuffer+2,10);
   MAX7456_WriteString(screenBuffer,getPosition(GPS_numSatPosition));
+}
+
+  /*
+   *  t_position  = screen position
+   *  t_value     = numerical value
+   *  t_leadicon  = hex position of leading character. 0 = no leading character.
+   *  t_trailicon = hex position of trailing character. 0 = no trailing character.
+   *  t_psize     = number of characters to right justify value into. 0 = left justified with no padding.
+   *  t_dec       = char position of decimal point within right justified psize. e.g for 16.1 use t_psize=3,t_dec=2 
+  */
+
+void displayGPSdop(void)
+{
+  uint16_t t_dop = GPS_dop/10;
+  if (t_dop>99)
+    t_dop=99;
+  displayItem(DOPposition, t_dop, SYM_DOP, 0 , 3,  2 );
 }
 
 
@@ -1069,7 +1065,7 @@ void display_speed(uint16_t t_value, uint8_t t_position, uint8_t t_type)
 
 void displayGPS_time(void)       //local time of coord calc - haydent
 {
-  if(!GPS_fix) return;
+//  if(!GPS_fix) return;
   if(!Settings[S_GPSTIME]) return;
   if(!fieldIsVisible(GPS_timePosition)) return;
 
@@ -1111,10 +1107,10 @@ void displayAltitude(void)
     if(((altitude/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
       return;   
   }
-  formatDistance(altitude,1,0);
+  formatDistance(altitude,1,0,SYM_ALT);
   MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition));
 #ifdef SHOW_MAX_ALTITUDE
-  formatDistance(altitudeMAX,1,0);
+  formatDistance(altitudeMAX,1,0,SYM_MAX);
   MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+LINE);
 #endif //SHOW_MAX_ALTITUDE
 
@@ -1123,7 +1119,7 @@ void displayAltitude(void)
 
 void displayClimbRate(void)
 {
-  if(!fieldIsVisible(MwClimbRatePosition))
+  if(!fieldIsVisible(MwVarioPosition))
     return;
 
 #ifdef VARIOALARM
@@ -1133,7 +1129,7 @@ void displayClimbRate(void)
 #endif // VARIOALARM
   
   
-  uint16_t position = getPosition(MwClimbRatePosition);
+  uint16_t position = getPosition(MwVarioPosition);
 
   for(int8_t X=-1; X<=1; X++) {
     screen[position+(X*LINE)] =  SYM_VARIO;
@@ -1251,8 +1247,8 @@ void displayClimbRate(void)
 
 void displayDistanceToHome(void)
 {
-  if(!GPS_fix)
-    return;
+//  if(!GPS_fix)
+//    return;
   uint32_t dist;
   if(Settings[S_UNITSYSTEM])
     dist = GPS_distanceToHome * 3.2808;           // mt to feet
@@ -1271,22 +1267,31 @@ void displayDistanceToHome(void)
       return;
   }
 
-  formatDistance(dist,1,2);
+//  formatDistance(dist,1,2,0);
+  formatDistance(dist,1,2,SYM_DTH);
   MAX7456_WriteString(screenBuffer,getPosition(GPS_distanceToHomePosition));
+}
 
+
+void displayDistanceTotal(void)
+{
+  #if defined SHOW_TOTAL_DISTANCE
+    if(!fieldIsVisible(TotalDistanceposition))
+      return;
+    formatDistance(trip,1,2,SYM_TOTAL);                                                   
+    MAX7456_WriteString(screenBuffer,getPosition(TotalDistanceposition));                                                                            
+  #endif //SHOW_TOTAL_DISTANCE
+}
+
+
+void displayDistanceMax(void)
+{
   #if defined SHOW_MAX_DISTANCE
-    formatDistance(distanceMAX,1,2);
-    MAX7456_WriteString(screenBuffer,LINE+getPosition(GPS_distanceToHomePosition));
+    if(!fieldIsVisible(MaxDistanceposition))
+      return;
+    formatDistance(distanceMAX,1,2,SYM_MAX);
+    MAX7456_WriteString(screenBuffer,getPosition(MaxDistanceposition));
   #endif //SHOW_MAX_DISTANCE
-  #if defined SHOW_TOTAL_DISTANCE                                              
-    formatDistance(trip,1,2);                                                   
-    #if defined SHOW_MAX_DISTANCE                                               
-    MAX7456_WriteString(screenBuffer,LINE+LINE+getPosition(GPS_distanceToHomePosition));                                                                       
-    #else                                                                       
-    MAX7456_WriteString(screenBuffer,LINE+getPosition(GPS_distanceToHomePosition));                                                                            
-    #endif //two lines if max distance is there                                 
-  #endif //SHOW_TOTAL_DISTANCE  
-
 }
 
 
@@ -1659,7 +1664,7 @@ void displayConfigScreen(void)
       } 
       else  {      
 #ifdef LONG_RANGE_DISPLAY
-        formatDistance(MaxMenuBuffer[X], 0, 2);
+        formatDistance(MaxMenuBuffer[X], 0, 2, 0);
         MAX7456_WriteString(screenBuffer, 110+(30*Y));
 #else
         MAX7456_WriteString(itoa(MaxMenuBuffer[X], screenBuffer, 10), 110+(30*Y));
@@ -2167,8 +2172,8 @@ void mapmode(void) {
     return;
   }
 
-  if(!GPS_fix)
-    return;
+//  if(!GPS_fix)
+//    return;
   if(!fieldIsVisible(MapModePosition))
     return;
 
@@ -2458,7 +2463,52 @@ void displayAlarms() {
 #endif
 
 
-void formatDistance(int32_t d2f, uint8_t units, uint8_t type ) {
+void formatDistance(int32_t t_d2f, uint8_t t_units, uint8_t t_type, uint8_t t_icon ) {
+//void formatDistance(int32_t t_d2f, uint8_t t_units, uint8_t t_type) {
+  // t_d2f = integer to format into string
+  // t_type 0=alt, 2=dist , 4=LD alt, 6=LD dist
+  // t_units 0=none, 1 show units symbol at end
+  // t_licon 0=none, other = hex char of lead icon
+  int32_t tmp;
+  uint8_t xx=0;
+  if (t_icon>1){
+    xx=1;
+    screenBuffer[0]=t_icon;
+  }
+#ifdef LONG_RANGE_DISPLAY  
+  if (t_d2f>9999){
+    if(Settings[S_UNITSYSTEM]){
+      tmp = ((t_d2f) + (t_d2f%5280))/528;
+    }
+    else{
+      tmp = t_d2f/100;
+    }
+    itoa(tmp, screenBuffer+xx, 10);
+    xx = FindNull();
+    screenBuffer[xx]=screenBuffer[xx-1];
+    screenBuffer[xx-1] = DECIMAL;
+    xx++;
+    screenBuffer[xx] = 0;
+    // type = (type==2) ? type=6 : type=4; // additional fonts to be added           
+  }
+  else{
+    itoa(t_d2f, screenBuffer+xx, 10);
+  }
+#else
+    itoa(t_d2f, screenBuffer+xx, 10);
+#endif  
+  if (t_units==1){
+    xx = FindNull();
+    screenBuffer[xx] = UnitsIcon[Settings[S_UNITSYSTEM]+t_type];
+    xx++;
+    screenBuffer[xx] = 0;
+  }
+  else{    
+  }
+}
+
+
+void formatDistanceOld(int32_t d2f, uint8_t units, uint8_t type ) {
   // d2f = integer to format into string
   // type 0=alt, 2=dist , 4=LD alt, 6=LD dist
   // units 0=none, 1 show units symbol
@@ -2501,10 +2551,6 @@ void displayItem(uint16_t t_position, int16_t t_value, uint8_t t_leadicon, uint8
    *  t_psize     = number of characters to right justify value into. 0 = left justified with no padding.
    *  t_dec       = char position of decimal point within right justified psize. e.g for 16.1 use t_psize=4,t_dec=3
   */
-  /*
-   *  This is potential future function to reduce memory have single display write function.
-   *  It may require more memeory to actually implement so is here for reference only
-  */
   
   uint8_t t_offset = 0;
   if(!fieldIsVisible(t_position))
@@ -2514,7 +2560,7 @@ void displayItem(uint16_t t_position, int16_t t_value, uint8_t t_leadicon, uint8
       t_offset = 1;
     }
     if (t_psize>1){ // right justified value. Do we really need RJV ??
-      ItoaPadded(t_value,screenBuffer,t_psize,t_pdec);  
+      ItoaPadded(t_value,screenBuffer+t_offset,t_psize,t_pdec);  
       screenBuffer[t_psize+t_offset] = 0;         
     }
     else{ // left justified value

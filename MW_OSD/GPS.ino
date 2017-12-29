@@ -549,12 +549,10 @@ bool UBLOX_parse_gps(void) {
       _fix_ok = 0;
       if ((_buffer.solution.fix_status & NAV_STATUS_FIX_VALID) && (_buffer.solution.fix_type == FIX_3D || _buffer.solution.fix_type == FIX_2D)) _fix_ok = 1;
       GPS_numSat = _buffer.solution.satellites;
-#ifdef DISPLAYDOP
-      GPS_pdop = _buffer.solution.position_DOP;
-      if ((GPS_fix_HOME == 0) && (GPS_pdop > GPSDOP)) {
-        GPS_numSat = MINSATFIX;
-      }
-#endif
+      GPS_dop = _buffer.solution.position_DOP;
+//      if ((GPS_fix_HOME == 0) && (GPS_dop > GPSDOP)) {
+//        GPS_numSat = MINSATFIX;
+//      }
       break;
     case MSG_VELNED:
       GPS_speed         = _buffer.velned.speed_2d;  // cm/s
@@ -718,7 +716,7 @@ restart:
       GPS_speed                   = _buffer.msg.ground_speed;     // in m/s * 100 == in cm/s
       GPS_ground_course           = _buffer.msg.ground_course / 100; //in degrees
       GPS_numSat                  = _buffer.msg.satellites;
-      //GPS_hdop                  = _buffer.msg.hdop;
+      GPS_dop                     = _buffer.msg.hdop;
       parsed = true;
       GPS_Present = 1;
   }

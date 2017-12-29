@@ -249,7 +249,11 @@ void loop()
 //------------------------------------------------------------------------
 void loop()
 {
-  
+#ifdef DEVELOPMENT                  // Developement pre-set test paramters only 
+GPS_fix=1;
+GPS_numSat=8;
+GPS_dop=10000;
+#endif  
   alarms.active=0;
   timer.loopcount++;
   if (flags.reset){
@@ -493,9 +497,6 @@ void loop()
 
 #ifndef INTRO_DELAY 
   #define INTRO_DELAY 5
-  #ifdef DEBUG 
-    #define INTRO_DELAY 0
-  #endif
 #endif
     if( allSec < INTRO_DELAY ){
       displayIntro();
@@ -575,9 +576,6 @@ void loop()
 #ifdef VIRTUAL_NOSE
         displayVirtualNose();
 #endif
-#ifdef DISPLAYDOP
-        displayDOP();
-#endif
         displayArmed();
         displayCurrentThrottle();
 #ifdef CALLSIGNALWAYS
@@ -595,28 +593,32 @@ void loop()
         displayCallsign(getPosition(callSignPosition));      
        }
 #endif
-        if(MwSensorPresent&MAGNETOMETER) {
+//-        if(MwSensorPresent&MAGNETOMETER) {
           displayHeadingGraph();
           displayHeading();
-        }
-        if(MwSensorPresent&BAROMETER) {
+//-        }
+//-        if(MwSensorPresent&BAROMETER) {
           displayAltitude();
           displayClimbRate();
-        }
-        if(MwSensorPresent&GPSSENSOR) 
+//-        }
+//-        if(MwSensorPresent&GPSSENSOR) // missing {
           displayNumberOfSat();
           displayDirectionToHome();
           displayDistanceToHome();
+          displayDistanceTotal();
+          displayDistanceMax();
           displayAngleToHome();
+          displayGPSAltitude();
+          displayGPSdop();
           #ifdef USEGLIDESCOPE
             // displayfwglidescope(); //note hook for this is in display horizon function
           #endif //USEGLIDESCOPE  
           display_speed(GPS_speed,GPS_speedPosition,0);
+#if defined V14 
           display_speed(AIR_speed,AIR_speedPosition,1);
-//          display_speed(WIND_speed,WIND_speedPosition);
           displayWindSpeed(); // also windspeed if available
-//          display_max(speedMAX,MAX_speedPosition);
           displayItem(MAX_speedPosition, speedMAX, SYM_MAX, speedUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
+#endif //V14
           displayGPSPosition();  
       
 #ifdef GPSTIME
@@ -1309,3 +1311,6 @@ void useairspeed(){
   GPS_speed = 27.7777 * sqrt(airspeedsensor * airspeed_cal); // Need in cm/s for this
 }
 #endif //USE_AIRSPEED_SENSOR 
+
+
+

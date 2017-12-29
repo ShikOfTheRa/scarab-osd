@@ -121,8 +121,7 @@
 #define GPSOSDHOMEDISTANCE 40       // distance from home in meters when GPSOSD is home. When speed is low it disarms and displays summary screen.
 #define GPSOSDSUMMARY      32       // seconds summary is displayed for after landing. Max 32
 #define GPSOSDLANDED        8       // seconds OSD needs to have landed (within home distance and speed less than xxx) before triggering summary. Max 32
-//#define GPSDOP 300                // UBLOX only - minimum PDOP required for sat fix. A DOP of 2.00 is considered good 
-//#define DISPLAYDOP                // UBLOX only - display DOP when its bad - above GPSDOP. Uses and requires temperature position to be enabled
+#define GPSDOP 500                  // UBLOX only - minimum PDOP required for sat fix. A DOP of 2.00 is considered good 
 //#define PWM_OSD_SWITCH            // Enables 3 way screen switch using a TX channel via a RX channel connected to the OSD PWM input pin (RSSI pin on basic MINIM hardware). 
 //#define PWM_THROTTLE              // Enables throttle feature, virtual current sensor using RC throttle connected into OSD PWM input pin (RSSI pin on basic MINIM hardware). 
 //#define PPM_CONTROL               // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD PWM input pin (RSSI pin on basic MINIM hardware). Requires TX type to be set below. 
@@ -157,7 +156,7 @@
 //#define USEBAROALTITUDE           // Undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) ** Recommended **
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
 #define USEGLIDESCOPE             // Enables ILS glidescope
-#define GLIDEANGLE 40               // ILS glidescope angle where 40 = 4.0° - 1.0 deg gradiented scope scale requires enabling in layouts. Auto enabled for FIXEDWING
+#define GLIDEANGLE 80               // ILS glidescope angle where 40 = 4.0° - 1.0 deg gradiented scope scale requires enabling in layouts. Auto enabled for FIXEDWING
 
 
 /******************** Serial speed settings *********************/
@@ -243,12 +242,11 @@
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 #define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft. Auto enabled for FIXEDWING
-#define AIRMODE 2                   // Enable this to display airmode icon. Value determines distance in characters between mode icon and airmode icon. 2 = next to it. 30 = below it
+#define AIRMODE                     // Enable this to display airmode icon. 
 //#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
 //#define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
 //#define TEXTMODE                  // Enable to display the flyingmode as text instead of symbols
 //#define OSD_SWITCH                // Forces original 2 way multiwii screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
-
 
 /********************       Power / efficiency display Settings         ************************/
 #define DISPLAYWATTS                // Enable this to display Watts
@@ -339,16 +337,6 @@
 #define VENDOR   1                   // For vendor use for custom GUI
 
 
-/********************       FrSky S.Port settings      *********************/
-//enables data transfer from frsky reciever s.port to osd via multiwii
-//requires serial inverter cable & multiwii with s.port code
-//Auto detected cell graph from s.port, 16 steps @ 0.05v 
-//To show battery voltage from s.port, enable "Use MWii" under "Main Voltage" in GUI
-//To show amperage from s.port, enable "Use MWii" under Amperage in GUI
-//more details: http://code.google.com/p/scarab-osd/wiki/Frsky_SPort
-#define MIN_CELL 320 //Cell Low Flash - No decimal, 3 Digits ie 320 = 3.20v
-
-
 /********************  TEMPERATURE  settings      *********************/
 //#define TEMPSENSOR                 // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
 #define TEMPERATUREMAX 50            // Temperature warning value
@@ -360,10 +348,10 @@
 // This is used for those who are attempting records to always show the maximum achieved.
 // Maximum values (as shown on statistics summary screen will be displayed on line IMMEDAITELY BELOW where current live data is displayed
 // It may require layouts to be amended to show data without overwriting other information
-//#define SHOW_MAX_SPEED             // Enable to display MAX speed achieved on line below current speed
+#define SHOW_MAX_SPEED               // Enable to display MAX speed achieved
 //#define SHOW_MAX_ALTITUDE          // Enable to display MAX altitude achieved on line below current altitude
-//#define SHOW_MAX_DISTANCE          // Enable to display MAX distance achieved on line below current distance
-//#define SHOW_TOTAL_DISTANCE        // Enable to display TOTAL distance achieved on line below current distance
+#define SHOW_MAX_DISTANCE            // Enable to display MAX distance achieved
+#define SHOW_TOTAL_DISTANCE          // Enable to display TOTAL distance achieved
 
 
 /********************  THROTTLE calibration  settings      *********************/

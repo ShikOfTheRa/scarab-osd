@@ -18,7 +18,7 @@
 
 #define SYM_ANGLE_RTH     0XF2
 #define SYM_ANGLE_HDG     0XF3
-#define SYM_HDOP          0XF4
+#define SYM_DOP           0XF4
 #define SYM_SPEED_GPS     0XF5 
 #define SYM_SPEED_AIR     0XF6 //GPS +1
 #define SYM_MAX           0XF7 
@@ -26,7 +26,13 @@
 #define SYM_EFF           0XF9 
 #define SYM_PITCH         0XFA 
 #define SYM_ROLL          0XFB 
+#define SYM_POWER         0XFC 
+#define SYM_AVG_EFF       0XFD 
+#define SYM_TOTAL         0XFE 
 
+#define SYM_DTH           0X7A
+#define SYM_ALT           0X3F
+#define SYM_KM            0x7D
 
 // Direction arrows 
 #ifdef V14
@@ -90,7 +96,7 @@
 // GPS Coordinates and Altitude
 #define SYM_LAT 0xCA
 #define SYM_LON 0XCB
-#define SYM_ALT 0XCC
+//#define SYM_ALT 0XCC
 
 // GPS Mode and Autopilot
 #define SYM_3DFIX 0XDF 
@@ -159,7 +165,7 @@
 #define SYM_BATT_EMPTY 0X96
 
 // Vario
-#define SYM_VARIO 0x78
+#define SYM_VARIO 0x7F
 
 // Glidescope
 #define SYM_GLIDESCOPE 0xDC
@@ -190,7 +196,7 @@
 #define SYM_VOLT 0XA9
 #define SYM_AMP 0X9A
 #define SYM_MAH 0XA4
-#define SYM_WATT 0X57
+#define SYM_WATT 0X7B
 
 // Flying Mode
 #define SYM_ACRO 0XAE
