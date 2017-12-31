@@ -297,7 +297,7 @@ void displayMode(void)
   }
   else if(MwSensorActive&mode.gpshold){
     #ifdef TEXTMODE
-	  strcpy(screenBuffer, "GPSHOLD");
+	  strcpy(screenBuffer, "GHOLD");
     #else
       screenBuffer[2]=0;
       screenBuffer[0] = SYM_GHOLD;
@@ -305,15 +305,19 @@ void displayMode(void)
     #endif
   }
   else if(MwSensorActive&mode.gpsmission){
-    itoa(GPS_waypoint_step,screenBuffer+2,10);
-    screenBuffer[4]=0;
-    screenBuffer[0] = SYM_GMISSION;
-    screenBuffer[1] = SYM_GMISSION1;  
+    #ifdef TEXTMODE
+      strcpy(screenBuffer, "WAYP");
+    #else
+      itoa(GPS_waypoint_step,screenBuffer+2,10);
+      screenBuffer[4]=0;
+      screenBuffer[0] = SYM_GMISSION;
+      screenBuffer[1] = SYM_GMISSION1;  
+    #endif
   }
 #if defined MULTIWII_V24
   else if(MwSensorActive&mode.gpsland){
     #ifdef TEXTMODE
-	  strcpy(screenBuffer, "GPSLAND");
+	  strcpy(screenBuffer, "LAND");
     #else
       screenBuffer[2]=0;
       screenBuffer[0] = SYM_GLAND;
@@ -323,7 +327,7 @@ void displayMode(void)
 #endif //MULTIWII_V24    
   else if(MwSensorActive&mode.baro){
     #ifdef TEXTMODE
-    strcpy(screenBuffer, "ALTHOLD");
+    strcpy(screenBuffer, "AHOLD");
     #else
       screenBuffer[2]=0;
       screenBuffer[0] = SYM_GHOLD;

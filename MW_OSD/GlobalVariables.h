@@ -736,7 +736,8 @@ uint16_t old_GPS_speed;
 int16_t GPS_directionToHome=0;
 uint8_t GPS_numSat=0;
 uint16_t GPS_dop=0;
-uint8_t GPS_waypoint_step=0;
+uint8_t  GPS_waypoint_step=0;
+uint16_t GPS_waypoint_dist=0;
 //uint16_t I2CError=0;
 //uint16_t cycleTime=0;
 uint16_t pMeterSum=0;
@@ -1608,8 +1609,9 @@ const PROGMEM char * const msp_mode_index[] =
 #define MAVLINK_MSG_ID_MISSION_CURRENT 42
 #define MAVLINK_MSG_ID_MISSION_CURRENT_MAGIC 28
 #define MAVLINK_MSG_ID_MISSION_CURRENT_LEN 2
-
-
+#define MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT 62
+#define MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT_MAGIC 183
+#define MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT_LEN 26 
 
 #define MAV_DATA_STREAM_RAW_SENSORS 1
 #define MAV_DATA_STREAM_EXTENDED_STATUS 2
@@ -1729,6 +1731,7 @@ struct __mw_mav {
   uint8_t  sequence;
   uint16_t serial_checksum;
   uint16_t tx_checksum;
+  uint16_t throttle;
 }mw_mav;
 
 int32_t  GPS_home[2];

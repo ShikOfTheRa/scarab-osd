@@ -228,6 +228,7 @@ void serialMAVCheck() {
         GPS_fix_HOME |= 0x01;
         GPS_altitude_home = GPS_altitude;
       }
+      mw_mav.throttle = (int16_t)((serialBuffer[18] | serialBuffer[19] << 8)+1000);
       break;
     case MAVLINK_MSG_ID_ATTITUDE:
       MwAngle[0] = (int16_t)(serialbufferfloat(4) * 57.2958 * 10);  // rad-->0.1deg
@@ -259,18 +260,29 @@ void serialMAVCheck() {
       MwRssi = (uint16_t)(((103) * serialBuffer[21]) / 10);
       for (uint8_t i = 0; i < 8; i++)
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
+        #ifdef MAV_ALT_THROTTLE
+          MwRcData[THROTTLESTICK]=mw_mav.throttle;
+        #endif // MAV_ALT_THROTTLE
       handleRawRC();
       break;
     case MAVLINK_MSG_ID_RC_CHANNELS:
       MwRssi = (uint16_t)(((103) * serialBuffer[41]) / 10);
       for (uint8_t i = 0; i < 8; i++)
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
+        #ifdef MAV_ALT_THROTTLE
+          MwRcData[THROTTLESTICK]=mw_mav.throttle;
+        #endif // MAV_ALT_THROTTLE
       handleRawRC();
       break;
-    case MAVLINK_MSG_ID_WIND:
+    case MAVLINK_MSG_ID_WIND: 
       WIND_direction = (int16_t)(serialBuffer[0]) | (serialBuffer[1] << 8); // 0=>360 deg
       WIND_speed     = (int16_t)(serialBuffer[2]) | (serialBuffer[3] << 8); // m/3
       break;
+/*
+    case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT
+      GPS_waypoint_dist = (int16_t)(serialBuffer[24]) | (serialBuffer[25] << 8); 
+      break;
+*/
     case MAVLINK_MSG_ID_MISSION_CURRENT:
       // GPS_waypoint_step = (int16_t)(serialBuffer[0] | (serialBuffer[1] << 8));
       GPS_waypoint_step = serialBuffer[0]; // just 256 values for now

@@ -174,6 +174,7 @@
 #define MAV_COM_ID 1                // Component ID of MAV.
 //#define MAV_ARMED                 // Forces OSD to be always armed (for when MAV does not send armed status in heartbeat).
 //#define MAV_RESET_HOME            // Resets home position when not armed. When enabled, note that RX glitch etc. could potentially reset home position.
+//#define MAV_ALT_THROTTLE          // Use alternative MAV throttle value. Not raw RC channel
 
 /******************** Serial MSP speed settings *********************/
 // Choose ONLY ONE SPEED option: increases speeds of serial update - but with impact to flight controller 
