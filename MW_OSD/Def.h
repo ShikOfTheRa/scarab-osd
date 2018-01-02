@@ -547,6 +547,7 @@
   #undef  OSD_SWITCH_RC
   #undef  DISPLAY_PR
   #define NOAHI
+  #define NOSUMMARYTHROTTLERESET
   
 //  #define HIDEARMEDSTATUS
   #define ALARM_GPS 5
@@ -765,6 +766,7 @@ enum {
 #ifdef PROTOCOL_MAVLINK
 #undef  PROTOCOL_MSP
 #define FORCESENSORS
+#define NOSUMMARYTHROTTLERESET
 #endif
 
 #ifdef PROTOCOL_LTM

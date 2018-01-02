@@ -792,8 +792,10 @@ void displayTime(void)
 
   uint32_t displaytime;
   if (armed) { 
-    if(((flyTime/60)>=Settings[S_FLYTIME_ALARM])&&(timer.Blink2hz))
-      return;
+    if (Settings[S_FLYTIME_ALARM]>0){
+      if(((flyTime/60)>=Settings[S_FLYTIME_ALARM])&&(timer.Blink2hz))
+        return;
+    }
 
     if(flyTime < 3600) {
       screenBuffer[0] = SYM_FLY_M;

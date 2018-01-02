@@ -246,7 +246,7 @@
 //#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
 //#define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
 //#define TEXTMODE                  // Enable to display the flyingmode as text instead of symbols
-
+//NOSUMMARYTHROTTLERESET            // Enable to supress summary display clearing from throttle
 
 /********************       Power / efficiency display Settings         ************************/
 #define DISPLAYWATTS                // Enable this to display Watts (if Watts selected in layouts). Select one of WATTS/MAHMIN/EFFICIENCY
