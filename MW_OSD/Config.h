@@ -247,7 +247,11 @@
 //#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
 //#define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
 //#define TEXTMODE                  // Enable to display the flyingmode as text instead of symbols
+<<<<<<< HEAD
 //#define OSD_SWITCH                // Forces original 2 way multiwii screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
+=======
+//NOSUMMARYTHROTTLERESET            // Enable to supress summary display clearing from throttle
+>>>>>>> refs/remotes/origin/master
 
 /********************       Power / efficiency display Settings         ************************/
 #define DISPLAYWATTS                // Enable this to display Watts
