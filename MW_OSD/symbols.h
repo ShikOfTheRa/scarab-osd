@@ -35,13 +35,8 @@
 #define SYM_KM            0x7D
 
 // Direction arrows 
-#ifdef V14
   #define SYM_ARROW_HOME 0X60
   #define SYM_ARROW_DIR 0XE0
-#else  
-  #define SYM_ARROW_HOME 0X60
-  #define SYM_ARROW_DIR 0X60
-#endif
 #define SYM_ARROW_2 0X61
 #define SYM_ARROW_3 0X62
 #define SYM_ARROW_4 0X63

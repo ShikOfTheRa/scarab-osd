@@ -81,7 +81,7 @@ uint16_t UntouchedStack(void)
 //------------------------------------------------------------------------
 #define MWVERS "MW-OSD - R1.7.4.0"
 #define MWOSDVERSION 1740 // 1660=1.6.6.0 for GUI
-#define EEPROMVER 13      // for eeprom layout verification
+#define EEPROMVER 14      // for eeprom layout verification
 
 #include <avr/pgmspace.h>
 #undef PROGMEM
@@ -561,14 +561,10 @@ GPS_dop=10000;
         displayWatt();
 #endif //DISPLAYWATTS
 #if defined (DISPLAYEFFICIENCY)
-      #if defined V14 
         displayEfficiency();
-      #endif
 #endif //DISPLAYEFFICIENCY
 #if defined (DISPLAYMAHMIN)
-      #if defined V14 
         displaymAhmin();
-      #endif
 #endif //DISPLAYMAHMIN
 #ifdef TEMPSENSOR
         if(((temperature<Settings[TEMPERATUREMAX])||(timer.Blink2hz))) displayTemperature();
@@ -614,11 +610,9 @@ GPS_dop=10000;
             // displayfwglidescope(); //note hook for this is in display horizon function
           #endif //USEGLIDESCOPE  
           display_speed(GPS_speed,GPS_speedPosition,0);
-#if defined V14 
           display_speed(AIR_speed,AIR_speedPosition,1);
           displayWindSpeed(); // also windspeed if available
           displayItem(MAX_speedPosition, speedMAX, SYM_MAX, speedUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
-#endif //V14
           displayGPSPosition();  
       
 #ifdef GPSTIME

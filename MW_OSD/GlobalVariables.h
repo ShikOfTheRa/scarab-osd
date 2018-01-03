@@ -360,68 +360,46 @@ enum Setting16_ {
 
 // Settings Locations
 enum Setting_ {
-  S_CHECK_,		// used for check
-  S_UNUSED_5, //spare
+  S_CHECK_,
+S_AUTOCELL,
   S_VIDVOLTAGEMIN,
   S_RSSI_ALARM,
-  S_DISPLAYRSSITEMP, //spare
+S_AUTOCELL_ALARM,
   S_MWRSSI,
   S_PWMRSSI,
-  S_DISPLAYVOLTAGETEMP, //spare
+S_USE_BARO,
   S_VOLTAGEMIN,
   S_BATCELLS,
   S_DIVIDERRATIO,
   S_MAINVOLTAGE_VBAT,
   S_AMPERAGETEMP,
   S_MWAMPERAGE,
-  S_AMPER_HOURTEMP, //spare
+S_USE_MAG,
   S_AMPERAGE_VIRTUAL,
   S_ALARMS_TEXT,
-  S_VIDVOLTAGETEMP, //spare
+S_CALLSIGN_ALWAYS,
   S_VIDDIVIDERRATIO,
   S_THROTTLE_PWM,
   S_AMPER_HOUR_ALARM,
   S_AMPERAGE_ALARM,
-  S_DISPLAYGPSTEMP, //spare
-  S_COORDINATESTEMP, //spare
-  S_GPSCOORDTOP, //spare
-  S_GPSALTITUDETEMP,//spare
-  S_ANGLETOHOMETEMP, //spare
-  S_SHOWHEADINGTEMP, //spare
+  S_Reserved1,          // unused
+  S_Reserved2,          // unused
   S_HEADING360,
   S_UNITSYSTEM,
   S_VIDEOSIGNALTYPE,
-  S_THROTTLEPOSITIONTEMP, //spare
-  S_DISPLAY_HORIZON_BRTEMP, //spare
-  S_WITHDECORATIONTEMP, //spare
   S_SHOWBATLEVELEVOLUTION,
   S_RESETSTATISTICS,
   S_MAPMODE,
   S_VREFERENCE,
   S_USE_BOXNAMES,
-  S_MODEICONTEMP, // spare
-  S_DISPLAY_CSTEMP, // spare
   S_GPSTIME,
   S_GPSTZAHEAD,
   S_GPSTZ,
-  S_DEBUGTEMP, //spare
-  S_SCROLLINGTEMP, //spare
-  S_GIMBALTEMP, //spare
-  S_VARIOTEMP, //spare
-  S_BAROALTTEMP, //50 //spare
-  S_COMPASSTEMP, //spare
-  S_HORIZON_ELEVATIONTEMP, //spare
-  S_TIMERTEMP, //spare
-  S_MODESENSORTEMP, //spare
-  S_SIDEBARTOPSTEMP, //spare
   S_VTX_POWER,
   S_VTX_BAND,
   S_VTX_CHANNEL,
   S_RCWSWITCH,
   S_RCWSWITCH_CH,
-  S_HUDSW0TEMP, //spare
-  S_HUDSW1TEMP, //spare
-  S_HUDSW2TEMP, //spare
   S_DISTANCE_ALARM,
   S_ALTITUDE_ALARM,
   S_SPEED_ALARM,
@@ -449,60 +427,41 @@ uint16_t Settings16[EEPROM16_SETTINGS];
 
 // For Settings Defaults
 PROGMEM const uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
-EEPROMVER,   // used for check              0
-0,   // S_UNUSED_5                  1
-0, // S_VIDVOLTAGEMIN             2
-60,  // S_RSSI_ALARM                3
-0,   // S_DISPLAYRSSI               4
-0,   // S_MWRSSI                    5
-0,   // S_PWMRSSI                   6
-1,   // S_DISPLAYVOLTAGE            7
-138, // S_VOLTAGEMIN                8
-4,   // S_BATCELLS                  9
-200, // S_DIVIDERRATIO              10
-0,   // S_MAINVOLTAGE_VBAT          11
-0,   // S_AMPERAGE                  12
-0,   // S_MWAMPERAGE                12a :)
-0,   // S_AMPER_HOUR                13
-0,   // S_AMPERAGE_VIRTUAL,         13a
-1  , // S_ALARMS_TEXT,              13b
-0,   // S_VIDVOLTAGE                14
-200, // S_VIDDIVIDERRATIO           15
-0,   // S_VIDVOLTAGE_VBAT           16 
-50,  // S_AMPER_HOUR_ALARM          17
-100, // S_AMPERAGE_ALARM            18
-1,   // S_DISPLAYGPS                20
-1,   // S_COORDINATES               21
-1,   // S_GPSCOORDTOP               22
-0,   // S_GPSALTITUDE               23
-0,   // S_ANGLETOHOME               24 
-0,   // S_SHOWHEADING               25
-1,   // S_HEADING360                26
-0,   // S_UNITSYSTEM                27
-0,   // S_VIDEOSIGNALTYPE           28
-0,   // S_THROTTLEPOSITION          29
-1,   // S_DISPLAY_HORIZON_BR        30
-1,   // S_WITHDECORATION            31
-0,   // S_SHOWBATLEVELEVOLUTION     32
-0,   // S_RESETSTATISTICS           33
-1,   // S_MAPMODE                   34
-0,   // S_VREFERENCE,               34a
-0,   // S_USE_BOXNAMES              35
-1,   // S_MODEICON                  36
-0,   // S_DISPLAY_CS,               37
-0,   // GPStime                     37a
-0,   // GPSTZ +/-                   37b
-0,   // GPSTZ                       37c
-0,   // DEBUG                       37e
-1,   // SCROLLING LADDERS           37f
-1,   // SHOW GIMBAL ICON            37g
-1,   // SHOW VARIO                  37h
-1,   // SHOW BAROALT                38h 50
-1,   // SHOW COMPASS                39h
-0,   // S_HORIZON_ELEVATION         40h
-1,   // S_TIMER                     41h
-1,   // S_MODESENSOR                42h
-0,   // S_SIDEBARTOPS               43h
+EEPROMVER, //   S_CHECK_,    
+1, // S_AUTOCELL
+0, //   S_VIDVOLTAGEMIN,
+0, //   S_RSSI_ALARM,
+34, // S_AUTOCELL_ALARM
+0, //   S_MWRSSI,
+0, //   S_PWMRSSI,
+0, // S_USE_BARO
+0, //   S_VOLTAGEMIN,
+4, //   S_BATCELLS,
+200, //   S_DIVIDERRATIO,
+0, //   S_MAINVOLTAGE_VBAT,
+0, //   S_AMPERAGETEMP,
+0, //   S_MWAMPERAGE,
+0, // S_USE_MAG
+0, //   S_AMPERAGE_VIRTUAL,
+1, //   S_ALARMS_TEXT,
+1, // S_CALLSIGN_ALWAYS
+200, //   S_VIDDIVIDERRATIO,
+0, //   S_THROTTLE_PWM,
+50, //   S_AMPER_HOUR_ALARM,
+100, //   S_AMPERAGE_ALARM,
+0, // Reserved unused
+0, // Reserved unused
+1, //   S_HEADING360,
+0, //   S_UNITSYSTEM,
+0, //   S_VIDEOSIGNALTYPE,
+0, //   S_SHOWBATLEVELEVOLUTION,
+0, //   S_RESETSTATISTICS,
+1, //   S_MAPMODE,
+0, //   S_VREFERENCE,
+0, //   S_USE_BOXNAMES,
+0, //   S_GPSTIME,
+0, //   S_GPSTZAHEAD,
+0, //   S_GPSTZ,
 #ifdef VTX_RTC6705
 VTX_DEFAULT_POWER,    // S_VTX_POWER
 VTX_DEFAULT_BAND,     // S_VTX_BAND
@@ -514,9 +473,6 @@ VTX_DEFAULT_CHANNEL,  // S_VTX_CHANNEL
 #endif
 1,   // S_RCWSWITCH,
 8,   // S_RCWSWITCH_CH,
-0,   // S_HUDSW0, LOW   // NORMAL
-0,   // S_HUDSW1, HIGH  // OSDSW
-0,   // S_HUDSW2, MID
 0,   // S_DISTANCE_ALARM,
 0,   // S_ALTITUDE_ALARM,
 0,   // S_SPEED_ALARM,
@@ -588,7 +544,6 @@ enum Positions {
   glidescopePosition,
   callSignPosition,
   debugPosition,
-#ifdef V14
   climbratevaluePosition,
   efficiencyPosition,
   mAhPosition,
@@ -598,27 +553,14 @@ enum Positions {
   WIND_speedPosition,
   MaxDistanceposition,
   DOPposition,
-#endif  
 
   POSITIONS_SETTINGS
 };
 
-#ifndef V14 
-uint16_t climbratevaluePosition = 600|DISPLAY_NEVER;
-uint16_t efficiencyPosition = 600|DISPLAY_NEVER;
-uint16_t mAhPosition = 600|DISPLAY_NEVER;
-uint16_t AIR_speedPosition = 600|DISPLAY_NEVER;
-uint16_t MAX_speedPosition = 600|DISPLAY_NEVER;
-uint16_t TotalDistanceposition = 600|DISPLAY_NEVER;
-uint16_t WIND_speedPosition = 600|DISPLAY_NEVER;
-uint16_t MaxDistanceposition = 600|DISPLAY_NEVER;
-uint16_t DOPposition = 600|DISPLAY_NEVER;
-#endif  
-
 uint16_t screenPosition[POSITIONS_SETTINGS];
 
+#ifdef DISPLAYALL
 PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
-
 (LINE02+2)|DISPLAY_ALWAYS,    // GPS_numSatPosition
 (LINE02+22)|DISPLAY_ALWAYS,   // GPS_directionToHomePosition
 (LINE02+24)|DISPLAY_ALWAYS,   // GPS_distanceToHomePosition
@@ -660,7 +602,6 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE07+6)|DISPLAY_ALWAYS,    // glidescopePosition
 (LINE10+10)|DISPLAY_ALWAYS,   // CallSign Position
 (LINE08+10)|DISPLAY_ALWAYS,   // Debug Position
-#ifdef V14
 (LINE08+23)|DISPLAY_ALWAYS,   // climbratevaluePosition,
 (LINE08+2)|DISPLAY_ALWAYS,    // efficiencyPosition,
 (LINE10+2)|DISPLAY_ALWAYS,    // mAhPosition,
@@ -670,9 +611,61 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE03+22)|DISPLAY_ALWAYS,   // WIND_speedposition,
 (LINE06+8)|DISPLAY_ALWAYS,    // MaxDistanceposition
 (LINE02+6)|DISPLAY_ALWAYS,    // DOPposition
-#endif  
-
 };
+#else 
+PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
+(LINE02+2)|DISPLAY_ALWAYS,    // GPS_numSatPosition
+(LINE02+22)|DISPLAY_ALWAYS,   // GPS_directionToHomePosition
+(LINE02+24)|DISPLAY_ALWAYS,   // GPS_distanceToHomePosition
+(LINE07+2)|DISPLAY_ALWAYS,    // GPS_speedPosition
+(LINE05+24)|DISPLAY_NEVER,   // GPS_angleToHomePosition
+(LINE06+23)|DISPLAY_NEVER,   // MwGPSAltPosition
+(LINE02+6)|DISPLAY_ALWAYS,    // sensorPosition
+(LINE04+24)|DISPLAY_NEVER,   // MwHeadingPosition
+(LINE02+10)|DISPLAY_ALWAYS,   // MwHeadingGraphPosition
+(LINE07+23)|DISPLAY_ALWAYS,   // MwAltitudePosition
+(LINE07+22)|DISPLAY_ALWAYS,   // MwVarioPosition
+(LINE12+22)|DISPLAY_ALWAYS,   // CurrentThrottlePosition
+(LINE13+22)|DISPLAY_NEVER,   // UNUSED flyTimePosition
+(LINE13+22)|DISPLAY_ALWAYS,   // onTimePosition
+(LINE11+11)|DISPLAY_ALWAYS,   // motorArmedPosition
+(LINE10+22)|DISPLAY_NEVER,   // pitchAnglePosition
+(LINE11+22)|DISPLAY_NEVER,   // rollAnglePosition
+(LINE01+2)|DISPLAY_ALWAYS,    // MwGPSLatPositionTop      // On top of screen
+(LINE01+15)|DISPLAY_ALWAYS,   // MwGPSLonPositionTop      // On top of screen
+(LINE12+3)|DISPLAY_ALWAYS,    // rssiPosition
+(LINE05+3)|DISPLAY_NEVER,    // temperaturePosition
+(LINE13+3)|DISPLAY_ALWAYS,    // voltagePosition
+(LINE11+3)|DISPLAY_ALWAYS,    // vidvoltagePosition
+(LINE13+9)|DISPLAY_ALWAYS,    // amperagePosition
+(LINE13+16)|DISPLAY_ALWAYS,   // pMeterSumPosition
+(LINE07+14)|DISPLAY_ALWAYS,   // horizonPosition
+(LINE07+7)|DISPLAY_ALWAYS,    // SideBarPosition
+(LINE07+7)|DISPLAY_ALWAYS,    // SideBarScrollPosition
+(LINE01+3)|DISPLAY_NEVER,     // SideBarHeight
+(LINE01+7)|DISPLAY_NEVER,     // SideBarWidth
+(LINE05+2)|DISPLAY_ALWAYS,    // Gimbal Position
+(LINE12+11)|DISPLAY_NEVER,   // GPS_time Position
+(LINE09+22)|DISPLAY_NEVER,   // SportPosition
+(LINE04+2)|DISPLAY_ALWAYS,    // modePosition
+(LINE02+22)|DISPLAY_NEVER,    // MapModePosition
+(LINE07+15)|DISPLAY_NEVER,    // MapCenterPosition
+(LINE04+10)|DISPLAY_ALWAYS,   // APstatusPosition
+(LINE09+2)|DISPLAY_NEVER,    // wattPosition
+(LINE07+6)|DISPLAY_ALWAYS,    // glidescopePosition
+(LINE10+10)|DISPLAY_ALWAYS,   // CallSign Position
+(LINE08+10)|DISPLAY_NEVER,   // Debug Position
+(LINE08+23)|DISPLAY_NEVER,   // climbratevaluePosition,
+(LINE08+2)|DISPLAY_NEVER,    // efficiencyPosition,
+(LINE10+2)|DISPLAY_NEVER,    // mAhPosition,
+(LINE06+2)|DISPLAY_NEVER,    // AIR_speedposition,
+(LINE05+8)|DISPLAY_NEVER,    // MAX_speedposition,
+(LINE08+8)|DISPLAY_NEVER,    // TotalDistanceposition
+(LINE03+22)|DISPLAY_NEVER,   // WIND_speedposition,
+(LINE06+8)|DISPLAY_NEVER,    // MaxDistanceposition
+(LINE02+6)|DISPLAY_NEVER,    // DOPposition
+};
+#endif
 
 
 

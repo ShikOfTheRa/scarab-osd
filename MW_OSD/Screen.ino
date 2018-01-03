@@ -1147,14 +1147,12 @@ void displayClimbRate(void)
   int8_t varsymbol=xx%6;
   screen[position+(varline*LINE)] = 0x8F-varsymbol;
 
-#if defined V14 // CLIMB RATE text value 
   int16_t climbrate;
   if(Settings[S_UNITSYSTEM])
     climbrate = MwVario * 0.032808;       // ft/sec
   else
     climbrate = MwVario / 100;            // mt/sec
   displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
-#endif // V14
 
 #ifdef AUDIOVARIO  
 //test when using non RSSI output
