@@ -566,8 +566,8 @@ GPS_dop=10000;
 #if defined (DISPLAYMAHMIN)
         displaymAhmin();
 #endif //DISPLAYMAHMIN
-#ifdef TEMPSENSOR
-        if(((temperature<Settings[TEMPERATUREMAX])||(timer.Blink2hz))) displayTemperature();
+#ifdef SHOW_TEMPERATURE
+        displayTemperature();
 #endif
 #ifdef VIRTUAL_NOSE
         displayVirtualNose();
@@ -1095,7 +1095,7 @@ void ProcessSensors(void) {
     }
 
 //-------------- Temperature
-#ifdef TEMPSENSOR
+#ifdef SHOW_TEMPERATURE
     temperature=sensorfilter[3][SENSORFILTERSIZE]>>3-TEMPZERO;
     temperature = map (temperature, TEMPZERO, 1024, 0 , TEMPMAX);
 #endif

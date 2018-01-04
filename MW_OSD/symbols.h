@@ -29,10 +29,12 @@
 #define SYM_POWER         0XFC 
 #define SYM_AVG_EFF       0XFD 
 #define SYM_TOTAL         0XFE 
+#define SYM_TMP           0X06 
 
 #define SYM_DTH           0X7A
 #define SYM_ALT           0X3F
 #define SYM_KM            0x7D
+#define SYM_GPS_ALT       0XF1
 
 // Direction arrows 
   #define SYM_ARROW_HOME 0X60

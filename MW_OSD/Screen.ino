@@ -177,20 +177,14 @@ void displayVirtualNose(void)
 
 void displayTemperature(void)        
 {
-  if(!fieldIsVisible(temperaturePosition))
+  if(((temperature>Settings[TEMPERATUREMAX])&&(timer.Blink2hz))) 
     return;
-
   int xxx;
   if (Settings[S_UNITSYSTEM])
     xxx = temperature*1.8+32;       //Fahrenheit conversion for imperial system.
   else
     xxx = temperature;
-
-  itoa(xxx,screenBuffer,10);
-  uint8_t xx = FindNull();   // find the NULL
-  screenBuffer[xx++]=temperatureUnitAdd[Settings[S_UNITSYSTEM]];
-  screenBuffer[xx]=0;  // Restore the NULL
-  MAX7456_WriteString(screenBuffer,getPosition(temperaturePosition));
+  displayItem(temperaturePosition, xxx, SYM_TMP, temperatureUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
 }
 
 
@@ -431,8 +425,10 @@ void displayMode(void)
 }
 
 
-void displayCallsign(int cposition)
+void displayCallsign(int cposition) 
 {
+  if(!fieldIsVisible(callSignPosition))
+    return;
   for(uint8_t X=0; X<10; X++) {
     screenBuffer[X] = char(Settings[S_CS0 + X]);
   }   
@@ -637,10 +633,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
 
 void displayVoltage(void)
 {
-//  if (Settings[S_MAINVOLTAGE_VBAT]){
-//    voltage=MwVBat;
-//  }
-
+  uint8_t t_lead_icon;
   if(voltage >= 0 && voltage < voltageMIN)
     voltageMIN = voltage;
 
@@ -669,29 +662,20 @@ void displayVoltage(void)
     uint16_t batevhigh = cells * MvVBatMaxCellVoltage;
     battev = constrain(voltage, batevlow, batevhigh-2);
     battev = map(battev, batevlow, batevhigh-1, 0, 7);   
-    screenBuffer[0]=(SYM_BATT_EMPTY)-battev;
+    t_lead_icon=(SYM_BATT_EMPTY)-battev;
   }
   else 
 #endif // BATTERYICONVOLTS
 
   {
-    screenBuffer[0]=SYM_MAIN_BATT;
+    t_lead_icon=SYM_MAIN_BATT;
   }
 
   if ((voltage<voltageWarning)&&(timer.Blink2hz))
     return;
 
-#ifdef FORCE_DISP_LOW_VOLTS
-  if(fieldIsVisible(voltagePosition)||(voltage<=voltageWarning)) 
-#else
-    if(fieldIsVisible(voltagePosition)) 
-#endif
-    {
-      ItoaPadded(voltage, screenBuffer+1, 4, 3);
-      screenBuffer[5] = SYM_VOLT;
-      screenBuffer[6] = 0;
-      MAX7456_WriteString(screenBuffer,getPosition(voltagePosition)-1);
-    }
+
+  displayItem(voltagePosition, voltage, t_lead_icon, SYM_VOLT, 4, 3 );
 }
 
 
@@ -699,18 +683,7 @@ void displayVidVoltage(void)
 {
   if((vidvoltage<vidvoltageWarning)&&(timer.Blink2hz))
     return;
-#ifdef FORCE_DISP_LOW_VID_VOLTS
-  if(fieldIsVisible(vidvoltagePosition)||(vidvoltage<=vidvoltageWarning)) 
-#else
-    if(fieldIsVisible(vidvoltagePosition)) 
-#endif  
-    {
-      screenBuffer[0]=SYM_VID_BAT;
-      ItoaPadded(vidvoltage, screenBuffer+1, 4, 3);
-      screenBuffer[5] = SYM_VOLT;
-      screenBuffer[6] = 0;    
-      MAX7456_WriteString(screenBuffer,getPosition(vidvoltagePosition)-1);
-    }
+  displayItem(vidvoltagePosition, vidvoltage, SYM_MAIN_BATT, SYM_VOLT, 4, 3 );
 }
 
 
@@ -803,12 +776,7 @@ void displayAmperage(void)
 {
   if(amperage > ampMAX)
     ampMAX = amperage;
-  if(!fieldIsVisible(amperagePosition))
-    return;
-  ItoaPadded(amperage, screenBuffer, 5, 4);     // 999.9 ampere max!
-  screenBuffer[5] = SYM_AMP;
-  screenBuffer[6] = 0;
-  MAX7456_WriteString(screenBuffer,getPosition(amperagePosition));
+  displayItem(amperagePosition, amperage, 0, SYM_AMP, 5,  4 );
 }
 
 
@@ -844,14 +812,13 @@ void displaymAhmin(void)
   uint16_t t_mAhmin = 0;
   if (flyingTime>0)
     t_mAhmin = (uint32_t) amperagesum/(flyingTime*6);
-  displayItem(mAhPosition, t_mAhmin, SYM_AVG_EFF, 0, 0,  0 );
+  displayItem(avgefficiencyPosition, t_mAhmin, SYM_AVG_EFF, 0, 0,  0 );
 }
 
 
 void displaypMeterSum(void)
 {
-  if(!fieldIsVisible(pMeterSumPosition))
-    return;
+  int xx=amperagesum/360;
 
 #ifdef BATTERYICONAMPS
   uint16_t battev =0;
@@ -859,19 +826,14 @@ void displaypMeterSum(void)
     battev=amperagesum/(360*Settings[S_AMPER_HOUR_ALARM]);
     battev=constrain(battev,0,100);
     battev = map(100-battev, 0, 101, 0, 7);
-    screenBuffer[0]=SYM_BATT_EMPTY-battev;
-    screenBuffer[1]=SYM_MAH;
-    int xx=amperagesum/360;
-    itoa(xx,screenBuffer+2,10);
+    uint8_t t_lead_icon = SYM_BATT_EMPTY-battev;
+    displayItem(pMeterSumPosition, xx, t_lead_icon, SYM_MAH, 0,  0 );
   }
   else 
+    displayItem(pMeterSumPosition, xx, 0, SYM_MAH, 0,  0 );
+#else
+  displayItem(pMeterSumPosition, xx, 0, SYM_MAH, 0,  0 );
 #endif //BATTERYICONAMPS
-  {
-    screenBuffer[0]=SYM_MAH;
-    int xx=amperagesum/360;
-    itoa(xx,screenBuffer+1,10);
-  }
-  MAX7456_WriteString(screenBuffer,getPosition(pMeterSumPosition));
 }
 
 
@@ -892,16 +854,8 @@ void displayRSSI(void)
 {      
   if(rssi < rssiMIN && rssi > 0)
     rssiMIN = rssi;  
-  if(!fieldIsVisible(rssiPosition)){
-    return;
-  }
-    
-  screenBuffer[0] = SYM_RSSI;
-  itoa(rssi,screenBuffer+1,10);
-  uint8_t xx = FindNull();
-  screenBuffer[xx++] = '%';
-  screenBuffer[xx] = 0;
-  MAX7456_WriteString(screenBuffer,getPosition(rssiPosition)-1);
+  displayItem(rssiPosition, rssi, SYM_RSSI, '%', 0, 0 );
+
 }
 
 
@@ -993,7 +947,7 @@ void displayGPSAltitude(void){
       if(((xx/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
         return;
     }
-    formatDistance(xx,1,0,SYM_ALT);
+    formatDistance(xx,1,0,SYM_GPS_ALT);
     MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
 }
 

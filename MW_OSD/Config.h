@@ -146,8 +146,6 @@
 #define ALARM_SATS                  // Text alerts if sats below MINSATFIX - in addition to flashing sat indicator
 #define ALARM_GPS 5                 // Text alerts if no GPS data for more than x secs. Sets GPS sats to zero
 #define ALARM_MSP 3                 // Text alerts if no Flight controller data for more than x secs. 
-//#define FORCE_DISP_LOW_VOLTS      // Enable display low voltage warning override for screen layouts where its disabled
-//#define FORCE_DISP_LOW_VID_VOLTS  // Enable display low VIDEO voltage warning override for screen layouts where its disabled
 
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
@@ -340,7 +338,7 @@
 
 
 /********************  TEMPERATURE  settings      *********************/
-//#define TEMPSENSOR                 // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
+//#define SHOW_TEMPERATURE           // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
 #define TEMPERATUREMAX 50            // Temperature warning value
 #define TEMPZERO 0                   // Temperature Zero calibration (range = 0-1024 :512 = 2.5v with vref of 5v and 0.55v for vref of 1.1v) 
 #define TEMPMAX  500                 // Temperature when at sensor output at VCC. Might be  atheoreticla value 

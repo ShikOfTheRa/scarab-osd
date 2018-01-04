@@ -546,7 +546,7 @@ enum Positions {
   debugPosition,
   climbratevaluePosition,
   efficiencyPosition,
-  mAhPosition,
+  avgefficiencyPosition,
   AIR_speedPosition,
   MAX_speedPosition,
   TotalDistanceposition,
@@ -580,10 +580,10 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE11+22)|DISPLAY_ALWAYS,   // rollAnglePosition
 (LINE01+2)|DISPLAY_ALWAYS,    // MwGPSLatPositionTop      // On top of screen
 (LINE01+15)|DISPLAY_ALWAYS,   // MwGPSLonPositionTop      // On top of screen
-(LINE12+3)|DISPLAY_ALWAYS,    // rssiPosition
-(LINE05+3)|DISPLAY_ALWAYS,    // temperaturePosition
-(LINE13+3)|DISPLAY_ALWAYS,    // voltagePosition
-(LINE11+3)|DISPLAY_ALWAYS,    // vidvoltagePosition
+(LINE12+2)|DISPLAY_ALWAYS,    // rssiPosition
+(LINE05+2)|DISPLAY_ALWAYS,    // temperaturePosition
+(LINE13+2)|DISPLAY_ALWAYS,    // voltagePosition
+(LINE11+2)|DISPLAY_ALWAYS,    // vidvoltagePosition
 (LINE13+9)|DISPLAY_ALWAYS,    // amperagePosition
 (LINE13+16)|DISPLAY_ALWAYS,   // pMeterSumPosition
 (LINE07+14)|DISPLAY_ALWAYS,   // horizonPosition
@@ -598,13 +598,13 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE02+22)|DISPLAY_NEVER,    // MapModePosition
 (LINE07+15)|DISPLAY_NEVER,    // MapCenterPosition
 (LINE04+10)|DISPLAY_ALWAYS,   // APstatusPosition
-(LINE09+2)|DISPLAY_ALWAYS,    // wattPosition
+(LINE10+2)|DISPLAY_ALWAYS,    // wattPosition
 (LINE07+6)|DISPLAY_ALWAYS,    // glidescopePosition
 (LINE10+10)|DISPLAY_ALWAYS,   // CallSign Position
 (LINE08+10)|DISPLAY_ALWAYS,   // Debug Position
 (LINE08+23)|DISPLAY_ALWAYS,   // climbratevaluePosition,
-(LINE08+2)|DISPLAY_ALWAYS,    // efficiencyPosition,
-(LINE10+2)|DISPLAY_ALWAYS,    // mAhPosition,
+(LINE09+2)|DISPLAY_ALWAYS,    // efficiencyPosition,
+(LINE08+2)|DISPLAY_ALWAYS,    // avgefficiencyPosition,
 (LINE06+2)|DISPLAY_ALWAYS,    // AIR_speedposition,
 (LINE05+8)|DISPLAY_ALWAYS,    // MAX_speedposition,
 (LINE08+8)|DISPLAY_ALWAYS,    // TotalDistanceposition
@@ -633,10 +633,10 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE11+22)|DISPLAY_NEVER,   // rollAnglePosition
 (LINE01+2)|DISPLAY_ALWAYS,    // MwGPSLatPositionTop      // On top of screen
 (LINE01+15)|DISPLAY_ALWAYS,   // MwGPSLonPositionTop      // On top of screen
-(LINE12+3)|DISPLAY_ALWAYS,    // rssiPosition
-(LINE05+3)|DISPLAY_NEVER,    // temperaturePosition
-(LINE13+3)|DISPLAY_ALWAYS,    // voltagePosition
-(LINE11+3)|DISPLAY_ALWAYS,    // vidvoltagePosition
+(LINE12+2)|DISPLAY_ALWAYS,    // rssiPosition
+(LINE05+2)|DISPLAY_NEVER,    // temperaturePosition
+(LINE13+2)|DISPLAY_ALWAYS,    // voltagePosition
+(LINE11+2)|DISPLAY_ALWAYS,    // vidvoltagePosition
 (LINE13+9)|DISPLAY_ALWAYS,    // amperagePosition
 (LINE13+16)|DISPLAY_ALWAYS,   // pMeterSumPosition
 (LINE07+14)|DISPLAY_ALWAYS,   // horizonPosition
@@ -651,13 +651,13 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE02+22)|DISPLAY_NEVER,    // MapModePosition
 (LINE07+15)|DISPLAY_NEVER,    // MapCenterPosition
 (LINE04+10)|DISPLAY_ALWAYS,   // APstatusPosition
-(LINE09+2)|DISPLAY_NEVER,    // wattPosition
+(LINE10+2)|DISPLAY_NEVER,    // wattPosition
 (LINE07+6)|DISPLAY_ALWAYS,    // glidescopePosition
 (LINE10+10)|DISPLAY_ALWAYS,   // CallSign Position
 (LINE08+10)|DISPLAY_NEVER,   // Debug Position
 (LINE08+23)|DISPLAY_NEVER,   // climbratevaluePosition,
-(LINE08+2)|DISPLAY_NEVER,    // efficiencyPosition,
-(LINE10+2)|DISPLAY_NEVER,    // mAhPosition,
+(LINE09+2)|DISPLAY_NEVER,    // efficiencyPosition,
+(LINE08+2)|DISPLAY_NEVER,    // avgefficiencyPosition,
 (LINE06+2)|DISPLAY_NEVER,    // AIR_speedposition,
 (LINE05+8)|DISPLAY_NEVER,    // MAX_speedposition,
 (LINE08+8)|DISPLAY_NEVER,    // TotalDistanceposition
