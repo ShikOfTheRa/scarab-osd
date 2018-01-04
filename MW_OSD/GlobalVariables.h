@@ -5,9 +5,9 @@
 #define DISPLAY_MASK    0xC000
 #define DISPLAY_ALWAYS  0xC000
 #define DISPLAY_NEVER   0x0000
-#define DISPLAY_COND    0x4000
-#define DISPLAY_MIN_OFF     0x8000
-
+#ifndef DISPLAY_DEV
+  #define DISPLAY_DEV     0x0000
+#endif
 #define POS(pos, pal_off, disp)  (((pos)&POS_MASK)|((pal_off)<<PAL_SHFT)|(disp))
 #if defined SHIFTDOWN
 #define TOPSHIFT        LINE
@@ -559,115 +559,58 @@ enum Positions {
 
 uint16_t screenPosition[POSITIONS_SETTINGS];
 
-#ifdef DISPLAYALL
 PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
-(LINE02+2)|DISPLAY_ALWAYS,    // GPS_numSatPosition
-(LINE02+22)|DISPLAY_ALWAYS,   // GPS_directionToHomePosition
-(LINE02+24)|DISPLAY_ALWAYS,   // GPS_distanceToHomePosition
-(LINE07+2)|DISPLAY_ALWAYS,    // GPS_speedPosition
-(LINE05+24)|DISPLAY_ALWAYS,   // GPS_angleToHomePosition
-(LINE06+23)|DISPLAY_ALWAYS,   // MwGPSAltPosition
-(LINE02+6)|DISPLAY_ALWAYS,    // sensorPosition
-(LINE04+24)|DISPLAY_ALWAYS,   // MwHeadingPosition
-(LINE02+10)|DISPLAY_ALWAYS,   // MwHeadingGraphPosition
-(LINE07+23)|DISPLAY_ALWAYS,   // MwAltitudePosition
-(LINE07+22)|DISPLAY_ALWAYS,   // MwVarioPosition
-(LINE12+22)|DISPLAY_ALWAYS,   // CurrentThrottlePosition
-(LINE13+22)|DISPLAY_ALWAYS,   // UNUSED flyTimePosition
-(LINE13+22)|DISPLAY_ALWAYS,   // onTimePosition
-(LINE11+11)|DISPLAY_ALWAYS,   // motorArmedPosition
-(LINE10+22)|DISPLAY_ALWAYS,   // pitchAnglePosition
-(LINE11+22)|DISPLAY_ALWAYS,   // rollAnglePosition
-(LINE01+2)|DISPLAY_ALWAYS,    // MwGPSLatPositionTop      // On top of screen
-(LINE01+15)|DISPLAY_ALWAYS,   // MwGPSLonPositionTop      // On top of screen
-(LINE12+2)|DISPLAY_ALWAYS,    // rssiPosition
-(LINE05+2)|DISPLAY_ALWAYS,    // temperaturePosition
-(LINE13+2)|DISPLAY_ALWAYS,    // voltagePosition
-(LINE11+2)|DISPLAY_ALWAYS,    // vidvoltagePosition
-(LINE13+9)|DISPLAY_ALWAYS,    // amperagePosition
-(LINE13+16)|DISPLAY_ALWAYS,   // pMeterSumPosition
-(LINE07+14)|DISPLAY_ALWAYS,   // horizonPosition
-(LINE07+7)|DISPLAY_ALWAYS,    // SideBarPosition
-(LINE07+7)|DISPLAY_ALWAYS,    // SideBarScrollPosition
-(LINE01+3)|DISPLAY_NEVER,     // SideBarHeight
-(LINE01+7)|DISPLAY_NEVER,     // SideBarWidth
-(LINE05+2)|DISPLAY_ALWAYS,    // Gimbal Position
-(LINE12+11)|DISPLAY_ALWAYS,   // GPS_time Position
-(LINE09+22)|DISPLAY_ALWAYS,   // SportPosition
-(LINE04+2)|DISPLAY_ALWAYS,    // modePosition
-(LINE02+22)|DISPLAY_NEVER,    // MapModePosition
-(LINE07+15)|DISPLAY_NEVER,    // MapCenterPosition
-(LINE04+10)|DISPLAY_ALWAYS,   // APstatusPosition
-(LINE10+2)|DISPLAY_ALWAYS,    // wattPosition
-(LINE07+6)|DISPLAY_ALWAYS,    // glidescopePosition
-(LINE10+10)|DISPLAY_ALWAYS,   // CallSign Position
-(LINE08+10)|DISPLAY_ALWAYS,   // Debug Position
-(LINE08+23)|DISPLAY_ALWAYS,   // climbratevaluePosition,
-(LINE09+2)|DISPLAY_ALWAYS,    // efficiencyPosition,
-(LINE08+2)|DISPLAY_ALWAYS,    // avgefficiencyPosition,
-(LINE06+2)|DISPLAY_ALWAYS,    // AIR_speedposition,
-(LINE05+8)|DISPLAY_ALWAYS,    // MAX_speedposition,
-(LINE08+8)|DISPLAY_ALWAYS,    // TotalDistanceposition
-(LINE03+22)|DISPLAY_ALWAYS,   // WIND_speedposition,
-(LINE06+8)|DISPLAY_ALWAYS,    // MaxDistanceposition
-(LINE02+6)|DISPLAY_ALWAYS,    // DOPposition
+(LINE02+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // GPS_numSatPosition
+(LINE02+22)|DISPLAY_ALWAYS|DISPLAY_DEV,   // GPS_directionToHomePosition
+(LINE02+24)|DISPLAY_ALWAYS|DISPLAY_DEV,   // GPS_distanceToHomePosition
+(LINE07+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // GPS_speedPosition
+(LINE05+24)|DISPLAY_NEVER|DISPLAY_DEV,   // GPS_angleToHomePosition
+(LINE06+23)|DISPLAY_NEVER|DISPLAY_DEV,   // MwGPSAltPosition
+(LINE02+6)|DISPLAY_ALWAYS|DISPLAY_DEV,    // sensorPosition
+(LINE04+24)|DISPLAY_NEVER|DISPLAY_DEV,   // MwHeadingPosition
+(LINE02+10)|DISPLAY_ALWAYS|DISPLAY_DEV,   // MwHeadingGraphPosition
+(LINE07+23)|DISPLAY_ALWAYS|DISPLAY_DEV,   // MwAltitudePosition
+(LINE07+22)|DISPLAY_ALWAYS|DISPLAY_DEV,   // MwVarioPosition
+(LINE12+22)|DISPLAY_ALWAYS|DISPLAY_DEV,   // CurrentThrottlePosition
+(LINE13+22)|DISPLAY_NEVER|DISPLAY_DEV,   // UNUSED flyTimePosition
+(LINE13+22)|DISPLAY_ALWAYS|DISPLAY_DEV,   // onTimePosition
+(LINE11+11)|DISPLAY_ALWAYS|DISPLAY_DEV,   // motorArmedPosition
+(LINE10+22)|DISPLAY_NEVER|DISPLAY_DEV,   // pitchAnglePosition
+(LINE11+22)|DISPLAY_NEVER|DISPLAY_DEV,   // rollAnglePosition
+(LINE01+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // MwGPSLatPositionTop      // On top of screen
+(LINE01+15)|DISPLAY_ALWAYS|DISPLAY_DEV,   // MwGPSLonPositionTop      // On top of screen
+(LINE12+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // rssiPosition
+(LINE05+2)|DISPLAY_NEVER|DISPLAY_DEV,    // temperaturePosition
+(LINE13+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // voltagePosition
+(LINE11+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // vidvoltagePosition
+(LINE13+9)|DISPLAY_ALWAYS|DISPLAY_DEV,    // amperagePosition
+(LINE13+16)|DISPLAY_ALWAYS|DISPLAY_DEV,   // pMeterSumPosition
+(LINE07+14)|DISPLAY_ALWAYS|DISPLAY_DEV,   // horizonPosition
+(LINE07+7)|DISPLAY_ALWAYS|DISPLAY_DEV,    // SideBarPosition
+(LINE07+7)|DISPLAY_ALWAYS|DISPLAY_DEV,    // SideBarScrollPosition
+(LINE01+3)|DISPLAY_NEVER,                 // SideBarHeight
+(LINE01+7)|DISPLAY_NEVER,                 // SideBarWidth
+(LINE05+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // Gimbal Position
+(LINE12+11)|DISPLAY_NEVER|DISPLAY_DEV,   // GPS_time Position
+(LINE09+22)|DISPLAY_NEVER|DISPLAY_DEV,   // SportPosition
+(LINE04+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // modePosition
+(LINE02+22)|DISPLAY_NEVER,                // MapModePosition
+(LINE07+15)|DISPLAY_NEVER,                // MapCenterPosition
+(LINE04+10)|DISPLAY_ALWAYS|DISPLAY_DEV,   // APstatusPosition
+(LINE10+2)|DISPLAY_NEVER|DISPLAY_DEV,    // wattPosition
+(LINE07+6)|DISPLAY_ALWAYS|DISPLAY_DEV,    // glidescopePosition
+(LINE10+10)|DISPLAY_ALWAYS|DISPLAY_DEV,   // CallSign Position
+(LINE08+10)|DISPLAY_NEVER|DISPLAY_DEV,   // Debug Position
+(LINE08+23)|DISPLAY_NEVER|DISPLAY_DEV,   // climbratevaluePosition,
+(LINE09+2)|DISPLAY_NEVER|DISPLAY_DEV,    // efficiencyPosition,
+(LINE08+2)|DISPLAY_NEVER|DISPLAY_DEV,    // avgefficiencyPosition,
+(LINE06+2)|DISPLAY_NEVER|DISPLAY_DEV,    // AIR_speedposition,
+(LINE05+8)|DISPLAY_NEVER|DISPLAY_DEV,    // MAX_speedposition,
+(LINE08+8)|DISPLAY_NEVER|DISPLAY_DEV,    // TotalDistanceposition
+(LINE03+22)|DISPLAY_NEVER|DISPLAY_DEV,   // WIND_speedposition,
+(LINE06+8)|DISPLAY_NEVER|DISPLAY_DEV,    // MaxDistanceposition
+(LINE02+6)|DISPLAY_NEVER|DISPLAY_DEV,    // DOPposition
 };
-#else 
-PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
-(LINE02+2)|DISPLAY_ALWAYS,    // GPS_numSatPosition
-(LINE02+22)|DISPLAY_ALWAYS,   // GPS_directionToHomePosition
-(LINE02+24)|DISPLAY_ALWAYS,   // GPS_distanceToHomePosition
-(LINE07+2)|DISPLAY_ALWAYS,    // GPS_speedPosition
-(LINE05+24)|DISPLAY_NEVER,   // GPS_angleToHomePosition
-(LINE06+23)|DISPLAY_NEVER,   // MwGPSAltPosition
-(LINE02+6)|DISPLAY_ALWAYS,    // sensorPosition
-(LINE04+24)|DISPLAY_NEVER,   // MwHeadingPosition
-(LINE02+10)|DISPLAY_ALWAYS,   // MwHeadingGraphPosition
-(LINE07+23)|DISPLAY_ALWAYS,   // MwAltitudePosition
-(LINE07+22)|DISPLAY_ALWAYS,   // MwVarioPosition
-(LINE12+22)|DISPLAY_ALWAYS,   // CurrentThrottlePosition
-(LINE13+22)|DISPLAY_NEVER,   // UNUSED flyTimePosition
-(LINE13+22)|DISPLAY_ALWAYS,   // onTimePosition
-(LINE11+11)|DISPLAY_ALWAYS,   // motorArmedPosition
-(LINE10+22)|DISPLAY_NEVER,   // pitchAnglePosition
-(LINE11+22)|DISPLAY_NEVER,   // rollAnglePosition
-(LINE01+2)|DISPLAY_ALWAYS,    // MwGPSLatPositionTop      // On top of screen
-(LINE01+15)|DISPLAY_ALWAYS,   // MwGPSLonPositionTop      // On top of screen
-(LINE12+2)|DISPLAY_ALWAYS,    // rssiPosition
-(LINE05+2)|DISPLAY_NEVER,    // temperaturePosition
-(LINE13+2)|DISPLAY_ALWAYS,    // voltagePosition
-(LINE11+2)|DISPLAY_ALWAYS,    // vidvoltagePosition
-(LINE13+9)|DISPLAY_ALWAYS,    // amperagePosition
-(LINE13+16)|DISPLAY_ALWAYS,   // pMeterSumPosition
-(LINE07+14)|DISPLAY_ALWAYS,   // horizonPosition
-(LINE07+7)|DISPLAY_ALWAYS,    // SideBarPosition
-(LINE07+7)|DISPLAY_ALWAYS,    // SideBarScrollPosition
-(LINE01+3)|DISPLAY_NEVER,     // SideBarHeight
-(LINE01+7)|DISPLAY_NEVER,     // SideBarWidth
-(LINE05+2)|DISPLAY_ALWAYS,    // Gimbal Position
-(LINE12+11)|DISPLAY_NEVER,   // GPS_time Position
-(LINE09+22)|DISPLAY_NEVER,   // SportPosition
-(LINE04+2)|DISPLAY_ALWAYS,    // modePosition
-(LINE02+22)|DISPLAY_NEVER,    // MapModePosition
-(LINE07+15)|DISPLAY_NEVER,    // MapCenterPosition
-(LINE04+10)|DISPLAY_ALWAYS,   // APstatusPosition
-(LINE10+2)|DISPLAY_NEVER,    // wattPosition
-(LINE07+6)|DISPLAY_ALWAYS,    // glidescopePosition
-(LINE10+10)|DISPLAY_ALWAYS,   // CallSign Position
-(LINE08+10)|DISPLAY_NEVER,   // Debug Position
-(LINE08+23)|DISPLAY_NEVER,   // climbratevaluePosition,
-(LINE09+2)|DISPLAY_NEVER,    // efficiencyPosition,
-(LINE08+2)|DISPLAY_NEVER,    // avgefficiencyPosition,
-(LINE06+2)|DISPLAY_NEVER,    // AIR_speedposition,
-(LINE05+8)|DISPLAY_NEVER,    // MAX_speedposition,
-(LINE08+8)|DISPLAY_NEVER,    // TotalDistanceposition
-(LINE03+22)|DISPLAY_NEVER,   // WIND_speedposition,
-(LINE06+8)|DISPLAY_NEVER,    // MaxDistanceposition
-(LINE02+6)|DISPLAY_NEVER,    // DOPposition
-};
-#endif
-
-
 
 
 static uint8_t P8[PIDITEMS], I8[PIDITEMS], D8[PIDITEMS];
