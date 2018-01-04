@@ -683,7 +683,7 @@ void displayVidVoltage(void)
 {
   if((vidvoltage<vidvoltageWarning)&&(timer.Blink2hz))
     return;
-  displayItem(vidvoltagePosition, vidvoltage, SYM_MAIN_BATT, SYM_VOLT, 4, 3 );
+  displayItem(vidvoltagePosition, vidvoltage, SYM_VID_BAT, SYM_VOLT, 4, 3 );
 }
 
 
