@@ -427,8 +427,6 @@ void displayMode(void)
 
 void displayCallsign(int cposition) 
 {
-  if(!fieldIsVisible(callSignPosition))
-    return;
   for(uint8_t X=0; X<10; X++) {
     screenBuffer[X] = char(Settings[S_CS0 + X]);
   }   

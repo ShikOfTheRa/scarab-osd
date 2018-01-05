@@ -1,7 +1,7 @@
 /*--------------------------       MANDATORY configurable parameters      ----------------------------------------------------*/
 /*--------------------------       MANDATORY configurable parameters      ----------------------------------------------------*/
 
-//#define DEVELOPMENT               // For development set only 
+#define DEVELOPMENT               // For development set only 
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
@@ -185,9 +185,8 @@
 
 
 /********************       CALLSIGN settings      *********************/
-#define   CALLSIGNINTERVAL 60       // How frequently to display Callsign (in seconds)
+#define   CALLSIGNINTERVAL 60       // How frequently to display Callsign (in seconds) 
 #define   CALLSIGNDURATION 4        // How long to display Callsign (in seconds)
-//#define CALLSIGNALWAYS            // Alternative option - enable to permanently display callsign.
 //#define FREETEXTLLIGHTS           // Alternative option - enable to display freetext (or callsign) when LLIGHTS Switch active on TX.
 //#define FREETEXTGIMBAL            // Alternative option - enable to display freetext (or callsign) when GIMBAL Switch active on TX.
 

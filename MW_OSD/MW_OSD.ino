@@ -574,20 +574,23 @@ GPS_dop=10000;
 #endif
         displayArmed();
         displayCurrentThrottle();
-#ifdef CALLSIGNALWAYS
-        displayCallsign(getPosition(callSignPosition)); 
-#elif  FREETEXTLLIGHTS
+#ifdef FREETEXTLLIGHTS
         if (MwSensorActive&mode.llights) displayCallsign(getPosition(callSignPosition)); 
 #elif  FREETEXTGIMBAL
         if (MwSensorActive&mode.camstab) displayCallsign(getPosition(callSignPosition)); 
 #else 
-        if ( (onTime > (timer.lastCallSign+CALLSIGNINTERVAL)))
-       {
-           // Displays 4 sec every 5min (no blink during flight)
-        if ( onTime > (timer.lastCallSign+CALLSIGNINTERVAL+CALLSIGNDURATION)) 
-          timer.lastCallSign = onTime; 
-        displayCallsign(getPosition(callSignPosition));      
-       }
+        if(fieldIsVisible(callSignPosition)){
+          if (Settings[S_CALLSIGN_ALWAYS]>1){
+            if ( (onTime > (timer.lastCallSign+CALLSIGNINTERVAL))){ // Displays 4 sec every 60 secs 
+              if ( onTime > (timer.lastCallSign+CALLSIGNINTERVAL+CALLSIGNDURATION)) 
+                timer.lastCallSign = onTime; 
+              displayCallsign(getPosition(callSignPosition));      
+            }
+          }
+          else if (Settings[S_CALLSIGN_ALWAYS]==1){
+            displayCallsign(getPosition(callSignPosition));     
+          }
+        }
 #endif
 //-        if(MwSensorPresent&MAGNETOMETER) {
           displayHeadingGraph();
