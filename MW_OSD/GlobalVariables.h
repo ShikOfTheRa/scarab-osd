@@ -201,7 +201,7 @@ struct  __timer {
   uint32_t seconds;
   uint8_t  MSP_active;
   uint8_t  GPS_active;
-  uint8_t  GUI_active;
+  uint8_t  GUI_active=INTRO_DELAY;
   uint8_t  GPS_initdelay;
   uint16_t  loopcount;
   uint16_t  packetcount;
@@ -609,7 +609,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE08+8)|DISPLAY_NEVER|DISPLAY_DEV,     // TotalDistanceposition
 (LINE03+22)|DISPLAY_NEVER|DISPLAY_DEV,    // WIND_speedposition,
 (LINE06+8)|DISPLAY_NEVER|DISPLAY_DEV,     // MaxDistanceposition
-(LINE02+6)|DISPLAY_NEVER|DISPLAY_DEV,     // DOPposition
+(LINE05+2)|DISPLAY_NEVER|DISPLAY_DEV,     // DOPposition
 };
 
 
