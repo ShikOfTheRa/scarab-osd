@@ -637,44 +637,36 @@ void displayVoltage(void)
   if(voltage >= 0 && voltage < voltageMIN)
     voltageMIN = voltage;
 
-#ifdef AUTOCELL
-  uint8_t tcells = ((voltage-3) / MvVBatMaxCellVoltage) + 1;
-  if (tcells>cells){
-    if (tcells<11){
-      cells=tcells;
+  if (Settings[S_AUTOCELL]){
+    uint8_t t_cells = (voltage / (CELL_VOLTS_MAX+2)) + 1; // Detect 3s > 8.7v, 4s > 13.2v, 5s > 17.5v, 6s > 20.8v
+    if (t_cells > cells){
+      cells++;
     }
-  }   
-  voltageWarning = cells * MvVBatWarningCellVoltage;
-#ifdef AUTOCELL_ALARM
-  voltageWarning = cells * Settings[S_VOLTAGEMIN];
-#endif // AUTOCELL_ALARM
-#else //NOT AUTOCELL
-  voltageWarning = Settings[S_VOLTAGEMIN];
-  cells = Settings[S_BATCELLS];
-#endif //AUTOCELL
-
-
+    voltageWarning = cells * Settings[S_AUTOCELL_ALARM];
+  }
+  else {
+    cells = Settings[S_BATCELLS];  
+    voltageWarning = Settings[S_VOLTAGEMIN];
+  }
 #ifdef BATTERYICONVOLTS
   if (Settings[S_SHOWBATLEVELEVOLUTION])
   {
     uint8_t battev = 0;
-    uint16_t batevlow  = cells * MvVBatMinCellVoltage;
-    uint16_t batevhigh = cells * MvVBatMaxCellVoltage;
+    uint16_t batevlow  = cells * CELL_VOLTS_MIN;
+    uint16_t batevhigh = cells * CELL_VOLTS_MAX;
     battev = constrain(voltage, batevlow, batevhigh-2);
     battev = map(battev, batevlow, batevhigh-1, 0, 7);   
     t_lead_icon=(SYM_BATT_EMPTY)-battev;
   }
   else 
-#endif // BATTERYICONVOLTS
-
   {
     t_lead_icon=SYM_MAIN_BATT;
   }
-
+#else
+    t_lead_icon=SYM_MAIN_BATT;
+#endif // BATTERYICONVOLTS
   if ((voltage<voltageWarning)&&(timer.Blink2hz))
     return;
-
-
   displayItem(voltagePosition, voltage, t_lead_icon, SYM_VOLT, 4, 3 );
 }
 
