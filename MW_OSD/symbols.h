@@ -16,26 +16,6 @@
 #define SYM_DEGREES 0XBD
 
 
-#define SYM_ANGLE_RTH     0XF2
-#define SYM_ANGLE_HDG     0XF3
-#define SYM_DOP           0XF4
-#define SYM_SPEED_GPS     0XF5 
-#define SYM_SPEED_AIR     0XF6 //GPS +1
-#define SYM_MAX           0XF7 
-#define SYM_CLIMBRATE     0XF8 
-#define SYM_EFF           0XF9 
-#define SYM_PITCH         0XFA 
-#define SYM_ROLL          0XFB 
-#define SYM_POWER         0XFC 
-#define SYM_AVG_EFF       0XFD 
-#define SYM_TOTAL         0XFE 
-#define SYM_TMP           0X06 
-
-#define SYM_DTH           0X7A
-#define SYM_ALT           0X3F
-#define SYM_KM            0x7D
-#define SYM_GPS_ALT       0XF1
-
 // Direction arrows 
   #define SYM_ARROW_HOME 0X60
   #define SYM_ARROW_DIR 0XE0
@@ -162,14 +142,12 @@
 #define SYM_BATT_EMPTY 0X96
 
 // Vario
-#define SYM_VARIO 0x7F
+#define SYM_VARIO 0x8C
 
 // Glidescope
 #define SYM_GLIDESCOPE 0xDC
 
 // Batt Icon´s
-#define SYM_MAIN_BATT 0X97
-#define SYM_VID_BAT 0XBF
 
 // Unit Icon´s (Metric)
 #define SYM_MS 0X9F
@@ -179,6 +157,7 @@
 #define SYM_DISTHOME_KM 0XDF
 #define SYM_M 0X0C
 #define SYM_ALTKM 0X7A
+#define SYM_KM            0x7D
 
 // Unit Icon´s (Imperial)
 #define SYM_FTS 0X99
@@ -207,7 +186,7 @@
 #define SYM_PASS1 0XAB
 #define SYM_AIR 0XC0
 #define SYM_AIR1 0XEB
-#define SYM_PLUS 0X89
+#define SYM_PLUS 0X01
 
 // Time
 #define SYM_ON_M 0X9B
@@ -217,10 +196,6 @@
 
 // Throttle Position (%)
 #define SYM_THR 0XC8
-#define SYM_THR1 0XC9
-
-// RSSI
-#define SYM_RSSI 0XBA
 
 // Menu cursor
 #define SYM_CURSOR SYM_AH_LEFT
@@ -231,3 +206,126 @@
 //sport
 #define SYM_MIN 0xB3
 #define SYM_AVG 0xB4
+
+//dispaly items lead indicator icons
+#ifdef ICON_ANGLE_RTH
+#define SYM_ANGLE_RTH     0XF2
+#else
+#define SYM_ANGLE_RTH     0
+#endif
+
+#ifdef ICON_ANGLE_HDG
+#define SYM_ANGLE_HDG     0XF3
+#else
+#define SYM_ANGLE_HDG     0
+#endif
+
+#ifdef ICON_DOP
+#define SYM_DOP           0XF4
+#else
+#define SYM_DOP           0
+#endif
+
+#ifdef ICON_SPEED_GPS
+#define SYM_SPEED_GPS     0XF5 
+#else
+#define SYM_SPEED_GPS     0 
+#endif
+
+#ifdef ICON_SPEED_AIR
+#define SYM_SPEED_AIR     0XF6 //GPS +1
+#else
+#define SYM_SPEED_AIR     0
+#endif
+
+#ifdef ICON_MAX
+#define SYM_MAX           0XF7 
+#else
+#define SYM_MAX           0 
+#endif
+
+#ifdef ICON_CLIMBRATE
+#define SYM_CLIMBRATE     0XF8 
+#else
+#define SYM_CLIMBRATE     0 
+#endif
+
+#ifdef ICON_EFF
+#define SYM_EFF           0XF9 
+#else
+#define SYM_EFF           0 
+#endif
+
+#ifdef ICON_PITCH
+#define SYM_PITCH         0XFA 
+#else
+#define SYM_PITCH         0 
+#endif
+
+#ifdef ICON_ROLL
+#define SYM_ROLL          0XFB 
+#else
+#define SYM_ROLL          0 
+#endif
+
+#ifdef ICON_POWER
+#define SYM_POWER         0XFC 
+#else
+#define SYM_POWER         0 
+#endif
+
+#ifdef ICON_AVG_EFF
+#define SYM_AVG_EFF       0XFD 
+#else
+#define SYM_AVG_EFF       0 
+#endif
+
+#ifdef ICON_TOTAL
+#define SYM_TOTAL         0XFE 
+#else
+#define SYM_TOTAL         0 
+#endif
+
+#ifdef ICON_TMP
+#define SYM_TMP           0X06 
+#else
+#define SYM_TMP           0 
+#endif
+
+#ifdef ICON_DTH
+#define SYM_DTH           0X7A
+#else
+#define SYM_DTH           0
+#endif
+
+#ifdef ICON_ALT
+#define SYM_ALT           0X3F
+#else
+#define SYM_ALT           0
+#endif
+
+#ifdef ICON_GPS_ALT
+#define SYM_GPS_ALT       0XF1
+#else
+#define SYM_GPS_ALT       0
+#endif
+
+#ifdef ICON_MAIN_BATT
+#define SYM_MAIN_BATT 0X97
+#else
+#define SYM_MAIN_BATT     0
+#endif
+
+#ifdef ICON_VID_BAT
+#define SYM_VID_BAT       0XBF
+#else
+#define SYM_VID_BAT       0
+#endif
+
+#ifdef ICON_RSSI
+#define SYM_RSSI          0XBA
+#else
+#define SYM_RSSI          0
+#endif
+
+

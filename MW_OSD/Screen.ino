@@ -973,9 +973,8 @@ void displayGPSdop(void)
 }
 
 
-void display_speed(uint16_t t_value, uint8_t t_position, uint8_t t_type)
+void display_speed(uint16_t t_value, uint8_t t_position, uint8_t t_leadicon)
 {
-  // t_type = 0 - GPS, 1 - AIR, 
   if(!armed) t_value=0;
   uint16_t xx;
   if(!Settings[S_UNITSYSTEM])
@@ -986,21 +985,11 @@ void display_speed(uint16_t t_value, uint8_t t_position, uint8_t t_type)
     speedMAX+=20; 
   else if(xx > speedMAX)
     speedMAX=xx; 
-//  if(!fieldIsVisible(t_position))
-//    return;
   if (Settings[S_SPEED_ALARM]>0){
     if((xx>Settings[S_SPEED_ALARM])&&(timer.Blink2hz))
       return;
   }    
-
-  displayItem(t_position, t_value, SYM_SPEED_GPS+t_type, speedUnitAdd[Settings[S_UNITSYSTEM]], 0,  0 );
-/*
-  #ifdef PROTOCOL_MAVLINK
-    displayItem(t_position, t_value, SYM_SPEED_GPS+t_type, speedUnitAdd[Settings[S_UNITSYSTEM]], 0,  0 );
-  #else
-    displayItem(t_position, t_value, speedUnitAdd[Settings[S_UNITSYSTEM]], 0 , 0,  0 );
-  #endif
-*/
+  displayItem(t_position, t_value, t_leadicon, speedUnitAdd[Settings[S_UNITSYSTEM]], 0,  0 );
 }
 
 
@@ -1062,24 +1051,20 @@ void displayAltitude(void)
   formatDistance(altitudeMAX,1,0,SYM_MAX);
   MAX7456_WriteString(screenBuffer,getPosition(MwAltitudePosition)+LINE);
 #endif //SHOW_MAX_ALTITUDE
-
 }
 
 
-void displayClimbRate(void)
+void displayVario(void)
 {
   if(!fieldIsVisible(MwVarioPosition))
     return;
-
-#ifdef VARIOALARM
-  if (((MwVario>VARIOALARM) or (MwVario<(0-VARIOALARM))) &&(timer.Blink2hz)){
-       return;
-  }
-#endif // VARIOALARM
-  
-  
   uint16_t position = getPosition(MwVarioPosition);
 
+//test:
+MwVario = (int16_t) (voltage-80)*2;
+#define VARIOSLIDER
+
+#ifdef VARIOORIIGINAL // requires different font table
   for(int8_t X=-1; X<=1; X++) {
     screen[position+(X*LINE)] =  SYM_VARIO;
   }
@@ -1090,13 +1075,34 @@ void displayClimbRate(void)
   int8_t varline=(xx/6)-1;
   int8_t varsymbol=xx%6;
   screen[position+(varline*LINE)] = 0x8F-varsymbol;
-
-  int16_t climbrate;
-  if(Settings[S_UNITSYSTEM])
-    climbrate = MwVario * 0.032808;       // ft/sec
-  else
-    climbrate = MwVario / 100;            // mt/sec
-  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
+#elif defined VARIOENHANCED // multi char slider representation of climb rate
+  #define VARIOSCALE 120 // max 127 8 bit
+  #define VARIOICONCOUNT 3
+  #define VARIOROWS VARIOENHANCED
+  int8_t t_vario=MwVario;
+  if (MwVario>VARIOSCALE) t_vario=VARIOSCALE;
+  if (MwVario<-VARIOSCALE) t_vario=-VARIOSCALE;
+  int8_t t_vario_rows = (int16_t)t_vario / (VARIOSCALE/VARIOROWS);
+  int8_t t_vario_icon = ((int16_t)t_vario % (VARIOSCALE/VARIOROWS)) /(VARIOSCALE/(VARIOROWS*VARIOICONCOUNT));
+  for(uint8_t X=0; X<abs(t_vario_rows); X++) {
+    if (MwVario>0)
+      screen[position-(LINE*X)] = SYM_VARIO+VARIOICONCOUNT;  // need -ve too  
+    else
+      screen[position+(LINE*X)] = SYM_VARIO-VARIOICONCOUNT;  // need -ve too  
+  }
+  if (t_vario_icon!=0)
+    screen[position-(LINE*t_vario_rows)] = SYM_VARIO+t_vario_icon;  // need -ve too  
+#elif defined VARIOSTANDARD // single char icon representation of climb rate
+  #define VARIOSCALE 120 // max 127 8 bit
+  #define VARIOICONCOUNT 3
+  #define VARIOROWS 1
+  int8_t t_vario=MwVario;
+  if (MwVario>VARIOSCALE) t_vario=VARIOSCALE;
+  if (MwVario<-VARIOSCALE) t_vario=-VARIOSCALE;
+  t_vario = t_vario/(VARIOSCALE/VARIOICONCOUNT);
+  screen[position] = SYM_VARIO+t_vario;
+#else
+#endif
 
 #ifdef AUDIOVARIO  
 //test when using non RSSI output
@@ -1189,6 +1195,17 @@ void displayClimbRate(void)
   } 
 #endif //AUDIOVARIOTYPE2
 #endif // AUDIOVARIO
+}
+
+
+void displayClimbRate(void)
+{
+  int16_t climbrate;
+  if(Settings[S_UNITSYSTEM])
+    climbrate = MwVario * 0.032808;       // ft/sec
+  else
+    climbrate = MwVario / 100;            // mt/sec
+  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
 }
 
 

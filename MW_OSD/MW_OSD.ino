@@ -176,7 +176,7 @@ void setup()
 
   MAX7456Setup();
   #if defined GPSOSD
-    timer.GPS_initdelay=10; 
+    timer.GPS_initdelay=INTRO_DELAY; 
     //GPS_SerialInit(); 
   #else
   #endif
@@ -599,6 +599,7 @@ GPS_dop=10000;
 //-        if(MwSensorPresent&BAROMETER) {
           displayAltitude();
           displayClimbRate();
+          displayVario();
 //-        }
 //-        if(MwSensorPresent&GPSSENSOR) // missing {
           displayNumberOfSat();
@@ -612,8 +613,8 @@ GPS_dop=10000;
           #ifdef USEGLIDESCOPE
             // displayfwglidescope(); //note hook for this is in display horizon function
           #endif //USEGLIDESCOPE  
-          display_speed(GPS_speed,GPS_speedPosition,0);
-          display_speed(AIR_speed,AIR_speedPosition,1);
+          display_speed(GPS_speed,GPS_speedPosition,SYM_SPEED_GPS);
+          display_speed(AIR_speed,AIR_speedPosition,SYM_SPEED_AIR);
           displayWindSpeed(); // also windspeed if available
           displayItem(MAX_speedPosition, speedMAX, SYM_MAX, speedUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
           displayGPSPosition();  
@@ -690,6 +691,9 @@ GPS_dop=10000;
     }  
     if (timer.GUI_active>0){
       timer.GUI_active--;
+      #if defined GPSOSD
+        timer.GPS_initdelay=2; 
+      #endif     
     }  
     #if defined(GPSOSD) && !defined(NAZA)
     if (timer.GPS_initdelay==1){

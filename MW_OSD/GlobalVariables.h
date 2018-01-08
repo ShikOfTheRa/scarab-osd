@@ -580,7 +580,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE01+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // MwGPSLatPositionTop      // On top of screen
 (LINE01+15)|DISPLAY_ALWAYS|DISPLAY_DEV,   // MwGPSLonPositionTop      // On top of screen
 (LINE12+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // rssiPosition
-(LINE05+2)|DISPLAY_NEVER|DISPLAY_DEV,     // temperaturePosition
+(LINE09+8)|DISPLAY_NEVER|DISPLAY_DEV,     // temperaturePosition
 (LINE13+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // voltagePosition
 (LINE11+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // vidvoltagePosition
 (LINE13+9)|DISPLAY_ALWAYS|DISPLAY_DEV,    // amperagePosition

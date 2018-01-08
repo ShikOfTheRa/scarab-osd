@@ -72,7 +72,6 @@
 
 
 /********************       Debug      *********************/
-//#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
 #define MENU_DEBUG                  // Enable to display debug values in OSD menu 
 
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
@@ -195,7 +194,7 @@
 #define INTRO_MENU                  // Enable to display TX stick MENU 
 #define INTRO_CALLSIGN              // Enable to display callsign at startup
 #define INTRO_SIGNALTYPE            // Enable to display video type at startup
-//#define INTRO_DELAY 1             // Seconds intro screen should show for. Default is 5 
+#define INTRO_DELAY 5               // Seconds intro screen should show for. Default is 5 
 //#define STARTUPDELAY 500          // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
 
@@ -255,7 +254,8 @@
 
 /********************       Visual Vario / climbrate Settings         ************************/
 //#define VARIOALARM 150            // Enable this to for flashing climb rate warning. Value in cm/sec (if climb rate selected in layouts)
-
+#define VARIOSTANDARD               // Enable this for single icon representation of vario
+//#define VARIOENHANCED 4           // Enable this for multi line more accurate visual slider representation of vario. 4 provides +/- 4 rows of slider resolution
 
 /********************       Audio Vario / climbrate Settings         ************************/
 //#define AUDIOVARIO A3                // Enable this for audio vario on RSSI pin A3. Uses BARO data from FC or GPS
@@ -335,7 +335,7 @@
 
 
 /********************  TEMPERATURE  settings      *********************/
-//#define SHOW_TEMPERATURE           // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
+#define SHOW_TEMPERATURE           // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
 #define TEMPERATUREMAX 50            // Temperature warning value
 #define TEMPZERO 0                   // Temperature Zero calibration (range = 0-1024 :512 = 2.5v with vref of 5v and 0.55v for vref of 1.1v) 
 #define TEMPMAX  500                 // Temperature when at sensor output at VCC. Might be  atheoreticla value 
@@ -371,6 +371,30 @@
 #define VTX_REGION_UNRESTRICTED      // Enable for all 40 channels
 //#define VTX_REGION_AUSTRALIA       // Enable for AU legal channels and power level only
 #define DISPLAY_VTX_INFO             // Enable to show frequency in menu display. 
+
+
+/********************           Display items lead icon           *********************/
+// comment out to not display lead icon for displayed items
+#define ICON_ANGLE_RTH               // Direction to home
+#define ICON_ANGLE_HDG               // Heading
+#define ICON_DOP                     // GPS SAT DOP
+#define ICON_SPEED_GPS               // GPS speed
+#define ICON_SPEED_AIR               // Air Speed
+#define ICON_MAX                     // Max value - speed/distance/alt
+#define ICON_CLIMBRATE               // CLimb rate
+#define ICON_EFF                     // Efficiency
+#define ICON_PITCH                   // Pitch
+#define ICON_ROLL                    // Roll
+#define ICON_POWER                   // Power
+#define ICON_AVG_EFF                 // Average Efficiency
+#define ICON_TOTAL                   // Total distance travelled
+#define ICON_TMP                     // Temperature
+#define ICON_DTH                     // Distance to home
+#define ICON_ALT                     // Altitude prime
+#define ICON_GPS_ALT                 // GPS altitude
+#define ICON_MAIN_BATT               // Main battery icon
+#define ICON_VID_BAT                 // Video battery icon
+#define ICON_RSSI                    // RSSI
 
 
 /********************  Advanced parameters  settings      *********************/

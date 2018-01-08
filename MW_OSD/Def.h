@@ -22,6 +22,8 @@
 #define DEBUGDPOSRX 220      // display serial data rate at position X
 //#define DEBUGDPOSMSPID 33  // display MSP ID received
 
+//#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+
 // Display Debug text message in standard screen text warning message area
 // Enable and set debugtext=1 in code when required 
 //#define DEBUGTEXT "DEBUG"    // Set text you wish to display when debug text message required. Must be CAPSLOCK text
@@ -39,7 +41,8 @@
   #define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
   #define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
   #define INTRO_DELAY 1             // To speed up startup
-  #define DISPLAY_DEV 0xC000      // screen layout dev - display all items...
+  #define DISPLAY_DEV 0xC000      // Use screen layout dev position - display all items...
+  //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
 
 #endif
 
