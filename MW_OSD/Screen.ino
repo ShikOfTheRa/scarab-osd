@@ -1060,10 +1060,6 @@ void displayVario(void)
     return;
   uint16_t position = getPosition(MwVarioPosition);
 
-//test:
-MwVario = (int16_t) (voltage-80)*2;
-#define VARIOSLIDER
-
 #ifdef VARIOORIIGINAL // requires different font table
   for(int8_t X=-1; X<=1; X++) {
     screen[position+(X*LINE)] =  SYM_VARIO;
