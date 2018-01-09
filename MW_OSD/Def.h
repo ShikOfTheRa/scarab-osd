@@ -708,12 +708,8 @@ enum {
   #define LONG_RANGE_DISPLAY
   #define USEGPSHEADING
   #define USEGPSALTITUDE
-  #if defined USEMAGHEADING 
-    #undef USEGPSHEADING
-  #endif  
-  #if defined USEBAROALTITUDE
-    #undef USEGPSALTITUDE
-  #endif
+  //#define USEGPSHEADING
+  //#define USEGPSALTITUDE
   #define FORCESENSORS
   #ifndef USEGLIDESCOPE 
     #define USEGLIDESCOPE

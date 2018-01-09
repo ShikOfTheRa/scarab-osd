@@ -472,7 +472,10 @@ For sub-command 3 (draw string):
     }
       MwHeading = read16();
     #if defined(USEGPSHEADING)
-      MwHeading = GPS_ground_course/10;
+        MwHeading = GPS_ground_course/10;
+    #else     
+      if(!MwSensorPresent&BAROMETER)
+        MwHeading = GPS_ground_course/10;
     #endif
     #ifdef HEADINGCORRECT
       if (MwHeading >= 180) MwHeading -= 360;
@@ -495,13 +498,19 @@ For sub-command 3 (draw string):
 #endif //SPORT
   if (cmdMSP==MSP_ALTITUDE)
   {
-    #if defined(USEGPSALTITUDE)
-      MwAltitude = (int32_t)GPS_altitude*100;
-      gpsvario();
-    #else    
-      MwAltitude =read32();
-      MwVario = read16();
-    #endif
+   #if defined(USEGPSHEADING)
+        MwAltitude = (int32_t)GPS_altitude*100;
+        gpsvario();
+   #else
+     if(!MwSensorPresent&MAGNETOMETER){
+        MwAltitude = (int32_t)GPS_altitude*100;
+        gpsvario();
+      }
+      else{
+        MwAltitude =read32();
+        MwVario = read16();
+      }
+    #endif  
   }
 
   if (cmdMSP==MSP_ANALOG)

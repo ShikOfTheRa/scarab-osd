@@ -149,10 +149,10 @@
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
 // **ONLY** valid when using fixed wing
-//#define USEMAGHEADING             // Undefine this to use MAG for FW heading instead of GPS (requires controller with MAG sensor) 
-//#define USEBAROALTITUDE           // Undefine this if you have a BARO to use BARO for FW altitude instead of GPS (requires controller with BARO sensor) ** Recommended **
+//#define USEGPSHEADING             // Undefine this to force using GPS for heading data instead of MAG. MSP data FC only.  
+//#define USEGPSALTITUDE            // Undefine this to force using GPS for altitude data instead of MAG. MSP data FC only.
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
-#define USEGLIDESCOPE             // Enables ILS glidescope
+#define USEGLIDESCOPE               // Enables ILS glidescope
 #define GLIDEANGLE 80               // ILS glidescope angle where 40 = 4.0° - 1.0 deg gradiented scope scale requires enabling in layouts. Auto enabled for FIXEDWING
 
 
