@@ -4,8 +4,6 @@
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 
 /*----------------------------------------------       Developer / debug parameters      ----------------------------------------------------*/
-//#define ALWAYSARMED
-#define FORCESENSORS
 
 // Display Debug screen display options
 //#define DEBUGMW            // Enable to display MSP debug values (assumes debug[x] values are not set elsewhere) 
@@ -31,6 +29,7 @@
 #define HARDRESET            // Enables watchdog timer reset rather than fixed memory jmp 
 //#define BOOTRESET          // Enables reset from default Atmega 328 bootloader address (instead of 0) 
 
+
 #ifdef DEVELOPMENT                  // Developement pre-set test paramters only 
   #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
   //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
@@ -43,6 +42,8 @@
   #define INTRO_DELAY 1             // To speed up startup
   #define DISPLAY_DEV 0xC000      // Use screen layout dev position - display all items...
   //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+  //#define ALWAYSARMED
+  #define FORCESENSORS
 
 #endif
 
