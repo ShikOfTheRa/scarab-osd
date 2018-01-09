@@ -377,6 +377,11 @@ GPS_dop=10000;
       case REQ_MSP_STATUS:
         MSPcmdsend = MSP_STATUS;
         break;
+#ifdef INTRO_FC
+      case REQ_MSP_FC_VERSION:
+        MSPcmdsend = MSP_FC_VERSION;
+        break;
+#endif
       case REQ_MSP_RC:
         MSPcmdsend = MSP_RC;
         break;
@@ -883,6 +888,9 @@ void setMspRequests() {
   else {
     modeMSPRequests = 
       REQ_MSP_STATUS|
+     #ifdef INTRO_FC
+      REQ_MSP_IDENT|
+     #endif 
      #ifdef DEBUGMW
       REQ_MSP_DEBUG|
      #endif

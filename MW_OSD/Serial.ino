@@ -386,7 +386,21 @@ For sub-command 3 (draw string):
   }
 */  
 
-  if (cmdMSP==MSP_STATUS)
+/*
+if (cmdMSP==MSP_FC_VARIANT) 
+  {
+    FC.variant = read32();
+  }
+*/
+
+if (cmdMSP==MSP_FC_VERSION) 
+  {
+    FC.verMajor = read8();
+    FC.verMinor = read8();
+    FC.verPatch = read8();
+  }
+
+if (cmdMSP==MSP_STATUS)
   {
     cycleTime=read16();
     I2CError=read16();

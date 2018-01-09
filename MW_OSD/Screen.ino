@@ -851,7 +851,7 @@ void displayRSSI(void)
 
 void displayIntro(void)
 {
-  for(uint8_t X=0; X<=7; X++) {
+  for(uint8_t X=0; X<=8; X++) {
     MAX7456_WriteString_P(PGMSTR(&(intro_item[X])), 64+(X*30));
   }
 #ifdef INTRO_CALLSIGN
@@ -860,11 +860,25 @@ void displayIntro(void)
 #ifdef INTRO_SIGNALTYPE
   MAX7456_WriteString_P(PGMSTR(&(signal_type[flags.signaltype])), 64+(30*7)+4);
 #endif
+#ifdef INTRO_FC
+  itoa(FC.verMajor,screenBuffer,10);
+  uint8_t xx = FindNull();
+  screenBuffer[xx]=0x2E;
+  xx++;
+  itoa(FC.verMinor,screenBuffer+xx,10);
+  xx = FindNull();
+  screenBuffer[xx]=0x2E;
+  xx++;
+  itoa(FC.verMinor,screenBuffer+xx,10);
+  MAX7456_WriteString(screenBuffer,64+(30*8)+4);
+
+#endif
 #ifdef HAS_ALARMS
   if (alarmState != ALARM_OK) {
     MAX7456_WriteString((const char*)alarmMsg, 64+(30*9)+4);
   }
 #endif
+//zz
 }
 
 

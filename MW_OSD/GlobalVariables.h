@@ -258,6 +258,13 @@ struct __cfgpa {
 }
 cfgpa;
 
+struct __FC {
+uint8_t    verMajor;
+uint8_t    verMinor;
+uint8_t    verPatch;  
+}
+FC;
+
 #ifdef MENU_SERVO  
 #define MAX_SERVOS 8
 struct __servo {
@@ -772,13 +779,13 @@ int16_t rssiMIN=100;
   uint8_t  GPSOSD_state=0;
 #endif
 
-
 // ---------------------------------------------------------------------------------------
 // Defines imported from Multiwii Serial Protocol MultiWii_shared svn r1337
 #define MSP_VERSION              0
 
 //to multiwii developpers/committers : do not add new MSP messages without a proper argumentation/agreement on the forum
-#define MSP_IDENT                100   //out message         multitype + multiwii version + protocol version + capability variable
+#define MSP_FC_VERSION             3   //out message         FC firmware version
+//#define MSP_IDENT                100   //out message         multitype + multiwii version + protocol version + capability variable
 #define MSP_STATUS               101   //out message         cycletime & errors_count & sensor present & box activation & current setting number
 #define MSP_RAW_IMU              102   //out message         9 DOF
 #define MSP_SERVO                103   //out message         8 servos
@@ -939,6 +946,7 @@ const char introtext2[]  PROGMEM = "    +YAW RIGHT";
 const char introtext3[]  PROGMEM = "    +PITCH FULL";
 const char introtext4[]  PROGMEM = "ID:";
 const char introtext5[]  PROGMEM = "SI:";
+const char introtext6[]  PROGMEM = "FC:";
 const char introtextblank[]  PROGMEM = "";
 
 // Intro
@@ -963,6 +971,11 @@ const PROGMEM char * const intro_item[] =
 #endif
 #ifdef INTRO_SIGNALTYPE
   introtext5,
+#else
+  introtextblank,
+#endif
+#ifdef INTRO_FC
+  introtext6,
 #else
   introtextblank,
 #endif
@@ -1238,6 +1251,7 @@ const unsigned char UnitsIcon[8]={
 #define REQ_MSP_PIDNAMES       (1L<<21)
 #define REQ_MSP_SERVO_CONF     (1L<<22)
 #define REQ_MSP_VOLTAGE_METER_CONFIG (1L<<23)
+#define REQ_MSP_FC_VERSION     (1L<<24)
 // Menu selections
 
 
