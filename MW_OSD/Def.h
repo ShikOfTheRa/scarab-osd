@@ -47,11 +47,32 @@
   //#define ALWAYSARMED
   #define FORCESENSORS
   #define TX_GUI_CONTROL            // for mavlink
-
-
 #endif
 
-
+//#define SCHLONG                   // Test for Schalonsus 
+#ifdef SCHLONG                      
+#define iNAV
+#define FIXEDWING     
+#define HORIZON
+#define FILTER_AVG
+#define ALARM_SATS 
+#define ALARM_GPS 5
+#define ALARM_MSP 3
+#define USEBAROALTITUDE
+#define USE_VSYNC
+#define DECIMAL '.'
+#define ALT_CENTER
+#define FORCECROSSHAIR
+#define MINSUMMARY
+#define NOTHROTTLESPACE
+#define APINDICATOR
+#define DISPLAYEFFICIENCY 
+#define DISPLAYVARIO
+#define KKAUDIOVARIO A3 
+#define AUDIOVARIORC 1200
+#define BATTERYICONVOLTS
+#define SHOW_TOTAL_DISTANCE
+#endif
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
 
