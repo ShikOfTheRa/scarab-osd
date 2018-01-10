@@ -1,7 +1,6 @@
 /*--------------------------       MANDATORY configurable parameters      ----------------------------------------------------*/
 /*--------------------------       MANDATORY configurable parameters      ----------------------------------------------------*/
 
-//#define DEVELOPMENT               // For development set only 
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:

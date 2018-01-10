@@ -1345,5 +1345,10 @@ void useairspeed(){
 }
 #endif //USE_AIRSPEED_SENSOR 
 
-
+void reverseChannels(void){ //ifdef (TX_REVERSE) 
+  for(uint8_t i=1;i<=4;i++){
+    if (Settings[S_TX_CH_REVERSE] & (1<<i))
+      MwRcData[i] = 3000 - MwRcData[i];
+  }
+}
 

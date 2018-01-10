@@ -151,7 +151,6 @@ uint8_t vtxChannel;
 #endif //VTX_REGION_XXXXX
 
 #endif // VTX_RTC6705
-#define TX_GUI_CONTROL
 
 /********************  RX channel rule definitions  *********************/
 #if defined TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI    
@@ -447,7 +446,7 @@ S_TX_TYPE,
   S_MAINVOLTAGE_VBAT,
   S_AMPERAGETEMP,
   S_MWAMPERAGE,
-S_USE_MAG,              // unused
+S_TX_CH_REVERSE,
   S_AMPERAGE_VIRTUAL,
   S_ALARMS_TEXT,
 S_CALLSIGN_ALWAYS,
@@ -514,7 +513,7 @@ EEPROMVER, //   S_CHECK_,
 0, //   S_MAINVOLTAGE_VBAT,
 0, //   S_AMPERAGETEMP,
 0, //   S_MWAMPERAGE,
-0, // S_USE_MAG
+0, // S_TX_CH_REVERSE
 0, //   S_AMPERAGE_VIRTUAL,
 1, //   S_ALARMS_TEXT,
 1, // S_CALLSIGN_ALWAYS

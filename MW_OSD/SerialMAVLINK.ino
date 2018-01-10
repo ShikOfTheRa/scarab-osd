@@ -260,6 +260,9 @@ void serialMAVCheck() {
       MwRssi = (uint16_t)(((103) * serialBuffer[21]) / 10);
       for (uint8_t i = 0; i < 8; i++)
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
+        #if defined (TX_GUI_CONTROL)
+          reverseChannels();
+        #endif // TX_PRYT
         #ifdef MAV_ALT_THROTTLE
           MwRcData[THROTTLESTICK]=mw_mav.throttle;
         #endif // MAV_ALT_THROTTLE

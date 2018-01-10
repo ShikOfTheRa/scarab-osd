@@ -30,12 +30,14 @@
 //#define BOOTRESET          // Enables reset from default Atmega 328 bootloader address (instead of 0) 
 
 
-#ifdef DEVELOPMENT                  // Developement pre-set test paramters only 
+//#define DEVELOPMENT               // For development set only 
+
+#ifdef DEVELOPMENT                  // Development pre-set test paramters only 
   #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
   //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
   //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
-  //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
-  #define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
+  #define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
+  //#define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
   #define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
   #define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
   #define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
@@ -44,6 +46,8 @@
   //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   //#define ALWAYSARMED
   #define FORCESENSORS
+  #define TX_GUI_CONTROL            // for mavlink
+
 
 #endif
 
@@ -911,48 +915,6 @@ enum {
 
 /********************  RX channel rule definitions  *********************/
 
-#if defined TX_GS            //PITCH,YAW,THROTTLE,ROLL,AUX1,AUX2,AUX3,AUX4 //For Graupner/Spektrum    
-  #define ROLLSTICK        4
-  #define PITCHSTICK       1
-  #define YAWSTICK         2
-  #define THROTTLESTICK    3
-#elif defined TX_RHF         //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For Robe/Hitec/Futaba
-  #define ROLLSTICK        1
-  #define PITCHSTICK       2
-  #define YAWSTICK         4
-  #define THROTTLESTICK    3
-#elif defined TX_M           //ROLL,PITCH,YAW,THROTTLE,AUX1,AUX2,AUX3,AUX4 //For Multiplex
-  #define ROLLSTICK        1
-  #define PITCHSTICK       2
-  #define YAWSTICK         3
-  #define THROTTLESTICK    4
-#elif defined TX_HS          //PITCH,ROLL,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For some Hitec/Sanwa/Others
-  #define ROLLSTICK        2
-  #define PITCHSTICK       1
-  #define YAWSTICK         4
-  #define THROTTLESTICK    3
-#elif defined KISS
-  #define ROLLSTICK        2
-  #define PITCHSTICK       3
-  #define YAWSTICK         4
-  #define THROTTLESTICK    1
-#elif defined PX4            //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For PX4
-  #define ROLLSTICK        1
-  #define PITCHSTICK       2
-  #define YAWSTICK         4
-  #define THROTTLESTICK    3
-#elif defined APM            //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For APM
-  #define ROLLSTICK        1
-  #define PITCHSTICK       2
-  #define YAWSTICK         4
-  #define THROTTLESTICK    3
-#else
-  // RX CHANEL IN MwRcData table
-  #define ROLLSTICK        1
-  #define PITCHSTICK       2
-  #define YAWSTICK         3
-  #define THROTTLESTICK    4
-#endif
 
 #ifndef TX_CHANNELS
   #define TX_CHANNELS 8 
