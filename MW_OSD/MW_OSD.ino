@@ -254,6 +254,30 @@ GPS_fix=1;
 GPS_numSat=8;
 GPS_dop=10000;
 #endif  
+
+#if defined TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI 
+  switch(Settings[S_TX_TYPE]) {
+    case 1: //RPTY
+      tx_roll     = 1;
+      tx_pitch    = 2;
+      tx_yaw      = 4;
+      tx_throttle = 3;
+      break;
+    case 2: //TRPY
+      tx_roll     = 2;
+      tx_pitch    = 3;
+      tx_yaw      = 4;
+      tx_throttle = 1;
+      break;
+    default: //RPYT - default xxxflight FC
+      tx_roll     = 1;
+      tx_pitch    = 2;
+      tx_yaw      = 3;
+      tx_throttle = 4;
+      break;  
+  }
+#endif // TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI   
+  
   alarms.active=0;
   timer.loopcount++;
   if (flags.reset){

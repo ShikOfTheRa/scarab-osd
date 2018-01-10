@@ -72,7 +72,6 @@
   #define VTX_RC
   #define VTX_LED
   #define USE_MENU_VTX
-  #define INFO_OPTIONS1 1<<4
 #endif
 
 #ifdef FFPV_INNOVA
@@ -81,7 +80,6 @@
   //#define VTX_RC    // Can be turned on, hard to use without VTX_LED
   //#define VTX_LED   // Needs VTXLED_* definitions in RTC6705.ino
   #define USE_MENU_VTX
-  #define INFO_OPTIONS1 1<<4
 #endif
 
 
@@ -704,6 +702,19 @@ enum {
   #define USE_FC_VOLTS_CONFIG
 #endif
 
+/********************  OPTIONS enabled definitions  *********************/
+#ifdef USE_MENU_VTX
+  #define INFO_OPTIONS_4 1<<4
+#else
+  #define INFO_OPTIONS_4 0
+#endif
+#if defined TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI 
+  #define INFO_OPTIONS_5 1<<5
+#else
+  #define INFO_OPTIONS_5 0
+#endif
+#define INFO_OPTIONS 0|INFO_OPTIONS_4|INFO_OPTIONS_5
+
 /********************  FIXEDWING definitions  *********************/
 #ifdef FIXEDWING                     
   #define LONG_RANGE_DISPLAY
@@ -1135,8 +1146,8 @@ enum {
   #define INFO_AIRCRAFT            0            // default - unknown 
 #endif
 
-#ifndef INFO_OPTIONS1
-  #define INFO_OPTIONS1            0            // default - unknown 
+#ifndef INFO_OPTIONS
+  #define INFO_OPTIONS            0            // default - unknown 
 #endif
 
 

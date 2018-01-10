@@ -151,6 +151,72 @@ uint8_t vtxChannel;
 #endif //VTX_REGION_XXXXX
 
 #endif // VTX_RTC6705
+#define TX_GUI_CONTROL
+
+/********************  RX channel rule definitions  *********************/
+#if defined TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI    
+  uint8_t tx_roll;
+  uint8_t tx_pitch;
+  uint8_t tx_yaw;
+  uint8_t tx_throttle;
+  #define ROLLSTICK        tx_roll
+  #define PITCHSTICK       tx_pitch
+  #define YAWSTICK         tx_yaw
+  #define THROTTLESTICK    tx_throttle
+#elif defined TX_PYTR      //PITCH,YAW,THROTTLE,ROLL,AUX1,AUX2,AUX3,AUX4 //For Graupner/Spektrum    
+  #define ROLLSTICK        4
+  #define PITCHSTICK       1
+  #define YAWSTICK         2
+  #define THROTTLESTICK    3
+#elif defined TX_RPTY      //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For Robe/Hitec/Futaba
+  #define ROLLSTICK        1
+  #define PITCHSTICK       2
+  #define YAWSTICK         4
+  #define THROTTLESTICK    3
+#elif defined TX_RPYT      //ROLL,PITCH,YAW,THROTTLE,AUX1,AUX2,AUX3,AUX4 //For Multiplex
+  #define ROLLSTICK        1
+  #define PITCHSTICK       2
+  #define YAWSTICK         3
+  #define THROTTLESTICK    4
+#elif defined TX_PRTY      //PITCH,ROLL,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For some Hitec/Sanwa/Others
+  #define ROLLSTICK        2
+  #define PITCHSTICK       1
+  #define YAWSTICK         4
+  #define THROTTLESTICK    3
+#elif defined TX_TRPY      //THROTTLE,ROLL,PITCH,YAW,AUX1,AUX2,AUX3,AUX4 //For some JR
+  #define ROLLSTICK        2
+  #define PITCHSTICK       3
+  #define YAWSTICK         4
+  #define THROTTLESTICK    1
+#elif defined KISS
+  #define ROLLSTICK        2
+  #define PITCHSTICK       3
+  #define YAWSTICK         4
+  #define THROTTLESTICK    1
+#elif defined PX4            //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For PX4
+  #define ROLLSTICK        1
+  #define PITCHSTICK       2
+  #define YAWSTICK         4
+  #define THROTTLESTICK    3
+#elif defined APM            //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For APM
+  #define ROLLSTICK        1
+  #define PITCHSTICK       2
+  #define YAWSTICK         4
+  #define THROTTLESTICK    3
+#else
+  // RX CHANEL IN MwRcData table
+  #define ROLLSTICK        1
+  #define PITCHSTICK       2
+  #define YAWSTICK         3
+  #define THROTTLESTICK    4
+#endif
+/*****************************************/
+
+
+
+
+
+
 
 #if defined (ALARM_MSP)
 #define DATA_MSP ALARM_MSP
@@ -374,7 +440,7 @@ S_AUTOCELL,
 S_AUTOCELL_ALARM,
   S_MWRSSI,
   S_PWMRSSI,
-S_USE_BARO,             // unused
+S_TX_TYPE,
   S_VOLTAGEMIN,
   S_BATCELLS,
   S_DIVIDERRATIO,
@@ -441,7 +507,7 @@ EEPROMVER, //   S_CHECK_,
 34, // S_AUTOCELL_ALARM
 0, //   S_MWRSSI,
 0, //   S_PWMRSSI,
-0, // S_USE_BARO
+0, // S_TX_TYPE
 0, //   S_VOLTAGEMIN,
 4, //   S_BATCELLS,
 200, //   S_DIVIDERRATIO,
@@ -618,7 +684,6 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE06+8)|DISPLAY_NEVER|DISPLAY_DEV,     // MaxDistanceposition
 (LINE05+2)|DISPLAY_NEVER|DISPLAY_DEV,     // DOPposition
 };
-
 
 static uint8_t P8[PIDITEMS], I8[PIDITEMS], D8[PIDITEMS];
 
@@ -1811,5 +1876,6 @@ const PROGMEM char * const NAZA_mode_index[] =
  naza_mode_GPSA,
 };
 #endif // NAZA
+
 
 

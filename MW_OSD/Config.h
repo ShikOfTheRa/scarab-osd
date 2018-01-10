@@ -282,12 +282,14 @@
 
 
 /********************   RC TX Settings     *********************/
+// R=Roll, P=Pitch, Y=Yaw, T=Throttle
 //#define TX_MODE1                  // Enable this if wish to use cursor controls on same stick - for MODE 1 TX users
-//#define TX_CHANNELS 8             // Amend if require up to 16 RC channels (Only use for GPSOSD/NAZA/APM/PIXHAWK/MAVLINK)
-//#define TX_RHF                    // Enable for Robe/Hitec/Futaba (Only use for GPSOSD/NAZA/APM/PIXHAWK/MAVLINK)
-//#define TX_GS                     // Enable for Graupner/Spektrum (Only use for GPSOSD/NAZA/APM/PIXHAWK/MAVLINK)    
-//#define TX_M                      // Enable for Multiplex (Only use for GPSOSD/NAZA/APM/PIXHAWK/MAVLINK)
-//#define TX_HS                     // Enable for Hitec/Sanwa (Only use for GPSOSD/NAZA/APM/PIXHAWK/MAVLINK)
+//#define TX_CHANNELS 8             // Amend if require up to 16 RC channels (Only use for GPSOSD/NAZA/APM/PX4/MAVLINK)
+//#define TX_PYTR                   // Enable for Robe/Hitec/Futaba (Only use for GPSOSD/NAZA/APM/PX4/MAVLINK)
+//#define TX_RPTY                   // Enable for Graupner/Spektrum (Only use for GPSOSD/NAZA/APM/PX4/MAVLINK)    
+//#define TX_RPYT                   // Enable for Multiplex (Only use for GPSOSD/NAZA/APM/PX4/MAVLINK)
+//#define TX_PRTY                   // Enable for Hitec/Sanwa (Only use for GPSOSD/NAZA/APM/PX4/MAVLINK)
+//#define TX_TRPY                   // Enable for JR (Only use for GPSOSD/NAZA/APM/PX4/MAVLINK)
 #define TX_CHAN_MID 1400            // Value for determining RC SWITCH LOW / MID transsition
 #define TX_CHAN_HIGH 1600           // Value for determining RC SWITCH MID / HIGH transition
 

@@ -265,7 +265,7 @@ void serialMSPCheck()
        cfgWrite16(INFO_HARDWARE);
        cfgWrite16(INFO_VERSION); 
        cfgWrite16(INFO_AIRCRAFT);
-       cfgWrite16(INFO_OPTIONS1);
+       cfgWrite16(INFO_OPTIONS);
        cfgWrite16(INFO_VENDOR);
        cfgWriteChecksum();
     }
