@@ -1229,7 +1229,8 @@ void displayClimbRate(void)
     climbrate = MwVario * 0.032808;       // ft/sec
   else
     climbrate = MwVario / 100;            // mt/sec
-  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
+//  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
+  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 2, 2 );
 }
 
 
