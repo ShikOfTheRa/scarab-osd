@@ -556,7 +556,7 @@
 
 // Flight Controller Software types to be added before here...
 
-#ifndef ANYCONTROLLER // default
+#ifdef ANYCONTROLLER // default
   #define INFO_CONTROLLER 0
   #define MENU_STAT
   #define MENU_VOLTAGE

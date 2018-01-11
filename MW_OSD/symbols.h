@@ -101,7 +101,6 @@
 #define SYM_MAN 0XC0
 #define SYM_MAN1 0XC1
 #define SYM_MAN2 0XC2
-#define SYM_CHECK 0XBE
 #define SYM_BARO10 0XB7
 #define SYM_BARO11 0XB8
 #define SYM_MAG10 0XB5
@@ -305,7 +304,7 @@
 #endif
 
 #ifdef ICON_GPS_ALT
-#define SYM_GPS_ALT       0XF1
+#define SYM_GPS_ALT       0XBE
 #else
 #define SYM_GPS_ALT       0
 #endif
