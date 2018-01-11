@@ -971,12 +971,16 @@ void displayNumberOfSat(void)
   if((GPS_numSat<MINSATFIX)&&(timer.Blink2hz)){
     return;
   }
+#if defined ICON_SAT
   if(!fieldIsVisible(GPS_numSatPosition))
     return;
   screenBuffer[0] = SYM_SAT_L;
   screenBuffer[1] = SYM_SAT_R;
   itoa(GPS_numSat,screenBuffer+2,10);
   MAX7456_WriteString(screenBuffer,getPosition(GPS_numSatPosition));
+#else
+  displayItem(GPS_numSatPosition, GPS_numSat, SYM_SAT, 0 , 0,  0 );
+#endif
 }
 
   /*

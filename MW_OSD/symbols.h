@@ -7,11 +7,6 @@
 
 #define SYM_BLANK 0X20
 
-// Satellite Graphics
-#define SYM_SAT_L 0X1E
-#define SYM_SAT_R 0X1F
-//#define SYM_SAT 0X0F  // Not used
-
 // Degrees Icon for HEADING/DIRECTION HOME
 #define SYM_DEGREES 0XBD
 
@@ -326,5 +321,13 @@
 #else
 #define SYM_RSSI          0
 #endif
+
+#ifdef ICON_SAT
+#define SYM_SAT_L 0X1E
+#define SYM_SAT_R 0X1F
+#else
+#define SYM_SAT           0XF0
+#endif
+
 
 

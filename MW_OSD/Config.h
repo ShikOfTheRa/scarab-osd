@@ -400,6 +400,7 @@
 #define ICON_MAIN_BATT               // Main battery icon
 #define ICON_VID_BAT                 // Video battery icon
 #define ICON_RSSI                    // RSSI
+#define ICON_SAT                     // Sattelite enable for large icon, disable for small icon
 
 
 /********************  Advanced parameters  settings      *********************/
