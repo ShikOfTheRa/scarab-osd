@@ -1226,11 +1226,11 @@ void displayClimbRate(void)
 {
   int16_t climbrate;
   if(Settings[S_UNITSYSTEM])
-    climbrate = MwVario * 0.032808;       // ft/sec
+    climbrate = MwVario * 0.32808;       // ft/sec
   else
-    climbrate = MwVario / 100;            // mt/sec
+    climbrate = MwVario / 10;            // mt/sec
 //  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
-  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 2, 2 );
+  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 3, 2 );
 }
 
 
