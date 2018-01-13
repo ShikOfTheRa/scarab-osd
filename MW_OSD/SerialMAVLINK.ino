@@ -281,11 +281,11 @@ void serialMAVCheck() {
       WIND_direction = (int16_t)(serialBuffer[0]) | (serialBuffer[1] << 8); // 0=>360 deg
       WIND_speed     = (int16_t)(serialBuffer[2]) | (serialBuffer[3] << 8); // m/3
       break;
-/*
-    case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT
+
+    case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
       GPS_waypoint_dist = (int16_t)(serialBuffer[24]) | (serialBuffer[25] << 8); 
       break;
-*/
+
     case MAVLINK_MSG_ID_MISSION_CURRENT:
       // GPS_waypoint_step = (int16_t)(serialBuffer[0] | (serialBuffer[1] << 8));
       GPS_waypoint_step = serialBuffer[0]; // just 256 values for now

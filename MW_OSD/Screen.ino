@@ -202,7 +202,7 @@ void displayMode(void)
   }  
   #endif
   uint8_t xx = 0;
-
+  
   if((MwSensorActive&mode.camstab)){
     screenBuffer[2]=0;
     screenBuffer[0]=SYM_GIMBAL;
@@ -287,7 +287,7 @@ void displayMode(void)
     screenBuffer[1] = SYM_GHOME1;
     screenBuffer[2] = SYM_COLON;
     screenBuffer[8]=0;
-#endif
+    #endif
   }
   else if(MwSensorActive&mode.gpshold){
     #ifdef TEXTMODE
@@ -399,9 +399,31 @@ void displayMode(void)
     #endif //ACROPLUS
   }
 #endif //PROTOCOL_MAVLINK/KISS/LTM
-    if(fieldIsVisible(ModePosition)){
-      MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
+     if(fieldIsVisible(ModePosition)){
+       MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
+       #ifdef PROTOCOL_MAVLINK
+         #if defined PX4 // within MAVLINK
+           #define MAVMISSIONID 5
+         #elif defined FIXEDWING // within MAVLINK
+           #define MAVMISSIONID 10
+         #else
+           #define MAVMISSIONID 3
+         #endif
+         if (mw_mav.mode==MAVMISSIONID){
+           xx = FindNull()+1;
+           itoa(GPS_waypoint_step, screenBuffer, 10);
+           MAX7456_WriteString(screenBuffer,getPosition(ModePosition)+xx);
+           xx = FindNull()+1;
+           uint16_t dist;
+           if(Settings[S_UNITSYSTEM])
+             dist = GPS_waypoint_dist * 3.2808;           // mt to feet
+           formatDistance(dist,1,2,0);
+           MAX7456_WriteString(screenBuffer,getPosition(ModePosition)+xx);
+         }
+#endif       
     }  
+
+
 
 #ifdef APINDICATOR
   if(timer.Blink2hz)
