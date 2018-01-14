@@ -191,11 +191,11 @@
 //#define FREETEXTGIMBAL            // Alternative option - enable to display freetext (or callsign) when GIMBAL Switch active on TX.
 
 /********************       STARTUP settings      *********************/
-#define INTRO_VERSION               "MWOSD - R1.8 S-DEV" // Call the OSD something else if you prefer. 
+//#define INTRO_VERSION               "MWOSD" // Call the OSD something else if you prefer. 
 #define INTRO_MENU                  // Enable to display TX stick MENU 
 #define INTRO_CALLSIGN              // Enable to display callsign at startup
 #define INTRO_SIGNALTYPE            // Enable to display video type at startup
-#define INTRO_FC                    // Enable to display video type at startup
+#define INTRO_FC                  // Enable to FC version at startup
 #define INTRO_DELAY 5               // Seconds intro screen should show for. Default is 5 
 //#define STARTUPDELAY 500          // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 

@@ -1039,7 +1039,7 @@ void display_speed(uint16_t t_value, uint8_t t_position, uint8_t t_leadicon)
     if((xx>Settings[S_SPEED_ALARM])&&(timer.Blink2hz))
       return;
   }    
-  displayItem(t_position, t_value, t_leadicon, speedUnitAdd[Settings[S_UNITSYSTEM]], 0,  0 );
+  displayItem(t_position, xx, t_leadicon, speedUnitAdd[Settings[S_UNITSYSTEM]], 0,  0 );
 }
 
 

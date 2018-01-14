@@ -31,7 +31,6 @@
 
 
 //#define DEVELOPMENT               // For development set only 
-
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
   #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
   //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
@@ -47,7 +46,19 @@
   //#define ALWAYSARMED
   #define FORCESENSORS
   #define TX_GUI_CONTROL            // for mavlink
+  #define INTRO_FC                  // Enable to FC version at startup
+  #define INTRO_VERSION               "MWOSD R1.8 TEST" // Call the OSD something else if you prefer. 
 #endif
+
+//#define GPSTEST
+#ifdef GPSTEST                  // Development pre-set test paramters only 
+#define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
+#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
+#define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
+#define INTRO_FC                  // Enable to FC version at startup
+#endif
+
 
 //#define SCHLONG                   // Test for Schalonsus 
 #ifdef SCHLONG                      
