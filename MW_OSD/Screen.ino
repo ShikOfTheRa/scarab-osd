@@ -951,7 +951,7 @@ void displayGPSPosition(void)
     screenBuffer[0] = SYM_LAT;
     FormatGPSCoord(GPS_latitude,screenBuffer+1,4,'N','S');
 #ifdef MASKGPSLOCATION
-    if Setings[S_GPS_MASK){
+    if (Settings[S_GPS_MASK]){
       screenBuffer[1] = '0';
       screenBuffer[2] = '6';
       screenBuffer[3] = '3';
@@ -962,7 +962,7 @@ void displayGPSPosition(void)
     screenBuffer[0] = SYM_LON;
     FormatGPSCoord(GPS_longitude,screenBuffer+1,4,'E','W');
 #ifdef MASKGPSLOCATION
-    if Settings[S_GPS_MASK){
+    if (Settings[S_GPS_MASK]){
       screenBuffer[1] = '0';
       screenBuffer[2] = '9';
       screenBuffer[3] = '3';
