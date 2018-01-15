@@ -455,7 +455,7 @@ S_CALLSIGN_ALWAYS,
   S_AMPER_HOUR_ALARM,
   S_AMPERAGE_ALARM,
   S_VARIO_SCALE,
-  S_Reserved2,          // unused
+  S_GPS_MASK,
   S_HEADING360,
   S_UNITSYSTEM,
   S_VIDEOSIGNALTYPE,
@@ -522,7 +522,7 @@ EEPROMVER, //   S_CHECK_,
 50, //   S_AMPER_HOUR_ALARM,
 100, //   S_AMPERAGE_ALARM,
 3, // S_VARIO_SCALE
-0, // Reserved unused
+0, // S_GPS_MASK
 1, //   S_HEADING360,
 0, //   S_UNITSYSTEM,
 0, //   S_VIDEOSIGNALTYPE,
@@ -662,16 +662,16 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE07+7)|DISPLAY_ALWAYS|DISPLAY_DEV,    // SideBarScrollPosition
 (LINE01+3)|DISPLAY_NEVER,                 // SideBarHeight
 (LINE01+7)|DISPLAY_NEVER,                 // SideBarWidth
-(LINE05+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // Gimbal Position
+(LINE04+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // Gimbal Position
 (LINE12+11)|DISPLAY_NEVER|DISPLAY_DEV,    // GPS_time Position
 (LINE09+22)|DISPLAY_NEVER|DISPLAY_DEV,    // SportPosition
-(LINE04+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // modePosition
+(LINE03+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // modePosition
 (LINE02+22)|DISPLAY_NEVER,                // MapModePosition
 (LINE07+15)|DISPLAY_NEVER,                // MapCenterPosition
 (LINE04+10)|DISPLAY_ALWAYS|DISPLAY_DEV,   // APstatusPosition
 (LINE10+2)|DISPLAY_NEVER|DISPLAY_DEV,     // wattPosition
 (LINE07+6)|DISPLAY_ALWAYS|DISPLAY_DEV,    // glidescopePosition
-(LINE04+12)|DISPLAY_ALWAYS|DISPLAY_DEV,   // callSignPosition
+(LINE03+12)|DISPLAY_ALWAYS|DISPLAY_DEV,   // callSignPosition
 (LINE08+10)|DISPLAY_NEVER|DISPLAY_DEV,    // Debug Position
 (LINE08+23)|DISPLAY_NEVER|DISPLAY_DEV,    // climbratevaluePosition,
 (LINE09+2)|DISPLAY_NEVER|DISPLAY_DEV,     // efficiencyPosition,
