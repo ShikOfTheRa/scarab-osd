@@ -1124,7 +1124,7 @@ void displayVario(void)
 #elif defined VARIOENHANCED // multi char slider representation of climb rate
   #define VARIOSCALE 120 // max 127 8 bit
   #define VARIOICONCOUNT 3
-  #define VARIOROWS VARIOENHANCED
+  #define VARIOROWS Settings[S_VARIO_SCALE]
   int8_t t_vario=MwVario;
   if (MwVario>VARIOSCALE) t_vario=VARIOSCALE;
   if (MwVario<-VARIOSCALE) t_vario=-VARIOSCALE;

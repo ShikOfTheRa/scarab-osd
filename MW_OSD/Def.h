@@ -32,11 +32,12 @@
 
 //#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
+//#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
   //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
   //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
-  #define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
-  //#define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
+  //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
+  #define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
   #define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
   #define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
   #define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
@@ -44,24 +45,31 @@
   #define DISPLAY_DEV 0xC000      // Use screen layout dev position - display all items...
   //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   //#define ALWAYSARMED
-  #define FORCESENSORS
+  //#define FORCESENSORS
   #define TX_GUI_CONTROL            // for mavlink
   #define INTRO_FC                  // Enable to FC version at startup
+  #undef INTRO_FC                  // Enable to FC version at startup
   #define INTRO_VERSION               "MWOSD R1.8 TEST" // Call the OSD something else if you prefer. 
 #endif
 
 //#define GPSTEST
+//#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
 #ifdef GPSTEST                  // Development pre-set test paramters only 
 #define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
 #define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
 #define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
 #define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
-#define INTRO_FC                  // Enable to FC version at startup
+#undef VARIOSTANDARD               // Enable this for single icon representation of vario
+#define VARIOENHANCED 4           // Enable this for multi line more accurate visual slider representation of vario. 4 provides +/- 4 rows of slider resolution
+#undef INTRO_FC                  // Enable to FC version at startup
+#define INTRO_VERSION               "MWOSD R1.8 TEST" // Call the OSD something else if you prefer. 
+
 #endif
 
 
 //#define SCHLONG                   // Test for Schalonsus 
 #ifdef SCHLONG                      
+//#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
 #define iNAV
 #define FIXEDWING     
 #define HORIZON
@@ -83,6 +91,9 @@
 #define AUDIOVARIORC 1200
 #define BATTERYICONVOLTS
 #define SHOW_TOTAL_DISTANCE
+#undef INTRO_FC                  // Enable to FC version at startup
+#define INTRO_VERSION               "MWOSD R1.8 TEST" // Call the OSD something else if you prefer. 
+
 #endif
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/

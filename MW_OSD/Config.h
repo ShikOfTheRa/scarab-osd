@@ -95,9 +95,9 @@
 /********************       FEATURES      *********************/
 // Disable features if you require memory for other features
 // Further configuration may be require elsewhere in config.h + option enabled on GUI
-#define SBDIRECTION                 // Enable/disable sidebar indicators (changes in speed or altitude)
 #define HORIZON                     // Enable/disable HORIZON indicator
 #define MAPMODE                     // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
+//#define SBDIRECTION               // Enable/disable sidebar indicators (icons indicationg changes in speed or altitude)
 //#define GPSTIME                   // Enable/disable GPS Time functions
 //#define SPORT                     // Enable/disable FRSKY S.PORT cell code
 
@@ -257,17 +257,17 @@
 
 /********************       Visual Vario / climbrate Settings         ************************/
 //#define VARIOALARM 150            // Enable this to for flashing climb rate warning. Value in cm/sec (if climb rate selected in layouts)
-#define VARIOSTANDARD               // Enable this for single icon representation of vario
-//#define VARIOENHANCED 4           // Enable this for multi line more accurate visual slider representation of vario. 4 provides +/- 4 rows of slider resolution
+//#define VARIOSTANDARD             // Enable this for single icon representation of vario
+#define VARIOENHANCED               // Enable this for multi line more accurate visual slider representation of vario. 4 provides +/- 4 rows of slider resolution
 
 /********************       Audio Vario / climbrate Settings         ************************/
-//#define AUDIOVARIO A3                // Enable this for audio vario on RSSI pin A3. Uses BARO data from FC or GPS
-//#define AUDIOVARIORC 1200            // Enable this to disable audio vario for throttle values above 1200 uS
-#define AUDIOVARIOTHRESHOLDCLIMB  10   // Threshold for climbing (cm/s)
-#define AUDIOVARIOTHRESHOLDSINK  -20   // Threshold for sinking  (cm/s) 
-#define AUDIOVARIOSILENTDEADBAND       // Enable for silent deadband otherwise will hear near thermal tone
-//#define AUDIOVARIOTYPE1              // Simple beep indicator (std AudioVario)
-#define AUDIOVARIOTYPE2                // Complex variable pulse / frequency / indicator  (std AudioVario)
+//#define AUDIOVARIO A3             // Enable this for audio vario on RSSI pin A3. Uses BARO data from FC or GPS
+//#define AUDIOVARIORC 1200         // Enable this to disable audio vario for throttle values above 1200 uS
+#define AUDIOVARIOTHRESHOLDCLIMB  10  // Threshold for climbing (cm/s)
+#define AUDIOVARIOTHRESHOLDSINK  -20  // Threshold for sinking  (cm/s) 
+#define AUDIOVARIOSILENTDEADBAND    // Enable for silent deadband otherwise will hear near thermal tone
+//#define AUDIOVARIOTYPE1           // Simple beep indicator (std AudioVario)
+#define AUDIOVARIOTYPE2             // Complex variable pulse / frequency / indicator  (std AudioVario)
 
 
 /********************       KK Audio Vario / climbrate Settings         ************************/
