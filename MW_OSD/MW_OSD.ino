@@ -395,6 +395,10 @@ GPS_dop=10000;
       uint8_t MSPcmdsend=0;
       if(queuedMSPRequests == 0)
         queuedMSPRequests = modeMSPRequests;
+      if (timer.GUI_active!=0){
+        queuedMSPRequests&=REQ_MSP_FONT;
+      } 
+  
       uint32_t req = queuedMSPRequests & -queuedMSPRequests;
       queuedMSPRequests &= ~req;
       switch(req) {
@@ -509,9 +513,7 @@ GPS_dop=10000;
          if (!canvasMode)
          #endif
          {
-           if (timer.GUI_active==0){
-             mspWriteRequest(MSPcmdsend, 0);
-           } 
+           mspWriteRequest(MSPcmdsend, 0);
          }
        #endif // KISS
       #endif //GPSOSD
