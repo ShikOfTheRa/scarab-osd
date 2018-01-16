@@ -603,8 +603,8 @@ enum Positions {
   horizonPosition,
   SideBarPosition,
   SideBarScrollPosition,
-  SideBarHeight,           // special function
-  SideBarWidth,            // special function
+  SideBarHeightSPARE,           // special function
+  SideBarWidthSPARE,            // special function
   gimbalPosition,
   GPS_timePosition,
   SportPosition,
