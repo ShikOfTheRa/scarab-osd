@@ -152,7 +152,7 @@ void setup()
   readEEPROM();
   
   #ifndef STARTUPDELAY
-    #define STARTUPDELAY 500
+    #define STARTUPDELAY 1000
   #endif
   delay(STARTUPDELAY);
 
