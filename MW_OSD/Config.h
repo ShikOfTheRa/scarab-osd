@@ -120,9 +120,9 @@
 #define GPSOSDSUMMARY      32       // seconds summary is displayed for after landing. Max 32
 #define GPSOSDLANDED        8       // seconds OSD needs to have landed (within home distance and speed less than xxx) before triggering summary. Max 32
 #define GPSDOP 500                  // UBLOX only - minimum PDOP required for sat fix. A DOP of 2.00 is considered good 
-//#define PWM_OSD_SWITCH            // Enables 3 way screen switch using a TX channel via a RX channel connected to the OSD PWM input pin (RSSI pin on basic MINIM hardware). 
-//#define PWM_THROTTLE              // Enables throttle feature, virtual current sensor using RC throttle connected into OSD PWM input pin (RSSI pin on basic MINIM hardware). 
 //#define PPM_CONTROL               // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD PWM input pin (RSSI pin on basic MINIM hardware). Requires TX type to be set below. 
+//#define PWM_OSD_SWITCH            // Enables 3 way screen switch from a RX PWM channel connected to the OSD PWM input pin (RSSI pin on basic MINIM hardware). AEROMAX OSD has a dedicated connection.
+//#define PWM_THROTTLE              // Enables throttle feature, virtual current sensor using RC throttle connected into OSD PWM input pin (RSSI pin on basic MINIM hardware). AEROMAX OSD has a dedicated connection with this enabled by default. 
 
 
 /********************       FILTER settings      *********************/

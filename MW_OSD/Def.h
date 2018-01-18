@@ -30,26 +30,29 @@
 //#define BOOTRESET          // Enables reset from default Atmega 328 bootloader address (instead of 0) 
 
 
-//#define DEVELOPMENT               // For development set only 
+#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
-//#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
-  #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
+#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+//#define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
+//  #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
   //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
-  //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+  #define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
   //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
-  #define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-  #define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
+  //#define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
+  //#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
   #define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
-  #define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
-  #define INTRO_DELAY 1             // To speed up startup
+  //#define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
+  #define INTRO_DELAY 5             // To speed up startup
   #define DISPLAY_DEV 0xC000      // Use screen layout dev position - display all items...
-  //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   //#define ALWAYSARMED
   //#define FORCESENSORS
-  #define TX_GUI_CONTROL            // for mavlink
+  #define TX_GUI_CONTROL            // for mavlink and possibly GPS OSD in future
   #define INTRO_FC                  // Enable to FC version at startup
   #undef INTRO_FC                  // Enable to FC version at startup
   #define INTRO_VERSION               "MWOSD R1.8 TEST" // Call the OSD something else if you prefer. 
+//#define PWM_THROTTLE              // Enables throttle feature, virtual current sensor using RC throttle connected into OSD PWM input pin (RSSI pin on basic MINIM hardware). AEROMAX OSD has a dedicated connection. 
+//#define PWM_OSD_SWITCH            // Enables 3 way screen switch from a RX PWM channel connected to the OSD PWM input pin (RSSI pin on basic MINIM hardware). AEROMAX OSD has a dedicated connection.
+
 #endif
 
 //#define GPSTEST
@@ -773,13 +776,6 @@ enum {
   #endif
 #endif
 
-/********************  HARDWARE PINS definitions  *********************/
-#define AMPERAGEPIN   A1
-#define TEMPPIN       A3  // also used for airspeed         
-#define RSSIPIN       A3              
-#define LEDPIN        7
-#define INTC3       // Arduino A3 enabled for PWM/PPM interrupts)
-
 // All aircraft / FC types defaults...
 #define RESETGPSALTITUDEATARM
 #define HEADINGCORRECT              // required to correct for MWheading being 0>360 vs MWII -180>+180. Leave permanently enabled
@@ -793,6 +789,60 @@ enum {
 
 
 /********************  OSD HARDWARE rule definitions  *********************/
+
+// default pin mappings:
+#define VOLTAGEPIN    A0
+#define VIDVOLTAGEPIN A2
+#define AMPERAGEPIN   A1
+#define RSSIPIN       A3              
+#define LEDPIN        7
+#define RCPIN         5   // Aeromax hardware only      
+#define AUXPIN        A6  // Aeromax hardware only        
+#define INTC3             // Arduino A3 enabled for PWM/PPM interrupts) Arduino A3 == Atmega Port C bit 3 for PWM trigger on RSSI pin
+//#define INTD5           // Atmega Port D bit 5 PWM/PPM interrupts) Aeromax hardware used for RC input
+
+// board specific amendments:
+#ifdef AEROMAX
+    #define ATMEGASETHARDWAREPORTS DDRC &= B11110111;DDRD &= B11011111;
+    #define INTD5     
+#elif defined AIRBOTMICRO
+    #undef VOLTAGEPIN
+    #undef VIDVOLTAGEPIN
+    #define VOLTAGEPIN    A2
+    #define VIDVOLTAGEPIN A0
+    #define MAX_SOFTRESET
+#elif defined ANDROMEDA
+    #define MAX_SOFTRESET
+#elif defined RTFQV1                     
+    #undef VOLTAGEPIN
+    #undef VIDVOLTAGEPIN
+    #define VOLTAGEPIN    A2
+    #define VIDVOLTAGEPIN A0
+    #define ALTERNATEDIVIDERS
+#elif defined RTFQMICRO                     
+    #undef VOLTAGEPIN
+    #undef VIDVOLTAGEPIN
+    #define VOLTAGEPIN    A2
+    #define VIDVOLTAGEPIN A0
+#elif defined KYLIN250PDB
+    #undef VOLTAGEPIN
+    #define VOLTAGEPIN    A6
+#elif defined HOLYBROPDB
+    #undef VOLTAGEPIN
+    #define VOLTAGEPIN    A6
+#endif
+
+#ifdef SWAPVOLTAGEPINS                     
+    #undef VOLTAGEPIN
+    #undef VIDVOLTAGEPIN
+    #define VOLTAGEPIN    A2
+    #define VIDVOLTAGEPIN A0
+#endif
+
+#ifndef ATMEGASETHARDWAREPORTS
+    # define ATMEGASETHARDWAREPORTS pinMode(RSSIPIN, INPUT);pinMode(RCPIN, INPUT);
+#endif 
+
 #ifdef RUSHDUINO                    
     # define DATAOUT          11 // MOSI
     # define DATAIN           12 // MISO
@@ -831,56 +881,8 @@ enum {
     # define LEDOFF           PORTD&=B01111111;
 #endif
 
-#ifdef AEROMAX
-    #define TEMPPIN       A6  // also used for airspeed         
-    #define INTD5     
-#endif
-
-#ifdef AIRBOTMICRO
-    #define MAX_SOFTRESET
-    #define SWAPVOLTAGEPINS
-#endif
-
-#if defined  AUDIOVARIO // temporary reassign RSSI / Temp to avoid issues
-//  #define TEMPPIN       A1  // also used for airspeed         
-//  #define RSSIPIN       A1              
-#endif
-
 #if defined  KKAUDIOVARIO 
   #undef FIXEDLOOP
-//  #define TEMPPIN       A1  // also used for airspeed         
-//  #define RSSIPIN       A1              
-#endif
-
-#ifdef ANDROMEDA
-    #define MAX_SOFTRESET
-#endif
-
-#ifdef RTFQV1                     
-    #define SWAPVOLTAGEPINS
-    #define ALTERNATEDIVIDERS
-#endif
-
-#ifdef RTFQMICRO                     
-    #define SWAPVOLTAGEPINS
-#endif
-
-#ifdef KYLIN250PDB
-    #undef VOLTAGEPIN
-    #define VOLTAGEPIN    A6
-#endif
-
-#ifdef HOLYBROPDB
-    #undef VOLTAGEPIN
-    #define VOLTAGEPIN    A6
-#endif
-
-#ifdef SWAPVOLTAGEPINS                     
-    #define VOLTAGEPIN    A2
-    #define VIDVOLTAGEPIN A0
-#else                                  
-    #define VOLTAGEPIN    A0
-    #define VIDVOLTAGEPIN A2
 #endif
 
 #ifdef ALTERNATEDIVIDERS
@@ -897,6 +899,9 @@ enum {
     #define I2C_UB_BREQUIV   115200UL   // Pretend baudrate of 115200
     #define MSP2CFG                     // Duplicate MSP request to config port
 #endif
+
+/********************  END OSD HARDWARE rule definitions  *********************/
+
 
 /********************  GPS OSD rule definitions  *********************/
 

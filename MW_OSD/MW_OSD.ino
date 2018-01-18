@@ -125,7 +125,6 @@ void setup()
     uint8_t l = ((F_CPU  / 4 / (BAUDRATE) -1) / 2);
     UCSR0A  |= (1<<U2X0); UBRR0H = h; UBRR0L = l; 
   #endif
-  Serial.flush();
 
 #ifdef I2C_UB_SUPPORT
   // I2C initialization
@@ -137,20 +136,18 @@ void setup()
 #endif
 
   MAX7456SETHARDWAREPORTS
-
-  pinMode(A6, INPUT);
-  pinMode(RSSIPIN, INPUT);
-  pinMode(TEMPPIN, INPUT);
+  ATMEGASETHARDWAREPORTS
   LEDINIT
   
-  initPulseInts();  // initialise PWM / PPM inputs
 
 #if defined EEPROM_CLEAR
   EEPROM_clear();
 #endif  
   checkEEPROM();
   readEEPROM();
-  
+
+  initPulseInts();  // initialise PWM / PPM inputs
+ 
   #ifndef STARTUPDELAY
     #define STARTUPDELAY 1000
   #endif
@@ -201,6 +198,7 @@ void setup()
     pressure = getPressure();
     lowpassFast = lowpassSlow = pressure;
   #endif //KKAUDIOVARIO
+  Serial.flush();
 }
 
 //------------------------------------------------------------------------
@@ -574,8 +572,7 @@ GPS_dop=10000;
 #if defined USE_AIRSPEED_SENSOR
         useairspeed();
 #endif //USE_AIRSPEED_SENSOR
-        if(MwSensorPresent&ACCELEROMETER)
-           displayHorizon(MwAngle[0],MwAngle[1]);
+        displayHorizon(MwAngle[0],MwAngle[1]);
 #if defined FORCECROSSHAIR
         displayForcedCrosshair();
 #endif //FORCECROSSHAIR
@@ -1190,16 +1187,21 @@ void ProcessSensors(void) {
 
 void initPulseInts() { //RSSI/PWM/PPM int initialisation
   #if defined INTC3
-  DDRC &= ~(1 << DDC3); //  PORTC |= (1 << PORTC3);
+  if (Settings[S_PWMRSSI]==1){
+    DDRC &= ~(1 << DDC3); //  PORTC |= (1 << PORTC3);
+    //DDRC &=B11110111; 
+  }
   #endif
   #if defined INTD5
   DDRD &= ~(1 << DDD5); //  PORTD |= (1 << PORTD5);
   #endif
   cli();
   #if defined INTC3
+  if (Settings[S_PWMRSSI]==1){
   if ((PCMSK1&(1 << PCINT11))==0){
     PCICR |=  (1 << PCIE1);
     PCMSK1 |= (1 << PCINT11);
+  }
   }
   #endif
   #if defined INTD5
@@ -1229,7 +1231,7 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
   if (!(pinstatus & (1<<PWMPIN1))) { // measures low duration
     PulseDuration = CurrentTime-PulseStart; 
     if ((750<PulseDuration) && (PulseDuration<2250)) {    
-  #ifdef INTD5
+  #ifdef INTD5 // Aeromax Hardware so this must be PWMRSSI only
       pwmRSSI = PulseDuration;
   #else
     #ifdef PPM_CONTROL
@@ -1309,10 +1311,10 @@ ISR(PCINT2_vect) { // // Secondary Arduino D5 Atmega D5
           Naza.mode=NAZA_MODE_LOW;
         }
       #endif  
-      #ifdef PWM_THROTTLE
-        MwRcData[THROTTLESTICK] = PulseDuration;
-      #elif defined OSD_SWITCH_RC     
+      #ifdef PWM_OSD_SWITCH
         MwRcData[rcswitch_ch]=PulseDuration;
+      #else // assume throttle connected if not using PPM
+        MwRcData[THROTTLESTICK] = PulseDuration;
       #endif
       }
     }

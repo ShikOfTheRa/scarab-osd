@@ -234,7 +234,7 @@ uint8_t screenAttr[480/8]; // Attribute (INV) bits for each char in screen[]
 char screenBuffer[20]; 
 uint32_t modeMSPRequests;
 uint32_t queuedMSPRequests;
-uint8_t sensorpinarray[]={VOLTAGEPIN,VIDVOLTAGEPIN,AMPERAGEPIN,TEMPPIN,RSSIPIN};  
+uint8_t sensorpinarray[]={VOLTAGEPIN,VIDVOLTAGEPIN,AMPERAGEPIN,AUXPIN,RSSIPIN};  
 unsigned long previous_millis_low=0;
 unsigned long previous_millis_high =0;
 unsigned long previous_millis_sync =0;

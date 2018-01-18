@@ -570,6 +570,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
 #endif
   pitchAngle=pitchAngle+AHICORRECT;
 
+if(MwSensorPresent&ACCELEROMETER)
   if(fieldIsVisible(horizonPosition)){
 
 #ifdef NOAHI
