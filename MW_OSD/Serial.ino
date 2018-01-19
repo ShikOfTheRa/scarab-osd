@@ -518,9 +518,11 @@ if (cmdMSP==MSP_STATUS)
       MwAltitude = (int32_t)GPS_altitude*100;
       gpsvario();
     }     
-   #elif defined(USEGPSALTITUDE) && defined (FIXEDWING)
-     MwAltitude = (int32_t)GPS_altitude*100;
-     gpsvario();
+   #elif defined (FIXEDWING)
+     if (Settings[S_USEGPSHEADING]){
+       MwAltitude = (int32_t)GPS_altitude*100;
+       gpsvario();
+     }
    #else
     MwAltitude =read32();
     MwVario = read16();
