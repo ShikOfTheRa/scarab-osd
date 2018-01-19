@@ -2479,7 +2479,7 @@ void displayAlarms() {
 void formatDistance(int32_t t_d2f, uint8_t t_units, uint8_t t_type, uint8_t t_icon ) {
 //void formatDistance(int32_t t_d2f, uint8_t t_units, uint8_t t_type) {
   // t_d2f = integer to format into string
-  // t_type 0=alt, 2=dist , 4=LD alt, 6=LD dist
+  // t_type 0=alt, 2=dist , 4=LD alt, 6=LD dist NOTE DO NOT SEND USING LD
   // t_units 0=none, 1 show units symbol at end
   // t_licon 0=none, other = hex char of lead icon
   int32_t tmp;
@@ -2502,8 +2502,7 @@ void formatDistance(int32_t t_d2f, uint8_t t_units, uint8_t t_type, uint8_t t_ic
     screenBuffer[xx-1] = DECIMAL;
     xx++;
     screenBuffer[xx] = 0;
-    t_type+=4;
-    // type = (type==2) ? type=6 : type=4; // additional fonts to be added           
+    t_type+=4; // to make LD font
   }
   else{
     itoa(t_d2f, screenBuffer+xx, 10);

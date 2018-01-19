@@ -159,8 +159,7 @@
 #define SYM_ALTFT 0XA8
 #define SYM_DISTHOME_FT 0XB9
 #define SYM_DISTHOME_MI 0XBB
-#define SYM_FT 0X0F
-#define SYM_ALTMI 0XA7
+#define SYM_FT 0X0D
 
 // Voltage and amperage 
 #define SYM_VOLT 0XA9
