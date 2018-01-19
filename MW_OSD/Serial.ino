@@ -488,7 +488,8 @@ if (cmdMSP==MSP_STATUS)
     #if defined (AUTOSENSEMAG) && defined (FIXEDWING)     
       if(!(MwSensorPresent&MAGNETOMETER))
         MwHeading = GPS_ground_course/10;
-    #elif defined(USEGPSHEADING) && defined (FIXEDWING)
+    #elif defined (FIXEDWING)
+      if (Settings[S_USEGPSHEADING])
         MwHeading = GPS_ground_course/10;
     #endif
     #ifdef HEADINGCORRECT

@@ -30,7 +30,7 @@
 //#define BOOTRESET          // Enables reset from default Atmega 328 bootloader address (instead of 0) 
 
 
-#define DEVELOPMENT               // For development set only 
+//#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
 //#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   #define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
@@ -94,9 +94,12 @@
 #define AUDIOVARIORC 1200
 #define BATTERYICONVOLTS
 #define SHOW_TOTAL_DISTANCE
-#undef INTRO_FC                  // Enable to FC version at startup
 #define INTRO_VERSION               "MWOSD R1.8 TEST" // Call the OSD something else if you prefer. 
-
+#undef MAPMODE
+#undef MENU_DEBUG
+#undef INTRO_FC                  // Enable to FC version at startup
+#undef DISPLAY_PR
+#undef SHOW_TEMPERATURE
 #endif
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/

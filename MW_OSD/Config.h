@@ -80,11 +80,11 @@
 // Once the initialisation has completed, all sections should be commented and the sketch re-uploaded.
 // Font upload will take 90 seconds after upload is completed. If connected to a camera, you will see teh font table displayed.
 
-//#define EEPROM_CLEAR             // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
-//#define LOADFONT_DEFAULT         // Uncomment to force an upload of default font instead of using GUI
-//#define LOADFONT_LARGE           // Uncomment to force an upload of large font instead of using GUI
-//#define LOADFONT_BOLD            // Uncomment to force an upload of bold font instead of using GUI
-//#define DISPLAYFONTS             // Uncomment to display installed fonts for testing
+//#define EEPROM_CLEAR              // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
+//#define LOADFONT_DEFAULT          // Uncomment to force an upload of default font instead of using GUI
+//#define LOADFONT_LARGE            // Uncomment to force an upload of large font instead of using GUI
+//#define LOADFONT_BOLD             // Uncomment to force an upload of bold font instead of using GUI
+//#define DISPLAYFONTS              // Uncomment to display installed fonts for testing
 
 
 
@@ -148,8 +148,8 @@
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
 // **ONLY** valid when using fixed wing
-#define USEGPSHEADING               // Enable this to force using GPS for heading data instead of MAG. MSP data FC only.  
-#define USEGPSALTITUDE              // Enable this to force using GPS for altitude data instead of BARO. MSP data FC only.
+#define USEGPSHEADING               // Enable this to force using GPS for heading data instead of MAG. NOTE!! MSP data FC only.  
+#define USEGPSALTITUDE              // Enable this to force using GPS for altitude data instead of BARO. NOTE!! MSP data FC only.
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
 //#define AUTOSENSEMAG              // Undefine this to force autodetect MAG (to use MAG or GPS data for heading. MSP data FC only. 
 //#define AUTOSENSEBARO             // Undefine this to force autodetect BARO(to use BARO or GPS data for altitude. MSP data FC only.  
@@ -177,12 +177,12 @@
 
 /******************** Serial MSP speed settings *********************/
 // Choose ONLY ONE SPEED option: increases speeds of serial update - but with impact to flight controller 
-//#define MSP_SPEED_LOW     // Enable for soft serial / slow baud rates.
-#define MSP_SPEED_MED       // Default
-//#define MSP_SPEED_HIGH    // Enable for faster AHI and speed updates. Requires higher baud rates and increases overhead on the FC to process
-#define MSP_USE_BARO        // Disable if not used to increase serial speed update for MSP based FC: Baro IC data such as  altitude
-#define MSP_USE_GPS         // Disable if not used to increase serial speed update for MSP based FC: GPS data such as speed , distance
-#define MSP_USE_ANALOG      // Disable if not used to increase serial speed update for MSP based FC: Voltage, Amperage or RSSI from the FC
+//#define MSP_SPEED_LOW             // Enable for soft serial / slow baud rates.
+#define MSP_SPEED_MED               // Default
+//#define MSP_SPEED_HIGH            // Enable for faster AHI and speed updates. Requires higher baud rates and increases overhead on the FC to process
+#define MSP_USE_BARO                // Disable if not used to increase serial speed update for MSP based FC: Baro IC data such as  altitude
+#define MSP_USE_GPS                 // Disable if not used to increase serial speed update for MSP based FC: GPS data such as speed , distance
+#define MSP_USE_ANALOG              // Disable if not used to increase serial speed update for MSP based FC: Voltage, Amperage or RSSI from the FC
 
 
 /********************       CALLSIGN settings      *********************/
@@ -196,7 +196,7 @@
 #define INTRO_MENU                  // Enable to display TX stick MENU 
 #define INTRO_CALLSIGN              // Enable to display callsign at startup
 #define INTRO_SIGNALTYPE            // Enable to display video type at startup
-#define INTRO_FC                  // Enable to FC version at startup
+#define INTRO_FC                    // Enable to FC version at startup
 #define INTRO_DELAY 5               // Seconds intro screen should show for. Default is 5 
 //#define STARTUPDELAY 500          // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
@@ -328,41 +328,41 @@
 
 
 /********************       Headtracker support         ************************/
-//#define VIRTUAL_NOSE               // Enables the use of a virtual nose for headtracker users where aircraft nose is not visible
-#define HTCHANNEL   3                // RC chanel uses ch 1 - 8/16
-#define HTSCALE     10               // Scaling of Pan Axis - Max of 10
-#define HTLINE      11               // Row on which Headtracker info is displayed
-#define HTDIRECTION +                // Reverses direction of pan action
+//#define VIRTUAL_NOSE              // Enables the use of a virtual nose for headtracker users where aircraft nose is not visible
+#define HTCHANNEL   3               // RC chanel uses ch 1 - 8/16
+#define HTSCALE     10              // Scaling of Pan Axis - Max of 10
+#define HTLINE      11              // Row on which Headtracker info is displayed
+#define HTDIRECTION +               // Reverses direction of pan action
 
 
 /********************       Vendor support         ************************/
 // This is for vendor use only for custom GUI support
-#define VENDOR   1                   // For vendor use for custom GUI
+#define VENDOR   1                  // For vendor use for custom GUI
 
 
 /********************  TEMPERATURE  settings      *********************/
-#define SHOW_TEMPERATURE           // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
-#define TEMPERATUREMAX 50            // Temperature warning value
-#define TEMPZERO 0                   // Temperature Zero calibration (range = 0-1024 :512 = 2.5v with vref of 5v and 0.55v for vref of 1.1v) 
-#define TEMPMAX  500                 // Temperature when at sensor output at VCC. Might be  atheoreticla value 
+#define SHOW_TEMPERATURE            // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
+#define TEMPERATUREMAX 50           // Temperature warning value
+#define TEMPZERO 0                  // Temperature Zero calibration (range = 0-1024 :512 = 2.5v with vref of 5v and 0.55v for vref of 1.1v) 
+#define TEMPMAX  500                // Temperature when at sensor output at VCC. Might be  atheoreticla value 
 
 
 /********************  RECORD CAPTURE  settings      *********************/
 // This is used for those who are attempting records to always show the maximum achieved.
 // Maximum values (as shown on statistics summary screen will be displayed on line IMMEDAITELY BELOW where current live data is displayed
 // It may require layouts to be amended to show data without overwriting other information
-#define SHOW_MAX_SPEED               // Enable to display MAX speed achieved
-//#define SHOW_MAX_ALTITUDE          // Enable to display MAX altitude achieved on line below current altitude
-#define SHOW_MAX_DISTANCE            // Enable to display MAX distance achieved
-#define SHOW_TOTAL_DISTANCE          // Enable to display TOTAL distance achieved
+#define SHOW_MAX_SPEED              // Enable to display MAX speed achieved
+//#define SHOW_MAX_ALTITUDE         // Enable to display MAX altitude achieved on line below current altitude
+#define SHOW_MAX_DISTANCE           // Enable to display MAX distance achieved
+#define SHOW_TOTAL_DISTANCE         // Enable to display TOTAL distance achieved
 
 
 /********************  THROTTLE calibration  settings      *********************/
 // This is used for those who want to specify non default throttle calibration values. 
 // To use comment out AUTOTHROTTLE and adjusts the maximum and minimum throttle values 
 #define AUTOTHROTTLE 
-#define HIGHTHROTTLE 1900            // Maximum recognised value for throttle 
-#define LOWTHROTTLE  1100            // Minimum recognised value for throttle
+#define HIGHTHROTTLE 1900           // Maximum recognised value for throttle 
+#define LOWTHROTTLE  1100           // Minimum recognised value for throttle
 
 
 /********************  AMPERAGE calibration  settings      *********************/
@@ -374,40 +374,40 @@
 
 /********************           VTX settings           *********************/
 // Regional RF frequency regulations: Choose ONLY ONE option:
-#define VTX_REGION_UNRESTRICTED      // Enable for all 40 channels
-//#define VTX_REGION_AUSTRALIA       // Enable for AU legal channels and power level only
-#define DISPLAY_VTX_INFO             // Enable to show frequency in menu display. 
+#define VTX_REGION_UNRESTRICTED     // Enable for all 40 channels
+//#define VTX_REGION_AUSTRALIA      // Enable for AU legal channels and power level only
+#define DISPLAY_VTX_INFO            // Enable to show frequency in menu display. 
 
 
 /********************           Display items lead icon           *********************/
 // comment out to not display lead icon for displayed items
-#define ICON_ANGLE_RTH               // Direction to home
-#define ICON_ANGLE_HDG               // Heading
-#define ICON_DOP                     // GPS SAT DOP
-#define ICON_SPEED_GPS               // GPS speed
-#define ICON_SPEED_AIR               // Air Speed
-#define ICON_MAX                     // Max value - speed/distance/alt
-#define ICON_CLIMBRATE               // CLimb rate
-#define ICON_EFF                     // Efficiency
-#define ICON_PITCH                   // Pitch
-#define ICON_ROLL                    // Roll
-#define ICON_POWER                   // Power
-#define ICON_AVG_EFF                 // Average Efficiency
-#define ICON_TOTAL                   // Total distance travelled
-#define ICON_TMP                     // Temperature
-#define ICON_DTH                     // Distance to home
-#define ICON_ALT                     // Altitude prime
-#define ICON_GPS_ALT                 // GPS altitude
-#define ICON_MAIN_BATT               // Main battery icon
-#define ICON_VID_BAT                 // Video battery icon
-#define ICON_RSSI                    // RSSI
-#define ICON_SAT                     // Sattelite enable for large icon, disable for small icon
+#define ICON_ANGLE_RTH              // Direction to home
+#define ICON_ANGLE_HDG              // Heading
+#define ICON_DOP                    // GPS SAT DOP
+#define ICON_SPEED_GPS              // GPS speed
+#define ICON_SPEED_AIR              // Air Speed
+#define ICON_MAX                    // Max value - speed/distance/alt
+#define ICON_CLIMBRATE              // CLimb rate
+#define ICON_EFF                    // Efficiency
+#define ICON_PITCH                  // Pitch
+#define ICON_ROLL                   // Roll
+#define ICON_POWER                  // Power
+#define ICON_AVG_EFF                // Average Efficiency
+#define ICON_TOTAL                  // Total distance travelled
+#define ICON_TMP                    // Temperature
+#define ICON_DTH                    // Distance to home
+#define ICON_ALT                    // Altitude prime
+#define ICON_GPS_ALT                // GPS altitude
+#define ICON_MAIN_BATT              // Main battery icon
+#define ICON_VID_BAT                // Video battery icon
+#define ICON_RSSI                   // RSSI
+#define ICON_SAT                    // Sattelite enable for large icon, disable for small icon
 
 
 /********************  Advanced parameters  settings      *********************/
 // This is to enable rarely used advanced parameter saving. Off by default to minimise risk 
 // Enabling may create ability to write invalid data to FC
-//#define ADVANCEDSAVE               // Enables saving of advanced paramters where supported (Looptime/profile)
-//#define FIXEDLOOP                  // Enables 1ms loop max for consistency
+//#define ADVANCEDSAVE              // Enables saving of advanced paramters where supported (Looptime/profile)
+//#define FIXEDLOOP                 // Enables 1ms loop max for consistency
 
 
