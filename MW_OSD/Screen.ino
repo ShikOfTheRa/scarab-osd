@@ -1343,10 +1343,8 @@ void displayHeading(void)
   MAX7456_WriteString(screenBuffer,getPosition(MwHeadingPosition));
 */
   int16_t heading = MwHeading;
-  if (Settings[S_HEADING360]) {
     if(heading < 0)
       heading += 360;
-  }
   displayItem(MwHeadingPosition, heading, SYM_ANGLE_HDG, SYM_DEGREES, 0,  0 );
 }
 
