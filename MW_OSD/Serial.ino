@@ -485,10 +485,10 @@ if (cmdMSP==MSP_STATUS)
       MwAngle[i] = read16();
     }
       MwHeading = read16();
-    #if defined(USEGPSHEADING) && defined (FIXEDWING)
-        MwHeading = GPS_ground_course/10;
-    #elif defined (AUTOSENSEMAG) && defined (FIXEDWING)     
+    #if defined (AUTOSENSEMAG) && defined (FIXEDWING)     
       if(!(MwSensorPresent&MAGNETOMETER))
+        MwHeading = GPS_ground_course/10;
+    #elif defined(USEGPSHEADING) && defined (FIXEDWING)
         MwHeading = GPS_ground_course/10;
     #endif
     #ifdef HEADINGCORRECT
@@ -512,14 +512,14 @@ if (cmdMSP==MSP_STATUS)
 #endif //SPORT
   if (cmdMSP==MSP_ALTITUDE)
   {
-   #if defined(USEGPSALTITUDE) && defined (FIXEDWING)
-     MwAltitude = (int32_t)GPS_altitude*100;
-     gpsvario();
-   #elif defined (AUTOSENSEBARO) && defined (FIXEDWING)     
+   #if defined (AUTOSENSEBARO) && defined (FIXEDWING)     
     if(!(MwSensorPresent&BAROMETER)){
       MwAltitude = (int32_t)GPS_altitude*100;
       gpsvario();
     }     
+   #elif defined(USEGPSALTITUDE) && defined (FIXEDWING)
+     MwAltitude = (int32_t)GPS_altitude*100;
+     gpsvario();
    #else
     MwAltitude =read32();
     MwVario = read16();

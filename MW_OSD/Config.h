@@ -148,13 +148,14 @@
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
 // **ONLY** valid when using fixed wing
-//#define USEGPSHEADING             // Undefine this to force using GPS for heading data instead of MAG. MSP data FC only.  
-//#define USEGPSALTITUDE            // Undefine this to force using GPS for altitude data instead of MAG. MSP data FC only.
+#define USEGPSHEADING               // Enable this to force using GPS for heading data instead of MAG. MSP data FC only.  
+#define USEGPSALTITUDE              // Enable this to force using GPS for altitude data instead of BARO. MSP data FC only.
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
-//#define AUTOSENSEMAG                // Undefine this to force autodetect MAG (to use MAG or GPS data for heading. MSP data FC only.  
-//#define AUTOSENSEBARO               // Undefine this to force autodetect BARO(to use BARO or GPS data for altitude. MSP data FC only.  
+//#define AUTOSENSEMAG              // Undefine this to force autodetect MAG (to use MAG or GPS data for heading. MSP data FC only. 
+//#define AUTOSENSEBARO             // Undefine this to force autodetect BARO(to use BARO or GPS data for altitude. MSP data FC only.  
 #define USEGLIDESCOPE               // Enables ILS glidescope
-#define GLIDEANGLE 80               // ILS glidescope angle where 40 = 4.0° - 1.0 deg gradiented scope scale requires enabling in layouts. Auto enabled for FIXEDWING
+#define GLIDEANGLE  80              // ILS glidescope angle where 40 = 4.0° requires enabling in layouts. Auto enabled for FIXEDWING
+#define GLIDEWINDOW 40              // ILS glidescope angle where Window of 40 = 4.0° - 1.0 deg scope gradients, 80 =  2.0 deg scope gradients. Requires enabling in layouts. Auto enabled for FIXEDWING
 
 
 /******************** Serial speed settings *********************/

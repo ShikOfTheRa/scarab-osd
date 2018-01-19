@@ -2332,18 +2332,15 @@ void mapmode(void) {
 void displayfwglidescope(void){
   if(!fieldIsVisible(glidescopePosition))
     return;  
-
   int8_t GS_deviation_scale   = 0;
   if (GPS_distanceToHome>0){ //watch div 0!!
-    int16_t gs_angle          =(573*atan((float)MwAltitude/10/GPS_distanceToHome));
-    int16_t GS_target_delta   = gs_angle-GLIDEANGLE;
-    GS_target_delta           = constrain(GS_target_delta,-400,400); 
-    GS_deviation_scale        = map(GS_target_delta,400,-400,0,8);
+    int16_t gs_angle          =(double)570*atan2(MwAltitude/100,GPS_distanceToHome);
+    int16_t GS_target_delta   = GLIDEANGLE-gs_angle;
+    GS_target_delta           = constrain(GS_target_delta,-GLIDEWINDOW,GLIDEWINDOW); 
+    GS_deviation_scale        = map(GS_target_delta,-GLIDEWINDOW,GLIDEWINDOW,0,8);
   }
-
   int8_t varline              = (GS_deviation_scale/3)-1;
   int8_t varsymbol            = GS_deviation_scale%3;
-
   uint16_t position = getPosition(glidescopePosition);
   for(int8_t X=-1; X<=1; X++) {
     screen[position+(X*LINE)] =  SYM_GLIDESCOPE;
@@ -2505,6 +2502,7 @@ void formatDistance(int32_t t_d2f, uint8_t t_units, uint8_t t_type, uint8_t t_ic
     screenBuffer[xx-1] = DECIMAL;
     xx++;
     screenBuffer[xx] = 0;
+    t_type+=4;
     // type = (type==2) ? type=6 : type=4; // additional fonts to be added           
   }
   else{

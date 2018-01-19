@@ -537,6 +537,7 @@ bool UBLOX_parse_gps(void) {
         GPS_coord[LON]   = _buffer.posllh.longitude;
         GPS_coord[LAT]   = _buffer.posllh.latitude;
         GPS_altitude_ASL = _buffer.posllh.altitude_msl / 1000;      //alt in m
+        GPS_altitude_vario = _buffer.posllh.altitude_msl / 10;      //alt in cm
         gpsvario();
       }
       GPS_fix = _fix_ok;
@@ -822,9 +823,16 @@ void GPS_NewData() {
 void gpsvario() {
   if (millis() > timer.fwAltitudeTimer) { // To make vario from GPS altitude
     timer.fwAltitudeTimer += 1000;
-    previousfwaltitude = interimfwaltitude;
-    interimfwaltitude = GPS_altitude;
-    MwVario = (GPS_altitude - previousfwaltitude) * 20;
+    MwVario = (GPS_altitude - previousfwaltitude) * 100;
+    previousfwaltitude = GPS_altitude;
+  }
+}
+
+void gpsvarioublox() {
+  if (millis() > timer.fwAltitudeTimer) { // To make vario from GPS altitude
+    timer.fwAltitudeTimer += 1000;
+    MwVario = (int32_t)(GPS_altitude_vario - previousfwaltitude) * 10;
+    previousfwaltitude = GPS_altitude_vario;
   }
 }
 

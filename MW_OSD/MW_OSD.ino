@@ -1230,7 +1230,7 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
   LastTime = CurrentTime;
   if (!(pinstatus & (1<<PWMPIN1))) { // measures low duration
     PulseDuration = CurrentTime-PulseStart; 
-    if ((750<PulseDuration) && (PulseDuration<2250)) {    
+    if ((850<PulseDuration) && (PulseDuration<2150)) {    
   #ifdef INTD5 // Aeromax Hardware so this must be PWMRSSI only
       pwmRSSI = PulseDuration;
   #else
@@ -1240,6 +1240,11 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
       if (PulseType){ //PPM
         if (RCchan<=TX_CHANNELS)// avoid array overflow if > standard ch PPM
           MwRcData[RCchan] = PulseDuration; // Val updated
+        #if defined (TX_GUI_CONTROL)
+        if (RCchan==4)
+          reverseChannels();
+        #endif // TX_PRYT
+  
       }
       else{ //PWM
       #ifdef NAZA
