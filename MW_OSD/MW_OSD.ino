@@ -146,8 +146,6 @@ void setup()
   checkEEPROM();
   readEEPROM();
 
-  initPulseInts();  // initialise PWM / PPM inputs
- 
   #ifndef STARTUPDELAY
     #define STARTUPDELAY 1000
   #endif
@@ -159,17 +157,6 @@ void setup()
     vtx_flash_led(5);
   # endif
 #endif
-
-#ifdef IMPULSERC_HELIX
-  //Ignore setting because this is critical to making sure we can detect the
-  //VTX power jumper being installed. If we aren't using 5V ref there is
-  //the chance we will power up on wrong frequency.
-  Settings[S_VREFERENCE]=1;
-#endif //IMPULSERC_HELIX 
-  if (Settings[S_VREFERENCE])
-    analogReference(DEFAULT);
-  else
-    analogReference(INTERNAL);
 
   MAX7456Setup();
   #if defined GPSOSD
@@ -974,9 +961,48 @@ void readEEPROM(void)
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
      Settings[en] = EEPROM.read(en);
   }
-  #ifdef AUTOCELL
-  Settings[S_BATCELLS]=1;
+
+// config dependant - set up interrupts  
+  #if defined INTC3
+  if (Settings[S_MWRSSI]==1){
+    DDRC &= ~(1 << DDC3); //  PORTC |= (1 << PORTC3);
+    //DDRC &=B11110111; 
+  }
   #endif
+  #if defined INTD5
+  DDRD &= ~(1 << DDD5); //  PORTD |= (1 << PORTD5);
+  #endif
+  cli();
+  #if defined INTC3
+  if (Settings[S_MWRSSI]==1){
+  if ((PCMSK1&(1 << PCINT11))==0){
+    PCICR |=  (1 << PCIE1);
+    PCMSK1 |= (1 << PCINT11);
+  }
+  }
+  #endif
+  #if defined INTD5
+  if ((PCMSK2&(1 << PCINT21))==0){
+    PCICR |=  (1 << PCIE2);
+    PCMSK2 |= (1 << PCINT21);
+  }
+  #endif
+  sei(); 
+
+
+// config dependant - voltage reference  
+#ifdef IMPULSERC_HELIX
+  //Ignore setting because this is critical to making sure we can detect the
+  //VTX power jumper being installed. If we aren't using 5V ref there is
+  //the chance we will power up on wrong frequency.
+  Settings[S_VREFERENCE]=1;
+#endif //IMPULSERC_HELIX 
+
+  if (Settings[S_VREFERENCE])
+    analogReference(DEFAULT);
+  else
+    analogReference(INTERNAL);
+  
 
   for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
      uint16_t pos=(en*2)+EEPROM_SETTINGS;
@@ -1186,31 +1212,7 @@ void ProcessSensors(void) {
 
 
 void initPulseInts() { //RSSI/PWM/PPM int initialisation
-  #if defined INTC3
-  if (Settings[S_MWRSSI]==1){
-    DDRC &= ~(1 << DDC3); //  PORTC |= (1 << PORTC3);
-    //DDRC &=B11110111; 
-  }
-  #endif
-  #if defined INTD5
-  DDRD &= ~(1 << DDD5); //  PORTD |= (1 << PORTD5);
-  #endif
-  cli();
-  #if defined INTC3
-  if (Settings[S_MWRSSI]==1){
-  if ((PCMSK1&(1 << PCINT11))==0){
-    PCICR |=  (1 << PCIE1);
-    PCMSK1 |= (1 << PCINT11);
-  }
-  }
-  #endif
-  #if defined INTD5
-  if ((PCMSK2&(1 << PCINT21))==0){
-    PCICR |=  (1 << PCIE2);
-    PCMSK2 |= (1 << PCINT21);
-  }
-  #endif
-  sei();
+
 }
 
 
