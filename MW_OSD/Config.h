@@ -130,10 +130,6 @@
 #define FILTER_AVG                  // Enable standard averaging filter  
 //#define FILTER_HYSTERYSIS 2       // Alternative filter with hysteris to provide smoother changes. Higher number = more filtering. Max 4  
 
-/********************       RSSI settings (PWM/PPM)      *********************/
-//Note all require PWM RSSI to be enabled on GUI
-//#define RCRSSI 4                  // Undefine this to use RC channel (1-TX_CHANNELS- default 8) for RSSI (this can be from the FC - or a PPM channel with GPSOSD)
-
 
 /********************       GPS settings      *********************/
 #define MINSATFIX 5                 // Number of sats required for a fix. 5 minimum. More = better.

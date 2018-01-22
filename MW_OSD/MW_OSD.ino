@@ -1073,18 +1073,20 @@ void ProcessSensors(void) {
     }
     //--- override with PWM, FC RC CH or FC RSSI data if enabled    
     if (sensor ==4) { 
-      if (Settings[S_PWMRSSI]){
-        sensortemp = pwmRSSI>>1;
-        if (sensortemp==0) { // timed out - use previous
-          sensortemp=sensorfilter[sensor][sensorindex];
-        }
+      if (Settings[S_MWRSSI]==3) { // RSSI from a TX channel
+        sensortemp = MwRcData[Settings[S_RSSI_CH]]>>1;
       }
-      if(Settings[S_MWRSSI]) {
+      else if (Settings[S_MWRSSI]==2) { // RSSI from Flight controller
         sensortemp = MwRssi;
       }
-      #if defined RCRSSI
-        sensortemp = MwRcData[RCRSSI]>>1;
-      #endif
+      else if (Settings[S_MWRSSI]==1) { // RSSI from direct OSD - PWM
+         sensortemp = pwmRSSI>>1;
+         if (sensortemp==0) { // timed out - use previous
+           sensortemp=sensorfilter[sensor][sensorindex];
+         }
+      }
+      else{ // RSSI from direct OSD - Analog              
+      }
     }
     //--- Apply filtering    
 #if defined FILTER_HYSTERYSIS  // Hysteris incremental averaged change    
@@ -1139,14 +1141,7 @@ void ProcessSensors(void) {
 #endif
 
 //-------------- Current
-  
-  if(!Settings[S_MWAMPERAGE]) {
-    if (!Settings[S_AMPERAGE_VIRTUAL]) { // Analogue
-      amperage = sensorfilter[2][SENSORFILTERSIZE]>>3;
-      amperage = map(amperage, Settings16[S16_AMPZERO], AMPCALHIGH, AMPCALLOW, Settings16[S16_AMPDIVIDERRATIO]);
-      if (amperage < 0) amperage=0;
-    }  
-    else {  // Virtual
+    if (Settings[S_MWAMPERAGE]==2) { // Virtual
       uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],LowT,HighT);
       Vthrottle = constrain((Vthrottle-1000)/10,0,100);
       amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings16[S16_AMPDIVIDERRATIO]*0.01;
@@ -1154,17 +1149,22 @@ void ProcessSensors(void) {
         amperage += Settings16[S16_AMPZERO];
       else 
         amperage = Settings16[S16_AMPZERO];
-    }  
-  }
-  else{
-    // Apply rounding math
-    if (MWAmperage < 0)
-      amperage = (MWAmperage - AMPERAGE_DIV / 2) / AMPERAGE_DIV;
-    else
-      amperage = (MWAmperage + AMPERAGE_DIV / 2) / AMPERAGE_DIV;
-  }
+    }
+    else if (Settings[S_MWAMPERAGE]==1) { // from FC
+      if (MWAmperage < 0)
+        amperage = (MWAmperage - AMPERAGE_DIV / 2) / AMPERAGE_DIV;
+      else
+        amperage = (MWAmperage + AMPERAGE_DIV / 2) / AMPERAGE_DIV;
+    }
+    else { // Analog
+      amperage = sensorfilter[2][SENSORFILTERSIZE]>>3;
+      amperage = map(amperage, Settings16[S16_AMPZERO], AMPCALHIGH, AMPCALLOW, Settings16[S16_AMPDIVIDERRATIO]);
+      if (amperage < 0) amperage=0;              
+    }
+
 
 //-------------- RSSI
+
     rssi = sensorfilter[4][SENSORFILTERSIZE]>>3; // filter and remain 16 bit
     if (configMode){
       if((timer.rssiTimer==15)) {
@@ -1187,7 +1187,7 @@ void ProcessSensors(void) {
 
 void initPulseInts() { //RSSI/PWM/PPM int initialisation
   #if defined INTC3
-  if (Settings[S_PWMRSSI]==1){
+  if (Settings[S_MWRSSI]==1){
     DDRC &= ~(1 << DDC3); //  PORTC |= (1 << PORTC3);
     //DDRC &=B11110111; 
   }
@@ -1197,7 +1197,7 @@ void initPulseInts() { //RSSI/PWM/PPM int initialisation
   #endif
   cli();
   #if defined INTC3
-  if (Settings[S_PWMRSSI]==1){
+  if (Settings[S_MWRSSI]==1){
   if ((PCMSK1&(1 << PCINT11))==0){
     PCICR |=  (1 << PCIE1);
     PCMSK1 |= (1 << PCINT11);
