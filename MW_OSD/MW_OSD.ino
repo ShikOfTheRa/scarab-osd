@@ -281,12 +281,18 @@ GPS_dop=10000;
   #elif defined (OSD_SWITCH_RC)                   
     rcswitch_ch = Settings[S_RCWSWITCH_CH];
     screenlayout=0;
+    if (Settings[S_RCWSWITCH]==1){
       if (MwRcData[rcswitch_ch] > TX_CHAN_HIGH){
         screenlayout=1;
       }
       else if (MwRcData[rcswitch_ch] > TX_CHAN_MID){
         screenlayout=2;
       }
+    }
+    else{
+    if (MwSensorActive&mode.osd_switch)
+      screenlayout=1;      
+    }
   #else 
     screenlayout=0;
   #endif

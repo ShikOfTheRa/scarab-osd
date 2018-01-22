@@ -104,8 +104,18 @@
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
 
+
+
+
+
+
+
+
+
+
+
 /********************       OSD SCREEN SWITCH settings      *********************/
-#define OSD_SWITCH_RC               // Enables 3 way screen switch using a TX channel via FC. Specify channel on GUI (range 0-7 AUX1=4 AUX4=7)
+#define OSD_SWITCH_RC               // Enables 3 way screen switch using a TX channel via FC. Specify channel on GUI (range 1-16 AUX1=5 AUX4=8)
 #ifdef  OSD_SWITCH
   #undef OSD_SWITCH_RC
 #endif

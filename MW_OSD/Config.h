@@ -254,8 +254,8 @@
 
 /********************       Visual Vario / climbrate Settings         ************************/
 //#define VARIOALARM 150            // Enable this to for flashing climb rate warning. Value in cm/sec (if climb rate selected in layouts)
-//#define VARIOSTANDARD             // Enable this for single icon representation of vario
-#define VARIOENHANCED               // Enable this for multi line more accurate visual slider representation of vario. 4 provides +/- 4 rows of slider resolution
+//#define VARIOSTANDARD             // Enable this for single icon representation of vario. Less memory.
+#define VARIOENHANCED               // Enable this for multi line more accurate visual slider representation of vario. configurable from GUI
 
 /********************       Audio Vario / climbrate Settings         ************************/
 //#define AUDIOVARIO A3             // Enable this for audio vario on RSSI pin A3. Uses BARO data from FC or GPS
