@@ -985,7 +985,7 @@ void displayGPSAltitude(void){
       xx = GPS_altitude;          // Mt
 
     if (Settings[S_ALTITUDE_ALARM]>0){
-      if(((xx/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
+      if(((xx/100)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
         return;
     }
     formatDistance(xx,1,0,SYM_GPS_ALT);
@@ -1097,7 +1097,7 @@ void displayAltitude(void)
   if(!fieldIsVisible(MwAltitudePosition))
     return;
   if (Settings[S_ALTITUDE_ALARM]>0){
-    if(((altitude/10)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
+    if(((altitude/100)>=Settings[S_ALTITUDE_ALARM])&&(timer.Blink2hz))
       return;   
   }
   formatDistance(altitude,1,0,SYM_ALT);
