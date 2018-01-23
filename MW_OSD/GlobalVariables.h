@@ -1500,7 +1500,7 @@ const PROGMEM char * const menutitle_item[] =
 #ifdef MENU_RC
   configMsg20,
 #endif
-#ifdef MENU_RC_2
+#ifdef MENU_2RC
   configMsg130,
 #endif
 #ifdef MENU_INFO

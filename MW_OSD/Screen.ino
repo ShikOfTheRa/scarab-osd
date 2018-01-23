@@ -669,7 +669,7 @@ void displayVoltage(void)
     voltageMIN = voltage;
 
   if (Settings[S_AUTOCELL]){
-    uint8_t t_cells = (voltage / (CELL_VOLTS_MAX+2)) + 1; // Detect 3s > 8.7v, 4s > 13.2v, 5s > 17.5v, 6s > 20.8v
+    uint8_t t_cells = (voltage / (CELL_VOLTS_MAX+3)) + 1; // Detect 3s > 9.0v, 4s > 13.5v, 5s > 18.0v, 6s > 22.5v power up voltage
     if (t_cells > cells){
       cells++;
     }
@@ -1536,8 +1536,8 @@ void displayCursor(void)
     if(configPage==MENU_CURRENT)
     {  
       COL=3;
-      if (ROW==9) ROW=3;
-      if (ROW==4) ROW=10;
+      if (ROW==9) ROW=2;
+      if (ROW==3) ROW=10;
       cursorpos=(ROW+2)*30+10+6+6;
     }
 #endif
@@ -1554,8 +1554,8 @@ void displayCursor(void)
     if(configPage==MENU_ADVANCED)
     {  
       COL=3;
-      if (ROW==9) ROW=6;
-      if (ROW==7) ROW=10;
+      if (ROW==9) ROW=2;
+      if (ROW==3) ROW=10;
       cursorpos=(ROW+2)*30+10+6+6;
     }
 #endif
