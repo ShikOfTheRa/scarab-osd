@@ -369,12 +369,16 @@ void serialMAVreceive(uint8_t c)
   }
   else if (mav_state == MAV_HEADER_SEQ)
   {
-    if (c == MAV_SYS_ID) {
+#ifdef MAV_ALL
+      mav_state = MAV_HEADER_SYS;
+#else
+if (c == Settings[S_MAV_SYS_ID]) {
       mav_state = MAV_HEADER_SYS;
     }
     else {
       mav_state = MAV_IDLE;
     }
+#endif  
   }
   else if (mav_state == MAV_HEADER_SYS)
   {
