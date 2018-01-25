@@ -966,7 +966,7 @@ if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THR
       int8_t oldmenudir=constrain(menudir,-5,5);
       menudir=0;
 #ifndef NOSUMMARYTHROTTLERESET 
-      if(previousarmedstatus&&(MwRcData[THROTTLESTICK]>1300))
+      if(previousarmedstatus&&(MwRcData[THROTTLESTICK]>1600))
       {
 	// EXIT from SHOW STATISTICS AFTER DISARM (push throttle up)
 	waitStick = 2;

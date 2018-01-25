@@ -409,16 +409,24 @@ void displayMode(void)
          #else
            #define MAVMISSIONID 3
          #endif
-         if (mw_mav.mode==MAVMISSIONID){
-           xx = FindNull()+1;
+         if ((mw_mav.mode==MAVMISSIONID)&(GPS_waypoint_step>0)){
+//           xx = FindNull()+1;
            itoa(GPS_waypoint_step, screenBuffer, 10);
-           MAX7456_WriteString(screenBuffer,getPosition(ModePosition)+xx);
+        #ifdef TEXTMODE
+           MAX7456_WriteString(screenBuffer,getPosition(ModePosition) + 5 );
+        #else
+           MAX7456_WriteString(screenBuffer,getPosition(ModePosition) + 3);
+        #endif   
            xx = FindNull()+1;
-           uint16_t dist;
+           uint16_t dist=GPS_waypoint_dist;
            if(Settings[S_UNITSYSTEM])
              dist = GPS_waypoint_dist * 3.2808;           // mt to feet
            formatDistance(dist,1,2,0);
-           MAX7456_WriteString(screenBuffer,getPosition(ModePosition)+xx);
+        #ifdef TEXTMODE
+           MAX7456_WriteString(screenBuffer,getPosition(ModePosition) + 5 + xx);
+        #else
+           MAX7456_WriteString(screenBuffer,getPosition(ModePosition) + 3 + xx);
+        #endif   
          }
 #endif       
     }  

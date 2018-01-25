@@ -387,7 +387,13 @@ GPS_dop=10000;
       if(queuedMSPRequests == 0)
         queuedMSPRequests = modeMSPRequests;
       if (timer.GUI_active!=0){
+#ifdef INTRO_FC
         queuedMSPRequests&=REQ_MSP_FONT;
+        if (FC.verMajor==0)
+          queuedMSPRequests|=REQ_MSP_FC_VERSION;
+#else
+        queuedMSPRequests&=REQ_MSP_FONT|;
+#endif
       } 
   
       uint32_t req = queuedMSPRequests & -queuedMSPRequests;
@@ -905,7 +911,7 @@ void setMspRequests() {
     modeMSPRequests = 
       REQ_MSP_STATUS|
      #ifdef INTRO_FC
-      REQ_MSP_IDENT|
+      REQ_MSP_FC_VERSION|
      #endif 
      #ifdef DEBUGMW
       REQ_MSP_DEBUG|
@@ -1346,7 +1352,10 @@ void EEPROM_clear(){
     EEPROM.write(i, 0);
 }
 
-
+int16_t filter16u( int16_t filtered, int16_t raw, const byte k){
+  filtered+=(raw-filtered)/k; // note extreme values may overrun. 32 it if reuired.
+  return filtered;
+}
 
 #if defined USE_AIRSPEED_SENSOR
 void useairspeed(){

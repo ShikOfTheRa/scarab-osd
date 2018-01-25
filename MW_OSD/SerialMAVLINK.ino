@@ -123,6 +123,7 @@ void serialMAVCheck() {
 #ifdef DATA_MSP
   timer.MSP_active = DATA_MSP; // getting valid MAV on serial port
 #endif //DATA_MSP
+  int16_t t_MwVario; 
   int16_t MwHeading360;
   static uint8_t armedglitchprotect = 0;
   switch (mw_mav.message_cmd) {
@@ -223,7 +224,8 @@ void serialMAVCheck() {
       if (MwHeading360 > 180)
         MwHeading360 = MwHeading360 - 360;
       MwHeading   = MwHeading360;
-      MwVario = (int16_t)serialbufferfloat(12) * 100; // m/s-->cm/s
+      t_MwVario = (float)serialbufferfloat(12) * 100; // m/s-->cm/s
+      MwVario = filter16u(MwVario, t_MwVario, 10);
       if (((GPS_fix_HOME & 0x01) == 0) && (GPS_numSat >= MINSATFIX) && armed) {
         GPS_fix_HOME |= 0x01;
         GPS_altitude_home = GPS_altitude;
@@ -243,6 +245,7 @@ void serialMAVCheck() {
       GPS_ground_course = (serialBuffer[26] | (serialBuffer[27] << 8)) / 10;
       GPS_latitude = serialbufferint(8);
       GPS_longitude = serialbufferint(12);
+      GPS_dop = (int16_t)(serialBuffer[20] | serialBuffer[21] << 8);
       if ((GPS_fix > 2) && (GPS_numSat >= MINSATFIX)) {
         uint32_t dist;
         int32_t  dir;
@@ -287,8 +290,8 @@ void serialMAVCheck() {
       break;
 
     case MAVLINK_MSG_ID_MISSION_CURRENT:
-      // GPS_waypoint_step = (int16_t)(serialBuffer[0] | (serialBuffer[1] << 8));
-      GPS_waypoint_step = serialBuffer[0]; // just 256 values for now
+      GPS_waypoint_step = (int16_t)(serialBuffer[0] | (serialBuffer[1] << 8));
+      //GPS_waypoint_step = serialBuffer[0]; // just 256 values for now
       break;
     case MAVLINK_MSG_ID_SYS_STATUS:
       mode.stable = (1 << 1);
