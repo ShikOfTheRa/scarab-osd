@@ -281,8 +281,8 @@ void serialMAVCheck() {
       handleRawRC();
       break;
     case MAVLINK_MSG_ID_WIND: 
-      WIND_direction = (int16_t)(serialBuffer[0]) | (serialBuffer[1] << 8); // 0=>360 deg
-      WIND_speed     = (int16_t)(serialBuffer[2]) | (serialBuffer[3] << 8); // m/3
+      WIND_direction = (int16_t)serialbufferfloat(0); // 0=>360 deg
+      WIND_speed     = serialbufferfloat(4) * 27.7778); // km/h-->cm/s
       break;
 
     case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:

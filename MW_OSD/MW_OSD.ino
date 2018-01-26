@@ -234,11 +234,6 @@ void loop()
 //------------------------------------------------------------------------
 void loop()
 {
-#ifdef DEVELOPMENT                  // Developement pre-set test paramters only 
-GPS_fix=1;
-GPS_numSat=8;
-GPS_dop=10000;
-#endif  
 
 #if defined TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI 
   switch(Settings[S_TX_TYPE]) {
