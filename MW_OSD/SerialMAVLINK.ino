@@ -282,7 +282,7 @@ void serialMAVCheck() {
       break;
     case MAVLINK_MSG_ID_WIND: 
       WIND_direction = (int16_t)serialbufferfloat(0); // 0=>360 deg
-      WIND_speed     = serialbufferfloat(4) * 27.7778); // km/h-->cm/s
+      WIND_speed     = serialbufferfloat(4) * 27.7778; // km/h-->cm/s
       break;
 
     case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
