@@ -30,7 +30,7 @@
 //#define BOOTRESET          // Enables reset from default Atmega 328 bootloader address (instead of 0) 
 
 
-#define DEVELOPMENT               // For development set only 
+//#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
 
 //#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
@@ -891,12 +891,15 @@ enum {
   #undef FIXEDLOOP
 #endif
 
-#ifdef ALTERNATEDIVIDERS
-    #define DIVIDER1v1      0.0002      // Voltage divider for 1.1v reference.
-    #define DIVIDER5v       0.0005      // Voltage divider for 5v reference.
+#ifdef AEROMAX
+    #define DIVIDER1v1      0.000107      // Voltage divider for 1.1v reference.
+    #define DIVIDER5v       0.000475      // Voltage divider for 5v reference.
+#elif ALTERNATEDIVIDERS
+    #define DIVIDER1v1      0.0002        // Voltage divider for 1.1v reference.
+    #define DIVIDER5v       0.0005        // Voltage divider for 5v reference.
 #else
-    #define DIVIDER1v1      0.0001      // Voltage divider for 1.1v reference. Use 0.0001 default unless advised otherwise.
-    #define DIVIDER5v       0.00042      // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
+    #define DIVIDER1v1      0.0001        // Voltage divider for 1.1v reference. Use 0.0001 default unless advised otherwise.
+    #define DIVIDER5v       0.0005        // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
 #endif
 
 #ifdef I2C_UB_SUPPORT
