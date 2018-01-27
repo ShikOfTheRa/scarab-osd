@@ -425,6 +425,18 @@ if (c == Settings[S_MAV_SYS_ID]) {
         mav_magic = MAVLINK_MSG_ID_SYS_STATUS_MAGIC;
         mav_len = MAVLINK_MSG_ID_SYS_STATUS_LEN;
         break;
+      case  MAVLINK_MSG_ID_WIND:
+        mav_magic = MAVLINK_MSG_ID_WIND_MAGIC;
+        mav_len = MAVLINK_MSG_ID_WIND_LEN;
+        break;
+      case  MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
+        mav_magic = MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT_MAGIC;
+        mav_len = MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT_LEN;
+        break;
+      case  MAVLINK_MSG_ID_MISSION_CURRENT:
+        mav_magic = MAVLINK_MSG_ID_MISSION_CURRENT_MAGIC;
+        mav_len = MAVLINK_MSG_ID_MISSION_CURRENT_LEN;
+        break;
     }
     if ((mw_mav.message_length) == mav_len) { // too much data so reset check
       mav_state = MAV_HEADER_MSG;
