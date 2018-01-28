@@ -90,9 +90,9 @@
 #define INTRO_VERSION               "MWOSD R1.8 TEST" // Call the OSD something else if you prefer. 
 #undef MAPMODE
 #undef MENU_DEBUG
-#undef INTRO_FC                  // Enable to FC version at startup
-#undef DISPLAY_PR
-#undef SHOW_TEMPERATURE
+//#undef INTRO_FC                  // Enable to FC version at startup
+//#undef DISPLAY_PR
+//#undef SHOW_TEMPERATURE
 #endif
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
@@ -811,6 +811,7 @@ enum {
 #ifdef AEROMAX
     #define ATMEGASETHARDWAREPORTS DDRC &= B11110111;DDRD &= B11011111;
     #define INTD5     
+    #define AUDIOPIN 2
 #elif defined AIRBOTMICRO
     #undef VOLTAGEPIN
     #undef VIDVOLTAGEPIN

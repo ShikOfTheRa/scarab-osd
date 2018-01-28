@@ -6,7 +6,7 @@
   Modified by Shiki for MWOSD
 */
 
-/*
+
 uint8_t _pinMask = 0;         // Pin bitmask.
 volatile uint8_t *_pinOutput; // Output port register
 
@@ -43,21 +43,21 @@ void noNewTone(uint8_t pin) {
 ISR(TIMER1_COMPA_vect) { // Timer interrupt vector.
   *_pinOutput ^= _pinMask; // Toggle the pin state.
 }
-*/
+
 
 void AudioVarioUpdate()
 {
 #ifdef AUDIOVARIOSWITCH
   if(!fieldIsVisible(MwClimbRatePosition)){
-    noTone(KKAUDIOVARIO);
-//    noNewTone(KKAUDIOVARIO);
+//    noTone(KKAUDIOVARIO);
+    noNewTone(KKAUDIOVARIO);
     return;
   }
 #endif //AUDIOVARIOSWITCH
 #ifdef AUDIOVARIORC // no audio vario when throttle on
   if (MwRcData[THROTTLESTICK]> AUDIOVARIORC) {
-    noTone(KKAUDIOVARIO);
-//    noNewTone(KKAUDIOVARIO);
+//    noTone(KKAUDIOVARIO);
+    noNewTone(KKAUDIOVARIO);
     return; 
   }
 #endif //AUDIOVARIORC
@@ -75,13 +75,13 @@ void AudioVarioUpdate()
   
   if ((toneFreq < KKDEADBANDLOW) ||  ((toneFreq > KKDEADBANDHIGH)  && (ddsAcc > 0))) 
   {
-    tone(KKAUDIOVARIO, toneFreq + 510);  
-//    NewTone(KKAUDIOVARIO, toneFreq + 510, 0);  
+//    tone(KKAUDIOVARIO, toneFreq + 510);  
+    NewTone(KKAUDIOVARIO, toneFreq + 510, 0);  
   }
   else
   {
-    noTone(KKAUDIOVARIO);
-//    noNewTone(KKAUDIOVARIO);
+//    noTone(KKAUDIOVARIO);
+    noNewTone(KKAUDIOVARIO);
   }
 }
 
