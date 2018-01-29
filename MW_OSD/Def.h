@@ -943,6 +943,9 @@ enum {
 #undef  PROTOCOL_MSP
 #define FORCESENSORS
 #define NOSUMMARYTHROTTLERESET
+#ifndef TX_CHANNELS
+  #define TX_CHANNELS 16 
+#endif
 #endif
 
 #ifdef PROTOCOL_LTM
