@@ -63,7 +63,7 @@ void AudioVarioUpdate()
 #endif //AUDIOVARIORC
 
   
-  pressure = getPressure();
+  pressure = getPressure(); // try MwAltitude *0.01 for systems without pressure sensor. Only looking at relative change and 0.01mb is approx 10cm?
   lowpassFast = lowpassFast + (pressure - lowpassFast) * 0.1;
   lowpassSlow = lowpassSlow + (pressure - lowpassSlow) * 0.05;
   
@@ -72,6 +72,32 @@ void AudioVarioUpdate()
 
   toneFreq = constrain(toneFreqLowpass, -500, 500);
   ddsAcc += toneFreq * 100 + 2000;
+
+/*
+#define S_AUDVARIO_THCUT 1
+#define S_AUDVARIO_DEADBAND 1
+
+  uint8_t t_maketone=1;
+  
+  if (MwRcData[THROTTLESTICK]> AUDIOVARIORC) {
+    t_maketone=0;  
+  }
+  else if (Settings[S_AUDVARIO_DEADBAND]==0){
+  }
+  else if (toneFreq < -Settings[S_AUDVARIO_DEADBAND]){
+    toneFreq += Settings[S_AUDVARIO_DEADBAND];
+  }
+  else if (toneFreq > Settings[S_AUDVARIO_DEADBAND]){
+    toneFreq -= Settings[S_AUDVARIO_DEADBAND];  
+    if (ddsAcc<=0)
+      t_maketone=0;  
+  }
+  else{
+    t_maketone=0;
+  }  
+  if (t_maketone==0) 
+ */
+
   
   if ((toneFreq < KKDEADBANDLOW) ||  ((toneFreq > KKDEADBANDHIGH)  && (ddsAcc > 0))) 
   {
