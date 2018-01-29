@@ -261,7 +261,7 @@ void serialMAVCheck() {
       break;
     case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
       MwRssi = (uint16_t)(((102) * serialBuffer[21]) / 10);
-      for (uint8_t i = 0; i < 8; i++)
+      for (uint8_t i = 0; i < TX_CHANNELS; i++)
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
         #if defined (TX_GUI_CONTROL)
           reverseChannels();
@@ -273,7 +273,7 @@ void serialMAVCheck() {
       break;
     case MAVLINK_MSG_ID_RC_CHANNELS:
       MwRssi = (uint16_t)(((102) * serialBuffer[41]) / 10);
-      for (uint8_t i = 0; i < 8; i++)
+      for (uint8_t i = 0; i < TX_CHANNELS; i++)
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
         #ifdef MAV_ALT_THROTTLE
           MwRcData[THROTTLESTICK]=mw_mav.throttle;
