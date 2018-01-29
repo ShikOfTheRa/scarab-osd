@@ -73,13 +73,8 @@ void AudioVarioUpdate()
   toneFreq = constrain(toneFreqLowpass, -500, 500);
   ddsAcc += toneFreq * 100 + 2000;
 
-/*
-#define S_AUDVARIO_THCUT 1
-#define S_AUDVARIO_DEADBAND 1
-
-  uint8_t t_maketone=1;
-  
-  if (MwRcData[THROTTLESTICK]> AUDIOVARIORC) {
+  uint8_t t_maketone=1;  
+  if (MwRcData[THROTTLESTICK]> (20*Settings[S_AUDVARIO_TH_CUT])) { 
     t_maketone=0;  
   }
   else if (Settings[S_AUDVARIO_DEADBAND]==0){
@@ -95,18 +90,14 @@ void AudioVarioUpdate()
   else{
     t_maketone=0;
   }  
-  if (t_maketone==0) 
- */
-
   
-  if ((toneFreq < KKDEADBANDLOW) ||  ((toneFreq > KKDEADBANDHIGH)  && (ddsAcc > 0))) 
+//  if ((toneFreq < KKDEADBANDLOW) ||  ((toneFreq > KKDEADBANDHIGH)  && (ddsAcc > 0))) 
+  if (t_maketone==1) 
   {
-//    tone(KKAUDIOVARIO, toneFreq + 510);  
     NewTone(KKAUDIOVARIO, toneFreq + 510, 0);  
   }
   else
   {
-//    noTone(KKAUDIOVARIO);
     noNewTone(KKAUDIOVARIO);
   }
 }
