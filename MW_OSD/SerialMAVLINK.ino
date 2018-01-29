@@ -260,7 +260,7 @@ void serialMAVCheck() {
 
       break;
     case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
-      MwRssi = (uint16_t)(((103) * serialBuffer[21]) / 10);
+      MwRssi = (uint16_t)(((102) * serialBuffer[21]) / 10);
       for (uint8_t i = 0; i < 8; i++)
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
         #if defined (TX_GUI_CONTROL)
@@ -272,7 +272,7 @@ void serialMAVCheck() {
       handleRawRC();
       break;
     case MAVLINK_MSG_ID_RC_CHANNELS:
-      MwRssi = (uint16_t)(((103) * serialBuffer[41]) / 10);
+      MwRssi = (uint16_t)(((102) * serialBuffer[41]) / 10);
       for (uint8_t i = 0; i < 8; i++)
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
         #ifdef MAV_ALT_THROTTLE

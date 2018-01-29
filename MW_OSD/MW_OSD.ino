@@ -382,12 +382,10 @@ void loop()
       if(queuedMSPRequests == 0)
         queuedMSPRequests = modeMSPRequests;
       if (timer.GUI_active!=0){
-#ifdef INTRO_FC
         queuedMSPRequests&=REQ_MSP_FONT;
+#ifdef INTRO_FC
         if (FC.verMajor==0)
           queuedMSPRequests|=REQ_MSP_FC_VERSION;
-#else
-        queuedMSPRequests&=REQ_MSP_FONT|;
 #endif
       } 
   
@@ -905,9 +903,6 @@ void setMspRequests() {
   else {
     modeMSPRequests = 
       REQ_MSP_STATUS|
-     #ifdef INTRO_FC
-      REQ_MSP_FC_VERSION|
-     #endif 
      #ifdef DEBUGMW
       REQ_MSP_DEBUG|
      #endif
