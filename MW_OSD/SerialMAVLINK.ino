@@ -365,10 +365,10 @@ void serialMAVreceive(uint8_t c)
   {
     mw_mav.message_length = c;
     if (c >= SERIALBUFFERSIZE){
-      mav_state = MAV_HEADER_LEN;     
+      mav_state = MAV_IDLE;
     }
     else{
-      mav_state = MAV_IDLE;
+      mav_state = MAV_HEADER_LEN;     
     }
   }
   else if (mav_state == MAV_HEADER_LEN)
