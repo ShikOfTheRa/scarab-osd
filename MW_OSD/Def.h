@@ -228,7 +228,7 @@
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
   #define ENABLE_MSP_SAVE_ADVANCED
-  #define ACROPLUS
+  //#define ACROPLUS
 
   #define MENU_STAT
   #define MENU_PID
@@ -248,7 +248,7 @@
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
   #define ENABLE_MSP_SAVE_ADVANCED
-  #define ACROPLUS
+  //#define ACROPLUS
   #define CANVAS_SUPPORT
 
   #define MENU_STAT
