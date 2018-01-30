@@ -261,6 +261,20 @@ void serialMAVCheck() {
       break;
     case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
       MwRssi = (uint16_t)(((102) * serialBuffer[21]) / 10);
+
+#ifdef DEBUGDPOSMAVLINK  // DEBUG CODE  
+    for(uint16_t xx = 0; xx < MAX_screen_size; ++xx) {
+    screen[xx] = ' ';
+  }
+  MAX7456_WriteString("MAV DATA",DEBUGDPOSMAVLINK);
+  for(uint8_t id_row=0; id_row<=6; id_row++){
+    for(uint8_t id_col=0; id_col<=4; id_col++){
+      itoa(serialBuffer[(id_row*5)+(id_col)],screenBuffer,10);
+      MAX7456_WriteString(screenBuffer,DEBUGDPOSMAVLINK+5 + LINE + (id_row*LINE)+(id_col*3));
+    }
+  }
+#endif
+
       for (uint8_t i = 0; i < TX_CHANNELS; i++)
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
         #if defined (TX_GUI_CONTROL)
@@ -284,7 +298,14 @@ void serialMAVCheck() {
       WIND_direction = (int16_t)(360+MwHeading-serialbufferfloat(0)) % 360;
       WIND_speed     = serialbufferfloat(4) * 0.277778; // m/s=>kmh
       break;
-
+/*
+    case MAVLINK_MSG_ID_RADIO: 
+      MwRssi = (uint16_t)(((102) * serialBuffer[8]) / 10);
+      break;
+    case MAVLINK_MSG_ID_RADIO_STATUS: 
+      MwRssi = (uint16_t)(((102) * serialBuffer[4]) / 10);
+      break;
+*/
     case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
       GPS_waypoint_dist = (int16_t)(serialBuffer[24]) | (serialBuffer[25] << 8); 
       break;
@@ -442,6 +463,16 @@ if (c == Settings[S_MAV_SYS_ID]) {
         mav_magic = MAVLINK_MSG_ID_MISSION_CURRENT_MAGIC;
         mav_len = MAVLINK_MSG_ID_MISSION_CURRENT_LEN;
         break;
+/*        
+      case  MAVLINK_MSG_ID_RADIO:
+        mav_magic = MAVLINK_MSG_ID_RADIO_MAGIC;
+        mav_len = MAVLINK_MSG_ID_RADIO_LEN;
+        break;
+      case  MAVLINK_MSG_ID_RADIO_STATUS:
+        mav_magic = MAVLINK_MSG_ID_RADIO_STATUS_MAGIC;
+        mav_len = MAVLINK_MSG_ID_RADIO_STATUS_LEN;
+        break;
+*/
     }
     if ((mw_mav.message_length) == mav_len) { // too much data so reset check
       mav_state = MAV_HEADER_MSG;
