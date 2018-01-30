@@ -489,7 +489,7 @@ if (cmdMSP==MSP_STATUS)
       if(!(MwSensorPresent&MAGNETOMETER))
         MwHeading = GPS_ground_course/10;
     #elif defined (FIXEDWING)
-      if (Settings[S_USEGPSHEADING]>1)
+      if (Settings[S_USEGPSHEADING]>0)
         MwHeading = GPS_ground_course/10;
     #endif
     #ifdef HEADINGCORRECT
@@ -519,7 +519,7 @@ if (cmdMSP==MSP_STATUS)
       gpsvario();
     }     
    #elif defined (FIXEDWING)
-     if (Settings[S_USEGPSHEADING]>0){
+     if (Settings[S_USEGPSHEADING]>1){
        MwAltitude = (int32_t)GPS_altitude*100;
        gpsvario();
      }

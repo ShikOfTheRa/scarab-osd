@@ -401,7 +401,7 @@ void serialMAVreceive(uint8_t c)
 #ifdef MAV_ALL
       mav_state = MAV_HEADER_SYS;
 #else
-if (c == Settings[S_MAV_SYS_ID]) {
+    if (c == Settings[S_MAV_SYS_ID]) {
       mav_state = MAV_HEADER_SYS;
     }
     else {
@@ -474,17 +474,17 @@ if (c == Settings[S_MAV_SYS_ID]) {
         break;
 */
     }
-    if ((mw_mav.message_length) == mav_len) { // too much data so reset check
+    if ((mw_mav.message_length) == mav_len) { 
       mav_state = MAV_HEADER_MSG;
     }
-    else {
+    else { // invalid length so reset check
       mav_state = MAV_IDLE;
     }
   }
   else if (mav_state == MAV_HEADER_MSG)
   {
     serialBuffer[mav_payload_index] = c;
-    mav_payload_index++;
+    mav_payload_index++;      
     if (mav_payload_index == mw_mav.message_length) { // end of data
       mav_state = MAV_PAYLOAD;
     }
