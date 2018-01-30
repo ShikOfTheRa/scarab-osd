@@ -804,6 +804,7 @@ enum {
 #define LEDPIN        7
 #define RCPIN         5   // Aeromax hardware only      
 #define AUXPIN        A6  // Aeromax hardware only        
+#define AUDIOPIN      2   // Aeromax hardware only  
 #define INTC3             // Arduino A3 enabled for PWM/PPM interrupts) Arduino A3 == Atmega Port C bit 3 for PWM trigger on RSSI pin
 //#define INTD5           // Atmega Port D bit 5 PWM/PPM interrupts) Aeromax hardware used for RC input
 
@@ -811,7 +812,6 @@ enum {
 #ifdef AEROMAX
     #define ATMEGASETHARDWAREPORTS DDRC &= B11110111;DDRD &= B11011111;
     #define INTD5     
-    #define AUDIOPIN 2
 #elif defined AIRBOTMICRO
     #undef VOLTAGEPIN
     #undef VIDVOLTAGEPIN
@@ -989,6 +989,17 @@ enum {
 
 #ifdef PIOAUDIOVARIO // This is for travis build only
   #define AUDIOVARIO A3 // Enable AUDIOVARIO on RSSI
+#endif
+
+#ifdef PIOKKVARIO // This is for travis build only
+  #define KKAUDIOVARIO A3 // Enable KKAUDIOVARIO on RSSI
+#endif
+
+#ifdef PIOAUDIOVARIOAEROMAX // This is for travis build only
+#endif
+
+#ifdef PIOKKVARIOAEROMAX // This is for travis build only
+  #define KKAUDIOVARIO AUDIOPIN // Enable KKAUDIOVARIO on defined audio pin (AEROMAX hardware)
 #endif
 
 #ifdef PWM_THROTTLE
