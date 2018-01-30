@@ -996,6 +996,7 @@ enum {
 #endif
 
 #ifdef PIOAUDIOVARIOAEROMAX // This is for travis build only
+  #define AUDIOVARIO AUDIOPIN // Enable AUDIOVARIO on on defined audio pin (AEROMAX hardware)
 #endif
 
 #ifdef PIOKKVARIOAEROMAX // This is for travis build only
