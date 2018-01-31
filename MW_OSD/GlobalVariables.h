@@ -418,7 +418,7 @@ struct __mode {
 
 // Settings Locations
 enum Setting16_ {
-  S16_AMPMAXn,
+  S16_SPARE3,
   S16_AMPZERO,
   S16_AMPDIVIDERRATIO,
   S16_RSSIMIN,
@@ -515,7 +515,6 @@ uint16_t Settings16[EEPROM16_SETTINGS];
   #define DEF_S_RCWSWITCH 0
   #define DEF_S_RCWSWITCH_CH 8
 #endif
-
 
 // For Settings Defaults
 PROGMEM const uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {

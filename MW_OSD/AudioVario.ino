@@ -54,13 +54,6 @@ void AudioVarioUpdate()
     return;
   }
 #endif //AUDIOVARIOSWITCH
-#ifdef AUDIOVARIORC // no audio vario when throttle on
-  if (MwRcData[THROTTLESTICK]> AUDIOVARIORC) {
-//    noTone(KKAUDIOVARIO);
-    noNewTone(KKAUDIOVARIO);
-    return; 
-  }
-#endif //AUDIOVARIORC
 
   
   pressure = getPressure(); // try MwAltitude *0.01 for systems without pressure sensor. Only looking at relative change and 0.01mb is approx 10cm?

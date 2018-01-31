@@ -33,10 +33,10 @@
 
 // latest release...
 //#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
-//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.0 at time of this MWOSD release)
+//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.2.0 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-//#define APM                       // Uncomment this if you are using APM MAVLINK 1.0 compatible FC
-//#define PX4                       // Uncomment this if you are using PIXHAWK with PX4 stack
+//#define APM                       // Uncomment this if you are using Ardupilot or APM MAVLINK 1.0 compatible FC
+//#define PX4                       // Uncomment this if you are using PX4 stack
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
 //#define MULTIWII                  // Uncomment this if you are using latest 2.4 MULTIWII
 //#define MAHOWII                   // Uncomment this if you are using MAHOWII (https://github.com/mahowik/mahowii)
@@ -144,12 +144,10 @@
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
 // **ONLY** valid when using fixed wing
-#define USEGPSHEADING               // Enable this to force using GPS for heading data instead of MAG. NOTE!! MSP data FC only.  
-#define USEGPSALTITUDE              // Enable this to force using GPS for altitude data instead of BARO. NOTE!! MSP data FC only.
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
-//#define AUTOSENSEMAG              // Undefine this to force autodetect MAG (to use MAG or GPS data for heading. MSP data FC only. 
-//#define AUTOSENSEBARO             // Undefine this to force autodetect BARO(to use BARO or GPS data for altitude. MSP data FC only.  
-#define USEGLIDESCOPE               // Enables ILS glidescope
+//#define AUTOSENSEMAG              // Undefine this to force autodetect MAG (to use MAG or GPS data for heading - otherwise use GUI). MSP data FC only. 
+//#define AUTOSENSEBARO             // Undefine this to force autodetect BARO(to use BARO or GPS data for altitude - otherwise use GUI). MSP data FC only.  
+#define USEGLIDESCOPE               // Undefine if not used to save memory. ILS glidescope can be enabled / disabled on GUI.
 #define GLIDEANGLE  80              // ILS glidescope angle where 40 = 4.0° requires enabling in layouts. Auto enabled for FIXEDWING
 #define GLIDEWINDOW 40              // ILS glidescope angle where Window of 40 = 4.0° - 1.0 deg scope gradients, 80 =  2.0 deg scope gradients. Requires enabling in layouts. Auto enabled for FIXEDWING
 
@@ -165,7 +163,7 @@
 
 /******************** Mavlink settings *********************/
 //#define MAVLINKREQ                // Enable this for mavlink systems where the Mavlink data requires requesting. 
-#define MAV_COM_ID 1                // Component ID of MAV.
+#define MAV_COM_ID 1                // Component ID of MAV. Change if required. 
 //#define MAV_ALL                   // To act on data from all MAV SYSID in stream. NOT recommended. Specify ID in GUI. Default=1 upon reset.
 //#define MAV_ARMED                 // Forces OSD to be always armed (for when MAV does not send armed status in heartbeat).
 //#define MAV_RESET_HOME            // Resets home position when not armed. When enabled, note that RX glitch etc. could potentially reset home position.
@@ -192,7 +190,7 @@
 #define INTRO_MENU                  // Enable to display TX stick MENU 
 #define INTRO_CALLSIGN              // Enable to display callsign at startup
 #define INTRO_SIGNALTYPE            // Enable to display video type at startup
-#define INTRO_FC                    // Enable to FC version at startup
+#define INTRO_FC                    // Enable to display FC version at startup
 #define INTRO_DELAY 5               // Seconds intro screen should show for. Default is 5 
 //#define STARTUPDELAY 500          // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
 
@@ -231,6 +229,7 @@
 //#define INVERT_ROLL_SIGN          // Invert the sign of the displayed numeric value for the roll angle (ex: roll right = negative )
 //#define AHIINVERTSUPPORT          // Support for inverted flight. AHI flow terrain when inverted
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
+//#define SECONDARYAHI              // Enable to display secondary AHI lines
 #define AHIPITCHMAX 200             // Specify maximum AHI pitch value displayed. Default 200 = 20.0 degrees
 #define AHIROLLMAX  400             // Specify maximum AHI roll value displayed. Default 400 = 40.0 degrees 
 //#define AHIPITCHSCALE 100         // Specify scaling sensitvity for Pitch. Higher number = pitches more on OSD         
@@ -241,38 +240,40 @@
 //#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft. Auto enabled for FIXEDWING
 #define AIRMODE                     // Enable this to display airmode icon. 
 //#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
-#define MASKGPSLOCATION             // Enables MASK GPS settings on GUI. Coordinates displayed with major digits XXX set to random location "XXX.DDDDDDD" 
+#define MASKGPSLOCATION             // Disable to save memeory if not used. Enables MASK GPS settings on GUI. Coordinates displayed with major digits XXX set to random location "XXX.DDDDDDD" 
 //#define TEXTMODE                  // Enable to display the flyingmode as text instead of symbols
 //#define OSD_SWITCH                // Forces original 2 way multiwii screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
 //#define NOSUMMARYTHROTTLERESET    // Enable to supress summary display clearing from throttle
 
+
 /********************       Power / efficiency display Settings         ************************/
-#define DISPLAYWATTS                // Enable this to display Watts
-#define DISPLAYEFFICIENCY           // Enable this to display Watts/KMh or Mph for efficiency
-#define DISPLAYMAHMIN               // Enable this to display average mAh/minKMh
+#define DISPLAYWATTS                // Disable to save memeory if not used. Enable this to display Watts
+#define DISPLAYEFFICIENCY           // Disable to save memeory if not used. Enable this to display Watts/KMh or Mph for efficiency
+#define DISPLAYMAHMIN               // Disable to save memeory if not used. Enable this to display average mAh/minKMh
 
 
 /********************       Visual Vario / climbrate Settings         ************************/
-//#define VARIOALARM 150            // Enable this to for flashing climb rate warning. Value in cm/sec (if climb rate selected in layouts)
 //#define VARIOSTANDARD             // Enable this for single icon representation of vario. Less memory.
-#define VARIOENHANCED               // Enable this for multi line more accurate visual slider representation of vario. configurable from GUI
+#define VARIOENHANCED               // Enable this for multi line more accurate visual slider representation of vario. Configurable from GUI
 
-/********************       Audio Vario / climbrate Settings         ************************/
-//#define AUDIOVARIO A3             // Enable this for audio vario on RSSI pin A3. Uses BARO data from FC or GPS
-//#define AUDIOVARIORC 1200         // Enable this to disable audio vario for throttle values above 1200 uS
+/********************       FC BARO Audio Vario / climbrate Settings         ************************/
+// A basic Audio Vario using vario data from FC 
+// Uses simple circuit added to OSD
+// Wiki: https://github.com/ShikOfTheRa/scarab-osd/wiki/Audio-Vario
+//#define AUDIOVARIO A3             // Enable this for audio vario on Arduino pin XX. A3=RSSI. Use AUDIOPIN on AEROMAX 
+//#define AUDIOVARIOSWITCH          // Enable this to use screen layouts to enable/disable vario. If visual vario is displayed, the audio vario is on
 #define AUDIOVARIOTHRESHOLDCLIMB  10  // Threshold for climbing (cm/s)
 #define AUDIOVARIOTHRESHOLDSINK  -20  // Threshold for sinking  (cm/s) 
 #define AUDIOVARIOSILENTDEADBAND    // Enable for silent deadband otherwise will hear near thermal tone
-//#define AUDIOVARIOTYPE1           // Simple beep indicator (std AudioVario)
-#define AUDIOVARIOTYPE2             // Complex variable pulse / frequency / indicator  (std AudioVario)
 
 
 /********************       KK Audio Vario / climbrate Settings         ************************/
 // A highly accurate / sensitive Audio Vario from KapeteinKuk
-// Uses MS5611 pressure sensor connected by I2C
-// Only supported by VIRTUALPILOT AEROMAX hardware unless able to carry out very fine soldering  
-//#define KKAUDIOVARIO A3           // Enable this for audio vario on Arduino pin XX. AUDIOPIN on AEROMAX 
-//#define AUDIOVARIORC 1200         // Enable this to disable audio vario for throttle values above 1200 uS
+// Uses MS5611 pressure sensor connected by I2C and simple circuit added to OSD
+// Only supported by VIRTUALPILOT AEROMAX hardware unless able to carry out very fine soldering. Refer to links below 
+// Wiki:  https://github.com/ShikOfTheRa/scarab-osd/wiki/Audio-Vario
+// Hardware: https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/VIRTUALPILOT%20AEROMAX/VP%20AEROMAX%20with%20I2C%20BARO%20VARIO.jpg 
+//#define KKAUDIOVARIO A3           // Enable this for audio vario on Arduino pin XX. A3=RSSI. Use AUDIOPIN on AEROMAX 
 //#define AUDIOVARIOSWITCH          // Enable this to use screen layouts to enable/disable vario. If visual vario is displayed, the audio vario is on
 #define KKDEADBANDLOW  -25          // Deadband threshold for sinking (Set to -500 to disable sink tones). 0 for no deadband
 #define KKDEADBANDHIGH  15          // Deadband threshold for climbing. 0 for no deadband 
@@ -281,7 +282,7 @@
 /********************   RC TX Settings     *********************/
 // R=Roll, P=Pitch, Y=Yaw, T=Throttle
 //#define TX_MODE1                  // Enable this if wish to use cursor controls on same stick - for MODE 1 TX users
-//#define TX_CHANNELS 8             // Amend if require up to 16 RC channels (Only use for GPSOSD/NAZA/APM/PX4/MAVLINK)
+//#define TX_CHANNELS 8             // Amend if require up to 16 RC channels (APM/PX4/MAVLINK are 16 by default)
 //#define TX_PYTR                   // Enable for Robe/Hitec/Futaba (Only use for GPSOSD/NAZA/APM/PX4/MAVLINK)
 //#define TX_RPTY                   // Enable for Graupner/Spektrum (Only use for GPSOSD/NAZA/APM/PX4/MAVLINK)    
 //#define TX_RPYT                   // Enable for Multiplex (Only use for GPSOSD/NAZA/APM/PX4/MAVLINK)
@@ -311,8 +312,7 @@
 /********************       Voltage Warning Settings         ************************/
 //The following variables are available for adjustment of battery icon only 
 #define CELL_VOLTS_MIN 32           // Specify the cell voltage at which it is considered empty. Used for battery guage icon only
-#define CELL_VOLTS_MAX 42           // Specify the max normal LIPO cell voltage. USed for auto cell count determination andbattery guage icon
-
+#define CELL_VOLTS_MAX 42           // Specify the max normal LIPO cell voltage. Used for auto cell count determination and battery guage icon
 //#define FC_VOLTAGE_CONFIG         // Additionally uncomment this if you want to use the vbat voltage config with BASEFLIGHT, CLEANFLIGHT and BETAFLIGHT on the flight controller (include: min cell voltage, max cell voltage and warning cell voltage)
 
 

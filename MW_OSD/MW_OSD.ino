@@ -1213,11 +1213,6 @@ void ProcessSensors(void) {
 }
 
 
-void initPulseInts() { //RSSI/PWM/PPM int initialisation
-
-}
-
-
 #if defined INTC3
 ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
   static uint16_t PulseStart;
@@ -1234,7 +1229,7 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
   LastTime = CurrentTime;
   if (!(pinstatus & (1<<PWMPIN1))) { // measures low duration
     PulseDuration = CurrentTime-PulseStart; 
-    if ((850<PulseDuration) && (PulseDuration<2150)) {    
+    if ((950<PulseDuration) && (PulseDuration<2150)) {    
   #ifdef INTD5 // Aeromax Hardware so this must be PWMRSSI only
       pwmRSSI = PulseDuration;
   #else
@@ -1299,7 +1294,7 @@ ISR(PCINT2_vect) { // // Secondary Arduino D5 Atmega D5
   
   if (!(pinstatus & (1<<PWMPIN2))) { // measures low duration
     PulseDuration = CurrentTime-PulseStart; 
-    if ((750<PulseDuration) && (PulseDuration<2250)) {    
+    if ((950<PulseDuration) && (PulseDuration<2150)) {    
     #ifdef PPM_CONTROL
       PulseType=1;
     #endif

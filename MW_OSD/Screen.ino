@@ -584,12 +584,14 @@ if(MwSensorPresent&ACCELEROMETER)
         uint16_t pos = position -9 + LINE*(Y/9) + 3 - 4*LINE + X;
         if (pos < 480)
           screen[pos] = SYM_AH_BAR9_0+(Y%9);
+       #ifdef SECONDARYAHI
           if(X >= 4 && X <= 8) {
             if ((pos-3*LINE) < 480)
               screen[pos-3*LINE] = SYM_AH_BAR9_0+(Y%9);
             if ((pos+3*LINE) < 480)
               screen[pos+3*LINE] = SYM_AH_BAR9_0+(Y%9);
           }
+        #endif // SECONDARYAHI 
       }
     }
 #else //FULLAHI
@@ -1159,51 +1161,14 @@ void displayVario(void)
 //test when using non RSSI output
 //MwVario = map(rssi,0,100,-VARIOMAXCLIMB,VARIOMAXCLIMB); 
   
-  #ifdef AUDIOVARIORC // no audio vario when throttle on
-  if (MwRcData[THROTTLESTICK]> AUDIOVARIORC) {
-    return; 
+  if (MwRcData[THROTTLESTICK]> (20*Settings[S_AUDVARIO_TH_CUT])) { 
+    return;  
   }
-  #endif //AUDIOVARIORC
+#ifdef AUDIOVARIOSWITCH
+  if(!fieldIsVisible(MwClimbRatePosition))
+    return;
+#endif //AUDIOVARIOSWITCH
   
-#ifdef AUDIOVARIOTYPE1
-  #define AUDIOVARIOFREQ       800   // Climb tone Hz
-  #define AUDIOVARIOHZ         40    // 20cm/s = 1hz --> 200cm/s = 10hz
-  #define AUDIOVARIOMAXHZ      10    // Maximum hz for max climbrate
-  #define AUDIOVARIOMINHZ      1     // Minimum hz for min climbrate
-  #define AUDIOVARIOMAXCLIMB   200   // Maximum climb/sink rate
-  #define AUDIOVARIOMINFREQ    200   // Minimum audio frequency
-  #define AUDIOVARIOMAXFREQ    1600  // Maximum audio frequency
-
-  int16_t AudioVario    = constrain (MwVario,-AUDIOVARIOMAXCLIMB,AUDIOVARIOMAXCLIMB); 
-  int16_t ABSAudioVario = abs(AudioVario); 
-  int16_t lowhz         = map(ABSAudioVario, 0,AUDIOVARIOMAXCLIMB,1000/AUDIOVARIOMINHZ,1000/AUDIOVARIOMAXHZ);
-  AudioVario            = map(AudioVario, -AUDIOVARIOMAXCLIMB,AUDIOVARIOMAXCLIMB,AUDIOVARIOMINFREQ,AUDIOVARIOMAXFREQ);
-  AudioVario            = constrain (AudioVario,AUDIOVARIOMINFREQ,AUDIOVARIOMAXFREQ);
-
-  if (millis()>timer.vario){
-    timer.vario = millis()+lowhz;
-    flags.vario = !flags.vario;
-  }
-  if (flags.vario){
-    noTone(AUDIOVARIO);
-  }
-  else if (MwVario > AUDIOVARIOTHRESHOLDCLIMB){
-    tone(AUDIOVARIO, AudioVario);      
-  }
-  else if (MwVario < AUDIOVARIOTHRESHOLDSINK){
-    tone(AUDIOVARIO, AudioVario);  
-  }
-  else{
-   #ifdef AUDIOVARIOSILENTDEADBAND
-    noTone(AUDIOVARIO);
-   #else
-    tone(AUDIOVARIO, AudioVario);  
-   #endif // AUDIOVARIOSILENTDEADBAND
-  }
-#endif //AUDIOVARIOTYPE1
-
-#ifdef AUDIOVARIOTYPE2
-
   #define AUDIOVARIOMINFREQ    200  // Minimum audio frequency
   #define AUDIOVARIOMAXFREQ    1600 // Maximum audio frequency
   #define AUDIOVARIOMAXCLIMB   200  // Maximum climb/sink rate
@@ -1244,7 +1209,6 @@ void displayVario(void)
   else{
     noTone(AUDIOVARIO);
   } 
-#endif //AUDIOVARIOTYPE2
 #endif // AUDIOVARIO
 }
 
