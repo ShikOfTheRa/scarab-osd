@@ -1230,6 +1230,7 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
   if (!(pinstatus & (1<<PWMPIN1))) { // measures low duration
     PulseDuration = CurrentTime-PulseStart; 
     if ((950<PulseDuration) && (PulseDuration<2150)) {    
+      pwmval1=PulseDuration;
   #ifdef INTD5 // Aeromax Hardware so this must be PWMRSSI only
       pwmRSSI = PulseDuration;
   #else
@@ -1269,7 +1270,6 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
     #endif
     }
     RCchan++;
-    pwmval1=PulseDuration;
   } 
   else {
     PulseStart = CurrentTime;
@@ -1295,6 +1295,7 @@ ISR(PCINT2_vect) { // // Secondary Arduino D5 Atmega D5
   if (!(pinstatus & (1<<PWMPIN2))) { // measures low duration
     PulseDuration = CurrentTime-PulseStart; 
     if ((950<PulseDuration) && (PulseDuration<2150)) {    
+      pwmval2=PulseDuration;
     #ifdef PPM_CONTROL
       PulseType=1;
     #endif
@@ -1323,7 +1324,6 @@ ISR(PCINT2_vect) { // // Secondary Arduino D5 Atmega D5
       }
     }
     RCchan++;
-    pwmval2=PulseDuration;
   }  
   else {
     PulseStart = CurrentTime;
