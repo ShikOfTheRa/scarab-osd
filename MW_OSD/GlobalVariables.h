@@ -417,7 +417,6 @@ struct __mode {
 
 // Settings Locations
 enum Setting16_ {
-  S16_SPARE3,
   S16_AMPZERO,
   S16_AMPDIVIDERRATIO,
   S16_RSSIMIN,
