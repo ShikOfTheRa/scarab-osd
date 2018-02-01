@@ -584,17 +584,17 @@ if(MwSensorPresent&ACCELEROMETER)
         uint16_t pos = position -9 + LINE*(Y/9) + 3 - 4*LINE + X;
         if (pos < 480)
           screen[pos] = SYM_AH_BAR9_0+(Y%9);
-       #ifdef SECONDARYAHI
+       if (Settings[S_ELEVATIONS]){
           if(X >= 4 && X <= 8) {
             if ((pos-3*LINE) < 480)
               screen[pos-3*LINE] = SYM_AH_BAR9_0+(Y%9);
             if ((pos+3*LINE) < 480)
               screen[pos+3*LINE] = SYM_AH_BAR9_0+(Y%9);
           }
-        #endif // SECONDARYAHI 
+        }
       }
     }
-#else //FULLAHI
+#else //Normal AHI
     for(uint8_t X=0; X<=8; X++) {
       if (X==4) X=5;
       int Y = (rollAngle * (4-X)) / 64;
@@ -604,12 +604,14 @@ if(MwSensorPresent&ACCELEROMETER)
         uint16_t pos = position -7 + LINE*(Y/9) + 3 - 4*LINE + X;
         if (pos < 480)
           screen[pos] = SYM_AH_BAR9_0+(Y%9);
+       if (Settings[S_ELEVATIONS]){
           if(X >= 2 && X <= 6) {
             if ((pos-3*LINE) < 480)
               screen[pos-3*LINE] = SYM_AH_BAR9_0+(Y%9);
             if ((pos+3*LINE) < 480)
               screen[pos+3*LINE] = SYM_AH_BAR9_0+(Y%9);
           }
+        }
       }
     }
 #endif //FULLAHI

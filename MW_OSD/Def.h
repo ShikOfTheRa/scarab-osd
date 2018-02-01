@@ -421,7 +421,7 @@
 
 #if defined (MULTIWII_V24)
   #define AMPERAGE_DIV  1
-
+  #undef INTRO_FC
   #define MENU_STAT
   #define MENU_PID
   #define MENU_RC
@@ -432,9 +432,11 @@
   #define MENU_ADVANCED
   #define MENU_GPS_TIME
   #define MENU_ALARMS
+  
 #endif
 
 #if defined (MULTIWII_V23)
+  #undef INTRO_FC
   #define MENU_STAT
   #define MENU_PID
   #define MENU_RC
@@ -449,6 +451,7 @@
 
 #if defined (MULTIWII_V21)
   #define BOXNAMES              // required to support legacy protocol
+  #undef INTRO_FC
   #define MENU_STAT
   #define MENU_PID
   #define MENU_RC
@@ -462,6 +465,7 @@
 
 #if defined(TAULABS)
   #define AMPERAGE_DIV  10
+  #undef INTRO_FC
   #define HAS_ALARMS
   #define ACROPLUS
   #define MENU_STAT
@@ -476,6 +480,7 @@
 #endif
 
 #if defined(APM)
+  #undef INTRO_FC
   #define MENU_STAT
   #define MENU_VOLTAGE
   #define MENU_RSSI
@@ -488,6 +493,7 @@
 #endif
 
 #if defined(KISS)
+  #undef INTRO_FC
   #define MENU_STAT
   #define MENU_VOLTAGE
   #define MENU_RSSI
@@ -500,6 +506,7 @@
 #endif
 
 #ifdef SKYTRACK
+  #undef INTRO_FC
   #undef  INTRO_MENU
   #undef  ALARM_MSP
   #undef  ALARM_SATS
@@ -510,6 +517,7 @@
 #endif
 
 #ifdef NOCONTROLLER
+  #undef INTRO_FC
   #undef  INTRO_MENU
   #undef  ALARM_MSP
   #undef  ALARM_SATS
@@ -563,6 +571,7 @@
 #endif
 
 #if defined GPSOSD
+  #undef INTRO_FC
   #undef  INTRO_MENU
   #ifndef NAZA
     #undef  ALARM_MSP

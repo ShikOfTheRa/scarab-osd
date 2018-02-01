@@ -357,7 +357,6 @@ uint16_t I2CError;
 uint8_t oldROW=0;
 uint8_t cells=0;
 uint8_t rcswitch_ch=8;
-int8_t PulseType = 0; //0 PWM 1 PPM
 uint16_t pwmval1=0;
 uint16_t pwmval2=0;
 uint8_t debugtext=0;
@@ -488,6 +487,9 @@ S_SIDEBARWIDTH,
   S_CS7,
   S_CS8,
   S_CS9,
+S_PWM_PPM,
+S_ELEVATIONS,
+
   // EEPROM_SETTINGS must be last!
   EEPROM_SETTINGS
 };
@@ -581,11 +583,12 @@ DEF_S_RCWSWITCH,   // S_RCWSWITCH,
 0x20,   // S_CS7,
 0x20,   // S_CS8,
 0x20,   // S_CS9,
+0,      // S_PWM_PPM,
+0,      // S_ELEVATIONS,
 
 };
 
 PROGMEM const uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
-  0,// S16_SPARE3,
   0,// S16_AMPZERO,
   150,// S16_AMPDIVIDERRATIO,
   0,// S16_RSSIMIN,

@@ -1234,10 +1234,7 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
   #ifdef INTD5 // Aeromax Hardware so this must be PWMRSSI only
       pwmRSSI = PulseDuration;
   #else
-    #ifdef PPM_CONTROL
-      PulseType=1;
-    #endif
-      if (PulseType){ //PPM
+      if (Settings[S_PWM_PPM]){ //PPM
         if (RCchan<=TX_CHANNELS)// avoid array overflow if > standard ch PPM
           MwRcData[RCchan] = PulseDuration; // Val updated
         #if defined (TX_GUI_CONTROL)
@@ -1296,10 +1293,7 @@ ISR(PCINT2_vect) { // // Secondary Arduino D5 Atmega D5
     PulseDuration = CurrentTime-PulseStart; 
     if ((950<PulseDuration) && (PulseDuration<2150)) {    
       pwmval2=PulseDuration;
-    #ifdef PPM_CONTROL
-      PulseType=1;
-    #endif
-      if (PulseType){ //PPM
+      if (Settings[S_PWM_PPM]){ //PPM
         if (RCchan<=TX_CHANNELS)// avoid array overflow if > standard ch PPM
           MwRcData[RCchan] = PulseDuration; // Val updated
       }
