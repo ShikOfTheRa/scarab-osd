@@ -1,20 +1,17 @@
 
 ---
 
-Download the latest release of MW OSD here:-
+Pre-compiled binaries are now avail;able to flash from within the GUI
+
+The latest releases are available [here](https://github.com/ShikOfTheRa/scarab-osd/releases)
+
+---
+
+Historic releases of MW OSD are here:-
 
 **Release 1.7 - 10/03/2017 :**
 
 [MW OSD R1.7](https://drive.google.com/uc?export=download&id=0B2MInRUrbpWxa1ZmM3VDZENKVzA)
-
----
-
-[Go here for Beta releases of MWOSD](https://github.com/ShikOfTheRa/scarab-osd/releases)
-
----
----
-
-Historic releases of MW OSD are here:-
 
 **Release 1.6 - 08/03/2016 :**
 
