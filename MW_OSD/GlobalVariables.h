@@ -247,7 +247,6 @@ boolean ledstatus=HIGH;
 
 #ifdef KKAUDIOVARIO
 unsigned int calibrationData[7];
-unsigned long time = 0;
 float toneFreq, toneFreqLowpass, pressure, lowpassFast, lowpassSlow ;
 int ddsAcc;
 #endif

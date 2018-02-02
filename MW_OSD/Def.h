@@ -35,7 +35,7 @@
   #define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   #define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
   //#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
-  #define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
+  //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
   //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
   //#define APM
   //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
@@ -45,6 +45,8 @@
   //#define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
   //#define INTRO_DELAY 1             // To speed up startup
   #define DISPLAY_DEV 0xC000      // Use screen layout dev position - display all items...
+  #define KKAUDIOVARIO A3           // Enable this for audio vario on Arduino pin XX. A3=RSSI. Use AUDIOPIN on AEROMAX 
+
 #endif
 
 //#define GPSTEST
@@ -61,49 +63,14 @@
 
 #endif
 
-
 //#define SCHLONG                   // Test for Schalonsus 
 #ifdef SCHLONG                      
-//#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
-#define iNAV
-#define FIXEDWING     
-#define HORIZON
-#define FILTER_AVG
-#define ALARM_SATS 
-#define ALARM_GPS 5
-#define ALARM_MSP 3
-#define USEBAROALTITUDE
-#define USE_VSYNC
-#define DECIMAL '.'
-#define ALT_CENTER
-#define FORCECROSSHAIR
-#define MINSUMMARY
-#define NOTHROTTLESPACE
-#define APINDICATOR
-#define DISPLAYEFFICIENCY 
-#define DISPLAYVARIO
-#define KKAUDIOVARIO A3 
-#define AUDIOVARIORC 1200
-#define BATTERYICONVOLTS
-#define SHOW_TOTAL_DISTANCE
-#define INTRO_VERSION               "MWOSD R1.8 TEST" // Call the OSD something else if you prefer. 
-#undef MAPMODE
-#undef MENU_DEBUG
-//#undef INTRO_FC                  // Enable to FC version at startup
-//#undef DISPLAY_PR
-//#undef SHOW_TEMPERATURE
+  #define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+  #define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
+  #define iNAV_KK                   // Uncomment this if you are using AEROMAX OSD and BARO sensor addition with iNAV with KK audio vario
 #endif
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
-
-
-
-
-
-
-
-
-
 
 
 /********************       OSD SCREEN SWITCH settings      *********************/
@@ -173,6 +140,19 @@
 
 #ifdef iNAV    //set up latest at time of release
 //  #define iNAV
+#endif
+
+#ifdef iNAV_KK // iNAV with KK VARIO
+  #define iNAV
+  #define KKAUDIOVARIO AUDIOPIN     // Enable this for audio vario. AUDIOPIN = D2 on AEROMAX hardware. Alternatively use A3 (RSSI) with other hardware  
+  #undef MAPMODE
+  #undef MENU_DEBUG
+//  #undef DISPLAY_PR
+//  #undef SHOW_TEMPERATURE
+//  #undef INTRO_MENU                  // Enable to display TX stick MENU 
+//  #undef INTRO_CALLSIGN              // Enable to display callsign at startup
+//  #undef INTRO_SIGNALTYPE            // Enable to display video type at startup
+//  #undef INTRO_FC                    // Enable to display FC version at startup
 #endif
 
 #ifdef BASEFLIGHT     //set up latest at time of release
@@ -527,6 +507,10 @@
   #define MENU_STAT
 #endif
 
+#if defined GPSOSD_UBLOX_KK
+  #define UBLOX
+  #define KKAUDIOVARIO AUDIOPIN     // Enable this for audio vario. AUDIOPIN = D2 on AEROMAX hardware. Alternatively use A3 (RSSI) with other hardware  
+#endif
 #if defined GPSOSD_UBLOX
   #define UBLOX
 #endif

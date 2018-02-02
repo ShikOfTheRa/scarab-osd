@@ -35,6 +35,7 @@
 //#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.2.0 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
+//#define iNAV_KK                   // Uncomment this if you are using AEROMAX OSD and BARO sensor addition with iNAV with KK audio vario
 //#define APM                       // Uncomment this if you are using Ardupilot or APM MAVLINK 1.0 compatible FC
 //#define PX4                       // Uncomment this if you are using PX4 stack
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
@@ -51,6 +52,7 @@
 //#define RACEFLIGHT                // Uncomment this if you are using RACEFLIGHT - untested. Test and feedback required
 //#define SKYTRACK                  // Under development
 //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+//#define GPSOSD_UBLOX_KK           // Uncomment this if you are using AEROMAX OSD and BARO sensor addition with UBLOX GPS module and KK audio vario
 //#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
 //#define GPSOSD_MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
 //#define NOCONTROLLER              // Uncomment this if you have nothing connected to the serial port - no controller or GPS module
@@ -260,11 +262,11 @@
 // A basic Audio Vario using vario data from FC 
 // Uses simple circuit added to OSD
 // Wiki: https://github.com/ShikOfTheRa/scarab-osd/wiki/Audio-Vario
-//#define AUDIOVARIO A3             // Enable this for audio vario on Arduino pin XX. A3=RSSI. Use AUDIOPIN on AEROMAX 
-//#define AUDIOVARIOSWITCH          // Enable this to use screen layouts to enable/disable vario. If visual vario is displayed, the audio vario is on
+//#define AUDIOVARIO AUDIOPIN         // Enable this for audio vario. AUDIOPIN = D2 on AEROMAX hardware. Alternatively use A3 (RSSI) with other hardware  
+//#define AUDIOVARIOSWITCH            // Enable this to use screen layouts to enable/disable vario. If visual vario is displayed, the audio vario is on
 #define AUDIOVARIOTHRESHOLDCLIMB  10  // Threshold for climbing (cm/s)
 #define AUDIOVARIOTHRESHOLDSINK  -20  // Threshold for sinking  (cm/s) 
-#define AUDIOVARIOSILENTDEADBAND    // Enable for silent deadband otherwise will hear near thermal tone
+#define AUDIOVARIOSILENTDEADBAND      // Enable for silent deadband otherwise will hear near thermal tone
 
 
 /********************       KK Audio Vario / climbrate Settings         ************************/
@@ -273,7 +275,7 @@
 // Only supported by VIRTUALPILOT AEROMAX hardware unless able to carry out very fine soldering. Refer to links below 
 // Wiki:  https://github.com/ShikOfTheRa/scarab-osd/wiki/Audio-Vario
 // Hardware: https://github.com/ShikOfTheRa/scarab-osd/blob/master/OTHER/DOCUMENTATION/VIRTUALPILOT%20AEROMAX/VP%20AEROMAX%20with%20I2C%20BARO%20VARIO.jpg 
-//#define KKAUDIOVARIO A3           // Enable this for audio vario on Arduino pin XX. A3=RSSI. Use AUDIOPIN on AEROMAX 
+//#define KKAUDIOVARIO AUDIOPIN     // Enable this for audio vario. AUDIOPIN = D2 on AEROMAX hardware. Alternatively use A3 (RSSI) with other hardware  
 //#define AUDIOVARIOSWITCH          // Enable this to use screen layouts to enable/disable vario. If visual vario is displayed, the audio vario is on
 #define KKDEADBANDLOW  -25          // Deadband threshold for sinking (Set to -500 to disable sink tones). 0 for no deadband
 #define KKDEADBANDHIGH  15          // Deadband threshold for climbing. 0 for no deadband 
