@@ -49,13 +49,13 @@ void AudioVarioUpdate()
 {
 #ifdef AUDIOVARIOSWITCH
   if(!fieldIsVisible(MwClimbRatePosition)){
-//    noTone(KKAUDIOVARIO);
     noNewTone(KKAUDIOVARIO);
     return;
   }
 #endif //AUDIOVARIOSWITCH
   
-  pressure = getPressure(); // try MwAltitude *0.01 for systems without pressure sensor. Only looking at relative change and 0.01mb is approx 10cm?
+  pressure = getPressure(); 
+  //pressure = -MwAltitude/100; // try MwAltitude *0.01 for systems without pressure sensor. Only looking at relative change and 0.01mb is approx 10cm?
   lowpassFast = lowpassFast + (pressure - lowpassFast) * 0.1;
   lowpassSlow = lowpassSlow + (pressure - lowpassSlow) * 0.05;
   
@@ -65,15 +65,11 @@ void AudioVarioUpdate()
   toneFreq = constrain(toneFreqLowpass, -500, 500);
   ddsAcc += toneFreq * 100 + 2000;
   uint8_t t_maketone=1;  
-  if (MwRcData[THROTTLESTICK]/100>(Settings[S_AUDVARIO_TH_CUT])) { 
-    t_maketone=0;  
-  }
-  if (Settings[S_AUDVARIO_DEADBAND]==0){
-  }
-  else if (toneFreq < -Settings[S_AUDVARIO_DEADBAND]){
+
+  if (toneFreq <= -Settings[S_AUDVARIO_DEADBAND]){
     toneFreq += Settings[S_AUDVARIO_DEADBAND];
   }
-  else if (toneFreq > Settings[S_AUDVARIO_DEADBAND]){
+  else if (toneFreq >= Settings[S_AUDVARIO_DEADBAND]){
     toneFreq -= Settings[S_AUDVARIO_DEADBAND];  
     if (ddsAcc<=0)
       t_maketone=0;  
@@ -81,6 +77,11 @@ void AudioVarioUpdate()
   else{
     t_maketone=0;
   }  
+   
+  if (MwRcData[THROTTLESTICK]/100>(Settings[S_AUDVARIO_TH_CUT])) { 
+    t_maketone=0;  
+  }
+
   if (t_maketone==1) 
   {
     NewTone(KKAUDIOVARIO, toneFreq + 510, 0);  
