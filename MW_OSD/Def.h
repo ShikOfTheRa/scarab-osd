@@ -63,7 +63,7 @@
 
 #endif
 
-#define SCHLONG                   // Test for Schalonsus 
+//#define SCHLONG                   // Test for Schalonsus 
 #ifdef SCHLONG                      
   #define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   #define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
