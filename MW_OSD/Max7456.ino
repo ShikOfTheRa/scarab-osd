@@ -93,7 +93,7 @@
 uint16_t MAX_screen_size;
 
 // Goods for tidiness
-#define VIDEO_MODE (Settings[S_VIDEOSIGNALTYPE] ? VIDEO_MODE_PAL : VIDEO_MODE_NTSC)
+#define VIDEO_MODE (flags.signaltype ? VIDEO_MODE_PAL : VIDEO_MODE_NTSC)
 
 uint8_t detectedCamType = 0;
 
@@ -175,33 +175,35 @@ void MAX7456Setup(void)
 
 #ifdef AUTOCAM 
   uint8_t srdata;
-
-  delay(1000/10); // Extra delay for input sync detection. 4 frames
-
+  delay(1000/10);                  // Extra delay for input sync detection. 4 frames
+  flags.signalauto = 2;            // default - not detected
+  flags.signaltype = 0;            // default - NTSC    
   spi_transfer(MAX7456ADD_STAT);
   srdata = spi_transfer(0xFF); 
   srdata &= B00000011;
-  if (srdata == B00000001){      // PAL
-    Settings[S_VIDEOSIGNALTYPE]=1; 
-    flags.signaltype = 1;
-  }
-  else if (srdata == B00000010){ // NTSC
-    Settings[S_VIDEOSIGNALTYPE]=0;
-    flags.signaltype = 0;
+  detectedCamType = srdata;
+  if (Settings[S_VIDEOSIGNALTYPE]>1){
+    if (srdata == B00000001){      // PAL
+      flags.signaltype = 1; 
+      flags.signalauto = 1; 
+    }
+    else if (srdata == B00000010){ // NTSC
+      flags.signalauto = 0; 
+    }
   }
   else{
-    flags.signaltype = 2 + Settings[S_VIDEOSIGNALTYPE]; // NOT DETECTED    
+    flags.signaltype = Settings[S_VIDEOSIGNALTYPE];
+    flags.signalauto = flags.signaltype; 
   }
-  detectedCamType = srdata;
-#else
-  flags.signaltype = Settings[S_VIDEOSIGNALTYPE];
+#else 
+    flags.signaltype = Settings[S_VIDEOSIGNALTYPE];
 #endif //AUTOCAM
-  if(Settings[S_VIDEOSIGNALTYPE]) {   // PAL
+  if(flags.signaltype==1) {        // PAL
     MAX7456_reset = 0x4C;
     MAX_screen_size = 480;
     MAX_screen_rows = 16;
   }
-  else {                              // NTSC
+  else {                           // NTSC
     MAX_screen_size = 390;
     MAX_screen_rows=13;
   }
@@ -228,6 +230,8 @@ void MAX7456Setup(void)
   }
 #endif
 // readEEPROM_screenlayout();
+  readEEPROM();
+
 }
 
 // Copy string from ram into screen buffer

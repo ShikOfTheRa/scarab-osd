@@ -283,6 +283,7 @@ struct __flags {
   uint8_t box;
   uint8_t reset;
   uint8_t signaltype;
+  uint8_t signalauto;
   uint8_t vario;  
 }
 flags;
@@ -1077,7 +1078,6 @@ const PROGMEM char * const signal_type[] =
 {   
   signaltext0,
   signaltext1,
-  signaltext2,
   signaltext2,
 };
 #elif AUTOCAMFULL // FOr testing

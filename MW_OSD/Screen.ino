@@ -895,7 +895,7 @@ void displayIntro(void)
   displayCallsign(64+(30*6)+4);
 #endif
 #ifdef INTRO_SIGNALTYPE
-  MAX7456_WriteString_P(PGMSTR(&(signal_type[flags.signaltype])), 64+(30*7)+4);
+  MAX7456_WriteString_P(PGMSTR(&(signal_type[flags.signalauto])), 64+(30*7)+4);
 #endif
 #ifdef INTRO_FC
   itoa(FC.verMajor,screenBuffer,10);
