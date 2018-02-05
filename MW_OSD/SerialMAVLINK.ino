@@ -259,23 +259,12 @@ void serialMAVCheck() {
       }
 
       break;
+
     case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
       MwRssi = (uint16_t)(((102) * serialBuffer[21]) / 10);
-
-#ifdef DEBUGDPOSMAVLINK  // DEBUG CODE  
-    for(uint16_t xx = 0; xx < MAX_screen_size; ++xx) {
-    screen[xx] = ' ';
-  }
-  MAX7456_WriteString("MAV DATA",DEBUGDPOSMAVLINK);
-  for(uint8_t id_row=0; id_row<=6; id_row++){
-    for(uint8_t id_col=0; id_col<=4; id_col++){
-      itoa(serialBuffer[(id_row*5)+(id_col)],screenBuffer,10);
-      MAX7456_WriteString(screenBuffer,DEBUGDPOSMAVLINK+5 + LINE + (id_row*LINE)+(id_col*3));
-    }
-  }
-#endif
-
-      for (uint8_t i = 0; i < TX_CHANNELS; i++)
+      if (serialBuffer[20]!=0)
+        break;
+      for (uint8_t i = 0; i < 8; i++)
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
         #if defined (TX_GUI_CONTROL)
           reverseChannels();
@@ -289,6 +278,9 @@ void serialMAVCheck() {
       MwRssi = (uint16_t)(((102) * serialBuffer[41]) / 10);
       for (uint8_t i = 0; i < TX_CHANNELS; i++)
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
+        #if defined (TX_GUI_CONTROL)
+          reverseChannels();
+        #endif // TX_PRYT
         #ifdef MAV_ALT_THROTTLE
           MwRcData[THROTTLESTICK]=mw_mav.throttle;
         #endif // MAV_ALT_THROTTLE
@@ -298,6 +290,8 @@ void serialMAVCheck() {
       WIND_direction = (int16_t)(360+MwHeading-serialbufferfloat(0)) % 360;
       WIND_speed     = serialbufferfloat(4) * 0.277778; // m/s=>kmh
       break;
+
+      
 /*
     case MAVLINK_MSG_ID_RADIO: 
       MwRssi = (uint16_t)(((102) * serialBuffer[8]) / 10);
