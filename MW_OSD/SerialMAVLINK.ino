@@ -289,9 +289,7 @@ void serialMAVCheck() {
     case MAVLINK_MSG_ID_WIND: 
       WIND_direction = (int16_t)(360+MwHeading-serialbufferfloat(0)) % 360;
       WIND_speed     = serialbufferfloat(4) * 0.277778; // m/s=>kmh
-      break;
-
-      
+      break;     
 /*
     case MAVLINK_MSG_ID_RADIO: 
       MwRssi = (uint16_t)(((102) * serialBuffer[8]) / 10);
@@ -300,10 +298,13 @@ void serialMAVCheck() {
       MwRssi = (uint16_t)(((102) * serialBuffer[4]) / 10);
       break;
 */
+    case MAVLINK_MSG_ID_SCALED_PRESSURE:
+    case MAVLINK_MSG_ID_SCALED_PRESSURE2:
+      temperature = (int16_t)serialbufferint(12)/100;
+      break;
     case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
       GPS_waypoint_dist = (int16_t)(serialBuffer[24]) | (serialBuffer[25] << 8); 
       break;
-
     case MAVLINK_MSG_ID_MISSION_CURRENT:
       GPS_waypoint_step = (int16_t)(serialBuffer[0] | (serialBuffer[1] << 8));
       //GPS_waypoint_step = serialBuffer[0]; // just 256 values for now
@@ -456,6 +457,14 @@ void serialMAVreceive(uint8_t c)
       case  MAVLINK_MSG_ID_MISSION_CURRENT:
         mav_magic = MAVLINK_MSG_ID_MISSION_CURRENT_MAGIC;
         mav_len = MAVLINK_MSG_ID_MISSION_CURRENT_LEN;
+        break;
+      case  MAVLINK_MSG_ID_SCALED_PRESSURE:
+        mav_magic = MAVLINK_MSG_ID_SCALED_PRESSURE_MAGIC;
+        mav_len = MAVLINK_MSG_ID_SCALED_PRESSURE_LEN;
+        break;
+      case  MAVLINK_MSG_ID_SCALED_PRESSURE2:
+        mav_magic = MAVLINK_MSG_ID_SCALED_PRESSURE2_MAGIC;
+        mav_len = MAVLINK_MSG_ID_SCALED_PRESSURE2_LEN;
         break;
 /*        
       case  MAVLINK_MSG_ID_RADIO:

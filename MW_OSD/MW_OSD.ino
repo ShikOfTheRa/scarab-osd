@@ -1163,8 +1163,10 @@ void ProcessSensors(void) {
 
 //-------------- Temperature
 #ifdef SHOW_TEMPERATURE
+  #ifndef PROTOCOL_MAVLINK
     temperature=sensorfilter[3][SENSORFILTERSIZE]>>3-TEMPZERO;
     temperature = map (temperature, TEMPZERO, 1024, 0 , TEMPMAX);
+  #endif  
 #endif
 
 //-------------- Current
