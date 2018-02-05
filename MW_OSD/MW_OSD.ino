@@ -1098,6 +1098,13 @@ void ProcessSensors(void) {
         sensortemp=MwVBat;
       }
     }
+#ifdef PROTOCOL_MAVLINK // assume vbat2 on FC if vbat1 is
+    if (sensor ==1) { 
+      if (Settings[S_MAINVOLTAGE_VBAT]){
+        sensortemp=MwVBat2;
+      }
+    }
+#endif    
     //--- override with PWM, FC RC CH or FC RSSI data if enabled    
     if (sensor ==4) { 
       if (Settings[S_MWRSSI]==3) { // RSSI from a TX channel

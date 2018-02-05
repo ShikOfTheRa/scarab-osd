@@ -747,6 +747,7 @@ int16_t sensorfilter[SENSORTOTAL][SENSORFILTERSIZE+2];
 uint16_t  MwSensorPresent=0;
 uint32_t  MwSensorActive=0;
 uint8_t MwVBat=0;
+uint8_t MwVBat2=0;
 int16_t MwVario=0;
 uint8_t armed=0;
 uint8_t previousarmedstatus=0;  // for statistics after disarming
@@ -1652,14 +1653,15 @@ const PROGMEM char * const msp_mode_index[] =
 #define MAVLINK_MSG_ID_RADIO 166
 #define MAVLINK_MSG_ID_RADIO_MAGIC 21
 #define MAVLINK_MSG_ID_RADIO_LEN 9 
-
 #define MAVLINK_MSG_ID_SCALED_PRESSURE 29
 #define MAVLINK_MSG_ID_SCALED_PRESSURE_MAGIC 115
 #define MAVLINK_MSG_ID_SCALED_PRESSURE_LEN 14 
 #define MAVLINK_MSG_ID_SCALED_PRESSURE2 137
 #define MAVLINK_MSG_ID_SCALED_PRESSURE2_MAGIC 14
 #define MAVLINK_MSG_ID_SCALED_PRESSURE2_LEN 195 
-
+#define MAVLINK_MSG_ID_BATTERY2 181
+#define MAVLINK_MSG_ID_BATTERY2_MAGIC 174
+#define MAVLINK_MSG_ID_BATTERY2_LEN 4 
 
 #define MAV_DATA_STREAM_RAW_SENSORS 1
 #define MAV_DATA_STREAM_EXTENDED_STATUS 2
@@ -1667,6 +1669,7 @@ const PROGMEM char * const msp_mode_index[] =
 #define MAV_DATA_STREAM_POSITION 6
 #define MAV_DATA_STREAM_EXTRA1 10
 #define MAV_DATA_STREAM_EXTRA2 11
+
 #define  LAT  0
 #define  LON  1
 

@@ -302,6 +302,9 @@ void serialMAVCheck() {
     case MAVLINK_MSG_ID_SCALED_PRESSURE2:
       temperature = (int16_t)serialbufferint(12)/100;
       break;
+    case MAVLINK_MSG_ID_BATTERY2:
+      MwVBat2 = (int16_t)serialbufferint(0)/100;
+      break;    
     case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
       GPS_waypoint_dist = (int16_t)(serialBuffer[24]) | (serialBuffer[25] << 8); 
       break;
@@ -466,6 +469,11 @@ void serialMAVreceive(uint8_t c)
         mav_magic = MAVLINK_MSG_ID_SCALED_PRESSURE2_MAGIC;
         mav_len = MAVLINK_MSG_ID_SCALED_PRESSURE2_LEN;
         break;
+      case  MAVLINK_MSG_ID_BATTERY2:
+        mav_magic = MAVLINK_MSG_ID_BATTERY2_MAGIC;
+        mav_len = MAVLINK_MSG_ID_BATTERY2_LEN;
+        break;
+        
 /*        
       case  MAVLINK_MSG_ID_RADIO:
         mav_magic = MAVLINK_MSG_ID_RADIO_MAGIC;
