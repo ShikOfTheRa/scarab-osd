@@ -285,7 +285,7 @@ void displayMode(void)
     screenBuffer[xx] =0;
     screenBuffer[0] = SYM_GHOME;
     screenBuffer[1] = SYM_GHOME1;
-    screenBuffer[2] = SYM_COLON;
+    screenBuffer[2] = SYM_DASH;
     screenBuffer[8]=0;
     #endif
   }
@@ -401,36 +401,47 @@ void displayMode(void)
 #endif //PROTOCOL_MAVLINK/KISS/LTM
      if(fieldIsVisible(ModePosition)){
        MAX7456_WriteString(screenBuffer,getPosition(ModePosition));
-       #ifdef PROTOCOL_MAVLINK
-         #if defined PX4 // within MAVLINK
-           #define MAVMISSIONID 5
-         #elif defined FIXEDWING // within MAVLINK
-           #define MAVMISSIONID 10
-         #else
-           #define MAVMISSIONID 3
-         #endif
-         if ((mw_mav.mode==MAVMISSIONID)&(GPS_waypoint_step>0)){
-           xx = FindNull()+1;
-           itoa(GPS_waypoint_step, screenBuffer, 10);
-           MAX7456_WriteString(screenBuffer,getPosition(ModePosition) + xx );
-           xx += FindNull()+1;
-           uint16_t dist=GPS_waypoint_dist;
-           if(Settings[S_UNITSYSTEM])
-             dist = GPS_waypoint_dist * 3.2808;           // mt to feet
-           formatDistance(dist,1,2,0);
-           MAX7456_WriteString(screenBuffer,getPosition(ModePosition) + xx);
-         }
-      #endif // PROTOCOL_MAVLINK     
     }  
 
 
 
 #ifdef APINDICATOR
-  if(timer.Blink2hz)
-    return;
   if(!fieldIsVisible(APstatusPosition))
     return;
   uint8_t apactive=0;
+ #ifdef PROTOCOL_MAVLINK
+   #if defined PX4 // within MAVLINK
+     #define MAVMISSIONID 5
+     #define MAVRTLID 6
+   #elif defined FIXEDWING // within MAVLINK
+     #define MAVMISSIONID 10
+     #define MAVRTLID 11
+   #else
+     #define MAVMISSIONID 3
+     #define MAVRTLID 6
+   #endif
+  if (mw_mav.mode==MAVRTLID){ // RTL
+    apactive=2;
+    MAX7456_WriteString_P(PGMSTR(&(message_text[apactive])),getPosition(APstatusPosition));
+  }
+  else if ((mw_mav.mode==MAVMISSIONID)&(GPS_waypoint_step>0)) // Mission
+    apactive=4;
+    if ((mw_mav.mode==MAVMISSIONID)&(GPS_waypoint_step>0)){
+      screenBuffer[0]=0x57;
+      screenBuffer[1]=0x50;
+      screenBuffer[2]= SYM_COLON;
+      itoa(GPS_waypoint_step, screenBuffer + 3, 10);
+      MAX7456_WriteString(screenBuffer,getPosition(APstatusPosition));
+      xx = FindNull()+1;
+      uint16_t dist=GPS_waypoint_dist;
+      if(Settings[S_UNITSYSTEM])
+        dist = GPS_waypoint_dist * 3.2808;           // mt to feet
+      formatDistance(dist,1,2,0);
+      MAX7456_WriteString(screenBuffer,getPosition(APstatusPosition)+xx);
+    }
+#else  // NOT PROTOCOL_MAVLINK       
+  if(timer.Blink2hz)
+    return;
   if (MwSensorActive&mode.failsafe)
     apactive=1;
   else if (MwSensorActive&mode.gpshome)
@@ -441,8 +452,8 @@ void displayMode(void)
     apactive=4;
   else
     return;
-
   MAX7456_WriteString_P(PGMSTR(&(message_text[apactive])),getPosition(APstatusPosition));
+  #endif // PROTOCOL_MAVLINK     
 #endif
 }
 
@@ -2481,39 +2492,6 @@ void formatDistance(int32_t t_d2f, uint8_t t_units, uint8_t t_type, uint8_t t_ic
     screenBuffer[xx] = 0;
   }
   else{    
-  }
-}
-
-
-void formatDistanceOld(int32_t d2f, uint8_t units, uint8_t type ) {
-  // d2f = integer to format into string
-  // type 0=alt, 2=dist , 4=LD alt, 6=LD dist
-  // units 0=none, 1 show units symbol
-  int32_t tmp;
-#ifdef LONG_RANGE_DISPLAY  
-  if (d2f>9999){
-    if(Settings[S_UNITSYSTEM]){
-      tmp = ((d2f) + (d2f%5280))/528;
-    }
-    else{
-      tmp = d2f/100;
-    }
-    itoa(tmp, screenBuffer+units, 10);
-    uint8_t xx = FindNull();
-    screenBuffer[xx]=screenBuffer[xx-1];
-    screenBuffer[xx-1] = DECIMAL;
-    xx++;
-    screenBuffer[xx] = 0;
-    // type = (type==2) ? type=6 : type=4; // additional fonts to be added           
-  }
-  else{
-    itoa(d2f, screenBuffer+units, 10);
-  }
-#else
-    itoa(d2f, screenBuffer+units, 10);
-#endif  
-  if (units==1){
-    screenBuffer[0] = UnitsIcon[Settings[S_UNITSYSTEM]+type];
   }
 }
 

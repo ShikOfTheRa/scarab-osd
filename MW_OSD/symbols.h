@@ -194,7 +194,8 @@
 #define SYM_CURSOR SYM_AH_LEFT
 
 //Misc
-#define SYM_COLON 0X2D
+#define SYM_DASH  0X2D
+#define SYM_COLON 0X3A
 
 //sport
 #define SYM_MIN 0xB3
