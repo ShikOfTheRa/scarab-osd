@@ -801,7 +801,7 @@ void GPS_NewData() {
       break;
 
     case 4: // confirm landed. Display stats
-      if (millis() > GPSOSDSUMMARY*1000+timer.GPSOSDstate) { // Confirmed landed
+      if (timer.disarmed==0) { // Dispalay stats until timer or cancelled by throttle
         configExit();
         GPS_armedangleset = 0;
         GPSOSD_state=2;  

@@ -119,7 +119,6 @@
 #define HOMESATFIX          6       // Minimum number of sats required when setting initial home location. 
 #define GPSOSDARMDISTANCE  20       // distance from home in meters when GPSOSD arms. Starts flight timer etc.
 #define GPSOSDHOMEDISTANCE 40       // distance from home in meters when GPSOSD is home. When speed is low it disarms and displays summary screen.
-#define GPSOSDSUMMARY      32       // seconds summary is displayed for after landing. Max 32
 #define GPSOSDLANDED        8       // seconds OSD needs to have landed (within home distance and speed less than xxx) before triggering summary. Max 32
 #define GPSDOP 500                  // UBLOX only - minimum PDOP required for sat fix. A DOP of 2.00 is considered good 
 //#define PPM_CONTROL               // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD PWM input pin (RSSI pin on basic MINIM hardware). Requires TX type to be set below. 
@@ -246,6 +245,7 @@
 //#define TEXTMODE                  // Enable to display the flyingmode as text instead of symbols
 //#define OSD_SWITCH                // Forces original 2 way multiwii screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
 //#define NOSUMMARYTHROTTLERESET    // Enable to supress summary display clearing from throttle
+#define OSDSUMMARY 30               // Seconds summary is displayed for after landing. Max 254
 
 
 /********************       Power / efficiency display Settings         ************************/

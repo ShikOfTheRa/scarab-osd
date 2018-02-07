@@ -966,7 +966,7 @@ if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THR
       int8_t oldmenudir=constrain(menudir,-5,5);
       menudir=0;
 #ifndef NOSUMMARYTHROTTLERESET 
-      if(previousarmedstatus&&(MwRcData[THROTTLESTICK]>1600))
+      if(previousarmedstatus&&((MwRcData[THROTTLESTICK]>1600)||(timer.disarmed==0)))
       {
 	// EXIT from SHOW STATISTICS AFTER DISARM (push throttle up)
 	waitStick = 2;
@@ -1447,6 +1447,7 @@ void configExit()
   configMode=0;
   //waitStick=3;
   previousarmedstatus = 0;
+  timer.disarmed = 0;
   if (Settings[S_RESETSTATISTICS]){
     trip=0;
     distanceMAX=0;

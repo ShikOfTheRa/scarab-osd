@@ -527,6 +527,7 @@ void loop()
     {
       if(armed){
         previousarmedstatus=1;
+        timer.disarmed=OSDSUMMARY;
         if (configMode==1)
           configExit();
       }
@@ -706,6 +707,9 @@ void loop()
         timer.GPS_active--;
       }      
     #endif // ALARM_GPS 
+    if (timer.disarmed>0){
+      timer.disarmed--;
+    }  
     if (timer.MSP_active>0){
       timer.MSP_active--;
     }  

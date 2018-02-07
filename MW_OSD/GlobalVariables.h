@@ -274,7 +274,8 @@ struct  __timer {
   uint32_t alarms;                            // Alarm length timer
   uint32_t vario;                             
   uint32_t audiolooptimer;
-  uint32_t GPSOSDstate;                             
+  uint32_t GPSOSDstate;
+  uint8_t  disarmed;                             
 
 }
 timer;
