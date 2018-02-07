@@ -1,10 +1,6 @@
- 
-#if defined PROTOCOL_MAVLINK
-  #define SERIALBUFFERSIZE 100
-#elif defined NAZA
+
+#if defined NAZA
   #define SERIALBUFFERSIZE 250
-#elif defined GPSOSD
-  #define SERIALBUFFERSIZE 100
 #else
   #define SERIALBUFFERSIZE 100
 #endif
@@ -269,7 +265,7 @@ void serialMSPCheck()
        cfgWrite16(INFO_HARDWARE);
        cfgWrite16(INFO_VERSION); 
        cfgWrite16(INFO_AIRCRAFT);
-       cfgWrite16(INFO_OPTIONS1);
+       cfgWrite16(INFO_OPTIONS);
        cfgWrite16(INFO_VENDOR);
        cfgWriteChecksum();
     }
@@ -295,12 +291,12 @@ void serialMSPCheck()
       }
     }
     if(cmd == OSD_DEFAULT) {
-      EEPROM_clear(); 
+      EEPROM.write(0, 0);
       checkEEPROM();
       flags.reset=1;
     }
     if(cmd == OSD_RESET) {
-        flags.reset=1;
+      flags.reset=1;
     }
                     
   }
@@ -382,13 +378,29 @@ For sub-command 3 (draw string):
   }
   #endif // CANVAS_SUPPORT
 
-  if (cmdMSP==MSP_IDENT)
+/*  
+  if (cmdMSP==MSP_IDENT) // no longer used
   {
     flags.ident=1;
     MwVersion= read8();                             // MultiWii Firmware version
   }
+*/  
 
-  if (cmdMSP==MSP_STATUS)
+/*
+if (cmdMSP==MSP_FC_VARIANT) 
+  {
+    FC.variant = read32();
+  }
+*/
+
+if (cmdMSP==MSP_FC_VERSION) 
+  {
+    FC.verMajor = read8();
+    FC.verMinor = read8();
+    FC.verPatch = read8();
+  }
+
+if (cmdMSP==MSP_STATUS)
   {
     cycleTime=read16();
     I2CError=read16();
@@ -438,6 +450,7 @@ For sub-command 3 (draw string):
     #else
       GPS_speed = read16();
     #endif // I2CGPS_SPEED
+    AIR_speed=GPS_speed;
     GPS_ground_course = read16();
   }
 
@@ -456,6 +469,7 @@ For sub-command 3 (draw string):
 #endif
   }
 
+#if defined MULTIWII_V24
   if (cmdMSP==MSP_NAV_STATUS)
   {
      read8();
@@ -463,6 +477,7 @@ For sub-command 3 (draw string):
      read8();
      GPS_waypoint_step=read8();
   }
+#endif //MULTIWII_V24 
 
   if (cmdMSP==MSP_ATTITUDE)
   {
@@ -470,8 +485,12 @@ For sub-command 3 (draw string):
       MwAngle[i] = read16();
     }
       MwHeading = read16();
-    #if defined(USEGPSHEADING)
-      MwHeading = GPS_ground_course/10;
+    #if defined (AUTOSENSEMAG) && defined (FIXEDWING)     
+      if(!(MwSensorPresent&MAGNETOMETER))
+        MwHeading = GPS_ground_course/10;
+    #elif defined (FIXEDWING)
+      if (Settings[S_USEGPSHEADING]>0)
+        MwHeading = GPS_ground_course/10;
     #endif
     #ifdef HEADINGCORRECT
       if (MwHeading >= 180) MwHeading -= 360;
@@ -494,13 +513,20 @@ For sub-command 3 (draw string):
 #endif //SPORT
   if (cmdMSP==MSP_ALTITUDE)
   {
-    #if defined(USEGPSALTITUDE)
+   #if defined (AUTOSENSEBARO) && defined (FIXEDWING)     
+    if(!(MwSensorPresent&BAROMETER)){
       MwAltitude = (int32_t)GPS_altitude*100;
       gpsvario();
-    #else    
-      MwAltitude =read32();
-      MwVario = read16();
-    #endif
+    }     
+   #elif defined (FIXEDWING)
+     if (Settings[S_USEGPSHEADING]>1){
+       MwAltitude = (int32_t)GPS_altitude*100;
+       gpsvario();
+     }
+   #else
+    MwAltitude =read32();
+    MwVario = read16();
+   #endif  
   }
 
   if (cmdMSP==MSP_ANALOG)
@@ -940,7 +966,7 @@ if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THR
       int8_t oldmenudir=constrain(menudir,-5,5);
       menudir=0;
 #ifndef NOSUMMARYTHROTTLERESET 
-      if(previousarmedstatus&&(MwRcData[THROTTLESTICK]>1300))
+      if(previousarmedstatus&&((MwRcData[THROTTLESTICK]>1600)||(timer.disarmed==0)))
       {
 	// EXIT from SHOW STATISTICS AFTER DISARM (push throttle up)
 	waitStick = 2;
@@ -1097,8 +1123,8 @@ void serialMenuCommon()
   }
 #endif
 
-#ifdef MENU_RC_2
-  if(configPage == MENU_RC_2 && COL == 3) {    
+#ifdef MENU_2RC
+  if(configPage == MENU_2RC && COL == 3) {    
     switch(ROW) {
       case 1: tpa_breakpoint16 += menudir; break;
       case 2: rcYawExpo8 += menudir; break;
@@ -1176,13 +1202,10 @@ void serialMenuCommon()
 #ifdef MENU_VOLTAGE
   if (configPage == MENU_VOLTAGE && COL == 3) {
     switch(ROW) {
-    case 1: ReverseSetting(S_DISPLAYVOLTAGE)
+    case 1: ModifySetting(S_VOLTAGEMIN)
     case 2: ModifySetting(S_DIVIDERRATIO)
-    case 3: ModifySetting(S_VOLTAGEMIN)
-    case 4: ReverseSetting(S_VIDVOLTAGE)
-    case 5: ModifySetting(S_VIDDIVIDERRATIO)
-    case 6: ModifySetting(S_BATCELLS)
-    case 7: ReverseSetting(S_MAINVOLTAGE_VBAT)
+    case 3: ModifySetting(S_VIDDIVIDERRATIO)
+    case 4: ModifySetting(S_BATCELLS)
     }
   }
 #endif
@@ -1190,12 +1213,9 @@ void serialMenuCommon()
 #ifdef MENU_RSSI
   if (configPage == MENU_RSSI && COL == 3) {
     switch(ROW) {
-    case 1: ReverseSetting(S_DISPLAYRSSI)
-    case 2: timer.rssiTimer=15; break; // 15 secs to turn off tx anwait to read min RSSI
-    case 3: ReverseSetting(S_MWRSSI)
-    case 4: ReverseSetting(S_PWMRSSI)
-    case 5: ModifySetting16(S16_RSSIMAX)
-    case 6: ModifySetting16(S16_RSSIMIN)
+    case 1: timer.rssiTimer=15; break; // 15 secs to turn off tx and wait to read min RSSI
+    case 2: ModifySetting16(S16_RSSIMAX)
+    case 3: ModifySetting16(S16_RSSIMIN)
     }
   }
 #endif
@@ -1203,11 +1223,8 @@ void serialMenuCommon()
 #ifdef MENU_CURRENT
   if (configPage == MENU_CURRENT && COL == 3) {
     switch(ROW) {
-    case 1: ReverseSetting(S_AMPERAGE)
-    case 2: ReverseSetting(S_AMPER_HOUR)
-    case 3: ReverseSetting(S_AMPERAGE_VIRTUAL)
-    case 4: ModifySetting16(S16_AMPDIVIDERRATIO)
-    case 5: ModifySetting16(S16_AMPZERO)
+    case 1: ModifySetting16(S16_AMPDIVIDERRATIO)
+    case 2: ModifySetting16(S16_AMPZERO)
     }
   }
 #endif
@@ -1215,14 +1232,7 @@ void serialMenuCommon()
 #ifdef MENU_DISPLAY
   if (configPage == MENU_DISPLAY && COL == 3) {
     switch(ROW) {
-    case 1: ReverseSetting(S_DISPLAY_HORIZON_BR)
-    case 2: ReverseSetting(S_WITHDECORATION)
-    case 3: ReverseSetting(S_SCROLLING)
-    case 4: ReverseSetting(S_THROTTLEPOSITION)
-    case 5: ReverseSetting(S_COORDINATES)
-    case 6: ReverseSetting(S_MODESENSOR)
-    case 7: ReverseSetting(S_GIMBAL)
-    case 8: ModifySetting(S_MAPMODE)
+    case 1: ModifySetting(S_MAPMODE)
     }
   }
 #endif
@@ -1230,12 +1240,8 @@ void serialMenuCommon()
 #ifdef MENU_ADVANCED
   if (configPage == MENU_ADVANCED && COL == 3) {
     switch(ROW) {
-    case 1: ReverseSetting(S_UNITSYSTEM)
-    case 2: ReverseSetting(S_VREFERENCE)
-    case 3: ReverseSetting(S_DEBUG)
-    case 4: timer.magCalibrationTimer=CALIBRATION_DELAY; break;
-    case 5: ModifySetting(S_RCWSWITCH_CH)
-    case 6: ReverseSetting(S_THROTTLE_PWM)
+    case 1: timer.magCalibrationTimer=CALIBRATION_DELAY; break;
+    case 2: ReverseSetting(S_THROTTLE_PWM)
     }
   }
 #endif
@@ -1441,6 +1447,7 @@ void configExit()
   configMode=0;
   //waitStick=3;
   previousarmedstatus = 0;
+  timer.disarmed = 0;
   if (Settings[S_RESETSTATISTICS]){
     trip=0;
     distanceMAX=0;

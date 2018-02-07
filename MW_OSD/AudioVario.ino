@@ -6,7 +6,7 @@
   Modified by Shiki for MWOSD
 */
 
-/*
+
 uint8_t _pinMask = 0;         // Pin bitmask.
 volatile uint8_t *_pinOutput; // Output port register
 
@@ -43,27 +43,19 @@ void noNewTone(uint8_t pin) {
 ISR(TIMER1_COMPA_vect) { // Timer interrupt vector.
   *_pinOutput ^= _pinMask; // Toggle the pin state.
 }
-*/
+
 
 void AudioVarioUpdate()
 {
 #ifdef AUDIOVARIOSWITCH
   if(!fieldIsVisible(MwClimbRatePosition)){
-    noTone(KKAUDIOVARIO);
-//    noNewTone(KKAUDIOVARIO);
+    noNewTone(KKAUDIOVARIO);
     return;
   }
 #endif //AUDIOVARIOSWITCH
-#ifdef AUDIOVARIORC // no audio vario when throttle on
-  if (MwRcData[THROTTLESTICK]> AUDIOVARIORC) {
-    noTone(KKAUDIOVARIO);
-//    noNewTone(KKAUDIOVARIO);
-    return; 
-  }
-#endif //AUDIOVARIORC
-
   
-  pressure = getPressure();
+  pressure = getPressure(); 
+  //pressure = -MwAltitude/100; // try MwAltitude *0.01 for systems without pressure sensor. Only looking at relative change and 0.01mb is approx 10cm?
   lowpassFast = lowpassFast + (pressure - lowpassFast) * 0.1;
   lowpassSlow = lowpassSlow + (pressure - lowpassSlow) * 0.05;
   
@@ -72,16 +64,31 @@ void AudioVarioUpdate()
 
   toneFreq = constrain(toneFreqLowpass, -500, 500);
   ddsAcc += toneFreq * 100 + 2000;
-  
-  if ((toneFreq < KKDEADBANDLOW) ||  ((toneFreq > KKDEADBANDHIGH)  && (ddsAcc > 0))) 
+  uint8_t t_maketone=1;  
+
+  if (toneFreq <= -Settings[S_AUDVARIO_DEADBAND]){
+    toneFreq += Settings[S_AUDVARIO_DEADBAND];
+  }
+  else if (toneFreq >= Settings[S_AUDVARIO_DEADBAND]){
+    toneFreq -= Settings[S_AUDVARIO_DEADBAND];  
+    if (ddsAcc<=0)
+      t_maketone=0;  
+  }
+  else{
+    t_maketone=0;
+  }  
+   
+  if (MwRcData[THROTTLESTICK]/100>(Settings[S_AUDVARIO_TH_CUT])) { 
+    t_maketone=0;  
+  }
+
+  if (t_maketone==1) 
   {
-    tone(KKAUDIOVARIO, toneFreq + 510);  
-//    NewTone(KKAUDIOVARIO, toneFreq + 510, 0);  
+    NewTone(KKAUDIOVARIO, toneFreq + 510, 0);  
   }
   else
   {
-    noTone(KKAUDIOVARIO);
-//    noNewTone(KKAUDIOVARIO);
+    noNewTone(KKAUDIOVARIO);
   }
 }
 

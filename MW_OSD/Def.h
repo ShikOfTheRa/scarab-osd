@@ -3,12 +3,11 @@
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 /*--------------------------       advanced parameters      ----------------------------------------------------*/
 
-/*----------------------------------------------       Developer parameters      ----------------------------------------------------*/
-//#define ALWAYSARMED
-//#define FORCESENSORS
+/*----------------------------------------------       Developer / debug parameters      ----------------------------------------------------*/
 
 // Display Debug screen display options
 //#define DEBUGMW            // Enable to display MSP debug values (assumes debug[x] values are not set elsewhere) 
+#define DEBUGDPOSMENU 3      // dispaly debug title at position X
 #define DEBUGDPOSRCDATA 33   // display RCDATA values at position X
 #define DEBUGDPOSANAL 84     // display sensor values at position X
 #define DEBUGDPOSPWM 264     // display PWM values at position X
@@ -21,34 +20,64 @@
 #define DEBUGDPOSRX 220      // display serial data rate at position X
 //#define DEBUGDPOSMSPID 33  // display MSP ID received
 
+//#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+
 // Display Debug text message in standard screen text warning message area
 // Enable and set debugtext=1 in code when required 
-//#define ENABLEDEBUGTEXT
-#define DEBUGTEXT "DEBUG"    // Set text you wish to display when debug text message required. Must be CAPSLOCK text
+//#define DEBUGTEXT "DEBUG"    // Set text you wish to display when debug text message required. Must be CAPSLOCK text
 
-//#define HARDRESET                        // Enables watchdog timer reset rather than fixed memory jmp 
-#define BOOTRESET                          // Enables reset from default Atmega 328 bootloader address (instead of 0) 
+#define HARDRESET            // Enables watchdog timer reset rather than fixed memory jmp 
+//#define BOOTRESET          // Enables reset from default Atmega 328 bootloader address (instead of 0) 
 
-#ifdef DEVELOPMENT                  // Developement pre-set test paramters only 
-  #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
-  #define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
-  //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+
+//#define DEVELOPMENT               // For development set only 
+#ifdef DEVELOPMENT                  // Development pre-set test paramters only 
+  //#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+  #define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
+  //#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
+  //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
+  //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+  //#define APM
+  //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
+  #define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
   #define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
   #define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
+  //#define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
+  //#define INTRO_DELAY 1             // To speed up startup
+  #define DISPLAY_DEV 0xC000      // Use screen layout dev position - display all items...
+//  #define KKAUDIOVARIO A3           // Enable this for audio vario on Arduino pin XX. A3=RSSI. Use AUDIOPIN on AEROMAX 
+
 #endif
 
+//#define GPSTEST
+#ifdef GPSTEST                  // Development pre-set test paramters only 
+//#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+#define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
+#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
+#define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
+#undef VARIOSTANDARD               // Enable this for single icon representation of vario
+#define VARIOENHANCED 4           // Enable this for multi line more accurate visual slider representation of vario. 4 provides +/- 4 rows of slider resolution
+#undef INTRO_FC                  // Enable to FC version at startup
+#define INTRO_VERSION               "MWOSD R1.8 TEST" // Call the OSD something else if you prefer. 
 
+#endif
+
+//#define SCHLONG                   // Test for Schalonsus 
+#ifdef SCHLONG                      
+  #define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+  #define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
+  #define iNAV_KK                   // Uncomment this if you are using AEROMAX OSD and BARO sensor addition with iNAV with KK audio vario
+#endif
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
 
-/********************       OSD SCREEN SWITCH settings      *********************/
-// This functionality enables :
-// a, 2 different screen layouts to be selected using the Flight controller "OSD_SWITCH" feature or
-// b, 2 or 3 different screen layouts to be selected using a specificed RC channel assigned to a TX switch
-//Choose ONLY ONE option:
-#define OSD_SWITCH_RC               // Enables 3 way screen switch using a TX channel via FC. Specify channel on GUI (range 0-7 AUX1=4 AUX4=7)
-//#define OSD_SWITCH                // DEPRECATED Forces original 2 way screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
 
+/********************       OSD SCREEN SWITCH settings      *********************/
+#define OSD_SWITCH_RC               // Enables 3 way screen switch using a TX channel via FC. Specify channel on GUI (range 1-16 AUX1=5 AUX4=8)
+#ifdef  OSD_SWITCH
+  #undef OSD_SWITCH_RC
+#endif
 
 
 
@@ -65,7 +94,6 @@
   #define VTX_RC
   #define VTX_LED
   #define USE_MENU_VTX
-  #define INFO_OPTIONS1 1<<4
 #endif
 
 #ifdef FFPV_INNOVA
@@ -74,7 +102,6 @@
   //#define VTX_RC    // Can be turned on, hard to use without VTX_LED
   //#define VTX_LED   // Needs VTXLED_* definitions in RTC6705.ino
   #define USE_MENU_VTX
-  #define INFO_OPTIONS1 1<<4
 #endif
 
 
@@ -113,6 +140,19 @@
 
 #ifdef iNAV    //set up latest at time of release
 //  #define iNAV
+#endif
+
+#ifdef iNAV_KK // iNAV with KK VARIO
+  #define iNAV
+  #define KKAUDIOVARIO AUDIOPIN     // Enable this for audio vario. AUDIOPIN = D2 on AEROMAX hardware. Alternatively use A3 (RSSI) with other hardware  
+  #undef MAPMODE
+  #undef MENU_DEBUG
+//  #undef DISPLAY_PR
+//  #undef SHOW_TEMPERATURE
+//  #undef INTRO_MENU                  // Enable to display TX stick MENU 
+//  #undef INTRO_CALLSIGN              // Enable to display callsign at startup
+//  #undef INTRO_SIGNALTYPE            // Enable to display video type at startup
+//  #undef INTRO_FC                    // Enable to display FC version at startup
 #endif
 
 #ifdef BASEFLIGHT     //set up latest at time of release
@@ -168,21 +208,19 @@
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
   #define ENABLE_MSP_SAVE_ADVANCED
-  #define ACROPLUS
+  //#define ACROPLUS
 
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_RC_2     3       //RC TUNING PAGE 2
-  #define MENU_VOLTAGE  4       //VOLTAGE
-  #define MENU_RSSI     5       //RSSI
-  #define MENU_CURRENT  6       //CURRENT
-  #define MENU_DISPLAY  7       //DISPLAY
-  #define MENU_ADVANCED 8       //ADVANCED
-  #define MENU_ALARMS   9       //ALARMS
-  #define MENU_PROFILE  10      //PROFILE+PID CONTROLLER
-  #define MENU_DEBUG    11      //DEBUG
-  #define MAXPAGE       MENU_DEBUG
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_RC
+  #define MENU_2RC
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
+  #define MENU_PROFILE
 #endif
 
 #if defined BETAFLIGHT31
@@ -190,24 +228,21 @@
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
   #define ENABLE_MSP_SAVE_ADVANCED
-  #define ACROPLUS
-
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_RC_2     3       //RC TUNING PAGE 2
-  #define MENU_INFO     4       //RC TUNING FC
-  #define MENU_VOLTAGE  5       //VOLTAGE
-  #define MENU_RSSI     6       //RSSI
-  #define MENU_CURRENT  7       //CURRENT
-  #define MENU_DISPLAY  8       //DISPLAY
-  #define MENU_ADVANCED 9       //ADVANCED
-  #define MENU_ALARMS   10      //ALARMS
-  #define MENU_PROFILE  11      //PROFILE+PID CONTROLLER
-  #define MENU_DEBUG    12      //DEBUG
-  #define MAXPAGE       MENU_DEBUG
-
+  //#define ACROPLUS
   #define CANVAS_SUPPORT
+
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_RC
+  #define MENU_2RC
+  #define MENU_INFO
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
+  #define MENU_PROFILE
 #endif
 
 #if defined CLEANFLIGHT190
@@ -217,19 +252,17 @@
   #define ENABLE_MSP_SAVE_ADVANCED
   #define CORRECTLOOPTIME
 
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_RC_2     3       //RC TUNING PAGE 2
-  #define MENU_VOLTAGE  4       //VOLTAGE
-  #define MENU_RSSI     5       //RSSI
-  #define MENU_CURRENT  6       //CURRENT
-  #define MENU_DISPLAY  7       //DISPLAY
-  #define MENU_ADVANCED 8       //ADVANCED
-  #define MENU_ALARMS   9       //ALARMS
-  #define MENU_PROFILE  10      //PROFILE+PID CONTROLLER
-  #define MENU_DEBUG    11
-  #define MAXPAGE       MENU_DEBUG
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_RC
+  #define MENU_2RC
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
+  #define MENU_PROFILE
 #endif
 
 #if defined iNAV // same as CLEANFLIGHT190 + CMS
@@ -240,20 +273,17 @@
   #define CORRECTLOOPTIME
   #define CANVAS_SUPPORT
 
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_RC_2     3       //RC TUNING PAGE 2
-  #define MENU_INFO     4       //RC TUNING FC
-  #define MENU_VOLTAGE  5       //VOLTAGE
-  #define MENU_RSSI     6       //RSSI
-  #define MENU_CURRENT  7       //CURRENT
-  #define MENU_DISPLAY  8       //DISPLAY
-  #define MENU_ADVANCED 9       //ADVANCED
-  #define MENU_ALARMS   10       //ALARMS
-  #define MENU_PROFILE  11      //PROFILE+PID CONTROLLER
-  #define MENU_DEBUG    12
-  #define MAXPAGE       MENU_DEBUG
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_RC
+  #define MENU_2RC
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
+  #define MENU_PROFILE
 #endif
 
 #if defined CLEANFLIGHT180
@@ -261,32 +291,28 @@
   #define CORRECT_MSP_CF1
   #define CORRECT_MENU_RCT1
 
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_ALARMS   8       //ALARMS
-  #define MENU_DEBUG    9      //DEBUG
-  #define MAXPAGE       MENU_DEBUG
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_RC
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
 #endif
 
 #if defined CLEANFLIGHT172
   #define AMPERAGE_DIV  10
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_ALARMS   8       //ALARMS
-  #define MENU_DEBUG    9      //DEBUG
-  #define MAXPAGE       MENU_DEBUG
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_RC
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
 #endif
 
 #if defined FIXEDWING_BF
@@ -296,19 +322,17 @@
   #define CORRECT_MENU_RCT1
   #define ENABLE_MSP_SAVE_ADVANCED
 
-  #define MENU_STAT          0       //STATISTICS
-  #define MENU_PID           1       //PID CONFIG
-  #define MENU_RC            2       //RC TUNING
-  #define MENU_FIXEDWING     3       //FIXEDWING adjustments
-  #define MENU_VOLTAGE       4       //VOLTAGE
-  #define MENU_RSSI          5       //RSSI
-  #define MENU_CURRENT       6       //CURRENT
-  #define MENU_DISPLAY       7       //DISPLAY
-  #define MENU_ADVANCED      8       //ADVANCED
-  #define MENU_ALARMS        9       //ALARMS
-  #define MENU_PROFILE       10      //PROFILE+PID CONTROLLER
-  #define MENU_DEBUG         11      //DEBUG
-  #define MAXPAGE       MENU_DEBUG
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_RC
+  #define MENU_FIXEDWING
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
+  #define MENU_PROFILE
 #endif
 
 #if defined FIXEDWING_BF_SERVO
@@ -318,20 +342,18 @@
   #define CORRECT_MENU_RCT1
   #define ENABLE_MSP_SAVE_ADVANCED
 
-  #define MENU_STAT          0       //STATISTICS
-  #define MENU_PID           1       //PID CONFIG
-  #define MENU_RC            2       //RC TUNING
-  #define MENU_SERVO         3       //SERVO
-  #define MENU_FIXEDWING     4       //FIXEDWING adjustments
-  #define MENU_VOLTAGE       5       //VOLTAGE
-  #define MENU_RSSI          6       //RSSI
-  #define MENU_CURRENT       7       //CURRENT
-  #define MENU_DISPLAY       8       //DISPLAY
-  #define MENU_ADVANCED      9       //ADVANCED
-  #define MENU_ALARMS        10       //ALARMS
-  #define MENU_PROFILE       11      //PROFILE+PID CONTROLLER
-  #define MENU_DEBUG         12      //DEBUG
-  #define MAXPAGE       MENU_DEBUG
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_RC
+  #define MENU_SERVO
+  #define MENU_FIXEDWING
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
+  #define MENU_PROFILE
 #endif
 
 #if defined BASEFLIGHT20150627
@@ -340,162 +362,155 @@
   #define CORRECT_MENU_RCT1
   #define ENABLE_MSP_SAVE_ADVANCED
 
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_ALARMS   8       //ALARMS
-  #define MENU_PROFILE  9       //PROFILE+PID CONTROLLER
-  #define MENU_DEBUG    10      //DEBUG
-  #define MAXPAGE       MENU_DEBUG
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_RC
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
+  #define MENU_PROFILE
 #endif
 
 #if defined (BASEFLIGHT20150327)
   #define AMPERAGE_DIV  10
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_ALARMS   8       //ALARMS
-  #define MENU_DEBUG    9      //DEBUG
-  #define MAXPAGE       MENU_DEBUG
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_RC
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
 #endif
 
 #if defined (RACEFLIGHT)
   #define AMPERAGE_DIV  10
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_VOLTAGE  2       //VOLTAGE
-  #define MENU_RSSI     3       //RSSI
-  #define MENU_CURRENT  4       //CURRENT
-  #define MENU_DISPLAY  5       //DISPLAY
-  #define MENU_ADVANCED 6       //ADVANCED
-  #define MENU_ALARMS   7       //ALARMS
-  #define MENU_DEBUG    8      //DEBUG
-  #define MAXPAGE       MENU_DEBUG
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
 #endif
 
 #if defined (MULTIWII_V24)
   #define AMPERAGE_DIV  1
-
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_GPS_TIME 8       //GPS TIME
-  #define MENU_ALARMS   9       //ALARMS
-  #define MENU_DEBUG    10      //DEBUG
-  #define MAXPAGE       MENU_DEBUG
+  #undef INTRO_FC
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_RC
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_GPS_TIME
+  #define MENU_ALARMS
+  
 #endif
 
 #if defined (MULTIWII_V23)
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_ALARMS   8       //ALARMS
-  #define MENU_DEBUG    9      //DEBUG
-  #define MAXPAGE       MENU_DEBUG
+  #undef INTRO_FC
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_RC
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
+
 #endif
 
 #if defined (MULTIWII_V21)
   #define BOXNAMES              // required to support legacy protocol
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_ALARMS   8       //ALARMS
-  #define MENU_DEBUG    9      //DEBUG
-  #define MAXPAGE       MENU_DEBUG
+  #undef INTRO_FC
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_RC
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
 #endif
 
 #if defined(TAULABS)
   #define AMPERAGE_DIV  10
+  #undef INTRO_FC
   #define HAS_ALARMS
   #define ACROPLUS
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_PID      1       //PID CONFIG
-  #define MENU_RC       2       //RC TUNING
-  #define MENU_VOLTAGE  3       //VOLTAGE
-  #define MENU_RSSI     4       //RSSI
-  #define MENU_CURRENT  5       //CURRENT
-  #define MENU_DISPLAY  6       //DISPLAY
-  #define MENU_ADVANCED 7       //ADVANCED
-  #define MENU_ALARMS   8       //ALARMS
-  #define MENU_DEBUG    9      //DEBUG
-  #define MAXPAGE       MENU_DEBUG
+  #define MENU_STAT
+  #define MENU_PID
+  #define MENU_RC
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
 #endif
 
 #if defined(APM)
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_VOLTAGE  1       //VOLTAGE
-  #define MENU_RSSI     2       //RSSI
-  #define MENU_CURRENT  3       //CURRENT
-  #define MENU_DISPLAY  4       //DISPLAY
-  #define MENU_ADVANCED 5       //ADVANCED
-  #define MENU_ALARMS   6       //ALARMS
-  #define MENU_DEBUG    7      //DEBUG
-  #define MAXPAGE       MENU_DEBUG
+  #undef INTRO_FC
+  #define MENU_STAT
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
   #define PROTOCOL_MAVLINK
   #define AMPERAGE_DIV 10
 #endif
 
 #if defined(KISS)
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_VOLTAGE  1       //VOLTAGE
-  #define MENU_RSSI     2       //RSSI
-  #define MENU_CURRENT  3       //CURRENT
-  #define MENU_DISPLAY  4       //DISPLAY
-  #define MENU_ADVANCED 5       //ADVANCED
-  #define MENU_ALARMS   6       //ALARMS
-  #define MENU_DEBUG    7      //DEBUG
-  #define MAXPAGE       MENU_DEBUG
+  #undef INTRO_FC
+  #define MENU_STAT
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
   #define PROTOCOL_KISS
   #define AMPERAGE_DIV 10
 #endif
 
 #ifdef SKYTRACK
+  #undef INTRO_FC
   #undef  INTRO_MENU
   #undef  ALARM_MSP
   #undef  ALARM_SATS
   #undef  ALARM_GPS
   #undef  OSD_SWITCH_RC
-  #define MENU_STAT  0           //STATISTICS
-  #define MAXPAGE MENU_STAT
+  #define MENU_STAT
   #define PROTOCOL_SKYTRACK
 #endif
 
 #ifdef NOCONTROLLER
+  #undef INTRO_FC
   #undef  INTRO_MENU
   #undef  ALARM_MSP
   #undef  ALARM_SATS
   #undef  ALARM_GPS
   #undef  OSD_SWITCH_RC
   #define HIDEARMEDSTATUS
-  #define MENU_STAT  0           //STATISTICS
-  #define MAXPAGE MENU_STAT
+  #define MENU_STAT
 #endif
 
+#if defined GPSOSD_UBLOX_KK
+  #define UBLOX
+  #define KKAUDIOVARIO AUDIOPIN     // Enable this for audio vario. AUDIOPIN = D2 on AEROMAX hardware. Alternatively use A3 (RSSI) with other hardware  
+#endif
 #if defined GPSOSD_UBLOX
   #define UBLOX
 #endif
@@ -540,6 +555,7 @@
 #endif
 
 #if defined GPSOSD
+  #undef INTRO_FC
   #undef  INTRO_MENU
   #ifndef NAZA
     #undef  ALARM_MSP
@@ -548,39 +564,169 @@
   #undef  DISPLAY_PR
   #define NOAHI
   #define NOSUMMARYTHROTTLERESET
-  
+  #define TX_GUI_CONTROL  
 //  #define HIDEARMEDSTATUS
   #define ALARM_GPS 5
 
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_VOLTAGE  1       //VOLTAGE
-  #define MENU_RSSI     2       //RSSI
-  #define MENU_CURRENT  3       //CURRENT
-  #define MENU_DISPLAY  4       //DISPLAY
-  #define MENU_ADVANCED 5       //ADVANCED
-  #define MENU_ALARMS   6       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+  #define MENU_STAT
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
 #endif
 
 // Flight Controller Software types to be added before here...
 
-#ifndef MAXPAGE
+#ifndef MENU_STAT // default
   #define INFO_CONTROLLER 0
-  #define MENU_STAT     0       //STATISTICS
-  #define MENU_VOLTAGE  1       //VOLTAGE
-  #define MENU_RSSI     2       //RSSI
-  #define MENU_CURRENT  3       //CURRENT
-  #define MENU_DISPLAY  4       //DISPLAY
-  #define MENU_ADVANCED 5       //ADVANCED
-  #define MENU_ALARMS   6       //ALARMS
-  #define MAXPAGE       MENU_ALARMS
+  #define MENU_STAT
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
 #endif
 
-#define GTMP1 MAXPAGE +1
+
+/*
+  #define MENU_STAT          0       //STATISTICS
+  #define MENU_PID           1       //PID CONFIG
+  #define MENU_RC            2       //RC TUNING
+  #define MENU_SERVO         3       //SERVO
+  #define MENU_FIXEDWING     4       //FIXEDWING adjustments
+  #define MENU_VOLTAGE       5       //VOLTAGE
+  #define MENU_RSSI          6       //RSSI
+  #define MENU_CURRENT       7       //CURRENT
+  #define MENU_DISPLAY       8       //DISPLAY
+  #define MENU_ADVANCED      9       //ADVANCED
+  #define MENU_ALARMS        10      //ALARMS
+  #define MENU_PROFILE       11      //PROFILE+PID CONTROLLER
+  #define MENU_DEBUG         12      //DEBUG
+*/
+
+
+#undef MAXPAGE
+#define MAXPAGE 0
+
+#ifdef MENU_STAT
+  const uint8_t MENU_STAT_tmp = 0;
+  #define MENU_STAT MENU_STAT_tmp
+  #define MAXPAGE MENU_STAT 
+#endif
+
+#ifdef MENU_PID
+  const uint8_t MENU_PID_tmp = MAXPAGE+1;
+  #define MENU_PID MENU_PID_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_PID 
+#endif
+
+#ifdef MENU_RC
+  const uint8_t MENU_RC_tmp = MAXPAGE+1;
+  #define MENU_RC MENU_RC_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_RC 
+#endif
+
+#ifdef MENU_2RC
+  const uint8_t MENU_2RC_tmp = MAXPAGE+1;
+  #define MENU_2RC MENU_2RC_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_2RC 
+#endif
+
+#warning "AMPERAGE_DIV"
+
+#ifdef MENU_SERVO
+  const uint8_t MENU_SERVO_tmp = MAXPAGE+1;
+  #define MENU_SERVO MENU_SERVO_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_SERVO 
+#endif
+
+#ifdef MENU_FIXEDWING
+  const uint8_t MENU_FIXEDWING_tmp = MAXPAGE+1;
+  #define MENU_FIXEDWING MENU_FIXEDWING_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_FIXEDWING 
+#endif
+
+#ifdef MENU_INFO
+  const uint8_t MENU_INFO_tmp = MAXPAGE+1;
+  #define MENU_INFO MENU_INFO_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_INFO 
+#endif
+
+#ifdef MENU_VOLTAGE
+  const uint8_t MENU_VOLTAGE_tmp = MAXPAGE+1;
+  #define MENU_VOLTAGE MENU_VOLTAGE_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_VOLTAGE 
+#endif
+
+#ifdef MENU_RSSI
+  const uint8_t MENU_RSSI_tmp = MAXPAGE+1;
+  #define MENU_RSSI MENU_RSSI_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_RSSI 
+#endif
+
+#ifdef MENU_CURRENT
+  const uint8_t MENU_CURRENT_tmp = MAXPAGE+1;
+  #define MENU_CURRENT MENU_CURRENT_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_CURRENT 
+#endif
+
+#ifdef MENU_DISPLAY
+  const uint8_t MENU_DISPLAY_tmp = MAXPAGE+1;
+  #define MENU_DISPLAY MENU_DISPLAY_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_DISPLAY 
+#endif
+
+#ifdef MENU_ADVANCED
+  const uint8_t MENU_ADVANCED_tmp = MAXPAGE+1;
+  #define MENU_ADVANCED MENU_ADVANCED_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_ADVANCED 
+#endif
+
+#ifdef MENU_GPS_TIME
+  const uint8_t MENU_GPS_TIME_tmp = MAXPAGE+1;
+  #define MENU_GPS_TIME MENU_GPS_TIME_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_GPS_TIME 
+#endif
+
+#ifdef MENU_ALARMS
+  const uint8_t MENU_ALARMS_tmp = MAXPAGE+1;
+  #define MENU_ALARMS MENU_ALARMS_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_ALARMS 
+#endif
+
+#ifdef MENU_PROFILE
+  const uint8_t MENU_PROFILE_tmp = MAXPAGE+1;
+  #define MENU_PROFILE MENU_PROFILE_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_PROFILE 
+#endif
+
+#ifdef MENU_DEBUG
+  const uint8_t MENU_DEBUG_tmp = MAXPAGE+1;
+  #define MENU_DEBUG MENU_DEBUG_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_DEBUG 
+#endif
 
 #ifdef USE_MENU_VTX
-  const uint8_t MENU_vtx_tmp = MAXPAGE+1;
-  #define MENU_VTX MENU_vtx_tmp
+  const uint8_t MENU_VTX_tmp = MAXPAGE+1;
+  #define MENU_VTX MENU_VTX_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_VTX 
 #endif
@@ -604,29 +750,29 @@ enum {
   #define USE_FC_VOLTS_CONFIG
 #endif
 
+/********************  OPTIONS enabled definitions  *********************/
+#ifdef USE_MENU_VTX
+  #define INFO_OPTIONS_4 1<<4
+#else
+  #define INFO_OPTIONS_4 0
+#endif
+#if defined TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI 
+  #define INFO_OPTIONS_5 1<<5
+#else
+  #define INFO_OPTIONS_5 0
+#endif
+#define INFO_OPTIONS 0|INFO_OPTIONS_4|INFO_OPTIONS_5
+
 /********************  FIXEDWING definitions  *********************/
 #ifdef FIXEDWING                     
   #define LONG_RANGE_DISPLAY
-  #define USEGPSHEADING
-  #define USEGPSALTITUDE
-  #if defined USEMAGHEADING 
-    #undef USEGPSHEADING
-  #endif  
-  #if defined USEBAROALTITUDE
-    #undef USEGPSALTITUDE
-  #endif
+  //#define USEGPSHEADING  // defined in config.h now
+  //#define USEGPSALTITUDE // defined in config.h now
   #define FORCESENSORS
   #ifndef USEGLIDESCOPE 
     #define USEGLIDESCOPE
   #endif
 #endif
-
-/********************  HARDWARE PINS definitions  *********************/
-#define AMPERAGEPIN   A1
-#define TEMPPIN       A3  // also used for airspeed         
-#define RSSIPIN       A3              
-#define LEDPIN        7
-#define INTC3       // Arduino A3 enabled for PWM/PPM interrupts)
 
 // All aircraft / FC types defaults...
 #define RESETGPSALTITUDEATARM
@@ -641,6 +787,61 @@ enum {
 
 
 /********************  OSD HARDWARE rule definitions  *********************/
+
+// default pin mappings:
+#define VOLTAGEPIN    A0
+#define VIDVOLTAGEPIN A2
+#define AMPERAGEPIN   A1
+#define RSSIPIN       A3              
+#define LEDPIN        7
+#define RCPIN         5   // Aeromax hardware only      
+#define AUXPIN        A6  // Aeromax hardware only        
+#define AUDIOPIN      2   // Aeromax hardware only  
+#define INTC3             // Arduino A3 enabled for PWM/PPM interrupts) Arduino A3 == Atmega Port C bit 3 for PWM trigger on RSSI pin
+//#define INTD5           // Atmega Port D bit 5 PWM/PPM interrupts) Aeromax hardware used for RC input
+
+// board specific amendments:
+#ifdef AEROMAX
+    #define ATMEGASETHARDWAREPORTS DDRC &= B11110111;DDRD &= B11011111;
+    #define INTD5     
+#elif defined AIRBOTMICRO
+    #undef VOLTAGEPIN
+    #undef VIDVOLTAGEPIN
+    #define VOLTAGEPIN    A2
+    #define VIDVOLTAGEPIN A0
+    #define MAX_SOFTRESET
+#elif defined ANDROMEDA
+    #define MAX_SOFTRESET
+#elif defined RTFQV1                     
+    #undef VOLTAGEPIN
+    #undef VIDVOLTAGEPIN
+    #define VOLTAGEPIN    A2
+    #define VIDVOLTAGEPIN A0
+    #define ALTERNATEDIVIDERS
+#elif defined RTFQMICRO                     
+    #undef VOLTAGEPIN
+    #undef VIDVOLTAGEPIN
+    #define VOLTAGEPIN    A2
+    #define VIDVOLTAGEPIN A0
+#elif defined KYLIN250PDB
+    #undef VOLTAGEPIN
+    #define VOLTAGEPIN    A6
+#elif defined HOLYBROPDB
+    #undef VOLTAGEPIN
+    #define VOLTAGEPIN    A6
+#endif
+
+#ifdef SWAPVOLTAGEPINS                     
+    #undef VOLTAGEPIN
+    #undef VIDVOLTAGEPIN
+    #define VOLTAGEPIN    A2
+    #define VIDVOLTAGEPIN A0
+#endif
+
+#ifndef ATMEGASETHARDWAREPORTS
+    # define ATMEGASETHARDWAREPORTS pinMode(RSSIPIN, INPUT);pinMode(RCPIN, INPUT);
+#endif 
+
 #ifdef RUSHDUINO                    
     # define DATAOUT          11 // MOSI
     # define DATAIN           12 // MISO
@@ -652,6 +853,9 @@ enum {
     # define MAX7456HWRESET   digitalWrite(MAX7456RESET,LOW);delay(60);digitalWrite(MAX7456RESET,HIGH);delay(40);
     # define MAX7456ENABLE    digitalWrite(MAX7456SELECT,LOW); 
     # define MAX7456DISABLE   digitalWrite(MAX7456SELECT,HIGH); 
+    # define LEDINIT          pinMode(LEDPIN,OUTPUT);
+    # define LEDON            digitalWrite(LEDPIN,HIGH);
+    # define LEDOFF           digitalWrite(LEDPIN,LOW); 
 #elif defined ARDUINO_OSD // Example for Arduino guys                     
     # define DATAOUT          11 // MOSI
     # define DATAIN           12 // MISO
@@ -663,71 +867,32 @@ enum {
     # define MAX7456HWRESET   digitalWrite(MAX7456RESET,LOW);delay(60);digitalWrite(MAX7456RESET,HIGH);delay(40);
     # define MAX7456ENABLE    digitalWrite(MAX7456SELECT,LOW); 
     # define MAX7456DISABLE   digitalWrite(MAX7456SELECT,HIGH); 
+    # define LEDINIT          pinMode(LEDPIN,OUTPUT);
+    # define LEDON            digitalWrite(LEDPIN,HIGH);
+    # define LEDOFF           digitalWrite(LEDPIN,LOW);
 #else                                  
     # define MAX7456ENABLE    PORTD&=B10111111; 
     # define MAX7456DISABLE   PORTD|=B01000000; 
     # define MAX7456SETHARDWAREPORTS  DDRB|=B00101100;DDRB&=B11101111;DDRD|=B01000000;DDRD&=B11111011;
     # define MAX7456HWRESET   PORTB&=B11111011;delay(100);PORTB|=B00000100;
-#endif
-
-#ifdef AEROMAX
-    #define TEMPPIN       A6  // also used for airspeed         
-    #define INTD5     
-#endif
-
-#ifdef AIRBOTMICRO
-    #define MAX_SOFTRESET
-    #define SWAPVOLTAGEPINS
-#endif
-
-#if defined  AUDIOVARIO // temporary reassign RSSI / Temp to avoid issues
-//  #define TEMPPIN       A1  // also used for airspeed         
-//  #define RSSIPIN       A1              
+    # define LEDINIT          DDRD = DDRD|B10000000;
+    # define LEDON            PORTD|=B10000000;
+    # define LEDOFF           PORTD&=B01111111;
 #endif
 
 #if defined  KKAUDIOVARIO 
   #undef FIXEDLOOP
-//  #define TEMPPIN       A1  // also used for airspeed         
-//  #define RSSIPIN       A1              
 #endif
 
-#ifdef ANDROMEDA
-    #define MAX_SOFTRESET
-#endif
-
-#ifdef RTFQV1                     
-    #define SWAPVOLTAGEPINS
-    #define ALTERNATEDIVIDERS
-#endif
-
-#ifdef RTFQMICRO                     
-    #define SWAPVOLTAGEPINS
-#endif
-
-#ifdef KYLIN250PDB
-    #undef VOLTAGEPIN
-    #define VOLTAGEPIN    A6
-#endif
-
-#ifdef HOLYBROPDB
-    #undef VOLTAGEPIN
-    #define VOLTAGEPIN    A6
-#endif
-
-#ifdef SWAPVOLTAGEPINS                     
-    #define VOLTAGEPIN    A2
-    #define VIDVOLTAGEPIN A0
-#else                                  
-    #define VOLTAGEPIN    A0
-    #define VIDVOLTAGEPIN A2
-#endif
-
-#ifdef ALTERNATEDIVIDERS
-    #define DIVIDER1v1      0.0002      // Voltage divider for 1.1v reference.
-    #define DIVIDER5v       0.0008      // Voltage divider for 5v reference.
+#ifdef AEROMAX
+    #define DIVIDER1v1      0.000107      // Voltage divider for 1.1v reference.
+    #define DIVIDER5v       0.000475      // Voltage divider for 5v reference.
+#elif ALTERNATEDIVIDERS
+    #define DIVIDER1v1      0.0002        // Voltage divider for 1.1v reference.
+    #define DIVIDER5v       0.0005        // Voltage divider for 5v reference.
 #else
-    #define DIVIDER1v1      0.0001      // Voltage divider for 1.1v reference. Use 0.0001 default unless advised otherwise.
-    #define DIVIDER5v       0.0005      // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
+    #define DIVIDER1v1      0.0001045     // Voltage divider for 1.1v reference. Use 0.0001 default unless advised otherwise.
+    #define DIVIDER5v       0.0005        // Voltage divider for 5v reference. Use 0.0005 default unless advised otherwise.
 #endif
 
 #ifdef I2C_UB_SUPPORT
@@ -736,6 +901,9 @@ enum {
     #define I2C_UB_BREQUIV   115200UL   // Pretend baudrate of 115200
     #define MSP2CFG                     // Duplicate MSP request to config port
 #endif
+
+/********************  END OSD HARDWARE rule definitions  *********************/
+
 
 /********************  GPS OSD rule definitions  *********************/
 
@@ -766,7 +934,10 @@ enum {
 #ifdef PROTOCOL_MAVLINK
 #undef  PROTOCOL_MSP
 #define FORCESENSORS
-#define NOSUMMARYTHROTTLERESET
+//#define NOSUMMARYTHROTTLERESET
+#ifndef TX_CHANNELS
+  #define TX_CHANNELS 16 
+#endif
 #endif
 
 #ifdef PROTOCOL_LTM
@@ -797,48 +968,6 @@ enum {
 
 /********************  RX channel rule definitions  *********************/
 
-#if defined TX_GS            //PITCH,YAW,THROTTLE,ROLL,AUX1,AUX2,AUX3,AUX4 //For Graupner/Spektrum    
-  #define ROLLSTICK        4
-  #define PITCHSTICK       1
-  #define YAWSTICK         2
-  #define THROTTLESTICK    3
-#elif defined TX_RHF         //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For Robe/Hitec/Futaba
-  #define ROLLSTICK        1
-  #define PITCHSTICK       2
-  #define YAWSTICK         4
-  #define THROTTLESTICK    3
-#elif defined TX_M           //ROLL,PITCH,YAW,THROTTLE,AUX1,AUX2,AUX3,AUX4 //For Multiplex
-  #define ROLLSTICK        1
-  #define PITCHSTICK       2
-  #define YAWSTICK         3
-  #define THROTTLESTICK    4
-#elif defined TX_HS          //PITCH,ROLL,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For some Hitec/Sanwa/Others
-  #define ROLLSTICK        2
-  #define PITCHSTICK       1
-  #define YAWSTICK         4
-  #define THROTTLESTICK    3
-#elif defined KISS
-  #define ROLLSTICK        2
-  #define PITCHSTICK       3
-  #define YAWSTICK         4
-  #define THROTTLESTICK    1
-#elif defined PX4            //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For PX4
-  #define ROLLSTICK        1
-  #define PITCHSTICK       2
-  #define YAWSTICK         4
-  #define THROTTLESTICK    3
-#elif defined APM            //ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For APM
-  #define ROLLSTICK        1
-  #define PITCHSTICK       2
-  #define YAWSTICK         4
-  #define THROTTLESTICK    3
-#else
-  // RX CHANEL IN MwRcData table
-  #define ROLLSTICK        1
-  #define PITCHSTICK       2
-  #define YAWSTICK         3
-  #define THROTTLESTICK    4
-#endif
 
 #ifndef TX_CHANNELS
   #define TX_CHANNELS 8 
@@ -852,6 +981,18 @@ enum {
 
 #ifdef PIOAUDIOVARIO // This is for travis build only
   #define AUDIOVARIO A3 // Enable AUDIOVARIO on RSSI
+#endif
+
+#ifdef PIOKKVARIO // This is for travis build only
+  #define KKAUDIOVARIO A3 // Enable KKAUDIOVARIO on RSSI
+#endif
+
+#ifdef PIOAUDIOVARIOAEROMAX // This is for travis build only
+  #define AUDIOVARIO AUDIOPIN // Enable AUDIOVARIO on on defined audio pin (AEROMAX hardware)
+#endif
+
+#ifdef PIOKKVARIOAEROMAX // This is for travis build only
+  #define KKAUDIOVARIO AUDIOPIN // Enable KKAUDIOVARIO on defined audio pin (AEROMAX hardware)
 #endif
 
 #ifdef PWM_THROTTLE
@@ -1032,8 +1173,8 @@ enum {
   #define INFO_AIRCRAFT            0            // default - unknown 
 #endif
 
-#ifndef INFO_OPTIONS1
-  #define INFO_OPTIONS1            0            // default - unknown 
+#ifndef INFO_OPTIONS
+  #define INFO_OPTIONS            0            // default - unknown 
 #endif
 
 

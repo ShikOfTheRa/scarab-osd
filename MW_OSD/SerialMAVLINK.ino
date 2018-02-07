@@ -123,12 +123,11 @@ void serialMAVCheck() {
 #ifdef DATA_MSP
   timer.MSP_active = DATA_MSP; // getting valid MAV on serial port
 #endif //DATA_MSP
+  int16_t t_MwVario; 
   int16_t MwHeading360;
   static uint8_t armedglitchprotect = 0;
   switch (mw_mav.message_cmd) {
     case MAVLINK_MSG_ID_HEARTBEAT:
-      debug[3]|=1<<0;
-      debug[0]++;
       mode.armed      = (1 << 0);
       mode.gpshome    = (1 << 4);
       mode.gpshold    = (1 << 5);
@@ -215,7 +214,6 @@ void serialMAVCheck() {
 #endif //MAVLINKREQ
       break;
     case MAVLINK_MSG_ID_VFR_HUD:
-      debug[3]|=1<<1;
       AIR_speed = (int16_t)serialbufferfloat(0) * 100; // m/s-->cm/s
       GPS_speed = (int16_t)serialbufferfloat(4) * 100; // m/s-->cm/s
       GPS_altitude = (int16_t)serialbufferfloat(8);   // m-->m
@@ -226,19 +224,19 @@ void serialMAVCheck() {
       if (MwHeading360 > 180)
         MwHeading360 = MwHeading360 - 360;
       MwHeading   = MwHeading360;
-      MwVario = (int16_t)serialbufferfloat(12) * 100; // m/s-->cm/s
+      t_MwVario = (float)serialbufferfloat(12) * 100; // m/s-->cm/s
+      MwVario = filter16u(MwVario, t_MwVario, 10);
       if (((GPS_fix_HOME & 0x01) == 0) && (GPS_numSat >= MINSATFIX) && armed) {
         GPS_fix_HOME |= 0x01;
         GPS_altitude_home = GPS_altitude;
       }
+      mw_mav.throttle = (int16_t)((serialBuffer[18] | serialBuffer[19] << 8)+1000);
       break;
     case MAVLINK_MSG_ID_ATTITUDE:
-      debug[3]|=1<<2;
       MwAngle[0] = (int16_t)(serialbufferfloat(4) * 57.2958 * 10);  // rad-->0.1deg
       MwAngle[1] = (int16_t)(serialbufferfloat(8) * 57.2958 * -10); // rad-->0.1deg
       break;
     case MAVLINK_MSG_ID_GPS_RAW_INT:
-      debug[3]|=1<<3;
 #ifdef ALARM_GPS
       timer.GPS_active = ALARM_GPS;
 #endif //ALARM_GPS
@@ -247,6 +245,7 @@ void serialMAVCheck() {
       GPS_ground_course = (serialBuffer[26] | (serialBuffer[27] << 8)) / 10;
       GPS_latitude = serialbufferint(8);
       GPS_longitude = serialbufferint(12);
+      GPS_dop = (int16_t)(serialBuffer[20] | serialBuffer[21] << 8);
       if ((GPS_fix > 2) && (GPS_numSat >= MINSATFIX)) {
         uint32_t dist;
         int32_t  dir;
@@ -260,22 +259,60 @@ void serialMAVCheck() {
       }
 
       break;
+
     case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
-      debug[3]|=1<<4;
-      MwRssi = (uint16_t)(((103) * serialBuffer[21]) / 10);
+      MwRssi = (uint16_t)(((102) * serialBuffer[21]) / 10);
+      if (serialBuffer[20]!=0)
+        break;
       for (uint8_t i = 0; i < 8; i++)
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
+        #if defined (TX_GUI_CONTROL)
+          reverseChannels();
+        #endif // TX_PRYT
+        #ifdef MAV_ALT_THROTTLE
+          MwRcData[THROTTLESTICK]=mw_mav.throttle;
+        #endif // MAV_ALT_THROTTLE
       handleRawRC();
       break;
     case MAVLINK_MSG_ID_RC_CHANNELS:
-      debug[3]|=1<<5;
-      MwRssi = (uint16_t)(((103) * serialBuffer[41]) / 10);
-      for (uint8_t i = 0; i < 8; i++)
+      MwRssi = (uint16_t)(((102) * serialBuffer[41]) / 10);
+      for (uint8_t i = 0; i < TX_CHANNELS; i++)
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
+        #if defined (TX_GUI_CONTROL)
+          reverseChannels();
+        #endif // TX_PRYT
+        #ifdef MAV_ALT_THROTTLE
+          MwRcData[THROTTLESTICK]=mw_mav.throttle;
+        #endif // MAV_ALT_THROTTLE
       handleRawRC();
       break;
+    case MAVLINK_MSG_ID_WIND: 
+      WIND_direction = (int16_t)(360+MwHeading-serialbufferfloat(0)) % 360;
+      WIND_speed     = serialbufferfloat(4) * 0.277778; // m/s=>kmh
+      break;     
+/*
+    case MAVLINK_MSG_ID_RADIO: 
+      MwRssi = (uint16_t)(((102) * serialBuffer[8]) / 10);
+      break;
+    case MAVLINK_MSG_ID_RADIO_STATUS: 
+      MwRssi = (uint16_t)(((102) * serialBuffer[4]) / 10);
+      break;
+*/
+    case MAVLINK_MSG_ID_SCALED_PRESSURE:
+    case MAVLINK_MSG_ID_SCALED_PRESSURE2:
+      temperature = (int16_t)serialbufferint(12)/100;
+      break;
+    case MAVLINK_MSG_ID_BATTERY2:
+      MwVBat2 = (int16_t)serialbufferint(0)/100;
+      break;    
+    case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
+      GPS_waypoint_dist = (int16_t)(serialBuffer[24]) | (serialBuffer[25] << 8); 
+      break;
+    case MAVLINK_MSG_ID_MISSION_CURRENT:
+      GPS_waypoint_step = (int16_t)(serialBuffer[0] | (serialBuffer[1] << 8));
+      //GPS_waypoint_step = serialBuffer[0]; // just 256 values for now
+      break;
     case MAVLINK_MSG_ID_SYS_STATUS:
-      debug[3]|=1<<6;
       mode.stable = (1 << 1);
       mode.baro   = (1 << 2);
       mode.mag    = (1 << 3);
@@ -346,7 +383,12 @@ void serialMAVreceive(uint8_t c)
   else if (mav_state == MAV_HEADER_START)
   {
     mw_mav.message_length = c;
-    mav_state = MAV_HEADER_LEN;
+    if (c >= SERIALBUFFERSIZE){
+      mav_state = MAV_IDLE;
+    }
+    else{
+      mav_state = MAV_HEADER_LEN;     
+    }
   }
   else if (mav_state == MAV_HEADER_LEN)
   {
@@ -354,12 +396,16 @@ void serialMAVreceive(uint8_t c)
   }
   else if (mav_state == MAV_HEADER_SEQ)
   {
-    if (c == MAV_SYS_ID) {
+#ifdef MAV_ALL
+      mav_state = MAV_HEADER_SYS;
+#else
+    if (c == Settings[S_MAV_SYS_ID]) {
       mav_state = MAV_HEADER_SYS;
     }
     else {
       mav_state = MAV_IDLE;
     }
+#endif  
   }
   else if (mav_state == MAV_HEADER_SYS)
   {
@@ -403,18 +449,53 @@ void serialMAVreceive(uint8_t c)
         mav_magic = MAVLINK_MSG_ID_SYS_STATUS_MAGIC;
         mav_len = MAVLINK_MSG_ID_SYS_STATUS_LEN;
         break;
+      case  MAVLINK_MSG_ID_WIND:
+        mav_magic = MAVLINK_MSG_ID_WIND_MAGIC;
+        mav_len = MAVLINK_MSG_ID_WIND_LEN;
+        break;
+      case  MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
+        mav_magic = MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT_MAGIC;
+        mav_len = MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT_LEN;
+        break;
+      case  MAVLINK_MSG_ID_MISSION_CURRENT:
+        mav_magic = MAVLINK_MSG_ID_MISSION_CURRENT_MAGIC;
+        mav_len = MAVLINK_MSG_ID_MISSION_CURRENT_LEN;
+        break;
+      case  MAVLINK_MSG_ID_SCALED_PRESSURE:
+        mav_magic = MAVLINK_MSG_ID_SCALED_PRESSURE_MAGIC;
+        mav_len = MAVLINK_MSG_ID_SCALED_PRESSURE_LEN;
+        break;
+      case  MAVLINK_MSG_ID_SCALED_PRESSURE2:
+        mav_magic = MAVLINK_MSG_ID_SCALED_PRESSURE2_MAGIC;
+        mav_len = MAVLINK_MSG_ID_SCALED_PRESSURE2_LEN;
+        break;
+      case  MAVLINK_MSG_ID_BATTERY2:
+        mav_magic = MAVLINK_MSG_ID_BATTERY2_MAGIC;
+        mav_len = MAVLINK_MSG_ID_BATTERY2_LEN;
+        break;
+        
+/*        
+      case  MAVLINK_MSG_ID_RADIO:
+        mav_magic = MAVLINK_MSG_ID_RADIO_MAGIC;
+        mav_len = MAVLINK_MSG_ID_RADIO_LEN;
+        break;
+      case  MAVLINK_MSG_ID_RADIO_STATUS:
+        mav_magic = MAVLINK_MSG_ID_RADIO_STATUS_MAGIC;
+        mav_len = MAVLINK_MSG_ID_RADIO_STATUS_LEN;
+        break;
+*/
     }
-    if ((mw_mav.message_length) == mav_len) { // too much data so reset check
+    if ((mw_mav.message_length) == mav_len) { 
       mav_state = MAV_HEADER_MSG;
     }
-    else {
+    else { // invalid length so reset check
       mav_state = MAV_IDLE;
     }
   }
   else if (mav_state == MAV_HEADER_MSG)
   {
     serialBuffer[mav_payload_index] = c;
-    mav_payload_index++;
+    mav_payload_index++;      
     if (mav_payload_index == mw_mav.message_length) { // end of data
       mav_state = MAV_PAYLOAD;
     }
