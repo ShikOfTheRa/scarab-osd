@@ -191,9 +191,9 @@
 #define INTRO_MENU                  // Enable to display TX stick MENU 
 #define INTRO_CALLSIGN              // Enable to display callsign at startup
 #define INTRO_SIGNALTYPE            // Enable to display video type at startup
-#define INTRO_FC                    // Enable to display FC version at startup
+//#define INTRO_FC                  // Enable to display FC version at startup
 #define INTRO_DELAY 5               // Seconds intro screen should show for. Default is 5 
-//#define STARTUPDELAY 500          // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring 
+//#define STARTUPDELAY 500          // Enable alternative startup delay (in ms) to allow MAX chip voltage to rise fully and initialise before configuring. Deafult = 1000 
 
 
 /********************       I2CGPS type settings      *********************/

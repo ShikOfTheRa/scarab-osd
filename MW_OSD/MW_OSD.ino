@@ -150,6 +150,9 @@ void setup()
   #ifndef STARTUPDELAY
     #define STARTUPDELAY 1000
   #endif
+  #ifndef INTRO_DELAY 
+    #define INTRO_DELAY 5
+  #endif
   delay(STARTUPDELAY);
 
  #ifdef VTX_RTC6705
@@ -384,10 +387,6 @@ void loop()
         queuedMSPRequests = modeMSPRequests;
       if (timer.GUI_active!=0){
         queuedMSPRequests&=REQ_MSP_FONT;
-#ifdef INTRO_FC
-        if (FC.verMajor==0)
-          queuedMSPRequests|=REQ_MSP_FC_VERSION;
-#endif
       } 
   
       uint32_t req = queuedMSPRequests & -queuedMSPRequests;
@@ -504,7 +503,9 @@ void loop()
          if (!canvasMode)
          #endif
          {
-           mspWriteRequest(MSPcmdsend, 0);
+           if (MSPcmdsend!=0){
+             mspWriteRequest(MSPcmdsend, 0);
+           }
          }
        #endif // KISS
       #endif //GPSOSD
@@ -516,10 +517,6 @@ void loop()
 
     ProcessSensors();       // using analogue sensors
 
-
-#ifndef INTRO_DELAY 
-  #define INTRO_DELAY 5
-#endif
     if( allSec < INTRO_DELAY ){
       displayIntro();
       timer.lastCallSign=onTime-CALLSIGNINTERVAL;
@@ -940,9 +937,13 @@ void setMspRequests() {
       REQ_MSP_RC;
     if(mode.armed == 0)
       modeMSPRequests |=REQ_MSP_BOX;
+#ifdef INTRO_FC
+    if (FC.verMajor==0)
+      queuedMSPRequests|=REQ_MSP_FC_VERSION;
+#endif      
 #if defined MULTIWII_V24
     if(MwSensorActive&mode.gpsmission)
-    modeMSPRequests |= REQ_MSP_NAV_STATUS;
+      modeMSPRequests |= REQ_MSP_NAV_STATUS;
 #endif
   }     
   queuedMSPRequests &= modeMSPRequests;   // so we do not send requests that are not needed.
