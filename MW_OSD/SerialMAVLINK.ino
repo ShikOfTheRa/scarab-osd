@@ -257,9 +257,7 @@ void serialMAVCheck() {
         GPS_fix_HOME |= 0x02;
         GPS_reset_home_position();
       }
-
       break;
-
     case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
       MwRssi = (uint16_t)(((102) * serialBuffer[21]) / 10);
       if (serialBuffer[20]!=0)

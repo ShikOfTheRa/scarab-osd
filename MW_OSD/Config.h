@@ -139,8 +139,8 @@
 /********************       ALARM/STATUS settings      *********************/
 #define ALARM_VOLTAGE               // Text alerts if voltage below voltage alarm - in addition to flashing voltage indicator
 #define ALARM_SATS                  // Text alerts if sats below MINSATFIX - in addition to flashing sat indicator
-#define ALARM_GPS 5                 // Text alerts if no GPS data for more than x secs. Sets GPS sats to zero
-#define ALARM_MSP 3                 // Text alerts if no Flight controller data for more than x secs. 
+//#define ALARM_GPS 5               // Text alerts if no GPS data for more than x secs. Sets GPS sats to zero
+#define ALARM_MSP 5                 // Text alerts if no Flight controller data for more than x secs. 
 
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
