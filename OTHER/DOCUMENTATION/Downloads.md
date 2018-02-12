@@ -1,7 +1,7 @@
 
 ---
 
-Pre-compiled binaries are now avail;able to flash from within the GUI
+Pre-compiled binaries are now available to flash from within the GUI
 
 The latest releases are available [here](https://github.com/ShikOfTheRa/scarab-osd/releases)
 
