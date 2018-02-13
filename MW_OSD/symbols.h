@@ -7,16 +7,13 @@
 
 #define SYM_BLANK 0X20
 
-// Satellite Graphics
-#define SYM_SAT_L 0X1E
-#define SYM_SAT_R 0X1F
-//#define SYM_SAT 0X0F  // Not used
-
 // Degrees Icon for HEADING/DIRECTION HOME
 #define SYM_DEGREES 0XBD
 
+
 // Direction arrows 
-#define SYM_ARROW_SOUTH 0X60
+  #define SYM_ARROW_HOME 0X60
+  #define SYM_ARROW_DIR 0XE0
 #define SYM_ARROW_2 0X61
 #define SYM_ARROW_3 0X62
 #define SYM_ARROW_4 0X63
@@ -71,7 +68,7 @@
 // GPS Coordinates and Altitude
 #define SYM_LAT 0xCA
 #define SYM_LON 0XCB
-#define SYM_ALT 0XCC
+//#define SYM_ALT 0XCC
 
 // GPS Mode and Autopilot
 #define SYM_3DFIX 0XDF 
@@ -99,7 +96,6 @@
 #define SYM_MAN 0XC0
 #define SYM_MAN1 0XC1
 #define SYM_MAN2 0XC2
-#define SYM_CHECK 0XBE
 #define SYM_BARO10 0XB7
 #define SYM_BARO11 0XB8
 #define SYM_MAG10 0XB5
@@ -140,14 +136,12 @@
 #define SYM_BATT_EMPTY 0X96
 
 // Vario
-#define SYM_VARIO 0x7F
+#define SYM_VARIO 0x8C
 
 // Glidescope
-#define SYM_GLIDESCOPE 0xE0
+#define SYM_GLIDESCOPE 0xDC
 
 // Batt Icon´s
-#define SYM_MAIN_BATT 0X97
-#define SYM_VID_BAT 0XBF
 
 // Unit Icon´s (Metric)
 #define SYM_MS 0X9F
@@ -157,6 +151,7 @@
 #define SYM_DISTHOME_KM 0XDF
 #define SYM_M 0X0C
 #define SYM_ALTKM 0X7A
+#define SYM_KM            0x7D
 
 // Unit Icon´s (Imperial)
 #define SYM_FTS 0X99
@@ -164,14 +159,13 @@
 #define SYM_ALTFT 0XA8
 #define SYM_DISTHOME_FT 0XB9
 #define SYM_DISTHOME_MI 0XBB
-#define SYM_FT 0X0F
-#define SYM_ALTMI 0XA7
+#define SYM_FT 0X0D
 
 // Voltage and amperage 
 #define SYM_VOLT 0XA9
 #define SYM_AMP 0X9A
 #define SYM_MAH 0XA4
-#define SYM_WATT 0X57
+#define SYM_WATT 0X7B
 
 // Flying Mode
 #define SYM_ACRO 0XAE
@@ -183,9 +177,9 @@
 #define SYM_HORIZON1 0XC5
 #define SYM_PASS 0XAA
 #define SYM_PASS1 0XAB
-#define SYM_AIR 0XEA
+#define SYM_AIR 0XC0
 #define SYM_AIR1 0XEB
-#define SYM_PLUS 0X89
+#define SYM_PLUS 0X01
 
 // Time
 #define SYM_ON_M 0X9B
@@ -195,17 +189,145 @@
 
 // Throttle Position (%)
 #define SYM_THR 0XC8
-#define SYM_THR1 0XC9
-
-// RSSI
-#define SYM_RSSI 0XBA
 
 // Menu cursor
 #define SYM_CURSOR SYM_AH_LEFT
 
 //Misc
-#define SYM_COLON 0X2D
+#define SYM_DASH  0X2D
+#define SYM_COLON 0X3A
 
 //sport
 #define SYM_MIN 0xB3
 #define SYM_AVG 0xB4
+
+//dispaly items lead indicator icons
+#ifdef ICON_ANGLE_RTH
+#define SYM_ANGLE_RTH     0XF2
+#else
+#define SYM_ANGLE_RTH     0
+#endif
+
+#ifdef ICON_ANGLE_HDG
+#define SYM_ANGLE_HDG     0XF3
+#else
+#define SYM_ANGLE_HDG     0
+#endif
+
+#ifdef ICON_DOP
+#define SYM_DOP           0XF4
+#else
+#define SYM_DOP           0
+#endif
+
+#ifdef ICON_SPEED_GPS
+#define SYM_SPEED_GPS     0XF5 
+#else
+#define SYM_SPEED_GPS     0 
+#endif
+
+#ifdef ICON_SPEED_AIR
+#define SYM_SPEED_AIR     0XF6 //GPS +1
+#else
+#define SYM_SPEED_AIR     0
+#endif
+
+#ifdef ICON_MAX
+#define SYM_MAX           0XF7 
+#else
+#define SYM_MAX           0 
+#endif
+
+#ifdef ICON_CLIMBRATE
+#define SYM_CLIMBRATE     0XF8 
+#else
+#define SYM_CLIMBRATE     0 
+#endif
+
+#ifdef ICON_EFF
+#define SYM_EFF           0XF9 
+#else
+#define SYM_EFF           0 
+#endif
+
+#ifdef ICON_PITCH
+#define SYM_PITCH         0XFA 
+#else
+#define SYM_PITCH         0 
+#endif
+
+#ifdef ICON_ROLL
+#define SYM_ROLL          0XFB 
+#else
+#define SYM_ROLL          0 
+#endif
+
+#ifdef ICON_POWER
+#define SYM_POWER         0XFC 
+#else
+#define SYM_POWER         0 
+#endif
+
+#ifdef ICON_AVG_EFF
+#define SYM_AVG_EFF       0XFD 
+#else
+#define SYM_AVG_EFF       0 
+#endif
+
+#ifdef ICON_TOTAL
+#define SYM_TOTAL         0XFE 
+#else
+#define SYM_TOTAL         0 
+#endif
+
+#ifdef ICON_TMP
+#define SYM_TMP           0X06 
+#else
+#define SYM_TMP           0 
+#endif
+
+#ifdef ICON_DTH
+#define SYM_DTH           0X7A
+#else
+#define SYM_DTH           0
+#endif
+
+#ifdef ICON_ALT
+#define SYM_ALT           0X3F
+#else
+#define SYM_ALT           0
+#endif
+
+#ifdef ICON_GPS_ALT
+#define SYM_GPS_ALT       0XBE
+#else
+#define SYM_GPS_ALT       0
+#endif
+
+#ifdef ICON_MAIN_BATT
+#define SYM_MAIN_BATT 0X97
+#else
+#define SYM_MAIN_BATT     0
+#endif
+
+#ifdef ICON_VID_BAT
+#define SYM_VID_BAT       0XBF
+#else
+#define SYM_VID_BAT       0
+#endif
+
+#ifdef ICON_RSSI
+#define SYM_RSSI          0XBA
+#else
+#define SYM_RSSI          0
+#endif
+
+#ifdef ICON_SAT
+#define SYM_SAT_L 0X1E
+#define SYM_SAT_R 0X1F
+#else
+#define SYM_SAT           0XF0
+#endif
+
+
+

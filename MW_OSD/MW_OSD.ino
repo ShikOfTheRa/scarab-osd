@@ -79,9 +79,11 @@ uint16_t UntouchedStack(void)
 #define PGMSTR(p) (char *)pgm_read_word(p)
 
 //------------------------------------------------------------------------
-#define MWVERS "MW-OSD - R1.7.2.2"
-#define MWOSDVERSION 1722 // 1660=1.6.6.0 for GUI
-#define EEPROMVER 13      // for eeprom layout verification
+#define MWVERS "MW-OSD - R1.8.0.0"
+#define MWVERS "MW-OSD - R1.8 BUILD 1"
+#define MWOSDVERSION 1880 // 1660=1.6.6.0 for GUI
+#define EEPROMVER 15      // for eeprom layout verification
+
 #include <avr/pgmspace.h>
 #undef PROGMEM
 #define PROGMEM __attribute__(( section(".progmem.data") ))
@@ -107,34 +109,6 @@ uint16_t UntouchedStack(void)
   #include <Wire.h>
 #endif
 
-char screen[480];          // Main screen ram for MAX7456
-#ifdef INVERTED_CHAR_SUPPORT
-uint8_t screenAttr[480/8]; // Attribute (INV) bits for each char in screen[]
-#endif
-char screenBuffer[20]; 
-uint32_t modeMSPRequests;
-uint32_t queuedMSPRequests;
-uint8_t sensorpinarray[]={VOLTAGEPIN,VIDVOLTAGEPIN,AMPERAGEPIN,TEMPPIN,RSSIPIN};  
-unsigned long previous_millis_low=0;
-unsigned long previous_millis_high =0;
-unsigned long previous_millis_sync =0;
-unsigned long previous_millis_rssi =0;
-
-#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
-uint8_t fontStatus=0;
-//uint16_t MAX_screen_size;
-boolean ledstatus=HIGH;
-//uint8_t fontData[54];
-//uint8_t Settings[1];
-#endif
-
-#ifdef KKAUDIOVARIO
-unsigned int calibrationData[7];
-unsigned long time = 0;
-float toneFreq, toneFreqLowpass, pressure, lowpassFast, lowpassSlow ;
-int ddsAcc;
-#endif
-
 
 
 //------------------------------------------------------------------------
@@ -152,7 +126,6 @@ void setup()
     uint8_t l = ((F_CPU  / 4 / (BAUDRATE) -1) / 2);
     UCSR0A  |= (1<<U2X0); UBRR0H = h; UBRR0L = l; 
   #endif
-  Serial.flush();
 
 #ifdef I2C_UB_SUPPORT
   // I2C initialization
@@ -164,22 +137,21 @@ void setup()
 #endif
 
   MAX7456SETHARDWAREPORTS
-
-  pinMode(A6, INPUT);
-  pinMode(RSSIPIN, INPUT);
-  pinMode(TEMPPIN, INPUT);
-  pinMode(LEDPIN,OUTPUT);
+  ATMEGASETHARDWAREPORTS
+  LEDINIT
   
-  initPulseInts();  // initialise PWM / PPM inputs
 
 #if defined EEPROM_CLEAR
   EEPROM_clear();
 #endif  
   checkEEPROM();
   readEEPROM();
-  
+
   #ifndef STARTUPDELAY
-    #define STARTUPDELAY 500
+    #define STARTUPDELAY 1000
+  #endif
+  #ifndef INTRO_DELAY 
+    #define INTRO_DELAY 5
   #endif
   delay(STARTUPDELAY);
 
@@ -190,20 +162,9 @@ void setup()
   # endif
 #endif
 
-#ifdef IMPULSERC_HELIX
-  //Ignore setting because this is critical to making sure we can detect the
-  //VTX power jumper being installed. If we aren't using 5V ref there is
-  //the chance we will power up on wrong frequency.
-  Settings[S_VREFERENCE]=1;
-#endif //IMPULSERC_HELIX 
-  if (Settings[S_VREFERENCE])
-    analogReference(DEFAULT);
-  else
-    analogReference(INTERNAL);
-
   MAX7456Setup();
   #if defined GPSOSD
-    timer.GPS_initdelay=10; 
+    timer.GPS_initdelay=INTRO_DELAY; 
     //GPS_SerialInit(); 
   #else
   #endif
@@ -228,6 +189,7 @@ void setup()
     pressure = getPressure();
     lowpassFast = lowpassSlow = pressure;
   #endif //KKAUDIOVARIO
+  Serial.flush();
 }
 
 //------------------------------------------------------------------------
@@ -254,7 +216,14 @@ void loop()
       fontStatus++;
       break;
   }
-  digitalWrite(LEDPIN,LOW);
+  LEDOFF
+}
+#elif defined DISPLAYFONTS
+void loop()
+{
+  MAX7456Setup(); 
+  displayFont();  
+  MAX7456_DrawScreen();
 }
 #else
 
@@ -269,6 +238,29 @@ void loop()
 //------------------------------------------------------------------------
 void loop()
 {
+
+#if defined TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI 
+  switch(Settings[S_TX_TYPE]) {
+    case 1: //RPTY
+      tx_roll     = 1;
+      tx_pitch    = 2;
+      tx_yaw      = 4;
+      tx_throttle = 3;
+      break;
+    case 2: //TRPY
+      tx_roll     = 2;
+      tx_pitch    = 3;
+      tx_yaw      = 4;
+      tx_throttle = 1;
+      break;
+    default: //RPYT - default xxxflight FC
+      tx_roll     = 1;
+      tx_pitch    = 2;
+      tx_yaw      = 3;
+      tx_throttle = 4;
+      break;  
+  }
+#endif // TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI   
   
   alarms.active=0;
   timer.loopcount++;
@@ -280,39 +272,40 @@ void loop()
       screenlayout=1;
     else
       screenlayout=0; 
+  #elif defined (OSD_SWITCH)                   
+    if (MwSensorActive&mode.osd_switch)
+      screenlayout=1;
+    else  
+      screenlayout=0;
   #elif defined (OSD_SWITCH_RC)                   
     rcswitch_ch = Settings[S_RCWSWITCH_CH];
     screenlayout=0;
-    if (Settings[S_RCWSWITCH]){
+    if (Settings[S_RCWSWITCH]==1){
       if (MwRcData[rcswitch_ch] > TX_CHAN_HIGH){
         screenlayout=1;
       }
       else if (MwRcData[rcswitch_ch] > TX_CHAN_MID){
         screenlayout=2;
       }
-    } 
+    }
     else{
-      if (MwSensorActive&mode.osd_switch){
-        screenlayout=1;
-      }
+    if (MwSensorActive&mode.osd_switch)
+      screenlayout=1;      
     }
   #else 
-    if (MwSensorActive&mode.osd_switch)
-      screenlayout=1;
-    else  
-      screenlayout=0;
+    screenlayout=0;
   #endif
   
   if (screenlayout!=oldscreenlayout){
-    readEEPROM_screenlayout();
+    readEEPROM();
   }
   oldscreenlayout=screenlayout;
     
   // Blink Basic Sanity Test Led at 0.5hz
-  if(timer.tenthSec>5)
-    digitalWrite(LEDPIN,HIGH);
+  if(timer.Blink2hz)
+    LEDON
   else
-    digitalWrite(LEDPIN,LOW);
+    LEDOFF
 
   //---------------  Start Timed Service Routines  ---------------------------------------
   unsigned long currentMillis = millis();
@@ -353,16 +346,21 @@ void loop()
     timer.tenthSec++;
     timer.halfSec++;
     timer.Blink10hz=!timer.Blink10hz;
-    calculateTrip();
-    if (Settings[S_AMPER_HOUR]) 
-    {
+
+    if(GPS_fix && armed){
+      if(Settings[S_UNITSYSTEM])
+        tripSum += GPS_speed *0.0032808;     //  100/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
+      else
+        tripSum += GPS_speed *0.0010;        //  100/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)      
+      trip = (uint32_t) tripSum;
+    }
+    
       #ifndef KISS
         amperagesum += amperage;
       #else 
         if (!Settings[S_MWAMPERAGE]) 
           amperagesum += amperage;
       #endif   // KISS
-    }
     #ifndef GPSOSD 
       #ifdef MSP_SPEED_MED
         #ifdef CANVAS_SUPPORT
@@ -387,15 +385,21 @@ void loop()
       uint8_t MSPcmdsend=0;
       if(queuedMSPRequests == 0)
         queuedMSPRequests = modeMSPRequests;
+      if (timer.GUI_active!=0){
+        queuedMSPRequests&=REQ_MSP_FONT;
+      } 
+  
       uint32_t req = queuedMSPRequests & -queuedMSPRequests;
       queuedMSPRequests &= ~req;
       switch(req) {
-      case REQ_MSP_IDENT:
-       MSPcmdsend = MSP_IDENT;
-        break;
       case REQ_MSP_STATUS:
         MSPcmdsend = MSP_STATUS;
         break;
+#ifdef INTRO_FC
+      case REQ_MSP_FC_VERSION:
+        MSPcmdsend = MSP_FC_VERSION;
+        break;
+#endif
       case REQ_MSP_RC:
         MSPcmdsend = MSP_RC;
         break;
@@ -499,9 +503,9 @@ void loop()
          if (!canvasMode)
          #endif
          {
-           if (timer.GUI_active==0){
+           if (MSPcmdsend!=0){
              mspWriteRequest(MSPcmdsend, 0);
-           } 
+           }
          }
        #endif // KISS
       #endif //GPSOSD
@@ -513,13 +517,6 @@ void loop()
 
     ProcessSensors();       // using analogue sensors
 
-
-#ifndef INTRO_DELAY 
-  #define INTRO_DELAY 5
-  #ifdef DEBUG 
-    #define INTRO_DELAY 0
-  #endif
-#endif
     if( allSec < INTRO_DELAY ){
       displayIntro();
       timer.lastCallSign=onTime-CALLSIGNINTERVAL;
@@ -528,6 +525,7 @@ void loop()
     {
       if(armed){
         previousarmedstatus=1;
+        timer.disarmed=OSDSUMMARY;
         if (configMode==1)
           configExit();
       }
@@ -557,18 +555,6 @@ void loop()
           MAX7456_ClearScreen();
           canvasMode = false;
         }
-
-        // Place a small indicator for canvas mode to detect spurious 
-        // canvas requests.
-        // In a normal situation, It should go away on the very first
-        // clear screen request, but may remain until next clear screen
-        // if the begin and the first clear request comes in back-to-back
-        // before the indicator is drawn.
-
-        if (canvasFirst) {
-          MAX7456_WriteString("*", (LINE01+01));
-          canvasFirst = false;
-        }
       }
 #endif
       else
@@ -577,20 +563,17 @@ void loop()
 #if defined USE_AIRSPEED_SENSOR
         useairspeed();
 #endif //USE_AIRSPEED_SENSOR
-        if(MwSensorPresent&ACCELEROMETER)
-           displayHorizon(MwAngle[0],MwAngle[1]);
+        displayHorizon(MwAngle[0],MwAngle[1]);
 #if defined FORCECROSSHAIR
         displayForcedCrosshair();
 #endif //FORCECROSSHAIR
-        if(Settings[S_DISPLAYVOLTAGE])
           displayVoltage();
-        if (Settings[S_VIDVOLTAGE])
           displayVidVoltage();
-        if(Settings[S_DISPLAYRSSI]&&((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz)))
+        if((rssi>Settings[S_RSSI_ALARM])||(timer.Blink2hz))
           displayRSSI();
-        if(Settings[S_AMPERAGE]&&(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz)))
+        if(((amperage/10)<Settings[S_AMPERAGE_ALARM])||(timer.Blink2hz))
           displayAmperage();
-        if(Settings[S_AMPER_HOUR] && ((!ampAlarming()) || timer.Blink2hz))
+        if(((!ampAlarming()) || timer.Blink2hz))
           displaypMeterSum();
         displayTime();
 #if defined (DISPLAYWATTS)
@@ -602,50 +585,57 @@ void loop()
 #if defined (DISPLAYMAHMIN)
         displaymAhmin();
 #endif //DISPLAYMAHMIN
-#ifdef TEMPSENSOR
-        if(((temperature<Settings[TEMPERATUREMAX])||(timer.Blink2hz))) displayTemperature();
+#ifdef SHOW_TEMPERATURE
+        displayTemperature();
 #endif
 #ifdef VIRTUAL_NOSE
         displayVirtualNose();
 #endif
-#ifdef DISPLAYDOP
-        displayDOP();
-#endif
         displayArmed();
-        if (Settings[S_THROTTLEPOSITION])
-          displayCurrentThrottle();
-#ifdef CALLSIGNALWAYS
-        if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition)); 
-#elif  FREETEXTLLIGHTS
+        displayCurrentThrottle();
+#ifdef FREETEXTLLIGHTS
         if (MwSensorActive&mode.llights) displayCallsign(getPosition(callSignPosition)); 
 #elif  FREETEXTGIMBAL
         if (MwSensorActive&mode.camstab) displayCallsign(getPosition(callSignPosition)); 
 #else 
-        if ( (onTime > (timer.lastCallSign+CALLSIGNINTERVAL)))
-       {
-           // Displays 4 sec every 5min (no blink during flight)
-        if ( onTime > (timer.lastCallSign+CALLSIGNINTERVAL+CALLSIGNDURATION)) timer.lastCallSign = onTime; 
-        if(Settings[S_DISPLAY_CS]) displayCallsign(getPosition(callSignPosition));      
-       }
+        if(fieldIsVisible(callSignPosition)){
+          if (Settings[S_CALLSIGN_ALWAYS]>1){
+            if ( (onTime > (timer.lastCallSign+CALLSIGNINTERVAL))){ // Displays 4 sec every 60 secs 
+              if ( onTime > (timer.lastCallSign+CALLSIGNINTERVAL+CALLSIGNDURATION)) 
+                timer.lastCallSign = onTime; 
+              displayCallsign(getPosition(callSignPosition));      
+            }
+          }
+          else if (Settings[S_CALLSIGN_ALWAYS]==1){
+            displayCallsign(getPosition(callSignPosition));     
+          }
+        }
 #endif
-        if(MwSensorPresent&MAGNETOMETER) {
+//-        if(MwSensorPresent&MAGNETOMETER) {
           displayHeadingGraph();
           displayHeading();
-        }
-        if(MwSensorPresent&BAROMETER) {
+//-        }
+//-        if(MwSensorPresent&BAROMETER) {
           displayAltitude();
           displayClimbRate();
-        }
-        if(MwSensorPresent&GPSSENSOR) 
-        if(Settings[S_DISPLAYGPS]){
+          displayVario();
+//-        }
+//-        if(MwSensorPresent&GPSSENSOR) // missing {
           displayNumberOfSat();
           displayDirectionToHome();
           displayDistanceToHome();
+          displayDistanceTotal();
+          displayDistanceMax();
           displayAngleToHome();
+          displayGPSAltitude();
+          displayGPSdop();
           #ifdef USEGLIDESCOPE
             // displayfwglidescope(); //note hook for this is in display horizon function
           #endif //USEGLIDESCOPE  
-          displayGPS_speed();
+          display_speed(GPS_speed,GPS_speedPosition,SYM_SPEED_GPS);
+          display_speed(AIR_speed,AIR_speedPosition,SYM_SPEED_AIR);
+          displayWindSpeed(); // also windspeed if available
+          displayItem(MAX_speedPosition, speedMAX, SYM_MAX, speedUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
           displayGPSPosition();  
       
 #ifdef GPSTIME
@@ -654,7 +644,6 @@ void loop()
 #ifdef MAPMODE
           mapmode();
 #endif
-        }
         displayMode();       
 #ifdef I2CERROR
         displayI2CError();
@@ -716,11 +705,17 @@ void loop()
         timer.GPS_active--;
       }      
     #endif // ALARM_GPS 
+    if (timer.disarmed>0){
+      timer.disarmed--;
+    }  
     if (timer.MSP_active>0){
       timer.MSP_active--;
     }  
     if (timer.GUI_active>0){
       timer.GUI_active--;
+      #if defined GPSOSD
+        timer.GPS_initdelay=2; 
+      #endif     
     }  
     #if defined(GPSOSD) && !defined(NAZA)
     if (timer.GPS_initdelay==1){
@@ -865,16 +860,14 @@ void setMspRequests() {
   }
   else if(configMode) {
     modeMSPRequests = 
-      REQ_MSP_IDENT|
       REQ_MSP_STATUS|
       REQ_MSP_RAW_GPS|
-#ifdef MSP_SPEED_LOW
       REQ_MSP_ATTITUDE|
-#endif
       REQ_MSP_RAW_IMU|
       REQ_MSP_ALTITUDE|
       REQ_MSP_RC_TUNING|
       REQ_MSP_PID_CONTROLLER|
+      REQ_MSP_ANALOG|
 #ifdef USE_MSP_PIDNAMES
       REQ_MSP_PIDNAMES|
 #endif
@@ -900,75 +893,60 @@ void setMspRequests() {
 #ifdef MENU_FIXEDWING
       REQ_MSP_FW_CONFIG|
 #endif
+#ifdef USE_FC_VOLTS_CONFIG
+  #if defined(CLEANFLIGHT) || defined(BETAFLIGHT)
+      REQ_MSP_VOLTAGE_METER_CONFIG|
+  #else
+      REQ_MSP_MISC|
+  #endif
+#endif
       REQ_MSP_RC;
   }
   else {
-//wtf:?? try deleting next 4 lines and what happens to memory. is it local vs global in some way?
-//    MwSensorPresent |=GPSSENSOR;
-//    MwSensorPresent |=BAROMETER;
-//    MwSensorPresent |=MAGNETOMETER;
-//    MwSensorPresent |=ACCELEROMETER;
-
     modeMSPRequests = 
       REQ_MSP_STATUS|
-      REQ_MSP_RC|
      #ifdef DEBUGMW
       REQ_MSP_DEBUG|
      #endif
      #ifdef SPORT      
       REQ_MSP_CELLS|
      #endif
+     #ifdef MSP_USE_GPS
+      REQ_MSP_RAW_GPS| 
+      REQ_MSP_COMP_GPS|
+     #endif //MSP_USE_GPS
+     #ifdef MSP_USE_BARO
+      REQ_MSP_ALTITUDE|
+     #endif //MSP_USE_BARO
      #ifdef HAS_ALARMS
       REQ_MSP_ALARMS|
      #endif
-#ifdef MSP_SPEED_LOW
+     #ifdef MSP_SPEED_LOW
       REQ_MSP_ATTITUDE|
-#endif
-      0; // Sigh...
-
-    if(MwSensorPresent&BAROMETER){ 
-      modeMSPRequests |= REQ_MSP_ALTITUDE;
-    }
-    if(flags.ident!=1){
-      modeMSPRequests |= REQ_MSP_IDENT;
-    }
-    if(MwSensorPresent&GPSSENSOR) 
-      modeMSPRequests |= REQ_MSP_RAW_GPS| REQ_MSP_COMP_GPS;
+     #endif
+     #ifdef MSP_USE_ANALOG
+      REQ_MSP_ANALOG|
+     #endif //MSP_USE_ANALOG     
+     #ifdef USE_FC_VOLTS_CONFIG
+       #if defined(CLEANFLIGHT) || defined(BETAFLIGHT)
+         REQ_MSP_VOLTAGE_METER_CONFIG|
+       #else
+         REQ_MSP_MISC|
+       #endif
+     #endif
+      REQ_MSP_RC;
     if(mode.armed == 0)
       modeMSPRequests |=REQ_MSP_BOX;
+#ifdef INTRO_FC
+    if (FC.verMajor==0)
+      queuedMSPRequests|=REQ_MSP_FC_VERSION;
+#endif      
 #if defined MULTIWII_V24
     if(MwSensorActive&mode.gpsmission)
-    modeMSPRequests |= REQ_MSP_NAV_STATUS;
+      modeMSPRequests |= REQ_MSP_NAV_STATUS;
 #endif
-  }
- 
-  if(Settings[S_MAINVOLTAGE_VBAT] || Settings[S_AMPERAGE] || Settings[S_MWRSSI]) {
-    modeMSPRequests |= REQ_MSP_ANALOG;
-    
-#ifdef USE_FC_VOLTS_CONFIG
-  #if defined(CLEANFLIGHT) || defined(BETAFLIGHT)
-    modeMSPRequests |= REQ_MSP_VOLTAGE_METER_CONFIG;
-  #else
-    modeMSPRequests |= REQ_MSP_MISC;
-  #endif
-#endif
-
-  }
-
+  }     
   queuedMSPRequests &= modeMSPRequests;   // so we do not send requests that are not needed.
-}
-
-
-void calculateTrip(void)
-{
-  static float tripSum = 0; 
-  if(GPS_fix && armed && (GPS_speed>0)) {
-    if(Settings[S_UNITSYSTEM])
-      tripSum += GPS_speed *0.0032808;     //  100/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
-    else
-      tripSum += GPS_speed *0.0010;        //  100/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)      
-  }
-  trip = (uint32_t) tripSum;
 }
 
 
@@ -978,9 +956,9 @@ void writeEEPROM(void) // OSD will only change 8 bit values. GUI changes directl
     EEPROM.write(en,Settings[en]);
   } 
   for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
-    uint16_t pos=EEPROM_SETTINGS+(en*2);
-    EEPROM.write(pos,Settings16[en]&0xFF);
-    EEPROM.write(pos+1,Settings16[en]>>8);
+    uint16_t pos  = EEPROM_SETTINGS+(en*2);
+    uint16_t data = Settings16[en];
+    write16EEPROM(pos, data);
   } 
   EEPROM.write(0,EEPROMVER);
 }
@@ -991,9 +969,48 @@ void readEEPROM(void)
   for(uint8_t en=0;en<EEPROM_SETTINGS;en++){
      Settings[en] = EEPROM.read(en);
   }
-  #ifdef AUTOCELL
-  Settings[S_BATCELLS]=1;
+
+// config dependant - set up interrupts  
+  #if defined INTC3
+  if (Settings[S_MWRSSI]==1){
+    DDRC &= ~(1 << DDC3); //  PORTC |= (1 << PORTC3);
+    //DDRC &=B11110111; 
+  }
   #endif
+  #if defined INTD5
+  DDRD &= ~(1 << DDD5); //  PORTD |= (1 << PORTD5);
+  #endif
+  cli();
+  #if defined INTC3
+  if (Settings[S_MWRSSI]==1){
+  if ((PCMSK1&(1 << PCINT11))==0){
+    PCICR |=  (1 << PCIE1);
+    PCMSK1 |= (1 << PCINT11);
+  }
+  }
+  #endif
+  #if defined INTD5
+  if ((PCMSK2&(1 << PCINT21))==0){
+    PCICR |=  (1 << PCIE2);
+    PCMSK2 |= (1 << PCINT21);
+  }
+  #endif
+  sei(); 
+
+
+// config dependant - voltage reference  
+#ifdef IMPULSERC_HELIX
+  //Ignore setting because this is critical to making sure we can detect the
+  //VTX power jumper being installed. If we aren't using 5V ref there is
+  //the chance we will power up on wrong frequency.
+  Settings[S_VREFERENCE]=1;
+#endif //IMPULSERC_HELIX 
+
+  if (Settings[S_VREFERENCE])
+    analogReference(DEFAULT);
+  else
+    analogReference(INTERNAL);
+  
 
   for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
      uint16_t pos=(en*2)+EEPROM_SETTINGS;
@@ -1002,21 +1019,14 @@ void readEEPROM(void)
      Settings16[en] = Settings16[en]+(xx<<8);
   }
 
-  readEEPROM_screenlayout();
-}
-
-
-void readEEPROM_screenlayout(void)
-{
-
+  // Read screen layouts
   uint16_t EEPROMscreenoffset=EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(screenlayout*POSITIONS_SETTINGS*2);
   for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
     uint16_t pos=(en*2)+EEPROMscreenoffset;
     screenPosition[en] = EEPROM.read(pos);
     uint16_t xx=(uint16_t)EEPROM.read(pos+1)<<8;
     screenPosition[en] = screenPosition[en] + xx;
-
-    if(Settings[S_VIDEOSIGNALTYPE]){
+    if(flags.signaltype==1){
       uint16_t x = screenPosition[en]&0x1FF; 
       if (x>LINE06) screenPosition[en] = screenPosition[en] + LINE;
       if (x>LINE09) screenPosition[en] = screenPosition[en] + LINE;
@@ -1036,41 +1046,28 @@ void checkEEPROM(void)
       EEPROM.write(en,pgm_read_byte(&EEPROM_DEFAULT[en]));
     }
     for(uint8_t en=0;en<EEPROM16_SETTINGS;en++){
-      uint16_t pos=EEPROM_SETTINGS+(en*2);
-      uint16_t w = pgm_read_word(&EEPROM16_DEFAULT[en]);
-      EEPROM.write(pos, w & 0xff);
-      EEPROM.write(pos+1, w >> 8);
+      uint16_t pos  = EEPROM_SETTINGS+(en*2);
+      uint16_t data = pgm_read_word(&EEPROM16_DEFAULT[en]);
+      write16EEPROM(pos, data);
     }
-
-#define L0START EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)
-#define L1START EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*2)
-#define L2START EEPROM_SETTINGS+(EEPROM16_SETTINGS*2)+(POSITIONS_SETTINGS*4)
-
-    for(uint8_t en=0;en<POSITIONS_SETTINGS*2;en++){
-      uint16_t w;
-      w = pgm_read_word(&SCREENLAYOUT_DEFAULT[en]);
-      EEPROM.write(L0START+(en*2), w & 0xff);
-      EEPROM.write(L0START+(en*2)+1, w >> 8);
-
-      w = pgm_read_word(&SCREENLAYOUT_DEFAULT_OSDSW[en]);
-      EEPROM.write(L1START+(en*2), w & 0xff);
-      EEPROM.write(L1START+(en*2)+1, w >> 8);
-
-      w = pgm_read_word(&SCREENLAYOUT_DEFAULT[en]);
-      EEPROM.write(L2START+(en*2), w & 0xff);
-      EEPROM.write(L2START+(en*2)+1, w >> 8);
-    }
-/*
-    for(uint8_t osd_switch_pos=0;osd_switch_pos<3;osd_switch_pos++){
-      for(uint8_t en=0;en<POSITIONS_SETTINGS;en++){
-        EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*osd_switch_pos)+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]&0xFF);
-        EEPROM.write(EEPROM_SETTINGS+(POSITIONS_SETTINGS*osd_switch_pos)+1+(en*2),SCREENLAYOUT_DEFAULT_OSDSW[en]>>8);
+    uint16_t base = EEPROM_SETTINGS+(EEPROM16_SETTINGS*2);
+    for(uint8_t ilayout=0;ilayout<3;ilayout++){
+      for(uint8_t en=0;en<POSITIONS_SETTINGS*2;en++){
+        uint16_t pos  = base + (en*2);
+        uint16_t data = pgm_read_word(&SCREENLAYOUT_DEFAULT[en]);
+        write16EEPROM(pos, data);
       }
-    }    
-*/
+      base+=POSITIONS_SETTINGS*2;
+    }  
   }
 }
 
+
+void write16EEPROM(uint16_t pos, uint16_t data)
+{
+  EEPROM.write(pos  , data & 0xff);
+  EEPROM.write(pos+1, data >> 8  );
+}
 
 
 void gpsdistancefix(void){
@@ -1107,20 +1104,29 @@ void ProcessSensors(void) {
         sensortemp=MwVBat;
       }
     }
+#ifdef PROTOCOL_MAVLINK // assume vbat2 on FC if vbat1 is
+    if (sensor ==1) { 
+      if (Settings[S_MAINVOLTAGE_VBAT]){
+        sensortemp=MwVBat2;
+      }
+    }
+#endif    
     //--- override with PWM, FC RC CH or FC RSSI data if enabled    
     if (sensor ==4) { 
-      if (Settings[S_PWMRSSI]){
-        sensortemp = pwmRSSI>>1;
-        if (sensortemp==0) { // timed out - use previous
-          sensortemp=sensorfilter[sensor][sensorindex];
-        }
+      if (Settings[S_MWRSSI]==3) { // RSSI from a TX channel
+        sensortemp = MwRcData[Settings[S_RSSI_CH]]>>1;
       }
-      if(Settings[S_MWRSSI]) {
+      else if (Settings[S_MWRSSI]==2) { // RSSI from Flight controller
         sensortemp = MwRssi;
       }
-      #if defined RCRSSI
-        sensortemp = MwRcData[RCRSSI]>>1;
-      #endif
+      else if (Settings[S_MWRSSI]==1) { // RSSI from direct OSD - PWM
+         sensortemp = pwmRSSI>>1;
+         if (sensortemp==0) { // timed out - use previous
+           sensortemp=sensorfilter[sensor][sensorindex];
+         }
+      }
+      else{ // RSSI from direct OSD - Analog              
+      }
     }
     //--- Apply filtering    
 #if defined FILTER_HYSTERYSIS  // Hysteris incremental averaged change    
@@ -1169,20 +1175,15 @@ void ProcessSensors(void) {
     }
 
 //-------------- Temperature
-#ifdef TEMPSENSOR
+#ifdef SHOW_TEMPERATURE
+  #ifndef PROTOCOL_MAVLINK
     temperature=sensorfilter[3][SENSORFILTERSIZE]>>3-TEMPZERO;
     temperature = map (temperature, TEMPZERO, 1024, 0 , TEMPMAX);
+  #endif  
 #endif
 
 //-------------- Current
-  
-  if(!Settings[S_MWAMPERAGE]) {
-    if (!Settings[S_AMPERAGE_VIRTUAL]) { // Analogue
-      amperage = sensorfilter[2][SENSORFILTERSIZE]>>3;
-      amperage = map(amperage, Settings16[S16_AMPZERO], AMPCALHIGH, AMPCALLOW, Settings16[S16_AMPDIVIDERRATIO]);
-      if (amperage < 0) amperage=0;
-    }  
-    else {  // Virtual
+    if (Settings[S_MWAMPERAGE]==2) { // Virtual
       uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK],LowT,HighT);
       Vthrottle = constrain((Vthrottle-1000)/10,0,100);
       amperage = (Vthrottle+(Vthrottle*Vthrottle*0.02))*Settings16[S16_AMPDIVIDERRATIO]*0.01;
@@ -1190,18 +1191,22 @@ void ProcessSensors(void) {
         amperage += Settings16[S16_AMPZERO];
       else 
         amperage = Settings16[S16_AMPZERO];
-    }  
-  }
-  else{
-    // Apply rounding math
-    if (MWAmperage < 0)
-      amperage = (MWAmperage - AMPERAGE_DIV / 2) / AMPERAGE_DIV;
-    else
-      amperage = (MWAmperage + AMPERAGE_DIV / 2) / AMPERAGE_DIV;
-  }
+    }
+    else if (Settings[S_MWAMPERAGE]==1) { // from FC
+      if (MWAmperage < 0)
+        amperage = (MWAmperage - AMPERAGE_DIV / 2) / AMPERAGE_DIV;
+      else
+        amperage = (MWAmperage + AMPERAGE_DIV / 2) / AMPERAGE_DIV;
+    }
+    else { // Analog
+      amperage = sensorfilter[2][SENSORFILTERSIZE]>>3;
+      amperage = map(amperage, Settings16[S16_AMPZERO], AMPCALHIGH, AMPCALLOW, Settings16[S16_AMPDIVIDERRATIO]);
+      if (amperage < 0) amperage=0;              
+    }
+
 
 //-------------- RSSI
-  if (Settings[S_DISPLAYRSSI]) {           
+
     rssi = sensorfilter[4][SENSORFILTERSIZE]>>3; // filter and remain 16 bit
     if (configMode){
       if((timer.rssiTimer==15)) {
@@ -1214,36 +1219,11 @@ void ProcessSensors(void) {
     }
     rssi = map(rssi, Settings16[S16_RSSIMIN], Settings16[S16_RSSIMAX], 0, 100);
     rssi=constrain(rssi,0,100);
-  }
 
 //-------------- For filter support
   sensorindex++;                    
   if (sensorindex >= SENSORFILTERSIZE)              
     sensorindex = 0;                           
-}
-
-
-void initPulseInts() { //RSSI/PWM/PPM int initialisation
-  #if defined INTC3
-  DDRC &= ~(1 << DDC3); //  PORTC |= (1 << PORTC3);
-  #endif
-  #if defined INTD5
-  DDRD &= ~(1 << DDD5); //  PORTD |= (1 << PORTD5);
-  #endif
-  cli();
-  #if defined INTC3
-  if ((PCMSK1&(1 << PCINT11))==0){
-    PCICR |=  (1 << PCIE1);
-    PCMSK1 |= (1 << PCINT11);
-  }
-  #endif
-  #if defined INTD5
-  if ((PCMSK2&(1 << PCINT21))==0){
-    PCICR |=  (1 << PCIE2);
-    PCMSK2 |= (1 << PCINT21);
-  }
-  #endif
-  sei();
 }
 
 
@@ -1263,16 +1243,24 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
   LastTime = CurrentTime;
   if (!(pinstatus & (1<<PWMPIN1))) { // measures low duration
     PulseDuration = CurrentTime-PulseStart; 
-    if ((750<PulseDuration) && (PulseDuration<2250)) {    
-  #ifdef INTD5
+    if ((950<PulseDuration) && (PulseDuration<2150)) {    
+      pwmval1=PulseDuration;
+  #ifdef INTD5 // Aeromax Hardware so this must be PWMRSSI only
       pwmRSSI = PulseDuration;
   #else
-    #ifdef PPM_CONTROL
-      PulseType=1;
+    #if defined PPM_CONTROL
+      #define INTC3_PPM_PWM 1
+    #else
+      #define INTC3_PPM_PWM 0
     #endif
-      if (PulseType){ //PPM
+      if (INTC3_PPM_PWM){ //PWM
         if (RCchan<=TX_CHANNELS)// avoid array overflow if > standard ch PPM
           MwRcData[RCchan] = PulseDuration; // Val updated
+        #if defined (TX_GUI_CONTROL)
+        if (RCchan==4)
+          reverseChannels();
+        #endif // TX_PRYT
+  
       }
       else{ //PWM
       #ifdef NAZA
@@ -1298,7 +1286,6 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
     #endif
     }
     RCchan++;
-    pwmval1=PulseDuration;
   } 
   else {
     PulseStart = CurrentTime;
@@ -1323,11 +1310,9 @@ ISR(PCINT2_vect) { // // Secondary Arduino D5 Atmega D5
   
   if (!(pinstatus & (1<<PWMPIN2))) { // measures low duration
     PulseDuration = CurrentTime-PulseStart; 
-    if ((750<PulseDuration) && (PulseDuration<2250)) {    
-    #ifdef PPM_CONTROL
-      PulseType=1;
-    #endif
-      if (PulseType){ //PPM
+    if ((950<PulseDuration) && (PulseDuration<2150)) {    
+      pwmval2=PulseDuration;
+      if (Settings[S_PWM_PPM]){ //PPM
         if (RCchan<=TX_CHANNELS)// avoid array overflow if > standard ch PPM
           MwRcData[RCchan] = PulseDuration; // Val updated
       }
@@ -1344,15 +1329,14 @@ ISR(PCINT2_vect) { // // Secondary Arduino D5 Atmega D5
           Naza.mode=NAZA_MODE_LOW;
         }
       #endif  
-      #ifdef PWM_THROTTLE
-        MwRcData[THROTTLESTICK] = PulseDuration;
-      #elif defined OSD_SWITCH_RC     
+      #ifdef PWM_OSD_SWITCH
         MwRcData[rcswitch_ch]=PulseDuration;
+      #else // assume throttle connected if not using PPM
+        MwRcData[THROTTLESTICK] = PulseDuration;
       #endif
       }
     }
     RCchan++;
-    pwmval2=PulseDuration;
   }  
   else {
     PulseStart = CurrentTime;
@@ -1366,7 +1350,10 @@ void EEPROM_clear(){
     EEPROM.write(i, 0);
 }
 
-
+int16_t filter16u( int16_t filtered, int16_t raw, const byte k){
+  filtered+=(raw-filtered)/k; // note extreme values may overrun. 32 it if reuired.
+  return filtered;
+}
 
 #if defined USE_AIRSPEED_SENSOR
 void useairspeed(){
@@ -1381,3 +1368,11 @@ void useairspeed(){
   GPS_speed = 27.7777 * sqrt(airspeedsensor * airspeed_cal); // Need in cm/s for this
 }
 #endif //USE_AIRSPEED_SENSOR 
+
+void reverseChannels(void){ //ifdef (TX_REVERSE) 
+  for(uint8_t i=1;i<=4;i++){
+    if (Settings[S_TX_CH_REVERSE] & (1<<i))
+      MwRcData[i] = 3000 - MwRcData[i];
+  }
+}
+
