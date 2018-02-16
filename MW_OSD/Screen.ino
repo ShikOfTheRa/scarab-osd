@@ -6,7 +6,7 @@ char *ItoaPadded(int val, char *str, uint8_t bytes, uint8_t decimalpos)  {
   // Length
   // Decimal position
   uint8_t neg = 0;
-  if(val < 0) {
+  if(val < 0){ 
     neg = 1;
     val = -val;
   } 
@@ -1043,10 +1043,10 @@ void displayGPSdop(void)
 }
 
 
-void display_speed(uint16_t t_value, uint8_t t_position, uint8_t t_leadicon)
+void display_speed(int16_t t_value, uint8_t t_position, uint8_t t_leadicon)
 {
   if(!armed) t_value=0;
-  uint16_t xx;
+  int16_t xx;
   if(!Settings[S_UNITSYSTEM])
     xx = t_value * 0.036;           // From MWii cm/sec to Km/h
   else
