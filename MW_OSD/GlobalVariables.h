@@ -423,8 +423,8 @@ enum Setting16_ {
   S16_AMPDIVIDERRATIO,
   S16_RSSIMIN,
   S16_RSSIMAX,
-  S16_SPARE1,
-  S16_SPARE2,
+  S16_AIRSPEEDZERO,
+  S16_AIRSPEEDCAL,
   
   // EEPROM16_SETTINGS must be last!
   EEPROM16_SETTINGS
@@ -594,8 +594,8 @@ PROGMEM const uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
   150,// S16_AMPDIVIDERRATIO,
   0,// S16_RSSIMIN,
   1023,// S16_RSSIMAX,
-  500,// S16_SPARE1,
-  600,// S16_SPARE2,
+  512,// S16_AIRSPEEDZERO,
+  500,// S16_AIRSPEEDCAL,
   
 };
 
@@ -775,9 +775,9 @@ int32_t GPS_altitude;
 int32_t GPS_altitude_ASL;
 int32_t GPS_altitude_vario;
 int32_t GPS_home_altitude;
-int16_t previousfwaltitude=0;
-uint16_t AIR_speed;
-uint16_t GPS_speed;
+int32_t previousfwaltitude=0;
+int16_t AIR_speed;
+int16_t GPS_speed;
 int16_t  GPS_ground_course;
 uint16_t old_GPS_speed;
 int16_t GPS_directionToHome=0;
