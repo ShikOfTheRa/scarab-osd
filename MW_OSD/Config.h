@@ -296,7 +296,7 @@
 
 /********************       Airspeed Sensor         ************************/
 // UNTESTED in flight. Uses MPXV700DP sensor connected to AUXPIN A6  (Aeromax OSD hardware only)
-#define USE_AIRSPEED_SENSOR
+//#define USE_AIRSPEED_SENSOR
 
 
 /********************       NAZA Settings         ************************/
