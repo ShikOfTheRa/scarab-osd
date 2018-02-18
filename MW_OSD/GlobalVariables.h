@@ -775,7 +775,7 @@ int32_t GPS_altitude;
 int32_t GPS_altitude_ASL;
 int32_t GPS_altitude_vario;
 int32_t GPS_home_altitude;
-int16_t previousfwaltitude=0;
+int32_t previousfwaltitude=0;
 int16_t AIR_speed;
 int16_t GPS_speed;
 int16_t  GPS_ground_course;

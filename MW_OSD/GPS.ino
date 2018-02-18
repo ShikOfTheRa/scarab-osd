@@ -538,7 +538,7 @@ bool UBLOX_parse_gps(void) {
         GPS_coord[LAT]   = _buffer.posllh.latitude;
         GPS_altitude_ASL = _buffer.posllh.altitude_msl / 1000;      //alt in m
         GPS_altitude_vario = _buffer.posllh.altitude_msl / 10;      //alt in cm
-        gpsvario();
+        gpsvarioublox();
       }
       GPS_fix = _fix_ok;
 #ifdef ALARM_GPS
@@ -817,6 +817,16 @@ void GPS_NewData() {
   }
 }
 
+
+void gpsvarioublox() {
+  if (millis() > timer.fwAltitudeTimer) { // To make vario from GPS altitude
+    timer.fwAltitudeTimer += 500;
+    MwVario = (int32_t)(GPS_altitude_vario - previousfwaltitude)<<1;
+    previousfwaltitude = GPS_altitude_vario;
+  }
+}
+
+
 #endif // GPS
 
 
@@ -828,13 +838,6 @@ void gpsvario() {
   }
 }
 
-void gpsvarioublox() {
-  if (millis() > timer.fwAltitudeTimer) { // To make vario from GPS altitude
-    timer.fwAltitudeTimer += 1000;
-    MwVario = (int32_t)(GPS_altitude_vario - previousfwaltitude) * 10;
-    previousfwaltitude = GPS_altitude_vario;
-  }
-}
 
 
 #if defined NAZA
