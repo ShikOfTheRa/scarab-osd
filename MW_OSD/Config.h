@@ -343,12 +343,10 @@
 
 /********************  RECORD CAPTURE  settings      *********************/
 // This is used for those who are attempting records to always show the maximum achieved.
-// Maximum values (as shown on statistics summary screen will be displayed on line IMMEDAITELY BELOW where current live data is displayed
-// It may require layouts to be amended to show data without overwriting other information
 #define SHOW_MAX_SPEED              // Enable to display MAX speed achieved
-//#define SHOW_MAX_ALTITUDE         // Enable to display MAX altitude achieved on line below current altitude
 #define SHOW_MAX_DISTANCE           // Enable to display MAX distance achieved
 #define SHOW_TOTAL_DISTANCE         // Enable to display TOTAL distance achieved
+//#define SHOW_MAX_ALTITUDE         // Enable to display MAX altitude achieved on line below current altitude
 
 
 /********************  THROTTLE calibration  settings      *********************/
