@@ -294,13 +294,9 @@
 #define TX_CHAN_HIGH 1600           // Value for determining RC SWITCH MID / HIGH transition
 
 
-/********************       Airspeed Settings         ************************/
-// Completely UNTESTED for future integration of support for airspeed sensor connected direct to OSD
-// Uses temp pin
-// Overrides GPS speed
+/********************       Airspeed Sensor         ************************/
+// UNTESTED in flight. Uses MPXV700DP sensor connected to AUXPIN A6  (Aeromax OSD hardware only)
 //#define USE_AIRSPEED_SENSOR
-#define AIRSPEED_ZERO 512           // AIRSPEED ZERO calibration (0-1024) typically 512 for HK pilot sensor
-#define AIRSPEED_CAL  78.125        // Adjusting factor
 
 
 /********************       NAZA Settings         ************************/
