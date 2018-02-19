@@ -257,6 +257,7 @@
 /********************       Visual Vario / climbrate Settings         ************************/
 //#define VARIOSTANDARD             // Enable this for single icon representation of vario. Less memory.
 #define VARIOENHANCED               // Enable this for multi line more accurate visual slider representation of vario. Configurable from GUI
+//#define VARIOSCALE 200            // Scale used for Vario - 200 =2.00 m/s. Multirotor defualt = 200, Plane = 300
 
 /********************       FC BARO Audio Vario / climbrate Settings         ************************/
 // A basic Audio Vario using vario data from FC 

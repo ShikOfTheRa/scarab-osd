@@ -772,6 +772,7 @@ enum {
   #ifndef USEGLIDESCOPE 
     #define USEGLIDESCOPE
   #endif
+  #define VARIOSCALE 300 
 #endif
 
 // All aircraft / FC types defaults...
