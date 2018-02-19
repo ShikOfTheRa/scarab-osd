@@ -772,7 +772,18 @@ enum {
   #ifndef USEGLIDESCOPE 
     #define USEGLIDESCOPE
   #endif
+  #ifndef VARIOSCALE 
+    #define VARIOSCALE 300 
+  #endif
 #endif
+
+/********************  ROTORCRAFT definitions  *********************/
+#ifdef ROTORCRAFT                     
+  #ifndef GPSOSDHOMEDISTANCE
+    #define GPSOSDHOMEDISTANCE 15     // distance from home in meters to start check  for when when GPSOSD is home.
+  #endif
+#endif
+
 
 // All aircraft / FC types defaults...
 #define RESETGPSALTITUDEATARM
@@ -785,6 +796,9 @@ enum {
   #undef RESETGPSALTITUDEATARM
 #endif
 
+#ifndef GPSOSDHOMEDISTANCE
+  #define GPSOSDHOMEDISTANCE 40     // distance from home in meters to start check  for when when GPSOSD is home.
+#endif
 
 /********************  OSD HARDWARE rule definitions  *********************/
 

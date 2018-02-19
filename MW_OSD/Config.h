@@ -118,7 +118,7 @@
 #define GPSHOMEFIX         10       // Number of consecutive seconds of valid fixes before home will be set. Max 32 
 #define HOMESATFIX          6       // Minimum number of sats required when setting initial home location. 
 #define GPSOSDARMDISTANCE  20       // distance from home in meters when GPSOSD arms. Starts flight timer etc.
-#define GPSOSDHOMEDISTANCE 40       // distance from home in meters when GPSOSD is home. When speed is low it disarms and displays summary screen.
+//#define GPSOSDHOMEDISTANCE 40     // distance from home in meters when GPSOSD is home. When speed is low it disarms and displays summary screen.
 #define GPSOSDLANDED        8       // seconds OSD needs to have landed (within home distance and speed less than xxx) before triggering summary. Max 32
 #define GPSDOP 500                  // UBLOX only - minimum PDOP required for sat fix. A DOP of 2.00 is considered good 
 //#define PPM_CONTROL               // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD PWM input pin (RSSI pin on basic MINIM hardware). Requires TX type to be set below. 
@@ -257,6 +257,7 @@
 /********************       Visual Vario / climbrate Settings         ************************/
 //#define VARIOSTANDARD             // Enable this for single icon representation of vario. Less memory.
 #define VARIOENHANCED               // Enable this for multi line more accurate visual slider representation of vario. Configurable from GUI
+//#define VARIOSCALE 200            // Scale used for Vario - 200 =2.00 m/s. Multirotor defualt = 200, Plane = 300
 
 /********************       FC BARO Audio Vario / climbrate Settings         ************************/
 // A basic Audio Vario using vario data from FC 
