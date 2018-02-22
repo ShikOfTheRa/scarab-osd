@@ -1350,9 +1350,19 @@ void EEPROM_clear(){
     EEPROM.write(i, 0);
 }
 
-int16_t filter16u( int16_t filtered, int16_t raw, const byte k){
-  filtered+=(raw-filtered)/k; // note extreme values may overrun. 32 it if reuired.
+int16_t filter16( int16_t filtered, int16_t raw, const byte k){
+  filtered = filtered + (raw-filtered)/k; // note extreme values may overrun. 32 it if required.
   return filtered;
+}
+
+int32_t filter32( int32_t filtered, int32_t raw, const byte k){
+  filtered = filtered + (raw-filtered)/k; // note extreme values may overrun. 32 it if required.
+  return filtered;
+}
+
+int32_t filter32F( float filtered, float raw, const byte k){
+  filtered = filtered + (raw-filtered)/k; // note extreme values may overrun. 32 it if required.
+  return (int32_t) filtered; 
 }
 
 #if defined USE_AIRSPEED_SENSOR
