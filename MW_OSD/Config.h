@@ -257,7 +257,9 @@
 /********************       Visual Vario / climbrate Settings         ************************/
 //#define VARIOSTANDARD             // Enable this for single icon representation of vario. Less memory.
 #define VARIOENHANCED               // Enable this for multi line more accurate visual slider representation of vario. Configurable from GUI
-//#define VARIOSCALE 200            // Scale used for Vario - 200 =2.00 m/s. Multirotor defualt = 200, Plane = 300
+//#define VARIOSCALE 300            // Scale used for Vario - 200 =2.00 m/s. Multirotor default = 300, Plane = 500
+//#define SHOWNEGATIVECLIMBRATE     // Show negative sign for neagtive climb rate values
+
 
 /********************       FC BARO Audio Vario / climbrate Settings         ************************/
 // A basic Audio Vario using vario data from FC 
@@ -344,12 +346,10 @@
 
 /********************  RECORD CAPTURE  settings      *********************/
 // This is used for those who are attempting records to always show the maximum achieved.
-// Maximum values (as shown on statistics summary screen will be displayed on line IMMEDAITELY BELOW where current live data is displayed
-// It may require layouts to be amended to show data without overwriting other information
 #define SHOW_MAX_SPEED              // Enable to display MAX speed achieved
-//#define SHOW_MAX_ALTITUDE         // Enable to display MAX altitude achieved on line below current altitude
 #define SHOW_MAX_DISTANCE           // Enable to display MAX distance achieved
 #define SHOW_TOTAL_DISTANCE         // Enable to display TOTAL distance achieved
+//#define SHOW_MAX_ALTITUDE         // Enable to display MAX altitude achieved on line below current altitude
 
 
 /********************  THROTTLE calibration  settings      *********************/

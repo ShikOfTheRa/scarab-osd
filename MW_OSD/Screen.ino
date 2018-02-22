@@ -839,7 +839,6 @@ void displayEfficiency(void)
   else{
     eff = 999;
   }
-  eff=888;
   if (eff < 999)
     displayItem(efficiencyPosition, eff, SYM_EFF, 0, 0,  0 );
 }
@@ -1131,7 +1130,7 @@ void displayVario(void)
   uint16_t position = getPosition(MwVarioPosition);
 
 #ifndef VARIOSCALE
-  #define VARIOSCALE 200 
+  #define VARIOSCALE 300 
 #endif
 
 #if defined VARIOENHANCED // multi char slider representation of climb rate
@@ -1222,11 +1221,14 @@ void displayClimbRate(void)
 {
   int16_t climbrate;
   if(Settings[S_UNITSYSTEM])
-    climbrate = MwVario * 0.32808;       // ft/sec
+    climbrate = MwVario * 0.32808;       // ft/sec *10 for DP
   else
-    climbrate = MwVario / 10;            // mt/sec
-//  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
-  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 3, 2 );
+    climbrate = MwVario / 10;            // mt/sec *10 for DP
+#ifdef SHOWNEGATIVECLIMBRATE
+  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 4, 3 ); //Show +/-
+#else
+  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 3, 2 ); //neater look
+#endif
 }
 
 
@@ -1363,8 +1365,13 @@ void displayWindSpeed(void)
     d *= 4;
     d += 45;
     d = (d/90)%16;
+    uint16_t t_WIND_speed;
     // if (WIND_speed > 0){
-      displayItem(WIND_speedPosition, WIND_speed, SYM_ARROW_DIR + d, speedUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
+      if(!Settings[S_UNITSYSTEM])
+        t_WIND_speed = WIND_speed;             // Km/h
+      else
+        t_WIND_speed = WIND_speed * 0.62137;   // Mph
+      displayItem(WIND_speedPosition, t_WIND_speed, SYM_ARROW_DIR + d, speedUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
     // }
  #else
     d = (MwHeading+360+360+180)- GPS_ground_course/10 ;
@@ -2496,7 +2503,7 @@ void displayItem(uint16_t t_position, int16_t t_value, uint8_t t_leadicon, uint8
    *  t_leadicon  = hex position of leading character. 0 = no leading character.
    *  t_trailicon = hex position of trailing character. 0 = no trailing character.
    *  t_psize     = number of characters to right justify value into. 0 = left justified with no padding.
-   *  t_dec       = char position of decimal point within right justified psize. e.g for 16.1 use t_psize=4,t_dec=3
+   *  t_pdec       = char position of decimal point within right justified psize. e.g for 16.1 use t_psize=4,t_pdec=3
   */
   
   uint8_t t_offset = 0;

@@ -224,8 +224,8 @@ void serialMAVCheck() {
       if (MwHeading360 > 180)
         MwHeading360 = MwHeading360 - 360;
       MwHeading   = MwHeading360;
-      t_MwVario = (float)serialbufferfloat(12) * 100; // m/s-->cm/s
-      MwVario = filter16u(MwVario, t_MwVario, 10);
+      t_MwVario = (int16_t)serialbufferfloat(12) * 100; // m/s-->cm/s
+      MwVario = filter16(MwVario, t_MwVario, 4);
       if (((GPS_fix_HOME & 0x01) == 0) && (GPS_numSat >= MINSATFIX) && armed) {
         GPS_fix_HOME |= 0x01;
         GPS_altitude_home = GPS_altitude;
@@ -286,7 +286,7 @@ void serialMAVCheck() {
       break;
     case MAVLINK_MSG_ID_WIND: 
       WIND_direction = (int16_t)(360+MwHeading-serialbufferfloat(0)) % 360;
-      WIND_speed     = serialbufferfloat(4) * 0.277778; // m/s=>kmh
+      WIND_speed     = serialbufferfloat(4) * 3.6; // m/s=>km/h
       break;     
 /*
     case MAVLINK_MSG_ID_RADIO: 

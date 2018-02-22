@@ -818,10 +818,10 @@ void GPS_NewData() {
 }
 
 
-void gpsvarioublox() {
+void gpsvarioublox() { // Slightly laggy compared to baro. 
   if (millis() > timer.fwAltitudeTimer) { // To make vario from GPS altitude
-    timer.fwAltitudeTimer += 500;
-    MwVario = (int32_t)(GPS_altitude_vario - previousfwaltitude)<<1;
+    timer.fwAltitudeTimer += 1000;
+    MwVario = (int32_t)(((GPS_altitude_vario+previousfwaltitude)>>1) - previousfwaltitude);
     previousfwaltitude = GPS_altitude_vario;
   }
 }
