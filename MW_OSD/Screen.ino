@@ -1131,7 +1131,7 @@ void displayVario(void)
   uint16_t position = getPosition(MwVarioPosition);
 
 #ifndef VARIOSCALE
-  #define VARIOSCALE 200 
+  #define VARIOSCALE 300 
 #endif
 
 #if defined VARIOENHANCED // multi char slider representation of climb rate
