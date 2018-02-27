@@ -34,7 +34,7 @@ MWOSD also provides support a number of other configurations:
 <li>NAZA - test only</li>
 </ul>
 
-<a href='https://www.virtualpilot.co.uk/index.php?route=product/product&path=62&product_id=53' target='_blank'>Click here GUI Configurator with easy install firmware (alternative Windows PC client)</a><br>
+<a href='https://www.virtualpilot.co.uk/index.php?route=product/product&path=62&product_id=53' target='_blank'>Click here for GUI Configurator with easy install firmware</a><br>
 
 <br>
 <hr />
