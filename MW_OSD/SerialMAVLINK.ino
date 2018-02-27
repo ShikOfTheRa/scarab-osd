@@ -248,16 +248,16 @@ void serialMAVCheck() {
       GPS_latitude = serialbufferint(8);
       GPS_longitude = serialbufferint(12);
       GPS_dop = (int16_t)(serialBuffer[20] | serialBuffer[21] << 8);
-      if ((GPS_fix > 2) && (GPS_numSat >= MINSATFIX)) {
+      if (((GPS_fix_HOME & 0x02) == 0) && (GPS_numSat >= MINSATFIX) && armed) {
+        GPS_fix_HOME |= 0x02;
+        GPS_reset_home_position();
+      }
+      if ((GPS_fix > 2) && (GPS_numSat >= MINSATFIX) && ((GPS_fix_HOME & 0x02) == 0x02)) {
         uint32_t dist;
         int32_t  dir;
         GPS_distance_cm_bearing(&GPS_latitude, &GPS_longitude, &GPS_home[LAT], &GPS_home[LON], &dist, &dir);
         GPS_distanceToHome = dist / 100;
         GPS_directionToHome = dir / 100;
-      }
-      if (((GPS_fix_HOME & 0x02) == 0) && (GPS_numSat >= MINSATFIX) && armed) {
-        GPS_fix_HOME |= 0x02;
-        GPS_reset_home_position();
       }
       break;
     case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
