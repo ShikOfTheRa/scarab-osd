@@ -181,6 +181,7 @@
 
 #ifdef PX4   //set up latest at time of release
   #define APM
+  #define MAVLINKREQ
 #endif
 
 #ifdef APM       //set up latest at time of release
