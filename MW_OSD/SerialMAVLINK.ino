@@ -295,7 +295,7 @@ void serialMAVCheck() {
       severity = serialBuffer[0];
       nullifymessage = 1;
       if (severity<=MAV_STATUS){
-        for(uint8_t z=MAVLINK_MSG_ID_STATUSTEXT_MESSAGE; z >= 1; z--) {          
+        for(uint8_t z=MAVLINK_MSG_ID_STATUSTEXT_LEN-1; z >= 1; z--) {          
           fontData[z] = serialBuffer[z]; // steal unused fontdata array to save memory
           if ((fontData[z]>=97) && (fontData[z]<=122)) // upper font only
             fontData[z] -= 32;
