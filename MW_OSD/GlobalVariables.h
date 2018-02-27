@@ -276,6 +276,7 @@ struct  __timer {
   uint32_t audiolooptimer;
   uint32_t GPSOSDstate;
   uint8_t  disarmed;                             
+  uint8_t  MAVstatustext;                             
 
 }
 timer;
@@ -364,6 +365,7 @@ uint16_t pwmval2=0;
 uint8_t debugtext=0;
 uint8_t MSP_home_set=0;
 uint8_t variopitch=0;
+uint8_t MAVstatuslength;
 #if defined CORRECT_MSP_BF1
   uint8_t bfconfig[25];
 #endif
@@ -1676,6 +1678,10 @@ const PROGMEM char * const msp_mode_index[] =
 #define MAVLINK_MSG_ID_BATTERY2 181
 #define MAVLINK_MSG_ID_BATTERY2_MAGIC 174
 #define MAVLINK_MSG_ID_BATTERY2_LEN 4 
+
+#define MAVLINK_MSG_ID_STATUSTEXT 253
+#define MAVLINK_MSG_ID_STATUSTEXT_MAGIC 83
+#define MAVLINK_MSG_ID_STATUSTEXT_LEN 51 
 
 #define MAV_DATA_STREAM_RAW_SENSORS 1
 #define MAV_DATA_STREAM_EXTENDED_STATUS 2
