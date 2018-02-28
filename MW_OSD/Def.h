@@ -209,7 +209,6 @@
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
   #define ENABLE_MSP_SAVE_ADVANCED
-  //#define ACROPLUS
 
   #define MENU_STAT
   #define MENU_PID
@@ -229,7 +228,6 @@
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
   #define ENABLE_MSP_SAVE_ADVANCED
-  //#define ACROPLUS
   #define CANVAS_SUPPORT
 
   #define MENU_STAT
@@ -1037,9 +1035,15 @@ enum {
 #ifdef iNAV
   #define IDBOXAIR 29
   #define IDBOXWP 28
+  #define IDBOXGPSLAND 21
+#elif defined BETAFLIGHT
+  #define IDBOXAIR 28
+  #define IDBOXWP 199 // random unused to disable
+  #define IDBOXGPSLAND 199 // random unused to disable
 #else
   #define IDBOXAIR 28
   #define IDBOXWP 20
+  #define IDBOXGPSLAND 21
 #endif
 
 #ifdef MULTIWII
