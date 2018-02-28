@@ -858,7 +858,7 @@ if (cmdMSP==MSP_STATUS)
       case IDBOXWP:
         mode.gpsmission |= bit;
         break;
-      case 21:
+      case IDBOXGPSLAND:
         mode.gpsland |= bit;
         break;
       case IDBOXAIR:
