@@ -163,8 +163,10 @@
 
 
 /******************** Mavlink settings *********************/
-//#define MAVLINKREQ                // Enable this for mavlink systems where the Mavlink data requires requesting. 
 #define MAV_COM_ID 1                // Component ID of MAV. Change if required. 
+#define MAV_STATUS 6                // Enable to display mavlink system messages up to and including category X. 5 = default 
+#define MAV_STATUS_TIMER 4          // How long to display MAV status messages. 4 = default 
+//#define MAVLINKREQ                // Enable this for mavlink systems where the Mavlink data requires requesting. 
 //#define MAV_ALL                   // To act on data from all MAV SYSID in stream. NOT recommended. Specify ID in GUI. Default=1 upon reset.
 //#define MAV_ARMED                 // Forces OSD to be always armed (for when MAV does not send armed status in heartbeat).
 //#define MAV_RESET_HOME            // Resets home position when not armed. When enabled, note that RX glitch etc. could potentially reset home position.

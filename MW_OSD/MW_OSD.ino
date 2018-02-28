@@ -658,6 +658,9 @@ void loop()
 #ifdef HAS_ALARMS
         displayAlarms();
 #endif
+#ifdef MAV_STATUS
+        displayMAVstatustext();
+#endif
       }
     }
   }  // End of fast Timed Service Routine (50ms loop)
@@ -680,6 +683,10 @@ void loop()
   {
     timer.seconds+=1000;
     timer.tenthSec=0;
+    #ifdef MAV_STATUS
+      if (timer.MAVstatustext>0)
+        timer.MAVstatustext--;
+    #endif
     #ifdef DEBUGDPOSLOOP
       framerate=timer.loopcount;
       timer.loopcount=0;

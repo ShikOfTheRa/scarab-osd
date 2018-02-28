@@ -1,6 +1,5 @@
 #ifdef PROTOCOL_MAVLINK
 
-
 void mav_checksum(uint8_t val) {
   uint16_t tmp;
   tmp = val ^ mw_mav.serial_checksum & 0xFF;
@@ -85,9 +84,9 @@ void mavlink_msg_request_data_stream_send(uint8_t MAVStreams, uint16_t MAVRates)
   mav_serialize8(99);
   mav_serialize8(MAVLINK_MSG_ID_REQUEST_DATA_STREAM);
   //body:
-  mav_serialize16(MAVRates); //MAVRates
-  mav_serialize8(1);
-  mav_serialize8(1);
+  mav_serialize16(MAVRates);
+  mav_serialize8(Settings[S_MAV_SYS_ID]);
+  mav_serialize8(MAV_COM_ID);
   mav_serialize8(MAVStreams);
   mav_serialize8(1);
   //tail:
@@ -126,6 +125,9 @@ void serialMAVCheck() {
   int16_t t_MwVario; 
   int16_t MwHeading360;
   static uint8_t armedglitchprotect = 0;
+  uint8_t severity;
+  uint8_t nullifymessage = 1;     
+
   switch (mw_mav.message_cmd) {
     case MAVLINK_MSG_ID_HEARTBEAT:
       mode.armed      = (1 << 0);
@@ -246,16 +248,16 @@ void serialMAVCheck() {
       GPS_latitude = serialbufferint(8);
       GPS_longitude = serialbufferint(12);
       GPS_dop = (int16_t)(serialBuffer[20] | serialBuffer[21] << 8);
-      if ((GPS_fix > 2) && (GPS_numSat >= MINSATFIX)) {
+      if (((GPS_fix_HOME & 0x02) == 0) && (GPS_numSat >= MINSATFIX) && armed) {
+        GPS_fix_HOME |= 0x02;
+        GPS_reset_home_position();
+      }
+      if ((GPS_fix > 2) && (GPS_numSat >= MINSATFIX) && ((GPS_fix_HOME & 0x02) == 0x02)) {
         uint32_t dist;
         int32_t  dir;
         GPS_distance_cm_bearing(&GPS_latitude, &GPS_longitude, &GPS_home[LAT], &GPS_home[LON], &dist, &dir);
         GPS_distanceToHome = dist / 100;
         GPS_directionToHome = dir / 100;
-      }
-      if (((GPS_fix_HOME & 0x02) == 0) && (GPS_numSat >= MINSATFIX) && armed) {
-        GPS_fix_HOME |= 0x02;
-        GPS_reset_home_position();
       }
       break;
     case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
@@ -287,7 +289,30 @@ void serialMAVCheck() {
     case MAVLINK_MSG_ID_WIND: 
       WIND_direction = (int16_t)(360+MwHeading-serialbufferfloat(0)) % 360;
       WIND_speed     = serialbufferfloat(4) * 3.6; // m/s=>km/h
-      break;     
+      break; 
+  #ifdef MAV_STATUS
+    case  MAVLINK_MSG_ID_STATUSTEXT:
+      severity = serialBuffer[0];
+      nullifymessage = 1;
+      if (severity<=MAV_STATUS){
+        for(uint8_t z=MAVLINK_MSG_ID_STATUSTEXT_LEN-1; z >= 1; z--) {          
+          fontData[z] = serialBuffer[z]; // steal unused fontdata array to save memory
+          if ((fontData[z]>=97) && (fontData[z]<=122)) // upper font only
+            fontData[z] -= 32;
+          if (nullifymessage==1){
+            if((serialBuffer[z]==0) || (serialBuffer[z]==0x20)){
+              fontData[z] = 0;
+            }
+            else{
+              nullifymessage=0;
+              MAVstatuslength=z;
+            }
+          }
+        } 
+      timer.MAVstatustext=MAV_STATUS_TIMER;
+      }
+      break; 
+    #endif
 /*
     case MAVLINK_MSG_ID_RADIO: 
       MwRssi = (uint16_t)(((102) * serialBuffer[8]) / 10);
@@ -470,6 +495,10 @@ void serialMAVreceive(uint8_t c)
       case  MAVLINK_MSG_ID_BATTERY2:
         mav_magic = MAVLINK_MSG_ID_BATTERY2_MAGIC;
         mav_len = MAVLINK_MSG_ID_BATTERY2_LEN;
+        break;
+      case  MAVLINK_MSG_ID_STATUSTEXT:
+        mav_magic = MAVLINK_MSG_ID_STATUSTEXT_MAGIC;
+        mav_len = MAVLINK_MSG_ID_STATUSTEXT_LEN;
         break;
         
 /*        

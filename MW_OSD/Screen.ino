@@ -467,6 +467,21 @@ void displayCallsign(int cposition)
   MAX7456_WriteString(screenBuffer, cposition); 
 }
 
+void displayMAVstatustext(void) 
+{
+  if (timer.MAVstatustext==0)
+    return;
+  MAVstatuslength = constrain(MAVstatuslength,0, 28); 
+  uint16_t pos = (14 + (30* (getPosition(motorArmedPosition)/30)) - (MAVstatuslength/2));
+  for(uint8_t i=1; i<=50; i++) {
+    if (fontData[i]==0){
+      break;
+    }
+    else{
+      screen[pos+i]=char(fontData[i]);
+    }
+  }
+}
 
 void displayHorizon(int rollAngle, int pitchAngle)
 {
