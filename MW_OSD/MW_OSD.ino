@@ -80,7 +80,7 @@ uint16_t UntouchedStack(void)
 
 //------------------------------------------------------------------------
 #define MWVERS "MW-OSD - R1.8.0.0"
-#define MWVERS "MW-OSD - R1.8 BUILD 2"
+#define MWVERS "MW-OSD - R1.8 BUILD 3"
 #define MWOSDVERSION 1880 // 1660=1.6.6.0 for GUI
 #define EEPROMVER 15      // for eeprom layout verification
 
