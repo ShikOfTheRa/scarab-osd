@@ -33,8 +33,9 @@
 //#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
   //#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
-  #define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
-  //#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
+  //#define AIRBOTMICRO               // Uncomment this if using an airbot MicroOSD
+  //#define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
+  #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
   //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
   //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
   #define APM
@@ -777,7 +778,17 @@ enum {
 #endif
 
 /********************  ROTORCRAFT definitions  *********************/
-#ifdef ROTORCRAFT                     
+#ifndef FIXEDWING  
+  #ifndef ROTORCRAFT  
+    #define ROTORCRAFT 
+  #endif  
+
+  #if defined SKYTRACK || defined NOCONTROLLER 
+    #undef ROTORCRAFT
+  #endif 
+#endif                   
+
+#ifdef ROTORCRAFT                       
   #ifndef GPSOSDHOMEDISTANCE
     #define GPSOSDHOMEDISTANCE 15     // distance from home in meters to start check  for when when GPSOSD is home.
   #endif

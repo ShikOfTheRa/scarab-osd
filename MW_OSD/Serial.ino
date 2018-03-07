@@ -215,7 +215,7 @@ void serialMSPCheck()
     uint8_t cmd = read8();
 
     if (cmd == OSD_READ_CMD_EE) {
-      timer.GUI_active=2;
+      timer.GUI_active=3;
       eeaddress = read8();
       eeaddress = eeaddress+read8();
       eedata = read8();
@@ -224,7 +224,7 @@ void serialMSPCheck()
     }
 
     if (cmd == OSD_WRITE_CMD_EE) {
-      timer.GUI_active=2;
+      timer.GUI_active=3;
       for(uint8_t i=0; i<10; i++) {
         eeaddress = read8();
         eeaddress = eeaddress+(read8()<<8);
@@ -244,7 +244,7 @@ void serialMSPCheck()
     }
 #ifdef GUISENSORS
     if (cmd == OSD_SENSORS2||cmd == OSD_SENSORS) {
-      timer.GUI_active=2;
+      timer.GUI_active=3;
       timer.GPS_initdelay=0; 
       cfgWriteRequest(MSP_OSD,1+10);
       cfgWrite8(OSD_SENSORS);

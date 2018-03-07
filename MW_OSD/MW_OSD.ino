@@ -331,7 +331,7 @@ void loop()
     if(!fontMode)
 #endif
     {
-       #ifndef KISS
+       #ifdef PROTOCOL_MSP
        if (timer.GUI_active==0){
          mspWriteRequest(MSP_ATTITUDE,0);
        }
@@ -369,7 +369,7 @@ void loop()
         if(!fontMode)
         #endif
         {
-          #ifndef KISS
+          #ifdef PROTOCOL_MSP
             if (timer.GUI_active==0){
               mspWriteRequest(MSP_ATTITUDE,0);
             }
@@ -385,10 +385,6 @@ void loop()
       uint8_t MSPcmdsend=0;
       if(queuedMSPRequests == 0)
         queuedMSPRequests = modeMSPRequests;
-      if (timer.GUI_active!=0){
-        queuedMSPRequests&=REQ_MSP_FONT;
-      } 
-  
       uint32_t req = queuedMSPRequests & -queuedMSPRequests;
       queuedMSPRequests &= ~req;
       switch(req) {
@@ -495,23 +491,20 @@ void loop()
     }
     
     if(!fontMode){
-      #ifndef GPSOSD
-       #ifdef KISS
+     #ifdef KISS
        Serial.write(0x20);
-       #else     
-         #ifdef CANVAS_SUPPORT
+     #elif defined SKYTRACK
+       DrawSkytrack();
+     #elif defined PROTOCOL_MSP     
+       #ifdef CANVAS_SUPPORT
          if (!canvasMode)
-         #endif
-         {
-           if (MSPcmdsend!=0){
-             mspWriteRequest(MSPcmdsend, 0);
+       #endif
+           {
+             if (MSPcmdsend!=0){
+               mspWriteRequest(MSPcmdsend, 0);
+             }
            }
-         }
-       #endif // KISS
-      #endif //GPSOSD
-      #ifdef SKYTRACK
-//       DrawSkytrack();
-      #endif
+     #endif // KISS
      MAX7456_DrawScreen();
     }
 
@@ -752,11 +745,13 @@ void loop()
       timer.accCalibrationTimer=0;
     }
 */    
+#ifdef PROTOCOL_MSP
     if((timer.magCalibrationTimer==1)&&(configMode)) {
       mspWriteRequest(MSP_MAG_CALIBRATION,0);
       timer.magCalibrationTimer=0;
     }
     if(timer.magCalibrationTimer>0) timer.magCalibrationTimer--;
+#endif    
     if(timer.rssiTimer>0) timer.rssiTimer--;
   }
 //  setMspRequests();
@@ -944,7 +939,7 @@ void setMspRequests() {
       REQ_MSP_RC;
     if(mode.armed == 0)
       modeMSPRequests |=REQ_MSP_BOX;
-#ifdef INTRO_FC
+#if defined INTRO_FC && defined PROTOCOL_MSP
     if (FC.verMajor==0)
       queuedMSPRequests|=REQ_MSP_FC_VERSION;
 #endif      
@@ -952,7 +947,12 @@ void setMspRequests() {
     if(MwSensorActive&mode.gpsmission)
       modeMSPRequests |= REQ_MSP_NAV_STATUS;
 #endif
-  }     
+  }
+  if (timer.GUI_active!=0){
+    modeMSPRequests = 0;
+    queuedMSPRequests = 0;
+  }
+       
   queuedMSPRequests &= modeMSPRequests;   // so we do not send requests that are not needed.
 }
 
