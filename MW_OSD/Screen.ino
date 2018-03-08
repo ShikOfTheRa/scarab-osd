@@ -1021,6 +1021,20 @@ void displayGPSAltitude(void){
     MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
 }
 
+void displayMAVAltitude(void){
+    if(!fieldIsVisible(MwGPSAltPosition))
+      return;
+    if (GPS_altitude > 1000) // 10 meters
+      return;
+      
+    int32_t xx;
+    if(Settings[S_UNITSYSTEM])
+      xx = MAV_altitude * 0.393701; // inches
+    else
+      xx = MAV_altitude       ;     // cm
+    formatDistance(xx,0,0,0x2B);
+    MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
+}
 
 void displayNumberOfSat(void)
 {
@@ -1145,7 +1159,7 @@ void displayVario(void)
   uint16_t position = getPosition(MwVarioPosition);
 
 #ifndef VARIOSCALE
-  #define VARIOSCALE 300 
+  #define VARIOSCALE 150 
 #endif
 
 #if defined VARIOENHANCED // multi char slider representation of climb rate
@@ -2463,7 +2477,6 @@ void displayAlarms() {
   }
 }
 #endif
-
 
 void formatDistance(int32_t t_d2f, uint8_t t_units, uint8_t t_type, uint8_t t_icon ) {
 //void formatDistance(int32_t t_d2f, uint8_t t_units, uint8_t t_type) {

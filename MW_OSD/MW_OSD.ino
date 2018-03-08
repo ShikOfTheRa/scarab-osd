@@ -620,7 +620,11 @@ void loop()
           displayDistanceTotal();
           displayDistanceMax();
           displayAngleToHome();
+#if defined MAVDISTANCESENSE && defined APM
+          displayMAVAltitude();
+#else
           displayGPSAltitude();
+#endif          
           displayGPSdop();
           #ifdef USEGLIDESCOPE
             // displayfwglidescope(); //note hook for this is in display horizon function
