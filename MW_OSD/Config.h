@@ -171,6 +171,7 @@
 //#define MAV_ARMED                 // Forces OSD to be always armed (for when MAV does not send armed status in heartbeat).
 //#define MAV_RESET_HOME            // Resets home position when not armed. When enabled, note that RX glitch etc. could potentially reset home position.
 //#define MAV_ALT_THROTTLE          // Use alternative MAV throttle value. Not raw RC channel
+//#define MAVDISTANCESENSE          // Display distance from mavlink sensor sunch as ultrasonic. Must enable MAVLINKREQ unless stream confighured on MAV FC
 
 /******************** Serial MSP speed settings *********************/
 // Choose ONLY ONE SPEED option: increases speeds of serial update - but with impact to flight controller 
@@ -259,7 +260,7 @@
 /********************       Visual Vario / climbrate Settings         ************************/
 //#define VARIOSTANDARD             // Enable this for single icon representation of vario. Less memory.
 #define VARIOENHANCED               // Enable this for multi line more accurate visual slider representation of vario. Configurable from GUI
-//#define VARIOSCALE 300            // Scale used for Vario - 200 =2.00 m/s. Multirotor default = 300, Plane = 500
+//#define VARIOSCALE 150            // Scale used for Vario - 200 =2.00 m/s. Multirotor default = 150, Plane = 400
 //#define SHOWNEGATIVECLIMBRATE     // Show negative sign for neagtive climb rate values
 
 

@@ -774,6 +774,7 @@ uint8_t GPS_frame_timer=0;
 int32_t GPS_latitude;
 int32_t GPS_longitude;
 int32_t GPS_altitude;
+int16_t MAV_altitude;                          
 int32_t GPS_altitude_ASL;
 int32_t GPS_altitude_vario;
 int32_t GPS_home_altitude;
@@ -1678,10 +1679,12 @@ const PROGMEM char * const msp_mode_index[] =
 #define MAVLINK_MSG_ID_BATTERY2 181
 #define MAVLINK_MSG_ID_BATTERY2_MAGIC 174
 #define MAVLINK_MSG_ID_BATTERY2_LEN 4 
-
 #define MAVLINK_MSG_ID_STATUSTEXT 253
 #define MAVLINK_MSG_ID_STATUSTEXT_MAGIC 83
 #define MAVLINK_MSG_ID_STATUSTEXT_LEN 51 
+#define MAVLINK_MESSAGE_INFO_DISTANCE_SENSOR 132
+#define MAVLINK_MESSAGE_INFO_DISTANCE_SENSOR_MAGIC 85
+#define MAVLINK_MESSAGE_INFO_DISTANCE_SENSOR_LEN 14 
 
 #define MAV_DATA_STREAM_RAW_SENSORS 1
 #define MAV_DATA_STREAM_EXTENDED_STATUS 2
@@ -1731,7 +1734,7 @@ const PROGMEM char * const mav_mode_index[] =
  mav_mode_STAB, //10
  mav_mode_PX4,  //11
 };
-#define MAV_MODE_MAX 17
+#define MAV_MODE_MAX 11
 #elif defined FIXEDWING // within MAVLINK
 const char mav_mode_MANU[] PROGMEM   = "MANU"; //Manual
 const char mav_mode_TRNG[] PROGMEM   = "TRNG"; //Training
@@ -1763,13 +1766,22 @@ const PROGMEM char * const mav_mode_index[] =
 #define MAV_MODE_MAX 17
 #else
 const char mav_mode_ALTH[] PROGMEM   = "ALTH"; //Altitude Hold: auto control
-const char mav_mode_POSI[] PROGMEM   = "POSI"; //Position: auto control
+const char mav_mode_POSH[] PROGMEM   = "POSH"; //Position: auto control
 const char mav_mode_LAND[] PROGMEM   = "LAND"; //Land:: auto control
 const char mav_mode_OFLO[] PROGMEM   = "OFLO"; //OF_Loiter: hold a single location using optical flow sensor
 const char mav_mode_DRIF[] PROGMEM   = "DRIF"; //Drift mode: 
 const char mav_mode_SPRT[] PROGMEM   = "SPRT"; //Sport: earth frame rate control
 const char mav_mode_FLIP[] PROGMEM   = "FLIP"; //Flip: flip the vehicle on the roll axis
-const char mav_mode_HYBR[] PROGMEM   = "HYBR"; //Hybrid: position hold with manual override
+const char mav_mode_HOLD[] PROGMEM   = "HOLD";
+const char mav_mode_BRK[] PROGMEM    = "BRK";
+const char mav_mode_THRW[] PROGMEM   = "THRW";
+const char mav_mode_ADSB[] PROGMEM   = "ADSB";
+const char mav_mode_NGPS[] PROGMEM   = "NGPS";
+const char mav_mode_SRTL[] PROGMEM   = "SRTL";
+const char mav_mode_FLOW[] PROGMEM   = "FLOW";
+const char mav_mode_FOLL[] PROGMEM   = "FOLL";
+
+
 const PROGMEM char * const mav_mode_index[] = 
 {   
  mav_mode_STAB, //0
@@ -1780,7 +1792,7 @@ const PROGMEM char * const mav_mode_index[] =
  mav_mode_LOIT,
  mav_mode_RETL,
  mav_mode_CIRC,
- mav_mode_POSI,
+ mav_mode_POSH,              // changed
  mav_mode_LAND,
  mav_mode_OFLO,
  mav_mode_DRIF,
@@ -1788,11 +1800,18 @@ const PROGMEM char * const mav_mode_index[] =
  mav_mode_SPRT,
  mav_mode_FLIP,
  mav_mode_ATUN,
- mav_mode_HYBR, //16
- mav_mode_APM , //17
+ mav_mode_HOLD, //16        //changed
+ mav_mode_BRK , //17
+ mav_mode_THRW ,
+ mav_mode_ADSB ,
+ mav_mode_NGPS ,
+ mav_mode_SRTL ,
+ mav_mode_FLOW ,
+ mav_mode_FOLL ,
+ mav_mode_APM , //24
 };
-#define MAV_MODE_MAX 17
-#endif //FIXEDWING
+#define MAV_MODE_MAX 24
+#endif //FIXEDWING or COPTER
 
 // Vars
 struct __mw_mav {
@@ -1807,7 +1826,7 @@ struct __mw_mav {
 
 int32_t  GPS_home[2];
 uint8_t  GPS_fix_HOME;
-int16_t  GPS_altitude_home;                            
+int16_t  GPS_altitude_home;  
 #endif //MAVLINK
 
 
