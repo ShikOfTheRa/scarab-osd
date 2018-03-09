@@ -80,7 +80,7 @@ uint16_t UntouchedStack(void)
 
 //------------------------------------------------------------------------
 #define MWVERS "MW-OSD - R1.8.0.0"
-#define MWVERS "MW-OSD - R1.8 BUILD 3"
+#define MWVERS "MW-OSD - R1.8 BUILD 4"
 #define MWOSDVERSION 1880 // 1660=1.6.6.0 for GUI
 #define EEPROMVER 15      // for eeprom layout verification
 
@@ -621,7 +621,10 @@ void loop()
           displayDistanceMax();
           displayAngleToHome();
 #if defined MAVDISTANCESENSE && defined APM
-          displayMAVAltitude();
+          if (GPS_altitude < 10) // 10 meters
+            displayMAVAltitude();
+          else
+            displayGPSAltitude();
 #else
           displayGPSAltitude();
 #endif          
