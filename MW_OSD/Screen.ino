@@ -1021,12 +1021,10 @@ void displayGPSAltitude(void){
     MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
 }
 
+
 void displayMAVAltitude(void){
     if(!fieldIsVisible(MwGPSAltPosition))
-      return;
-    if (GPS_altitude > 1000) // 10 meters
-      return;
-      
+      return;      
     int32_t xx;
     if(Settings[S_UNITSYSTEM])
       xx = MAV_altitude * 0.393701; // inches
@@ -1035,6 +1033,7 @@ void displayMAVAltitude(void){
     formatDistance(xx,0,0,0x2B);
     MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
 }
+
 
 void displayNumberOfSat(void)
 {

@@ -621,7 +621,10 @@ void loop()
           displayDistanceMax();
           displayAngleToHome();
 #if defined MAVDISTANCESENSE && defined APM
-          displayMAVAltitude();
+          if (GPS_altitude < 10) // 10 meters
+            displayMAVAltitude();
+          else
+            displayGPSAltitude();
 #else
           displayGPSAltitude();
 #endif          
