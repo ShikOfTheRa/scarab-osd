@@ -245,7 +245,7 @@ void serialMAVCheck() {
       if (MwHeading360 > 180)
         MwHeading360 = MwHeading360 - 360;
       MwHeading   = MwHeading360;
-      MwVario  = (int16_t)serialbufferfloat(12) * 100; // m/s-->cm/s
+      MwVario  = (float)serialbufferfloat(12) * 100; // m/s-->cm/s
       //MwVario = filter16(MwVario, t_MwVario, 4);
       if (((GPS_fix_HOME & 0x01) == 0) && (GPS_numSat >= MINSATFIX) && armed) {
         GPS_fix_HOME |= 0x01;
@@ -337,6 +337,9 @@ void serialMAVCheck() {
     case  MAVLINK_MESSAGE_INFO_DISTANCE_SENSOR:
       MAV_altitude = serialbufferint(8);
       break;
+    case  MAVLINK_MSG_ID_RANGEFINDER:
+      MAV_altitude = (float)100*serialbufferfloat(8);
+      break;      
   #endif
 
 /*
@@ -530,6 +533,10 @@ void serialMAVreceive(uint8_t c)
       case  MAVLINK_MESSAGE_INFO_DISTANCE_SENSOR:
         mav_magic = MAVLINK_MESSAGE_INFO_DISTANCE_SENSOR_MAGIC;
         mav_len = MAVLINK_MESSAGE_INFO_DISTANCE_SENSOR_LEN;
+        break;
+      case  MAVLINK_MSG_ID_RANGEFINDER:
+        mav_magic = MAVLINK_MSG_ID_RANGEFINDER_MAGIC;
+        mav_len = MAVLINK_MSG_ID_RANGEFINDER_LEN;
         break;
 #endif        
 /*        
