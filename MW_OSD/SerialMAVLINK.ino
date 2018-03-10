@@ -333,12 +333,14 @@ void serialMAVCheck() {
       break; 
     #endif
  
-  #ifdef MAVDISTANCESENSE
+  #ifdef MAVSENSOR132
     case  MAVLINK_MESSAGE_INFO_DISTANCE_SENSOR:
       MAV_altitude = serialbufferint(8);
       break;
+  #endif
+  #ifdef MAVSENSOR173
     case  MAVLINK_MSG_ID_RANGEFINDER:
-      MAV_altitude = (float)100*serialbufferfloat(8);
+      MAV_altitude = (float)100*serialbufferfloat(0);
       break;      
   #endif
 
@@ -529,11 +531,13 @@ void serialMAVreceive(uint8_t c)
         mav_magic = MAVLINK_MSG_ID_STATUSTEXT_MAGIC;
         mav_len = MAVLINK_MSG_ID_STATUSTEXT_LEN;
         break;
-#ifdef MAVDISTANCESENSE        
+#ifdef MAVSENSOR132        
       case  MAVLINK_MESSAGE_INFO_DISTANCE_SENSOR:
         mav_magic = MAVLINK_MESSAGE_INFO_DISTANCE_SENSOR_MAGIC;
         mav_len = MAVLINK_MESSAGE_INFO_DISTANCE_SENSOR_LEN;
         break;
+#endif        
+#ifdef MAVSENSOR173        
       case  MAVLINK_MSG_ID_RANGEFINDER:
         mav_magic = MAVLINK_MSG_ID_RANGEFINDER_MAGIC;
         mav_len = MAVLINK_MSG_ID_RANGEFINDER_LEN;
