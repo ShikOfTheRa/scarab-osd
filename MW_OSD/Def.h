@@ -47,7 +47,7 @@
   //#define INTRO_DELAY 1             // To speed up startup
   #define DISPLAY_DEV 0xC000      // Use screen layout dev position - display all items...
 //  #define KKAUDIOVARIO A3           // Enable this for audio vario on Arduino pin XX. A3=RSSI. Use AUDIOPIN on AEROMAX 
-  #define MAVDISTANCESENSE
+#define MAVSENSOR173
 
 #endif
 

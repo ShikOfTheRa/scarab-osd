@@ -620,14 +620,14 @@ void loop()
           displayDistanceTotal();
           displayDistanceMax();
           displayAngleToHome();
-#if defined MAVDISTANCESENSE && defined APM
-          if (GPS_altitude < 10) // 10 meters
+#if defined MAVSENSORGPSACTIVE && defined APM
+          if (GPS_altitude < MAVSENSORGPSACTIVE) // display sensor distance when GPS below this value
             displayMAVAltitude();
           else
             displayGPSAltitude();
 #else
           displayGPSAltitude();
-#endif          
+#endif         
           displayGPSdop();
           #ifdef USEGLIDESCOPE
             // displayfwglidescope(); //note hook for this is in display horizon function

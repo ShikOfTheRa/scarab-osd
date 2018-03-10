@@ -171,7 +171,12 @@
 //#define MAV_ARMED                 // Forces OSD to be always armed (for when MAV does not send armed status in heartbeat).
 //#define MAV_RESET_HOME            // Resets home position when not armed. When enabled, note that RX glitch etc. could potentially reset home position.
 //#define MAV_ALT_THROTTLE          // Use alternative MAV throttle value. Not raw RC channel
-//#define MAVDISTANCESENSE          // Display distance from mavlink sensor sunch as ultrasonic. Must enable MAVLINKREQ unless stream confighured on MAV FC
+
+/******************** Mavlink distance sensor settings *********************/
+//#define MAVSENSORGPSACTIVE 5      // When enabled, displays sensor distance instead of GPS altitude. Default = 5m. Requires stream configured on MAV FC
+//#define MAVSENSOR173              // When enabled, uses RANGEFINDER - MAVLINK #173 command for the distance. Requires MAVSENSORGPSACTIVE enabled
+//#define MAVSENSOR132              // When enabled, uses INFO_DISTANCE - MAVLINK #132 command for the distance. Requires MAVSENSORGPSACTIVE enabled
+
 
 /******************** Serial MSP speed settings *********************/
 // Choose ONLY ONE SPEED option: increases speeds of serial update - but with impact to flight controller 
