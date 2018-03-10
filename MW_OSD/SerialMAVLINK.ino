@@ -95,26 +95,7 @@ void mavlink_msg_request_data_stream_send(uint8_t MAVStreams, uint16_t MAVRates)
   Serial.write((uint8_t)(mw_mav.tx_checksum >> 8 & 0xFF));
 }
 
-#ifdef MAVDISTANCESENSE          // Display distance from mavlink sensor sunch as ultrasonic
-void request_mavlink_rates() {
-  const int  maxStreams = 7;
-  const uint8_t MAVStreams[maxStreams] = {
-    MAV_DATA_STREAM_RAW_SENSORS,
-    MAV_DATA_STREAM_EXTENDED_STATUS,
-    MAV_DATA_STREAM_RC_CHANNELS,
-    MAV_DATA_STREAM_POSITION,
-    MAV_DATA_STREAM_EXTRA1,
-    MAV_DATA_STREAM_EXTRA2,
-    MAVLINK_MESSAGE_INFO_DISTANCE_SENSOR 
-  };
-  const uint16_t MAVRates[maxStreams] = {
-    0x02, 0x02, 0x05, 0x02, 0x05, 0x02, 0x03
-  };
-  for (int i = 0; i < maxStreams; i++) {
-    mavlink_msg_request_data_stream_send(MAVStreams[i], MAVRates[i]);
-  }
-}
-#else
+
 void request_mavlink_rates() {
   const int  maxStreams = 6;
   const uint8_t MAVStreams[maxStreams] = {
@@ -132,7 +113,7 @@ void request_mavlink_rates() {
     mavlink_msg_request_data_stream_send(MAVStreams[i], MAVRates[i]);
   }
 }
-#endif
+
 
 void serialMAVCheck() {
 #ifdef DEBUGDPOSPACKET
