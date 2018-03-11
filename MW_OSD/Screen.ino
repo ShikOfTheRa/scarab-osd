@@ -1038,7 +1038,7 @@ void displayMAVAltitude(void){
       xx = MAV_altitude * 0.32808;  // in ft*10
     else
       xx = MAV_altitude/10  ;       // in cm*10
-    displayItem(getPosition(MwGPSAltPosition), xx, 0x2B, uint8_t t_trailicon, 4, 3 )
+    displayItem(getPosition(MwGPSAltPosition), xx, 0x2B, 0, 4, 3 );
   #endif  
 }
 
