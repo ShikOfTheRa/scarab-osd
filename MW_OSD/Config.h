@@ -175,6 +175,7 @@
 /******************** Mavlink distance sensor settings *********************/
 // Choose ONLY ONE SENSOR option AND enable MAVSENSORACTIVE 
 //#define MAVSENSORGPSACTIVE 5      // When enabled, displays sensor distance instead of GPS altitude. Default = 5m. Requires stream configured on MAV FC
+//#define MAVSENSORDISPLAYTYPE      // When enabled, displays sensor distance in cm or inches. Disabled in meters or feet
 //#define MAVSENSOR173              // When enabled, uses RANGEFINDER - MAVLINK #173 command for the distance. Requires MAVSENSORGPSACTIVE enabled
 //#define MAVSENSOR132              // When enabled, uses INFO_DISTANCE - MAVLINK #132 command for the distance. Requires MAVSENSORGPSACTIVE enabled
 

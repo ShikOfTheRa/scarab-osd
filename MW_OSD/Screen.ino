@@ -1026,12 +1026,20 @@ void displayMAVAltitude(void){
     if(!fieldIsVisible(MwGPSAltPosition))
       return;      
     int32_t xx;
+  #ifdef MAVSENSORDISPLAYTYPE  
     if(Settings[S_UNITSYSTEM])
-      xx = MAV_altitude * 0.393701; // inches
+      xx = MAV_altitude * 0.393701; // inches or 3.28084 ft
     else
-      xx = MAV_altitude       ;     // cm
+      xx = MAV_altitude     ;       // in cm
     formatDistance(xx,0,0,0x2B);
     MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
+  #else
+    if(Settings[S_UNITSYSTEM])
+      xx = MAV_altitude * 0.32808;  // in ft*10
+    else
+      xx = MAV_altitude/10  ;       // in cm*10
+    displayItem(getPosition(MwGPSAltPosition), xx, 0x2B, uint8_t t_trailicon, 4, 3 )
+  #endif  
 }
 
 
