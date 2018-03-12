@@ -1038,10 +1038,9 @@ void displayMAVAltitude(void){
       xx = MAV_altitude * 0.32808;  // in ft*10
     else
       xx = MAV_altitude/10  ;       // in cm*10
-    displayItem(getPosition(MwGPSAltPosition), xx, 0x2B, 0, 4, 3 );
+    displayItem(MwGPSAltPosition,xx, 0x2B, 0, 4, 3 );
   #endif  
 }
-
 
 void displayNumberOfSat(void)
 {
