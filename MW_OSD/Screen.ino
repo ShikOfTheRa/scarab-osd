@@ -1034,11 +1034,21 @@ void displayMAVAltitude(void){
     formatDistance(xx,0,0,0x2B);
     MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
   #else
+    xx=MAV_altitude/10;
+    int8_t dec_len=0;
+   while (xx!=0){
+      xx/=10;
+      dec_len++;
+    }
+    if (dec_len<2)
+      dec_len=2;
+    if (MAV_altitude<0)
+      dec_len++; 
     if(Settings[S_UNITSYSTEM])
       xx = MAV_altitude * 0.32808;  // in ft*10
     else
       xx = MAV_altitude/10  ;       // in cm*10
-    displayItem(MwGPSAltPosition,xx, 0x2B, 0, 4, 3 );
+    displayItem(MwGPSAltPosition,xx, SYM_AGL, 0, dec_len+1, dec_len );
   #endif  
 }
 

@@ -402,6 +402,7 @@
 #define ICON_TMP                    // Temperature
 #define ICON_DTH                    // Distance to home
 #define ICON_ALT                    // Altitude prime
+#define ICON_AGL                    // Altitude rangefinder
 #define ICON_GPS_ALT                // GPS altitude
 #define ICON_MAIN_BATT              // Main battery icon
 #define ICON_VID_BAT                // Video battery icon

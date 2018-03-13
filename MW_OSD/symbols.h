@@ -298,6 +298,12 @@
 #define SYM_ALT           0
 #endif
 
+#ifdef ICON_AGL
+#define SYM_AGL           0XC7
+#else
+#define SYM_AGL           0
+#endif
+
 #ifdef ICON_GPS_ALT
 #define SYM_GPS_ALT       0XBE
 #else
