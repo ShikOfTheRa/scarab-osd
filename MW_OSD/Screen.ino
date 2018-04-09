@@ -1026,17 +1026,14 @@ void displayMAVAltitude(void){
     if(!fieldIsVisible(MwGPSAltPosition))
       return;      
     int32_t xx;
-  #ifdef MAVSENSORDISPLAYTYPE  
-    if(Settings[S_UNITSYSTEM])
-      xx = MAV_altitude * 0.393701; // inches or 3.28084 ft
-    else
-      xx = MAV_altitude     ;       // in cm
-    formatDistance(xx,0,0,0x2B);
-    MAX7456_WriteString(screenBuffer,getPosition(MwGPSAltPosition));
+  #ifdef MAVSENSORDISPLAYTYPE // for future in case need cm/inch precision 
   #else
-    xx=MAV_altitude/10;
+    if(Settings[S_UNITSYSTEM])
+      xx = MAV_altitude * 0.32808;  // in ft*10
+    else
+      xx = MAV_altitude/10  ;       // in cm*10
     int8_t dec_len=0;
-   while (xx!=0){
+    while (xx!=0){
       xx/=10;
       dec_len++;
     }
@@ -2509,10 +2506,10 @@ void formatDistance(int32_t t_d2f, uint8_t t_units, uint8_t t_type, uint8_t t_ic
 #ifdef LONG_RANGE_DISPLAY  
   if (t_d2f>9999){
     if(Settings[S_UNITSYSTEM]){
-      tmp = ((t_d2f) + (t_d2f%5280))/528;
+      tmp = (264+(t_d2f))/528;
     }
     else{
-      tmp = t_d2f/100;
+      tmp = (50+t_d2f)/100;
     }
     itoa(tmp, screenBuffer+xx, 10);
     xx = FindNull();
