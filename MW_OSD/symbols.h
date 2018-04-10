@@ -123,7 +123,7 @@
 
 
 // Temperature
-#define SYM_TEMP_F 0X0D
+#define SYM_TEMP_F 0X0F
 #define SYM_TEMP_C 0X0E
 
 // Batt evolution
