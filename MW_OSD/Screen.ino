@@ -467,6 +467,14 @@ void displayCallsign(int cposition)
   MAX7456_WriteString(screenBuffer, cposition); 
 }
 
+void displayIcon(int cposition) 
+{
+  for(uint8_t i=0; i<6; i++) {
+    uint16_t pos = cposition+(LINE*(i/3))+(i%3);
+    screen[cposition+i%3]=PILOT_ICON+i;
+  }
+}
+
 void displayMAVstatustext(void) 
 {
   if (timer.MAVstatustext==0)

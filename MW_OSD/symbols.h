@@ -10,6 +10,9 @@
 // Degrees Icon for HEADING/DIRECTION HOME
 #define SYM_DEGREES 0XBD
 
+// Pilot icon base address 
+#define PILOT_ICON 0x06
+
 
 // Direction arrows 
   #define SYM_ARROW_HOME 0X60
@@ -281,7 +284,7 @@
 #endif
 
 #ifdef ICON_TMP
-#define SYM_TMP           0X06 
+#define SYM_TMP           0XC6 
 #else
 #define SYM_TMP           0 
 #endif
