@@ -1411,7 +1411,11 @@ void displayWindSpeed(void)
   uint16_t position=getPosition(WIND_speedPosition);
   int16_t d;
   #ifdef PROTOCOL_MAVLINK
-    d = WIND_direction + 180;
+    #ifdef MAV_WIND_DIR_REVERSE
+      d = WIND_direction + 180;
+    #else
+      d = WIND_direction;
+    #endif
     d *= 4;
     d += 45;
     d = (d/90)%16;
