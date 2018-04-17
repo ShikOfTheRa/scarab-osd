@@ -284,7 +284,11 @@
 #endif
 
 #ifdef ICON_TMP
-#define SYM_TMP           0XC6 
+  #ifdef PILOTICON
+    #define SYM_TMP           0XC6 
+  #else
+    #define SYM_TMP           0X06 
+  #endif  
 #else
 #define SYM_TMP           0 
 #endif

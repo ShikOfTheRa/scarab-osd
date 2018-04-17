@@ -471,7 +471,7 @@ void displayIcon(int cposition)
 {
   for(uint8_t i=0; i<6; i++) {
     uint16_t pos = cposition+(LINE*(i/3))+(i%3);
-    screen[cposition+i%3]=PILOT_ICON+i;
+    screen[pos]=PILOT_ICON+i;
   }
 }
 
