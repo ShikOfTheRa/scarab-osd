@@ -236,7 +236,7 @@
 //#define REVERSE_AHI_PITCH         // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
 //#define REVERSE_AHI_ROLL          // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
 //#define AHICORRECT 10             // Enable to adjust AHI on display to match horizon. -10 = -1 degree
-//#define INVERT_PITCH_SIGN         // Invert the sign of the displayed numeric value for the pitch angle (ex: pitch up = positive )
+#define INVERT_PITCH_SIGN           // Invert the sign of the displayed numeric value for the pitch angle (ex: pitch up = positive )
 //#define INVERT_ROLL_SIGN          // Invert the sign of the displayed numeric value for the roll angle (ex: roll right = negative )
 //#define AHIINVERTSUPPORT          // Support for inverted flight. AHI flow terrain when inverted
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
