@@ -452,6 +452,9 @@ if (cmdMSP==MSP_STATUS)
     #endif // I2CGPS_SPEED
     AIR_speed=GPS_speed;
     GPS_ground_course = read16();
+    #if defined MSP_DOP_SUPPORT
+      GPS_dop=read16();
+    #endif
   }
 
   if (cmdMSP==MSP_COMP_GPS)
