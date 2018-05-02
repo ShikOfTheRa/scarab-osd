@@ -23,7 +23,7 @@ static uint8_t txChecksum;
 #endif 
 
 #if defined PROTOCOL_SKYTRACK
-  #include "SKYTRACK.h"
+  // #include "SKYTRACK.h"
 #endif 
 
 uint32_t read32() {
@@ -1378,6 +1378,9 @@ void serialMSPreceive(uint8_t loops)
       #endif //NAZA  
     #endif //GPSOSD   
 
+    #if defined (PROTOCOL_SKYTRACK)
+       serialSLreceive(c);
+    #endif //PROTOCOL_SKYTRACK   
     #if defined (PROTOCOL_MAVLINK)
        serialMAVreceive(c);
     #endif //PROTOCOL_MAVLINK   

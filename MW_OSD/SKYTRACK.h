@@ -2,7 +2,6 @@ struct __SL {
   uint8_t  index;
   uint8_t  checksum;
   uint8_t  SLserialBuffer[0x20];
-  uint32_t 
 }
 SL;
 
@@ -31,9 +30,12 @@ void SL_sync() {
 #ifdef DATA_MSP
   timer.MSP_active = DATA_MSP;           // getting something on serial port
 #endif
-  GPS_longitude = (int32_t)SLread_u32(4);
-  GPS_latitude  = (int32_t)SLread_u32(8);
+  GPS_longitude = SLread_u32(8);
+  GPS_latitude  = SLread_u32(4);
   GPS_numSat    = SLread_u8(21);
+  GPS_altitude  = SLread_u16(12);
+//  pitchAngle    = SLread_u16(0);
+//  rollAngle     = SLread_u16(2); 
 }
 
 
@@ -44,6 +46,7 @@ void serialSLreceive(uint8_t c) {
     SL_HEADER_2,
     SL_CLASS,
     SL_ID,
+    SL_LENGTH_LSB,
     SL_LENGTH,
     SL_PAYLOAD,
     SL_FLAG,
@@ -65,39 +68,49 @@ void serialSLreceive(uint8_t c) {
     c_state = (c == 0x0B) ? SL_ID : SL_IDLE;
   }
   else if (c_state == SL_ID) {
-    c_state = (c == 0x16) ? SL_LENGTH : SL_IDLE;
-    //c_state = SL_LENGTH;
+    c_state = SL_LENGTH_LSB;
+  }
+  else if (c_state == SL_LENGTH_LSB) {
+    c_state = SL_LENGTH;
   }
   else if (c_state == SL_LENGTH) {
-    SL.SLserialBuffer[SL.index++] = c;
+    SL.SLserialBuffer[SL.index] = c;
     SL.index++;
-    //    c_state = (SL.index == SL.SLserialBuffer[2]) ? SL_PAYLOAD : SL_LENGTH;
-    c_state = (SL.index == 0x16) ? SL_PAYLOAD : SL_LENGTH;
-
+    c_state = (SL.index == 0x16) ? SL_PAYLOAD : SL_LENGTH; // Only cater for single ID
   }
   else if (c_state == SL_PAYLOAD) {
-    c_state = (c == 0) ? SL_FLAG : SL_IDLE;
-  }
-  else if (c_state == SL_FLAG) {
-    SL.checksum=1;  /DEVVVVVVVVVVVVVVVV
-    if (SL.checksum)
-      SL_sync();
-    c_state = SL_IDLE;
+      #ifdef DEBUGDPOSPACKET
+        timer.packetcount++;
+      #endif
+    c_state = SL_CHECKSUM; 
   }
   else if (c_state == SL_CHECKSUM) {
+    SL.checksum=1;  // No checksum used at present. Visual indicator only
+    if (SL.checksum){
+      SL_sync();
+    }
+    c_state = SL_IDLE;
+  }
+  else{ 
+    c_state = SL_IDLE;
   }
 }
 
-
-void DrawSkytrack() {
-#define SL_LAT_POS (10*30)+2
-#define SL_LON_POS (11*30)+2
+void DrawSkytrack(){
+#define SL_WARN_POS LINE04+10
+#define SL_VOLT_POS LINE05+10
+#define SL_LAT_POS  LINE06+10
+#define SL_LON_POS  LINE07+10
+#define SL_SAT_POS  LINE08+10
 
   for (int xx = 0; xx < MAX_screen_size; ++xx) {
     screen[xx] = ' ';
   }
-
-  if (1) { // uh oh - seems like we no data display last known co-ordianates...
+  #ifdef DEBUG
+        displayDebug();
+  #else
+  if (timer.MSP_active==0) { // uh oh - seems like we have no data. Display last known co-ordinates...
+//  if (1) { // uh oh - seems like we have no data. Display last known co-ordinates...
     screenBuffer[0] = SYM_LAT;
     FormatGPSCoord(GPS_latitude, screenBuffer + 1, 4, 'N', 'S');
     MAX7456_WriteString(screenBuffer, SL_LAT_POS);
@@ -105,9 +118,40 @@ void DrawSkytrack() {
     FormatGPSCoord(GPS_longitude, screenBuffer + 1, 4, 'E', 'W');
     MAX7456_WriteString(screenBuffer, SL_LON_POS);
   }
-  
-  displayVoltage();
+  #endif
+
+//VOLTAGE 
+  uint8_t t_cells = (voltage / (CELL_VOLTS_MAX+3)) + 1; // Detect 3s > 9.0v, 4s > 13.5v, 5s > 18.0v, 6s > 22.5v power up voltage
+  if (t_cells > cells){
+    cells++;
+  }
+  voltageWarning = cells * 36;
+  screenBuffer[0]=SYM_MAIN_BATT;
+  uint8_t t_offset = 1;
+  ItoaPadded(voltage,screenBuffer+t_offset,4,3);  
+  screenBuffer[4+1] = 0;         
+  t_offset = FindNull();
+  screenBuffer[t_offset++] = SYM_VOLT;
+  screenBuffer[t_offset] = 0;
+  if ((voltage<voltageWarning)&&(timer.Blink2hz))
+    return;
+  if (voltage<voltageWarning){
+    MAX7456_WriteString_P(skytracktext0, SL_WARN_POS);
+    MAX7456_WriteString(screenBuffer,SL_VOLT_POS);
+  }
+// VOLTAGE
+
+//SATS
+  screenBuffer[0] = SYM_SAT_L;
+  screenBuffer[1] = SYM_SAT_R;
+  itoa(GPS_numSat,screenBuffer+2,10);
+//  MAX7456_WriteString(screenBuffer,SL_SAT_POS); // disabled as AAT not sending.....
+//SATS
 }
+
+
+
+
 
 
 

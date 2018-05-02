@@ -108,6 +108,9 @@ uint16_t UntouchedStack(void)
 #ifdef KKAUDIOVARIO
   #include <Wire.h>
 #endif
+#if defined PROTOCOL_SKYTRACK
+  #include "SKYTRACK.h"
+#endif 
 
 
 
@@ -1412,4 +1415,5 @@ void reverseChannels(void){ //ifdef (TX_REVERSE)
       MwRcData[i] = 3000 - MwRcData[i];
   }
 }
+
 
