@@ -20,10 +20,10 @@ This work is based on the following open source work :-
  Please refer to credits.txt for list of individual contributions
  
  Exceptions:
- Where there are exceptions, these take precedence over the genereric licencing approach
- Elements of the code provided by Pawelsky (DJI specific) are not for commercial use. See headers in individual files for further details.  
+ Where there are exceptions, these take precedence over the genereric GNU licencing
+ Elements of the code provided by Pawelsky (DJI specific) are not for commercial use. 
+ See headers in individual files for further details.  
  Libraries used and typically provided by compilers may have licening terms stricter than that of GNU 3
- 
 */
 
 // travis test 1
@@ -105,9 +105,13 @@ uint16_t UntouchedStack(void)
 #ifdef I2C_UB_SUPPORT
   #include "WireUB.h"
 #endif
-#ifdef KKAUDIOVARIO
+#ifdef I2C_SUPPORT
   #include <Wire.h>
 #endif
+#if defined USEMS5837
+  #include "MS5837.h"
+  MS5837 MS5837sensor;
+#endif //USEMS5837
 #if defined PROTOCOL_SKYTRACK
   #include "SKYTRACK.h"
 #endif 
@@ -192,6 +196,12 @@ void setup()
     pressure = getPressure();
     lowpassFast = lowpassSlow = pressure;
   #endif //KKAUDIOVARIO
+  #if defined USEMS5837
+    Wire.begin();
+    MS5837sensor.init();
+    MS5837sensor.setFluidDensity(FLUID_DENSITY); // kg/m^3 
+  #endif // USE MS_5837
+
   Serial.flush();
 }
 
@@ -349,7 +359,9 @@ void loop()
     timer.tenthSec++;
     timer.halfSec++;
     timer.Blink10hz=!timer.Blink10hz;
-
+    #ifdef USEMS5837
+      MS5837sensor.read();
+    #endif //USEMS5837  
     if(GPS_fix && armed){
       if(Settings[S_UNITSYSTEM])
         tripSum += GPS_speed *0.0032808;     //  100/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
@@ -628,7 +640,18 @@ void loop()
           displayHeading();
 //-        }
 //-        if(MwSensorPresent&BAROMETER) {
-          displayAltitude();
+          #if defined SUBMERSIBLE
+            MwAltitude = (float)100*MS5837sensor.depth();      
+            displaySUBMERSIBLEAltitude();
+            if (millis() > timer.fwAltitudeTimer) { // To make vario from SUBmersible altitude
+              timer.fwAltitudeTimer += 1000;
+              MwVario = MwAltitude - previousfwaltitude;
+              previousfwaltitude = MwAltitude;
+            }
+            MAX7456_WriteString("EXPERIMENTAL",LINE04+9);
+          #else
+            displayAltitude();
+          #endif
           displayClimbRate();
           displayVario();
 //-        }
@@ -1209,7 +1232,10 @@ void ProcessSensors(void) {
 
 //-------------- Temperature
 #ifdef SHOW_TEMPERATURE
-  #ifndef PROTOCOL_MAVLINK
+  #if defined USEMS5837
+    temperature = MS5837sensor.temperature();
+  #elif defined PROTOCOL_MAVLINK
+  #else 
     temperature=sensorfilter[3][SENSORFILTERSIZE]>>3-TEMPZERO;
     temperature = map (temperature, TEMPZERO, 1024, 0 , TEMPMAX);
   #endif  

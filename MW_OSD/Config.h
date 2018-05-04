@@ -64,7 +64,7 @@
 //#define CLEANFLIGHT172            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.7.2
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1 
 //#define BETAFLIGHT3               // Uncomment this if you are using BETAFLIGHT versions prior to 3.1
-
+//#define SUBMERSIBLE               // Uncomment this if you are using a submersible with MS5837 and optional MSP based FC
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
@@ -384,6 +384,12 @@
 //#define VTX_REGION_AUSTRALIA      // Enable for AU legal channels and power level only
 #define DISPLAY_VTX_INFO            // Enable to show frequency in menu display. 
 
+
+/********************           Submersible settings           *********************/
+// Specify fluid density for submersible (density = 997 freshwater, 1029 for seawater): Choose ONLY ONE option:
+#define FRESHWATER                  // Uncomment this if you are using a submersible in freshwater 
+//#define SEAWATER                  // Uncomment this if you are using a submersible in seawater
+//#define FLUID_DENSITY 997         // Uncomment this if you are using a submersible and wish to specify a particular fluid density
 
 /********************           Display items lead icon           *********************/
 // comment out to not display lead icon for displayed items

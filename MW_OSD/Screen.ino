@@ -1057,6 +1057,30 @@ void displayMAVAltitude(void){
   #endif  
 }
 
+void displaySUBMERSIBLEAltitude(void){
+    if(!fieldIsVisible(MwAltitudePosition))
+      return;
+    int32_t xx;
+    if(Settings[S_UNITSYSTEM])
+      xx = MwAltitude * 0.32808;  // in ft*10
+    else
+      xx = MwAltitude/10  ;       // in m*10
+    int8_t dec_len=0;
+    while (xx!=0){
+      xx/=10;
+      dec_len++;
+    }
+    if (dec_len<2)
+      dec_len=2;
+    if (MwAltitude<0)
+      dec_len++; 
+    if(Settings[S_UNITSYSTEM])
+      xx = MwAltitude * 0.32808;  // in ft*10
+    else
+      xx = MwAltitude/10  ;       // in m*10
+    displayItem(MwAltitudePosition,xx, SYM_AGL, 0, dec_len+1, dec_len );
+}
+
 void displayNumberOfSat(void)
 {
   if((GPS_numSat<MINSATFIX)&&(timer.Blink2hz)){

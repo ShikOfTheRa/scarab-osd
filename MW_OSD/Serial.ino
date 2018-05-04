@@ -516,7 +516,9 @@ if (cmdMSP==MSP_STATUS)
 #endif //SPORT
   if (cmdMSP==MSP_ALTITUDE)
   {
-   #if defined (AUTOSENSEBARO) && defined (FIXEDWING)     
+   #ifdef USEMS5837
+      MwAltitude = (float)100*MS5837sensor.depth();
+   #elif defined (AUTOSENSEBARO) && defined (FIXEDWING)     
     if(!(MwSensorPresent&BAROMETER)){
       MwAltitude = (int32_t)GPS_altitude*100;
       gpsvario();

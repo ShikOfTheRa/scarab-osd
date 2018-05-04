@@ -32,44 +32,53 @@
 
 //#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
-  //#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
-  //#define AIRBOTMICRO               // Uncomment this if using an airbot MicroOSD
-  //#define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
+  //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+  //#define AIRBOTMICRO             // Uncomment this if using an airbot MicroOSD
+  //#define AEROMAX                 // Uncomment this if using MWOSD AEROMAX hardware
   #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
   //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
   //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
   #define APM
   //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
   //#define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-  //#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
+  //#define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
   #define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
   //#define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
-  //#define INTRO_DELAY 1             // To speed up startup
-  #define DISPLAY_DEV 0xC000      // Use screen layout dev position - display all items...
-//  #define KKAUDIOVARIO A3           // Enable this for audio vario on Arduino pin XX. A3=RSSI. Use AUDIOPIN on AEROMAX 
-#define MAVSENSOR173
-
+  //#define INTRO_DELAY 1           // To speed up startup
+  #define DISPLAY_DEV 0xC000        // Use screen layout dev position - display all items...
+  //#define KKAUDIOVARIO A3         // Enable this for audio vario on Arduino pin XX. A3=RSSI. Use AUDIOPIN on AEROMAX 
+  #define MAVSENSOR173
 #endif
+
 
 //#define GPSTEST
-#ifdef GPSTEST                  // Development pre-set test paramters only 
-//#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
-#define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
-#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
-#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
-#define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
-#undef VARIOSTANDARD               // Enable this for single icon representation of vario
-#define VARIOENHANCED 4           // Enable this for multi line more accurate visual slider representation of vario. 4 provides +/- 4 rows of slider resolution
-#undef INTRO_FC                  // Enable to FC version at startup
-#define INTRO_VERSION               "MWOSD R1.8 TEST" // Call the OSD something else if you prefer. 
-
+#ifdef GPSTEST                      // Development pre-set test paramters only 
+  //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+  #define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
+  #define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+  #define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
+  #define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
+  #undef VARIOSTANDARD              // Enable this for single icon representation of vario
+  #define VARIOENHANCED 4           // Enable this for multi line more accurate visual slider representation of vario. 4 provides +/- 4 rows of slider resolution
+  #undef INTRO_FC                   // Enable to FC version at startup
+  #define INTRO_VERSION             "MWOSD R1.8 TEST" // Call the OSD something else if you prefer. 
 #endif
+
 
 //#define SCHLONG                   // Test for Schalonsus 
 #ifdef SCHLONG                      
   #define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   #define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
   #define iNAV_KK                   // Uncomment this if you are using AEROMAX OSD and BARO sensor addition with iNAV with KK audio vario
+  #define EEPROM_CLEAR              // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
+#endif
+
+
+//#define TROND                       // Submersible development 
+#ifdef TROND                      
+  //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+  #define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
+  #define SUBMERSIBLE               // Uncomment this if you are using a submersible with MS5837 and optional MSP based FC
 #endif
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
@@ -155,6 +164,20 @@
 //  #undef INTRO_CALLSIGN              // Enable to display callsign at startup
 //  #undef INTRO_SIGNALTYPE            // Enable to display video type at startup
 //  #undef INTRO_FC                    // Enable to display FC version at startup
+#endif
+
+#ifdef SUBMERSIBLE // MSP FC with depth sensor
+//  #define iNAV
+  #define USEMS5837                    // Enable this for BAR30  
+  #undef MAPMODE
+  #undef MENU_DEBUG
+//  #undef DISPLAY_PR
+//  #undef SHOW_TEMPERATURE
+  #undef INTRO_MENU                  // Enable to display TX stick MENU 
+  #undef INTRO_CALLSIGN              // Enable to display callsign at startup
+//  #undef INTRO_SIGNALTYPE            // Enable to display video type at startup
+  #undef INTRO_FC                    // Enable to display FC version at startup
+  #define FORCESENSORS
 #endif
 
 #ifdef BASEFLIGHT     //set up latest at time of release
@@ -812,6 +835,15 @@ enum {
   #define GPSOSDHOMEDISTANCE 40     // distance from home in meters to start check  for when when GPSOSD is home.
 #endif
 
+/********************  Submersible settings *********************/
+#if defined FRESHWATER
+  #define FLUID_DENSITY 997
+#elif defined SEAWATER
+  #define FLUID_DENSITY 1029
+#elif !defined FLUID_DENSITY
+  #define FLUID_DENSITY 997 // default fresh
+#endif
+
 /********************  OSD HARDWARE rule definitions  *********************/
 
 // default pin mappings:
@@ -906,8 +938,13 @@ enum {
     # define LEDOFF           PORTD&=B01111111;
 #endif
 
-#if defined  KKAUDIOVARIO 
+#if defined  KKAUDIOVARIO
+  #define I2C_SUPPORT
   #undef FIXEDLOOP
+#endif
+
+#if defined USEMS5837 
+  #define I2C_SUPPORT
 #endif
 
 #ifdef AEROMAX
