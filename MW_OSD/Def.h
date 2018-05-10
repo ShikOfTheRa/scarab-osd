@@ -74,11 +74,19 @@
 #endif
 
 
-//#define TROND                       // Submersible development 
+#define TROND                       // Submersible development 
 #ifdef TROND                      
   //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   #define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
   #define SUBMERSIBLE               // Uncomment this if you are using a submersible with MS5837 and optional MSP based FC
+  #undef DISPLAYWATTS                // Disable to save memeory if not used. Enable this to display Watts
+  #undef DISPLAYEFFICIENCY           // Disable to save memeory if not used. Enable this to display Watts/KMh or Mph for efficiency
+  #undef DISPLAYMAHMIN               // Disable to save memeory if not used. Enable this to display average mAh/minKMh
+  #undef PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
+  #undef MASKGPSLOCATION             // Disable to save memeory if not used. Enables MASK GPS settings on GUI. Coordinates displayed with major digits XXX set to random location "XXX.DDDDDDD" 
+  #undef FILTER_AVG                  // Enable standard averaging filter  
+  #undef HORIZON                     // Enable/disable HORIZON indicator
+
 #endif
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/

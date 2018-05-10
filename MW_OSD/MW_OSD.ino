@@ -641,7 +641,8 @@ void loop()
 //-        }
 //-        if(MwSensorPresent&BAROMETER) {
           #if defined SUBMERSIBLE
-            MwAltitude = (float)100*MS5837sensor.depth();      
+            MwAltitude = (float)100*MS5837sensor.depth();  
+            MwAltitude = 11200;    
             displaySUBMERSIBLEAltitude();
             if (millis() > timer.fwAltitudeTimer) { // To make vario from SUBmersible altitude
               timer.fwAltitudeTimer += 1000;
