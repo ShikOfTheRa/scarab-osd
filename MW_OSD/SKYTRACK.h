@@ -79,9 +79,9 @@ void serialSLreceive(uint8_t c) {
     c_state = (SL.index == 0x16) ? SL_PAYLOAD : SL_LENGTH; // Only cater for single ID
   }
   else if (c_state == SL_PAYLOAD) {
-      #ifdef DEBUGDPOSPACKET
+//      #ifdef DEBUGDPOSPACKET
         timer.packetcount++;
-      #endif
+//      #endif
     c_state = SL_CHECKSUM; 
   }
   else if (c_state == SL_CHECKSUM) {
@@ -97,11 +97,12 @@ void serialSLreceive(uint8_t c) {
 }
 
 void DrawSkytrack(){
-#define SL_WARN_POS LINE04+10
-#define SL_VOLT_POS LINE05+10
-#define SL_LAT_POS  LINE06+10
-#define SL_LON_POS  LINE07+10
-#define SL_SAT_POS  LINE08+10
+  #define SL_WARN_POS LINE04+10
+  #define SL_VOLT_POS LINE05+10
+  #define SL_LAT_POS  LINE06+10
+  #define SL_LON_POS  LINE07+10
+  #define SL_SAT_POS  LINE08+10
+  #define SL_PKT_POS  LINE09+10
 
   for (int xx = 0; xx < MAX_screen_size; ++xx) {
     screen[xx] = ' ';
@@ -109,16 +110,6 @@ void DrawSkytrack(){
   #ifdef DEBUG
         displayDebug();
   #else
-  if (timer.MSP_active==0) { // uh oh - seems like we have no data. Display last known co-ordinates...
-//  if (1) { // uh oh - seems like we have no data. Display last known co-ordinates...
-    screenBuffer[0] = SYM_LAT;
-    FormatGPSCoord(GPS_latitude, screenBuffer + 1, 4, 'N', 'S');
-    MAX7456_WriteString(screenBuffer, SL_LAT_POS);
-    screenBuffer[0] = SYM_LON;
-    FormatGPSCoord(GPS_longitude, screenBuffer + 1, 4, 'E', 'W');
-    MAX7456_WriteString(screenBuffer, SL_LON_POS);
-  }
-  #endif
 
 //VOLTAGE 
   uint8_t t_cells = (voltage / (CELL_VOLTS_MAX+3)) + 1; // Detect 3s > 9.0v, 4s > 13.5v, 5s > 18.0v, 6s > 22.5v power up voltage
@@ -133,20 +124,44 @@ void DrawSkytrack(){
   t_offset = FindNull();
   screenBuffer[t_offset++] = SYM_VOLT;
   screenBuffer[t_offset] = 0;
-  if ((voltage<voltageWarning)&&(timer.Blink2hz))
-    return;
   if (voltage<voltageWarning){
-    MAX7456_WriteString_P(skytracktext0, SL_WARN_POS);
-    MAX7456_WriteString(screenBuffer,SL_VOLT_POS);
+    if (timer.Blink2hz){
+      MAX7456_WriteString_P(skytracktext0, SL_WARN_POS);
+      MAX7456_WriteString(screenBuffer,SL_VOLT_POS);
+    }
   }
 // VOLTAGE
 
+//Choose:
+  if (timer.MSP_active!=0) { //Continue display last known co-ordinates if no data...
+//  if (0) { // Always display...
+    return;
+  }
+
+//CO-ORDINATES
+    screenBuffer[0] = SYM_LAT;
+    FormatGPSCoord(GPS_latitude, screenBuffer + 1, 4, 'N', 'S');
+    MAX7456_WriteString(screenBuffer, SL_LAT_POS);
+    screenBuffer[0] = SYM_LON;
+    FormatGPSCoord(GPS_longitude, screenBuffer + 1, 4, 'E', 'W');
+    MAX7456_WriteString(screenBuffer, SL_LON_POS);
+//CO-ORDINATES
+  
 //SATS
-  screenBuffer[0] = SYM_SAT_L;
-  screenBuffer[1] = SYM_SAT_R;
-  itoa(GPS_numSat,screenBuffer+2,10);
-//  MAX7456_WriteString(screenBuffer,SL_SAT_POS); // disabled as AAT not sending.....
+  MAX7456_WriteString("SAT",SL_SAT_POS);
+  itoa(GPS_numSat,screenBuffer,10);
+  MAX7456_WriteString(screenBuffer,SL_SAT_POS+5); 
 //SATS
+
+//SERIAL PACKET COUNT    
+  MAX7456_WriteString("PKT",SL_PKT_POS);
+  itoa(packetrate,screenBuffer,10);
+  MAX7456_WriteString(screenBuffer,SL_PKT_POS+5);
+//SERIAL PACKET COUNT      
+
+
+  #endif
+
 }
 
 
