@@ -635,16 +635,13 @@ void loop()
   #endif  
       }          
 #endif
-//-        if(MwSensorPresent&MAGNETOMETER) {
           displayHeadingGraph();
           displayHeading();
-//-        }
-//-        if(MwSensorPresent&BAROMETER) {
           #if defined SUBMERSIBLE
             MwAltitude = (float)100*MS5837sensor.depth();  
-            MwAltitude = 11200;    
+//            MwAltitude = (float)100*1.12;  
             displaySUBMERSIBLEAltitude();
-            if (millis() > timer.fwAltitudeTimer) { // To make vario from SUBmersible altitude
+            if (millis() > timer.fwAltitudeTimer) { // To make vario from Submersible altitude
               timer.fwAltitudeTimer += 1000;
               MwVario = MwAltitude - previousfwaltitude;
               previousfwaltitude = MwAltitude;
@@ -655,8 +652,6 @@ void loop()
           #endif
           displayClimbRate();
           displayVario();
-//-        }
-//-        if(MwSensorPresent&GPSSENSOR) // missing {
           displayNumberOfSat();
           displayDirectionToHome();
           displayDistanceToHome();
@@ -672,9 +667,7 @@ void loop()
           displayGPSAltitude();
 #endif         
           displayGPSdop();
-          #ifdef USEGLIDESCOPE
-            // displayfwglidescope(); //note hook for this is in display horizon function
-          #endif //USEGLIDESCOPE  
+          // displayfwglidescope(); //note hook for this is in display horizon function
           display_speed(GPS_speed,GPS_speedPosition,SYM_SPEED_GPS);
           display_speed(AIR_speed,AIR_speedPosition,SYM_SPEED_AIR);
           displayWindSpeed(); // also windspeed if available
@@ -1234,7 +1227,8 @@ void ProcessSensors(void) {
 //-------------- Temperature
 #ifdef SHOW_TEMPERATURE
   #if defined USEMS5837
-    temperature = MS5837sensor.temperature();
+    temperature = (float)(10*MS5837sensor.temperature());
+//    temperature = -1234; //GDEV
   #elif defined PROTOCOL_MAVLINK
   #else 
     temperature=sensorfilter[3][SENSORFILTERSIZE]>>3-TEMPZERO;

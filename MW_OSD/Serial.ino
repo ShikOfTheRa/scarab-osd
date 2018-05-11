@@ -1,6 +1,8 @@
-
+// Serial Buffer must be at least 65 for font transfers
 #if defined NAZA
   #define SERIALBUFFERSIZE 250
+#elif defined SUBMERSIBLE
+  #define SERIALBUFFERSIZE 65
 #else
   #define SERIALBUFFERSIZE 100
 #endif
