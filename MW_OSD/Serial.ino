@@ -516,20 +516,28 @@ if (cmdMSP==MSP_STATUS)
 #endif //SPORT
   if (cmdMSP==MSP_ALTITUDE)
   {
-   #if defined (AUTOSENSEBARO) && defined (FIXEDWING)     
+    #if defined (AUTOSENSEBARO) && defined (FIXEDWING)     
     if(!(MwSensorPresent&BAROMETER)){
       MwAltitude = (int32_t)GPS_altitude*100;
       gpsvario();
     }     
-   #elif defined (FIXEDWING)
-     if (Settings[S_USEGPSHEADING]>1){
-       MwAltitude = (int32_t)GPS_altitude*100;
-       gpsvario();
-     }
-   #else
+    else{
+      MwAltitude = read32();
+      MwVario = read16();      
+    }
+    #elif defined (FIXEDWING)
+    if (Settings[S_USEGPSHEADING]>1){
+      MwAltitude = (int32_t)GPS_altitude*100;
+      gpsvario();
+    }
+    else{
+      MwAltitude = read32();
+      MwVario = read16();      
+    }
+    #else
     MwAltitude =read32();
     MwVario = read16();
-   #endif  
+    #endif  
   }
 
   if (cmdMSP==MSP_ANALOG)
