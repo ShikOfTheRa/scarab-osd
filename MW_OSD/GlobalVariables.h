@@ -1,4 +1,3 @@
- 
 #define POS_MASK        0x01FF
 #define PAL_MASK        0x0003
 #define PAL_SHFT             9
@@ -227,6 +226,7 @@ uint8_t vtxChannel;
 #define NAZA_PMW_MED  1400
 #define NAZA_PMW_HIGH 1600
 
+uint16_t MAX_screen_size;
 char screen[480];          // Main screen ram for MAX7456
 #ifdef INVERTED_CHAR_SUPPORT
 uint8_t screenAttr[480/8]; // Attribute (INV) bits for each char in screen[]
@@ -1044,6 +1044,10 @@ struct __alarms {
 const char messageF0[] PROGMEM = "DO NOT POWER OFF";
 const char messageF1[] PROGMEM = "SCREEN WILL GO BLANK";
 const char messageF2[] PROGMEM = "UPDATE COMPLETE";
+#endif
+
+#ifdef SKYTRACK
+const char skytracktext0[] PROGMEM = "GS LOW VOLTS";
 #endif
 
 // For Intro
