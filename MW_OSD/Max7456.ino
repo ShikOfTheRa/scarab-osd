@@ -90,7 +90,6 @@
 //uint8_t ENABLE_display;
 //uint8_t ENABLE_display_vert;
 //uint8_t DISABLE_display;
-uint16_t MAX_screen_size;
 
 // Goods for tidiness
 #define VIDEO_MODE (flags.signaltype ? VIDEO_MODE_PAL : VIDEO_MODE_NTSC)

@@ -10,6 +10,9 @@
 // Degrees Icon for HEADING/DIRECTION HOME
 #define SYM_DEGREES 0XBD
 
+// Pilot icon base address 
+#define PILOT_ICON 0x06
+
 
 // Direction arrows 
   #define SYM_ARROW_HOME 0X60
@@ -123,7 +126,7 @@
 
 
 // Temperature
-#define SYM_TEMP_F 0X0D
+#define SYM_TEMP_F 0X0F
 #define SYM_TEMP_C 0X0E
 
 // Batt evolution
@@ -281,7 +284,11 @@
 #endif
 
 #ifdef ICON_TMP
-#define SYM_TMP           0X06 
+  #ifdef PILOTICON
+    #define SYM_TMP           0XC6 
+  #else
+    #define SYM_TMP           0X06 
+  #endif  
 #else
 #define SYM_TMP           0 
 #endif

@@ -170,12 +170,12 @@
 //#define MAV_ALL                   // To act on data from all MAV SYSID in stream. NOT recommended. Specify ID in GUI. Default=1 upon reset.
 //#define MAV_ARMED                 // Forces OSD to be always armed (for when MAV does not send armed status in heartbeat).
 //#define MAV_RESET_HOME            // Resets home position when not armed. When enabled, note that RX glitch etc. could potentially reset home position.
-//#define MAV_ALT_THROTTLE          // Use alternative MAV throttle value. Not raw RC channel
+//#define MAV_ALT_THROTTLE          // Use alternative MAV throttle value. Not raw RC channel.
+//#define MAV_WIND_DIR_REVERSE      // SHow direction in which wind is coming from. Same as otehr OSD. Default is to show direction of wind flow. 
 
 /******************** Mavlink distance sensor settings *********************/
 // Choose ONLY ONE SENSOR option AND enable MAVSENSORACTIVE 
 //#define MAVSENSORGPSACTIVE 5      // When enabled, displays sensor distance instead of GPS altitude. Default = 5m. Requires stream configured on MAV FC
-//#define MAVSENSORDISPLAYTYPE      // When enabled, displays sensor distance in cm or inches. Disabled in meters or feet
 //#define MAVSENSOR173              // When enabled, uses RANGEFINDER - MAVLINK #173 command for the distance. Requires MAVSENSORGPSACTIVE enabled
 //#define MAVSENSOR132              // When enabled, uses INFO_DISTANCE - MAVLINK #132 command for the distance. Requires MAVSENSORGPSACTIVE enabled
 
@@ -236,7 +236,7 @@
 //#define REVERSE_AHI_PITCH         // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
 //#define REVERSE_AHI_ROLL          // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
 //#define AHICORRECT 10             // Enable to adjust AHI on display to match horizon. -10 = -1 degree
-//#define INVERT_PITCH_SIGN         // Invert the sign of the displayed numeric value for the pitch angle (ex: pitch up = positive )
+#define INVERT_PITCH_SIGN           // Invert the sign of the displayed numeric value for the pitch angle (ex: pitch up = positive )
 //#define INVERT_ROLL_SIGN          // Invert the sign of the displayed numeric value for the roll angle (ex: roll right = negative )
 //#define AHIINVERTSUPPORT          // Support for inverted flight. AHI flow terrain when inverted
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
@@ -256,6 +256,7 @@
 //#define OSD_SWITCH                // Forces original 2 way multiwii screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
 //#define NOSUMMARYTHROTTLERESET    // Enable to supress summary display clearing from throttle
 #define OSDSUMMARY 30               // Seconds summary is displayed for after landing. Max 254
+#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
 
 
 /********************       Power / efficiency display Settings         ************************/

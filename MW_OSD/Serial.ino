@@ -24,7 +24,7 @@ static uint8_t txChecksum;
 #endif 
 
 #if defined PROTOCOL_SKYTRACK
-  #include "SKYTRACK.h"
+  // #include "SKYTRACK.h"
 #endif 
 
 uint32_t read32() {
@@ -453,6 +453,9 @@ if (cmdMSP==MSP_STATUS)
     #endif // I2CGPS_SPEED
     AIR_speed=GPS_speed;
     GPS_ground_course = read16();
+    #if defined MSP_DOP_SUPPORT
+      GPS_dop=read16();
+    #endif
   }
 
   if (cmdMSP==MSP_COMP_GPS)
@@ -514,20 +517,28 @@ if (cmdMSP==MSP_STATUS)
 #endif //SPORT
   if (cmdMSP==MSP_ALTITUDE)
   {
-   #if defined (AUTOSENSEBARO) && defined (FIXEDWING)     
+    #if defined (AUTOSENSEBARO) && defined (FIXEDWING)     
     if(!(MwSensorPresent&BAROMETER)){
       MwAltitude = (int32_t)GPS_altitude*100;
       gpsvario();
     }     
-   #elif defined (FIXEDWING)
-     if (Settings[S_USEGPSHEADING]>1){
-       MwAltitude = (int32_t)GPS_altitude*100;
-       gpsvario();
-     }
-   #else
+    else{
+      MwAltitude = read32();
+      MwVario = read16();      
+    }
+    #elif defined (FIXEDWING)
+    if (Settings[S_USEGPSHEADING]>1){
+      MwAltitude = (int32_t)GPS_altitude*100;
+      gpsvario();
+    }
+    else{
+      MwAltitude = read32();
+      MwVario = read16();      
+    }
+    #else
     MwAltitude =read32();
     MwVario = read16();
-   #endif  
+    #endif  
   }
 
   if (cmdMSP==MSP_ANALOG)
@@ -1393,6 +1404,9 @@ void serialMSPreceive(uint8_t loops)
       #endif //NAZA  
     #endif //GPSOSD   
 
+    #if defined (PROTOCOL_SKYTRACK)
+       serialSLreceive(c);
+    #endif //PROTOCOL_SKYTRACK   
     #if defined (PROTOCOL_MAVLINK)
        serialMAVreceive(c);
     #endif //PROTOCOL_MAVLINK   

@@ -273,7 +273,8 @@
   #define ENABLE_MSP_SAVE_ADVANCED
   #define CORRECTLOOPTIME
   #define CANVAS_SUPPORT
-
+  #define MSP_DOP_SUPPORT
+  
   #define MENU_STAT
   #define MENU_PID
   #define MENU_RC

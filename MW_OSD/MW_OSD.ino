@@ -108,6 +108,9 @@ uint16_t UntouchedStack(void)
 #ifdef KKAUDIOVARIO
   #include <Wire.h>
 #endif
+#if defined PROTOCOL_SKYTRACK
+  #include "SKYTRACK.h"
+#endif 
 
 
 
@@ -592,7 +595,11 @@ void loop()
         if (MwSensorActive&mode.camstab) displayCallsign(getPosition(callSignPosition)); 
 #else 
         if(fieldIsVisible(callSignPosition)){
-          if (Settings[S_CALLSIGN_ALWAYS]>1){
+  #ifdef PILOTICON
+          if (Settings[S_CALLSIGN_ALWAYS]==3){
+            displayIcon(getPosition(callSignPosition));               
+          }
+          else if (Settings[S_CALLSIGN_ALWAYS]==2){
             if ( (onTime > (timer.lastCallSign+CALLSIGNINTERVAL))){ // Displays 4 sec every 60 secs 
               if ( onTime > (timer.lastCallSign+CALLSIGNINTERVAL+CALLSIGNDURATION)) 
                 timer.lastCallSign = onTime; 
@@ -602,7 +609,19 @@ void loop()
           else if (Settings[S_CALLSIGN_ALWAYS]==1){
             displayCallsign(getPosition(callSignPosition));     
           }
-        }
+  #else
+          if (Settings[S_CALLSIGN_ALWAYS]==2){
+            if ( (onTime > (timer.lastCallSign+CALLSIGNINTERVAL))){ // Displays 4 sec every 60 secs 
+              if ( onTime > (timer.lastCallSign+CALLSIGNINTERVAL+CALLSIGNDURATION)) 
+                timer.lastCallSign = onTime; 
+              displayCallsign(getPosition(callSignPosition));      
+            }
+          }
+          else if (Settings[S_CALLSIGN_ALWAYS]==1){
+            displayCallsign(getPosition(callSignPosition));     
+          }
+  #endif  
+      }          
 #endif
 //-        if(MwSensorPresent&MAGNETOMETER) {
           displayHeadingGraph();
@@ -1396,4 +1415,5 @@ void reverseChannels(void){ //ifdef (TX_REVERSE)
       MwRcData[i] = 3000 - MwRcData[i];
   }
 }
+
 
