@@ -1064,9 +1064,6 @@ void readEEPROM(void)
       if (x>LINE06) screenPosition[en] = screenPosition[en] + LINE;
       if (x>LINE09) screenPosition[en] = screenPosition[en] + LINE;
     }
-#ifdef SHIFTDOWN
-    if ((screenPosition[en]&0x1FF)<LINE04) screenPosition[en] = screenPosition[en] + LINE;
-#endif
   }
 }
 

@@ -220,7 +220,6 @@
 #define AUTOCAM                     // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
 #define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
-//#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define FORCECROSSHAIR            // Forces a crosshair even if no AHI / horizon used
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
