@@ -8,11 +8,7 @@
   #define DISPLAY_DEV     0x0000
 #endif
 #define POS(pos, pal_off, disp)  (((pos)&POS_MASK)|((pal_off)<<PAL_SHFT)|(disp))
-#if defined SHIFTDOWN
-#define TOPSHIFT        LINE
-#else
-#define TOPSHIFT        0
-#endif
+
 
 #define MPH 1
 #define KMH 0
@@ -1336,8 +1332,8 @@ const unsigned char varioUnitAdd[2] ={
 const unsigned char temperatureUnitAdd[2] ={
   SYM_TEMP_C,SYM_TEMP_F};
 
-const unsigned char UnitsIcon[8]={
-  SYM_M,SYM_FT,SYM_M,SYM_FT,SYM_KM,SYM_M,SYM_KM,SYM_M};
+const unsigned char UnitsIcon[10]={
+  SYM_M,SYM_FT,SYM_M,SYM_FT,SYM_KM,SYM_M,SYM_KM,SYM_M,SYM_TEMP_C,SYM_TEMP_F};
 //  SYM_ALTM,SYM_ALTFT,SYM_DISTHOME_M,SYM_DISTHOME_FT,SYM_ALTKM,SYM_ALTMI,SYM_DISTHOME_KM,SYM_DISTHOME_MI};
 
 #define REQ_MSP_IDENT     (1 <<  0)

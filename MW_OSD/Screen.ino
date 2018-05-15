@@ -31,36 +31,6 @@ char *ItoaPadded(int val, char *str, uint8_t bytes, uint8_t decimalpos)  {
   return str;
 }
 
-char *ItoaUnPadded(int val, char *str, uint8_t bytes, uint8_t decimalpos)  {
-  // Val to convert
-  // Return String
-  // Length
-  // Decimal position
-  uint8_t neg = 0;
-  if(val < 0) {
-    neg = 1;
-    val = -val;
-  } 
-
-  str[bytes] = 0;
-  for(;;) {
-    if(bytes == decimalpos) {
-      str[--bytes] = DECIMAL;
-      decimalpos = 0;
-    }
-    str[--bytes] = '0' + (val % 10);
-    val = val / 10;
-    if(bytes == 0 || (decimalpos == 0 && val == 0))
-      break;
-  }
-
-  if(neg && bytes > 0)
-    str[--bytes] = '-';
-
-  while(bytes != 0)
-    str[--bytes] = ' ';
-  return str;
-}
 
 
 #ifdef CROPGPSPOSITION
@@ -177,14 +147,23 @@ void displayVirtualNose(void)
 
 void displayTemperature(void)        
 {
+  #ifdef SUBMERSIBLE  
+  if((((temperature/10)>Settings[TEMPERATUREMAX])&&(timer.Blink2hz))) 
+    return;
+  #else
   if(((temperature>Settings[TEMPERATUREMAX])&&(timer.Blink2hz))) 
     return;
+  #endif  
   int xxx;
   if (Settings[S_UNITSYSTEM])
     xxx = temperature*1.8+32;       //Fahrenheit conversion for imperial system.
   else
     xxx = temperature;
-  displayItem(temperaturePosition, xxx, SYM_TMP, temperatureUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
+  #ifdef SUBMERSIBLE  
+    displayItem(temperaturePosition, xxx, SYM_TMP, temperatureUnitAdd[Settings[S_UNITSYSTEM]], 0, 1 ); // *10 value, 1 DP
+  #else
+    displayItem(temperaturePosition, xxx, SYM_TMP, temperatureUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
+  #endif
 }
 
 
@@ -736,7 +715,7 @@ void displayVoltage(void)
 #endif // BATTERYICONVOLTS
   if ((voltage<voltageWarning)&&(timer.Blink2hz))
     return;
-  displayItem(voltagePosition, voltage, t_lead_icon, SYM_VOLT, 4, 3 );
+  displayItem(voltagePosition, voltage, t_lead_icon, SYM_VOLT, 0, 1 );
 }
 
 
@@ -744,7 +723,7 @@ void displayVidVoltage(void)
 {
   if((vidvoltage<vidvoltageWarning)&&(timer.Blink2hz))
     return;
-  displayItem(vidvoltagePosition, vidvoltage, SYM_VID_BAT, SYM_VOLT, 4, 3 );
+  displayItem(vidvoltagePosition, vidvoltage, SYM_VID_BAT, SYM_VOLT, 0, 1 );
 }
 
 
@@ -837,7 +816,7 @@ void displayAmperage(void)
 {
   if(amperage > ampMAX)
     ampMAX = amperage;
-  displayItem(amperagePosition, amperage, 0, SYM_AMP, 5,  4 );
+  displayItem(amperagePosition, amperage, 0, SYM_AMP, 0,  1 );
 }
 
 
@@ -1034,28 +1013,25 @@ void displayMAVAltitude(void){
     if(!fieldIsVisible(MwGPSAltPosition))
       return;      
     int32_t xx;
-  #ifdef MAVSENSORDISPLAYTYPE // for future in case need cm/inch precision 
-  #else
     if(Settings[S_UNITSYSTEM])
       xx = MAV_altitude * 0.32808;  // in ft*10
     else
       xx = MAV_altitude/10  ;       // in cm*10
-    int8_t dec_len=0;
-    while (xx!=0){
-      xx/=10;
-      dec_len++;
-    }
-    if (dec_len<2)
-      dec_len=2;
-    if (MAV_altitude<0)
-      dec_len++; 
-    if(Settings[S_UNITSYSTEM])
-      xx = MAV_altitude * 0.32808;  // in ft*10
-    else
-      xx = MAV_altitude/10  ;       // in cm*10
-    displayItem(MwGPSAltPosition,xx, SYM_AGL, 0, dec_len+1, dec_len );
-  #endif  
+    displayItem(MwGPSAltPosition,xx, SYM_AGL, UnitsIcon[Settings[S_UNITSYSTEM]+0], 0, 1 );
 }
+
+
+void displaySUBMERSIBLEAltitude(void){
+    if(!fieldIsVisible(MwAltitudePosition))
+      return;
+    int32_t xx;
+    if(Settings[S_UNITSYSTEM])
+      xx = MwAltitude * 0.32808;  // in ft*10
+    else
+      xx = MwAltitude/10  ;       // in m*10
+    displayItem(MwAltitudePosition,xx, SYM_AGL, UnitsIcon[Settings[S_UNITSYSTEM]+0], 0, 1 );
+}
+
 
 void displayNumberOfSat(void)
 {
@@ -1074,21 +1050,13 @@ void displayNumberOfSat(void)
 #endif
 }
 
-  /*
-   *  t_position  = screen position
-   *  t_value     = numerical value
-   *  t_leadicon  = hex position of leading character. 0 = no leading character.
-   *  t_trailicon = hex position of trailing character. 0 = no trailing character.
-   *  t_psize     = number of characters to right justify value into. 0 = left justified with no padding.
-   *  t_dec       = char position of decimal point within right justified psize. e.g for 16.1 use t_psize=3,t_dec=2 
-  */
 
 void displayGPSdop(void)
 {
   uint16_t t_dop = GPS_dop/10;
   if (t_dop>99)
     t_dop=99;
-  displayItem(DOPposition, t_dop, SYM_DOP, 0 , 3,  2 );
+  displayItem(DOPposition, t_dop, SYM_DOP, 0 , 0,  1 );
 }
 
 
@@ -1275,9 +1243,9 @@ void displayClimbRate(void)
   else
     climbrate = MwVario / 10;            // mt/sec *10 for DP
 #ifdef SHOWNEGATIVECLIMBRATE
-  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 4, 3 ); //Show +/-
+  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 0, 1 ); //Show +/-
 #else
-  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 3, 2 ); //neater look
+  displayItem(climbratevaluePosition, climbrate, SYM_CLIMBRATE, varioUnitAdd[Settings[S_UNITSYSTEM]], 0, 1 ); //neater look
 #endif
 }
 
@@ -2556,23 +2524,44 @@ void displayItem(uint16_t t_position, int16_t t_value, uint8_t t_leadicon, uint8
    *  t_leadicon  = hex position of leading character. 0 = no leading character.
    *  t_trailicon = hex position of trailing character. 0 = no trailing character.
    *  t_psize     = number of characters to right justify value into. 0 = left justified with no padding.
-   *  t_pdec       = char position of decimal point within right justified psize. e.g for 16.1 use t_psize=4,t_pdec=3
+   *  t_pdec      = decimal precision or char position of decimal point within right justified psize. e.g for 16.1 use t_psize=4,t_pdec=3
   */
   
   uint8_t t_offset = 0;
+  uint8_t t_decsize = 0;
   if(!fieldIsVisible(t_position))
     return;
     if (t_leadicon>0){ // has a lead icon
       screenBuffer[0]=t_leadicon;
       t_offset = 1;
     }
+    else{
+      t_offset = 0;      
+    }
     if (t_psize>1){ // right justified value. Do we really need RJV ??
       ItoaPadded(t_value,screenBuffer+t_offset,t_psize,t_pdec);  
-      screenBuffer[t_psize+t_offset] = 0;         
+      screenBuffer[t_psize+t_offset] = 0;   
     }
     else{ // left justified value
       itoa(t_value,screenBuffer+t_offset,10);  
- //     screenBuffer[t_psize] = 0;    
+      if (t_pdec > 0){
+       t_pdec++;
+       t_decsize = FindNull();
+       uint8_t singlevalue = 2 + t_offset; 
+       if (t_decsize == 1 + t_offset ){
+         screenBuffer[singlevalue]=0;
+         screenBuffer[singlevalue-1]=screenBuffer[t_offset];
+         screenBuffer[singlevalue-2]=0x30;
+         t_decsize++;
+       }
+       while (t_pdec !=0){
+          if (t_decsize>0)
+            screenBuffer[t_decsize+1] = screenBuffer[t_decsize];
+          t_decsize--;
+          t_pdec--;
+        }
+        screenBuffer[t_decsize+1] = 0x2E;
+      }
     }
     if (t_trailicon>0){ // has a trailing icon
       t_offset = FindNull();

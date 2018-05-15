@@ -64,7 +64,7 @@
 //#define CLEANFLIGHT172            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.7.2
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1 
 //#define BETAFLIGHT3               // Uncomment this if you are using BETAFLIGHT versions prior to 3.1
-
+//#define SUBMERSIBLE               // Uncomment this if you are using a submersible with MS5837 and optional MSP based FC
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
@@ -220,7 +220,6 @@
 #define AUTOCAM                     // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
 #define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
-//#define SHIFTDOWN                 // Select if your monitor cannot display top line fully. It shifts top 3 lines down. Not suitable for all layouts
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define FORCECROSSHAIR            // Forces a crosshair even if no AHI / horizon used
 //#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
@@ -248,7 +247,7 @@
 #define AHILEVEL                    // Enable to display AHI level indicators on sidebars 
 #define APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
 #define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
-//#define LONG_RANGE_DISPLAY        // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft. Auto enabled for FIXEDWING
+#define LONG_RANGE_DISPLAY          // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft. 
 #define AIRMODE                     // Enable this to display airmode icon. 
 //#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
 #define MASKGPSLOCATION             // Disable to save memeory if not used. Enables MASK GPS settings on GUI. Coordinates displayed with major digits XXX set to random location "XXX.DDDDDDD" 
@@ -256,7 +255,7 @@
 //#define OSD_SWITCH                // Forces original 2 way multiwii screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
 //#define NOSUMMARYTHROTTLERESET    // Enable to supress summary display clearing from throttle
 #define OSDSUMMARY 30               // Seconds summary is displayed for after landing. Max 254
-#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
+//#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
 
 
 /********************       Power / efficiency display Settings         ************************/
@@ -384,6 +383,12 @@
 //#define VTX_REGION_AUSTRALIA      // Enable for AU legal channels and power level only
 #define DISPLAY_VTX_INFO            // Enable to show frequency in menu display. 
 
+
+/********************           Submersible settings           *********************/
+// Specify fluid density for submersible (density = 997 freshwater, 1029 for seawater): Choose ONLY ONE option:
+#define FRESHWATER                  // Uncomment this if you are using a submersible in freshwater 
+//#define SEAWATER                  // Uncomment this if you are using a submersible in seawater
+//#define FLUID_DENSITY 997         // Uncomment this if you are using a submersible and wish to specify a particular fluid density
 
 /********************           Display items lead icon           *********************/
 // comment out to not display lead icon for displayed items
