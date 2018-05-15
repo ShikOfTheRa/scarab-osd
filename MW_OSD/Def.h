@@ -79,14 +79,6 @@
   //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   #define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
   #define SUBMERSIBLE               // Uncomment this if you are using a submersible with MS5837 and optional MSP based FC
-  #undef DISPLAYWATTS                // Disable to save memeory if not used. Enable this to display Watts
-  #undef DISPLAYEFFICIENCY           // Disable to save memeory if not used. Enable this to display Watts/KMh or Mph for efficiency
-  #undef DISPLAYMAHMIN               // Disable to save memeory if not used. Enable this to display average mAh/minKMh
-  #undef PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
-  #undef MASKGPSLOCATION             // Disable to save memeory if not used. Enables MASK GPS settings on GUI. Coordinates displayed with major digits XXX set to random location "XXX.DDDDDDD" 
-  #undef FILTER_AVG                  // Enable standard averaging filter  
-  #undef HORIZON                     // Enable/disable HORIZON indicator
-
 #endif
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
@@ -176,16 +168,24 @@
 
 #ifdef SUBMERSIBLE // MSP FC with depth sensor
 //  #define iNAV
+  #define FORCESENSORS
   #define USEMS5837                    // Enable this for BAR30  
   #undef MAPMODE
   #undef MENU_DEBUG
-//  #undef DISPLAY_PR
-//  #undef SHOW_TEMPERATURE
   #undef INTRO_MENU                  // Enable to display TX stick MENU 
-  #undef INTRO_CALLSIGN              // Enable to display callsign at startup
-//  #undef INTRO_SIGNALTYPE            // Enable to display video type at startup
+  //#undef INTRO_CALLSIGN              // Enable to display callsign at startup
+  //#undef INTRO_SIGNALTYPE            // Enable to display video type at startup
   #undef INTRO_FC                    // Enable to display FC version at startup
-  #define FORCESENSORS
+  #undef DISPLAYWATTS                // Disable to save memeory if not used. Enable this to display Watts
+  #undef DISPLAYEFFICIENCY           // Disable to save memeory if not used. Enable this to display Watts/KMh or Mph for efficiency
+  #undef DISPLAYMAHMIN               // Disable to save memeory if not used. Enable this to display average mAh/minKMh
+  #undef PILOTICON                   // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
+  #undef MASKGPSLOCATION             // Disable to save memeory if not used. Enables MASK GPS settings on GUI. Coordinates displayed with major digits XXX set to random location "XXX.DDDDDDD" 
+  #undef FILTER_AVG                  // Enable standard averaging filter  
+  //#undef HORIZON                     // Enable/disable HORIZON indicator
+  //#undef DISPLAY_PR
+  //#undef SHOW_TEMPERATURE
+  
 #endif
 
 #ifdef BASEFLIGHT     //set up latest at time of release
@@ -798,7 +798,7 @@ enum {
 
 /********************  FIXEDWING definitions  *********************/
 #ifdef FIXEDWING                     
-  #define LONG_RANGE_DISPLAY
+  //#define LONG_RANGE_DISPLAY
   //#define USEGPSHEADING  // defined in config.h now
   //#define USEGPSALTITUDE // defined in config.h now
   #define FORCESENSORS
@@ -1192,7 +1192,9 @@ enum {
 #ifdef RACEFLIGHT
   #define INFO_CONTROLLER 21
 #endif
-
+#ifdef SUBMERSIBLE
+  #define INFO_CONTROLLER 22
+#endif
 
 #ifdef MINIMOSD
   #define INFO_HARDWARE 1

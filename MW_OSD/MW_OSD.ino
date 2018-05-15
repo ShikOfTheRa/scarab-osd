@@ -638,15 +638,15 @@ void loop()
           displayHeadingGraph();
           displayHeading();
           #if defined SUBMERSIBLE
-            MwAltitude = (float)100*MS5837sensor.depth();  
-//            MwAltitude = (float)100*1.12;  
+            #if defined USEMS5837
+              MwAltitude = (float)100*MS5837sensor.depth();  
+            #endif
             displaySUBMERSIBLEAltitude();
             if (millis() > timer.fwAltitudeTimer) { // To make vario from Submersible altitude
               timer.fwAltitudeTimer += 1000;
               MwVario = MwAltitude - previousfwaltitude;
               previousfwaltitude = MwAltitude;
             }
-            MAX7456_WriteString("EXPERIMENTAL",LINE04+9);
           #else
             displayAltitude();
           #endif
@@ -1225,7 +1225,6 @@ void ProcessSensors(void) {
 #ifdef SHOW_TEMPERATURE
   #if defined USEMS5837
     temperature = (float)(10*MS5837sensor.temperature());
-//    temperature = -1234; //GDEV
   #elif defined PROTOCOL_MAVLINK
   #else 
     temperature=sensorfilter[3][SENSORFILTERSIZE]>>3-TEMPZERO;
