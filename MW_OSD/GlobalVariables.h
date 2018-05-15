@@ -8,11 +8,7 @@
   #define DISPLAY_DEV     0x0000
 #endif
 #define POS(pos, pal_off, disp)  (((pos)&POS_MASK)|((pal_off)<<PAL_SHFT)|(disp))
-#if defined SHIFTDOWN
-#define TOPSHIFT        LINE
-#else
-#define TOPSHIFT        0
-#endif
+
 
 #define MPH 1
 #define KMH 0
