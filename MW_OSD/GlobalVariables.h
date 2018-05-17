@@ -955,6 +955,10 @@ int16_t rssiMIN=100;
 #define MSP_FW_CONFIG            123   //out message         Returns parameters specific to Flying Wing mode
 #define MSP_SET_FW_CONFIG        216   //in message          Sets parameters specific to Flying Wing mode
 
+
+// iNAV MSPV2 specific
+#define MSP2_INAV_AIR_SPEED      0x2009    //in message          Returns airspeed
+
 // End of imported defines from Multiwii Serial Protocol MultiWii_shared svn r1333
 // ---------------------------------------------------------------------------------------
 

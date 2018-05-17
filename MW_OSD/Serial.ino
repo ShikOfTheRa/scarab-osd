@@ -9,8 +9,8 @@
 
 static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string
 static uint8_t receiverIndex;
-static uint8_t dataSize;
-static uint8_t cmdMSP;
+static uint16_t dataSize;
+static uint16_t cmdMSP; // 8 for MSP or 16 for MSPV2
 static uint8_t rcvChecksum;
 static uint8_t readIndex;
 static uint8_t txChecksum;
@@ -892,6 +892,15 @@ if (cmdMSP==MSP_STATUS)
       --remaining;
     }
   }
+
+#ifdef MSPV2
+  if (cmdMSP==MSP2_INAV_AIR_SPEED)
+  {
+    float t_AIR_speed = read32() *100;
+    AIR_speed = t_AIR_speed;
+  }
+#endif // MSPV2  
+  
 #endif
 #endif // GPSOSD
 }
@@ -1326,14 +1335,19 @@ void serialMSPreceive(uint8_t loops)
 {
   uint8_t c;
   uint8_t loopserial=0;
-
+  static uint8_t MSPversion;
   static enum _serial_state {
     IDLE,
     HEADER_START,
-    HEADER_M,
+    HEADER_MX,
     HEADER_ARROW,
     HEADER_SIZE,
-    HEADER_CMD,
+    PAYLOAD_READY,
+#ifdef MSPV2
+    HEADER_CMD1_MSPV2,
+    HEADER_CMD2_MSPV2,
+    HEADER_SIZE1_MSPV2,
+#endif    
   }
   c_state = IDLE;
 
@@ -1406,47 +1420,103 @@ void serialMSPreceive(uint8_t loops)
     if (c_state == IDLE)
     {
       c_state = (c=='$') ? HEADER_START : IDLE;
+      MSPversion=1;
     }
     else if (c_state == HEADER_START)
     {
-      c_state = (c=='M') ? HEADER_M : IDLE;
+      c_state = IDLE;
+      if (c=='M') {
+        c_state = HEADER_MX;
+      }
+#ifdef MSPV2
+      if (c=='X') {
+        c_state = HEADER_MX;
+        MSPversion = 2;
+      }
+#endif      
     }
-    else if (c_state == HEADER_M)
+    else if (c_state == HEADER_MX)
     {
       c_state = (c=='>') ? HEADER_ARROW : IDLE;
     }
     else if (c_state == HEADER_ARROW)
     {
-      if (c > SERIALBUFFERSIZE)
-      {  // now we are expecting the payload size
+     c_state = HEADER_SIZE;
+#ifdef MSPV2
+     if (MSPversion == 1) {
+       dataSize = c;
+       if (dataSize > SERIALBUFFERSIZE) {  // now we are expecting the payload size
+         c_state = IDLE;
+       }
+     }
+#else
+      dataSize = c;
+      if (c > SERIALBUFFERSIZE) {  // now we are expecting the payload size
         c_state = IDLE;
       }
-      else
-      {
-        dataSize = c;
-        c_state = HEADER_SIZE;
-        rcvChecksum = c;
-      }
+
+#endif        
+      rcvChecksum = 0;
+      crc8_dvb_s2(rcvChecksum,c,MSPversion);       
     }
     else if (c_state == HEADER_SIZE)
     {
-      c_state = HEADER_CMD;
+#ifdef MSPV2
       cmdMSP = c;
-      rcvChecksum ^= c;
+      if (MSPversion == 2) {
+        c_state = HEADER_CMD1_MSPV2;        
+      }
+      else{
+        receiverIndex=0;
+        c_state = PAYLOAD_READY;
+      }
+#else
+      cmdMSP = c;
+      c_state = PAYLOAD_READY;
+#endif        
+      crc8_dvb_s2(rcvChecksum,c,MSPversion);
       receiverIndex=0;
     }
-    else if (c_state == HEADER_CMD)
+    
+#ifdef MSPV2
+    else if (c_state == HEADER_CMD1_MSPV2)
     {
-      rcvChecksum ^= c;
+      crc8_dvb_s2(rcvChecksum,c, MSPversion);
+      cmdMSP += (uint16_t)(c<<8);
+      c_state = HEADER_CMD2_MSPV2;
+    }
+    else if (c_state == HEADER_CMD2_MSPV2)
+    {
+      crc8_dvb_s2(rcvChecksum,c,MSPversion);
+      dataSize = c;
+      c_state = HEADER_SIZE1_MSPV2;
+    }
+    else if (c_state == HEADER_SIZE1_MSPV2)
+    {
+      crc8_dvb_s2(rcvChecksum,c,MSPversion);
+      dataSize += (uint16_t)(c<<8);
+      if (dataSize > SERIALBUFFERSIZE) {  // now we are expecting the payload size
+        c_state = IDLE;
+      }
+      else{
+        c_state = PAYLOAD_READY;
+      }
+      receiverIndex=0;
+    }
+#endif      
+    else if (c_state == PAYLOAD_READY) // ready for payload / cksum
+    {
       if(receiverIndex == dataSize) // received checksum byte
       {
-        if(rcvChecksum == 0) {
-            serialMSPCheck();
+        if(rcvChecksum == c) {
+          serialMSPCheck();
         }
         c_state = IDLE;
       }
-      else
+      else{
+        crc8_dvb_s2(rcvChecksum,c,MSPversion);
         serialBuffer[receiverIndex++]=c;
+      }
     }
     if (loops==0) loopserial=0;
 #ifdef I2C_UB_SUPPORT
@@ -1456,6 +1526,33 @@ void serialMSPreceive(uint8_t loops)
 #endif
   }
 }
+
+
+uint8_t crc8_dvb_s2(uint8_t crc, unsigned char a, uint8_t crcversion)
+{
+  crc ^= a;
+  if (crcversion == 2){   
+    for (int ii = 0; ii < 8; ++ii){
+      if (crc & 0x80){
+        crc = (crc << 1) ^ 0xD5;
+      }
+      else{
+        crc = crc << 1;
+      }
+    }
+  }
+    rcvChecksum=crc;
+//  return crc;
+
+/*
+if ((rcvChecksum !=0)&& (crcversion == 2)) debug[0]++;
+if ((rcvChecksum ==0)&& (crcversion == 2)) debug[1]++;
+if ((rcvChecksum !=0)&& (crcversion == 1)) debug[2]++;
+if ((rcvChecksum ==0)&& (crcversion == 1)) debug[3]++;
+*/
+
+}
+
 
 void configExit()
 {
@@ -1612,7 +1709,7 @@ void fontSerialRequest() {
   cfgWrite8(OSD_GET_FONT);
   cfgWrite16(getNextCharToRequest());
   cfgWriteChecksum();
-}
+} 
 
 void settingsSerialRequest() {
   cfgWriteRequest(MSP_OSD,1+30);
@@ -1642,4 +1739,8 @@ void setFCProfile()
   setMspRequests();
   delay(100);
 }
+
+void MSPV2AIRSPEEDSerialRequest() {
+}
+
 
