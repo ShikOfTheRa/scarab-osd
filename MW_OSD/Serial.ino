@@ -9,8 +9,7 @@
 
 static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string
 static uint8_t receiverIndex;
-static uint8_t dataSize;
-static uint8_t dataSize_MSPV2;
+static uint16_t dataSize;
 static uint16_t cmdMSP; // 8 for MSP or 16 for MSPV2
 static uint8_t rcvChecksum;
 static uint8_t readIndex;
@@ -1337,20 +1336,17 @@ void serialMSPreceive(uint8_t loops)
   uint8_t c;
   uint8_t loopserial=0;
   static uint8_t MSPversion;
-  static uint16_t cmd_MSPV2;
   static enum _serial_state {
     IDLE,
     HEADER_START,
-    HEADER_M,
+    HEADER_MX,
     HEADER_ARROW,
     HEADER_SIZE,
-    HEADER_CMD,
+    PAYLOAD_READY,
 #ifdef MSPV2
-    HEADER_FLAG_MSPV2,
     HEADER_CMD1_MSPV2,
     HEADER_CMD2_MSPV2,
     HEADER_SIZE1_MSPV2,
-    HEADER_SIZE2_MSPV2,
 #endif    
   }
   c_state = IDLE;
@@ -1424,104 +1420,103 @@ void serialMSPreceive(uint8_t loops)
     if (c_state == IDLE)
     {
       c_state = (c=='$') ? HEADER_START : IDLE;
-      MSPversion=0;
+      MSPversion=1;
     }
     else if (c_state == HEADER_START)
     {
       c_state = IDLE;
-      if (c=='M') c_state = HEADER_M;
+      if (c=='M') {
+        c_state = HEADER_MX;
+      }
 #ifdef MSPV2
       if (c=='X') {
-        c_state = HEADER_M;
-        MSPversion == 1;
+        c_state = HEADER_MX;
+        MSPversion = 2;
       }
 #endif      
     }
-    else if (c_state == HEADER_M)
+    else if (c_state == HEADER_MX)
     {
       c_state = (c=='>') ? HEADER_ARROW : IDLE;
     }
     else if (c_state == HEADER_ARROW)
     {
-      if (c > SERIALBUFFERSIZE)
-      {  // now we are expecting the payload size
+     c_state = HEADER_SIZE;
+#ifdef MSPV2
+     if (MSPversion == 1) {
+       dataSize = c;
+       if (dataSize > SERIALBUFFERSIZE) {  // now we are expecting the payload size
+         c_state = IDLE;
+       }
+     }
+#else
+      dataSize = c;
+      if (c > SERIALBUFFERSIZE) {  // now we are expecting the payload size
         c_state = IDLE;
       }
-      else
-      {
-        dataSize = c;
-#ifdef MSPV2
-        if (MSPversion == 1) {
-          c_state = HEADER_FLAG_MSPV2;
-          rcvChecksum = 0;
-          crc8_dvb_s2(rcvChecksum,c);
-        }
-        else
-#endif      
-        {
-          c_state = HEADER_SIZE;
-          crc8_dvb_s2(rcvChecksum,c);
-        }
-      }
+
+#endif        
+      rcvChecksum = 0;
+      crc8_dvb_s2(rcvChecksum,c,MSPversion);       
     }
-#ifdef MSPV2
-    else if (c_state == HEADER_FLAG_MSPV2)
+    else if (c_state == HEADER_SIZE)
     {
-      crc8_dvb_s2(rcvChecksum,c);
-      cmd_MSPV2 = c;
-      c_state = HEADER_CMD1_MSPV2;
+#ifdef MSPV2
+      cmdMSP = c;
+      if (MSPversion == 2) {
+        c_state = HEADER_CMD1_MSPV2;        
+      }
+      else{
+        receiverIndex=0;
+        c_state = PAYLOAD_READY;
+      }
+#else
+      cmdMSP = c;
+      c_state = PAYLOAD_READY;
+#endif        
+      crc8_dvb_s2(rcvChecksum,c,MSPversion);
+      receiverIndex=0;
     }
+    
+#ifdef MSPV2
     else if (c_state == HEADER_CMD1_MSPV2)
     {
-      crc8_dvb_s2(rcvChecksum,c);
-      cmd_MSPV2 += (c<<8);
+      crc8_dvb_s2(rcvChecksum,c, MSPversion);
+      cmdMSP += (uint16_t)(c<<8);
       c_state = HEADER_CMD2_MSPV2;
     }
     else if (c_state == HEADER_CMD2_MSPV2)
     {
-      crc8_dvb_s2(rcvChecksum,c);
-      dataSize_MSPV2 = c;
+      crc8_dvb_s2(rcvChecksum,c,MSPversion);
+      dataSize = c;
       c_state = HEADER_SIZE1_MSPV2;
     }
     else if (c_state == HEADER_SIZE1_MSPV2)
     {
-      crc8_dvb_s2(rcvChecksum,c);
-      dataSize_MSPV2 += (c<<8);
-      c_state = HEADER_SIZE2_MSPV2;
-    }
-    else if (c_state == HEADER_SIZE2_MSPV2) // got V2 data
-    {
-      if(receiverIndex == dataSize_MSPV2) // received checksum byte
-      {
-        if(rcvChecksum == c) {
-//            serialMSPV2Check();
-        }
+      crc8_dvb_s2(rcvChecksum,c,MSPversion);
+      dataSize += (uint16_t)(c<<8);
+      if (dataSize > SERIALBUFFERSIZE) {  // now we are expecting the payload size
         c_state = IDLE;
       }
-      else
-      crc8_dvb_s2(rcvChecksum,c);
-      serialBuffer[receiverIndex++]=c;
-    }
-#endif      
-    else if (c_state == HEADER_SIZE)
-    {
-      c_state = HEADER_CMD;
-      cmdMSP = c;
-      rcvChecksum ^= c;
+      else{
+        c_state = PAYLOAD_READY;
+      }
       receiverIndex=0;
     }
-    else if (c_state == HEADER_CMD)
+#endif      
+    else if (c_state == PAYLOAD_READY) // ready for payload / cksum
     {
-      rcvChecksum ^= c;
       if(receiverIndex == dataSize) // received checksum byte
       {
-        if(rcvChecksum == 0) {
-            serialMSPCheck();
+        if(rcvChecksum == c) {
+          serialMSPCheck();
         }
         c_state = IDLE;
       }
-      else
+      else{
+        crc8_dvb_s2(rcvChecksum,c,MSPversion);
         serialBuffer[receiverIndex++]=c;
+      }
     }
     if (loops==0) loopserial=0;
 #ifdef I2C_UB_SUPPORT
@@ -1533,17 +1528,29 @@ void serialMSPreceive(uint8_t loops)
 }
 
 
-uint8_t crc8_dvb_s2(uint8_t crc, unsigned char a)
+uint8_t crc8_dvb_s2(uint8_t crc, unsigned char a, uint8_t crcversion)
 {
-    crc ^= a;
-    for (int ii = 0; ii < 8; ++ii) {
-        if (crc & 0x80) {
-            crc = (crc << 1) ^ 0xD5;
-        } else {
-            crc = crc << 1;
-        }
+  crc ^= a;
+  if (crcversion == 2){   
+    for (int ii = 0; ii < 8; ++ii){
+      if (crc & 0x80){
+        crc = (crc << 1) ^ 0xD5;
+      }
+      else{
+        crc = crc << 1;
+      }
     }
-    return crc;
+  }
+    rcvChecksum=crc;
+//  return crc;
+
+/*
+if ((rcvChecksum !=0)&& (crcversion == 2)) debug[0]++;
+if ((rcvChecksum ==0)&& (crcversion == 2)) debug[1]++;
+if ((rcvChecksum !=0)&& (crcversion == 1)) debug[2]++;
+if ((rcvChecksum ==0)&& (crcversion == 1)) debug[3]++;
+*/
+
 }
 
 
@@ -1734,29 +1741,6 @@ void setFCProfile()
 }
 
 void MSPV2AIRSPEEDSerialRequest() {
-  port->write("$M<");
-  port->write(0);
-  port->write(0x2009);
-  port->write(0);
-  port->write(0);
-  port->write(0); // cksum
 }
 
-/*
-void streamWriteRequest(Stream *port, uint8_t mspCommand, uint8_t txDataSize){
-  port->write("$M<");
-  txChecksum = 0;
-  streamWrite8(port, txDataSize);
-  streamWrite8(port, mspCommand);
-  if(txDataSize == 0)
-    streamWriteChecksum(port);
-}
-
-void streamWrite8(Stream *port, uint8_t t){
-  port->write(t);
-  txChecksum ^= t;
-}
-
-*/
- */
 
