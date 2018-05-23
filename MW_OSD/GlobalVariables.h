@@ -286,6 +286,18 @@ struct __flags {
 }
 flags;
 
+struct __datetime {
+  uint32_t unixtime;
+  uint16_t year;
+  uint8_t  month;
+  uint8_t  day;
+  uint8_t  hours;
+  uint8_t  minutes;  
+  uint8_t  seconds;  
+}
+datetime;
+
+
 struct __display {
   uint32_t distance;
 }
@@ -551,7 +563,7 @@ DEF_S_MWAMPERAGE, //   S_MWAMPERAGE,
 1, //   S_MAPMODE,
 0, //   S_VREFERENCE,
 7, //   S_SIDEBARWIDTH,
-0, //   S_GPSTIME,
+1, //   S_GPSTIME,
 0, //   S_GPSTZAHEAD,
 0, //   S_GPSTZ,
 #ifdef VTX_RTC6705
@@ -700,7 +712,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE01+3)|DISPLAY_NEVER,                 //                             Unused
 (LINE01+7)|DISPLAY_NEVER,                 //                             Unused
 (LINE04+2)|DISPLAY_NEVER|DISPLAY_DEV,     // Gimbal Position
-(LINE12+11)|DISPLAY_NEVER|DISPLAY_DEV,    // GPS_time Position
+(LINE12+11)|DISPLAY_ALWAYS|DISPLAY_DEV,    // GPS_time Position
 (LINE09+22)|DISPLAY_NEVER|DISPLAY_DEV,    // SportPosition
 (LINE03+2)|DEF_modePosition|DISPLAY_DEV,  // modePosition
 (LINE02+22)|DISPLAY_NEVER,                // MapModePosition
@@ -955,6 +967,8 @@ int16_t rssiMIN=100;
 #define MSP_FW_CONFIG            123   //out message         Returns parameters specific to Flying Wing mode
 #define MSP_SET_FW_CONFIG        216   //in message          Sets parameters specific to Flying Wing mode
 
+// iNAV specific
+#define MSP_RTC                  246    //out message         Gets the RTC clock (returns: secs(i32) millis(u16) - (0,0) if time is not known)
 
 // iNAV MSPV2 specific
 #define MSP2_INAV_AIR_SPEED      0x2009    //in message          Returns airspeed
@@ -1362,6 +1376,9 @@ const unsigned char UnitsIcon[10]={
 #define REQ_MSP_SERVO_CONF     (1L<<22)
 #define REQ_MSP_VOLTAGE_METER_CONFIG (1L<<23)
 #define REQ_MSP_FC_VERSION     (1L<<24)
+
+#define REQ_MSP_RTC            (1L<<26)
+
 // Menu selections
 
 

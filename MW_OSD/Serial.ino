@@ -761,6 +761,13 @@ if (cmdMSP==MSP_STATUS)
   }
 #endif /* HAS_ALARMS */
 
+#ifdef MSP_RTC_SUPPORT
+  if (cmdMSP == MSP_RTC)
+  {
+    GPS_time = read32();
+  }  
+#endif /* HAS_ALARMS */
+
 #ifdef BOXNAMES
   if(cmdMSP==MSP_BOXNAMES) {
     flags.box=1;

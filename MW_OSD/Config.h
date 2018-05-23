@@ -423,3 +423,8 @@
 //#define FIXEDLOOP                 // Enables 1ms loop max for consistency
 
 
+/********************           Under developement           *********************/
+// development and test
+#define MSP_RTC_SUPPORT           // Enables for iNAV MSP time support
+#define GPSTIME                   // Enables for GPS time support dispaly
+

@@ -203,6 +203,7 @@ void setup()
   #endif // USE MS_5837
 
   Serial.flush();
+  datetime.unixtime=1527072329;
 }
 
 //------------------------------------------------------------------------
@@ -500,6 +501,11 @@ void loop()
           MSPcmdsend = MSP_ALARMS;
       break;
 #endif
+#ifdef MSP_RTC_SUPPORT
+      case REQ_MSP_RTC:
+          MSPcmdsend = MSP_RTC;
+      break;
+#endif
       case REQ_MSP_VOLTAGE_METER_CONFIG:
         MSPcmdsend = MSP_VOLTAGE_METER_CONFIG;
         break;
@@ -675,7 +681,9 @@ void loop()
           displayGPSPosition();  
       
 #ifdef GPSTIME
-          displayGPS_time();
+//          displayGPS_time();
+          displayDateTime();
+
 #endif
 #ifdef MAPMODE
           mapmode();
@@ -717,6 +725,7 @@ void loop()
 
   if(millis() > timer.seconds+1000)     // this execute 1 time a second
   {
+    updateDateTime();
     timer.seconds+=1000;
     timer.tenthSec=0;
     #ifdef MAV_STATUS
@@ -937,6 +946,9 @@ void setMspRequests() {
 #endif
 #ifdef MENU_FIXEDWING
       REQ_MSP_FW_CONFIG|
+#endif
+#ifdef MSP_RTC_SUPPORT
+      REQ_MSP_RTC|
 #endif
 #ifdef USE_FC_VOLTS_CONFIG
   #if defined(CLEANFLIGHT) || defined(BETAFLIGHT)

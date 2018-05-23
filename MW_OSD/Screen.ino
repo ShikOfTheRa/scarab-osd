@@ -109,6 +109,7 @@ char *formatTime(uint32_t val, char *str, uint8_t hhmmss) {
   return str;
 }
 
+
 uint8_t FindNull(void)
 {
   uint8_t xx;
@@ -1090,7 +1091,6 @@ void display_speed(int16_t t_value, uint8_t t_position, uint8_t t_leadicon)
 
 void displayGPS_time(void)       //local time of coord calc - haydent
 {
-//  if(!GPS_fix) return;
   if(!Settings[S_GPSTIME]) return;
   if(!fieldIsVisible(GPS_timePosition)) return;
 
@@ -2569,6 +2569,89 @@ void displayItem(uint16_t t_position, int16_t t_value, uint8_t t_leadicon, uint8
       screenBuffer[t_offset] = 0;
     }
     MAX7456_WriteString(screenBuffer,getPosition(t_position));
+}
+
+void formatDateTime(uint8_t digit1,uint8_t digit2,uint8_t digit3, uint8_t seperator, uint8_t dtsize){
+  ItoaPadded(digit1,screenBuffer,2,0); 
+  screenBuffer[2]= seperator;
+  ItoaPadded(digit2,screenBuffer+3,2,0); 
+  if (dtsize>0){
+    screenBuffer[5]= seperator; 
+    ItoaPadded(digit3,screenBuffer+6,2,0); 
+    screenBuffer[8]= 0; 
+  }
+  else{
+    screenBuffer[5]= 0; 
+  }
+  for (int i = 0; i < 10; ++i)
+    if (screenBuffer[i] == 0x20) screenBuffer[i] = 0x30; // replace leading 0
+}
+
+void displayDateTime(void)
+{
+/* //dev code
+  datetime.day = 27;
+  datetime.month = 07;
+  datetime.year = 66;
+  datetime.hours = 01;
+  datetime.minutes = 02;
+  datetime.seconds = 03;
+*/ //dev code
+
+  if(!Settings[S_GPSTIME]) return;
+  if(!fieldIsVisible(GPS_timePosition)) return;
+  formatDateTime(datetime.hours, datetime.minutes, datetime.seconds, ':', 1);
+  MAX7456_WriteString(screenBuffer,getPosition(GPS_timePosition));
+  formatDateTime(datetime.day, datetime.month, datetime.year, '/', 1);
+  MAX7456_WriteString(screenBuffer,LINE+getPosition(GPS_timePosition));
+}
+
+void updateDateTime(void)
+{
+  datetime.unixtime++;
+  uint32_t t_time = datetime.unixtime;
+  static uint8_t const dm[2][12] = {                   // Days in each month
+    { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}, // Not a leap year
+    { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}  // Leap year
+  };                                                   //
+  
+  datetime.seconds = uint32_t (t_time % 60); t_time /= 60; 
+  datetime.minutes = uint32_t (t_time % 60); t_time /= 60; 
+  datetime.hours = uint32_t (t_time % 24);   t_time /= 24; 
+
+
+  year = 0;  
+  days = 0;
+  while((unsigned)(days += (LEAP_YEAR(year) ? 366 : 365)) <= time) {
+    year++;
+  }
+  tm.Year = year; // year is offset from 1970 
+  
+  days -= LEAP_YEAR(year) ? 366 : 365;
+  time  -= days; // now it is days in this year, starting at 0
+  
+  days=0;
+  month=0;
+  monthLength=0;
+  for (month=0; month<12; month++) {
+    if (month==1) { // february
+      if (LEAP_YEAR(year)) {
+        monthLength=29;
+      } else {
+        monthLength=28;
+      }
+    } else {
+      monthLength = monthDays[month];
+    }
+    
+    if (time >= monthLength) {
+      time -= monthLength;
+    } else {
+        break;
+    }
+  }
+  tm.Month = month + 1;  // jan is month 1  
+  tm.Day = time + 1;     // day of month
 }
 
 
