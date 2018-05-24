@@ -444,12 +444,16 @@ void serialMAVreceive(uint8_t c)
   }
   else if (mav_state == MAV_HEADER_SYS)
   {
+#ifdef MAV_COMP_ALL
+      mav_state = MAV_HEADER_COMP;
+#else
     if (c == MAV_COM_ID) {
       mav_state = MAV_HEADER_COMP;
     }
     else {
       mav_state = MAV_IDLE;
     }
+#endif    
   }
   else if (mav_state == MAV_HEADER_COMP)
   {

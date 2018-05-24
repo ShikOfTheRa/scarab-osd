@@ -306,7 +306,7 @@
   #define CORRECTLOOPTIME
   #define CANVAS_SUPPORT
   #define MSP_DOP_SUPPORT
-  
+  #define MAV_COMP_ALL  
   #define MENU_STAT
   #define MENU_PID
   #define MENU_RC
