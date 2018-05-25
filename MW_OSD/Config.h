@@ -168,6 +168,7 @@
 #define MAV_STATUS_TIMER 4          // How long to display MAV status messages. 4 = default 
 //#define MAVLINKREQ                // Enable this for mavlink systems where the Mavlink data requires requesting. 
 //#define MAV_ALL                   // To act on data from all MAV SYSID in stream. NOT recommended. Specify ID in GUI. Default=1 upon reset.
+//#define MAV_COMP_ALL              // To act on data from all MAV COMPONENTS in stream. Overrides MAV_COM_ID. Use if do not know MAV_COM_ID. Recommended for iNAV telemetry.
 //#define MAV_ARMED                 // Forces OSD to be always armed (for when MAV does not send armed status in heartbeat).
 //#define MAV_RESET_HOME            // Resets home position when not armed. When enabled, note that RX glitch etc. could potentially reset home position.
 //#define MAV_ALT_THROTTLE          // Use alternative MAV throttle value. Not raw RC channel.
