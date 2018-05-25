@@ -109,6 +109,7 @@ char *formatTime(uint32_t val, char *str, uint8_t hhmmss) {
   return str;
 }
 
+
 uint8_t FindNull(void)
 {
   uint8_t xx;
@@ -1077,42 +1078,6 @@ void display_speed(int16_t t_value, uint8_t t_position, uint8_t t_leadicon)
       return;
   }    
   displayItem(t_position, xx, t_leadicon, speedUnitAdd[Settings[S_UNITSYSTEM]], 0,  0 );
-}
-
-
-/*void display_max(uint16_t t_value, uint8_t t_position)
-{
-  screenBuffer[0]=speedUnitAdd[Settings[S_UNITSYSTEM]];
-  itoa(t_value,screenBuffer+1,10);
-  MAX7456_WriteString(screenBuffer,getPosition(t_position));
-}*/
-
-
-void displayGPS_time(void)       //local time of coord calc - haydent
-{
-//  if(!GPS_fix) return;
-  if(!Settings[S_GPSTIME]) return;
-  if(!fieldIsVisible(GPS_timePosition)) return;
-
-  //convert to local   
-  int TZ_SIGN = (Settings[S_GPSTZAHEAD] ? 1 :-1);
-  uint32_t local = GPS_time + (((Settings[S_GPSTZ] * 60 * TZ_SIGN / 10)) * 60000);//make correction for time zone
-  local = local % 604800000;//prob not necessary but keeps day of week accurate <= 7
-  //convert to local
-
-  //format and display
-  //  uint16_t milli = local % 1000;//get milli for later
-  uint32_t seconds = (local / 1000) % 86400;//remove millisonds and whole days
-
-  formatTime(seconds, screenBuffer, 1);
-  if(screenBuffer[0] == ' ')screenBuffer[0] = '0';//put leading zero if empty space
-  /*
-  screenBuffer[8] = '.';//add milli indicator
-   screenBuffer[9] = '0' + (milli / 100);//only show first digit of milli due to limit of gps rate
-   screenBuffer[10] = 0;//equivalent of new line or end of buffer
-   */
-  screenBuffer[8] = 0;//equivalent of new line or end of buffer
-  MAX7456_WriteString(screenBuffer,getPosition(GPS_timePosition));
 }
 
 
@@ -2376,6 +2341,14 @@ void displayArmed(void)
   }
   else{
     if (armedtimer>0){
+#ifdef GPSTIME
+      if(Settings[S_GPSTIME]>0){ 
+        formatDateTime(datetime.hours, datetime.minutes, datetime.seconds, ':', 1);
+        MAX7456_WriteString(screenBuffer,getPosition(GPS_timePosition));
+        formatDateTime(datetime.day, datetime.month, datetime.year, '/', 1);
+        MAX7456_WriteString(screenBuffer,LINE+getPosition(GPS_timePosition));
+      }
+#endif //GPSTIME      
       if (timer.Blink10hz)
         return;
       alarms.active|=(1<<2);
@@ -2569,6 +2542,96 @@ void displayItem(uint16_t t_position, int16_t t_value, uint8_t t_leadicon, uint8
       screenBuffer[t_offset] = 0;
     }
     MAX7456_WriteString(screenBuffer,getPosition(t_position));
+}
+
+void displayDateTime(void)
+{
+  formatDateTime(datetime.hours, datetime.minutes, datetime.seconds, ':', 1);
+  MAX7456_WriteString(screenBuffer,getPosition(GPS_timePosition));
+  formatDateTime(datetime.day, datetime.month, datetime.year, '/', 1);
+  MAX7456_WriteString(screenBuffer,LINE+getPosition(GPS_timePosition));
+}
+
+void formatDateTime(uint8_t digit1,uint8_t digit2,uint8_t digit3, uint8_t seperator, uint8_t dtsize){
+  ItoaPadded(digit1,screenBuffer,2,0); 
+  screenBuffer[2]= seperator;
+  ItoaPadded(digit2,screenBuffer+3,2,0); 
+  if (dtsize>0){
+    screenBuffer[5]= seperator; 
+    ItoaPadded(digit3,screenBuffer+6,2,0); 
+    screenBuffer[8]= 0; 
+  }
+  else{
+    screenBuffer[5]= 0; 
+  }
+  for (int i = 0; i < 10; ++i)
+    if (screenBuffer[i] == 0x20) screenBuffer[i] = 0x30; // replace leading 0
+}
+
+void setDateTime(void)
+{
+  datetime.unixtime = GPS_time;   
+}
+
+void updateDateTime(void)
+{
+  datetime.unixtime++;
+
+  #define LEAP_YEAR(Y)     ( ((1970+(Y))>0) && !((1970+(Y))%4) && ( ((1970+(Y))%100) || !((1970+(Y))%400) ) )
+  static const uint8_t daysinmonth[]={31,28,31,30,31,30,31,31,30,31,30,31};
+  uint8_t  t_year;
+  uint8_t  t_month;
+  uint8_t  t_monthsize;
+  uint32_t t_days;
+
+  uint32_t t_time = datetime.unixtime;
+#ifndef DATEFORMAT_UTC
+  if (Settings[S_GPSTZAHEAD])
+    t_time+=(3600);
+  if (Settings[S_GPSTZ])
+    t_time+=(3600*Settings[S_GPSTZ]);
+#endif // DATEFORMAT_UTC 
+
+  datetime.seconds = uint32_t (t_time % 60); t_time /= 60; 
+  datetime.minutes = uint32_t (t_time % 60); t_time /= 60; 
+  datetime.hours = uint32_t (t_time % 24);   t_time /= 24; 
+
+  t_year = 0;  
+  t_days = 0;
+  while((unsigned)(t_days += (LEAP_YEAR(t_year) ? 366 : 365)) <= t_time) {
+    t_year++;
+  }
+  t_days -= LEAP_YEAR(t_year) ? 366 : 365;
+  t_time  -= t_days;
+
+  t_days=0;
+  t_month=0;
+  t_monthsize=0;
+  for (t_month=0; t_month<12; t_month++) {
+    if (t_month==1) { // february
+      if (LEAP_YEAR(t_year)) {
+        t_monthsize=29;
+      } else {
+        t_monthsize=28;
+      }
+    } else {
+      t_monthsize = daysinmonth[t_month];
+    }
+    
+    if (t_time >= t_monthsize) {
+      t_time -= t_monthsize;
+    } else {
+        break;
+    }
+  }
+  #ifdef  DATEFORMAT_US
+    datetime.day   = t_month+1;
+    datetime.month = t_time+1;  
+  #else
+    datetime.day   = t_time+1;
+    datetime.month = t_month+1;  
+  #endif
+  datetime.year  = t_year-30;
 }
 
 

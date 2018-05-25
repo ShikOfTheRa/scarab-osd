@@ -201,7 +201,7 @@ void setup()
     MS5837sensor.init();
     MS5837sensor.setFluidDensity(FLUID_DENSITY); // kg/m^3 
   #endif // USE MS_5837
-
+  GPS_time=946684801;
   Serial.flush();
 }
 
@@ -500,6 +500,11 @@ void loop()
           MSPcmdsend = MSP_ALARMS;
       break;
 #endif
+#ifdef MSP_RTC_SUPPORT
+      case REQ_MSP_RTC:
+          MSPcmdsend = MSP_RTC;
+      break;
+#endif
       case REQ_MSP_VOLTAGE_METER_CONFIG:
         MSPcmdsend = MSP_VOLTAGE_METER_CONFIG;
         break;
@@ -675,7 +680,10 @@ void loop()
           displayGPSPosition();  
       
 #ifdef GPSTIME
-          displayGPS_time();
+          if(Settings[S_GPSTIME]>1){
+            if(!fieldIsVisible(GPS_timePosition))
+              displayDateTime();
+          }
 #endif
 #ifdef MAPMODE
           mapmode();
@@ -717,6 +725,7 @@ void loop()
 
   if(millis() > timer.seconds+1000)     // this execute 1 time a second
   {
+    updateDateTime();
     timer.seconds+=1000;
     timer.tenthSec=0;
     #ifdef MAV_STATUS
@@ -770,9 +779,11 @@ void loop()
     #endif
 
     if(!armed) {
-//      setMspRequests();
 #ifndef MAPMODENORTH
       armedangle=MwHeading;
+#endif
+#ifdef GPSTIME
+      setDateTime();
 #endif
     }
     else {
@@ -937,6 +948,9 @@ void setMspRequests() {
 #endif
 #ifdef MENU_FIXEDWING
       REQ_MSP_FW_CONFIG|
+#endif
+#ifdef MSP_RTC_SUPPORT
+      REQ_MSP_RTC|
 #endif
 #ifdef USE_FC_VOLTS_CONFIG
   #if defined(CLEANFLIGHT) || defined(BETAFLIGHT)
