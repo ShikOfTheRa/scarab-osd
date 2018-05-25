@@ -100,7 +100,7 @@
 #define HORIZON                     // Enable/disable HORIZON indicator
 #define MAPMODE                     // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
 //#define SBDIRECTION               // Enable/disable sidebar indicators (icons indicationg changes in speed or altitude)
-//#define GPSTIME                   // Enable/disable GPS Time functions
+//#define GPSTIME                   // Enable/disable GPS Time functions.
 //#define SPORT                     // Enable/disable FRSKY S.PORT cell code
 
 //#define CANVAS_SUPPORT            // Enable CANVAS mode support for post betaflight 3.1.0 CMS
@@ -256,7 +256,8 @@
 //#define NOSUMMARYTHROTTLERESET    // Enable to supress summary display clearing from throttle
 #define OSDSUMMARY 30               // Seconds summary is displayed for after landing. Max 254
 //#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
-
+#define DATEFORMAT_UTC            // Display UTC date when enabled - do not use time zone settings
+//#define DATEFORMAT_US             // Display date in US format when used in conjunction with GPSTIME
 
 /********************       Power / efficiency display Settings         ************************/
 #define DISPLAYWATTS                // Disable to save memeory if not used. Enable this to display Watts

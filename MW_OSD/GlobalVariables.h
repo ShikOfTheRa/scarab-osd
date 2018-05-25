@@ -712,7 +712,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE01+3)|DISPLAY_NEVER,                 //                             Unused
 (LINE01+7)|DISPLAY_NEVER,                 //                             Unused
 (LINE04+2)|DISPLAY_NEVER|DISPLAY_DEV,     // Gimbal Position
-(LINE12+11)|DISPLAY_ALWAYS|DISPLAY_DEV,    // GPS_time Position
+(LINE09+11)|DISPLAY_ALWAYS|DISPLAY_DEV,    // GPS_time Position
 (LINE09+22)|DISPLAY_NEVER|DISPLAY_DEV,    // SportPosition
 (LINE03+2)|DEF_modePosition|DISPLAY_DEV,  // modePosition
 (LINE02+22)|DISPLAY_NEVER,                // MapModePosition
@@ -800,7 +800,7 @@ uint16_t GPS_waypoint_dist=0;
 //uint16_t cycleTime=0;
 uint16_t pMeterSum=0;
 uint16_t MwRssi=0;
-uint32_t GPS_time = 0;        //local time of coord calc - haydent
+uint32_t GPS_time = 0;
 uint16_t WIND_direction = 0;
 uint16_t WIND_speed = 0;
 

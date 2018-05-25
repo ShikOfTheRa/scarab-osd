@@ -201,9 +201,8 @@ void setup()
     MS5837sensor.init();
     MS5837sensor.setFluidDensity(FLUID_DENSITY); // kg/m^3 
   #endif // USE MS_5837
-
+  GPS_time=946684801;
   Serial.flush();
-  datetime.unixtime=1527072329;
 }
 
 //------------------------------------------------------------------------
@@ -681,9 +680,10 @@ void loop()
           displayGPSPosition();  
       
 #ifdef GPSTIME
-//          displayGPS_time();
-          displayDateTime();
-
+          if(Settings[S_GPSTIME]>1){
+            if(!fieldIsVisible(GPS_timePosition))
+              displayDateTime();
+          }
 #endif
 #ifdef MAPMODE
           mapmode();
@@ -779,9 +779,11 @@ void loop()
     #endif
 
     if(!armed) {
-//      setMspRequests();
 #ifndef MAPMODENORTH
       armedangle=MwHeading;
+#endif
+#ifdef GPSTIME
+      setDateTime();
 #endif
     }
     else {

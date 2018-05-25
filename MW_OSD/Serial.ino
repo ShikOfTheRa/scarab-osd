@@ -469,8 +469,8 @@ if (cmdMSP==MSP_STATUS)
     GPS_directionToHome=read16();
     
 #ifdef GPSTIME
-    read8(); //missing
-    GPS_time = read32();        //local time of coord calc - haydent
+    read8();
+    GPS_time = read32();
 #endif
   }
 
@@ -766,7 +766,7 @@ if (cmdMSP==MSP_STATUS)
   {
     GPS_time = read32();
   }  
-#endif /* HAS_ALARMS */
+#endif // MSP_RTC_SUPPORT
 
 #ifdef BOXNAMES
   if(cmdMSP==MSP_BOXNAMES) {
