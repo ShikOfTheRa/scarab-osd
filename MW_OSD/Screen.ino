@@ -2294,20 +2294,31 @@ void displayfwglidescope(void){
   if(!fieldIsVisible(glidescopePosition))
     return;  
   int8_t GS_deviation_scale   = 0;
+  int16_t gs_angle = 0;
+  int8_t varsymbol = 3;
+
   if (GPS_distanceToHome>0){ //watch div 0!!
-    int16_t gs_angle          =(double)570*atan2(MwAltitude/100,GPS_distanceToHome);
+    gs_angle          =(double)570*atan2(MwAltitude/100,GPS_distanceToHome);
     int16_t GS_target_delta   = GLIDEANGLE-gs_angle;
     GS_target_delta           = constrain(GS_target_delta,-GLIDEWINDOW,GLIDEWINDOW); 
     GS_deviation_scale        = map(GS_target_delta,-GLIDEWINDOW,GLIDEWINDOW,0,8);
   }
-  int8_t varline              = (GS_deviation_scale/3)-1;
-  int8_t varsymbol            = GS_deviation_scale%3;
-  uint16_t position = getPosition(glidescopePosition);
-  for(int8_t X=-1; X<=1; X++) {
-    screen[position+(X*LINE)] =  SYM_GLIDESCOPE;
-  }
-  screen[position+(varline*LINE)] = SYM_GLIDESCOPE+3-varsymbol;
+  
+  #if defined DISPLAYGLIDEANGLE  
+    constrain(gs_angle,-900,900); 
+    displayItem(glidescopePosition, gs_angle/10, 0, 0xBD, 0, 0 );
+  #else
+    int8_t varline              = (GS_deviation_scale/3)-1;
+    varsymbol            = GS_deviation_scale%3;
+    uint16_t position = getPosition(glidescopePosition);
+    for(int8_t X=-1; X<=1; X++) {
+      screen[position+(X*LINE)] =  SYM_GLIDESCOPE;
+    }
+    screen[position+(varline*LINE)] = SYM_GLIDESCOPE+3-varsymbol;
+  #endif
 }
+
+
 #endif //USEGLIDESCOPE
 
 
@@ -2343,10 +2354,7 @@ void displayArmed(void)
     if (armedtimer>0){
 #ifdef GPSTIME
       if(Settings[S_GPSTIME]>0){ 
-        formatDateTime(datetime.hours, datetime.minutes, datetime.seconds, ':', 1);
-        MAX7456_WriteString(screenBuffer,getPosition(GPS_timePosition));
-        formatDateTime(datetime.day, datetime.month, datetime.year, '/', 1);
-        MAX7456_WriteString(screenBuffer,LINE+getPosition(GPS_timePosition));
+        displayDateTime();
       }
 #endif //GPSTIME      
       if (timer.Blink10hz)
@@ -2570,21 +2578,23 @@ void formatDateTime(uint8_t digit1,uint8_t digit2,uint8_t digit3, uint8_t sepera
 
 void setDateTime(void)
 {
-  datetime.unixtime = GPS_time;   
+  if (GPS_numSat >= MINSATFIX) {
+    datetime.unixtime = GPS_time;   
+  }
 }
 
 void updateDateTime(void)
 {
+//  datetime.unixtime=1527711053;
   datetime.unixtime++;
-
-  #define LEAP_YEAR(Y)     ( ((1970+(Y))>0) && !((1970+(Y))%4) && ( ((1970+(Y))%100) || !((1970+(Y))%400) ) )
-  static const uint8_t daysinmonth[]={31,28,31,30,31,30,31,31,30,31,30,31};
+  uint32_t t_time = datetime.unixtime;
   uint8_t  t_year;
   uint8_t  t_month;
   uint8_t  t_monthsize;
   uint32_t t_days;
+  static const uint8_t daysinmonth[]={31,28,31,30,31,30,31,31,30,31,30,31};
 
-  uint32_t t_time = datetime.unixtime;
+  #define LEAP_YEAR(Y)     ( ((1970+(Y))>0) && !((1970+(Y))%4) && ( ((1970+(Y))%100) || !((1970+(Y))%400) ) )
 #ifndef DATEFORMAT_UTC
   if (Settings[S_GPSTZAHEAD])
     t_time+=(3600);

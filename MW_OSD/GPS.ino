@@ -404,6 +404,18 @@ struct ubx_nav_velned {
   uint32_t speed_accuracy;
   uint32_t heading_accuracy;
 };
+typedef struct {
+    uint32_t time;              // GPS msToW
+    uint32_t tAcc;
+    int32_t nano;
+    uint16_t year;
+    uint8_t month;
+    uint8_t day;
+    uint8_t hour;
+    uint8_t min;
+    uint8_t sec;
+    uint8_t valid;
+} ubx_nav_timeutc;
 
 enum ubs_protocol_bytes {
   PREAMBLE1 = 0xb5,
@@ -417,6 +429,7 @@ enum ubs_protocol_bytes {
   MSG_STATUS = 0x3,
   MSG_SOL = 0x6,
   MSG_VELNED = 0x12,
+  MSG_TIMEUTC = 0x21,
   MSG_CFG_PRT = 0x00,
   MSG_CFG_RATE = 0x08,
   MSG_CFG_SET_RATE = 0x01,
@@ -456,6 +469,7 @@ static union {
   //    ubx_nav_status status;
   ubx_nav_solution solution;
   ubx_nav_velned velned;
+  ubx_nav_timeutc timeutc;
   uint8_t bytes[];
 } _buffer;
 
@@ -559,6 +573,18 @@ bool UBLOX_parse_gps(void) {
       GPS_speed         = _buffer.velned.speed_2d;  // cm/s
       GPS_ground_course = (uint16_t)(_buffer.velned.heading_2d / 10000);  // Heading 2D deg * 100000 rescaled to deg * 10
       break;
+    case MSG_TIMEUTC:
+      if (GPS_numSat >= MINSATFIX) {
+        datetime.year = _buffer.timeutc.year;
+        datetime.month = _buffer.timeutc.month;
+        datetime.day = _buffer.timeutc.day;
+        datetime.hours = _buffer.timeutc.hour;
+        datetime.minutes = _buffer.timeutc.min;
+        datetime.seconds = _buffer.timeutc.sec;
+        if(mode.armed == 0){ // For now to avoid uneven looking clock
+          setDateTime();
+        }
+       }
     default:
       break;
   }

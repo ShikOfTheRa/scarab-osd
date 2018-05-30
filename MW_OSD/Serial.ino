@@ -468,7 +468,7 @@ if (cmdMSP==MSP_STATUS)
     
     GPS_directionToHome=read16();
     
-#ifdef GPSTIME
+#if defined GPSTIME && !defined MSP_RTC_SUPPORT
     read8();
     GPS_time = read32();
 #endif
@@ -764,7 +764,10 @@ if (cmdMSP==MSP_STATUS)
 #ifdef MSP_RTC_SUPPORT
   if (cmdMSP == MSP_RTC)
   {
-    GPS_time = read32();
+    GPS_time = read32(); // GPS_time=1527711053;
+    if(mode.armed == 0){ // For now to avoid uneven looking clock
+      setDateTime();
+    }
   }  
 #endif // MSP_RTC_SUPPORT
 

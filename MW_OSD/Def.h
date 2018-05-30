@@ -32,7 +32,7 @@
 
 //#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
-  #define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+  //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   //#define AIRBOTMICRO             // Uncomment this if using an airbot MicroOSD
   //#define AEROMAX                 // Uncomment this if using MWOSD AEROMAX hardware
   #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
@@ -41,11 +41,11 @@
   //#define APM
   //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
   #define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-  //#define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
+  #define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
   //#define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
   //#define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
   //#define INTRO_DELAY 1           // To speed up startup
-  #define DISPLAY_DEV 0xC000        // Use screen layout dev position - display all items...
+  //#define DISPLAY_DEV 0xC000        // Use screen layout dev position - display all items...
   //#define KKAUDIOVARIO A3         // Enable this for audio vario on Arduino pin XX. A3=RSSI. Use AUDIOPIN on AEROMAX 
   //#define MAVSENSOR173
   #define MSPV2  
@@ -81,6 +81,14 @@
   #define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
   #define SUBMERSIBLE               // Uncomment this if you are using a submersible with MS5837 and optional MSP based FC
 #endif
+
+//#define TIMETEST
+#ifdef TIMETEST
+  #define MSP_RTC_SUPPORT           // Enables for iNAV MSP time support
+  #define GPSTIME                   // Enables for GPS time support dispaly
+  #define DISPLAY_DEV 0xC000        // Use screen layout dev position - display all items...
+#endif
+//
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
 
@@ -1039,7 +1047,7 @@ enum {
 #elif defined MSP_SPEED_MED
   #define hi_speed_cycle  50  // same as low, but also updates attitude 10 times per second
 #else
-  #define hi_speed_cycle  50  // updates everything approx 1.3 times per second
+  #define hi_speed_cycle  30  // updates everything approx 3 times per second
 #endif
 
 

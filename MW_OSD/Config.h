@@ -257,6 +257,7 @@
 //#define NOSUMMARYTHROTTLERESET    // Enable to supress summary display clearing from throttle
 #define OSDSUMMARY 30               // Seconds summary is displayed for after landing. Max 254
 //#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
+//#define DISPLAYGLIDEANGLE         // Displays glide angle as value instead of glidescope. Glidescope must be enabled
 #define DATEFORMAT_UTC            // Display UTC date when enabled - do not use time zone settings
 //#define DATEFORMAT_US             // Display date in US format when used in conjunction with GPSTIME
 
@@ -427,6 +428,6 @@
 
 /********************           Under developement           *********************/
 // development and test
-#define MSP_RTC_SUPPORT           // Enables for iNAV MSP time support
-#define GPSTIME                   // Enables for GPS time support dispaly
+//#define MSP_RTC_SUPPORT           // Enables for iNAV MSP time support
+//#define GPSTIME                   // Enables for GPS time support dispaly
 

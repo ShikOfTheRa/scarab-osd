@@ -79,9 +79,9 @@ uint16_t UntouchedStack(void)
 #define PGMSTR(p) (char *)pgm_read_word(p)
 
 //------------------------------------------------------------------------
-#define MWVERS "MW-OSD - R1.8.0.1"
+#define MWVERS "MW-OSD - R1.8.1.0"
 //#define MWVERS "MW-OSD - R1.8"
-#define MWOSDVERSION 1801 // 1660=1.6.6.0 for GUI
+#define MWOSDVERSION 1811 // 1660=1.6.6.0 for GUI
 #define EEPROMVER 15      // for eeprom layout verification
 
 #include <avr/pgmspace.h>
@@ -201,7 +201,7 @@ void setup()
     MS5837sensor.init();
     MS5837sensor.setFluidDensity(FLUID_DENSITY); // kg/m^3 
   #endif // USE MS_5837
-  GPS_time=946684801;
+  datetime.unixtime=946684801; //  GPS_time=946684801;
   Serial.flush();
 }
 
@@ -420,11 +420,9 @@ void loop()
       case REQ_MSP_COMP_GPS:
         MSPcmdsend = MSP_COMP_GPS;
         break;
-    #ifdef MSP_SPEED_LOW
       case REQ_MSP_ATTITUDE:
         MSPcmdsend = MSP_ATTITUDE;
         break;
-    #endif //MSP_SPEED_LOW  
       case REQ_MSP_ALTITUDE:
         MSPcmdsend = MSP_ALTITUDE;
         break;
@@ -680,10 +678,8 @@ void loop()
           displayGPSPosition();  
       
 #ifdef GPSTIME
-          if(Settings[S_GPSTIME]>1){
-            if(!fieldIsVisible(GPS_timePosition))
-              displayDateTime();
-          }
+          if(fieldIsVisible(GPS_timePosition))
+            displayDateTime();
 #endif
 #ifdef MAPMODE
           mapmode();
@@ -725,7 +721,9 @@ void loop()
 
   if(millis() > timer.seconds+1000)     // this execute 1 time a second
   {
+  #if defined GPSTIME
     updateDateTime();
+  #endif //GPSTIME    
     timer.seconds+=1000;
     timer.tenthSec=0;
     #ifdef MAV_STATUS
@@ -781,9 +779,6 @@ void loop()
     if(!armed) {
 #ifndef MAPMODENORTH
       armedangle=MwHeading;
-#endif
-#ifdef GPSTIME
-      setDateTime();
 #endif
     }
     else {
@@ -986,20 +981,24 @@ void setMspRequests() {
      #ifdef MSP_USE_ANALOG
       REQ_MSP_ANALOG|
      #endif //MSP_USE_ANALOG     
-     #ifdef USE_FC_VOLTS_CONFIG
-       #if defined(CLEANFLIGHT) || defined(BETAFLIGHT)
-         REQ_MSP_VOLTAGE_METER_CONFIG|
-       #else
-         REQ_MSP_MISC|
-       #endif
-     #endif
       REQ_MSP_RC;
-    if(mode.armed == 0)
-      modeMSPRequests |=REQ_MSP_BOX;
-#if defined INTRO_FC && defined PROTOCOL_MSP
-    if (FC.verMajor==0)
-      queuedMSPRequests|=REQ_MSP_FC_VERSION;
-#endif      
+    if(mode.armed == 0){
+      modeMSPRequests |=REQ_MSP_BOX|
+      #if defined INTRO_FC && defined PROTOCOL_MSP
+        REQ_MSP_FC_VERSION|
+      #endif // INTRO_FC && defined PROTOCOL_MSP      
+      #ifdef USE_FC_VOLTS_CONFIG
+        #if defined(CLEANFLIGHT) || defined(BETAFLIGHT)
+          REQ_MSP_VOLTAGE_METER_CONFIG|
+        #else
+          REQ_MSP_MISC|
+        #endif // defined(CLEANFLIGHT) || defined(BETAFLIGHT)
+     #endif // USE_FC_VOLTS_CONFIG
+     #ifdef MSP_RTC_SUPPORT
+      REQ_MSP_RTC|
+     #endif // MSP_RTC_SUPPORT
+     0;
+    }
 #if defined MULTIWII_V24
     if(MwSensorActive&mode.gpsmission)
       modeMSPRequests |= REQ_MSP_NAV_STATUS;
@@ -1008,8 +1007,7 @@ void setMspRequests() {
   if (timer.GUI_active!=0){
     modeMSPRequests = 0;
     queuedMSPRequests = 0;
-  }
-       
+  }       
   queuedMSPRequests &= modeMSPRequests;   // so we do not send requests that are not needed.
 }
 
