@@ -650,7 +650,7 @@ if(MwSensorPresent&ACCELEROMETER)
     screen[position+hudwidth-1] =  SYM_AH_RIGHT;
 #endif //AHILEVEL
 
-#if defined(USEGLIDESCOPE) && defined(FIXEDWING)                     
+#if defined (USEGLIDESCOPE) || defined (USEGLIDEANGLE) // && defined(FIXEDWING)                     
       displayfwglidescope();
 #endif //USEGLIDESCOPE  
 
@@ -2289,7 +2289,7 @@ void mapmode(void) {
 }
 
 
-#ifdef USEGLIDESCOPE
+#if defined (USEGLIDESCOPE) || defined (USEGLIDEANGLE)
 void displayfwglidescope(void){
   if(!fieldIsVisible(glidescopePosition))
     return;  
@@ -2304,9 +2304,11 @@ void displayfwglidescope(void){
     GS_deviation_scale        = map(GS_target_delta,-GLIDEWINDOW,GLIDEWINDOW,0,8);
   }
   
-  #if defined DISPLAYGLIDEANGLE  
-    constrain(gs_angle,-900,900); 
-    displayItem(glidescopePosition, gs_angle/10, 0, 0xBD, 0, 0 );
+  #if defined USEGLIDEANGLE  
+    gs_angle/=10;
+    constrain(gs_angle,-90,90); 
+    if (gs_angle < USEGLIDEANGLE)
+      displayItem(glidescopePosition, gs_angle/10, 0, 0xBD, 0, 0 );
   #else
     int8_t varline              = (GS_deviation_scale/3)-1;
     varsymbol            = GS_deviation_scale%3;
@@ -2585,7 +2587,7 @@ void setDateTime(void)
 
 void updateDateTime(void)
 {
-//  datetime.unixtime=1527711053;
+  //datetime.unixtime=1527712200; // 30/05/2018 @ 8:30 UTC
   datetime.unixtime++;
   uint32_t t_time = datetime.unixtime;
   uint8_t  t_year;

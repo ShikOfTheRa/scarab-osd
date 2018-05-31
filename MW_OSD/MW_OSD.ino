@@ -944,7 +944,7 @@ void setMspRequests() {
 #ifdef MENU_FIXEDWING
       REQ_MSP_FW_CONFIG|
 #endif
-#ifdef MSP_RTC_SUPPORT
+#if defined MSP_RTC_SUPPORT && defined GPSTIME
       REQ_MSP_RTC|
 #endif
 #ifdef USE_FC_VOLTS_CONFIG
@@ -982,7 +982,7 @@ void setMspRequests() {
       REQ_MSP_ANALOG|
      #endif //MSP_USE_ANALOG     
       REQ_MSP_RC;
-    if(mode.armed == 0){
+    if(!armed){
       modeMSPRequests |=REQ_MSP_BOX|
       #if defined INTRO_FC && defined PROTOCOL_MSP
         REQ_MSP_FC_VERSION|

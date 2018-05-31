@@ -100,11 +100,18 @@
 #define HORIZON                     // Enable/disable HORIZON indicator
 #define MAPMODE                     // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
 //#define SBDIRECTION               // Enable/disable sidebar indicators (icons indicationg changes in speed or altitude)
-//#define GPSTIME                   // Enable/disable GPS Time functions.
 //#define SPORT                     // Enable/disable FRSKY S.PORT cell code
 
 //#define CANVAS_SUPPORT            // Enable CANVAS mode support for post betaflight 3.1.0 CMS
 //#define INVERTED_CHAR_SUPPORT     // Enable inverted char support
+
+
+/********************       DATE & TIME settings      *********************/
+//Select ONLY if you are sure your OSD is connected to a telemetry feed such as MAVLINK/LTM:
+#define GPSTIME                     // Enable to use GPS time display functions with FC that support features
+#define DATEFORMAT_UTC            // Display UTC date when enabled - do not use time zone settings. Updated GUI to support non UTC will be released
+//#define DATEFORMAT_US             // Display date in US format when used in conjunction with GPSTIME
+//#define MENU_GPS_TIME             // Enable GPS time adjustments in OSD menu
 
 
 /********************       TELEMETRY settings      *********************/
@@ -148,9 +155,14 @@
 //#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. 
 //#define AUTOSENSEMAG              // Undefine this to force autodetect MAG (to use MAG or GPS data for heading - otherwise use GUI). MSP data FC only. 
 //#define AUTOSENSEBARO             // Undefine this to force autodetect BARO(to use BARO or GPS data for altitude - otherwise use GUI). MSP data FC only.  
-#define USEGLIDESCOPE               // Undefine if not used to save memory. ILS glidescope can be enabled / disabled on GUI.
-#define GLIDEANGLE  80              // ILS glidescope angle where 40 = 4.0° requires enabling in layouts. Auto enabled for FIXEDWING
-#define GLIDEWINDOW 40              // ILS glidescope angle where Window of 40 = 4.0° - 1.0 deg scope gradients, 80 =  2.0 deg scope gradients. Requires enabling in layouts. Auto enabled for FIXEDWING
+
+
+/********************       GLIDESCOPE / FRESNEL zone settings      *********************/
+// glidescope is an assistant indicator to help with landing approach. glide angle can be uses as alternative to glidescope or as an indicator for minimim distance/altitude ratio to maintain signal quality
+#define USEGLIDESCOPE               // ILS glidescope can be enabled / disabled on GUI.
+//#define USEGLIDEANGLE 100         // alternativel option - display ILS approach angle/ aircraft elevation from home as real value instead of glidescope. Set angle below which glideangle is displayed. 100 = permanent.
+#define GLIDEANGLE  80              // ILS glidescope angle where 40 = 4.0° requires enabling in layouts. 
+#define GLIDEWINDOW 40              // ILS glidescope angle where Window of 40 = 4.0° - 1.0 deg scope gradients, 80 =  2.0 deg scope gradients. Requires enabling in layouts.
 
 
 /******************** Serial speed settings *********************/
@@ -251,15 +263,12 @@
 #define LONG_RANGE_DISPLAY          // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft. 
 #define AIRMODE                     // Enable this to display airmode icon. 
 //#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
-#define MASKGPSLOCATION             // Disable to save memeory if not used. Enables MASK GPS settings on GUI. Coordinates displayed with major digits XXX set to random location "XXX.DDDDDDD" 
+#define MASKGPSLOCATION             // Disable to save memory if not used. Enables MASK GPS settings on GUI. Coordinates displayed with major digits XXX set to random location "XXX.DDDDDDD" 
 //#define TEXTMODE                  // Enable to display the flyingmode as text instead of symbols
 //#define OSD_SWITCH                // Forces original 2 way multiwii screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
 //#define NOSUMMARYTHROTTLERESET    // Enable to supress summary display clearing from throttle
 #define OSDSUMMARY 30               // Seconds summary is displayed for after landing. Max 254
-//#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
-//#define DISPLAYGLIDEANGLE         // Displays glide angle as value instead of glidescope. Glidescope must be enabled
-#define DATEFORMAT_UTC            // Display UTC date when enabled - do not use time zone settings
-//#define DATEFORMAT_US             // Display date in US format when used in conjunction with GPSTIME
+
 
 /********************       Power / efficiency display Settings         ************************/
 #define DISPLAYWATTS                // Disable to save memeory if not used. Enable this to display Watts
@@ -428,6 +437,7 @@
 
 /********************           Under developement           *********************/
 // development and test
-//#define MSP_RTC_SUPPORT           // Enables for iNAV MSP time support
-//#define GPSTIME                   // Enables for GPS time support dispaly
+//#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
+
+
 
