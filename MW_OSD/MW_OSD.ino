@@ -944,7 +944,7 @@ void setMspRequests() {
 #ifdef MENU_FIXEDWING
       REQ_MSP_FW_CONFIG|
 #endif
-#ifdef MSP_RTC_SUPPORT
+#if defined MSP_RTC_SUPPORT && defined GPSTIME
       REQ_MSP_RTC|
 #endif
 #ifdef USE_FC_VOLTS_CONFIG

@@ -764,7 +764,7 @@ if (cmdMSP==MSP_STATUS)
 #ifdef MSP_RTC_SUPPORT
   if (cmdMSP == MSP_RTC)
   {
-    GPS_time = read32(); // GPS_time=1527711053;
+    GPS_time = read32();
     if(!armed){ // For now to avoid uneven looking clock
       setDateTime();
     }

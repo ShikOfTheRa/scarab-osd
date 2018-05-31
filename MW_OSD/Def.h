@@ -251,6 +251,9 @@
   #define CORRECT_MENU_RCT2
   #define ENABLE_MSP_SAVE_ADVANCED
   #define CANVAS_SUPPORT
+  #ifdef GPSTIME
+    #define MSP_RTC_SUPPORT
+  #endif
 
   #define MENU_STAT
   #define MENU_PID
@@ -272,6 +275,9 @@
   #define CORRECT_MENU_RCT2
   #define ENABLE_MSP_SAVE_ADVANCED
   #define CORRECTLOOPTIME
+  #ifdef GPSTIME
+    #define MSP_RTC_SUPPORT
+  #endif
 
   #define MENU_STAT
   #define MENU_PID
@@ -294,7 +300,11 @@
   #define CORRECTLOOPTIME
   #define CANVAS_SUPPORT
   #define MSP_DOP_SUPPORT
-  #define MAV_COMP_ALL  
+  #define MAV_COMP_ALL 
+  #ifdef GPSTIME
+    #define MSP_RTC_SUPPORT
+  #endif
+  
   #define MENU_STAT
   #define MENU_PID
   #define MENU_RC
@@ -424,6 +434,10 @@
 #if defined (MULTIWII_V24)
   #define AMPERAGE_DIV  1
   #undef INTRO_FC
+  #ifdef GPSTIME
+    #define MSP_RTC_SUPPORT
+  #endif
+  
   #define MENU_STAT
   #define MENU_PID
   #define MENU_RC
