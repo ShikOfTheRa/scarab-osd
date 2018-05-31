@@ -765,7 +765,7 @@ if (cmdMSP==MSP_STATUS)
   if (cmdMSP == MSP_RTC)
   {
     GPS_time = read32(); // GPS_time=1527711053;
-    if(mode.armed == 0){ // For now to avoid uneven looking clock
+    if(!armed){ // For now to avoid uneven looking clock
       setDateTime();
     }
   }  

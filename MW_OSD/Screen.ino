@@ -2305,8 +2305,10 @@ void displayfwglidescope(void){
   }
   
   #if defined DISPLAYGLIDEANGLE  
-    constrain(gs_angle,-900,900); 
-    displayItem(glidescopePosition, gs_angle/10, 0, 0xBD, 0, 0 );
+    gs_angle/=10;
+    constrain(gs_angle,-90,90); 
+    if (gs_angle < DISPLAYGLIDEANGLE)
+      displayItem(glidescopePosition, gs_angle/10, 0, 0xBD, 0, 0 );
   #else
     int8_t varline              = (GS_deviation_scale/3)-1;
     varsymbol            = GS_deviation_scale%3;
@@ -2585,7 +2587,7 @@ void setDateTime(void)
 
 void updateDateTime(void)
 {
-//  datetime.unixtime=1527711053;
+  //datetime.unixtime=1527712200; // 30/05/2018 @ 8:30 UTC
   datetime.unixtime++;
   uint32_t t_time = datetime.unixtime;
   uint8_t  t_year;

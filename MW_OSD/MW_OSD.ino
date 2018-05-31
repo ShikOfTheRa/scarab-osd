@@ -982,7 +982,7 @@ void setMspRequests() {
       REQ_MSP_ANALOG|
      #endif //MSP_USE_ANALOG     
       REQ_MSP_RC;
-    if(mode.armed == 0){
+    if(!armed){
       modeMSPRequests |=REQ_MSP_BOX|
       #if defined INTRO_FC && defined PROTOCOL_MSP
         REQ_MSP_FC_VERSION|

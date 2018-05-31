@@ -251,15 +251,12 @@
 #define LONG_RANGE_DISPLAY          // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft. 
 #define AIRMODE                     // Enable this to display airmode icon. 
 //#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
-#define MASKGPSLOCATION             // Disable to save memeory if not used. Enables MASK GPS settings on GUI. Coordinates displayed with major digits XXX set to random location "XXX.DDDDDDD" 
+#define MASKGPSLOCATION             // Disable to save memory if not used. Enables MASK GPS settings on GUI. Coordinates displayed with major digits XXX set to random location "XXX.DDDDDDD" 
 //#define TEXTMODE                  // Enable to display the flyingmode as text instead of symbols
 //#define OSD_SWITCH                // Forces original 2 way multiwii screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
 //#define NOSUMMARYTHROTTLERESET    // Enable to supress summary display clearing from throttle
 #define OSDSUMMARY 30               // Seconds summary is displayed for after landing. Max 254
-//#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
-//#define DISPLAYGLIDEANGLE         // Displays glide angle as value instead of glidescope. Glidescope must be enabled
-#define DATEFORMAT_UTC            // Display UTC date when enabled - do not use time zone settings
-//#define DATEFORMAT_US             // Display date in US format when used in conjunction with GPSTIME
+
 
 /********************       Power / efficiency display Settings         ************************/
 #define DISPLAYWATTS                // Disable to save memeory if not used. Enable this to display Watts
@@ -428,6 +425,12 @@
 
 /********************           Under developement           *********************/
 // development and test
-//#define MSP_RTC_SUPPORT           // Enables for iNAV MSP time support
-//#define GPSTIME                   // Enables for GPS time support dispaly
+#define MSP_RTC_SUPPORT           // Enable to set RTC time via MSP
+#define GPSTIME                   // Enable to use GPS time display functions
+//#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
+//#define DISPLAYGLIDEANGLE 100     // Displays glide angle as real value instead of glidescope. Set angle below which glideangle is displayed. 100 = permanent. Glidescope must be enabled. 
+//#define DATEFORMAT_UTC            // Display UTC date when enabled - do not use time zone settings
+//#define DATEFORMAT_US             // Display date in US format when used in conjunction with GPSTIME
+//#define MENU_GPS_TIME             // Enable GPS time adjustments in OSD menu
+
 
