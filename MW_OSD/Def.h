@@ -497,6 +497,7 @@
 
 #if defined(APM)
   #undef INTRO_FC
+  #define TX_GUI_CONTROL 
   #define MENU_STAT
   #define MENU_VOLTAGE
   #define MENU_RSSI
