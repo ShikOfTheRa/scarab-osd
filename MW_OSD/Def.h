@@ -540,7 +540,7 @@
   #undef  ALARM_SATS
   #undef  ALARM_GPS
   #undef  OSD_SWITCH_RC
-  #define HIDEARMEDSTATUS
+  #undef  ALARM_ARMED
   #define MENU_STAT
 #endif
 
@@ -602,9 +602,9 @@
   #define NOAHI
   #define NOSUMMARYTHROTTLERESET
   #define TX_GUI_CONTROL  
-//  #define HIDEARMEDSTATUS
-  #define ALARM_GPS 5
-
+  #ifndef ALARM_GPS
+    #define ALARM_GPS 5
+  #endif
   #define MENU_STAT
   #define MENU_VOLTAGE
   #define MENU_RSSI

@@ -2410,10 +2410,9 @@ void displayArmed(void)
 #endif //ALARM_MSP
   }
 
-#ifdef HIDEARMEDSTATUS
-    alarms.active&=B11111000;
-#endif //HIDEARMEDSTATUS
-
+#ifndef ALARM_ARMED
+  alarms.active&=B11111000;
+#endif //ALARM_ARMED
 
   if(alarms.queue == 0)
     alarms.queue = alarms.active;
