@@ -584,8 +584,8 @@ void displayHorizon(int rollAngle, int pitchAngle)
 #endif
   pitchAngle=pitchAngle+AHICORRECT;
 
-if(MwSensorPresent&ACCELEROMETER)
   if(fieldIsVisible(horizonPosition)){
+    if(MwSensorPresent&ACCELEROMETER){
 
 #ifdef NOAHI
 #elif defined FULLAHI
@@ -629,7 +629,7 @@ if(MwSensorPresent&ACCELEROMETER)
       }
     }
 #endif //FULLAHI
-
+    }
     if(!fieldIsVisible(MapModePosition)){
         screen[position-1] = SYM_AH_CENTER_LINE;
         screen[position+1] = SYM_AH_CENTER_LINE_RIGHT;
