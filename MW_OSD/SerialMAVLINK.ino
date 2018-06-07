@@ -194,7 +194,7 @@ void serialMAVCheck() {
       if (serialBuffer[6] & (1 << 7)) { //armed
         MwSensorActive |= (1 << 0);
         armed = 1;
-        armedglitchprotect = 3;
+        armedglitchprotect = 2;
       }
       else {
         if (armedglitchprotect > 0) {
@@ -228,9 +228,12 @@ void serialMAVCheck() {
       MwHeading   = MwHeading360;
       MwVario  = (float)serialbufferfloat(12) * 100; // m/s-->cm/s
       //MwVario = filter16(MwVario, t_MwVario, 4);
-      if (((GPS_fix_HOME & 0x01) == 0) && (GPS_numSat >= MINSATFIX) && armed) {
-        GPS_fix_HOME |= 0x01;
+      if ((GPS_fix_HOME ==0) && (GPS_numSat >= MINSATFIX) && armed) {
+        GPS_fix_HOME |= B00000001;
         GPS_altitude_home = GPS_altitude;
+      }
+      else {
+        GPS_fix_HOME &= B11111110;        
       }
       mw_mav.throttle = (int16_t)((serialBuffer[18] | serialBuffer[19] << 8)+1000);
       break;
@@ -248,11 +251,11 @@ void serialMAVCheck() {
       GPS_latitude = serialbufferint(8);
       GPS_longitude = serialbufferint(12);
       GPS_dop = (int16_t)(serialBuffer[20] | serialBuffer[21] << 8);
-      if (((GPS_fix_HOME & 0x02) == 0) && (GPS_numSat >= MINSATFIX) && armed) {
-        GPS_fix_HOME |= 0x02;
+      if ((GPS_fix_HOME == B00000001) && (GPS_numSat >= MINSATFIX) && armed) {
+        GPS_fix_HOME |= B00000011;
         GPS_reset_home_position();
       }
-      if ((GPS_fix > 2) && (GPS_numSat >= MINSATFIX) && ((GPS_fix_HOME & 0x02) == 0x02)) {
+      if ((GPS_fix > 2) && (GPS_numSat >= MINSATFIX) && (GPS_fix_HOME >1)) {
         uint32_t dist;
         int32_t  dir;
         GPS_distance_cm_bearing(&GPS_latitude, &GPS_longitude, &GPS_home[LAT], &GPS_home[LON], &dist, &dir);
