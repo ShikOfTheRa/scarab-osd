@@ -116,7 +116,7 @@
 
 /********************       TELEMETRY settings      *********************/
 //Select ONLY if you are sure your OSD is connected to a telemetry feed such as MAVLINK/LTM:
-//#define RESETHOMEARMED            // Uncomment this ONLY if armed information is sent within telemetry feeed AND you do not want to reset home position when re-arming. DO NOT DISARM IN FLIGHT 
+//#define RESETHOMEARMED            // Uncomment this ONLY if armed information is sent within telemetry feed AND you do not want to reset home position when re-arming. DO NOT DISARM IN FLIGHT. Enabled in APM/PX4
 //#define FORCE_MSP                 // Uncomment to enable use of MSP as well as telemetry. Uses more memory 
 //#define PROTOCOL_LTM              // To use LTM protocol instead of MSP
 

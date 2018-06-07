@@ -35,12 +35,12 @@
   //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   //#define AIRBOTMICRO             // Uncomment this if using an airbot MicroOSD
   //#define AEROMAX                 // Uncomment this if using MWOSD AEROMAX hardware
-  #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
+  //#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
   //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
   //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
-  //#define APM
+  #define APM
   //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
-  #define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
+  //#define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
   #define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
   //#define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
   //#define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
@@ -48,7 +48,7 @@
   //#define DISPLAY_DEV 0xC000        // Use screen layout dev position - display all items...
   //#define KKAUDIOVARIO A3         // Enable this for audio vario on Arduino pin XX. A3=RSSI. Use AUDIOPIN on AEROMAX 
   //#define MAVSENSOR173
-  #define MSPV2  
+  //#define MSPV2  
 #endif
 
 
@@ -497,6 +497,7 @@
 
 #if defined(APM)
   #undef INTRO_FC
+  #define RESETHOMEARMED  
   #define TX_GUI_CONTROL 
   #define MENU_STAT
   #define MENU_VOLTAGE
