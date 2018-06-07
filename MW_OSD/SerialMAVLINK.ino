@@ -127,6 +127,8 @@ void serialMAVCheck() {
   static uint8_t armedglitchprotect = 0;
   uint8_t severity;
   uint8_t nullifymessage = 1;     
+  //uint64_t i_temp;
+  //byte * b = (byte *) &i_temp;
 
   switch (mw_mav.message_cmd) {
     case MAVLINK_MSG_ID_HEARTBEAT:
@@ -263,6 +265,22 @@ void serialMAVCheck() {
         GPS_directionToHome = dir / 100;
       }
       break;
+/*
+    case MAVLINK_MSG_ID_SYSTEM_TIME:
+      debug[0]=(uint16_t)(serialBuffer[0] | serialBuffer[1] << 8);
+      debug[1]=(uint16_t)(serialBuffer[2] | serialBuffer[3] << 8);
+      debug[2]=(uint16_t)(serialBuffer[4] | serialBuffer[5] << 8);
+      debug[3]=(uint16_t)(serialBuffer[6] | serialBuffer[7] << 8);
+       for (uint8_t i = 0; i < 8; i++) {
+        b[i] = serialBuffer[i];
+      }
+      i_temp/=1000000;
+      GPS_time=(uint32_t)i_temp;
+      if(!armed){ // For now to avoid uneven looking clock
+        setDateTime();
+      }
+      break;
+  */
     case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
       MwRssi = (uint16_t)(((102) * serialBuffer[21]) / 10);
       if (serialBuffer[20]!=0)

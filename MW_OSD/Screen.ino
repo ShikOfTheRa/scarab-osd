@@ -584,8 +584,8 @@ void displayHorizon(int rollAngle, int pitchAngle)
 #endif
   pitchAngle=pitchAngle+AHICORRECT;
 
-if(MwSensorPresent&ACCELEROMETER)
   if(fieldIsVisible(horizonPosition)){
+    if(MwSensorPresent&ACCELEROMETER){
 
 #ifdef NOAHI
 #elif defined FULLAHI
@@ -629,7 +629,7 @@ if(MwSensorPresent&ACCELEROMETER)
       }
     }
 #endif //FULLAHI
-
+    }
     if(!fieldIsVisible(MapModePosition)){
         screen[position-1] = SYM_AH_CENTER_LINE;
         screen[position+1] = SYM_AH_CENTER_LINE_RIGHT;
@@ -2410,10 +2410,9 @@ void displayArmed(void)
 #endif //ALARM_MSP
   }
 
-#ifdef HIDEARMEDSTATUS
-    alarms.active&=B11111000;
-#endif //HIDEARMEDSTATUS
-
+#ifndef ALARM_ARMED
+  alarms.active&=B11111000;
+#endif //ALARM_ARMED
 
   if(alarms.queue == 0)
     alarms.queue = alarms.active;

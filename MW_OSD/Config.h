@@ -144,9 +144,10 @@
 
 
 /********************       ALARM/STATUS settings      *********************/
+#define ALARM_ARMED                 // Text alert of armed/disarmed status.
 #define ALARM_VOLTAGE               // Text alerts if voltage below voltage alarm - in addition to flashing voltage indicator
 #define ALARM_SATS                  // Text alerts if sats below MINSATFIX - in addition to flashing sat indicator
-//#define ALARM_GPS 5               // Text alerts if no GPS data for more than x secs. Sets GPS sats to zero
+//#define ALARM_GPS 5               // Text alerts if no GPS data for more than x secs. intended for GPSOSD only. Sets GPS sats to zero
 #define ALARM_MSP 5                 // Text alerts if no Flight controller data for more than x secs. 
 
 
@@ -235,7 +236,6 @@
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define FORCECROSSHAIR            // Forces a crosshair even if no AHI / horizon used
-//#define HIDEARMEDSTATUS           // Enable to hide ARMED / DISARMED status
 //#define HIDESUMMARY               // Enable to suspend display of summary screen when disarming
 //#define SHORTSUMMARY              // Display only timer on flight summary 
 #define MINSUMMARY                  // Hide summary screen values that are 0

@@ -763,12 +763,34 @@ if (cmdMSP==MSP_STATUS)
 
 #ifdef MSP_RTC_SUPPORT
   if (cmdMSP == MSP_RTC)
+  #if defined (BETAFLIGHT)  
+  {
+    static const uint16_t days[4][12] =
+    {
+      {   0,  31,     60,     91,     121,    152,    182,    213,    244,    274,    305,    335},
+      { 366,  397,    425,    456,    486,    517,    547,    578,    609,    639,    670,    700},
+      { 731,  762,    790,    821,    851,    882,    912,    943,    974,    1004,   1035,   1065},
+      {1096,  1127,   1155,   1186,   1216,   1247,   1277,   1308,   1339,   1369,   1400,   1430},
+    };
+    uint16_t year = read16() - 1970; // 0-99
+    uint8_t month = read8() - 1;     // 0-11
+    uint8_t day = read8() - 1;       // 0-30
+    uint8_t hour = read8();          // 0-23
+    uint8_t minute = read8();        // 0-59
+    uint8_t second = read8();        // 0-59
+    datetime.unixtime = (((year / 4 * (365 * 4 + 1) + days[year % 4][month] + day) * 24 + hour) * 60 + minute) * 60 + second;
+    if(!armed){ // For now to avoid uneven looking clock
+      setDateTime();
+    }
+  }
+  #else
   {
     GPS_time = read32();
     if(!armed){ // For now to avoid uneven looking clock
       setDateTime();
     }
-  }  
+  }
+  #endif //iNAV 
 #endif // MSP_RTC_SUPPORT
 
 #ifdef BOXNAMES
