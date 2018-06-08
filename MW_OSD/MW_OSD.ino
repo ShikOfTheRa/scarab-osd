@@ -79,9 +79,9 @@ uint16_t UntouchedStack(void)
 #define PGMSTR(p) (char *)pgm_read_word(p)
 
 //------------------------------------------------------------------------
-#define MWVERS "MW-OSD - R1.8.1.0"
+#define MWVERS "MW-OSD - R1.8.1"
 //#define MWVERS "MW-OSD - R1.8"
-#define MWOSDVERSION 1811 // 1660=1.6.6.0 for GUI
+#define MWOSDVERSION 1815 // 1660=1.6.6.0 for GUI
 #define EEPROMVER 15      // for eeprom layout verification
 
 #include <avr/pgmspace.h>
@@ -721,9 +721,11 @@ void loop()
 
   if(millis() > timer.seconds+1000)     // this execute 1 time a second
   {
-  #if defined GPSTIME
+  #if defined (GPSTIME) && !defined (UBLOX)
     updateDateTime();
   #endif //GPSTIME    
+   if (timer.armedstatus>0)
+     timer.armedstatus--;
     timer.seconds+=1000;
     timer.tenthSec=0;
     #ifdef MAV_STATUS
