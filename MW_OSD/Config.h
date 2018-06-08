@@ -186,6 +186,7 @@
 //#define MAV_RESET_HOME            // Resets home position when not armed. When enabled, note that RX glitch etc. could potentially reset home position.
 //#define MAV_ALT_THROTTLE          // Use alternative MAV throttle value. Not raw RC channel.
 //#define MAV_WIND_DIR_REVERSE      // SHow direction in which wind is coming from. Same as otehr OSD. Default is to show direction of wind flow. 
+//#define MAV_VBAT2                 // Use VBAT2 from mavlink instead of direct connect
 
 /******************** Mavlink distance sensor settings *********************/
 // Choose ONLY ONE SENSOR option AND enable MAVSENSORACTIVE 
@@ -410,7 +411,8 @@
 #define ICON_SPEED_GPS              // GPS speed
 #define ICON_SPEED_AIR              // Air Speed
 #define ICON_MAX                    // Max value - speed/distance/alt
-#define ICON_CLIMBRATE              // CLimb rate
+#define ICON_CLIMBRATE              // Climb rate
+#define ICON_GA                     // Glide angle
 #define ICON_EFF                    // Efficiency
 #define ICON_PITCH                  // Pitch
 #define ICON_ROLL                   // Roll

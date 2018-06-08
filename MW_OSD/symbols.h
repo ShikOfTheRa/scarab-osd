@@ -285,9 +285,9 @@
 
 #ifdef ICON_TMP
   #ifdef PILOTICON
-    #define SYM_TMP           0XC6 
+    #define SYM_TMP       0XB3 
   #else
-    #define SYM_TMP           0X06 
+    #define SYM_TMP       0X06 
   #endif  
 #else
 #define SYM_TMP           0 
@@ -309,6 +309,12 @@
 #define SYM_AGL           0XC7
 #else
 #define SYM_AGL           0
+#endif
+
+#ifdef ICON_GA
+#define SYM_GA            0X77
+#else
+#define SYM_GA            0
 #endif
 
 #ifdef ICON_GPS_ALT

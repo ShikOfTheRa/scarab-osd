@@ -2308,7 +2308,7 @@ void displayfwglidescope(void){
     gs_angle/=10;
     constrain(gs_angle,-90,90); 
     if (gs_angle < USEGLIDEANGLE)
-      displayItem(glidescopePosition, gs_angle/10, 0, 0xBD, 0, 0 );
+      displayItem(glidescopePosition, gs_angle/10, 0, SYM_GA, 0, 0 );
   #else
     int8_t varline              = (GS_deviation_scale/3)-1;
     varsymbol            = GS_deviation_scale%3;
