@@ -2350,10 +2350,10 @@ void displayArmed(void)
 #ifndef GPSOSD
     alarms.active|=(1<<1);
 #endif    
-    armedtimer=30;
+    timer.armedstatus=4;
   }
   else{
-    if (armedtimer>0){
+    if (timer.armedstatus>0){
 #ifdef GPSTIME
       if(Settings[S_GPSTIME]>0){ 
         displayDateTime();
@@ -2371,7 +2371,7 @@ void displayArmed(void)
 
 #if defined GPSOSD
   if (GPSOSD_state==1) {
-    alarms.active|=(1<<3);      
+    alarms.active|=(1<<3)|(1<<0);      
   }
   if ((GPSOSD_state==2)&&(GPS_numSat>=MINSATFIX)) {
     alarms.active|=(1<<1);      

@@ -481,6 +481,16 @@ void _update_checksum(uint8_t *data, uint8_t len, uint8_t &ck_a, uint8_t &ck_b) 
   }
 }
 
+#if defined GPSTIME
+static const uint16_t days[4][12] =
+{
+    {   0,  31,     60,     91,     121,    152,    182,    213,    244,    274,    305,    335},
+    { 366,  397,    425,    456,    486,    517,    547,    578,    609,    639,    670,    700},
+    { 731,  762,    790,    821,    851,    882,    912,    943,    974,    1004,   1035,   1065},
+    {1096,  1127,   1155,   1186,   1216,   1247,   1277,   1308,   1339,   1369,   1400,   1430},
+};
+#endif
+
 bool GPS_UBLOX_newFrame(uint8_t data) {
   bool parsed = false;
 
@@ -573,23 +583,33 @@ bool UBLOX_parse_gps(void) {
       GPS_speed         = _buffer.velned.speed_2d;  // cm/s
       GPS_ground_course = (uint16_t)(_buffer.velned.heading_2d / 10000);  // Heading 2D deg * 100000 rescaled to deg * 10
       break;
+#if defined GPSTIME
     case MSG_TIMEUTC:
       if (GPS_numSat >= MINSATFIX) {
-        datetime.year = _buffer.timeutc.year;
+        datetime.year = _buffer.timeutc.year-2000;
         datetime.month = _buffer.timeutc.month;
         datetime.day = _buffer.timeutc.day;
         datetime.hours = _buffer.timeutc.hour;
         datetime.minutes = _buffer.timeutc.min;
         datetime.seconds = _buffer.timeutc.sec;
-        if(mode.armed == 0){ // For now to avoid uneven looking clock
-          setDateTime();
-        }
+//        unsigned int second = _buffer.timeutc.sec;       // 0-59
+//        unsigned int minute = _buffer.timeutc.min;       // 0-59
+//        unsigned int hour   = _buffer.timeutc.hour;      // 0-23
+//        unsigned int day    = _buffer.timeutc.day-1;     // 0-30
+//        unsigned int month  = _buffer.timeutc.month-1;   // 0-11
+//        unsigned int year   = _buffer.timeutc.year-2000; // 0-99  
+//        if(!armed){ // For now to avoid uneven looking clock
+//          GPS_time = ((((year) / 4 * (365 * 4 + 1) + days[(year) % 4][month] + day) * 24 + hour) * 60 + minute) * 60 + second;
+//          //setDateTime();
+//       }
        }
+#endif //GPSTIME       
     default:
       break;
   }
   return false;
 }
+
 #endif //UBLOX
 
 #if defined(MTK_BINARY16) || defined(MTK_BINARY19)

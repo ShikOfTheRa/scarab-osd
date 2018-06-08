@@ -272,7 +272,8 @@ struct  __timer {
   uint32_t audiolooptimer;
   uint32_t GPSOSDstate;
   uint8_t  disarmed;                             
-  uint8_t  MAVstatustext;                             
+  uint8_t  MAVstatustext;
+  uint8_t  armedstatus;                             
 
 }
 timer;
@@ -529,6 +530,12 @@ uint16_t Settings16[EEPROM16_SETTINGS];
   #define DEF_S_RCWSWITCH_CH 8
 #endif
 
+#if defined (UBLOX) || defined iNAV
+  #define DEF_S_GPSTIME 1
+#else
+  #define DEF_S_GPSTIME 0
+#endif
+
 // For Settings Defaults
 PROGMEM const uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
 EEPROMVER, //   S_CHECK_,    
@@ -563,7 +570,7 @@ DEF_S_MWAMPERAGE, //   S_MWAMPERAGE,
 1, //   S_MAPMODE,
 0, //   S_VREFERENCE,
 7, //   S_SIDEBARWIDTH,
-1, //   S_GPSTIME,
+DEF_S_GPSTIME, //   S_GPSTIME,
 0, //   S_GPSTZAHEAD,
 0, //   S_GPSTZ,
 #ifdef VTX_RTC6705
