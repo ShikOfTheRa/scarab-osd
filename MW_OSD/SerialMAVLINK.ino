@@ -360,9 +360,11 @@ void serialMAVCheck() {
     case MAVLINK_MSG_ID_SCALED_PRESSURE2:
       temperature = (int16_t)serialbufferint(12)/100;
       break;
+  #ifdef MAV_VBAT2
     case MAVLINK_MSG_ID_BATTERY2:
       MwVBat2 = (int16_t)serialbufferint(0)/100;
       break;    
+  #endif    
     case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
       GPS_waypoint_dist = (int16_t)(serialBuffer[24]) | (serialBuffer[25] << 8); 
       break;
