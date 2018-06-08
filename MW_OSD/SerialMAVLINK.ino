@@ -230,12 +230,14 @@ void serialMAVCheck() {
       MwHeading   = MwHeading360;
       MwVario  = (float)serialbufferfloat(12) * 100; // m/s-->cm/s
       //MwVario = filter16(MwVario, t_MwVario, 4);
-      if ((GPS_fix_HOME ==0) && (GPS_numSat >= MINSATFIX) && armed) {
-        GPS_fix_HOME |= B00000001;
-        GPS_altitude_home = GPS_altitude;
-      }
-      else {
-        GPS_fix_HOME &= B11111110;        
+      if ((GPS_fix_HOME ==0) && (GPS_numSat >= MINSATFIX)) {
+        if (armed){
+          GPS_fix_HOME |= B00000001;
+          GPS_altitude_home = GPS_altitude;
+        }
+        else{
+          GPS_altitude_home = GPS_altitude;          
+        }
       }
       mw_mav.throttle = (int16_t)((serialBuffer[18] | serialBuffer[19] << 8)+1000);
       break;
