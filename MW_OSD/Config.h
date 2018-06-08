@@ -410,7 +410,8 @@
 #define ICON_SPEED_GPS              // GPS speed
 #define ICON_SPEED_AIR              // Air Speed
 #define ICON_MAX                    // Max value - speed/distance/alt
-#define ICON_CLIMBRATE              // CLimb rate
+#define ICON_CLIMBRATE              // Climb rate
+#define ICON_GA                     // Glide angle
 #define ICON_EFF                    // Efficiency
 #define ICON_PITCH                  // Pitch
 #define ICON_ROLL                   // Roll
