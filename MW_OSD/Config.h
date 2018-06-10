@@ -440,6 +440,8 @@
 /********************           Under developement           *********************/
 // development and test
 //#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
+//#define MAV_RTC                   // Use mavlink time for RTC.
+//#define MAV_ADSB                  // Use Baro altitude from mavlink instead of GPS. Requires ADSB data to be configured in mavlink.
 
 
 
