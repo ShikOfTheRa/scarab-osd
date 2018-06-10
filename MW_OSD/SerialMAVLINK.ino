@@ -236,7 +236,7 @@ void serialMAVCheck() {
       //MwVario = filter16(MwVario, t_MwVario, 4);
       if (GPS_fix_HOME ==0){
         GPS_altitude_home = GPS_altitude;
-        if (GPS_numSat >= MINSATFIX)) {
+        if (GPS_numSat >= MINSATFIX) {
           if (armed){
             GPS_fix_HOME |= B00000001;
           }
