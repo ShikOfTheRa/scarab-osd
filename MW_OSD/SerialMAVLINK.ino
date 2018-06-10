@@ -126,9 +126,11 @@ void serialMAVCheck() {
   int16_t MwHeading360;
   static uint8_t armedglitchprotect = 0;
   uint8_t severity;
-  uint8_t nullifymessage = 1;     
-  //uint64_t i_temp;
-  //byte * b = (byte *) &i_temp;
+  uint8_t nullifymessage = 1; 
+  #ifdef MAV_RTC    
+    uint64_t i_temp;
+    byte * b = (byte *) &i_temp;
+  #endif
 
   switch (mw_mav.message_cmd) {
     case MAVLINK_MSG_ID_HEARTBEAT:
@@ -222,7 +224,9 @@ void serialMAVCheck() {
       GPS_speed = (int16_t)serialbufferfloat(4) * 100; // m/s-->cm/s
       GPS_altitude = (int16_t)serialbufferfloat(8);   // m-->m
       GPS_altitude = GPS_altitude - GPS_altitude_home;
-      MwAltitude = (int32_t) GPS_altitude * 100;      // m--cm gps to baro
+      #ifndef MAV_ADSB
+        MwAltitude = (int32_t) GPS_altitude * 100;
+      #endif
       MwHeading = serialBuffer[16] | serialBuffer[17] << 8; // deg (-->deg*10 if GPS heading)
       MwHeading360 = MwHeading;
       if (MwHeading360 > 180)
@@ -267,7 +271,7 @@ void serialMAVCheck() {
         GPS_directionToHome = dir / 100;
       }
       break;
-/*
+#ifdef MAV_RTC
     case MAVLINK_MSG_ID_SYSTEM_TIME:
       debug[0]=(uint16_t)(serialBuffer[0] | serialBuffer[1] << 8);
       debug[1]=(uint16_t)(serialBuffer[2] | serialBuffer[3] << 8);
@@ -282,7 +286,7 @@ void serialMAVCheck() {
         setDateTime();
       }
       break;
-  */
+#endif
     case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
       MwRssi = (uint16_t)(((102) * serialBuffer[21]) / 10);
       if (serialBuffer[20]!=0)
@@ -365,6 +369,11 @@ void serialMAVCheck() {
       MwVBat2 = (int16_t)serialbufferint(0)/100;
       break;    
   #endif    
+  #ifdef MAV_ADSB
+    case MAVLINK_MESSAGE_INFO_ADSB_VEHICLE:
+      MwAltitude = (int32_t)serialbufferint(12)/10;
+      break;    
+  #endif  
     case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
       GPS_waypoint_dist = (int16_t)(serialBuffer[24]) | (serialBuffer[25] << 8); 
       break;
@@ -533,10 +542,12 @@ void serialMAVreceive(uint8_t c)
         mav_magic = MAVLINK_MSG_ID_SCALED_PRESSURE2_MAGIC;
         mav_len = MAVLINK_MSG_ID_SCALED_PRESSURE2_LEN;
         break;
+#ifdef MAV_VBAT2
       case  MAVLINK_MSG_ID_BATTERY2:
         mav_magic = MAVLINK_MSG_ID_BATTERY2_MAGIC;
         mav_len = MAVLINK_MSG_ID_BATTERY2_LEN;
         break;
+#endif        
       case  MAVLINK_MSG_ID_STATUSTEXT:
         mav_magic = MAVLINK_MSG_ID_STATUSTEXT_MAGIC;
         mav_len = MAVLINK_MSG_ID_STATUSTEXT_LEN;
@@ -552,7 +563,20 @@ void serialMAVreceive(uint8_t c)
         mav_magic = MAVLINK_MSG_ID_RANGEFINDER_MAGIC;
         mav_len = MAVLINK_MSG_ID_RANGEFINDER_LEN;
         break;
-#endif        
+#endif    
+#ifdef MAV_ADSB        
+      case  MAVLINK_MESSAGE_INFO_ADSB_VEHICLE:
+        mav_magic = MAVLINK_MESSAGE_INFO_ADSB_VEHICLE_MAGIC;
+        mav_len = MAVLINK_MESSAGE_INFO_ADSB_VEHICLE_LEN;
+        break;
+#endif    
+#ifdef MAV_RTC        
+      case  MAVLINK_MSG_ID_SYSTEM_TIME:
+        mav_magic = MAVLINK_MSG_ID_SYSTEM_TIME_MAGIC;
+        mav_len = MAVLINK_MSG_ID_SYSTEM_TIME_LEN;
+        break;
+#endif    
+    
 /*        
       case  MAVLINK_MSG_ID_RADIO:
         mav_magic = MAVLINK_MSG_ID_RADIO_MAGIC;
