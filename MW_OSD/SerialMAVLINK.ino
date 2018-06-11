@@ -223,10 +223,6 @@ void serialMAVCheck() {
       AIR_speed = (int16_t)serialbufferfloat(0) * 100; // m/s-->cm/s
       GPS_speed = (int16_t)serialbufferfloat(4) * 100; // m/s-->cm/s
       GPS_altitude = (int16_t)serialbufferfloat(8);   // m-->m
-      GPS_altitude = GPS_altitude - GPS_altitude_home;
-      #ifndef MAV_ADSB
-        MwAltitude = (int32_t) GPS_altitude * 100;
-      #endif
       MwHeading = serialBuffer[16] | serialBuffer[17] << 8; // deg (-->deg*10 if GPS heading)
       MwHeading360 = MwHeading;
       if (MwHeading360 > 180)
@@ -234,6 +230,9 @@ void serialMAVCheck() {
       MwHeading   = MwHeading360;
       MwVario  = (float)serialbufferfloat(12) * 100; // m/s-->cm/s
       //MwVario = filter16(MwVario, t_MwVario, 4);
+      if (!armed){
+        GPS_fix_HOME =0;
+      }
       if (GPS_fix_HOME ==0){
         GPS_altitude_home = GPS_altitude;
         if (GPS_numSat >= MINSATFIX) {
@@ -242,6 +241,11 @@ void serialMAVCheck() {
           }
         }
       }
+      GPS_altitude = GPS_altitude - GPS_altitude_home;
+      #ifndef MAV_ADSB
+        MwAltitude = (int32_t) GPS_altitude * 100;
+//        MwAltitude = (int32_t) serialbufferfloat(8) * 100; //dev to displa AMSL
+      #endif
       mw_mav.throttle = (int16_t)((serialBuffer[18] | serialBuffer[19] << 8)+1000);
       break;
     case MAVLINK_MSG_ID_ATTITUDE:
@@ -262,7 +266,7 @@ void serialMAVCheck() {
         GPS_fix_HOME |= B00000011;
         GPS_reset_home_position();
       }
-      if ((GPS_fix > 2) && (GPS_numSat >= MINSATFIX) && (GPS_fix_HOME >1)) {
+      if ((GPS_numSat >= MINSATFIX) && (GPS_fix_HOME >1)) {
         uint32_t dist;
         int32_t  dir;
         GPS_distance_cm_bearing(&GPS_latitude, &GPS_longitude, &GPS_home[LAT], &GPS_home[LON], &dist, &dir);
@@ -400,8 +404,6 @@ void serialMAVCheck() {
   if (armed) {
   }
   else {
-    GPS_altitude = 0 ;
-    MwAltitude = 0 ;
     GPS_distanceToHome = 0;
     GPS_directionToHome = 0;
   }
