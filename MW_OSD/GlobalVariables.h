@@ -530,7 +530,7 @@ uint16_t Settings16[EEPROM16_SETTINGS];
   #define DEF_S_RCWSWITCH_CH 8
 #endif
 
-#if defined (UBLOX) || defined iNAV
+#if defined (UBLOX) || defined iNAV  || defined (MAV_RTC)
   #define DEF_S_GPSTIME 1
 #else
   #define DEF_S_GPSTIME 0

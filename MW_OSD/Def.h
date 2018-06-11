@@ -529,6 +529,7 @@
   #undef INTRO_FC
   #define RESETHOMEARMED  
   #define TX_GUI_CONTROL 
+  #define MAV_RTC
   #define MENU_STAT
   #define MENU_VOLTAGE
   #define MENU_RSSI
