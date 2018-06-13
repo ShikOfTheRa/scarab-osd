@@ -1433,11 +1433,14 @@ int32_t filter32F( float filtered, float raw, const byte k){
 #if defined USE_AIRSPEED_SENSOR
 void useairspeed(){
   #define AIRDENSITY  1.225 // Density of air kg/m3
-  int16_t pressuresensor = (int16_t)(sensorfilter[AUXPIN][SENSORFILTERSIZE]>>3)-Settings16[S16_AIRSPEEDZERO];
-  pressuresensor=(pressuresensor*Settings16[S16_AIRSPEEDCAL])/500;
-  constrain(pressuresensor,-500,500);
-  int16_t Pa = map(pressuresensor,-500,500,-2000,2000); // Pressure - actual pascals
-  AIR_speed = (100 * sqrt(2*Pa))/AIRDENSITY;                   // Speed required in cm/s
+  int16_t pressuresensor = (int16_t)(sensorfilter[3][SENSORFILTERSIZE]>>3)-Settings16[S16_AIRSPEEDZERO];
+  if (pressuresensor<0){
+    pressuresensor=0;
+  }
+  pressuresensor=((int32_t)pressuresensor*Settings16[S16_AIRSPEEDCAL])/500;
+  constrain(pressuresensor,-410,410);
+  int16_t Pa = map(pressuresensor,-410,410,-2000,2000); // Pressure - actual pascals
+  AIR_speed = (int32_t)100 * sqrt((2*Pa)/AIRDENSITY);    // Speed required in cm/s
 }
 #endif //USE_AIRSPEED_SENSOR 
 
