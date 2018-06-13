@@ -321,7 +321,7 @@
 
 
 /********************       Airspeed Sensor         ************************/
-// UNTESTED in flight. Uses MPXV700DP sensor connected to AUXPIN A6  (Aeromax OSD hardware only)
+// UNTESTED in flight. Uses MPXV7002DP sensor connected to AUXPIN A6  (Aeromax OSD hardware only)
 //#define USE_AIRSPEED_SENSOR
 
 

@@ -34,21 +34,23 @@
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
   //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   //#define AIRBOTMICRO             // Uncomment this if using an airbot MicroOSD
+  #define EEPROMVER 16              // for eeprom layout verification
   //#define AEROMAX                 // Uncomment this if using MWOSD AEROMAX hardware
-  //#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
+  #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
   //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
-  //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
-  #define APM
+  #define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+  //#define APM
   //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
   //#define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-  //#define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
-  //#define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
+  #define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
+  #define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
   //#define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
   //#define INTRO_DELAY 1           // To speed up startup
   //#define DISPLAY_DEV 0xC000        // Use screen layout dev position - display all items...
   //#define KKAUDIOVARIO A3         // Enable this for audio vario on Arduino pin XX. A3=RSSI. Use AUDIOPIN on AEROMAX 
   //#define MAVSENSOR173
   //#define MSPV2  
+  //#define USE_AIRSPEED_SENSOR
 
 //#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.2.0 at time of this MWOSD release)
@@ -897,7 +899,7 @@ enum {
 #define RSSIPIN       A3              
 #define LEDPIN        7
 #define RCPIN         5   // Aeromax hardware only      
-#define AUXPIN        A6  // Aeromax hardware only        
+#define AUXPIN        A2  // A6 for Aeromax hardware only        
 #define AUDIOPIN      2   // Aeromax hardware only  
 #define INTC3             // Arduino A3 enabled for PWM/PPM interrupts) Arduino A3 == Atmega Port C bit 3 for PWM trigger on RSSI pin
 //#define INTD5           // Atmega Port D bit 5 PWM/PPM interrupts) Aeromax hardware used for RC input
@@ -905,7 +907,9 @@ enum {
 // board specific amendments:
 #ifdef AEROMAX
     #define ATMEGASETHARDWAREPORTS DDRC &= B11110111;DDRD &= B11011111;
-    #define INTD5     
+    #define INTD5    
+    #undef  AUXPIN
+    #define AUXPIN    A2  // A6 for Aeromax hardware only        
 #elif defined AIRBOTMICRO
     #undef VOLTAGEPIN
     #undef VIDVOLTAGEPIN
