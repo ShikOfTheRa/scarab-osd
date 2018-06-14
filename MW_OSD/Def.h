@@ -899,7 +899,7 @@ enum {
 #define RSSIPIN       A3              
 #define LEDPIN        7
 #define RCPIN         5   // Aeromax hardware only      
-#define AUXPIN        A2  // A6 for Aeromax hardware only        
+#define AUXPIN        A1  // A6 for Aeromax hardware only        
 #define AUDIOPIN      2   // Aeromax hardware only  
 #define INTC3             // Arduino A3 enabled for PWM/PPM interrupts) Arduino A3 == Atmega Port C bit 3 for PWM trigger on RSSI pin
 //#define INTD5           // Atmega Port D bit 5 PWM/PPM interrupts) Aeromax hardware used for RC input
