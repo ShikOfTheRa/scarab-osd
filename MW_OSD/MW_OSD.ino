@@ -396,8 +396,8 @@ void loop()
 
   if((currentMillis - previous_millis_high) >= hi_speed_cycle)  // 20 Hz or 100hz in MSP high mode
   {
-    previous_millis_high = previous_millis_high+hi_speed_cycle;       
-      uint8_t MSPcmdsend=0;
+    previous_millis_high = previous_millis_high+hi_speed_cycle;           
+      uint16_t MSPcmdsend=0;
       if(queuedMSPRequests == 0)
         queuedMSPRequests = modeMSPRequests;
       uint32_t req = queuedMSPRequests & -queuedMSPRequests;
@@ -506,6 +506,11 @@ void loop()
       case REQ_MSP_VOLTAGE_METER_CONFIG:
         MSPcmdsend = MSP_VOLTAGE_METER_CONFIG;
         break;
+#ifdef MSPV2
+        case REQ_MSP2_INAV_AIR_SPEED:
+        MSPcmdsend = MSP2_INAV_AIR_SPEED;
+        break;
+#endif
     }
     
     if(!fontMode){
@@ -519,7 +524,15 @@ void loop()
        #endif
            {
              if (MSPcmdsend!=0){
-               mspWriteRequest(MSPcmdsend, 0);
+               #ifdef MSPV2
+                 if (MSPcmdsend>254){
+                   mspV2WriteRequest(MSPcmdsend, 0);
+                 }
+                 else
+               #endif
+               {
+                 mspWriteRequest(MSPcmdsend&0xff, 0);
+               }
              }
            }
      #endif // KISS
@@ -956,6 +969,9 @@ void setMspRequests() {
       REQ_MSP_MISC|
   #endif
 #endif
+#ifdef MSPV2
+      REQ_MSP2_INAV_AIR_SPEED|
+#endif
       REQ_MSP_RC;
   }
   else {
@@ -999,6 +1015,10 @@ void setMspRequests() {
      #ifdef MSP_RTC_SUPPORT
       REQ_MSP_RTC|
      #endif // MSP_RTC_SUPPORT
+     #ifdef MSPV2
+      REQ_MSP2_INAV_AIR_SPEED|
+     #endif
+     
      0;
     }
 #if defined MULTIWII_V24

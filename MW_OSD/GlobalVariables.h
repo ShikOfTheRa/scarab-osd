@@ -1372,20 +1372,20 @@ const unsigned char UnitsIcon[10]={
 #define REQ_MSP_FONT      (1 << 12)
 #define REQ_MSP_DEBUG     (1 << 13)
 #define REQ_MSP_CELLS     (1 << 14)
-#define REQ_MSP_NAV_STATUS     (1L<<15)
-#define REQ_MSP_CONFIG         (1L<<15)
-#define REQ_MSP_MISC           (1L<<16)
-#define REQ_MSP_ALARMS         (1L<<17)
-#define REQ_MSP_PID_CONTROLLER (1L<<18)
-#define REQ_MSP_LOOP_TIME      (1L<<19) 
-#define REQ_MSP_FW_CONFIG      (1L<<20) 
-#define REQ_MSP_PIDNAMES       (1L<<21)
-#define REQ_MSP_SERVO_CONF     (1L<<22)
+#define REQ_MSP_NAV_STATUS           (1L<<15)
+#define REQ_MSP_CONFIG               (1L<<15)
+#define REQ_MSP_MISC                 (1L<<16)
+#define REQ_MSP_ALARMS               (1L<<17)
+#define REQ_MSP_PID_CONTROLLER       (1L<<18)
+#define REQ_MSP_LOOP_TIME            (1L<<19) 
+#define REQ_MSP_FW_CONFIG            (1L<<20) 
+#define REQ_MSP_PIDNAMES             (1L<<21)
+#define REQ_MSP_SERVO_CONF           (1L<<22)
 #define REQ_MSP_VOLTAGE_METER_CONFIG (1L<<23)
-#define REQ_MSP_FC_VERSION     (1L<<24)
+#define REQ_MSP_FC_VERSION           (1L<<24)
 
-#define REQ_MSP_RTC            (1L<<26)
-
+#define REQ_MSP_RTC                  (1L<<26)
+#define REQ_MSP2_INAV_AIR_SPEED      (1L<<27)
 // Menu selections
 
 
