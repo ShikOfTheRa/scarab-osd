@@ -276,10 +276,6 @@ void serialMAVCheck() {
       break;
 #ifdef MAV_RTC
     case MAVLINK_MSG_ID_SYSTEM_TIME:
-      debug[0]=(uint16_t)(serialBuffer[0] | serialBuffer[1] << 8);
-      debug[1]=(uint16_t)(serialBuffer[2] | serialBuffer[3] << 8);
-      debug[2]=(uint16_t)(serialBuffer[4] | serialBuffer[5] << 8);
-      debug[3]=(uint16_t)(serialBuffer[6] | serialBuffer[7] << 8);
        for (uint8_t i = 0; i < 8; i++) {
         b[i] = serialBuffer[i];
       }
