@@ -808,6 +808,7 @@ uint16_t GPS_waypoint_dist=0;
 //uint16_t cycleTime=0;
 uint16_t pMeterSum=0;
 uint16_t MwRssi=0;
+uint16_t FCRssi=0;
 uint32_t GPS_time = 0;
 uint16_t WIND_direction = 0;
 uint16_t WIND_speed = 0;

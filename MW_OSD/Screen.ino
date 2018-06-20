@@ -770,8 +770,18 @@ void displayRSSI(void)
 {
   if (rssi < rssiMIN && rssi > 0)
     rssiMIN = rssi;
-  displayItem(rssiPosition, rssi, SYM_RSSI, '%', 0 );
-
+  #ifdef DUALRSSI
+    displayItem(rssiPosition, rssi, SYM_RSSI, '%', 0 );
+    screenBuffer[0] = SYM_RSSI;
+    uint8_t t_FCRssi= map(FCRssi,0,DUALRSSI,0,100);
+    itoa(t_FCRssi,screenBuffer+1,10);
+    uint8_t xx = FindNull();
+    screenBuffer[xx++] = '%';
+    screenBuffer[xx] = 0;
+    MAX7456_WriteString(screenBuffer,getPosition(rssiPosition)+30);
+  #else
+    displayItem(rssiPosition, rssi, SYM_RSSI, '%', 0 );
+  #endif  
 }
 
 
@@ -804,7 +814,6 @@ void displayIntro(void)
     MAX7456_WriteString((const char*)alarmMsg, 64 + (30 * 9) + 4);
   }
 #endif
-  //zz
 }
 
 

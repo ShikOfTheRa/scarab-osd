@@ -593,7 +593,11 @@ if (cmdMSP==MSP_STATUS)
   {
     MwVBat=read8();
     pMeterSum=read16();
-    MwRssi = read16();
+    #ifdef DUALRSSI
+      FCRssi = read16();
+    #else
+      MwRssi = read16();
+    #endif      
     MWAmperage = (int16_t)read16();
     if(!Settings[S_MWAMPERAGE]) {
       pMeterSum=0;
