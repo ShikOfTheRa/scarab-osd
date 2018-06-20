@@ -241,7 +241,7 @@
 //#define SHORTSUMMARY              // Display only timer on flight summary 
 #define MINSUMMARY                  // Hide summary screen values that are 0
 //#define FASTPIXEL                 // Optional - may improve resolution - especially hi res cams
-//#define WHITEBRIGHTNESS 0x01      // Optional change from default 0x00=120%,0x01=100%,0x10=90%,0x11=80%  default is 0x01=100%
+#define BWBRIGHTNESS                // Enable GUI brightness configuration from GUI. Otherwise use default.
 //#define BLACKBRIGHTNESS 0x00      // Optional change from default 0x00=0%,0x01=10%,0x10=20%0x11=30%  default is 0x00=0%
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count 
 //#define NOTHROTTLESPACE           // Enable to remove space between throttle symbol and the data

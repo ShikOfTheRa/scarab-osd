@@ -74,10 +74,10 @@ uint16_t UntouchedStack(void)
 #define PGMSTR(p) (char *)pgm_read_word(p)
 
 //------------------------------------------------------------------------
-#define MWVERS "MW-OSD - R1.8.1"
+#define MWVERS "MW-OSD - R1.8.2"
 //#define MWVERS "MW-OSD - R1.8"
-#define MWOSDVERSION 1817 // 1660=1.6.6.0 for GUI
-#define EEPROMVER 15      // for eeprom layout verification
+#define MWOSDVERSION 1820 // 1660=1.6.6.0 for GUI
+#define EEPROMVER 16      // for eeprom layout verification
 
 #include <avr/pgmspace.h>
 #undef   PROGMEM
@@ -668,7 +668,7 @@ void loop()
         displayDistanceMax();
         displayAngleToHome();
 #if defined MAVSENSORGPSACTIVE && defined APM
-        if (GPS_altitude < MAVSENSORGPSACTIVE) // display sensor distance when GPS below this value
+        if (GPS_altitude < Settings[S_ALTRESOLUTION]) // display sensor distance when GPS below this value
           displayMAVAltitude();
         else
           displayGPSAltitude();

@@ -254,6 +254,10 @@ void displayMode(void)
   else {
     flightmode = 10;
   }
+  uint8_t t_flightmodetext = 11;
+  if (Settings[S_FLIGHTMODETEXT]){
+    t_flightmodetext=0;
+  }
   strcpy_P(screenBuffer, (char*)pgm_read_word(&(msp_mode_index[flightmode + 11])));
 #endif  //PROTOCOL selection
 
@@ -877,6 +881,31 @@ void displayGPSPosition(void)
 #endif
 
 
+void displayAltitude(void)
+{
+  int16_t altitude;
+  if (Settings[S_UNITSYSTEM])
+    altitude = MwAltitude * 0.032808;  // cm to feet
+  else
+    altitude = MwAltitude / 100;       // cm to mt
+
+  if (armed && allSec > 5 && altitude > altitudeMAX)
+    altitudeMAX = altitude;
+  if (!fieldIsVisible(MwAltitudePosition))
+    return;
+  if (Settings[S_ALTITUDE_ALARM] > 0) {
+    if (((altitude / 100) >= Settings[S_ALTITUDE_ALARM]) && (timer.Blink2hz))
+      return;
+  }
+  formatDistance(altitude, 1, 0, SYM_ALT);
+  MAX7456_WriteString(screenBuffer, getPosition(MwAltitudePosition));
+#ifdef SHOW_MAX_ALTITUDE
+  formatDistance(altitudeMAX, 1, 0, SYM_MAX);
+  MAX7456_WriteString(screenBuffer, getPosition(MwAltitudePosition) + LINE);
+#endif //SHOW_MAX_ALTITUDE
+}
+
+
 void displayGPSAltitude(void) {
   if (!fieldIsVisible(MwGPSAltPosition))
     return;
@@ -963,31 +992,6 @@ void display_speed(int16_t t_value, uint8_t t_position, uint8_t t_leadicon)
       return;
   }
   displayItem(t_position, xx, t_leadicon, speedUnitAdd[Settings[S_UNITSYSTEM]], 0 );
-}
-
-
-void displayAltitude(void)
-{
-  int16_t altitude;
-  if (Settings[S_UNITSYSTEM])
-    altitude = MwAltitude * 0.032808;  // cm to feet
-  else
-    altitude = MwAltitude / 100;       // cm to mt
-
-  if (armed && allSec > 5 && altitude > altitudeMAX)
-    altitudeMAX = altitude;
-  if (!fieldIsVisible(MwAltitudePosition))
-    return;
-  if (Settings[S_ALTITUDE_ALARM] > 0) {
-    if (((altitude / 100) >= Settings[S_ALTITUDE_ALARM]) && (timer.Blink2hz))
-      return;
-  }
-  formatDistance(altitude, 1, 0, SYM_ALT);
-  MAX7456_WriteString(screenBuffer, getPosition(MwAltitudePosition));
-#ifdef SHOW_MAX_ALTITUDE
-  formatDistance(altitudeMAX, 1, 0, SYM_MAX);
-  MAX7456_WriteString(screenBuffer, getPosition(MwAltitudePosition) + LINE);
-#endif //SHOW_MAX_ALTITUDE
 }
 
 
