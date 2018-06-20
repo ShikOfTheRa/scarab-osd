@@ -258,7 +258,7 @@ void displayMode(void)
   if (Settings[S_FLIGHTMODETEXT]){
     t_flightmodetext=0;
   }
-  strcpy_P(screenBuffer, (char*)pgm_read_word(&(msp_mode_index[flightmode + 11])));
+  strcpy_P(screenBuffer, (char*)pgm_read_word(&(msp_mode_index[flightmode + t_flightmodetext])));
 #endif  //PROTOCOL selection
 
   if (fieldIsVisible(ModePosition)) {
