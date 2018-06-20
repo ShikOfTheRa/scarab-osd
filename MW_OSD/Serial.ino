@@ -905,7 +905,6 @@ if (cmdMSP==MSP_STATUS)
     flags.box=1;
     uint32_t bit = 1;
     uint8_t remaining = dataSize;
-
     memset(&mode, 0, sizeof(mode));
 
     while(remaining > 0) {

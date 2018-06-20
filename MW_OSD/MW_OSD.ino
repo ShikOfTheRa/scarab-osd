@@ -69,11 +69,6 @@ uint16_t UntouchedStack(void)
 } 
 #endif
 
-// Workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34734
-//#ifdef PROGMEM
-//  #undef PROGMEM
-//  #define PROGMEM __attribute__((section(".progmem.data")))
-//#endif
 
 // Frequently used expressions
 #define PGMSTR(p) (char *)pgm_read_word(p)
@@ -85,8 +80,8 @@ uint16_t UntouchedStack(void)
 #define EEPROMVER 15      // for eeprom layout verification
 
 #include <avr/pgmspace.h>
-#undef PROGMEM
-#define PROGMEM __attribute__(( section(".progmem.data") ))
+#undef   PROGMEM
+#define  PROGMEM __attribute__(( section(".progmem.data") )) // Workaround for http://gcc.gnu.org/bugzilla/show_bug.cgi?id=34734
 #include <EEPROM.h>
 #include <util/atomic.h> // For ATOMIC_BLOCK
 #include "Config.h"
@@ -147,7 +142,6 @@ void setup()
   ATMEGASETHARDWAREPORTS
   LEDINIT
   
-
 #if defined EEPROM_CLEAR
   EEPROM_clear();
 #endif  
@@ -172,7 +166,6 @@ void setup()
   MAX7456Setup();
   #if defined GPSOSD
     timer.GPS_initdelay=INTRO_DELAY; 
-    //GPS_SerialInit(); 
   #else
   #endif
 #if defined FORECSENSORACC
@@ -201,7 +194,7 @@ void setup()
     MS5837sensor.init();
     MS5837sensor.setFluidDensity(FLUID_DENSITY); // kg/m^3 
   #endif // USE MS_5837
-  datetime.unixtime=946684801; //  GPS_time=946684801;
+  datetime.unixtime=946684801; //  GPS_time=946684801; // Set to Y2K as default.
   Serial.flush();
 }
 
@@ -252,7 +245,7 @@ void loop()
 void loop()
 {
 
-#if defined TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI 
+#if defined TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI for GPSOSD and MAVLINK
   switch(Settings[S_TX_TYPE]) {
     case 1: //RPTY
       tx_roll     = 1;
@@ -687,7 +680,7 @@ void loop()
           display_speed(GPS_speed,GPS_speedPosition,SYM_SPEED_GPS);
           display_speed(AIR_speed,AIR_speedPosition,SYM_SPEED_AIR);
           displayWindSpeed(); // also windspeed if available
-          displayItem(MAX_speedPosition, speedMAX, SYM_MAX, speedUnitAdd[Settings[S_UNITSYSTEM]], 0, 0 );
+          displayItem(MAX_speedPosition, speedMAX, SYM_MAX, speedUnitAdd[Settings[S_UNITSYSTEM]], 0 );
           displayGPSPosition();  
       
 #ifdef GPSTIME
@@ -1017,8 +1010,7 @@ void setMspRequests() {
      #endif // MSP_RTC_SUPPORT
      #ifdef MSPV2
       REQ_MSP2_INAV_AIR_SPEED|
-     #endif
-     
+     #endif    
      0;
     }
 #if defined MULTIWII_V24

@@ -375,6 +375,7 @@ uint8_t debugtext=0;
 uint8_t MSP_home_set=0;
 uint8_t variopitch=0;
 uint8_t MAVstatuslength;
+
 #if defined CORRECT_MSP_BF1
   uint8_t bfconfig[25];
 #endif
@@ -1620,42 +1621,68 @@ const PROGMEM char * const menu_on_off[] =
   configMsgON,
 };
 
-#ifdef MODETEXTMODE
-
-//Ordering to be resolved - for priority of confilicting modes
+#ifdef PROTOCOL_MSP
+#ifdef FIXEDWING
+const char msp_mode_ACRO[] PROGMEM   = "GYRO"; //Acrobatic: rate control
+#else
 const char msp_mode_ACRO[] PROGMEM   = "ACRO"; //Acrobatic: rate control
+#endif
+
 const char msp_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
 const char msp_mode_HOZN[] PROGMEM   = "HOZN"; //Horizon
 const char msp_mode_HOLD[] PROGMEM   = "HOLD"; //3D Hold
-const char msp_mode_2D[]   PROGMEM   = "2D  "; //2D Hold No alt hold
-const char msp_mode_HEAD[] PROGMEM   = "HEAD"; //Head
-const char msp_mode_FAIL[] PROGMEM   = "FAIL"; //Failsafe: auto control
+const char msp_mode_FAIL[] PROGMEM   = "!FS!"; //Failsafe: auto control
 const char msp_mode_WAYP[] PROGMEM   = "WAYP"; //Mission/Waypoint: auto control
-const char msp_mode_PASS[] PROGMEM   = "PASS"; //Passthrough
+const char msp_mode_PASS[] PROGMEM   = "MANU"; //Passthrough
 const char msp_mode_RTH[]  PROGMEM   = "RTL "; //Return to Launch: auto control
 const char msp_mode_LNCH[] PROGMEM   = "LNCH"; //Launch mode - or gone to lunch :)
 const char msp_mode_AIR[]  PROGMEM   = "AIR "; //Air mode
-const char msp_mode_MSP[]  PROGMEM   = "****"; //Unknown MSP mode
+const char msp_mode_MSP[]  PROGMEM   = ""; //Unknown MSP mode
+
+#ifdef FIXEDWING
+const char msp_mode_SYM_ACRO[] PROGMEM   = {SYM_ACROGY,SYM_ACRO1,0}; //Acrobatic: rate control
+#else
+const char msp_mode_SYM_ACRO[] PROGMEM   = {SYM_ACRO,SYM_ACRO1,0}; //Acrobatic: rate control
+#endif
+const char msp_mode_SYM_STAB[] PROGMEM   = {SYM_STABLE,SYM_STABLE1,0}; //Stabilize: hold level position
+const char msp_mode_SYM_HOZN[] PROGMEM   = {SYM_HORIZON,SYM_HORIZON1,0}; //Horizon
+const char msp_mode_SYM_HOLD[] PROGMEM   = {SYM_GHOLD,SYM_GHOLD1,0}; //3D Hold
+const char msp_mode_SYM_FAIL[] PROGMEM   = "!FS!"; //Failsafe: auto control
+const char msp_mode_SYM_WAYP[] PROGMEM   = {SYM_GMISSION,SYM_GMISSION1,0}; //Mission/Waypoint: auto control
+const char msp_mode_SYM_PASS[] PROGMEM   = {SYM_PASS,SYM_PASS1,0}; //Passthrough
+const char msp_mode_SYM_RTH[]  PROGMEM   = {SYM_GHOME,SYM_GHOME1,0}; //Return to Launch: auto control
+const char msp_mode_SYM_LNCH[] PROGMEM   = "LNCH"; //Launch mode - or gone to lunch :)
+const char msp_mode_SYM_AIR[]  PROGMEM   = {SYM_AIR,SYM_AIR1,0}; //Air mode
+const char msp_mode_SYM_MSP[]  PROGMEM   = {0}; //Unknown MSP mode
 
 const PROGMEM char * const msp_mode_index[] = 
 {   
- msp_mode_ACRO, //0
+ msp_mode_MSP, 
+ msp_mode_PASS, 
+ msp_mode_FAIL, 
+ msp_mode_RTH,
+ msp_mode_LNCH,
+ msp_mode_WAYP, 
+ msp_mode_HOLD,
  msp_mode_STAB,
  msp_mode_HOZN,
- msp_mode_BARO,
- msp_mode_MAG,
- msp_mode_RTH,
- msp_mode_HOLD,
- msp_mode_WAYP, 
- msp_mode_CAM, 
  msp_mode_AIR,
- msp_mode_LNCH, 
- msp_mode_2D, 
- msp_mode_FAIL, 
- msp_mode_PASS, 
- msp_mode_MSP, 
+ msp_mode_ACRO,
+
+ msp_mode_SYM_MSP, 
+ msp_mode_SYM_PASS, 
+ msp_mode_SYM_FAIL, 
+ msp_mode_SYM_RTH,
+ msp_mode_SYM_LNCH,
+ msp_mode_SYM_WAYP, 
+ msp_mode_SYM_HOLD,
+ msp_mode_SYM_STAB,
+ msp_mode_SYM_HOZN,
+ msp_mode_SYM_AIR,
+ msp_mode_SYM_ACRO,
+ 
 };
-#endif
+#endif // PROTOCOL_MSP
 
 #ifdef PROTOCOL_MAVLINK
 
