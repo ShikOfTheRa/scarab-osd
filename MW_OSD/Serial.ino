@@ -87,6 +87,51 @@ void mspWriteChecksum(){
   Serial.write(txChecksum);
 }
 
+void mspV2WriteRequest(uint16_t mspCommand, uint8_t txDataSize){
+  Serial.write('$');
+  Serial.write('X');
+  Serial.write('<');
+  txChecksum = 0;
+  mspV2Write8(0);
+  mspV2Write16(mspCommand);
+  mspV2Write16(txDataSize);
+  mspV2Write8(txChecksum);
+}
+
+void mspV2Write8(uint8_t a){
+  Serial.write(a);
+  txChecksum ^= a;
+  for (int ii = 0; ii < 8; ++ii){
+    if (txChecksum & 0x80){
+      txChecksum = (txChecksum << 1) ^ 0xD5;
+    }
+    else{
+      txChecksum = txChecksum << 1;
+    }
+  }
+}
+
+void mspV2Write16(uint16_t t){
+  mspV2Write8(t);
+  mspV2Write8(t>>8);
+}
+
+uint8_t crc8_dvb_s2_tx(uint8_t crc, unsigned char a, uint8_t crcversion)
+{
+  crc ^= a;
+  if (crcversion == 2){   
+    for (int ii = 0; ii < 8; ++ii){
+      if (crc & 0x80){
+        crc = (crc << 1) ^ 0xD5;
+      }
+      else{
+        crc = crc << 1;
+      }
+    }
+  }
+    txChecksum=crc;
+}
+
 // Writes to GUI (OSD_xxx) is distinguished from writes to FC (MSP_xxx) by
 // cfgWrite*() and mspWrite*().
 //
@@ -548,7 +593,11 @@ if (cmdMSP==MSP_STATUS)
   {
     MwVBat=read8();
     pMeterSum=read16();
-    MwRssi = read16();
+    #ifdef DUALRSSI
+      FCRssi = read16();
+    #else
+      MwRssi = read16();
+    #endif      
     MWAmperage = (int16_t)read16();
     if(!Settings[S_MWAMPERAGE]) {
       pMeterSum=0;
@@ -860,7 +909,6 @@ if (cmdMSP==MSP_STATUS)
     flags.box=1;
     uint32_t bit = 1;
     uint8_t remaining = dataSize;
-
     memset(&mode, 0, sizeof(mode));
 
     while(remaining > 0) {
@@ -1573,16 +1621,7 @@ uint8_t crc8_dvb_s2(uint8_t crc, unsigned char a, uint8_t crcversion)
       }
     }
   }
-    rcvChecksum=crc;
-//  return crc;
-
-/*
-if ((rcvChecksum !=0)&& (crcversion == 2)) debug[0]++;
-if ((rcvChecksum ==0)&& (crcversion == 2)) debug[1]++;
-if ((rcvChecksum !=0)&& (crcversion == 1)) debug[2]++;
-if ((rcvChecksum ==0)&& (crcversion == 1)) debug[3]++;
-*/
-
+    rcvChecksum=crc; //  return crc;
 }
 
 

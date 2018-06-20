@@ -246,7 +246,7 @@ void serialMAVCheck() {
         MwAltitude = (int32_t) GPS_altitude * 100;
 //        MwAltitude = (int32_t) serialbufferfloat(8) * 100; //dev to displa AMSL
       #endif
-      mw_mav.throttle = (int16_t)((serialBuffer[18] | serialBuffer[19] << 8)+1000);
+      mw_mav.throttle = (int16_t)(((serialBuffer[18] | serialBuffer[19] << 8)*10)+1000);
       break;
     case MAVLINK_MSG_ID_ATTITUDE:
       MwAngle[0] = (int16_t)(serialbufferfloat(4) * 57.2958 * 10);  // rad-->0.1deg
@@ -276,10 +276,6 @@ void serialMAVCheck() {
       break;
 #ifdef MAV_RTC
     case MAVLINK_MSG_ID_SYSTEM_TIME:
-      debug[0]=(uint16_t)(serialBuffer[0] | serialBuffer[1] << 8);
-      debug[1]=(uint16_t)(serialBuffer[2] | serialBuffer[3] << 8);
-      debug[2]=(uint16_t)(serialBuffer[4] | serialBuffer[5] << 8);
-      debug[3]=(uint16_t)(serialBuffer[6] | serialBuffer[7] << 8);
        for (uint8_t i = 0; i < 8; i++) {
         b[i] = serialBuffer[i];
       }
@@ -291,7 +287,11 @@ void serialMAVCheck() {
       break;
 #endif
     case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
-      MwRssi = (uint16_t)(((102) * serialBuffer[21]) / 10);
+      #ifdef DUALRSSI
+        FCRssi = serialBuffer[21];
+      #else
+        MwRssi = (uint16_t)(((102) * serialBuffer[21]) / 10);
+      #endif   
       if (serialBuffer[20]!=0)
         break;
       for (uint8_t i = 0; i < 8; i++)
@@ -305,7 +305,11 @@ void serialMAVCheck() {
       handleRawRC();
       break;
     case MAVLINK_MSG_ID_RC_CHANNELS:
-      MwRssi = (uint16_t)(((102) * serialBuffer[41]) / 10);
+      #ifdef DUALRSSI
+        FCRssi = serialBuffer[41];
+      #else
+        MwRssi = (uint16_t)(((102) * serialBuffer[41]) / 10);
+      #endif   
       for (uint8_t i = 0; i < TX_CHANNELS; i++)
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
         #if defined (TX_GUI_CONTROL)
