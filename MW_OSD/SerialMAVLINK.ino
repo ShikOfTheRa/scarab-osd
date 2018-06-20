@@ -246,7 +246,7 @@ void serialMAVCheck() {
         MwAltitude = (int32_t) GPS_altitude * 100;
 //        MwAltitude = (int32_t) serialbufferfloat(8) * 100; //dev to displa AMSL
       #endif
-      mw_mav.throttle = (int16_t)((serialBuffer[18] | serialBuffer[19] << 8)+1000);
+      mw_mav.throttle = (int16_t)(((serialBuffer[18] | serialBuffer[19] << 8)*10)+1000);
       break;
     case MAVLINK_MSG_ID_ATTITUDE:
       MwAngle[0] = (int16_t)(serialbufferfloat(4) * 57.2958 * 10);  // rad-->0.1deg

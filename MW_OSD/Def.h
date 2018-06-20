@@ -52,7 +52,8 @@
   //#define MSPV2  
   //#define USE_AIRSPEED_SENSOR
   //#undef GPSTIME
-  
+  //#define MAV_ALT_THROTTLE          // Use alternative MAV throttle value. Not raw RC channel.
+ 
 
 //#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.2.0 at time of this MWOSD release)
