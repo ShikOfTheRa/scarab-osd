@@ -613,7 +613,7 @@ DEF_S_RCWSWITCH,   // S_RCWSWITCH,
 0,      // S_ELEVATIONS,
 0,      // S_ALTRESOLUTION 
 0,      // S_FLIGHTMODETEXT
-0,      // S_BRIGHTNESS
+1,      // S_BRIGHTNESS
 6,      // S_MAV_ALARMLEVEL
 0,      // S_GLIDESCOPE - not used
 0,      // S_LOSTMODEL - not used
