@@ -948,7 +948,12 @@ void display_speed(int16_t t_value, uint8_t t_position, uint8_t t_leadicon)
     if ((xx > Settings[S_SPEED_ALARM]) && (timer.Blink2hz))
       return;
   }
+#ifdef DISPLAYSPEEDMS
+  xx = t_value * 0.01;           // From MWii cm/sec to m/sec
+  displayItem(t_position, xx, t_leadicon, SYM_MS, 0 );
+#else
   displayItem(t_position, xx, t_leadicon, speedUnitAdd[Settings[S_UNITSYSTEM]], 0 );
+#endif
 }
 
 
