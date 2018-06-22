@@ -647,18 +647,18 @@ void loop()
         displayHeadingGraph();
         displayHeading();
 #if defined SUBMERSIBLE
-#if defined USEMS5837
+ #if defined USEMS5837
         MwAltitude = (float)100 * MS5837sensor.depth();
-#endif
-        displaySUBMERSIBLEAltitude();
+ #endif //USEMS5837
         if (millis() > timer.fwAltitudeTimer) { // To make vario from Submersible altitude
           timer.fwAltitudeTimer += 1000;
           MwVario = MwAltitude - previousfwaltitude;
           previousfwaltitude = MwAltitude;
         }
-#else
-        displayAltitude();
-#endif
+#endif // SUBMERSIBLE
+
+        displayAltitude(((int32_t)GPS_altitude*10),MwGPSAltPosition,SYM_GPS_ALT);
+        displayAltitude(MwAltitude/10,MwAltitudePosition,SYM_ALT);
         displayClimbRate();
         displayVario();
         displayNumberOfSat();
@@ -667,14 +667,6 @@ void loop()
         displayDistanceTotal();
         displayDistanceMax();
         displayAngleToHome();
-#if defined MAVSENSORGPSACTIVE && defined APM
-        if (GPS_altitude < Settings[S_ALTRESOLUTION]) // display sensor distance when GPS below this value
-          displayMAVAltitude();
-        else
-          displayGPSAltitude();
-#else
-        displayGPSAltitude();
-#endif
         displayGPSdop();
         // displayfwglidescope(); //note hook for this is in display horizon function
         display_speed(GPS_speed, GPS_speedPosition, SYM_SPEED_GPS);

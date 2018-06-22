@@ -528,6 +528,7 @@ uint16_t Settings16[EEPROM16_SETTINGS];
   #define DEF_S_TX_TYPE 1        // 1
   #define DEF_S_RCWSWITCH 1      // S_RCWSWITCH,
   #define DEF_S_RCWSWITCH_CH 8   // S_RCWSWITCH_CH,
+  #define DEF_S_ALTRESOLUTION 0
 #else
   #define DEF_S_MAINVOLTAGE_VBAT 0
   #define DEF_S_TX_TYPE 0
@@ -536,6 +537,7 @@ uint16_t Settings16[EEPROM16_SETTINGS];
   #define DEF_S_TX_TYPE 0
   #define DEF_S_RCWSWITCH 0
   #define DEF_S_RCWSWITCH_CH 8
+  #define DEF_S_ALTRESOLUTION 10
 #endif
 
 #if defined (UBLOX) || defined iNAV  || defined (MAV_RTC)
@@ -611,7 +613,7 @@ DEF_S_RCWSWITCH,   // S_RCWSWITCH,
 0x20,   // S_CS9,
 0,      // S_PWM_PPM,
 0,      // S_ELEVATIONS,
-0,      // S_ALTRESOLUTION 
+DEF_S_ALTRESOLUTION,     // S_ALTRESOLUTION 
 0,      // S_FLIGHTMODETEXT
 1,      // S_BRIGHTNESS
 6,      // S_MAV_ALARMLEVEL

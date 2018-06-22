@@ -254,9 +254,9 @@ void displayMode(void)
   else {
     flightmode = 10;
   }
-  uint8_t t_flightmodetext = 11;
-  if (Settings[S_FLIGHTMODETEXT]){
-    t_flightmodetext=0;
+  uint8_t t_flightmodetext = 0;
+  if (Settings[S_FLIGHTMODETEXT]) {
+    t_flightmodetext = 11;
   }
   strcpy_P(screenBuffer, (char*)pgm_read_word(&(msp_mode_index[flightmode + t_flightmodetext])));
 #endif  //PROTOCOL selection
@@ -774,18 +774,18 @@ void displayRSSI(void)
 {
   if (rssi < rssiMIN && rssi > 0)
     rssiMIN = rssi;
-  #ifdef DUALRSSI
-    displayItem(rssiPosition, rssi, SYM_RSSI, '%', 0 );
-    screenBuffer[0] = SYM_RSSI;
-    uint8_t t_FCRssi= map(FCRssi,0,DUALRSSI,0,100);
-    itoa(t_FCRssi,screenBuffer+1,10);
-    uint8_t xx = FindNull();
-    screenBuffer[xx++] = '%';
-    screenBuffer[xx] = 0;
-    MAX7456_WriteString(screenBuffer,getPosition(rssiPosition)+30);
-  #else
-    displayItem(rssiPosition, rssi, SYM_RSSI, '%', 0 );
-  #endif  
+#ifdef DUALRSSI
+  displayItem(rssiPosition, rssi, SYM_RSSI, '%', 0 );
+  screenBuffer[0] = SYM_RSSI;
+  uint8_t t_FCRssi = map(FCRssi, 0, DUALRSSI, 0, 100);
+  itoa(t_FCRssi, screenBuffer + 1, 10);
+  uint8_t xx = FindNull();
+  screenBuffer[xx++] = '%';
+  screenBuffer[xx] = 0;
+  MAX7456_WriteString(screenBuffer, getPosition(rssiPosition) + 30);
+#else
+  displayItem(rssiPosition, rssi, SYM_RSSI, '%', 0 );
+#endif
 }
 
 
@@ -881,70 +881,27 @@ void displayGPSPosition(void)
 #endif
 
 
-void displayAltitude(void)
-{
-  int16_t altitude;
-  if (Settings[S_UNITSYSTEM])
-    altitude = MwAltitude * 0.032808;  // cm to feet
-  else
-    altitude = MwAltitude / 100;       // cm to mt
-
-  if (armed && allSec > 5 && altitude > altitudeMAX)
-    altitudeMAX = altitude;
+void displayAltitude(int32_t t_alt10, int16_t t_pos, uint8_t t_icon) { // alt sent as dm
+  int32_t t_alt = t_alt10 / 10;
+  if (Settings[S_UNITSYSTEM]) {
+    t_alt10 = (float) (0.32808 * t_alt); // convert to imperial dm
+  }
+  if (armed && (allSec > 5) && ((t_alt / 10) > altitudeMAX)) { // not sure why 5 secs...
+    altitudeMAX = t_alt;
+  }
+  if (Settings[S_ALTITUDE_ALARM] > 0) {
+    if (((t_alt / 1000) >= Settings[S_ALTITUDE_ALARM]) && (timer.Blink2hz)) {
+      return;
+    }
+  }
   if (!fieldIsVisible(MwAltitudePosition))
     return;
-  if (Settings[S_ALTITUDE_ALARM] > 0) {
-    if (((altitude / 100) >= Settings[S_ALTITUDE_ALARM]) && (timer.Blink2hz))
-      return;
+  if (t_alt < Settings[S_ALTRESOLUTION]) {
+    displayItem(t_pos, t_alt10, SYM_AGL, UnitsIcon[Settings[S_UNITSYSTEM] + 0], 1 );
   }
-  formatDistance(altitude, 1, 0, SYM_ALT);
-  MAX7456_WriteString(screenBuffer, getPosition(MwAltitudePosition));
-#ifdef SHOW_MAX_ALTITUDE
-  formatDistance(altitudeMAX, 1, 0, SYM_MAX);
-  MAX7456_WriteString(screenBuffer, getPosition(MwAltitudePosition) + LINE);
-#endif //SHOW_MAX_ALTITUDE
-}
-
-
-void displayGPSAltitude(void) {
-  if (!fieldIsVisible(MwGPSAltPosition))
-    return;
-  int32_t xx;
-  if (Settings[S_UNITSYSTEM])
-    xx = GPS_altitude * 3.2808; // Mt to Feet
-  else
-    xx = GPS_altitude;          // Mt
-
-  if (Settings[S_ALTITUDE_ALARM] > 0) {
-    if (((xx / 100) >= Settings[S_ALTITUDE_ALARM]) && (timer.Blink2hz))
-      return;
+  else {
+    displayItem(t_pos, t_alt, t_icon, UnitsIcon[Settings[S_UNITSYSTEM] + 0], 0 );
   }
-  formatDistance(xx, 1, 0, SYM_GPS_ALT);
-  MAX7456_WriteString(screenBuffer, getPosition(MwGPSAltPosition));
-}
-
-
-void displayMAVAltitude(void) {
-  if (!fieldIsVisible(MwGPSAltPosition))
-    return;
-  int32_t xx;
-  if (Settings[S_UNITSYSTEM])
-    xx = MAV_altitude * 0.32808;  // in ft*10
-  else
-    xx = MAV_altitude / 10  ;     // in cm*10
-  displayItem(MwGPSAltPosition, xx, SYM_AGL, UnitsIcon[Settings[S_UNITSYSTEM] + 0], 1 );
-}
-
-
-void displaySUBMERSIBLEAltitude(void) {
-  if (!fieldIsVisible(MwAltitudePosition))
-    return;
-  int32_t xx;
-  if (Settings[S_UNITSYSTEM])
-    xx = MwAltitude * 0.32808;  // in ft*10
-  else
-    xx = MwAltitude / 10  ;     // in m*10
-  displayItem(MwAltitudePosition, xx, SYM_AGL, UnitsIcon[Settings[S_UNITSYSTEM] + 0], 1 );
 }
 
 

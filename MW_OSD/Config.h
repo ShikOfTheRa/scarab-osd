@@ -372,7 +372,6 @@
 #define SHOW_MAX_SPEED              // Enable to display MAX speed achieved
 #define SHOW_MAX_DISTANCE           // Enable to display MAX distance achieved
 #define SHOW_TOTAL_DISTANCE         // Enable to display TOTAL distance achieved
-//#define SHOW_MAX_ALTITUDE         // Enable to display MAX altitude achieved on line below current altitude
 
 
 /********************  THROTTLE calibration  settings      *********************/
@@ -436,11 +435,6 @@
 //#define ADVANCEDSAVE              // Enables saving of advanced paramters where supported (Looptime/profile)
 //#define FIXEDLOOP                 // Enables 1ms loop max for consistency
 
-
-/********************           Under developement           *********************/
-// development and test
-//#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
-//#define MAV_ADSB                  // Use Baro altitude from mavlink instead of GPS. Requires ADSB data to be configured in mavlink.
 
 
 
