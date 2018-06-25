@@ -212,7 +212,7 @@ void serialMAVCheck() {
         }
       }
       if (Settings[S_MAV_AUTO]>0) {
-        static uint8_t mavreqdone = 5;
+        static uint8_t mavreqdone = MAV_STREAMS;
         if (mavreqdone > 0) {
           request_mavlink_rates();
           mavreqdone--;
