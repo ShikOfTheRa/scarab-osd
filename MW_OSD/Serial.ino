@@ -466,8 +466,10 @@ if (cmdMSP==MSP_STATUS)
 
   if (cmdMSP==MSP_RC)
   {
-    for(uint8_t i=1;i<=TX_CHANNELS;i++)
+    for(uint8_t i=1;i<=TX_CHANNELS;i++){
       MwRcData[i] = read16();
+      MwRcData[i]=constrain(MwRcData[i],1000,2000);
+    }
     handleRawRC();
   }
 

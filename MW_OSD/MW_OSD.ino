@@ -1253,8 +1253,8 @@ void ProcessSensors(void) {
 
   //-------------- Current
   if (Settings[S_MWAMPERAGE] == 2) { // Virtual
-    uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK], LowT, HighT);
-    Vthrottle = constrain((Vthrottle - 1000) / 10, 0, 100);
+    uint32_t Vthrottle = map(MwRcData[THROTTLESTICK], LowT, HighT, 0, 100);
+    Vthrottle = constrain(Vthrottle, 0, 100);
     amperage = (Vthrottle + (Vthrottle * Vthrottle * 0.02)) * Settings16[S16_AMPDIVIDERRATIO] * 0.01;
     if (armed)
       amperage += Settings16[S16_AMPZERO];

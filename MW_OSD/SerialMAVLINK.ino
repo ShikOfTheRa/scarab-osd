@@ -345,8 +345,10 @@ void serialMAVCheck() {
 #endif
       if (serialBuffer[20] != 0)
         break;
-      for (uint8_t i = 0; i < 8; i++)
+      for (uint8_t i = 0; i < 8; i++){
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
+        MwRcData[i]=constrain(MwRcData[i],1000,2000);
+      }
 #if defined (TX_GUI_CONTROL)
       reverseChannels();
 #endif // TX_PRYT
