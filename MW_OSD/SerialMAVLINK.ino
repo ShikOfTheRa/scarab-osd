@@ -72,6 +72,52 @@ void mav_serialize32(uint16_t val) {
 }
 
 
+void request_PX4_MAVLINK_messages() {
+#define MAV_CMD_MAX 12
+  const uint8_t MAVCMD[MAV_CMD_MAX] = {
+    MAVLINK_MSG_ID_HEARTBEAT,
+    MAVLINK_MSG_ID_VFR_HUD,
+    MAVLINK_MSG_ID_ATTITUDE,
+    MAVLINK_MSG_ID_GPS_RAW_INT,
+    MAVLINK_MSG_ID_SYSTEM_TIME,
+    MAVLINK_MSG_ID_RC_CHANNELS,
+    MAVLINK_MSG_ID_WIND,
+    MAVLINK_MSG_ID_STATUSTEXT,
+    MAVLINK_MSG_ID_SCALED_PRESSURE2,
+    MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT,
+    MAVLINK_MSG_ID_MISSION_CURRENT,
+    MAVLINK_MSG_ID_SYS_STATUS
+  };
+  const uint8_t MAVRates[MAV_CMD_MAX] = {
+    0x01, 0x05, 0x0A, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02
+  };
+  for (int i = 0; i < MAV_CMD_MAX; i++) {
+    PX4_mavlink_msg_request_send(MAVCMD[i], MAVRates[i]);
+  }
+}
+
+
+void PX4_mavlink_msg_request_send(uint16_t MAV_cmd,uint8_t MAV_cmd_hz) {
+  //head:
+  static int8_t tx_sequence = 0;
+  tx_sequence++;
+  mw_mav.tx_checksum = 0xFFFF; //init
+  Serial.write(0xFE);
+  mav_serialize8(6);
+  mav_serialize8(tx_sequence);
+  mav_serialize8(99);
+  mav_serialize8(99);
+  mav_serialize8(MAVLINK_MSG_ID_MESSAGE_INTERVAL);
+  //body:
+  mav_serialize32(1000000 * MAV_cmd_hz);
+  mav_serialize16(MAV_cmd);
+  //tail:
+  mav_tx_checksum_func(MAVLINK_MSG_ID_REQUEST_DATA_STREAM_MAGIC);
+  Serial.write((uint8_t)(mw_mav.tx_checksum & 0xFF));
+  Serial.write((uint8_t)(mw_mav.tx_checksum >> 8 & 0xFF));
+}
+
+
 void mavlink_msg_request_data_stream_send(uint8_t MAVStreams, uint16_t MAVRates) {
   //head:
   static int8_t tx_sequence = 0;
@@ -211,10 +257,15 @@ void serialMAVCheck() {
 #endif
         }
       }
-      if (Settings[S_MAV_AUTO]>0) {
+      if (Settings[S_MAV_AUTO] > 0) {
         static uint8_t mavreqdone = MAV_STREAMS;
         if (mavreqdone > 0) {
+#ifdef PX4
+          request_PX4_MAVLINK_messages();
+#else
           request_mavlink_rates();
+#endif
+
           mavreqdone--;
         }
       }
