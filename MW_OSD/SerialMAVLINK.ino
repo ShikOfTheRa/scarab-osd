@@ -92,27 +92,36 @@ void request_PX4_MAVLINK_messages() {
     0x01, 0x05, 0x0A, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02
   };
   for (int i = 0; i < MAV_CMD_MAX; i++) {
-    PX4_mavlink_msg_request_send(MAVCMD[i], MAVRates[i]);
+    PX4_mavlink_msg_command_long_send(MAVCMD[i], MAVRates[i]);
   }
 }
 
 
-void PX4_mavlink_msg_request_send(uint16_t MAV_cmd,uint8_t MAV_cmd_hz) {
+void PX4_mavlink_msg_command_long_send(uint8_t MAV_cmd,uint8_t MAV_cmd_hz) {
   //head:
   static int8_t tx_sequence = 0;
   tx_sequence++;
   mw_mav.tx_checksum = 0xFFFF; //init
   Serial.write(0xFE);
-  mav_serialize8(6);
+  mav_serialize8(MAVLINK_MSG_ID_COMMAND_LONG_LEN);
   mav_serialize8(tx_sequence);
   mav_serialize8(99);
   mav_serialize8(99);
-  mav_serialize8(MAVLINK_MSG_ID_MESSAGE_INTERVAL);
+  mav_serialize8(MAVLINK_MSG_ID_COMMAND_LONG);  
   //body:
-  mav_serialize32(1000000 * MAV_cmd_hz);
-  mav_serialize16(MAV_cmd);
+  mav_serialize32(MAV_cmd);
+  mav_serialize32(1000000*MAV_cmd_hz);  
+  mav_serialize32(0);
+  mav_serialize32(0);  
+  mav_serialize32(0);
+  mav_serialize32(0);
+  mav_serialize32(0);  
+  mav_serialize16(MAV_CMD_SET_MESSAGE_INTERVAL);
+  mav_serialize8(Settings[S_MAV_SYS_ID]);
+  mav_serialize8(MAV_COM_ID);
+  mav_serialize8(0);  
   //tail:
-  mav_tx_checksum_func(MAVLINK_MSG_ID_REQUEST_DATA_STREAM_MAGIC);
+  mav_tx_checksum_func(MAVLINK_MSG_ID_COMMAND_LONG_MAGIC);
   Serial.write((uint8_t)(mw_mav.tx_checksum & 0xFF));
   Serial.write((uint8_t)(mw_mav.tx_checksum >> 8 & 0xFF));
 }
@@ -124,7 +133,7 @@ void mavlink_msg_request_data_stream_send(uint8_t MAVStreams, uint16_t MAVRates)
   tx_sequence++;
   mw_mav.tx_checksum = 0xFFFF; //init
   Serial.write(0xFE);
-  mav_serialize8(6);
+  mav_serialize8(MAVLINK_MSG_ID_REQUEST_DATA_STREAM_LEN);
   mav_serialize8(tx_sequence);
   mav_serialize8(99);
   mav_serialize8(99);
@@ -257,8 +266,8 @@ void serialMAVCheck() {
 #endif
         }
       }
-      if (Settings[S_MAV_AUTO] > 0) {
-        static uint8_t mavreqdone = MAV_STREAMS;
+      if (Settings[S_MAV_AUTO] >= 0) {
+        static uint8_t mavreqdone = 30;
         if (mavreqdone > 0) {
 #ifdef PX4
           request_PX4_MAVLINK_messages();
