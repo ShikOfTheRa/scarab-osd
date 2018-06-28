@@ -64,6 +64,7 @@ void mav_serialize16(uint16_t val) {
   mav_serialize8((val >> 8) & 0xFF);
 }
 
+
 void mav_serialize32(uint16_t val) {
   mav_serialize8((val   ) & 0xFF);
   mav_serialize8((val >> 8) & 0xFF);
@@ -72,9 +73,9 @@ void mav_serialize32(uint16_t val) {
 }
 
 
-void request_PX4_MAVLINK_messages() {
+void request_mavlink_packets_PX4() {
 #define MAV_CMD_MAX 12
-  const uint8_t MAVCMD[MAV_CMD_MAX] = {
+  const uint8_t MavCmd[MAV_CMD_MAX] = {
     MAVLINK_MSG_ID_HEARTBEAT,
     MAVLINK_MSG_ID_VFR_HUD,
     MAVLINK_MSG_ID_ATTITUDE,
@@ -88,46 +89,65 @@ void request_PX4_MAVLINK_messages() {
     MAVLINK_MSG_ID_MISSION_CURRENT,
     MAVLINK_MSG_ID_SYS_STATUS
   };
-  const uint8_t MAVRates[MAV_CMD_MAX] = {
+  const uint8_t MavRates[MAV_CMD_MAX] = {
     0x01, 0x05, 0x0A, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02
   };
   for (int i = 0; i < MAV_CMD_MAX; i++) {
-    PX4_mavlink_msg_command_long_send(MAVCMD[i], MAVRates[i]);
+    request_mavlink_CMD_PX4(MavCmd[i], MavRates[i]);
   }
 }
 
 
-void PX4_mavlink_msg_command_long_send(uint8_t MAV_cmd,uint8_t MAV_cmd_hz) {
+void request_mavlink_packets_APM() {
+  const uint8_t MavStream[MAV_STREAMS] = {
+    MAV_DATA_STREAM_RAW_SENSORS,
+    MAV_DATA_STREAM_EXTENDED_STATUS,
+    MAV_DATA_STREAM_RC_CHANNELS,
+    MAV_DATA_STREAM_POSITION,
+    MAV_DATA_STREAM_EXTRA1,
+    MAV_DATA_STREAM_EXTRA2,
+    MAV_DATA_STREAM_EXTRA3
+  };
+  const uint16_t MavRate[MAV_STREAMS] = {
+    0x02, 0x02, 0x02, 0x02, 0x0A, 0x05, 0X02
+  };
+  for (int i = 0; i < MAV_STREAMS; i++) {
+    request_mavlink_CMD_APM(MavStream[i], MavRate[i]);
+  }
+}
+
+
+void request_mavlink_CMD_PX4(uint8_t MavCmd, uint8_t MavRate) {
   //head:
   static int8_t tx_sequence = 0;
   tx_sequence++;
   mw_mav.tx_checksum = 0xFFFF; //init
   Serial.write(0xFE);
-  mav_serialize8(MAVLINK_MSG_ID_COMMAND_LONG_LEN);
-  mav_serialize8(tx_sequence);
-  mav_serialize8(99);
-  mav_serialize8(99);
-  mav_serialize8(MAVLINK_MSG_ID_COMMAND_LONG);  
+  mav_serialize8(MAVLINK_MSG_ID_COMMAND_LONG_LEN); //33
+  mav_serialize8(tx_sequence);// incrementing
+  mav_serialize8(99); //me
+  mav_serialize8(99); //me
+  mav_serialize8(MAVLINK_MSG_ID_COMMAND_LONG); //76
   //body:
-  mav_serialize32(MAV_cmd);
-  mav_serialize32(1000000*MAV_cmd_hz);  
-  mav_serialize32(0);
-  mav_serialize32(0);  
+  mav_serialize32(MavCmd); // commands - e.g. 0 = heartbeat
+  mav_serialize32(1000000 * MavRate);  // 1000000 * MavRate - interval in microsecs. 0 = default, -1 = disabled
   mav_serialize32(0);
   mav_serialize32(0);
-  mav_serialize32(0);  
-  mav_serialize16(MAV_CMD_SET_MESSAGE_INTERVAL);
-  mav_serialize8(Settings[S_MAV_SYS_ID]);
-  mav_serialize8(MAV_COM_ID);
-  mav_serialize8(0);  
+  mav_serialize32(0);
+  mav_serialize32(0);
+  mav_serialize32(0);
+  mav_serialize16(MAV_CMD_SET_MESSAGE_INTERVAL); //511
+  mav_serialize8(Settings[S_MAV_SYS_ID]); //1 default
+  mav_serialize8(MAV_COM_ID); //1
+  mav_serialize8(tx_sequence); // 0=first sending of message
   //tail:
-  mav_tx_checksum_func(MAVLINK_MSG_ID_COMMAND_LONG_MAGIC);
+  mav_tx_checksum_func(MAVLINK_MSG_ID_COMMAND_LONG_MAGIC); //152
   Serial.write((uint8_t)(mw_mav.tx_checksum & 0xFF));
   Serial.write((uint8_t)(mw_mav.tx_checksum >> 8 & 0xFF));
 }
 
 
-void mavlink_msg_request_data_stream_send(uint8_t MAVStreams, uint16_t MAVRates) {
+void request_mavlink_CMD_APM(uint8_t MAVStream, uint16_t MAVRate) {
   //head:
   static int8_t tx_sequence = 0;
   tx_sequence++;
@@ -139,34 +159,15 @@ void mavlink_msg_request_data_stream_send(uint8_t MAVStreams, uint16_t MAVRates)
   mav_serialize8(99);
   mav_serialize8(MAVLINK_MSG_ID_REQUEST_DATA_STREAM);
   //body:
-  mav_serialize16(MAVRates);
+  mav_serialize16(MAVRate);
   mav_serialize8(Settings[S_MAV_SYS_ID]);
   mav_serialize8(MAV_COM_ID);
-  mav_serialize8(MAVStreams);
+  mav_serialize8(MAVStream);
   mav_serialize8(1);
   //tail:
   mav_tx_checksum_func(MAVLINK_MSG_ID_REQUEST_DATA_STREAM_MAGIC);
   Serial.write((uint8_t)(mw_mav.tx_checksum & 0xFF));
   Serial.write((uint8_t)(mw_mav.tx_checksum >> 8 & 0xFF));
-}
-
-
-void request_mavlink_rates() {
-  const uint8_t MAVStreams[MAV_STREAMS] = {
-    MAV_DATA_STREAM_RAW_SENSORS,
-    MAV_DATA_STREAM_EXTENDED_STATUS,
-    MAV_DATA_STREAM_RC_CHANNELS,
-    MAV_DATA_STREAM_POSITION,
-    MAV_DATA_STREAM_EXTRA1,
-    MAV_DATA_STREAM_EXTRA2,
-    MAV_DATA_STREAM_EXTRA3
-  };
-  const uint16_t MAVRates[MAV_STREAMS] = {
-    0x02, 0x02, 0x02, 0x02, 0x0A, 0x05, 0X02
-  };
-  for (int i = 0; i < MAV_STREAMS; i++) {
-    mavlink_msg_request_data_stream_send(MAVStreams[i], MAVRates[i]);
-  }
 }
 
 
@@ -270,9 +271,9 @@ void serialMAVCheck() {
         static uint8_t mavreqdone = 30;
         if (mavreqdone > 0) {
 #ifdef PX4
-          request_PX4_MAVLINK_messages();
+          request_mavlink_packets_PX4();
 #else
-          request_mavlink_rates();
+          request_mavlink_packets_APM();
 #endif
 
           mavreqdone--;
@@ -354,9 +355,9 @@ void serialMAVCheck() {
 #endif
       if (serialBuffer[20] != 0)
         break;
-      for (uint8_t i = 0; i < 8; i++){
+      for (uint8_t i = 0; i < 8; i++) {
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
-        MwRcData[i]=constrain(MwRcData[i],1000,2000);
+        MwRcData[i] = constrain(MwRcData[i], 1000, 2000);
       }
 #if defined (TX_GUI_CONTROL)
       reverseChannels();
