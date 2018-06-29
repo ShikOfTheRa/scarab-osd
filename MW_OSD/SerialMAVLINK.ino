@@ -268,7 +268,7 @@ void serialMAVCheck() {
         }
       }
       if (Settings[S_MAV_AUTO] >= 0) {
-        static uint8_t mavreqdone = 30;
+        static uint8_t mavreqdone = 3;
         if (mavreqdone > 0) {
 #ifdef PX4
           request_mavlink_packets_PX4();
