@@ -1247,7 +1247,7 @@ void ProcessSensors(void) {
 #elif defined PROTOCOL_MAVLINK
 #else
   temperature = (sensorfilter[3][SENSORFILTERSIZE] >> 3) - TEMPZERO;
-  temperature = map (temperature, TEMPZERO, 1024, 0 , TEMPMAX);
+  temperature = map (temperature, 0, 1024, 0 , TEMPMAX);
 #endif
 #endif
 
