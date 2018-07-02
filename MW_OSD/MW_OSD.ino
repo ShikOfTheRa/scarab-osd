@@ -1246,8 +1246,8 @@ void ProcessSensors(void) {
   temperature = (float)(10 * MS5837sensor.temperature());
 #elif defined PROTOCOL_MAVLINK
 #else
-  temperature = (sensorfilter[3][SENSORFILTERSIZE] >> 3) - TEMPZERO;
-  temperature = map (temperature, 0, 1024, 0 , TEMPMAX);
+  temperature = (sensorfilter[3][SENSORFILTERSIZE] >> 3);
+  temperature = map (temperature, TEMPZERO, 1024, 0 , TEMPMAX);
 #endif
 #endif
 
