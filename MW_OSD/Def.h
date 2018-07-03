@@ -36,9 +36,9 @@
 //#define MAV_ADSB                  // Use Baro altitude from mavlink instead of GPS. Requires ADSB data to be configured in mavlink.
 
 
-#define DEVELOPMENT               // For development set only 
+//#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
-  #define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+  //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   //#define AIRBOTMICRO             // Uncomment this if using an airbot MicroOSD
   //#define EEPROMVER 16              // for eeprom layout verification
   //#define AEROMAX                 // Uncomment this if using MWOSD AEROMAX hardware
@@ -49,7 +49,7 @@
   //#define APM
   #define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
   //#define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-  #define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
+  //#define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
   #define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
   //#define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
   //#define INTRO_DELAY 1           // To speed up startup
@@ -917,7 +917,7 @@ enum {
     #define ATMEGASETHARDWAREPORTS DDRC &= B11110111;DDRD &= B11011111;
     #define INTD5    
     #undef  AUXPIN
-    #define AUXPIN    A2  // A6 for Aeromax hardware only        
+    #define AUXPIN    A6  // A6 for Aeromax hardware only        
 #elif defined AIRBOTMICRO
     #undef VOLTAGEPIN
     #undef VIDVOLTAGEPIN
