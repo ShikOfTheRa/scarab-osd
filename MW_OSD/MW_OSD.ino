@@ -1244,13 +1244,13 @@ void ProcessSensors(void) {
 #ifdef SHOW_TEMPERATURE
 #if defined USEMS5837
   temperature = (float)(10 * MS5837sensor.temperature());
-#elif defined PROTOCOL_MAVLINK && !defined HARDWARE_TEMERATURE_LM35
+#elif defined PROTOCOL_MAVLINK && !defined USE_TEMPERATURE_SENSOR
 #else
   temperature = (sensorfilter[3][SENSORFILTERSIZE] >> 3);
   if (Settings[S_VREFERENCE]) {
     temperature = (50*temperature)/11;
   }
-  temperature = map (temperature, TEMPCAL_0, TEMPCAL_100, 0 , 100);
+  temperature = map (temperature, S16_AUX_ZERO_CAL, S16_AUX_CAL, 0 , 100);
 #endif
 #endif
 
@@ -1440,11 +1440,11 @@ int32_t filter32F( float filtered, float raw, const byte k) {
 #if defined USE_AIRSPEED_SENSOR
 void useairspeed() {
 #define AIRDENSITY  1.225 // Density of air kg/m3
-  int16_t pressuresensor = (int16_t)(sensorfilter[3][SENSORFILTERSIZE] >> 3) - Settings16[S16_AIRSPEEDZERO];
+  int16_t pressuresensor = (int16_t)(sensorfilter[3][SENSORFILTERSIZE] >> 3) - Settings16[S16_AUX_ZERO_CAL];
   if (pressuresensor < 0) {
     pressuresensor = 0;
   }
-  pressuresensor = ((int32_t)pressuresensor * Settings16[S16_AIRSPEEDCAL]) / 500;
+  pressuresensor = ((int32_t)pressuresensor * Settings16[S16_AUX_CAL]) / 500;
   constrain(pressuresensor, -410, 410);
   int16_t Pa = map(pressuresensor, -410, 410, -2000, 2000); // Pressure - actual pascals
   AIR_speed = (int32_t)100 * sqrt((2 * Pa) / AIRDENSITY); // Speed required in cm/s
