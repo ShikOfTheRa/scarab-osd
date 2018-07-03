@@ -270,6 +270,7 @@
 #define OSDSUMMARY 30               // Seconds summary is displayed for after landing. Max 254
 //#define DUALRSSI 255              // Displays dual RSSI values (e.g. LQ and RRSI). Primary on line 1, Secondary on line 2. Configure primary as analog or PWM input. Secondary will be from FC. Value is max sent from FC. MWii - 1024, mavlink = 100 or 255
 //#define DISPLAYSPEEDMS            // Displays speed in m/s instead of km/h
+//#define PILOTICON                 // Disable to save memeory if unused. Display pilot ICON as an alternative to CHARACTER display. Requires enabling in GUI >= 1.8.2
 
 /********************       Power / efficiency display Settings         ************************/
 #define DISPLAYWATTS                // Disable to save memeory if not used. Enable this to display Watts
