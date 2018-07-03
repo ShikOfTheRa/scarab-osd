@@ -1247,10 +1247,7 @@ void ProcessSensors(void) {
 #elif defined PROTOCOL_MAVLINK && !defined USE_TEMPERATURE_SENSOR
 #else
   temperature = (sensorfilter[3][SENSORFILTERSIZE] >> 3);
-  if (Settings[S_VREFERENCE]) {
-    temperature = (50*temperature)/11;
-  }
-  temperature = map (temperature, S16_AUX_ZERO_CAL, S16_AUX_CAL, 0 , 100);
+  temperature = map (temperature, Settings16[S16_AUX_ZERO_CAL], Settings16[S16_AUX_CAL], 0 , 100);
 #endif
 #endif
 
