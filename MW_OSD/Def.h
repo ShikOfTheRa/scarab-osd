@@ -176,6 +176,7 @@
 
 #ifdef iNAV    //set up latest at time of release
 //  #define iNAV
+  #define MSPV2
 #endif
 
 #ifdef iNAV_KK // iNAV with KK VARIO
