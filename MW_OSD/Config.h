@@ -363,7 +363,7 @@
 /********************  TEMPERATURE  settings      *********************/
 // Documentation: https://github.com/ShikOfTheRa/scarab-osd/wiki/Temperature-probe
 #define SHOW_TEMPERATURE            // Disable to save memory if temerature not used
-//#define USE_TEMPERATURE_SENSOR   // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
+//#define USE_TEMPERATURE_SENSOR    // MAvlink users must enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED** 
 #define TEMPERATUREMAX 50           // Temperature warning value
 #define TEMPCAL_0      0            // Calibration value for 0 degrees C (range = 0-1024 as per arduino analogue value) 
 #define TEMPCAL_100    931          // Calibration value for 100 degrees C (range = 0-1024 as per arduino analogue value).  
