@@ -1244,10 +1244,13 @@ void ProcessSensors(void) {
 #ifdef SHOW_TEMPERATURE
 #if defined USEMS5837
   temperature = (float)(10 * MS5837sensor.temperature());
-#elif defined PROTOCOL_MAVLINK
+#elif defined PROTOCOL_MAVLINK && !defined HARDWARE_TEMERATURE_LM35
 #else
   temperature = (sensorfilter[3][SENSORFILTERSIZE] >> 3);
-  temperature = map (temperature, TEMPZERO, 1024, 0 , TEMPMAX);
+  if (Settings[S_VREFERENCE]) {
+    temperature = (50*temperature)/11;
+  }
+  temperature = map (temperature, TEMPCAL_0, TEMPCAL_100, 0 , 100);
 #endif
 #endif
 

@@ -361,10 +361,12 @@
 
 
 /********************  TEMPERATURE  settings      *********************/
-#define SHOW_TEMPERATURE            // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
+// Documentation: https://github.com/ShikOfTheRa/scarab-osd/wiki/Temperature-probe
+#define SHOW_TEMPERATURE            // Disable to save memory if temerature not used
+//#define HARDWARE_TEMERATURE_LM35  // Enable if you have a hardware temperature sensor - e.g. LM35 **UNTESTED**
 #define TEMPERATUREMAX 50           // Temperature warning value
-#define TEMPZERO 0                  // Temperature Zero calibration (range = 0-1024 :512 = 2.5v with vref of 5v and 0.55v for vref of 1.1v) 
-#define TEMPMAX  500                // Temperature when at sensor output at VCC. Might be  atheoreticla value 
+#define TEMPCAL_0      0            // Calibration value for 0 degrees C (range = 0-1024 as per arduino analogue value) 
+#define TEMPCAL_100    931          // Calibration value for 100 degrees C (range = 0-1024 as per arduino analogue value).  
 
 
 /********************  RECORD CAPTURE  settings      *********************/
