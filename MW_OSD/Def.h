@@ -593,12 +593,21 @@
 #endif
 #if defined GPSOSD_UBLOX
   #define UBLOX
+  #ifndef ROTORCRAFT
+    #define FIXEDWING
+  #endif
 #endif
 #if defined GPSOSD_NMEA
   #define NMEA
+  #ifndef ROTORCRAFT
+    #define FIXEDWING
+  #endif
 #endif
 #if defined GPSOSD_MTK
   #define MTK
+  #ifndef ROTORCRAFT
+    #define FIXEDWING
+  #endif
 #endif
 
 
