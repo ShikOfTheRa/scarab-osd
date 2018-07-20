@@ -47,8 +47,8 @@
   //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
   //#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
   //#define APM
-  #define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
-  //#define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
+  //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
+  #define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
   //#define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
   #define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
   //#define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
@@ -1094,7 +1094,7 @@ enum {
 #if defined MSP_SPEED_HIGH
   #define hi_speed_cycle  10  // updates everything approx 6.3 times per second, updates attitude 30 times per second
 #elif defined MSP_SPEED_MED
-  #define hi_speed_cycle  50  // same as low, but also updates attitude 10 times per second
+  #define hi_speed_cycle  30  // same as low, but also updates attitude 10 times per second
 #else
   #define hi_speed_cycle  30  // updates everything approx 3 times per second
 #endif

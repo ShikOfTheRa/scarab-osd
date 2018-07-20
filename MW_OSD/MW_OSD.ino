@@ -387,7 +387,7 @@ void loop()
 #endif //GPSOSD
   }  // End of slow Timed Service Routine (100ms loop)
 
-  if ((currentMillis - previous_millis_high) >= hi_speed_cycle) // 20 Hz or 100hz in MSP high mode
+  if ((currentMillis - previous_millis_high) >= hi_speed_cycle) // 33 Hz or 100hz in MSP high mode.
   {
     previous_millis_high = previous_millis_high + hi_speed_cycle;
     uint16_t MSPcmdsend = 0;
@@ -919,6 +919,7 @@ void setMspRequests() {
       REQ_MSP_RC_TUNING |
       REQ_MSP_PID_CONTROLLER |
       REQ_MSP_ANALOG |
+      REQ_MSP_RC|
 #ifdef USE_MSP_PIDNAMES
       REQ_MSP_PIDNAMES |
 #endif
@@ -944,9 +945,6 @@ void setMspRequests() {
 #ifdef MENU_FIXEDWING
       REQ_MSP_FW_CONFIG |
 #endif
-#if defined MSP_RTC_SUPPORT && defined GPSTIME
-      REQ_MSP_RTC |
-#endif
 #ifdef USE_FC_VOLTS_CONFIG
 #if defined(CLEANFLIGHT) || defined(BETAFLIGHT)
       REQ_MSP_VOLTAGE_METER_CONFIG |
@@ -954,10 +952,7 @@ void setMspRequests() {
       REQ_MSP_MISC |
 #endif
 #endif
-#ifdef MSPV2
-      REQ_MSP2_INAV_AIR_SPEED |
-#endif
-      REQ_MSP_RC;
+      0;
   }
   else {
     modeMSPRequests =
@@ -983,8 +978,12 @@ void setMspRequests() {
 #endif
 #ifdef MSP_USE_ANALOG
       REQ_MSP_ANALOG |
-#endif //MSP_USE_ANALOG     
-      REQ_MSP_RC;
+#endif //MSP_USE_ANALOG  
+#ifdef MSPV2
+      REQ_MSP2_INAV_AIR_SPEED |
+#endif
+      0;
+
     if (!armed) {
       modeMSPRequests |= REQ_MSP_BOX |
 #if defined INTRO_FC && defined PROTOCOL_MSP
@@ -1000,9 +999,6 @@ void setMspRequests() {
 #ifdef MSP_RTC_SUPPORT
                          REQ_MSP_RTC |
 #endif // MSP_RTC_SUPPORT
-#ifdef MSPV2
-                         REQ_MSP2_INAV_AIR_SPEED |
-#endif
                          0;
     }
 #if defined MULTIWII_V24
