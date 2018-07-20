@@ -2430,21 +2430,22 @@ void setDateTime(void)
   }
 }
 
+
 void updateDateTime(void)
 {
-  //datetime.unixtime=1527712200; // 30/05/2018 @ 8:30 UTC
+  //datetime.unixtime=1527712200; // 30/05/2018 @ 8:30 UTC for testing
   datetime.unixtime++;
-  uint32_t t_time = datetime.unixtime;
-  uint8_t  t_year;
-  uint8_t  t_month;
-  uint8_t  t_monthsize;
-  uint32_t t_days;
+  uint32_t t_time = datetime.unixtime  - 946684800;
+  uint8_t  t_year=0;
+  uint8_t  t_month=0;
+  uint8_t  t_monthsize=0;
+  uint32_t t_days=0;
   static const uint8_t daysinmonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-#define LEAP_YEAR(Y)     ( ((1970+(Y))>0) && !((1970+(Y))%4) && ( ((1970+(Y))%100) || !((1970+(Y))%400) ) )
+#define LEAP_YEAR(Y) !(((Y))%4) 
 #ifndef DATEFORMAT_UTC
-  if (Settings[S_GPSTZAHEAD])
-    t_time += (3600);
+//  if (Settings[S_GPSTZAHEAD])
+//    t_time += (3600);
   if (Settings[S_GPSTZ])
     t_time += (3600 * Settings[S_GPSTZ]);
 #endif // DATEFORMAT_UTC 
@@ -2453,8 +2454,6 @@ void updateDateTime(void)
   datetime.minutes = uint32_t (t_time % 60); t_time /= 60;
   datetime.hours = uint32_t (t_time % 24);   t_time /= 24;
 
-  t_year = 0;
-  t_days = 0;
   while ((unsigned)(t_days += (LEAP_YEAR(t_year) ? 366 : 365)) <= t_time) {
     t_year++;
   }
@@ -2488,7 +2487,5 @@ void updateDateTime(void)
   datetime.day   = t_time + 1;
   datetime.month = t_month + 1;
 #endif
-  datetime.year  = t_year - 30;
+  datetime.year  = t_year;
 }
-
-

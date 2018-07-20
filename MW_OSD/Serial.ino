@@ -440,12 +440,14 @@ if (cmdMSP==MSP_FC_VARIANT)
   }
 */
 
+#ifdef INTRO_FC
 if (cmdMSP==MSP_FC_VERSION) 
   {
     FC.verMajor = read8();
     FC.verMinor = read8();
     FC.verPatch = read8();
   }
+#endif
 
 if (cmdMSP==MSP_STATUS)
   {

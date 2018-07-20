@@ -109,7 +109,7 @@
 /********************       DATE & TIME settings      *********************/
 //Select ONLY if you are sure your OSD is connected to a telemetry feed such as MAVLINK/LTM:
 #define GPSTIME                     // Enable to use GPS time display functions with FC that support features
-#define DATEFORMAT_UTC            // Display UTC date when enabled - do not use time zone settings. Updated GUI to support non UTC will be released
+//#define DATEFORMAT_UTC            // Display UTC date when enabled - do not use time zone settings. Updated GUI to support non UTC will be released
 //#define DATEFORMAT_US             // Display date in US format when used in conjunction with GPSTIME
 //#define MENU_GPS_TIME             // Enable GPS time adjustments in OSD menu
 
