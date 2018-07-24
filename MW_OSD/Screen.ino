@@ -776,6 +776,8 @@ void displayRSSI(void)
     rssiMIN = rssi;
 #ifdef DUALRSSI
   displayItem(rssiPosition, rssi, SYM_RSSI, '%', 0 );
+  if (!fieldIsVisible(rssiPosition))
+    return;
   screenBuffer[0] = SYM_RSSI;
   uint8_t t_FCRssi = map(FCRssi, 0, DUALRSSI, 0, 100);
   itoa(t_FCRssi, screenBuffer + 1, 10);
