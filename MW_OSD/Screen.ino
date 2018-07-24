@@ -2445,7 +2445,7 @@ void updateDateTime(void)
 #define LEAP_YEAR(Y) !(((Y))%4) 
 #ifndef DATEFORMAT_UTC
   int32_t t_tzhours = 3600 * (128 - Settings[S_GPSTZ]);
-  t_time = t_time + t_tzhours;
+  t_time = t_time - t_tzhours;
 #endif // DATEFORMAT_UTC 
 
   datetime.seconds = uint32_t (t_time % 60); t_time /= 60;
