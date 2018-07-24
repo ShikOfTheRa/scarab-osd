@@ -2433,7 +2433,7 @@ void setDateTime(void)
 
 void updateDateTime(void)
 {
-  //datetime.unixtime=1527712200; // 30/05/2018 @ 8:30 UTC for testing
+  //datetime.unixtime=1527712200; // 30/05/2018 @ 20:30 UTC for testing
   datetime.unixtime++;
   uint32_t t_time = datetime.unixtime  - 946684800;
   uint8_t  t_year=0;
@@ -2444,10 +2444,8 @@ void updateDateTime(void)
 
 #define LEAP_YEAR(Y) !(((Y))%4) 
 #ifndef DATEFORMAT_UTC
-//  if (Settings[S_GPSTZAHEAD])
-//    t_time += (3600);
-  if (Settings[S_GPSTZ])
-    t_time += (3600 * Settings[S_GPSTZ]);
+  int32_t t_tzhours = 3600 * (128 - Settings[S_GPSTZ]);
+  t_time = t_time + t_tzhours;
 #endif // DATEFORMAT_UTC 
 
   datetime.seconds = uint32_t (t_time % 60); t_time /= 60;
