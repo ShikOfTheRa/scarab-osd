@@ -453,7 +453,6 @@ void loop()
 #ifdef BOXNAMES
         MSPcmdsend = MSP_BOXNAMES;
 #else
-        //if (flags.box!=1)
         MSPcmdsend = MSP_BOXIDS;
 #endif
         break;
@@ -919,7 +918,6 @@ void setMspRequests() {
       REQ_MSP_RC_TUNING |
       REQ_MSP_PID_CONTROLLER |
       REQ_MSP_ANALOG |
-      REQ_MSP_RC|
 #ifdef USE_MSP_PIDNAMES
       REQ_MSP_PIDNAMES |
 #endif
@@ -952,7 +950,7 @@ void setMspRequests() {
       REQ_MSP_MISC |
 #endif
 #endif
-      0;
+       REQ_MSP_RC;
   }
   else {
     modeMSPRequests =
@@ -982,24 +980,25 @@ void setMspRequests() {
 #ifdef MSPV2
       REQ_MSP2_INAV_AIR_SPEED |
 #endif
-      0;
+      REQ_MSP_RC;
 
     if (!armed) {
-      modeMSPRequests |= REQ_MSP_BOX |
+      modeMSPRequests |= 
+        REQ_MSP_BOX |
 #if defined INTRO_FC && defined PROTOCOL_MSP
-                         REQ_MSP_FC_VERSION |
+        REQ_MSP_FC_VERSION |
 #endif // INTRO_FC && defined PROTOCOL_MSP      
 #ifdef USE_FC_VOLTS_CONFIG
 #if defined(CLEANFLIGHT) || defined(BETAFLIGHT)
-                         REQ_MSP_VOLTAGE_METER_CONFIG |
+        REQ_MSP_VOLTAGE_METER_CONFIG |
 #else
-                         REQ_MSP_MISC |
+        REQ_MSP_MISC |
 #endif // defined(CLEANFLIGHT) || defined(BETAFLIGHT)
 #endif // USE_FC_VOLTS_CONFIG
 #ifdef MSP_RTC_SUPPORT
-                         REQ_MSP_RTC |
+        REQ_MSP_RTC |
 #endif // MSP_RTC_SUPPORT
-                         0;
+        0;
     }
 #if defined MULTIWII_V24
     if (MwSensorActive & mode.gpsmission)

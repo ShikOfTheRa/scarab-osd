@@ -279,7 +279,6 @@ struct  __timer {
 timer;
 
 struct __flags {
-  uint8_t box;
   uint8_t reset;
   uint8_t signaltype;
   uint8_t signalauto;

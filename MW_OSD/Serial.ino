@@ -451,10 +451,13 @@ if (cmdMSP==MSP_FC_VERSION)
 
 if (cmdMSP==MSP_STATUS)
   {
+    debug[0]++;
     cycleTime=read16();
     I2CError=read16();
     MwSensorPresent = read16();
     MwSensorActive = read32();
+    debug[1]=MwSensorActive&0xFFFF;
+    debug[2]=MwSensorActive>>16;
     #if defined FORCESENSORS
       MwSensorPresent=GPSSENSOR|BAROMETER|MAGNETOMETER|ACCELEROMETER;
     #endif  
@@ -848,7 +851,6 @@ if (cmdMSP==MSP_STATUS)
 
 #ifdef BOXNAMES
   if(cmdMSP==MSP_BOXNAMES) {
-    flags.box=1;
     uint32_t bit = 1;
     uint8_t remaining = dataSize;
     uint8_t len = 0;
@@ -910,7 +912,7 @@ if (cmdMSP==MSP_STATUS)
   }
 #else  
   if(cmdMSP==MSP_BOXIDS) {
-    flags.box=1;
+debug[3]++;
     uint32_t bit = 1;
     uint8_t remaining = dataSize;
     memset(&mode, 0, sizeof(mode));
