@@ -194,7 +194,8 @@ void setup()
   MS5837sensor.init();
   MS5837sensor.setFluidDensity(FLUID_DENSITY); // kg/m^3
 #endif // USE MS_5837
-  datetime.unixtime = 946684801; //  GPS_time=946684801; // Set to Y2K as default.
+  GPS_time=946684801; // Set to Y2K as default.
+  datetime.unixtime = GPS_time;
   Serial.flush();
   for (uint8_t i = 0; i < (1+16); i++) {
     MwRcData[i]=1500;
