@@ -271,10 +271,11 @@
 //#define DISPLAYSPEEDMS            // Displays speed in m/s instead of km/h
 //#define PILOTICON                 // Disable to save memeory if unused. Display pilot ICON as an alternative to CHARACTER display. Requires enabling in GUI >= 1.8.2
 
+
 /********************       Power / efficiency display Settings         ************************/
-#define DISPLAYWATTS                // Disable to save memeory if not used. Enable this to display Watts
-#define DISPLAYEFFICIENCY           // Disable to save memeory if not used. Enable this to display Watts/KMh or Mph for efficiency
-#define DISPLAYMAHMIN               // Disable to save memeory if not used. Enable this to display average mAh/minKMh
+#define DISPLAYWATTS                // Disable to save memory if not used. Enable this to display Watts
+#define DISPLAYEFFICIENCY           // Disable to save memory if not used. Enable this to display Watts/KMh or Mph for efficiency
+#define DISPLAYMAHMIN               // Disable to save memory if not used. Enable this to display average mAh/min KMh
 
 
 /********************       Visual Vario / climbrate Settings         ************************/
@@ -436,6 +437,11 @@
 // Enabling may create ability to write invalid data to FC
 //#define ADVANCEDSAVE              // Enables saving of advanced paramters where supported (Looptime/profile)
 //#define FIXEDLOOP                 // Enables 1ms loop max for consistency
+
+
+/********************  Under developemnt      *********************/
+// This is a work in process. ot completed for implementation
+#define DISPLAYMAHKM                // Display average mAh used / per KM instead of mAh/min KMh. 
 
 
 

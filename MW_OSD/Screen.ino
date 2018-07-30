@@ -643,7 +643,7 @@ void OLDdisplayCurrentThrottle(void)
 void displayTimer(uint32_t t_time, uint16_t t_pos, uint8_t t_leadsymbol)
 {
   if (t_time>=3600){
-    t_time /=3600;
+    t_time /=60;
   }
   uint32_t digit0 = t_time/60;
   uint32_t digit1 = t_time%60;
@@ -720,10 +720,14 @@ void displayEfficiency(void)
 
 void displaymAhmin(void)
 {
-  uint16_t t_mAhmin = 0;
+  uint16_t t_efficiency = 0;
   if (flyingTime > 0)
-    t_mAhmin = (uint32_t) amperagesum / (flyingTime * 6);
-  displayItem(avgefficiencyPosition, t_mAhmin, SYM_AVG_EFF, 0, 0 );
+  #if defined DISPLAYMAHKM // mAH used per KM travelled. TBA
+    t_efficiency = (uint32_t)  amperagesum / (360* trip); /// needs to be developed. KM or Miles
+  #else // mAh/min KMh
+    t_efficiency = (uint32_t) amperagesum / (flyingTime * 6); 
+  #endif
+  displayItem(avgefficiencyPosition, t_efficiency, SYM_AVG_EFF, 0, 0 );
 }
 
 
