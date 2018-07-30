@@ -2424,7 +2424,6 @@ void updateDateTime(uint32_t t_time)
 
 void displayGPSPosition(void)
 {
-  return;
   if (!fieldIsVisible(MwGPSLatPositionTop)){
     return;
   }
