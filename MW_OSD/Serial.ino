@@ -451,13 +451,10 @@ if (cmdMSP==MSP_FC_VERSION)
 
 if (cmdMSP==MSP_STATUS)
   {
-    debug[0]++;
     cycleTime=read16();
     I2CError=read16();
     MwSensorPresent = read16();
     MwSensorActive = read32();
-    debug[1]=MwSensorActive&0xFFFF;
-    debug[2]=MwSensorActive>>16;
     #if defined FORCESENSORS
       MwSensorPresent=GPSSENSOR|BAROMETER|MAGNETOMETER|ACCELEROMETER;
     #endif  
@@ -504,7 +501,9 @@ if (cmdMSP==MSP_STATUS)
     #else
       GPS_speed = read16();
     #endif // I2CGPS_SPEED
-    AIR_speed=GPS_speed;
+    #ifndef MSPV2
+      AIR_speed=GPS_speed;
+    #endif  
     GPS_ground_course = read16();
     #if defined MSP_DOP_SUPPORT
       GPS_dop=read16();
@@ -819,34 +818,46 @@ if (cmdMSP==MSP_STATUS)
 
 #ifdef MSP_RTC_SUPPORT
   if (cmdMSP == MSP_RTC)
-  #if defined (BETAFLIGHT)  
+  #if defined BETAFLIGHT
   {
-    static const uint16_t days[4][12] =
-    {
-      {   0,  31,     60,     91,     121,    152,    182,    213,    244,    274,    305,    335},
-      { 366,  397,    425,    456,    486,    517,    547,    578,    609,    639,    670,    700},
-      { 731,  762,    790,    821,    851,    882,    912,    943,    974,    1004,   1035,   1065},
-      {1096,  1127,   1155,   1186,   1216,   1247,   1277,   1308,   1339,   1369,   1400,   1430},
-    };
-    uint16_t year = read16() - 1970; // 0-99
-    uint8_t month = read8() - 1;     // 0-11
-    uint8_t day = read8() - 1;       // 0-30
+    #define SECS_PER_MIN  ((uint32_t)(60UL))
+    #define SECS_PER_HOUR ((uint32_t)(3600UL))
+    #define SECS_PER_DAY  ((uint32_t)(SECS_PER_HOUR * 24UL))
+
+    uint8_t i;
+    uint16_t year = read16() - 2000; // 0-99
+    uint8_t month = read8();         // 1-12
+    uint8_t day = read8();           // 1-31
     uint8_t hour = read8();          // 0-23
     uint8_t minute = read8();        // 0-59
     uint8_t second = read8();        // 0-59
-    datetime.unixtime = (((year / 4 * (365 * 4 + 1) + days[year % 4][month] + day) * 24 + hour) * 60 + minute) * 60 + second;
-    if(!armed){ // For now to avoid uneven looking clock
-      setDateTime();
+    GPS_time= year*(SECS_PER_DAY * 365);
+    for (i = 0; i < year; i++) {
+      if (LEAP_YEAR(i)) {
+        GPS_time +=  SECS_PER_DAY;
+      }
     }
-  }
+    for (i = 1; i < month; i++) {
+      if ( (i == 2) && LEAP_YEAR(year)) { 
+        GPS_time += SECS_PER_DAY * 29;
+      } else {
+        GPS_time += SECS_PER_DAY * monthDays[i-1];
+      }
+    }
+    GPS_time+= (day-1) * SECS_PER_DAY;
+    GPS_time+= hour * SECS_PER_HOUR;
+    GPS_time+= minute * SECS_PER_MIN;
+    GPS_time+= second;
+    GPS_time += 946684800;
+  }  
   #else
   {
     GPS_time = read32();
-    if(!armed){ // For now to avoid uneven looking clock
-      setDateTime();
-    }
   }
   #endif //iNAV 
+  if(!armed){ // For now to avoid uneven looking clock
+    datetime.unixtime = GPS_time;
+  }
 #endif // MSP_RTC_SUPPORT
 
 #ifdef BOXNAMES
@@ -912,7 +923,6 @@ if (cmdMSP==MSP_STATUS)
   }
 #else  
   if(cmdMSP==MSP_BOXIDS) {
-debug[3]++;
     uint32_t bit = 1;
     uint8_t remaining = dataSize;
     memset(&mode, 0, sizeof(mode));

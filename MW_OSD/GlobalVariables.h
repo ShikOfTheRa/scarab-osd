@@ -590,7 +590,7 @@ DEF_S_MWAMPERAGE, //   S_MWAMPERAGE,
 7, //   S_SIDEBARWIDTH,
 DEF_S_GPSTIME, //   S_GPSTIME,
 0, //   S_GPSTZAHEAD,
-0, //   S_GPSTZ,
+128, //   S_GPSTZ,
 #ifdef VTX_RTC6705
 VTX_DEFAULT_POWER,    // S_VTX_POWER
 VTX_DEFAULT_BAND,     // S_VTX_BAND
@@ -653,7 +653,7 @@ enum Positions {
   MwAltitudePosition,
   MwVarioPosition,
   CurrentThrottlePosition,
-  flyTimePosition,
+  flyTimePosition,              // unused
   onTimePosition,
   motorArmedPosition,
   pitchAnglePosition,
@@ -787,8 +787,7 @@ int32_t  old_MwAltitude=0;                     // This hold barometric value
 
 
 int16_t MwAngle[2]={0,0};           // Those will hold Accelerometer Angle
-static uint16_t MwRcData[1+16]={   // This hold receiver pulse signal
-  1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500} ;
+uint16_t MwRcData[1+16];
 
 
 
@@ -1148,7 +1147,7 @@ const PROGMEM char * const signal_type[] =
   signaltext1,
   signaltext2,
 };
-#elif AUTOCAMFULL // FOr testing
+#elif AUTOCAMFULL // For testing
 const char signaltext0[]  PROGMEM = "NTSC";
 const char signaltext1[]  PROGMEM = "PAL";
 const char signaltext2[]  PROGMEM = "NOT DETECTED-NTSC";
@@ -1185,11 +1184,11 @@ const char configMsgMWII[] PROGMEM = "USE FC";
 
 // For Config pages
 //-----------------------------------------------------------Page0
-const char configMsg00[] PROGMEM = "STATISTICS";
+const char configMsg00[] PROGMEM = "STATS";
 const char configMsg01[] PROGMEM = "FLY TIME";
-const char configMsg02[] PROGMEM = "TOT DISTANCE";
-const char configMsg03[] PROGMEM = "MAX DISTANCE";
-const char configMsg04[] PROGMEM = "MAX ALTITUDE";
+const char configMsg02[] PROGMEM = "TOT DIST";
+const char configMsg03[] PROGMEM = "MAX DIST";
+const char configMsg04[] PROGMEM = "MAX ALT";
 const char configMsg05[] PROGMEM = "MAX SPEED";
 const char configMsg06[] PROGMEM = "MAH USED";
 const char configMsg07[] PROGMEM = "MAX AMPS";
@@ -1368,7 +1367,17 @@ const PROGMEM char * const menu_vtx[] =
 #endif //MENU_VTX
 //-----------------------------------------------------------MENU END
 
+// BETAFLIGHT RTC setting
+const uint8_t monthDays[]=
+    {31,28,31,30,31,30,31,31,30,31,30,31}; 
+    
+// GPS lat/lon display 
+const unsigned char compass[] = {'N','S','E','W'};
+
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
+const unsigned char flightUnitAdd[4] ={
+  SYM_ON_M,SYM_ON_H, SYM_FLY_M,SYM_FLY_H} ; 
+
 const unsigned char speedUnitAdd[2] ={
   SYM_KMH,SYM_MPH} ; // [0][0] and [0][1] = Km/h   [1][0] and [1][1] = Mph
 

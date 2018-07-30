@@ -262,7 +262,6 @@
 #define GUISENSORS                  // Enable if wish to view raw sensor data on GUI
 #define LONG_RANGE_DISPLAY          // Enable this to for long range display consolidation - displays distance in KM or feet when exceed 9999m or ft. 
 #define AIRMODE                     // Enable this to display airmode icon. 
-//#define CROPGPSPOSITION           // Crop GPS coordinate display to decimals only ".DDDDDDD"
 #define MASKGPSLOCATION             // Disable to save memory if not used. Enables MASK GPS settings on GUI. Coordinates displayed with major digits XXX set to random location "XXX.DDDDDDD" 
 //#define TEXTMODE                  // Enable to display the flyingmode as text instead of symbols
 //#define OSD_SWITCH                // Forces original 2 way multiwii screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
@@ -430,7 +429,7 @@
 #define ICON_VID_BAT                // Video battery icon
 #define ICON_RSSI                   // RSSI
 #define ICON_SAT                    // Sattelite enable for large icon, disable for small icon
-
+#define ICON_THR                    // Throttle
 
 /********************  Advanced parameters  settings      *********************/
 // This is to enable rarely used advanced parameter saving. Off by default to minimise risk

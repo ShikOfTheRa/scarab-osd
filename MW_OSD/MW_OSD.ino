@@ -74,9 +74,9 @@ uint16_t UntouchedStack(void)
 #define PGMSTR(p) (char *)pgm_read_word(p)
 
 //------------------------------------------------------------------------
-#define MWVERS "MW-OSD - R1.8.2"
+#define MWVERS "MW-OSD - R1.9 RC1"
 //#define MWVERS "MW-OSD - R1.8"
-#define MWOSDVERSION 1820 // 1660=1.6.6.0 for GUI
+#define MWOSDVERSION 1830 // 1660=1.6.6.0 for GUI
 #define EEPROMVER 16      // for eeprom layout verification
 
 #include <avr/pgmspace.h>
@@ -196,6 +196,9 @@ void setup()
 #endif // USE MS_5837
   datetime.unixtime = 946684801; //  GPS_time=946684801; // Set to Y2K as default.
   Serial.flush();
+  for (uint8_t i = 0; i < (1+16); i++) {
+    MwRcData[i]=1500;
+  }
 }
 
 //------------------------------------------------------------------------
@@ -591,7 +594,7 @@ void loop()
           displayAmperage();
         if (((!ampAlarming()) || timer.Blink2hz))
           displaypMeterSum();
-        displayTime();
+        displayFlightTime();
 #if defined (DISPLAYWATTS)
         displayWatt();
 #endif //DISPLAYWATTS
@@ -668,6 +671,8 @@ void loop()
         displayAngleToHome();
         displayGPSdop();
         // displayfwglidescope(); //note hook for this is in display horizon function
+        if (!armed) 
+          GPS_speed = 0;
         display_speed(GPS_speed, GPS_speedPosition, SYM_SPEED_GPS);
         display_speed(AIR_speed, AIR_speedPosition, SYM_SPEED_AIR);
         displayWindSpeed(); // also windspeed if available
@@ -719,7 +724,8 @@ void loop()
   if (millis() > timer.seconds + 1000)  // this execute 1 time a second
   {
 #if defined (GPSTIME) && !defined (UBLOX)
-    updateDateTime();
+    datetime.unixtime++;
+    updateDateTime(datetime.unixtime);
 #endif //GPSTIME    
     if (timer.armedstatus > 0)
       timer.armedstatus--;
