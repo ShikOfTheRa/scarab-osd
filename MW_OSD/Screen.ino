@@ -56,6 +56,43 @@ uint8_t fieldIsVisible(uint8_t pos) {
     return 0;
 }
 
+char *FormatGPSCoord(uint16_t t_position, int32_t val, uint8_t t_hemisphere) {  //0 or 2
+uint8_t t_cardinal = 0;
+  if (val < 0) {
+    t_cardinal ++;
+    val = -val;
+  }
+  uint8_t t_leadicon = SYM_LAT + t_cardinal;  
+  t_cardinal+=t_hemisphere;
+
+  uint8_t bytes = 11;
+  val = val / 100;
+
+  screenBuffer[bytes] = 0;
+  screenBuffer [--bytes] = compass[t_cardinal];
+  for (;;) {
+    if (bytes == 5) {
+      screenBuffer [--bytes] = DECIMAL;
+      continue;
+    }
+    screenBuffer [--bytes] = '0' + (val % 10);
+    val = val / 10;
+    if (bytes == 0 || (bytes < 4 && val == 0))
+      break;
+  }
+
+  while (bytes != 0)
+    screenBuffer [--bytes] = ' ';
+  screenBuffer[0] = t_leadicon;
+  if (Settings[S_GPS_MASK]) {
+    screenBuffer[1] = '0';
+    screenBuffer[2] = '6';
+    screenBuffer[3] = '3';
+  }
+
+   MAX7456_WriteString(screenBuffer, t_position);
+}
+
 #ifdef VIRTUAL_NOSE
 void displayVirtualNose(void)
 {
@@ -2394,40 +2431,5 @@ void displayGPSPosition(void)
   FormatGPSCoord(t_position,GPS_longitude, 2) ;
 }
 
-char *FormatGPSCoord(uint16_t t_position, int32_t val, uint8_t t_hemisphere) {  //0 or 2
-uint8_t t_cardinal = 0;
-  if (val < 0) {
-    t_cardinal ++;
-    val = -val;
-  }
-  uint8_t t_leadicon = SYM_LAT + t_cardinal;  
-  t_cardinal+=t_hemisphere;
 
-  uint8_t bytes = 11;
-  val = val / 100;
-
-  screenBuffer[bytes] = 0;
-  screenBuffer [--bytes] = compass[t_cardinal];
-  for (;;) {
-    if (bytes == 5) {
-      screenBuffer [--bytes] = DECIMAL;
-      continue;
-    }
-    screenBuffer [--bytes] = '0' + (val % 10);
-    val = val / 10;
-    if (bytes == 0 || (bytes < 4 && val == 0))
-      break;
-  }
-
-  while (bytes != 0)
-    screenBuffer [--bytes] = ' ';
-  screenBuffer[0] = t_leadicon;
-  if (Settings[S_GPS_MASK]) {
-    screenBuffer[1] = '0';
-    screenBuffer[2] = '6';
-    screenBuffer[3] = '3';
-  }
-
-   MAX7456_WriteString(screenBuffer, t_position);
-}
 
