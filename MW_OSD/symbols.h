@@ -5,7 +5,9 @@
  *
  */
 
-#define SYM_BLANK 0X20
+#define SYM_BLANK   0X20
+#define SYM_PERCENT 0X25
+#define SYM_ZERO    0X30
 
 // Degrees Icon for HEADING/DIRECTION HOME
 #define SYM_DEGREES 0XBD
@@ -190,9 +192,6 @@
 #define SYM_ON_H 0X70
 #define SYM_FLY_H 0X71
 
-// Throttle Position (%)
-#define SYM_THR 0XC8
-
 // Menu cursor
 #define SYM_CURSOR SYM_AH_LEFT
 
@@ -284,11 +283,7 @@
 #endif
 
 #ifdef ICON_TMP
-  #ifdef PILOTICON
-    #define SYM_TMP       0XB3 
-  #else
-    #define SYM_TMP       0X06 
-  #endif  
+#define SYM_TMP           0XC6 
 #else
 #define SYM_TMP           0 
 #endif
@@ -348,5 +343,9 @@
 #define SYM_SAT           0XF0
 #endif
 
-
+#ifdef ICON_THR
+#define SYM_THR           0XC8
+#else
+#define SYM_THR           0
+#endif
 

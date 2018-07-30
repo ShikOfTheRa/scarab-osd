@@ -74,10 +74,10 @@ uint16_t UntouchedStack(void)
 #define PGMSTR(p) (char *)pgm_read_word(p)
 
 //------------------------------------------------------------------------
-#define MWVERS "MW-OSD - R1.8.1"
+#define MWVERS "MW-OSD - R1.9 RC1"
 //#define MWVERS "MW-OSD - R1.8"
-#define MWOSDVERSION 1817 // 1660=1.6.6.0 for GUI
-#define EEPROMVER 15      // for eeprom layout verification
+#define MWOSDVERSION 1830 // 1660=1.6.6.0 for GUI
+#define EEPROMVER 16      // for eeprom layout verification
 
 #include <avr/pgmspace.h>
 #undef   PROGMEM
@@ -194,8 +194,12 @@ void setup()
   MS5837sensor.init();
   MS5837sensor.setFluidDensity(FLUID_DENSITY); // kg/m^3
 #endif // USE MS_5837
-  datetime.unixtime = 946684801; //  GPS_time=946684801; // Set to Y2K as default.
+  GPS_time=946684801; // Set to Y2K as default.
+  datetime.unixtime = GPS_time;
   Serial.flush();
+  for (uint8_t i = 0; i < (1+16); i++) {
+    MwRcData[i]=1500;
+  }
 }
 
 //------------------------------------------------------------------------
@@ -387,7 +391,7 @@ void loop()
 #endif //GPSOSD
   }  // End of slow Timed Service Routine (100ms loop)
 
-  if ((currentMillis - previous_millis_high) >= hi_speed_cycle) // 20 Hz or 100hz in MSP high mode
+  if ((currentMillis - previous_millis_high) >= hi_speed_cycle) // 33 Hz or 100hz in MSP high mode.
   {
     previous_millis_high = previous_millis_high + hi_speed_cycle;
     uint16_t MSPcmdsend = 0;
@@ -453,7 +457,6 @@ void loop()
 #ifdef BOXNAMES
         MSPcmdsend = MSP_BOXNAMES;
 #else
-        //if (flags.box!=1)
         MSPcmdsend = MSP_BOXIDS;
 #endif
         break;
@@ -592,7 +595,7 @@ void loop()
           displayAmperage();
         if (((!ampAlarming()) || timer.Blink2hz))
           displaypMeterSum();
-        displayTime();
+        displayFlightTime();
 #if defined (DISPLAYWATTS)
         displayWatt();
 #endif //DISPLAYWATTS
@@ -647,18 +650,18 @@ void loop()
         displayHeadingGraph();
         displayHeading();
 #if defined SUBMERSIBLE
-#if defined USEMS5837
+ #if defined USEMS5837
         MwAltitude = (float)100 * MS5837sensor.depth();
-#endif
-        displaySUBMERSIBLEAltitude();
+ #endif //USEMS5837
         if (millis() > timer.fwAltitudeTimer) { // To make vario from Submersible altitude
           timer.fwAltitudeTimer += 1000;
           MwVario = MwAltitude - previousfwaltitude;
           previousfwaltitude = MwAltitude;
         }
-#else
-        displayAltitude();
-#endif
+#endif // SUBMERSIBLE
+
+        displayAltitude(((int32_t)GPS_altitude*10),MwGPSAltPosition,SYM_GPS_ALT);
+        displayAltitude(MwAltitude/10,MwAltitudePosition,SYM_ALT);
         displayClimbRate();
         displayVario();
         displayNumberOfSat();
@@ -667,16 +670,10 @@ void loop()
         displayDistanceTotal();
         displayDistanceMax();
         displayAngleToHome();
-#if defined MAVSENSORGPSACTIVE && defined APM
-        if (GPS_altitude < MAVSENSORGPSACTIVE) // display sensor distance when GPS below this value
-          displayMAVAltitude();
-        else
-          displayGPSAltitude();
-#else
-        displayGPSAltitude();
-#endif
         displayGPSdop();
         // displayfwglidescope(); //note hook for this is in display horizon function
+        if (!armed) 
+          GPS_speed = 0;
         display_speed(GPS_speed, GPS_speedPosition, SYM_SPEED_GPS);
         display_speed(AIR_speed, AIR_speedPosition, SYM_SPEED_AIR);
         displayWindSpeed(); // also windspeed if available
@@ -728,7 +725,8 @@ void loop()
   if (millis() > timer.seconds + 1000)  // this execute 1 time a second
   {
 #if defined (GPSTIME) && !defined (UBLOX)
-    updateDateTime();
+    datetime.unixtime++;
+    updateDateTime(datetime.unixtime);
 #endif //GPSTIME    
     if (timer.armedstatus > 0)
       timer.armedstatus--;
@@ -952,9 +950,6 @@ void setMspRequests() {
 #ifdef MENU_FIXEDWING
       REQ_MSP_FW_CONFIG |
 #endif
-#if defined MSP_RTC_SUPPORT && defined GPSTIME
-      REQ_MSP_RTC |
-#endif
 #ifdef USE_FC_VOLTS_CONFIG
 #if defined(CLEANFLIGHT) || defined(BETAFLIGHT)
       REQ_MSP_VOLTAGE_METER_CONFIG |
@@ -962,10 +957,7 @@ void setMspRequests() {
       REQ_MSP_MISC |
 #endif
 #endif
-#ifdef MSPV2
-      REQ_MSP2_INAV_AIR_SPEED |
-#endif
-      REQ_MSP_RC;
+       REQ_MSP_RC;
   }
   else {
     modeMSPRequests =
@@ -991,27 +983,29 @@ void setMspRequests() {
 #endif
 #ifdef MSP_USE_ANALOG
       REQ_MSP_ANALOG |
-#endif //MSP_USE_ANALOG     
+#endif //MSP_USE_ANALOG  
+#ifdef MSPV2
+      REQ_MSP2_INAV_AIR_SPEED |
+#endif
       REQ_MSP_RC;
+
     if (!armed) {
-      modeMSPRequests |= REQ_MSP_BOX |
+      modeMSPRequests |= 
+        REQ_MSP_BOX |
 #if defined INTRO_FC && defined PROTOCOL_MSP
-                         REQ_MSP_FC_VERSION |
+        REQ_MSP_FC_VERSION |
 #endif // INTRO_FC && defined PROTOCOL_MSP      
 #ifdef USE_FC_VOLTS_CONFIG
 #if defined(CLEANFLIGHT) || defined(BETAFLIGHT)
-                         REQ_MSP_VOLTAGE_METER_CONFIG |
+        REQ_MSP_VOLTAGE_METER_CONFIG |
 #else
-                         REQ_MSP_MISC |
+        REQ_MSP_MISC |
 #endif // defined(CLEANFLIGHT) || defined(BETAFLIGHT)
 #endif // USE_FC_VOLTS_CONFIG
 #ifdef MSP_RTC_SUPPORT
-                         REQ_MSP_RTC |
+        REQ_MSP_RTC |
 #endif // MSP_RTC_SUPPORT
-#ifdef MSPV2
-                         REQ_MSP2_INAV_AIR_SPEED |
-#endif
-                         0;
+        0;
     }
 #if defined MULTIWII_V24
     if (MwSensorActive & mode.gpsmission)
@@ -1252,17 +1246,17 @@ void ProcessSensors(void) {
 #ifdef SHOW_TEMPERATURE
 #if defined USEMS5837
   temperature = (float)(10 * MS5837sensor.temperature());
-#elif defined PROTOCOL_MAVLINK
+#elif defined PROTOCOL_MAVLINK && !defined USE_TEMPERATURE_SENSOR
 #else
-  temperature = (sensorfilter[3][SENSORFILTERSIZE] >> 3) - TEMPZERO;
-  temperature = map (temperature, TEMPZERO, 1024, 0 , TEMPMAX);
+  temperature = (sensorfilter[3][SENSORFILTERSIZE] >> 3);
+  temperature = map (temperature, Settings16[S16_AUX_ZERO_CAL], Settings16[S16_AUX_CAL], 0 , 100);
 #endif
 #endif
 
   //-------------- Current
   if (Settings[S_MWAMPERAGE] == 2) { // Virtual
-    uint32_t Vthrottle = constrain(MwRcData[THROTTLESTICK], LowT, HighT);
-    Vthrottle = constrain((Vthrottle - 1000) / 10, 0, 100);
+    uint32_t Vthrottle = map(MwRcData[THROTTLESTICK], LowT, HighT, 0, 100);
+    Vthrottle = constrain(Vthrottle, 0, 100);
     amperage = (Vthrottle + (Vthrottle * Vthrottle * 0.02)) * Settings16[S16_AMPDIVIDERRATIO] * 0.01;
     if (armed)
       amperage += Settings16[S16_AMPZERO];
@@ -1445,11 +1439,11 @@ int32_t filter32F( float filtered, float raw, const byte k) {
 #if defined USE_AIRSPEED_SENSOR
 void useairspeed() {
 #define AIRDENSITY  1.225 // Density of air kg/m3
-  int16_t pressuresensor = (int16_t)(sensorfilter[3][SENSORFILTERSIZE] >> 3) - Settings16[S16_AIRSPEEDZERO];
+  int16_t pressuresensor = (int16_t)(sensorfilter[3][SENSORFILTERSIZE] >> 3) - Settings16[S16_AUX_ZERO_CAL];
   if (pressuresensor < 0) {
     pressuresensor = 0;
   }
-  pressuresensor = ((int32_t)pressuresensor * Settings16[S16_AIRSPEEDCAL]) / 500;
+  pressuresensor = ((int32_t)pressuresensor * Settings16[S16_AUX_CAL]) / 500;
   constrain(pressuresensor, -410, 410);
   int16_t Pa = map(pressuresensor, -410, 410, -2000, 2000); // Pressure - actual pascals
   AIR_speed = (int32_t)100 * sqrt((2 * Pa) / AIRDENSITY); // Speed required in cm/s

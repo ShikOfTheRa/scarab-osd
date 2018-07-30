@@ -32,84 +32,6 @@ char *ItoaPadded(int val, char *str, uint8_t bytes, uint8_t decimalpos)  {
 }
 
 
-
-#ifdef CROPGPSPOSITION
-char *FormatGPSCoord(int32_t val, char *str, uint8_t p, char pos, char neg) {
-  if (val < 0) {                   //make value positive... not sure if this is needed, but why not leave it alone
-    val = -val;
-  }
-  uint8_t bytes = 0;
-  uint8_t n = 8;
-  str[n] = 0;                  //end of array = null
-  str[0] = DECIMAL;
-  for (bytes = 7; bytes >= 1; --bytes) {
-    str[bytes] = '0' + (val % 10);
-    val = val / 10;
-  }
-
-  while (bytes != 0)
-    str[--bytes] = ' ';
-  return str;
-}
-#else
-char *FormatGPSCoord(int32_t val, char *str, uint8_t p, char pos, char neg) {
-  if (val < 0) {
-    pos = neg;
-    val = -val;
-  }
-
-  uint8_t bytes = p + 6;
-  val = val / 100;
-
-  str[bytes] = 0;
-  str[--bytes] = pos;
-  for (;;) {
-    if (bytes == p) {
-      str[--bytes] = DECIMAL;
-      continue;
-    }
-    str[--bytes] = '0' + (val % 10);
-    val = val / 10;
-    if (bytes == 0 || (bytes < 3 && val == 0))
-      break;
-  }
-
-  while (bytes != 0)
-    str[--bytes] = ' ';
-
-  return str;
-}
-#endif
-
-// Take time in Seconds and format it as 'MM:SS'
-// Alternately Take time in Minutes and format it as 'HH:MM'
-// If hhmmss is 1, display as HH:MM:SS
-char *formatTime(uint32_t val, char *str, uint8_t hhmmss) {
-  int8_t bytes = 5;
-  if (hhmmss)
-    bytes = 8;
-  str[bytes] = 0;
-  do {
-    str[--bytes] = '0' + (val % 10);
-    val = val / 10;
-    str[--bytes] = '0' + (val % 6);
-    val = val / 6;
-    str[--bytes] = ':';
-  }
-  while (hhmmss-- != 0);
-  do {
-    str[--bytes] = '0' + (val % 10);
-    val = val / 10;
-  }
-  while (val != 0 && bytes != 0);
-
-  while (bytes != 0)
-    str[--bytes] = ' ';
-
-  return str;
-}
-
-
 uint8_t FindNull(void)
 {
   uint8_t xx;
@@ -132,6 +54,43 @@ uint8_t fieldIsVisible(uint8_t pos) {
     return 1;
   else
     return 0;
+}
+
+char *FormatGPSCoord(uint16_t t_position, int32_t val, uint8_t t_hemisphere) {  //0 or 2
+uint8_t t_cardinal = 0;
+  if (val < 0) {
+    t_cardinal ++;
+    val = -val;
+  }
+  uint8_t t_leadicon = SYM_LAT + t_cardinal;  
+  t_cardinal+=t_hemisphere;
+
+  uint8_t bytes = 11;
+  val = val / 100;
+
+  screenBuffer[bytes] = 0;
+  screenBuffer [--bytes] = compass[t_cardinal];
+  for (;;) {
+    if (bytes == 5) {
+      screenBuffer [--bytes] = DECIMAL;
+      continue;
+    }
+    screenBuffer [--bytes] = '0' + (val % 10);
+    val = val / 10;
+    if (bytes == 0 || (bytes < 4 && val == 0))
+      break;
+  }
+
+  while (bytes != 0)
+    screenBuffer [--bytes] = ' ';
+  screenBuffer[0] = t_leadicon;
+  if (Settings[S_GPS_MASK]) {
+    screenBuffer[1] = '0';
+    screenBuffer[2] = '6';
+    screenBuffer[3] = '3';
+  }
+
+   MAX7456_WriteString(screenBuffer, t_position);
 }
 
 #ifdef VIRTUAL_NOSE
@@ -254,7 +213,11 @@ void displayMode(void)
   else {
     flightmode = 10;
   }
-  strcpy_P(screenBuffer, (char*)pgm_read_word(&(msp_mode_index[flightmode + 11])));
+  uint8_t t_flightmodetext = 0;
+  if (Settings[S_FLIGHTMODETEXT]) {
+    t_flightmodetext = 11;
+  }
+  strcpy_P(screenBuffer, (char*)pgm_read_word(&(msp_mode_index[flightmode + t_flightmodetext])));
 #endif  //PROTOCOL selection
 
   if (fieldIsVisible(ModePosition)) {
@@ -559,7 +522,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
 void displayVoltage(void)
 {
   uint8_t t_lead_icon;
-  if (voltage >= 0 && voltage < voltageMIN)
+  if (voltage < voltageMIN)
     voltageMIN = voltage;
 
   if (Settings[S_AUTOCELL]) {
@@ -604,7 +567,31 @@ void displayVidVoltage(void)
 }
 
 
-void displayCurrentThrottle(void)
+void displayCurrentThrottle(void){
+
+#ifdef AUTOTHROTTLE
+  if (MwRcData[THROTTLESTICK] > HighT) HighT = MwRcData[THROTTLESTICK];
+  if (MwRcData[THROTTLESTICK] < LowT) LowT = MwRcData[THROTTLESTICK];      // Calibrate high and low throttle settings  --defaults set in GlobalVariables.h 1100-1900
+  if (HighT > 2050) HighT = 2050;
+  if (LowT < 950) LowT = 950;
+#else
+  HighT = HIGHTHROTTLE;
+  LowT = LOWTHROTTLE;
+#endif
+  uint16_t t_throttle = MwRcData[THROTTLESTICK];
+  uint8_t t_symbol=0;
+  if (Settings[S_THROTTLE_PWM] == 0) {
+    t_throttle = map(MwRcData[THROTTLESTICK], LowT, HighT, 0, 100);
+    t_symbol=SYM_PERCENT;
+  }
+  if (!armed){
+    t_throttle = 0;
+    t_symbol   = SYM_ZERO;
+  }
+  displayItem(CurrentThrottlePosition, t_throttle, SYM_THR, t_symbol, 0 );  
+}
+
+void OLDdisplayCurrentThrottle(void)
 {
   if (!fieldIsVisible(CurrentThrottlePosition))
     return;
@@ -653,39 +640,47 @@ void displayCurrentThrottle(void)
 }
 
 
-void displayTime(void)
+void displayTimer(uint32_t t_time, uint16_t t_pos, uint8_t t_leadsymbol)
 {
+  if (t_time>=3600){
+    t_time /=3600;
+  }
+  uint32_t digit0 = t_time/60;
+  uint32_t digit1 = t_time%60;
+  if (t_leadsymbol>0){
+    screenBuffer[0]=t_leadsymbol;
+    screenBuffer[1]=0;
+    MAX7456_WriteString(screenBuffer, t_pos);  
+    t_pos++;
+  }
+  formatDateTime(digit0, digit1, 0, ':', 0);
+  MAX7456_WriteString(screenBuffer, t_pos);  
+}
+
+
+void displayFlightTime(void){
   if (screenPosition[onTimePosition] < 512)
     return;
 
   uint32_t displaytime;
+  uint8_t t_leadsymbol = 0;
+  
   if (armed) {
     if (Settings[S_FLYTIME_ALARM] > 0) {
       if (((flyTime / 60) >= Settings[S_FLYTIME_ALARM]) && (timer.Blink2hz))
         return;
     }
-
-    if (flyTime < 3600) {
-      screenBuffer[0] = SYM_FLY_M;
+      t_leadsymbol +=2;
       displaytime = flyTime;
-    }
-    else {
-      screenBuffer[0] = SYM_FLY_H;
-      displaytime = flyTime / 60;
-    }
   }
   else {
-    if (onTime < 3600) {
-      screenBuffer[0] = SYM_ON_M;
-      displaytime = onTime;
-    }
-    else {
       screenBuffer[0] = SYM_ON_H;
-      displaytime = onTime / 60;
-    }
+      displaytime = onTime;
   }
-  formatTime(displaytime, screenBuffer + 1, 0);
-  MAX7456_WriteString(screenBuffer, getPosition(onTimePosition));
+  if (displaytime>=3600){
+    t_leadsymbol+=1;
+  }
+  displayTimer(displaytime,getPosition(onTimePosition), flightUnitAdd[t_leadsymbol]);
 }
 
 
@@ -770,18 +765,20 @@ void displayRSSI(void)
 {
   if (rssi < rssiMIN && rssi > 0)
     rssiMIN = rssi;
-  #ifdef DUALRSSI
-    displayItem(rssiPosition, rssi, SYM_RSSI, '%', 0 );
-    screenBuffer[0] = SYM_RSSI;
-    uint8_t t_FCRssi= map(FCRssi,0,DUALRSSI,0,100);
-    itoa(t_FCRssi,screenBuffer+1,10);
-    uint8_t xx = FindNull();
-    screenBuffer[xx++] = '%';
-    screenBuffer[xx] = 0;
-    MAX7456_WriteString(screenBuffer,getPosition(rssiPosition)+30);
-  #else
-    displayItem(rssiPosition, rssi, SYM_RSSI, '%', 0 );
-  #endif  
+#ifdef DUALRSSI
+  displayItem(rssiPosition, rssi, SYM_RSSI, '%', 0 );
+  if (!fieldIsVisible(rssiPosition))
+    return;
+  screenBuffer[0] = SYM_RSSI;
+  uint8_t t_FCRssi = map(FCRssi, 0, DUALRSSI, 0, 100);
+  itoa(t_FCRssi, screenBuffer + 1, 10);
+  uint8_t xx = FindNull();
+  screenBuffer[xx++] = '%';
+  screenBuffer[xx] = 0;
+  MAX7456_WriteString(screenBuffer, getPosition(rssiPosition) + 30);
+#else
+  displayItem(rssiPosition, rssi, SYM_RSSI, '%', 0 );
+#endif
 }
 
 
@@ -817,105 +814,27 @@ void displayIntro(void)
 }
 
 
-#ifdef CROPGPSPOSITION
-void displayGPSPosition(void)     //Truglodite: Crop GPS coordinates to simply ".DDDDDDD" 63 93
-{
-  uint16_t position;
-  //  if(!GPS_fix)
-  //    return;
-  //  if(!fieldIsVisible(MwGPSLatPositionTop))
-  //    return;
-  //  if (!MwSensorActive&mode.gpshome)
-  //    return;
-  if (fieldIsVisible(MwGPSLatPositionTop) | (MwSensorActive & mode.gpshome)) {
-    position = getPosition(MwGPSLatPositionTop);
-    screenBuffer[0] = SYM_LAT;
-    FormatGPSCoord(GPS_latitude, screenBuffer, 3, 'N', 'S');
-    MAX7456_WriteString(screenBuffer, position);
-    position = getPosition(MwGPSLonPositionTop);
-    screenBuffer[0] = SYM_LON;
-    FormatGPSCoord(GPS_longitude, screenBuffer, 4, 'E', 'W');
-    MAX7456_WriteString(screenBuffer, position);
+void displayAltitude(int32_t t_alt10, int16_t t_pos, uint8_t t_icon) { // alt sent as dm
+  int32_t t_alt = t_alt10 / 10;
+  if (Settings[S_UNITSYSTEM]) {
+    t_alt10 = (float) (0.32808 * t_alt); // convert to imperial dm
   }
-}
-#else
-void displayGPSPosition(void)
-{
-  uint16_t position;
-  //  if(!GPS_fix)
-  //    return;
-  //  displayGPSAltitude();
-  //  if(!fieldIsVisible(MwGPSLatPositionTop))
-  //    return;
-  //  if (!MwSensorActive&mode.gpshome)
-  //    return;
-  if (fieldIsVisible(MwGPSLatPositionTop) | (MwSensorActive & mode.gpshome)) {
-    position = getPosition(MwGPSLatPositionTop);
-    screenBuffer[0] = SYM_LAT;
-    FormatGPSCoord(GPS_latitude, screenBuffer + 1, 4, 'N', 'S');
-#ifdef MASKGPSLOCATION
-    if (Settings[S_GPS_MASK]) {
-      screenBuffer[1] = '0';
-      screenBuffer[2] = '6';
-      screenBuffer[3] = '3';
-    }
-#endif // MASKGPSLOCATION
-    MAX7456_WriteString(screenBuffer, position);
-    position = getPosition(MwGPSLonPositionTop);
-    screenBuffer[0] = SYM_LON;
-    FormatGPSCoord(GPS_longitude, screenBuffer + 1, 4, 'E', 'W');
-#ifdef MASKGPSLOCATION
-    if (Settings[S_GPS_MASK]) {
-      screenBuffer[1] = '0';
-      screenBuffer[2] = '9';
-      screenBuffer[3] = '3';
-    }
-#endif // MASKGPSLOCATION
-    MAX7456_WriteString(screenBuffer, position);
+  if (armed && (allSec > 5) && ((t_alt / 10) > altitudeMAX)) { // not sure why 5 secs...
+    altitudeMAX = t_alt;
   }
-}
-#endif
-
-
-void displayGPSAltitude(void) {
-  if (!fieldIsVisible(MwGPSAltPosition))
-    return;
-  int32_t xx;
-  if (Settings[S_UNITSYSTEM])
-    xx = GPS_altitude * 3.2808; // Mt to Feet
-  else
-    xx = GPS_altitude;          // Mt
-
   if (Settings[S_ALTITUDE_ALARM] > 0) {
-    if (((xx / 100) >= Settings[S_ALTITUDE_ALARM]) && (timer.Blink2hz))
+    if (((t_alt / 1000) >= Settings[S_ALTITUDE_ALARM]) && (timer.Blink2hz)) {
       return;
+    }
   }
-  formatDistance(xx, 1, 0, SYM_GPS_ALT);
-  MAX7456_WriteString(screenBuffer, getPosition(MwGPSAltPosition));
-}
-
-
-void displayMAVAltitude(void) {
-  if (!fieldIsVisible(MwGPSAltPosition))
-    return;
-  int32_t xx;
-  if (Settings[S_UNITSYSTEM])
-    xx = MAV_altitude * 0.32808;  // in ft*10
-  else
-    xx = MAV_altitude / 10  ;     // in cm*10
-  displayItem(MwGPSAltPosition, xx, SYM_AGL, UnitsIcon[Settings[S_UNITSYSTEM] + 0], 1 );
-}
-
-
-void displaySUBMERSIBLEAltitude(void) {
   if (!fieldIsVisible(MwAltitudePosition))
     return;
-  int32_t xx;
-  if (Settings[S_UNITSYSTEM])
-    xx = MwAltitude * 0.32808;  // in ft*10
-  else
-    xx = MwAltitude / 10  ;     // in m*10
-  displayItem(MwAltitudePosition, xx, SYM_AGL, UnitsIcon[Settings[S_UNITSYSTEM] + 0], 1 );
+  if (t_alt < Settings[S_ALTRESOLUTION]) {
+    displayItem(t_pos, t_alt10, SYM_AGL, UnitsIcon[Settings[S_UNITSYSTEM] + 0], 1 );
+  }
+  else {
+    displayItem(t_pos, t_alt, t_icon, UnitsIcon[Settings[S_UNITSYSTEM] + 0], 0 );
+  }
 }
 
 
@@ -948,7 +867,6 @@ void displayGPSdop(void)
 
 void display_speed(int16_t t_value, uint8_t t_position, uint8_t t_leadicon)
 {
-  if (!armed) t_value = 0;
   int16_t xx;
   if (!Settings[S_UNITSYSTEM])
     xx = t_value * 0.036;           // From MWii cm/sec to Km/h
@@ -962,32 +880,12 @@ void display_speed(int16_t t_value, uint8_t t_position, uint8_t t_leadicon)
     if ((xx > Settings[S_SPEED_ALARM]) && (timer.Blink2hz))
       return;
   }
+#ifdef DISPLAYSPEEDMS
+  xx = t_value * 0.01;           // From MWii cm/sec to m/sec
+  displayItem(t_position, xx, t_leadicon, SYM_MS, 0 );
+#else
   displayItem(t_position, xx, t_leadicon, speedUnitAdd[Settings[S_UNITSYSTEM]], 0 );
-}
-
-
-void displayAltitude(void)
-{
-  int16_t altitude;
-  if (Settings[S_UNITSYSTEM])
-    altitude = MwAltitude * 0.032808;  // cm to feet
-  else
-    altitude = MwAltitude / 100;       // cm to mt
-
-  if (armed && allSec > 5 && altitude > altitudeMAX)
-    altitudeMAX = altitude;
-  if (!fieldIsVisible(MwAltitudePosition))
-    return;
-  if (Settings[S_ALTITUDE_ALARM] > 0) {
-    if (((altitude / 100) >= Settings[S_ALTITUDE_ALARM]) && (timer.Blink2hz))
-      return;
-  }
-  formatDistance(altitude, 1, 0, SYM_ALT);
-  MAX7456_WriteString(screenBuffer, getPosition(MwAltitudePosition));
-#ifdef SHOW_MAX_ALTITUDE
-  formatDistance(altitudeMAX, 1, 0, SYM_MAX);
-  MAX7456_WriteString(screenBuffer, getPosition(MwAltitudePosition) + LINE);
-#endif //SHOW_MAX_ALTITUDE
+#endif
 }
 
 
@@ -1488,8 +1386,7 @@ void displayConfigScreen(void)
 
 #ifdef SHORTSUMMARY
     MAX7456_WriteString_P(PGMSTR(&(menu_stats_item[0])), ROLLT);
-    formatTime(flyingTime, screenBuffer, 1);
-    MAX7456_WriteString(screenBuffer, ROLLD - 4);
+    displayTimer(flyingTime, ROLLD - 3, 0);
 #else // SHORTSUMMARY
 
 #ifdef MINSUMMARY
@@ -1534,8 +1431,7 @@ void displayConfigScreen(void)
       }
     }
 
-    formatTime(flyingTime, screenBuffer, 1);
-    MAX7456_WriteString(screenBuffer, ROLLD - 4);
+    displayTimer(flyingTime, ROLLD - 3, 0);
 #endif
 #ifdef HAS_ALARMS
     if (alarmState != ALARM_OK) {
@@ -2464,31 +2360,28 @@ void setDateTime(void)
   }
 }
 
-void updateDateTime(void)
+
+void updateDateTime(uint32_t t_time)
 {
-  //datetime.unixtime=1527712200; // 30/05/2018 @ 8:30 UTC
-  datetime.unixtime++;
-  uint32_t t_time = datetime.unixtime;
-  uint8_t  t_year;
-  uint8_t  t_month;
-  uint8_t  t_monthsize;
-  uint32_t t_days;
+  //datetime.unixtime=1527712200; // 30/05/2018 @ 20:30 UTC for testing
+
+  t_time -= 946684800;
+  uint8_t  t_year=0;
+  uint8_t  t_month=0;
+  uint8_t  t_monthsize=0;
+  uint32_t t_days=0;
   static const uint8_t daysinmonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-#define LEAP_YEAR(Y)     ( ((1970+(Y))>0) && !((1970+(Y))%4) && ( ((1970+(Y))%100) || !((1970+(Y))%400) ) )
+#define LEAP_YEAR(Y) !(((Y))%4) 
 #ifndef DATEFORMAT_UTC
-  if (Settings[S_GPSTZAHEAD])
-    t_time += (3600);
-  if (Settings[S_GPSTZ])
-    t_time += (3600 * Settings[S_GPSTZ]);
+  int32_t t_tzhours = 3600 * (128 - Settings[S_GPSTZ]);
+  t_time = t_time - t_tzhours;
 #endif // DATEFORMAT_UTC 
 
   datetime.seconds = uint32_t (t_time % 60); t_time /= 60;
   datetime.minutes = uint32_t (t_time % 60); t_time /= 60;
   datetime.hours = uint32_t (t_time % 24);   t_time /= 24;
 
-  t_year = 0;
-  t_days = 0;
   while ((unsigned)(t_days += (LEAP_YEAR(t_year) ? 366 : 365)) <= t_time) {
     t_year++;
   }
@@ -2522,7 +2415,21 @@ void updateDateTime(void)
   datetime.day   = t_time + 1;
   datetime.month = t_month + 1;
 #endif
-  datetime.year  = t_year - 30;
+  datetime.year  = t_year;
 }
+
+void displayGPSPosition(void)
+{
+  return;
+  if (!fieldIsVisible(MwGPSLatPositionTop)){
+    return;
+  }
+  uint16_t t_position;
+  t_position = getPosition(MwGPSLatPositionTop);
+  FormatGPSCoord(t_position,GPS_latitude, 0) ;
+  t_position = getPosition(MwGPSLonPositionTop);
+  FormatGPSCoord(t_position,GPS_longitude, 2) ;
+}
+
 
 

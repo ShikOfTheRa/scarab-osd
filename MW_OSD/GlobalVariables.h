@@ -279,7 +279,6 @@ struct  __timer {
 timer;
 
 struct __flags {
-  uint8_t box;
   uint8_t reset;
   uint8_t signaltype;
   uint8_t signalauto;
@@ -435,8 +434,8 @@ enum Setting16_ {
   S16_AMPDIVIDERRATIO,
   S16_RSSIMIN,
   S16_RSSIMAX,
-  S16_AIRSPEEDZERO,
-  S16_AIRSPEEDCAL,
+  S16_AUX_ZERO_CAL,
+  S16_AUX_CAL,
   
   // EEPROM16_SETTINGS must be last!
   EEPROM16_SETTINGS
@@ -502,6 +501,13 @@ S_SIDEBARWIDTH,
   S_CS9,
 S_PWM_PPM,
 S_ELEVATIONS,
+S_ALTRESOLUTION, 
+S_FLIGHTMODETEXT,
+S_BRIGHTNESS,
+S_MAV_ALARMLEVEL,
+S_GLIDESCOPE,
+S_LOSTMODEL,
+S_MAV_AUTO,
 
   // EEPROM_SETTINGS must be last!
   EEPROM_SETTINGS
@@ -511,7 +517,7 @@ S_ELEVATIONS,
 uint8_t  Settings[EEPROM_SETTINGS];
 uint16_t Settings16[EEPROM16_SETTINGS];
 
-//const uint8_t screenlayoutoffset=((EEPROM_SETTINGS-EEPROM16_SETTINGS_START)>>2);
+// Default EEPROM values
 
 #ifdef PROTOCOL_MAVLINK
   #define DEF_S_MAINVOLTAGE_VBAT 1 // 1
@@ -521,6 +527,7 @@ uint16_t Settings16[EEPROM16_SETTINGS];
   #define DEF_S_TX_TYPE 1        // 1
   #define DEF_S_RCWSWITCH 1      // S_RCWSWITCH,
   #define DEF_S_RCWSWITCH_CH 8   // S_RCWSWITCH_CH,
+  #define DEF_S_ALTRESOLUTION 0
 #else
   #define DEF_S_MAINVOLTAGE_VBAT 0
   #define DEF_S_TX_TYPE 0
@@ -529,6 +536,7 @@ uint16_t Settings16[EEPROM16_SETTINGS];
   #define DEF_S_TX_TYPE 0
   #define DEF_S_RCWSWITCH 0
   #define DEF_S_RCWSWITCH_CH 8
+  #define DEF_S_ALTRESOLUTION 10
 #endif
 
 #if defined (UBLOX) || defined iNAV  || defined (MAV_RTC)
@@ -536,6 +544,15 @@ uint16_t Settings16[EEPROM16_SETTINGS];
 #else
   #define DEF_S_GPSTIME 0
 #endif
+
+#ifdef USE_AIRSPEED_SENSOR
+  #define DEF_S16_AUX_ZERO_CAL 512
+  #define DEF_S16_AUX_CAL 500
+#else
+  #define DEF_S16_AUX_ZERO_CAL 0
+  #define DEF_S16_AUX_CAL 931
+#endif
+
 
 // For Settings Defaults
 PROGMEM const uint8_t EEPROM_DEFAULT[EEPROM_SETTINGS] = {
@@ -573,7 +590,7 @@ DEF_S_MWAMPERAGE, //   S_MWAMPERAGE,
 7, //   S_SIDEBARWIDTH,
 DEF_S_GPSTIME, //   S_GPSTIME,
 0, //   S_GPSTZAHEAD,
-0, //   S_GPSTZ,
+128, //   S_GPSTZ,
 #ifdef VTX_RTC6705
 VTX_DEFAULT_POWER,    // S_VTX_POWER
 VTX_DEFAULT_BAND,     // S_VTX_BAND
@@ -604,7 +621,13 @@ DEF_S_RCWSWITCH,   // S_RCWSWITCH,
 0x20,   // S_CS9,
 0,      // S_PWM_PPM,
 0,      // S_ELEVATIONS,
-
+DEF_S_ALTRESOLUTION,     // S_ALTRESOLUTION 
+0,      // S_FLIGHTMODETEXT
+1,      // S_BRIGHTNESS
+6,      // S_MAV_ALARMLEVEL
+0,      // S_GLIDESCOPE - not used
+0,      // S_LOSTMODEL - not used
+1,      // S_MAV_AUTO
 };
 
 PROGMEM const uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
@@ -612,8 +635,8 @@ PROGMEM const uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
   150,// S16_AMPDIVIDERRATIO,
   0,// S16_RSSIMIN,
   1023,// S16_RSSIMAX,
-  512,// S16_AIRSPEEDZERO,
-  500,// S16_AIRSPEEDCAL,
+  DEF_S16_AUX_ZERO_CAL,// S16_AUX_ZERO_CAL,
+  DEF_S16_AUX_CAL,// S16_AUX_CAL,
   
 };
 
@@ -630,7 +653,7 @@ enum Positions {
   MwAltitudePosition,
   MwVarioPosition,
   CurrentThrottlePosition,
-  flyTimePosition,
+  flyTimePosition,              // unused
   onTimePosition,
   motorArmedPosition,
   pitchAnglePosition,
@@ -764,8 +787,7 @@ int32_t  old_MwAltitude=0;                     // This hold barometric value
 
 
 int16_t MwAngle[2]={0,0};           // Those will hold Accelerometer Angle
-static uint16_t MwRcData[1+16]={   // This hold receiver pulse signal
-  1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500,1500} ;
+uint16_t MwRcData[1+16];
 
 
 
@@ -1125,7 +1147,7 @@ const PROGMEM char * const signal_type[] =
   signaltext1,
   signaltext2,
 };
-#elif AUTOCAMFULL // FOr testing
+#elif AUTOCAMFULL // For testing
 const char signaltext0[]  PROGMEM = "NTSC";
 const char signaltext1[]  PROGMEM = "PAL";
 const char signaltext2[]  PROGMEM = "NOT DETECTED-NTSC";
@@ -1162,11 +1184,11 @@ const char configMsgMWII[] PROGMEM = "USE FC";
 
 // For Config pages
 //-----------------------------------------------------------Page0
-const char configMsg00[] PROGMEM = "STATISTICS";
+const char configMsg00[] PROGMEM = "STATS";
 const char configMsg01[] PROGMEM = "FLY TIME";
-const char configMsg02[] PROGMEM = "TOT DISTANCE";
-const char configMsg03[] PROGMEM = "MAX DISTANCE";
-const char configMsg04[] PROGMEM = "MAX ALTITUDE";
+const char configMsg02[] PROGMEM = "TOT DIST";
+const char configMsg03[] PROGMEM = "MAX DIST";
+const char configMsg04[] PROGMEM = "MAX ALT";
 const char configMsg05[] PROGMEM = "MAX SPEED";
 const char configMsg06[] PROGMEM = "MAH USED";
 const char configMsg07[] PROGMEM = "MAX AMPS";
@@ -1345,7 +1367,17 @@ const PROGMEM char * const menu_vtx[] =
 #endif //MENU_VTX
 //-----------------------------------------------------------MENU END
 
+// BETAFLIGHT RTC setting
+const uint8_t monthDays[]=
+    {31,28,31,30,31,30,31,31,30,31,30,31}; 
+    
+// GPS lat/lon display 
+const unsigned char compass[] = {'N','S','E','W'};
+
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
+const unsigned char flightUnitAdd[4] ={
+  SYM_ON_M,SYM_ON_H, SYM_FLY_M,SYM_FLY_H} ; 
+
 const unsigned char speedUnitAdd[2] ={
   SYM_KMH,SYM_MPH} ; // [0][0] and [0][1] = Km/h   [1][0] and [1][1] = Mph
 
@@ -1632,7 +1664,7 @@ const char msp_mode_ACRO[] PROGMEM   = "ACRO"; //Acrobatic: rate control
 const char msp_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
 const char msp_mode_HOZN[] PROGMEM   = "HOZN"; //Horizon
 const char msp_mode_HOLD[] PROGMEM   = "HOLD"; //3D Hold
-const char msp_mode_FAIL[] PROGMEM   = "!FS!"; //Failsafe: auto control
+const char msp_mode_FAIL[] PROGMEM   = "*FS*"; //Failsafe: auto control
 const char msp_mode_WAYP[] PROGMEM   = "WAYP"; //Mission/Waypoint: auto control
 const char msp_mode_PASS[] PROGMEM   = "MANU"; //Passthrough
 const char msp_mode_RTH[]  PROGMEM   = "RTL "; //Return to Launch: auto control
@@ -1648,7 +1680,7 @@ const char msp_mode_SYM_ACRO[] PROGMEM   = {SYM_ACRO,SYM_ACRO1,0}; //Acrobatic: 
 const char msp_mode_SYM_STAB[] PROGMEM   = {SYM_STABLE,SYM_STABLE1,0}; //Stabilize: hold level position
 const char msp_mode_SYM_HOZN[] PROGMEM   = {SYM_HORIZON,SYM_HORIZON1,0}; //Horizon
 const char msp_mode_SYM_HOLD[] PROGMEM   = {SYM_GHOLD,SYM_GHOLD1,0}; //3D Hold
-const char msp_mode_SYM_FAIL[] PROGMEM   = "!FS!"; //Failsafe: auto control
+const char msp_mode_SYM_FAIL[] PROGMEM   = "*FS*"; //Failsafe: auto control
 const char msp_mode_SYM_WAYP[] PROGMEM   = {SYM_GMISSION,SYM_GMISSION1,0}; //Mission/Waypoint: auto control
 const char msp_mode_SYM_PASS[] PROGMEM   = {SYM_PASS,SYM_PASS1,0}; //Passthrough
 const char msp_mode_SYM_RTH[]  PROGMEM   = {SYM_GHOME,SYM_GHOME1,0}; //Return to Launch: auto control
@@ -1750,15 +1782,20 @@ const PROGMEM char * const msp_mode_index[] =
 #define MAVLINK_MESSAGE_INFO_ADSB_VEHICLE 246 
 #define MAVLINK_MESSAGE_INFO_ADSB_VEHICLE_MAGIC 184
 #define MAVLINK_MESSAGE_INFO_ADSB_VEHICLE_LEN 38
+#define MAV_CMD_SET_MESSAGE_INTERVAL 511
+#define MAVLINK_MSG_ID_COMMAND_LONG 76
+#define MAVLINK_MSG_ID_COMMAND_LONG_MAGIC 152
+#define MAVLINK_MSG_ID_COMMAND_LONG_LEN 33
 
+// Mavlink stream requests (APM only?)
+#define MAV_STREAMS 7
 #define MAV_DATA_STREAM_RAW_SENSORS 1
 #define MAV_DATA_STREAM_EXTENDED_STATUS 2
 #define MAV_DATA_STREAM_RC_CHANNELS 3
 #define MAV_DATA_STREAM_POSITION 6
 #define MAV_DATA_STREAM_EXTRA1 10
 #define MAV_DATA_STREAM_EXTRA2 11
-
-
+#define MAV_DATA_STREAM_EXTRA3 12
 
 #define  LAT  0
 #define  LON  1

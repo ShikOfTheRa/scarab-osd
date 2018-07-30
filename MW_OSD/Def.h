@@ -30,20 +30,26 @@
 //#define BOOTRESET          // Enables reset from default Atmega 328 bootloader address (instead of 0) 
 
 
+/********************           Under developement           *********************/
+// development and test
+//#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
+//#define MAV_ADSB                  // Use Baro altitude from mavlink instead of GPS. Requires ADSB data to be configured in mavlink.
+
+
 //#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
   //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   //#define AIRBOTMICRO             // Uncomment this if using an airbot MicroOSD
   //#define EEPROMVER 16              // for eeprom layout verification
-  //#define AEROMAX                 // Uncomment this if using MWOSD AEROMAX hardware
-  #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
+  #define AEROMAX                 // Uncomment this if using MWOSD AEROMAX hardware
+  //#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
   //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
   //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
-  #define APM
+  #define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
+  //#define APM
   //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
   //#define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-  #define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
-  #define MASKGPSLOCATION           // MASK GPS coordinate display with major digits set to random location "XXX.DDDDDDD" 
+  //#define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
   //#define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
   //#define INTRO_DELAY 1           // To speed up startup
   //#define DISPLAY_DEV 0xC000        // Use screen layout dev position - display all items...
@@ -53,9 +59,8 @@
   //#define USE_AIRSPEED_SENSOR
   //#undef GPSTIME
   //#define MAV_ALT_THROTTLE          // Use alternative MAV throttle value. Not raw RC channel.
- 
-
-//#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
+  #define TX_CHANNELS 16 
+  
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.2.0 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define iNAV_KK                   // Uncomment this if you are using AEROMAX OSD and BARO sensor addition with iNAV with KK audio vario
@@ -97,7 +102,7 @@
   //#define APM
   //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
   #define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-  #define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
+  //#define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
 #endif
 //
 
@@ -171,6 +176,7 @@
 
 #ifdef iNAV    //set up latest at time of release
 //  #define iNAV
+  #define MSPV2
 #endif
 
 #ifdef iNAV_KK // iNAV with KK VARIO
@@ -337,6 +343,7 @@
   #ifdef GPSTIME
     #define MSP_RTC_SUPPORT
   #endif
+  #define TX_CHANNELS 16 
   
   #define MENU_STAT
   #define MENU_PID
@@ -587,12 +594,21 @@
 #endif
 #if defined GPSOSD_UBLOX
   #define UBLOX
+  #ifndef ROTORCRAFT
+    #define FIXEDWING
+  #endif
 #endif
 #if defined GPSOSD_NMEA
   #define NMEA
+  #ifndef ROTORCRAFT
+    #define FIXEDWING
+  #endif
 #endif
 #if defined GPSOSD_MTK
   #define MTK
+  #ifndef ROTORCRAFT
+    #define FIXEDWING
+  #endif
 #endif
 
 
@@ -912,7 +928,7 @@ enum {
     #define ATMEGASETHARDWAREPORTS DDRC &= B11110111;DDRD &= B11011111;
     #define INTD5    
     #undef  AUXPIN
-    #define AUXPIN    A2  // A6 for Aeromax hardware only        
+    #define AUXPIN    A6  // A6 for Aeromax hardware only        
 #elif defined AIRBOTMICRO
     #undef VOLTAGEPIN
     #undef VIDVOLTAGEPIN
@@ -1079,7 +1095,7 @@ enum {
 #if defined MSP_SPEED_HIGH
   #define hi_speed_cycle  10  // updates everything approx 6.3 times per second, updates attitude 30 times per second
 #elif defined MSP_SPEED_MED
-  #define hi_speed_cycle  50  // same as low, but also updates attitude 10 times per second
+  #define hi_speed_cycle  30  // same as low, but also updates attitude 10 times per second
 #else
   #define hi_speed_cycle  30  // updates everything approx 3 times per second
 #endif

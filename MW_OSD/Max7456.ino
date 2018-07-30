@@ -1,15 +1,5 @@
 #include "bitarray.h"
 
-#if defined WHITEBRIGHTNESS | defined BLACKBRIGHTNESS
-  #ifndef WHITEBRIGHTNESS
-    #define WHITEBRIGHTNESS 0x01
-  #endif
-  #ifndef BLACKBRIGHTNESS
-    #define BLACKBRIGHTNESS 0x00
-  #endif
-  #define BWBRIGHTNESS ((BLACKBRIGHTNESS << 2) | WHITEBRIGHTNESS)
-#endif
-
 // video mode register 0 bits
 #define VIDEO_BUFFER_DISABLE 0x01
 //#define MAX7456_RESET 0x02
@@ -141,7 +131,7 @@ void MAX7456SoftReset(void)
 
   // Issue software reset
   MAX7456_Send(MAX7456ADD_VM0, (1 << 1));
-  MAX7456DISABLE;
+  MAX7456DISABLE
 }
 #endif
 
@@ -217,7 +207,7 @@ void MAX7456Setup(void)
 #ifdef BWBRIGHTNESS // change charactor black/white level brightess from default 
   uint8_t x;
   for(x = 0; x < MAX_screen_rows; x++) {
-    MAX7456_Send(MAX7456ADD_RB0+x, BWBRIGHTNESS);
+    MAX7456_Send(MAX7456ADD_RB0+x, Settings[S_BRIGHTNESS]);
   }
 #endif
   MAX7456DISABLE
@@ -357,7 +347,7 @@ void MAX7456_DrawScreen()
   MAX7456_Send(MAX7456ADD_DMDI, END_string);
   MAX7456_Send(MAX7456ADD_DMM, 0);
 
-  MAX7456DISABLE;
+  MAX7456DISABLE
 }
 
 void MAX7456_Send(uint8_t add, uint8_t data)
