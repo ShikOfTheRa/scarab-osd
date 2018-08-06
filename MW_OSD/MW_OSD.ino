@@ -292,10 +292,10 @@ void loop()
   screenlayout = 0;
   if (Settings[S_RCWSWITCH] == 1) {
     if (MwRcData[rcswitch_ch] > TX_CHAN_HIGH) {
-      screenlayout = 1;
+      screenlayout = 2;
     }
     else if (MwRcData[rcswitch_ch] > TX_CHAN_MID) {
-      screenlayout = 2;
+      screenlayout = 1;
     }
   }
   else {
