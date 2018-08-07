@@ -154,7 +154,7 @@ void setupSensor()
 void twiSendCommand(byte address, byte command)
 {
   Wire.beginTransmission(address);
-  if (!Wire.write(command)) ; //Serial.println("Error: write()");
+  if (!Wire.write(command)) ; 
   if (Wire.endTransmission()) 
   {
 //    Serial.print("Error when sending command: ");

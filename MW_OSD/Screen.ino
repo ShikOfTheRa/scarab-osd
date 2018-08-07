@@ -1128,7 +1128,6 @@ void displayWindSpeed(void)
 {
   if (!fieldIsVisible(WIND_speedPosition))
     return;
-  uint16_t position = getPosition(WIND_speedPosition);
   int16_t d;
 #ifdef PROTOCOL_MAVLINK
 #ifdef MAV_WIND_DIR_REVERSE

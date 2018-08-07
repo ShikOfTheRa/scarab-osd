@@ -820,7 +820,7 @@ int32_t previousfwaltitude=0;
 int16_t AIR_speed;
 int16_t GPS_speed;
 int16_t  GPS_ground_course;
-uint16_t old_GPS_speed;
+int16_t old_GPS_speed;
 int16_t GPS_directionToHome=0;
 uint8_t GPS_numSat=0;
 uint16_t GPS_dop=0;
@@ -894,7 +894,7 @@ int16_t temperature=0;                  // temperature in degrees Centigrade
 
 
 // For Statistics
-uint16_t speedMAX=0;
+int16_t speedMAX=0;
 int16_t altitudeMAX=0;
 uint32_t distanceMAX=0;
 uint16_t ampMAX=0;
@@ -1673,20 +1673,20 @@ const char msp_mode_AIR[]  PROGMEM   = "AIR "; //Air mode
 const char msp_mode_MSP[]  PROGMEM   = ""; //Unknown MSP mode
 
 #ifdef FIXEDWING
-const char msp_mode_SYM_ACRO[] PROGMEM   = {SYM_ACROGY,SYM_ACRO1,0}; //Acrobatic: rate control
+const char msp_mode_SYM_ACRO[] PROGMEM   = {(unsigned)SYM_ACROGY,(unsigned)SYM_ACRO1,0}; //Acrobatic: rate control
 #else
-const char msp_mode_SYM_ACRO[] PROGMEM   = {SYM_ACRO,SYM_ACRO1,0}; //Acrobatic: rate control
+const char msp_mode_SYM_ACRO[] PROGMEM   = {(unsigned)SYM_ACRO,(unsigned)SYM_ACRO1,0}; //Acrobatic: rate control
 #endif
-const char msp_mode_SYM_STAB[] PROGMEM   = {SYM_STABLE,SYM_STABLE1,0}; //Stabilize: hold level position
-const char msp_mode_SYM_HOZN[] PROGMEM   = {SYM_HORIZON,SYM_HORIZON1,0}; //Horizon
-const char msp_mode_SYM_HOLD[] PROGMEM   = {SYM_GHOLD,SYM_GHOLD1,0}; //3D Hold
+const char msp_mode_SYM_STAB[] PROGMEM   = {(unsigned)SYM_STABLE,(unsigned)SYM_STABLE1,0}; //Stabilize: hold level position
+const char msp_mode_SYM_HOZN[] PROGMEM   = {(unsigned)SYM_HORIZON,(unsigned)SYM_HORIZON1,0}; //Horizon
+const char msp_mode_SYM_HOLD[] PROGMEM   = {(unsigned)SYM_GHOLD,(unsigned)SYM_GHOLD1,0}; //3D Hold
 const char msp_mode_SYM_FAIL[] PROGMEM   = "*FS*"; //Failsafe: auto control
-const char msp_mode_SYM_WAYP[] PROGMEM   = {SYM_GMISSION,SYM_GMISSION1,0}; //Mission/Waypoint: auto control
-const char msp_mode_SYM_PASS[] PROGMEM   = {SYM_PASS,SYM_PASS1,0}; //Passthrough
-const char msp_mode_SYM_RTH[]  PROGMEM   = {SYM_GHOME,SYM_GHOME1,0}; //Return to Launch: auto control
+const char msp_mode_SYM_WAYP[] PROGMEM   = {(unsigned)SYM_GMISSION,(unsigned)SYM_GMISSION1,0}; //Mission/Waypoint: auto control
+const char msp_mode_SYM_PASS[] PROGMEM   = {(unsigned)SYM_PASS,(unsigned)SYM_PASS1,0}; //Passthrough
+const char msp_mode_SYM_RTH[]  PROGMEM   = {(unsigned)SYM_GHOME,(unsigned)SYM_GHOME1,0}; //Return to Launch: auto control
 const char msp_mode_SYM_LNCH[] PROGMEM   = "LNCH"; //Launch mode - or gone to lunch :)
-const char msp_mode_SYM_AIR[]  PROGMEM   = {SYM_AIR,SYM_AIR1,0}; //Air mode
-const char msp_mode_SYM_MSP[]  PROGMEM   = {0}; //Unknown MSP mode
+const char msp_mode_SYM_AIR[]  PROGMEM   = {(unsigned)SYM_AIR,(unsigned)SYM_AIR1,0}; //Air mode
+const char msp_mode_SYM_MSP[]  PROGMEM   = {(unsigned)0}; //Unknown MSP mode
 
 const PROGMEM char * const msp_mode_index[] = 
 {   

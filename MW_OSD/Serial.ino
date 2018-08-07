@@ -116,22 +116,6 @@ void mspV2Write16(uint16_t t){
   mspV2Write8(t>>8);
 }
 
-uint8_t crc8_dvb_s2_tx(uint8_t crc, unsigned char a, uint8_t crcversion)
-{
-  crc ^= a;
-  if (crcversion == 2){   
-    for (int ii = 0; ii < 8; ++ii){
-      if (crc & 0x80){
-        crc = (crc << 1) ^ 0xD5;
-      }
-      else{
-        crc = crc << 1;
-      }
-    }
-  }
-    txChecksum=crc;
-}
-
 // Writes to GUI (OSD_xxx) is distinguished from writes to FC (MSP_xxx) by
 // cfgWrite*() and mspWrite*().
 //
@@ -1624,7 +1608,7 @@ void serialMSPreceive(uint8_t loops)
 }
 
 
-uint8_t crc8_dvb_s2(uint8_t crc, unsigned char a, uint8_t crcversion)
+void crc8_dvb_s2(uint8_t crc, unsigned char a, uint8_t crcversion)
 {
   crc ^= a;
   if (crcversion == 2){   
