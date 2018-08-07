@@ -155,7 +155,7 @@ void twiSendCommand(byte address, byte command)
 {
   Wire.beginTransmission(address);
   if (!Wire.write(command)) ; 
-  if (Wire.endTransmission()) 
+  if (Wire.endTransmission()); 
 /*
   {
     Serial.print("Error when sending command: ");
