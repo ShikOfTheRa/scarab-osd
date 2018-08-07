@@ -1166,7 +1166,7 @@ enum {
 #ifdef MULTIWII
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #undef  INTRO_MENU
   #define INFO_CONTROLLER 1
 #endif
@@ -1179,13 +1179,13 @@ enum {
 #ifdef LIBREPILOT
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #define INFO_CONTROLLER 3
 #endif
 #ifdef DRONIN
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #define INFO_CONTROLLER 5
 #endif
 #ifdef CLEANFLIGHT
@@ -1215,13 +1215,13 @@ enum {
 #ifdef APM
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #define INFO_CONTROLLER 14
 #endif
 #ifdef PX4
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #define INFO_CONTROLLER 15
 #endif
 #ifdef SKYTRACK
@@ -1230,19 +1230,19 @@ enum {
 #ifdef GPSOSD_UBLOX
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #define INFO_CONTROLLER 17
 #endif
 #ifdef GPSOSD_NMEA
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #define INFO_CONTROLLER 18
 #endif
 #ifdef GPSOSD_NMEA
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #define INFO_CONTROLLER 19
 #endif
 #ifdef NOCONTROLLER

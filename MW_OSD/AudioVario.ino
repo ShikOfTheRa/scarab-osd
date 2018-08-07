@@ -156,11 +156,13 @@ void twiSendCommand(byte address, byte command)
   Wire.beginTransmission(address);
   if (!Wire.write(command)) ; 
   if (Wire.endTransmission()) 
+/*
   {
-//    Serial.print("Error when sending command: ");
-//    Serial.println(command, HEX);
+    Serial.print("Error when sending command: ");
+    Serial.println(command, HEX);
   }
+*/  
 }
-#endif KKAUDIOVARIO
+#endif //KKAUDIOVARIO
 
 
