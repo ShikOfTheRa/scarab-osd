@@ -1673,19 +1673,19 @@ const char msp_mode_AIR[]  PROGMEM   = "AIR "; //Air mode
 const char msp_mode_MSP[]  PROGMEM   = ""; //Unknown MSP mode
 
 #ifdef FIXEDWING
-const char msp_mode_SYM_ACRO[] PROGMEM   = {SYM_ACROGY,SYM_ACRO1,0}; //Acrobatic: rate control
+const char msp_mode_SYM_ACRO[] PROGMEM   = {(unsigned char)SYM_ACROGY,(unsigned char)SYM_ACRO1,0}; //Acrobatic: rate control
 #else
-const char msp_mode_SYM_ACRO[] PROGMEM   = {SYM_ACRO,SYM_ACRO1,0}; //Acrobatic: rate control
+const char msp_mode_SYM_ACRO[] PROGMEM   = {(unsigned char)SYM_ACRO,(unsigned char)SYM_ACRO1,0}; //Acrobatic: rate control
 #endif
-const char msp_mode_SYM_STAB[] PROGMEM   = {SYM_STABLE,SYM_STABLE1,0}; //Stabilize: hold level position
-const char msp_mode_SYM_HOZN[] PROGMEM   = {SYM_HORIZON,SYM_HORIZON1,0}; //Horizon
-const char msp_mode_SYM_HOLD[] PROGMEM   = {SYM_GHOLD,SYM_GHOLD1,0}; //3D Hold
+const char msp_mode_SYM_STAB[] PROGMEM   = {(unsigned char)SYM_STABLE,(unsigned char)SYM_STABLE1,0}; //Stabilize: hold level position
+const char msp_mode_SYM_HOZN[] PROGMEM   = {(unsigned char)SYM_HORIZON,(unsigned char)SYM_HORIZON1,0}; //Horizon
+const char msp_mode_SYM_HOLD[] PROGMEM   = {(unsigned char)SYM_GHOLD,(unsigned char)SYM_GHOLD1,0}; //3D Hold
 const char msp_mode_SYM_FAIL[] PROGMEM   = "*FS*"; //Failsafe: auto control
-const char msp_mode_SYM_WAYP[] PROGMEM   = {SYM_GMISSION,SYM_GMISSION1,0}; //Mission/Waypoint: auto control
-const char msp_mode_SYM_PASS[] PROGMEM   = {SYM_PASS,SYM_PASS1,0}; //Passthrough
-const char msp_mode_SYM_RTH[]  PROGMEM   = {SYM_GHOME,SYM_GHOME1,0}; //Return to Launch: auto control
+const char msp_mode_SYM_WAYP[] PROGMEM   = {(unsigned char)SYM_GMISSION,(unsigned char)SYM_GMISSION1,0}; //Mission/Waypoint: auto control
+const char msp_mode_SYM_PASS[] PROGMEM   = {(unsigned char)SYM_PASS,(unsigned char)SYM_PASS1,0}; //Passthrough
+const char msp_mode_SYM_RTH[]  PROGMEM   = {(unsigned char)SYM_GHOME,(unsigned char)SYM_GHOME1,0}; //Return to Launch: auto control
 const char msp_mode_SYM_LNCH[] PROGMEM   = "LNCH"; //Launch mode - or gone to lunch :)
-const char msp_mode_SYM_AIR[]  PROGMEM   = {SYM_AIR,SYM_AIR1,0}; //Air mode
+const char msp_mode_SYM_AIR[]  PROGMEM   = {(unsigned char)SYM_AIR,(unsigned char)SYM_AIR1,0}; //Air mode
 const char msp_mode_SYM_MSP[]  PROGMEM   = {0}; //Unknown MSP mode
 
 const PROGMEM char * const msp_mode_index[] = 

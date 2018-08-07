@@ -17,16 +17,6 @@
 #define SBAS_TEST_MODE          PSTR("$PMTK319,0*25\r\n")  //Enable test use of sbas satelite in test mode (usually PRN124 is in test mode)
 #endif
 
-// moving average filter variables
-#define GPS_FILTER_VECTOR_LENGTH 5
-
-static uint8_t GPS_filter_index = 0;
-static int32_t GPS_filter[2][GPS_FILTER_VECTOR_LENGTH];
-static int32_t GPS_filter_sum[2];
-static int32_t GPS_read[2];
-static int32_t GPS_filtered[2];
-static int32_t GPS_degree[2];    //the lat lon degree without any decimals (lat/10 000 000)
-static uint16_t fraction3[2];
 
 struct {
   uint8_t  GPS_fix;
