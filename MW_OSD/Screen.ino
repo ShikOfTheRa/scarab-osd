@@ -701,29 +701,25 @@ void displayWatt(void)
 
 void displayEfficiency(void)
 {
-  uint16_t xx;
+  uint16_t t_xx;
+  uint16_t t_efficiency;
   if (!Settings[S_UNITSYSTEM])
-    xx = GPS_speed * 0.036;           // From MWii cm/sec to Km/h
+    t_xx = GPS_speed * 0.036;           // From MWii cm/sec to Km/h
   else
-    xx = GPS_speed * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
-  uint16_t eff;
-  if (xx > 0) {
-    eff = amperage * voltage / (10 * xx); // Watts/Speed}
+    t_xx = GPS_speed * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
+  if (t_xx > 0) {
+    t_efficiency = amperage * voltage / (10 * t_xx); // Watts/Speed}
   }
   else {
-    eff = 999;
     t_efficiency = 999;
   }
-  if (eff < 999)
-    displayItem(efficiencyPosition, eff, SYM_EFF, 0, 0 );
+  if (t_efficiency < 999)
+    displayItem(efficiencyPosition, t_efficiency, SYM_EFF, 0, 0 );
 }
 
 
+void displayAverageEfficiency(void)
 {
-  if (flyingTime > 0)
-  #if defined DISPLAYMAHKM // mAH used per KM travelled. TBA
-    t_efficiency = (uint32_t)  amperagesum / (360* trip); /// needs to be developed. KM or Miles
-  #else // mAh/min KMh
   uint16_t t_xx;
   uint16_t t_efficiency;
   if (!Settings[S_UNITSYSTEM])
