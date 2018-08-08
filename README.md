@@ -29,7 +29,7 @@ An Multipurpose Open Source OSD software with support for:
 MWOSD also provides support a number of other configurations: 
 <ul class="task-list">
 <li>Traditional GPS based OSD with full GPS info - Altitude , Direction, Distance, Speed etc.</li>
-<li>Traditional standalone basic OSD - basic Volts / Amps / RSSI / Timer</li>
+<li>Basic OSD - basic Volts / Amps / RSSI / Timer</li>
 <li>Groundstation OSD for GS voltage / RSSI and Timer</li>
 <li>NAZA - test only</li>
 </ul>

@@ -440,7 +440,7 @@
 
 
 /********************  Under developemnt      *********************/
-// This is a work in process. ot completed for implementation
+// This is a work in process. Not completed for implementation
 #define DISPLAYMAHKM                // Display average mAh used / per KM instead of mAh/min KMh. 
 
 
