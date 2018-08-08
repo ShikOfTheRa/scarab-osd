@@ -729,7 +729,7 @@ void displayAverageEfficiency(void)
   if (trip > 0){
     t_efficiency = (uint32_t)  (amperagesum * t_xx) / (360* trip);
   if (t_efficiency < 9999)
-    displayItem(avgefficiencyPosition, t_efficiency, SYM_EFF, 0, 0 );
+    displayItem(avgefficiencyPosition, t_efficiency, SYM_AVG_EFF, 0, 0 );
   }
 }
 

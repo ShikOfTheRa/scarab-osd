@@ -76,7 +76,7 @@ uint16_t UntouchedStack(void)
 //------------------------------------------------------------------------
 #define MWVERS "MW-OSD - R1.9"
 //#define MWVERS "MW-OSD - R1.9"
-#define MWOSDVERSION 1990 // 1660=1.6.6.0 for GUI
+#define MWOSDVERSION 1900 // 1660=1.6.6.0 for GUI
 #define EEPROMVER 16      // for eeprom layout verification
 
 #include <avr/pgmspace.h>
