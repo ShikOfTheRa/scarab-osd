@@ -712,22 +712,29 @@ void displayEfficiency(void)
   }
   else {
     eff = 999;
+    t_efficiency = 999;
   }
   if (eff < 999)
     displayItem(efficiencyPosition, eff, SYM_EFF, 0, 0 );
 }
 
 
-void displaymAhmin(void)
 {
-  uint16_t t_efficiency = 0;
   if (flyingTime > 0)
   #if defined DISPLAYMAHKM // mAH used per KM travelled. TBA
     t_efficiency = (uint32_t)  amperagesum / (360* trip); /// needs to be developed. KM or Miles
   #else // mAh/min KMh
-    t_efficiency = (uint32_t) amperagesum / (flyingTime * 6); 
-  #endif
-  displayItem(avgefficiencyPosition, t_efficiency, SYM_AVG_EFF, 0, 0 );
+  uint16_t t_xx;
+  uint16_t t_efficiency;
+  if (!Settings[S_UNITSYSTEM])
+    t_xx = 1000;
+  else
+    t_xx = 5280;
+  if (trip > 0){
+    t_efficiency = (uint32_t)  (amperagesum * t_xx) / (360* trip);
+  if (t_efficiency < 9999)
+    displayItem(avgefficiencyPosition, t_efficiency, SYM_EFF, 0, 0 );
+  }
 }
 
 

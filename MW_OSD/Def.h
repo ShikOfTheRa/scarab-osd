@@ -38,6 +38,8 @@
 
 //#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
+//#define DISPLAYAVGEFFICIENCY                // Display average mAh used / per KM instead of mAh/min KMh. 
+
   //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   //#define AIRBOTMICRO             // Uncomment this if using an airbot MicroOSD
   //#define EEPROMVER 16              // for eeprom layout verification

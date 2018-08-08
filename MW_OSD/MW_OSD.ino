@@ -602,9 +602,9 @@ void loop()
 #if defined (DISPLAYEFFICIENCY)
         displayEfficiency();
 #endif //DISPLAYEFFICIENCY
-#if defined (DISPLAYMAHMIN)
-        displaymAhmin();
-#endif //DISPLAYMAHMIN
+#if defined (DISPLAYAVGEFFICIENCY)
+        displayAverageEfficiency();
+#endif //DISPLAYAVGEFFICIENCY
 #ifdef SHOW_TEMPERATURE
         displayTemperature();
 #endif
