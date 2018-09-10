@@ -38,6 +38,8 @@
 
 //#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
+//#define DISPLAYAVGEFFICIENCY                // Display average mAh used / per KM instead of mAh/min KMh. 
+
   //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   //#define AIRBOTMICRO             // Uncomment this if using an airbot MicroOSD
   //#define EEPROMVER 16              // for eeprom layout verification
@@ -840,19 +842,6 @@ enum {
   #define USE_FC_VOLTS_CONFIG
 #endif
 
-/********************  OPTIONS enabled definitions  *********************/
-#ifdef USE_MENU_VTX
-  #define INFO_OPTIONS_4 1<<4
-#else
-  #define INFO_OPTIONS_4 0
-#endif
-#if defined TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI 
-  #define INFO_OPTIONS_5 1<<5
-#else
-  #define INFO_OPTIONS_5 0
-#endif
-#define INFO_OPTIONS 0|INFO_OPTIONS_4|INFO_OPTIONS_5
-
 /********************  FIXEDWING definitions  *********************/
 #ifdef FIXEDWING                     
   //#define LONG_RANGE_DISPLAY
@@ -1293,6 +1282,34 @@ enum {
 #ifdef FIXEDWING
   #define INFO_AIRCRAFT 2
 #endif
+
+
+/********************  OPTIONS enabled definitions  *********************/
+#ifdef PROTOCOL_MAVLINK
+  #define INFO_OPTIONS_0 1<<0
+#else
+  #define INFO_OPTIONS_0 0
+#endif
+
+#ifdef GPSOSD
+  #define INFO_OPTIONS_1 1<<1
+#else
+  #define INFO_OPTIONS_1 0
+#endif
+
+#ifdef USE_MENU_VTX
+  #define INFO_OPTIONS_4 1<<4
+#else
+  #define INFO_OPTIONS_4 0
+#endif
+
+#if defined TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI 
+  #define INFO_OPTIONS_5 1<<5
+#else
+  #define INFO_OPTIONS_5 0
+#endif
+
+#define INFO_OPTIONS 0|INFO_OPTIONS_0|INFO_OPTIONS_1|INFO_OPTIONS_4|INFO_OPTIONS_5
 
 
 /********************  info for GUI  *********************/

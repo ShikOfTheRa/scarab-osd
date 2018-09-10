@@ -275,7 +275,7 @@
 /********************       Power / efficiency display Settings         ************************/
 #define DISPLAYWATTS                // Disable to save memory if not used. Enable this to display Watts
 #define DISPLAYEFFICIENCY           // Disable to save memory if not used. Enable this to display Watts/KMh or Mph for efficiency
-#define DISPLAYMAHMIN               // Disable to save memory if not used. Enable this to display average mAh/min KMh
+#define DISPLAYAVGEFFICIENCY        // Disable to save memory if not used. Enable this to display average mAh used / per KM or Mile travelled. 
 
 
 /********************       Visual Vario / climbrate Settings         ************************/
@@ -441,7 +441,6 @@
 
 /********************  Under developemnt      *********************/
 // This is a work in process. Not completed for implementation
-#define DISPLAYMAHKM                // Display average mAh used / per KM instead of mAh/min KMh. 
 
 
 
