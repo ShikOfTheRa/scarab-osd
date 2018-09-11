@@ -440,7 +440,7 @@ if (cmdMSP==MSP_STATUS)
     MwSensorPresent = read16();
     MwSensorActive = read32();
     #if defined FORCESENSORS
-      MwSensorPresent=GPSSENSOR|BAROMETER|MAGNETOMETER|ACCELEROMETER;
+      MwSensorPresent|=BAROMETER|MAGNETOMETER|ACCELEROMETER;
     #endif  
     armed = (MwSensorActive & mode.armed) != 0;
     FCProfile = read8();
