@@ -1052,7 +1052,7 @@ const char debug_text[]     PROGMEM = " ";
 const char satwait_text[]   PROGMEM = "  WAIT";
 const char launch_text[]    PROGMEM = " LAUNCH";
 const char ready_text[]     PROGMEM = " READY";
-const char CRUISE_text[]    PROGMEM = " READY";
+const char CRUISE_text[]    PROGMEM = " C";
 const char AUTOTRIM_text[]  PROGMEM = "AUTOTRIM";
 const char AUTOTUNE_text[]  PROGMEM = "AUTOTUNE";
 
@@ -1065,10 +1065,9 @@ const PROGMEM char * const message_text[] =
   APHOLDtext,      //3
   APWAYPOINTtext,  //4
 #ifdef EXTENDEDMODESUPPORT
-  CRUISE_text,     //5
-  launch_text,     //6
-  AUTOTRIM_text,   //7
-  AUTOTUNE_text,   //8
+  launch_text,     //5
+  AUTOTRIM_text,   //6
+  AUTOTUNE_text,   //7
 #endif // EXTENDEDMODESUPPORT 
 };
 
@@ -1696,11 +1695,11 @@ const char msp_mode_SYM_ACRO[] PROGMEM   = {SYM_ACRO,SYM_ACRO1,0}; //Acrobatic: 
 const char msp_mode_SYM_STAB[] PROGMEM   = {SYM_STABLE,SYM_STABLE1,0}; //Stabilize: hold level position
 const char msp_mode_SYM_HOZN[] PROGMEM   = {SYM_HORIZON,SYM_HORIZON1,0}; //Horizon
 const char msp_mode_SYM_HOLD[] PROGMEM   = {SYM_GHOLD,SYM_GHOLD1,0}; //3D Hold
-const char msp_mode_SYM_FAIL[] PROGMEM   = "*FS*"; //Failsafe: auto control
+//const char msp_mode_SYM_FAIL[] PROGMEM   = "*FS*"; //Failsafe: auto control
 const char msp_mode_SYM_WAYP[] PROGMEM   = {SYM_GMISSION,SYM_GMISSION1,0}; //Mission/Waypoint: auto control
 const char msp_mode_SYM_PASS[] PROGMEM   = {SYM_PASS,SYM_PASS1,0}; //Passthrough
 const char msp_mode_SYM_RTH[]  PROGMEM   = {SYM_GHOME,SYM_GHOME1,0}; //Return to Launch: auto control
-const char msp_mode_SYM_CRUZ[] PROGMEM   = "CRUZ"; //Cruise mode
+//const char msp_mode_SYM_CRUZ[] PROGMEM   = "CRUZ"; //Cruise mode
 const char msp_mode_SYM_AIR[]  PROGMEM   = {SYM_AIR,SYM_AIR1,0}; //Air mode
 const char msp_mode_SYM_MSP[]  PROGMEM   = {0}; //Unknown MSP mode
 
@@ -1720,9 +1719,9 @@ const PROGMEM char * const msp_mode_index[] =
 
  msp_mode_SYM_MSP, 
  msp_mode_SYM_PASS, 
- msp_mode_SYM_FAIL, 
+ msp_mode_FAIL, 
  msp_mode_SYM_RTH,
- msp_mode_SYM_CRUZ,
+ msp_mode_CRUZ,
  msp_mode_SYM_WAYP, 
  msp_mode_SYM_HOLD,
  msp_mode_SYM_STAB,

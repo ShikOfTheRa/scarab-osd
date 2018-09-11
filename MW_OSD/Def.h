@@ -51,7 +51,7 @@
   //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
   //#define DISPLAYAVGEFFICIENCY                // Display average mAh used / per KM instead of mAh/min KMh. 
   #define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-  //#define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
+  #define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
   //#define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
   //#define INTRO_DELAY 1           // To speed up startup
   //#define DISPLAY_DEV 0xC000        // Use screen layout dev position - display all items...

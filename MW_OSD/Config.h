@@ -73,7 +73,7 @@
 
 
 /********************       Debug      *********************/
-#define MENU_DEBUG                  // Enable to display debug values in OSD menu 
+//#define MENU_DEBUG                  // Enable to display debug values in OSD menu 
 
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
