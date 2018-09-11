@@ -185,14 +185,14 @@ void displayMode(void)
   else if (MwSensorActive & mode.gpshome) {
     flightmode = 3;
   }
-  //  else if(MwSensorActive&mode.launch){
-  //    flightmode=4;
-  //  }
   else if (MwSensorActive & mode.gpsmission) {
     flightmode = 5;
   }
   else if (MwSensorActive & mode.gpshold) {
     flightmode = 6;
+  }
+  else if(MwSensorActive&mode.cruise){
+    flightmode=4;
   }
   else if (MwSensorActive & mode.stable) {
     flightmode = 7;
@@ -269,6 +269,16 @@ void displayMode(void)
     apactive = 3;
   else if (MwSensorActive & mode.gpsmission)
     apactive = 4;
+#ifdef EXTENDEDMODESUPPORT  
+  else if (MwSensorActive & mode.cruise)
+    apactive = 5;
+  else if (MwSensorActive & mode.launch)
+    apactive = 6;
+  else if (MwSensorActive & mode.autotrim)
+    apactive = 7;
+  else if (MwSensorActive & mode.autotune)
+    apactive = 8;
+#endif // EXTENDEDMODESUPPORT
   else
     return;
   MAX7456_WriteString_P(PGMSTR(&(message_text[apactive])), getPosition(APstatusPosition));
