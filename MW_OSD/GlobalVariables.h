@@ -1699,7 +1699,7 @@ const char msp_mode_SYM_HOLD[] PROGMEM   = {SYM_GHOLD,SYM_GHOLD1,0}; //3D Hold
 const char msp_mode_SYM_WAYP[] PROGMEM   = {SYM_GMISSION,SYM_GMISSION1,0}; //Mission/Waypoint: auto control
 const char msp_mode_SYM_PASS[] PROGMEM   = {SYM_PASS,SYM_PASS1,0}; //Passthrough
 const char msp_mode_SYM_RTH[]  PROGMEM   = {SYM_GHOME,SYM_GHOME1,0}; //Return to Launch: auto control
-//const char msp_mode_SYM_CRUZ[] PROGMEM   = "CRUZ"; //Cruise mode
+const char msp_mode_SYM_CRUZ[] PROGMEM   = "CZ"; //Cruise mode
 const char msp_mode_SYM_AIR[]  PROGMEM   = {SYM_AIR,SYM_AIR1,0}; //Air mode
 const char msp_mode_SYM_MSP[]  PROGMEM   = {0}; //Unknown MSP mode
 
@@ -1721,7 +1721,7 @@ const PROGMEM char * const msp_mode_index[] =
  msp_mode_SYM_PASS, 
  msp_mode_FAIL, 
  msp_mode_SYM_RTH,
- msp_mode_CRUZ,
+ msp_mode_SYM_CRUZ,
  msp_mode_SYM_WAYP, 
  msp_mode_SYM_HOLD,
  msp_mode_SYM_STAB,
