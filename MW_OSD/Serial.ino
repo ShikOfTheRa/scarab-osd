@@ -3,6 +3,8 @@
   #define SERIALBUFFERSIZE 250
 #elif defined SUBMERSIBLE
   #define SERIALBUFFERSIZE 65
+#elif defined iNAV // 40 max in test
+  #define SERIALBUFFERSIZE 65
 #else
   #define SERIALBUFFERSIZE 100
 #endif
@@ -456,7 +458,7 @@ if (cmdMSP==MSP_STATUS)
     MwSensorPresent = read16();
     MwSensorActive = read32();
     #if defined FORCESENSORS
-      MwSensorPresent=GPSSENSOR|BAROMETER|MAGNETOMETER|ACCELEROMETER;
+      MwSensorPresent|=BAROMETER|MAGNETOMETER|ACCELEROMETER;
     #endif  
     armed = (MwSensorActive & mode.armed) != 0;
     FCProfile = read8();
@@ -966,18 +968,37 @@ if (cmdMSP==MSP_STATUS)
       case 19:
         mode.osd_switch |= bit;
         break;
-      case IDBOXWP:
-        mode.gpsmission |= bit;
-        break;
-      case IDBOXGPSLAND:
-        mode.gpsland |= bit;
-        break;
       case IDBOXAIR:
         mode.air |= bit;
         break;
       case 27:
         mode.failsafe |= bit;
         break;
+      case IDBOXWP:
+        mode.gpsmission |= bit;
+        break;
+#ifdef EXTENDEDMODESUPPORT
+      case IDBOXGPSLAND:
+        mode.gpsland |= bit;
+        break;
+      case 21:
+        mode.autotune |= bit;
+        break;
+      case 37:
+        mode.autotrim |= bit;
+        break;
+      case 36:
+        mode.launch |= bit;
+        break;
+      case 45:
+        mode.cruise |= bit;
+        break;
+      case 34:
+        mode.flaperon |= bit;
+        break;
+#endif // EXTENDEDMODESUPPORT
+
+        
 #if defined ACROPLUS
       case 29:
         mode.acroplus |= bit;

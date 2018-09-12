@@ -410,9 +410,9 @@ uint16_t serialrxrate = 0;
 
 // Mode bits
 struct __mode {
-  uint32_t armed;
-  uint32_t stable;
-  uint32_t horizon;
+  uint8_t armed;
+  uint8_t stable;
+  uint8_t horizon;
   uint32_t baro;
   uint32_t mag;
   uint32_t camstab;
@@ -425,7 +425,14 @@ struct __mode {
   uint32_t osd_switch;
   uint32_t llights;
   uint32_t gpsmission;
+  uint32_t cruise;
+#ifdef EXTENDEDMODESUPPORT
   uint32_t gpsland;
+  uint32_t autotune;
+  uint32_t autotrim;
+  uint32_t launch;
+  uint32_t flaperon;
+#endif
 }mode;
 
 // Settings Locations
@@ -1045,15 +1052,23 @@ const char debug_text[]     PROGMEM = " ";
 const char satwait_text[]   PROGMEM = "  WAIT";
 const char launch_text[]    PROGMEM = " LAUNCH";
 const char ready_text[]     PROGMEM = " READY";
+const char CRUISE_text[]    PROGMEM = " C";
+const char AUTOTRIM_text[]  PROGMEM = "AUTOTRIM";
+const char AUTOTUNE_text[]  PROGMEM = "AUTOTUNE";
 
 // For Alarm / Message text
 const PROGMEM char * const message_text[] =
 {   
-  blank_text,     //0
-  FAILtext,       //1
-  APRTHtext,      //2
-  APHOLDtext,     //3
-  APWAYPOINTtext,
+  blank_text,      //0
+  FAILtext,        //1
+  APRTHtext,       //2
+  APHOLDtext,      //3
+  APWAYPOINTtext,  //4
+#ifdef EXTENDEDMODESUPPORT
+  launch_text,     //5
+  AUTOTRIM_text,   //6
+  AUTOTUNE_text,   //7
+#endif // EXTENDEDMODESUPPORT 
 };
 
 const PROGMEM char * const alarm_text[] =
@@ -1668,7 +1683,7 @@ const char msp_mode_FAIL[] PROGMEM   = "*FS*"; //Failsafe: auto control
 const char msp_mode_WAYP[] PROGMEM   = "WAYP"; //Mission/Waypoint: auto control
 const char msp_mode_PASS[] PROGMEM   = "MANU"; //Passthrough
 const char msp_mode_RTH[]  PROGMEM   = "RTL "; //Return to Launch: auto control
-const char msp_mode_LNCH[] PROGMEM   = "LNCH"; //Launch mode - or gone to lunch :)
+const char msp_mode_CRUZ[] PROGMEM   = "CRUZ"; //Cruise mode
 const char msp_mode_AIR[]  PROGMEM   = "AIR "; //Air mode
 const char msp_mode_MSP[]  PROGMEM   = ""; //Unknown MSP mode
 
@@ -1680,11 +1695,11 @@ const char msp_mode_SYM_ACRO[] PROGMEM   = {SYM_ACRO,SYM_ACRO1,0}; //Acrobatic: 
 const char msp_mode_SYM_STAB[] PROGMEM   = {SYM_STABLE,SYM_STABLE1,0}; //Stabilize: hold level position
 const char msp_mode_SYM_HOZN[] PROGMEM   = {SYM_HORIZON,SYM_HORIZON1,0}; //Horizon
 const char msp_mode_SYM_HOLD[] PROGMEM   = {SYM_GHOLD,SYM_GHOLD1,0}; //3D Hold
-const char msp_mode_SYM_FAIL[] PROGMEM   = "*FS*"; //Failsafe: auto control
+//const char msp_mode_SYM_FAIL[] PROGMEM   = "*FS*"; //Failsafe: auto control
 const char msp_mode_SYM_WAYP[] PROGMEM   = {SYM_GMISSION,SYM_GMISSION1,0}; //Mission/Waypoint: auto control
 const char msp_mode_SYM_PASS[] PROGMEM   = {SYM_PASS,SYM_PASS1,0}; //Passthrough
 const char msp_mode_SYM_RTH[]  PROGMEM   = {SYM_GHOME,SYM_GHOME1,0}; //Return to Launch: auto control
-const char msp_mode_SYM_LNCH[] PROGMEM   = "LNCH"; //Launch mode - or gone to lunch :)
+const char msp_mode_SYM_CRUZ[] PROGMEM   = "CZ"; //Cruise mode
 const char msp_mode_SYM_AIR[]  PROGMEM   = {SYM_AIR,SYM_AIR1,0}; //Air mode
 const char msp_mode_SYM_MSP[]  PROGMEM   = {0}; //Unknown MSP mode
 
@@ -1694,7 +1709,7 @@ const PROGMEM char * const msp_mode_index[] =
  msp_mode_PASS, 
  msp_mode_FAIL, 
  msp_mode_RTH,
- msp_mode_LNCH,
+ msp_mode_CRUZ,
  msp_mode_WAYP, 
  msp_mode_HOLD,
  msp_mode_STAB,
@@ -1704,9 +1719,9 @@ const PROGMEM char * const msp_mode_index[] =
 
  msp_mode_SYM_MSP, 
  msp_mode_SYM_PASS, 
- msp_mode_SYM_FAIL, 
+ msp_mode_FAIL, 
  msp_mode_SYM_RTH,
- msp_mode_SYM_LNCH,
+ msp_mode_SYM_CRUZ,
  msp_mode_SYM_WAYP, 
  msp_mode_SYM_HOLD,
  msp_mode_SYM_STAB,
