@@ -250,11 +250,11 @@
 //#define AHICORRECT 10             // Enable to adjust AHI on display to match horizon. -10 = -1 degree
 #define INVERT_PITCH_SIGN           // Invert the sign of the displayed numeric value for the pitch angle (ex: pitch up = positive )
 //#define INVERT_ROLL_SIGN          // Invert the sign of the displayed numeric value for the roll angle (ex: roll right = negative )
-//#define AHIINVERTSUPPORT          // Support for inverted flight. AHI flow terrain when inverted
+#define AHIINVERTSUPPORT            // Support for inverted flight. AHI flow terrain when inverted
 //#define FULLAHI                   // Enable to display a slightly longer AHI line
 //#define SECONDARYAHI              // Enable to display secondary AHI lines
-#define AHIPITCHMAX 200             // Specify maximum AHI pitch value displayed. Default 200 = 20.0 degrees
-#define AHIROLLMAX  400             // Specify maximum AHI roll value displayed. Default 400 = 40.0 degrees 
+#define AHIPITCHMAX 200             // Specify maximum AHI pitch value displayed. Default 200 = 20.0 degrees - use no more that 900
+//#define AHIROLLMAX  900           // Specify maximum AHI roll value displayed. Default 400 = 40.0 degrees - use no more that 900
 //#define AHIPITCHSCALE 100         // Specify scaling sensitvity for Pitch. Higher number = pitches more on OSD
 //#define AHIROLLSCALE 100          // Specify scaling sensitvity for Roll. Higher number = rolls more on OSD
 #define AHILEVEL                    // Enable to display AHI level indicators on sidebars 
