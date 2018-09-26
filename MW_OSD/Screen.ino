@@ -400,17 +400,21 @@ void displayHorizon(int rollAngle, int pitchAngle)
 #ifdef AHIINVERTSUPPORT
   if (rollAngle < -900) {
     rollAngle += 1800;
+    pitchAngle = -pitchAngle;
   } else if (rollAngle > 900) {
     rollAngle -= 1800;
+    pitchAngle = -pitchAngle;
   }
 #endif
 
+#ifdef AHIPITCHMAX
   if (pitchAngle > AHIPITCHMAX) pitchAngle = AHIPITCHMAX;
   if (pitchAngle < -AHIPITCHMAX) pitchAngle = -AHIPITCHMAX;
+#endif //AHIPITCHMAX
+#ifdef AHIROLLMAX
   if (rollAngle > AHIROLLMAX) rollAngle = AHIROLLMAX;
   if (rollAngle < -AHIROLLMAX) rollAngle = -AHIROLLMAX;
-
-
+#endif //AHIROLLMAX
 
 #ifdef AHIPITCHSCALE
   pitchAngle = pitchAngle * AHIPITCHSCALE / 100;
