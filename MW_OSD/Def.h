@@ -324,6 +324,7 @@
   #define MENU_PID
   #define MENU_RC
   #define MENU_2RC
+  #define MENU_INFO
   #define MENU_VOLTAGE
   #define MENU_RSSI
   #define MENU_CURRENT
