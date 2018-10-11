@@ -56,14 +56,17 @@ uint8_t fieldIsVisible(uint8_t pos) {
     return 0;
 }
 
-char *FormatGPSCoord(uint16_t t_position, int32_t val, uint8_t t_hemisphere) {  //0 or 2
-uint8_t t_cardinal = 0;
+char *FormatGPSCoord(uint16_t t_position, int32_t val, uint8_t t_cardinalaxis) {  // lat = 0 or lon = 2
+
+  uint8_t t_leadicon = SYM_LAT;
+  if (t_cardinalaxis>0) 
+    t_leadicon++;  
+  uint8_t t_cardinal = 0;
   if (val < 0) {
-    t_cardinal ++;
+      t_cardinal ++;
     val = -val;
   }
-  uint8_t t_leadicon = SYM_LAT + t_cardinal;  
-  t_cardinal+=t_hemisphere;
+  t_cardinal+=t_cardinalaxis;
 
   uint8_t bytes = 11;
   val = val / 100;
