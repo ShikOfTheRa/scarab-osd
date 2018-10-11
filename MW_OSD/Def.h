@@ -477,6 +477,18 @@
   #define MENU_ALARMS
 #endif
 
+#if defined (FLIGHTONE_MSP)
+  #undef  ALARM_SATS
+  #define AMPERAGE_DIV  1
+  #define MENU_STAT
+  #define MENU_VOLTAGE
+  #define MENU_RSSI
+  #define MENU_CURRENT
+  #define MENU_DISPLAY
+  #define MENU_ADVANCED
+  #define MENU_ALARMS
+#endif
+
 #if defined (MULTIWII_V24)
   #define AMPERAGE_DIV  1
   #undef INTRO_FC
@@ -1244,6 +1256,9 @@ enum {
 #endif
 #ifdef SUBMERSIBLE
   #define INFO_CONTROLLER 22
+#endif
+#ifdef FLIGHTONE_MSP
+  #define INFO_CONTROLLER 23
 #endif
 
 #ifdef MINIMOSD

@@ -49,6 +49,7 @@
 //#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight
 //#define FIXEDWING_BF_SERVO        // Uncomment this if you are using fixed wing Baseflight with additional SERVO adjustment menu.
 //#define HARAKIRI                  // Uncomment this if you are using HARAKIRI (for BOXNAMES compatibility)
+//#define FLIGHTONE_MSP             // Uncomment this if you are using FLIGHTONE (requires MSP telemetry to be enabled in F1: set telem_msp=1 through 6 for usart 1 through usart 6's TX pin)
 //#define RACEFLIGHT                // Uncomment this if you are using RACEFLIGHT - untested. Test and feedback required
 //#define SKYTRACK                  // Under development
 //#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD

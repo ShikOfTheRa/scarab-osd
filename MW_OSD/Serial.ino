@@ -1623,6 +1623,17 @@ void serialMSPreceive(uint8_t loops)
 #endif      
     else if (c_state == PAYLOAD_READY) // ready for payload / cksum
     {
+#ifdef FLIGHTONE_MSP
+    if(cmdMSP == 101){
+      if (dataSize==16){ // Apply only to F1 versions with bug?
+        if (receiverIndex == 15){ // change to actual value of wrong version
+          serialMSPCheck();
+          c_state = IDLE;
+        }
+      }
+    }
+#endif // FLIGHTONE_MSP     
+      
       if(receiverIndex == dataSize) // received checksum byte
       {
         if(rcvChecksum == c) {
