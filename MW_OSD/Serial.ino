@@ -1625,8 +1625,8 @@ void serialMSPreceive(uint8_t loops)
     {
 #ifdef FLIGHTONE_MSP
     if(cmdMSP == 101){
-      if (dataSize==16){ // Apply only to F1 versions with bug?
-        if (receiverIndex == 15){ // change to actual value of wrong version
+      if (dataSize==11){ // Apply only to F1 versions with bug?
+        if (receiverIndex == 10){ // change to actual value of wrong version
           serialMSPCheck();
           c_state = IDLE;
         }
