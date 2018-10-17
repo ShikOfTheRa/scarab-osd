@@ -331,9 +331,15 @@ void MAX7456_DrawScreen()
     }
 #endif
 #ifdef SCREENTEST
-    screen[xx] = xx %10 ;
-    if (xx%30==0)
-      screen[xx] = (xx/30) % 10 ;    
+    screen[xx] = 48 + (xx %10) ;
+    if ((xx%30)==8)
+      screen[xx] = 48 + ((xx/30) % 10) ; 
+    if ((xx%30)==7)
+      screen[xx] = ' ' ; 
+    if ((xx%30)==9)
+      screen[xx] = ' ' ; 
+      
+         
 #endif // SCREENTEST
    
     MAX7456_Send(MAX7456ADD_DMDI, screen[xx]);
