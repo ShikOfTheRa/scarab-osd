@@ -88,7 +88,7 @@
 //#define LOADFONT_LARGE            // Uncomment to force an upload of large font instead of using GUI
 //#define LOADFONT_BOLD             // Uncomment to force an upload of bold font instead of using GUI
 //#define DISPLAYFONTS              // Uncomment to display installed fonts for testing
-
+//#define SCREENTEST                // Uncomment to fill display to assist in character alignment
 
 
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
