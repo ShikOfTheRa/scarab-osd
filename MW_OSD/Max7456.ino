@@ -313,6 +313,24 @@ void MAX7456_DrawScreen()
   MAX7456_WaitVSYNC();
 #endif
 
+#ifdef SCREENTEST
+   for(xx = 0; xx < MAX_screen_size; ++xx) {
+     screen[xx] = 48 + (xx %10) ;
+      if ((xx%30)==8)
+        screen[xx] = 48 + ((xx/30) % 10) ; 
+      if ((xx%30)==7)
+        screen[xx] = ' ' ; 
+      if ((xx%30)==9)
+        screen[xx] = ' ' ;    
+      if ((xx>120)&&(xx<300))
+        screen[xx] = ' ' ;    
+   }    
+   for (uint8_t X = 0; X <= 3; X++) {
+     MAX7456_WriteString_P(PGMSTR(&(screen_test[X])), (LINE*5)+10+(X*LINE));
+   }      
+#endif // SCREENTEST
+
+
   for(xx = 0; xx < MAX_screen_size; ++xx) {
 #ifdef USE_VSYNC
     // We don't actually need this?
@@ -330,17 +348,6 @@ void MAX7456_DrawScreen()
       invActive = false;
     }
 #endif
-#ifdef SCREENTEST
-    screen[xx] = 48 + (xx %10) ;
-    if ((xx%30)==8)
-      screen[xx] = 48 + ((xx/30) % 10) ; 
-    if ((xx%30)==7)
-      screen[xx] = ' ' ; 
-    if ((xx%30)==9)
-      screen[xx] = ' ' ; 
-      
-         
-#endif // SCREENTEST
    
     MAX7456_Send(MAX7456ADD_DMDI, screen[xx]);
 

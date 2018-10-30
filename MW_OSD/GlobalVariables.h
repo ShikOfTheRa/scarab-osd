@@ -1007,6 +1007,7 @@ int16_t rssiMIN=100;
 
 // iNAV specific
 #define MSP_RTC                  246    //out message         Gets the RTC clock (returns: secs(i32) millis(u16) - (0,0) if time is not known)
+#define MSP_SENSOR_STATUS        151    //out message         Gets the sensor HW status. Bit 0 = overall health
 
 // iNAV MSPV2 specific
 #define MSP2_INAV_AIR_SPEED      0x2009    //in message          Returns airspeed
@@ -1151,6 +1152,21 @@ const PROGMEM char * const intro_item[] =
   introtextblank,
 #endif
 };
+
+#ifdef SCREENTEST
+const char screentest0[]  PROGMEM = "LCD DISPLAY TEST";
+const char screentest1[]  PROGMEM = "PAL  : 0-12 ROWS";
+const char screentest2[]  PROGMEM = "NTSC : 0-15 ROWS";
+const char screentest3[]  PROGMEM = "BOTH : 0-29 COLS";
+
+const PROGMEM char * const screen_test[] =
+{   
+  screentest0,
+  screentest1,
+  screentest2,
+  screentest3,
+};
+#endif
 
 #ifdef AUTOCAM 
 const char signaltext0[]  PROGMEM = "NTSC";
