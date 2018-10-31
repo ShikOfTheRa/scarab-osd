@@ -837,10 +837,10 @@ void displayIntro(void)
 
 
 void displayAltitude(int32_t t_alt10, int16_t t_pos, uint8_t t_icon) { // alt sent as dm
-  int32_t t_alt = t_alt10 / 10;
   if (Settings[S_UNITSYSTEM]) {
-    t_alt10 = (float) (0.32808 * t_alt); // convert to imperial dm
+    t_alt10 = (float) (3.32808 * t_alt10); // convert to imperial dm
   }
+  int32_t t_alt = t_alt10 / 10;
   if (armed && (allSec > 5) && ((t_alt / 10) > altitudeMAX)) { // not sure why 5 secs...
     altitudeMAX = t_alt;
   }
