@@ -840,8 +840,8 @@ void displayAltitude(int32_t t_alt10, int16_t t_pos, uint8_t t_icon) { // alt se
   if (Settings[S_UNITSYSTEM]) {
     t_alt10 = (float) (3.32808 * t_alt10); // convert to imperial dm
   }
-  int32_t t_alt = t_alt10 / 10;
-  if (armed && (allSec > 5) && ((t_alt / 10) > altitudeMAX)) { // not sure why 5 secs...
+  int32_t t_alt = t_alt10 / 10; // alt in meters or feet
+  if (armed && (allSec > 5) && ((t_alt) > altitudeMAX)) { // not sure why 5 secs...
     altitudeMAX = t_alt;
   }
   if (Settings[S_ALTITUDE_ALARM] > 0) {
@@ -889,24 +889,24 @@ void displayGPSdop(void)
 
 void display_speed(int16_t t_value, uint8_t t_position, uint8_t t_leadicon)
 {
-  int16_t xx;
+  int16_t t_speed;
   if (!Settings[S_UNITSYSTEM])
-    xx = t_value * 0.036;           // From MWii cm/sec to Km/h
+    t_speed = t_value * 0.036;           // From MWii cm/sec to Km/h
   else
-    xx = t_value * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
-  if (xx > (speedMAX + 20)) // simple GPS glitch limit filter
+    t_speed = t_value * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
+  if (t_speed > (speedMAX + 20)) // simple GPS glitch limit filter
     speedMAX += 20;
-  else if (xx > speedMAX)
-    speedMAX = xx;
+  else if (t_speed > speedMAX)
+    speedMAX = t_speed;
   if (Settings[S_SPEED_ALARM] > 0) {
-    if ((xx > Settings[S_SPEED_ALARM]) && (timer.Blink2hz))
+    if ((t_speed > Settings[S_SPEED_ALARM]) && (timer.Blink2hz))
       return;
   }
 #ifdef DISPLAYSPEEDMS
-  xx = t_value * 0.01;           // From MWii cm/sec to m/sec
-  displayItem(t_position, xx, t_leadicon, SYM_MS, 0 );
+  t_speed = t_value * 0.01;           // From MWii cm/sec to m/sec
+  displayItem(t_position, t_speed, t_leadicon, SYM_MS, 0 );
 #else
-  displayItem(t_position, xx, t_leadicon, speedUnitAdd[Settings[S_UNITSYSTEM]], 0 );
+  displayItem(t_position, t_speed, t_leadicon, speedUnitAdd[Settings[S_UNITSYSTEM]], 0 );
 #endif
 }
 
