@@ -595,6 +595,7 @@ void loop()
           displayAmperage();
         if (((!ampAlarming()) || timer.Blink2hz))
           displaypMeterSum();
+//        displayRemainingTime();
         displayFlightTime();
 #if defined (DISPLAYWATTS)
         displayWatt();

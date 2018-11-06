@@ -673,6 +673,24 @@ void displayTimer(uint32_t t_time, uint16_t t_pos, uint8_t t_leadsymbol)
 }
 
 
+void displayRemainingTime(void){
+  int32_t t_remaining;
+  int32_t t_used = 100 * Settings[S_AMPER_HOUR_ALARM]- (amperagesum/(360));
+  if (screenPosition[remainingTimePosition] < 512)
+    return;
+  if (t_used < 0){
+    t_used = 0;
+  }
+  if (amperagesum>100){
+    t_remaining = (uint32_t) flyTime *(t_used)/(amperagesum/360);
+  }
+  else{ 
+    t_remaining = 0;
+  }
+  displayTimer(t_remaining,getPosition(remainingTimePosition), 'R');
+}
+
+
 void displayFlightTime(void){
   if (screenPosition[onTimePosition] < 512)
     return;

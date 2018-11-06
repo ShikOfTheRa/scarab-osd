@@ -660,7 +660,7 @@ enum Positions {
   MwAltitudePosition,
   MwVarioPosition,
   CurrentThrottlePosition,
-  flyTimePosition,              // unused
+  remainingTimePosition,
   onTimePosition,
   motorArmedPosition,
   pitchAnglePosition,
@@ -731,7 +731,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE07+23)|DISPLAY_ALWAYS|DISPLAY_DEV,   // MwAltitudePosition
 (LINE07+22)|DISPLAY_ALWAYS|DISPLAY_DEV,   // MwVarioPosition
 (LINE12+22)|DISPLAY_ALWAYS|DISPLAY_DEV,   // CurrentThrottlePosition
-(LINE13+22)|DISPLAY_NEVER|DISPLAY_DEV,    //                             unused
+(LINE14+22)|DISPLAY_NEVER|DISPLAY_DEV,    // remainingTimePosition
 (LINE13+22)|DISPLAY_ALWAYS|DISPLAY_DEV,   // onTimePosition
 (LINE11+11)|DISPLAY_ALWAYS|DISPLAY_DEV,   // motorArmedPosition
 (LINE10+22)|DISPLAY_NEVER|DISPLAY_DEV,    // pitchAnglePosition
