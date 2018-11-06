@@ -770,7 +770,7 @@ void loop()
     if (timer.GUI_active > 0) {
       timer.GUI_active--;
 #if defined GPSOSD
-      timer.GPS_initdelay = 2;
+      timer.GPS_initdelay = 254;
 #endif
     }
 #if defined(GPSOSD) && !defined(NAZA)
