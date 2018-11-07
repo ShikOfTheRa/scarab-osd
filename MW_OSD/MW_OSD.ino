@@ -152,7 +152,7 @@ void setup()
 #define STARTUPDELAY 1000
 #endif
 #ifndef INTRO_DELAY
-#define INTRO_DELAY 5
+#define INTRO_DELAY 6
 #endif
   delay(STARTUPDELAY);
 
@@ -773,7 +773,7 @@ void loop()
     if (timer.GUI_active > 0) {
       timer.GUI_active--;
 #if defined GPSOSD
-      timer.GPS_initdelay = 254;
+      timer.GPS_initdelay = 2;
 #endif
     }
 #if defined(GPSOSD) && !defined(NAZA)

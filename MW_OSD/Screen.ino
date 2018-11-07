@@ -698,7 +698,7 @@ void displayRemainingTime(void){
 #ifdef DISPLAYEFFICIENCYTIME
   displayTimer(t_remaining,getPosition(onTimePosition)-30, 0x2A);
 #else
-  displayTimer(t_remaining,getPosition(remainingTimePosition, 0x2A);
+  displayTimer(t_remaining,getPosition(remainingTimePosition), 0x2A);
 #endif
 }
 
