@@ -442,6 +442,8 @@
 
 /********************  Under developemnt      *********************/
 // This is a work in process. Not completed for implementation
+//#define DISPLAYEFFICIENCYTIME     // Enable this to display effieciency time remaining above elapsed time. 
+//#define EFFICIENCYTIMEINST        // Enable this for time remaining display to be based upon current draw instead of average battery consumption during flight so far. 
 
 
 
