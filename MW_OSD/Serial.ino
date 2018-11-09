@@ -292,7 +292,7 @@ void serialMSPCheck()
     }
 #ifdef GUISENSORS
     if (cmd == OSD_SENSORS2||cmd == OSD_SENSORS) {
-      timer.GPS_initdelay=0; 
+      timer.GPS_initdelay=255; 
       cfgWriteRequest(MSP_OSD,1+10);
       cfgWrite8(OSD_SENSORS);
       for (uint8_t sensor=0;sensor<SENSORTOTAL;sensor++) {
