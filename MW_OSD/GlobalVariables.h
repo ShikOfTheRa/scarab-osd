@@ -368,8 +368,8 @@ uint16_t I2CError;
 uint8_t oldROW=0;
 uint8_t cells=0;
 uint8_t rcswitch_ch=8;
-uint16_t pwmval1=0;
-uint16_t pwmval2=0;
+volatile uint16_t pwmval1=0;
+volatile uint16_t pwmval2=0;
 uint8_t debugtext=0;
 uint8_t MSP_home_set=0;
 uint8_t variopitch=0;
@@ -794,7 +794,7 @@ int32_t  old_MwAltitude=0;                     // This hold barometric value
 
 
 int16_t MwAngle[2]={0,0};           // Those will hold Accelerometer Angle
-uint16_t MwRcData[1+16];
+volatile uint16_t MwRcData[1+16];
 
 
 
@@ -885,7 +885,7 @@ int16_t MWAmperage=0;
 // Rssi
 int16_t rssi =0;   // uint8_t ?
 int16_t oldrssi;   // uint8_t ?
-int16_t pwmRSSI = 0;
+volatile int16_t pwmRSSI = 0;
 //int rssiADC=0;
 //int rssi_Int=0;
 

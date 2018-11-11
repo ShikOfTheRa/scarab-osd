@@ -366,7 +366,9 @@ void loop()
         tripSum += GPS_speed * 0.0010;       //  100/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)
       trip = (uint32_t) tripSum;
     }
-
+#if defined (GPSOSD)
+    handleRawRC();
+#endif
 #ifndef KISS
     amperagesum += amperage;
 #else
@@ -1048,6 +1050,9 @@ void readEEPROM(void)
   if (Settings[S_MWRSSI] == 1) {
     DDRC &= ~(1 << DDC3); //  PORTC |= (1 << PORTC3);
     //DDRC &=B11110111;
+   #ifndef INTD5
+   Settings[S_PWM_PPM] = 0;
+   #endif 
   }
 #endif
 #if defined INTD5
@@ -1300,123 +1305,156 @@ void ProcessSensors(void) {
     sensorindex = 0;
 }
 
-
-#if defined INTC3
+#if defined INTD5
 ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
-  static uint16_t PulseStart;
-  static uint8_t  RCchan = 1;
-  static uint16_t LastTime = 0;
-  uint8_t pinstatus;
-  pinstatus = PINC;
-#define PWMPIN1 DDC3
+  #define PWMPIN1 DDC3
+  static uint16_t s_LastRising = 0;
+  uint16_t l_PulseDuration;
+  uint16_t l_CurrentTime = micros();
+  uint8_t l_pinstatus = PINC;
   sei();
-  uint16_t PulseDuration;
-  uint16_t CurrentTime = micros();
+  l_PulseDuration = l_CurrentTime - s_LastRising;
+  if ((l_pinstatus & (1 << PWMPIN1))) { // transitioned to high 
+    s_LastRising = l_CurrentTime;
+    if ((l_PulseDuration) > 3000) { //assume this is PPM gap so exit
+      return;
+    }    
+  }
+  else{ // // transitioned to low 
+    if ((900 < l_PulseDuration) && (l_PulseDuration < 2200)) {
+#if defined DEBUG
+      pwmval1 = l_PulseDuration;
+#endif      
+      pwmRSSI = l_PulseDuration;
+    }
+  }  
+}
+#else // INTD5
+ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
+ #define PWMPIN1 DDC3
+  static uint8_t  s_RCchan = 1;
+  static uint16_t s_LastRising = 0;
+  static uint16_t s_LastFalling = 0;  
+  uint16_t l_PulseDuration;
+  uint16_t l_CurrentTime = micros();
+  uint8_t l_pinstatus = PINC;
+  sei();
+  l_PulseDuration = l_CurrentTime - s_LastRising;
 
-  if ((CurrentTime - LastTime) > 3000) RCchan = 1; // assume this is PPM gap
-  LastTime = CurrentTime;
-  if (!(pinstatus & (1 << PWMPIN1))) { // measures low duration
-    PulseDuration = CurrentTime - PulseStart;
-    if ((950 < PulseDuration) && (PulseDuration < 2150)) {
-      pwmval1 = PulseDuration;
-#ifdef INTD5 // Aeromax Hardware so this must be PWMRSSI only
-      pwmRSSI = PulseDuration;
-#else
-#if defined PPM_CONTROL
-#define INTC3_PPM_PWM 1
-#else
-#define INTC3_PPM_PWM 0
+  if ((l_pinstatus & (1 << PWMPIN1))) { // transitioned to high 
+    s_LastRising = l_CurrentTime;
+    if ((l_PulseDuration) > 3000) { //assume this is PPM gap so exit
+      s_RCchan = 1; 
+      return;
+    }    
+    if (Settings[S_PWM_PPM]) {//ppm
+      if (s_RCchan <= TX_CHANNELS) { // avoid array overflow if > standard ch PPM
+        MwRcData[s_RCchan] = l_PulseDuration; // Val updated
+      }   
+      if (s_RCchan == 4){
+#if defined DEBUG
+        pwmval1 = l_PulseDuration;
 #endif
-      if (INTC3_PPM_PWM) { //PWM
-        if (RCchan <= TX_CHANNELS) // avoid array overflow if > standard ch PPM
-          MwRcData[RCchan] = PulseDuration; // Val updated
-#if defined (TX_GUI_CONTROL)
-        if (RCchan == 4)
-          reverseChannels();
-#endif // TX_PRYT
-
+    #if defined TX_GUI_CONTROL
+        reverseChannels();
+    #endif // TX_GUI_CONTROL
       }
-      else { //PWM
+      s_RCchan++;
+    }
+  }
+  else{ // // transitioned to low 
+    s_LastFalling = l_CurrentTime;
+    if (!Settings[S_PWM_PPM]) {//pwm
+      if ((900 < l_PulseDuration) && (l_PulseDuration < 2250)) {
+#if defined DEBUG
+        pwmval1 = l_PulseDuration;
+#endif
 #ifdef NAZA
         Naza.mode = 0;
-        if (PulseDuration > NAZA_PMW_HIGH) {
+        if (l_PulseDuration > NAZA_PMW_HIGH) {
           Naza.mode = NAZA_MODE_HIGH;
         }
-        else if (PulseDuration > NAZA_PMW_MED) {
+        else if (l_PulseDuration > NAZA_PMW_MED) {
           Naza.mode = NAZA_MODE_MED;
         }
-        else if (PulseDuration > NAZA_PWM_LOW) {
+        else if (l_PulseDuration > NAZA_PWM_LOW) {
           Naza.mode = NAZA_MODE_LOW;
         }
 #endif
 #ifdef PWM_OSD_SWITCH
-        MwRcData[rcswitch_ch] = PulseDuration;
+        MwRcData[rcswitch_ch] = l_PulseDuration;
 #elif defined PWM_THROTTLE
-        MwRcData[THROTTLESTICK] = PulseDuration;
+        MwRcData[THROTTLESTICK] = l_PulseDuration;
 #else
-        pwmRSSI = PulseDuration;
+        pwmRSSI = l_PulseDuration;
 #endif
       }
-#endif
     }
-    RCchan++;
-  }
-  else {
-    PulseStart = CurrentTime;
-  }
+  }  
 }
-#endif
+#endif // INTD5
+
+
 
 #if defined INTD5
 ISR(PCINT2_vect) { // // Secondary Arduino D5 Atmega D5
-  static uint16_t PulseStart;
-  static uint8_t  RCchan = 1;
-  static uint16_t LastTime = 0;
-  uint8_t pinstatus;
-#define PWMPIN2 DDD5
-  pinstatus = PIND;
+  #define PWMPIN2 DDD5
+  static uint8_t  s_RCchan = 1;
+  static uint16_t s_LastRising = 0;
+  static uint16_t s_LastFalling = 0;  
+  uint16_t l_PulseDuration;
+  uint16_t l_CurrentTime = micros();
+  uint8_t l_pinstatus = PIND;
   sei();
-  uint16_t PulseDuration;
-  uint16_t CurrentTime = micros();
-
-  if ((CurrentTime - LastTime) > 3000) RCchan = 1; // assume this is PPM gap
-  LastTime = CurrentTime;
-
-  if (!(pinstatus & (1 << PWMPIN2))) { // measures low duration
-    PulseDuration = CurrentTime - PulseStart;
-    if ((950 < PulseDuration) && (PulseDuration < 2150)) {
-      pwmval2 = PulseDuration;
-      if (Settings[S_PWM_PPM]) { //PPM
-        if (RCchan <= TX_CHANNELS) // avoid array overflow if > standard ch PPM
-          MwRcData[RCchan] = PulseDuration; // Val updated
+  l_PulseDuration = l_CurrentTime - s_LastRising;
+  if ((l_pinstatus & (1 << PWMPIN2))) { // transitioned to high 
+    s_LastRising = l_CurrentTime;
+    if ((l_PulseDuration) > 3000) { //assume this is PPM gap so exit
+      s_RCchan = 1; 
+      return;
+    }    
+    if (Settings[S_PWM_PPM]) {//ppm
+      if (s_RCchan <= TX_CHANNELS) { // avoid array overflow if > standard ch PPM
+        MwRcData[s_RCchan] = l_PulseDuration; // Val updated
+      }   
+      if (s_RCchan == 4){
+#if defined DEBUG
+        pwmval2 = l_PulseDuration;
+#endif
+    #if defined TX_GUI_CONTROL
+        reverseChannels();
+    #endif // TX_GUI_CONTROL
       }
-      else { //PWM
+      s_RCchan++;
+    }
+  }
+  else{ // // transitioned to low 
+    s_LastFalling = l_CurrentTime;
+    if (!Settings[S_PWM_PPM]) {//pwm
+      if ((950 < l_PulseDuration) && (l_PulseDuration < 2150)) {
+        pwmval2 = l_PulseDuration;
 #ifdef NAZA
         Naza.mode = 0;
-        if (PulseDuration > NAZA_PMW_HIGH) {
+        if (l_PulseDuration > NAZA_PMW_HIGH) {
           Naza.mode = NAZA_MODE_HIGH;
         }
-        else if (PulseDuration > NAZA_PMW_MED) {
+        else if (l_PulseDuration > NAZA_PMW_MED) {
           Naza.mode = NAZA_MODE_MED;
         }
-        else if (PulseDuration > NAZA_PWM_LOW) {
+        else if (l_PulseDuration > NAZA_PWM_LOW) {
           Naza.mode = NAZA_MODE_LOW;
         }
 #endif
 #ifdef PWM_OSD_SWITCH
-        MwRcData[rcswitch_ch] = PulseDuration;
-#else // assume throttle connected if not using PPM
-        MwRcData[THROTTLESTICK] = PulseDuration;
+        MwRcData[rcswitch_ch] = l_PulseDuration;
+#else
+        MwRcData[THROTTLESTICK] = l_PulseDuration;
 #endif
       }
     }
-    RCchan++;
-  }
-  else {
-    PulseStart = CurrentTime;
-  }
+  }    
 }
-#endif
+#endif // INTD5
 
 
 void EEPROM_clear() {

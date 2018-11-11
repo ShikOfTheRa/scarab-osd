@@ -365,7 +365,6 @@ void serialMAVCheck() {
 #ifdef MAV_ALT_THROTTLE
       MwRcData[THROTTLESTICK] = mw_mav.throttle;
 #endif // MAV_ALT_THROTTLE
-      handleRawRC();
       break;
     case MAVLINK_MSG_ID_RC_CHANNELS:
 #ifdef DUALRSSI
