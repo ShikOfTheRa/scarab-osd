@@ -765,15 +765,10 @@ void displayEfficiency(void)
 
 void displayAverageEfficiency(void)
 {
-  uint16_t t_xx;
   uint16_t t_efficiency;
-  if (!Settings[S_UNITSYSTEM])
-    t_xx = 1000;
-  else
-    t_xx = 5280;
-  if (trip > 0){
-    t_efficiency = (uint32_t)  (amperagesum * t_xx) / (360* trip);
-  if (t_efficiency < 9999)
+  if (flyTime > 0){
+    t_efficiency = (uint32_t) amperagesum /(6 * flyTime) ;
+  if (t_efficiency < 99999)
     displayItem(avgefficiencyPosition, t_efficiency, SYM_AVG_EFF, 0, 0 );
   }
 }
