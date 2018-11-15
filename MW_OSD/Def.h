@@ -40,29 +40,30 @@
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
 
   #define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+  #undef GPSTIME
+
   //#define AIRBOTMICRO             // Uncomment this if using an airbot MicroOSD
   //#define EEPROMVER 16              // for eeprom layout verification
   #define AEROMAX                 // Uncomment this if using MWOSD AEROMAX hardware
   //#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
   //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
-  #define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
+  //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
   //#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
-  //#define APM
+  #define APM
   //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
   //#define DISPLAYAVGEFFICIENCY                // Display average mAh used / per KM instead of mAh/min KMh. 
   //#define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
   //#define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
   //#define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
-  #define INTRO_DELAY 1           // To speed up startup
+  //#define INTRO_DELAY 1           // To speed up startup
   //#define DISPLAY_DEV 0xC000        // Use screen layout dev position - display all items...
   //#define KKAUDIOVARIO A3         // Enable this for audio vario on Arduino pin XX. A3=RSSI. Use AUDIOPIN on AEROMAX 
   //#define MAVSENSOR173
   //#define MSPV2  
   //#define USE_AIRSPEED_SENSOR
-  //#undef GPSTIME
   //#define MAV_ALT_THROTTLE          // Use alternative MAV throttle value. Not raw RC channel.
   //#define TX_CHANNELS 16 
-  #define PPM_CONTROL               // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD PWM input pin (RSSI pin on basic MINIM hardware). Requires TX type to be set below.
+  //#define PPM_CONTROL               // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD PWM input pin (RSSI pin on basic MINIM hardware). Requires TX type to be set below.
   
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.2.0 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
@@ -90,24 +91,6 @@
 
 #endif
 
-
-//#define TIMETEST
-#ifdef TIMETEST
-  //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
-  #define DISPLAY_DEV 0xC000        // Use screen layout dev position - display all items...
-  #define MSP_RTC_SUPPORT           // Enable to set RTC time via MSP
-  #define GPSTIME                   // Enable to use GPS time display functions
-  #define DATEFORMAT_UTC            // Display UTC date when enabled - do not use time zone settings
-  //#define MENU_GPS_TIME             // Enable GPS time adjustments in OSD menu
-  //#define AEROMAX                 // Uncomment this if using MWOSD AEROMAX hardware
-  //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
-  //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
-  //#define APM
-  //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
-  #define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-  //#define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
-#endif
-//
 
 /*--------------------------       DEPRECATED parameters for reference only      ----------------------------------------------------*/
 
@@ -563,8 +546,8 @@
   #define MENU_VOLTAGE
   #define MENU_RSSI
   #define MENU_CURRENT
-  #define MENU_DISPLAY
-  #define MENU_ADVANCED
+  // #define MENU_DISPLAY
+  // #define MENU_ADVANCED
   #define MENU_ALARMS
   #define PROTOCOL_MAVLINK
   #define AMPERAGE_DIV 10
@@ -676,12 +659,12 @@
     #define ALARM_GPS 5
   #endif
   #define MENU_STAT
-  #define MENU_VOLTAGE
-  #define MENU_RSSI
-  #define MENU_CURRENT
-  #define MENU_DISPLAY
-  #define MENU_ADVANCED
-  #define MENU_ALARMS
+  //#define MENU_VOLTAGE
+  //#define MENU_RSSI
+  //#define MENU_CURRENT
+  //#define MENU_DISPLAY
+  //#define MENU_ADVANCED
+  //#define MENU_ALARMS
 #endif
 
 // Flight Controller Software types to be added before here...

@@ -1,6 +1,8 @@
 // Serial Buffer must be at least 65 for font transfers
-#if defined NAZA
-  #define SERIALBUFFERSIZE 250
+#if defined APM
+  #define SERIALBUFFERSIZE 75
+#elif defined NAZA
+  #define SERIALBUFFERSIZE 125
 #elif defined SUBMERSIBLE
   #define SERIALBUFFERSIZE 65
 #elif defined iNAV // 40 max in test

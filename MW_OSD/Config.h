@@ -277,6 +277,8 @@
 #define DISPLAYWATTS                // Disable to save memory if not used. Enable this to display Watts
 #define DISPLAYEFFICIENCY           // Disable to save memory if not used. Enable this to display Watts/KMh or Mph for efficiency
 #define DISPLAYAVGEFFICIENCY        // Disable to save memory if not used. Enable this to display average mAh used / per KM or Mile travelled. 
+#define DISPLAYEFFICIENCYTIME       // Enable this to display effieciency time remaining above elapsed time. 
+//#define EFFICIENCYTIMEINST        // Enable this for time remaining display to be based upon instantaneous current draw instead of average battery consumption during flight so far. 
 
 
 /********************       Visual Vario / climbrate Settings         ************************/
@@ -442,8 +444,6 @@
 
 /********************  Under developemnt      *********************/
 // This is a work in process. Not completed for implementation
-//#define DISPLAYEFFICIENCYTIME     // Enable this to display effieciency time remaining above elapsed time. 
-//#define EFFICIENCYTIMEINST        // Enable this for time remaining display to be based upon current draw instead of average battery consumption during flight so far. 
 
 
 

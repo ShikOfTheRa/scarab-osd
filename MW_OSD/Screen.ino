@@ -676,10 +676,8 @@ void displayTimer(uint32_t t_time, uint16_t t_pos, uint8_t t_leadsymbol)
 void displayRemainingTime(void){
   int32_t t_remaining;
   int32_t t_used = 100 * Settings[S_AMPER_HOUR_ALARM]- (amperagesum/(360));  
-#ifndef DISPLAYEFFICIENCYTIME
   if (screenPosition[remainingTimePosition] < 512)
     return;
-#endif    
   if (t_used < 0){
     t_used = 0;
   }
@@ -695,11 +693,7 @@ void displayRemainingTime(void){
   else{ 
     t_remaining = 0;
   }
-#ifdef DISPLAYEFFICIENCYTIME
-  displayTimer(t_remaining,getPosition(onTimePosition)-30, 0x2A);
-#else
   displayTimer(t_remaining,getPosition(remainingTimePosition), 0x2A);
-#endif
 }
 
 
