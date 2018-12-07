@@ -1687,37 +1687,37 @@ const PROGMEM char * const menu_on_off[] =
 
 #ifdef PROTOCOL_MSP
 #ifdef FIXEDWING
-const char msp_mode_ACRO[] PROGMEM   = "GYRO"; //Acrobatic: rate control
+const unsigned char msp_mode_ACRO[] PROGMEM   = "GYRO"; //Acrobatic: rate control
 #else
-const char msp_mode_ACRO[] PROGMEM   = "ACRO"; //Acrobatic: rate control
+const unsigned char msp_mode_ACRO[] PROGMEM   = "ACRO"; //Acrobatic: rate control
 #endif
 
-const char msp_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
-const char msp_mode_HOZN[] PROGMEM   = "HOZN"; //Horizon
-const char msp_mode_HOLD[] PROGMEM   = "HOLD"; //3D Hold
-const char msp_mode_FAIL[] PROGMEM   = "*FS*"; //Failsafe: auto control
-const char msp_mode_WAYP[] PROGMEM   = "WAYP"; //Mission/Waypoint: auto control
-const char msp_mode_PASS[] PROGMEM   = "MANU"; //Passthrough
-const char msp_mode_RTH[]  PROGMEM   = "RTL "; //Return to Launch: auto control
-const char msp_mode_CRUZ[] PROGMEM   = "CRUZ"; //Cruise mode
-const char msp_mode_AIR[]  PROGMEM   = "AIR "; //Air mode
-const char msp_mode_MSP[]  PROGMEM   = ""; //Unknown MSP mode
+const unsigned char msp_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
+const unsigned char msp_mode_HOZN[] PROGMEM   = "HOZN"; //Horizon
+const unsigned char msp_mode_HOLD[] PROGMEM   = "HOLD"; //3D Hold
+const unsigned char msp_mode_FAIL[] PROGMEM   = "*FS*"; //Failsafe: auto control
+const unsigned char msp_mode_WAYP[] PROGMEM   = "WAYP"; //Mission/Waypoint: auto control
+const unsigned char msp_mode_PASS[] PROGMEM   = "MANU"; //Passthrough
+const unsigned char msp_mode_RTH[]  PROGMEM   = "RTL "; //Return to Launch: auto control
+const unsigned char msp_mode_CRUZ[] PROGMEM   = "CRUZ"; //Cruise mode
+const unsigned char msp_mode_AIR[]  PROGMEM   = "AIR "; //Air mode
+const unsigned char msp_mode_MSP[]  PROGMEM   = ""; //Unknown MSP mode
 
 #ifdef FIXEDWING
-const char msp_mode_SYM_ACRO[] PROGMEM   = {SYM_ACROGY,SYM_ACRO1,0}; //Acrobatic: rate control
+const unsigned char msp_mode_SYM_ACRO[] PROGMEM   = {SYM_ACROGY,SYM_ACRO1,0}; //Acrobatic: rate control
 #else
-const char msp_mode_SYM_ACRO[] PROGMEM   = {SYM_ACRO,SYM_ACRO1,0}; //Acrobatic: rate control
+const unsigned char msp_mode_SYM_ACRO[] PROGMEM   = {SYM_ACRO,SYM_ACRO1,0}; //Acrobatic: rate control
 #endif
-const char msp_mode_SYM_STAB[] PROGMEM   = {SYM_STABLE,SYM_STABLE1,0}; //Stabilize: hold level position
-const char msp_mode_SYM_HOZN[] PROGMEM   = {SYM_HORIZON,SYM_HORIZON1,0}; //Horizon
-const char msp_mode_SYM_HOLD[] PROGMEM   = {SYM_GHOLD,SYM_GHOLD1,0}; //3D Hold
+const unsigned char msp_mode_SYM_STAB[] PROGMEM   = {SYM_STABLE,SYM_STABLE1,0}; //Stabilize: hold level position
+const unsigned char msp_mode_SYM_HOZN[] PROGMEM   = {SYM_HORIZON,SYM_HORIZON1,0}; //Horizon
+const unsigned char msp_mode_SYM_HOLD[] PROGMEM   = {SYM_GHOLD,SYM_GHOLD1,0}; //3D Hold
 //const char msp_mode_SYM_FAIL[] PROGMEM   = "*FS*"; //Failsafe: auto control
-const char msp_mode_SYM_WAYP[] PROGMEM   = {SYM_GMISSION,SYM_GMISSION1,0}; //Mission/Waypoint: auto control
-const char msp_mode_SYM_PASS[] PROGMEM   = {SYM_PASS,SYM_PASS1,0}; //Passthrough
-const char msp_mode_SYM_RTH[]  PROGMEM   = {SYM_GHOME,SYM_GHOME1,0}; //Return to Launch: auto control
-const char msp_mode_SYM_CRUZ[] PROGMEM   = "CZ"; //Cruise mode
-const char msp_mode_SYM_AIR[]  PROGMEM   = {SYM_AIR,SYM_AIR1,0}; //Air mode
-const char msp_mode_SYM_MSP[]  PROGMEM   = {0}; //Unknown MSP mode
+const unsigned char msp_mode_SYM_WAYP[] PROGMEM   = {SYM_GMISSION,SYM_GMISSION1,0}; //Mission/Waypoint: auto control
+const unsigned char msp_mode_SYM_PASS[] PROGMEM   = {SYM_PASS,SYM_PASS1,0}; //Passthrough
+const unsigned char msp_mode_SYM_RTH[]  PROGMEM   = {SYM_GHOME,SYM_GHOME1,0}; //Return to Launch: auto control
+const unsigned char msp_mode_SYM_CRUZ[] PROGMEM   = "CZ"; //Cruise mode
+const unsigned char msp_mode_SYM_AIR[]  PROGMEM   = {SYM_AIR,SYM_AIR1,0}; //Air mode
+const unsigned char msp_mode_SYM_MSP[]  PROGMEM   = {0}; //Unknown MSP mode
 
 const PROGMEM char * const msp_mode_index[] = 
 {   
