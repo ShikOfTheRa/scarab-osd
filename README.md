@@ -1,5 +1,6 @@
 
-Check out our [WIKI] (https://github.com/ShikOfTheRa/scarab-osd/wiki) for the latest documentation
+
+<a href='https://github.com/ShikOfTheRa/scarab-osd/wiki' target='_blank'>Click here for our WIKI for the latest documentation</a><br>
 
 Current development repository status : [![Build Status](https://travis-ci.org/ShikOfTheRa/scarab-osd.svg?branch=master)](https://travis-ci.org/ShikOfTheRa/scarab-osd) 		
 
