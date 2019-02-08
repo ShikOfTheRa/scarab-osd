@@ -379,7 +379,8 @@ void serialMAVCheck() {
       reverseChannels();
 #endif // TX_PRYT
 #ifdef MAV_ALT_THROTTLE
-      MwRcData[THROTTLESTICK] = mw_mav.throttle;
+     if (armed)
+       MwRcData[THROTTLESTICK] = mw_mav.throttle;
 #endif // MAV_ALT_THROTTLE
       handleRawRC();
       break;
