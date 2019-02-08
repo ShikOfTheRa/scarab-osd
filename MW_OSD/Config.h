@@ -180,7 +180,7 @@
 #define MAV_COM_ID 1                // Component ID of MAV. Change if required. 
 #define MAV_STATUS 6                // Enable to display mavlink system messages up to and including category X. 5 = default 
 #define MAV_STATUS_TIMER 4          // How long to display MAV status messages. 4 = default 
-//#define MAV_ALT_THROTTLE          // Enable to use MAVLINK throttle value. Disable to use raw RC channel.
+#define MAV_ALT_THROTTLE            // Enable to use MAVLINK throttle value when armed. Disable to use raw RC channel.
 //#define MAV_ALL                   // To act on data from all MAV SYSID in stream. NOT recommended. Specify ID in GUI. Default=1 upon reset.
 //#define MAV_COMP_ALL              // To act on data from all MAV COMPONENTS in stream. Overrides MAV_COM_ID. Use if do not know MAV_COM_ID. Recommended for iNAV telemetry.
 //#define MAV_ARMED                 // Forces OSD to be always armed (for when MAV does not send armed status in heartbeat).
