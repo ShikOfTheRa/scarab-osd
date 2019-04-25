@@ -39,7 +39,7 @@ Please report any missing names and aplogies if not already included...<br>
 
 Code contributors:<br>
 Jean Gabriel Maurice - Johhnygab<br>
-Gary M - Shikra<br>
+Shiki<br>
 Itai Nahshon - Itai<br>
 Carlo Nebuloni - Carlonb<br>
 Ross Power - Power67 for introduction of main GUI<br>
