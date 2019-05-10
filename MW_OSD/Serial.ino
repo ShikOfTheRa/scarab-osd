@@ -833,6 +833,8 @@ if (cmdMSP==MSP_STATUS)
     uint8_t hour = read8();          // 0-23
     uint8_t minute = read8();        // 0-59
     uint8_t second = read8();        // 0-59
+    if (year >30) // protection against BF zero values
+      return;
     GPS_time= year*(SECS_PER_DAY * 365);
     for (i = 0; i < year; i++) {
       if (LEAP_YEAR(i)) {
