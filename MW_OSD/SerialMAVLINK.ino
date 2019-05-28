@@ -65,7 +65,7 @@ void mav_serialize16(uint16_t val) {
 }
 
 
-void mav_serialize32(uint16_t val) {
+void mav_serialize32(uint32_t val) {
   mav_serialize8((val   ) & 0xFF);
   mav_serialize8((val >> 8) & 0xFF);
   mav_serialize8((val >> 16) & 0xFF);

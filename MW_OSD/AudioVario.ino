@@ -161,6 +161,6 @@ void twiSendCommand(byte address, byte command)
 //    Serial.println(command, HEX);
   }
 }
-#endif KKAUDIOVARIO
+#endif //KKAUDIOVARIO
 
 

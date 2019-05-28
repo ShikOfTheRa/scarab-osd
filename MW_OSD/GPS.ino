@@ -28,7 +28,7 @@ static int32_t GPS_filtered[2];
 static int32_t GPS_degree[2];    //the lat lon degree without any decimals (lat/10 000 000)
 static uint16_t fraction3[2];
 
-struct {
+struct __GPS_parse{
   uint8_t  GPS_fix;
   uint8_t  GPS_numSat;
   int16_t  GPS_altitude;

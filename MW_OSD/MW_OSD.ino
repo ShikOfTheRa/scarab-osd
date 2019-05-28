@@ -155,7 +155,7 @@ void setup()
 #define INTRO_DELAY 6
 #endif
   delay(STARTUPDELAY);
-
+  timer.GUI_active=INTRO_DELAY;
 #ifdef VTX_RTC6705
   vtx_init();
 #ifdef IMPULSERC_HELIX

@@ -262,7 +262,7 @@ struct  __timer {
   uint32_t seconds;
   uint8_t  MSP_active;
   uint8_t  GPS_active;
-  uint8_t  GUI_active=INTRO_DELAY;
+  uint8_t  GUI_active;
   uint8_t  GPS_initdelay;
   uint16_t  loopcount;
   uint16_t  packetcount;
