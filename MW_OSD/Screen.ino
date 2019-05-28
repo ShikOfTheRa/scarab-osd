@@ -232,7 +232,7 @@ void displayMode(void)
     return;
   uint8_t apactive = 0;
 #ifdef PROTOCOL_MAVLINK
-#if defined PX4 // within MAVLINK
+#ifdef PX4 // within MAVLINK
 #define MAVMISSIONID 5
 #define MAVRTLID 6
 #elif defined FIXEDWING // within MAVLINK

@@ -2,7 +2,7 @@
 
 #include "wireMacro.h"
 
-#if defined(IMPULSERC_HELIX)
+#ifdef IMPULSERC_HELIX
 
 # define RTC_SPILE   15 // A1
 # define RTC_SPICLK  14 // A0
@@ -14,7 +14,7 @@
 
 // Note: A6 is additionally used for power sensing
 
-#elif defined(FFPV_INNOVA)
+#elif defined FFPV_INNOVA
 
 # define RTC_SPILE    9
 # define RTC_SPICLK   8
