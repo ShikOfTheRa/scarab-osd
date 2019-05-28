@@ -462,6 +462,7 @@
 #endif
 
 #if defined (FLIGHTONE_MSP)
+  #define TX_CHANNELS 16
   #undef  ALARM_SATS
   #define AMPERAGE_DIV  1
   #define MENU_STAT
