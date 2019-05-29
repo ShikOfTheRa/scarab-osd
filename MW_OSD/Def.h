@@ -199,7 +199,8 @@
   //#undef HORIZON                     // Enable/disable HORIZON indicator
   //#undef DISPLAY_PR
   //#undef SHOW_TEMPERATURE
-  
+  #undef GPSTIME                     // Enable to use GPS time display functions with FC that support features
+ 
 #endif
 
 #ifdef BASEFLIGHT     //set up latest at time of release

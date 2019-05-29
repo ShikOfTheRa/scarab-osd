@@ -120,7 +120,7 @@ void mspV2Write16(uint16_t t){
   mspV2Write8(t>>8);
 }
 
-uint8_t crc8_dvb_s2_tx(uint8_t crc, unsigned char a, uint8_t crcversion)
+void crc8_dvb_s2_tx(uint8_t crc, unsigned char a, uint8_t crcversion)
 {
   crc ^= a;
   if (crcversion == 2){   
