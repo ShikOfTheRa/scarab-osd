@@ -1658,7 +1658,7 @@ void serialMSPreceive(uint8_t loops)
 }
 
 
-uint8_t crc8_dvb_s2(uint8_t crc, unsigned char a, uint8_t crcversion)
+void crc8_dvb_s2(uint8_t crc, unsigned char a, uint8_t crcversion)
 {
   crc ^= a;
   if (crcversion == 2){   

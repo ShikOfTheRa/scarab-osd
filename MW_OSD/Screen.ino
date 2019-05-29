@@ -309,7 +309,8 @@ void displayMAVstatustext(void)
 {
   if (timer.MAVstatustext == 0)
     return;
-  MAVstatuslength = constrain(MAVstatuslength, 0, 28);
+  if (MAVstatuslength > 28)
+     MAVstatuslength=28;
   uint16_t pos = (14 + (30 * (getPosition(motorArmedPosition) / 30)) - (MAVstatuslength / 2));
   for (uint8_t i = 1; i <= 50; i++) {
     if (fontData[i] == 0) {
@@ -760,7 +761,7 @@ void displayAverageEfficiency(void)
   uint16_t t_efficiency;
   if (flyTime > 0){
     t_efficiency = (uint32_t) amperagesum /(6 * flyTime) ;
-  if (t_efficiency < 99999)
+  if (t_efficiency < 999)
     displayItem(avgefficiencyPosition, t_efficiency, SYM_AVG_EFF, 0, 0 );
   }
 }
@@ -906,7 +907,7 @@ void displayGPSdop(void)
 
 void display_speed(int16_t t_value, uint8_t t_position, uint8_t t_leadicon)
 {
-  int16_t t_speed;
+  uint16_t t_speed;
   if (!Settings[S_UNITSYSTEM])
     t_speed = t_value * 0.036;           // From MWii cm/sec to Km/h
   else
