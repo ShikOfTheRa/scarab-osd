@@ -4,24 +4,24 @@
 
 #ifdef IMPULSERC_HELIX
 
-# define RTC_SPILE   15 // A1
-# define RTC_SPICLK  14 // A0
-# define RTC_SPIDATA 16 // A2
+#define RTC_SPILE   15 // A1
+#define RTC_SPICLK  14 // A0
+#define RTC_SPIDATA 16 // A2
 
-# define VTX_PSW1_PIN 5
-# define VTX_PSW2_PIN 6
-# define VTX_LED_PIN  8
+#define VTX_PSW1_PIN 5
+#define VTX_PSW2_PIN 6
+#define VTX_LED_PIN  8
 
 // Note: A6 is additionally used for power sensing
 
 #elif defined FFPV_INNOVA
 
-# define RTC_SPILE    9
-# define RTC_SPICLK   8
-# define RTC_SPIDATA 10
+#define RTC_SPILE    9
+#define RTC_SPICLK   8
+#define RTC_SPIDATA 10
 
 #else
-# error Unknown VTX integrated board
+#error Unknown VTX integrated board
 #endif
 
 void vtx_init() {
