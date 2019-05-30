@@ -16,6 +16,9 @@
 
 #elif defined FFPV_INNOVA
 
+#undef RTC_SPILE
+#undef RTC_SPICLK
+#undef RTC_SPIDATA
 #define RTC_SPILE    9
 #define RTC_SPICLK   8
 #define RTC_SPIDATA 10

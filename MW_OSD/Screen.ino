@@ -236,9 +236,13 @@ void displayMode(void)
 #define MAVMISSIONID 5
 #define MAVRTLID 6
 #elif defined FIXEDWING // within MAVLINK
+#undef MAVMISSIONID
+#undef MAVRTLID
 #define MAVMISSIONID 10
 #define MAVRTLID 11
 #else
+#undef MAVMISSIONID
+#undef MAVRTLID
 #define MAVMISSIONID 3
 #define MAVRTLID 6
 #endif
