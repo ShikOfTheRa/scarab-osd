@@ -1877,6 +1877,8 @@ const char mav_mode_FBWA[] PROGMEM   = "FBWA"; //Fly-by-wire A
 const char mav_mode_FBWB[] PROGMEM   = "FBWB"; //Fly-by-wire B
 const char mav_mode_CRUI[] PROGMEM   = "CRUI"; //Cruise
 const char mav_mode_INIT[] PROGMEM   = "INIT"; //Init
+const char mav_mode_HOLD[] PROGMEM   = "HOLD";
+const char mav_mode_LAND[] PROGMEM   = "LAND"; // Landing
 const PROGMEM char * const mav_mode_index[] = 
 {   
  mav_mode_MANU, //0
