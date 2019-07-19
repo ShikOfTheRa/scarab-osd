@@ -151,9 +151,8 @@ void MAX7456Setup(void)
 
   SPCR = (1<<SPE)|(1<<MSTR);
   SPSR = (1<<SPI2X);
-  uint8_t spi_junk;
-  spi_junk=SPSR;
-  spi_junk=SPDR;
+  MAX_screen_rows=SPSR; // Apparnetly have to read twice to clear errors. Unconfirmed 
+  MAX_screen_rows=SPDR;  
   delay(10);
 
 #ifdef MAX_SOFTRESET

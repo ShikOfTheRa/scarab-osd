@@ -155,7 +155,7 @@ void setup()
 #define INTRO_DELAY 6
 #endif
   delay(STARTUPDELAY);
-
+  timer.GUI_active=INTRO_DELAY;
 #ifdef VTX_RTC6705
   vtx_init();
 #ifdef IMPULSERC_HELIX
@@ -1263,7 +1263,7 @@ void ProcessSensors(void) {
 
   //-------------- Current
   if (Settings[S_MWAMPERAGE] == 2) { // Virtual
-    uint32_t Vthrottle = map(MwRcData[THROTTLESTICK], LowT, HighT, 0, 100);
+    int32_t Vthrottle = map(MwRcData[THROTTLESTICK], LowT, HighT, 0, 100);
     Vthrottle = constrain(Vthrottle, 0, 100);
     amperage = (Vthrottle + (Vthrottle * Vthrottle * 0.02)) * Settings16[S16_AMPDIVIDERRATIO] * 0.01;
     if (armed)
@@ -1334,7 +1334,6 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
  #define PWMPIN1 DDC3
   static uint8_t  s_RCchan = 1;
   static uint16_t s_LastRising = 0;
-  static uint16_t s_LastFalling = 0;  
   uint16_t l_PulseDuration;
   uint16_t l_CurrentTime = micros();
   uint8_t l_pinstatus = PINC;
@@ -1363,7 +1362,6 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
     }
   }
   else{ // // transitioned to low 
-    s_LastFalling = l_CurrentTime;
     if (!Settings[S_PWM_PPM]) {//pwm
       if ((900 < l_PulseDuration) && (l_PulseDuration < 2250)) {
 #if defined DEBUG
@@ -1401,7 +1399,6 @@ ISR(PCINT2_vect) { // // Secondary Arduino D5 Atmega D5
   #define PWMPIN2 DDD5
   static uint8_t  s_RCchan = 1;
   static uint16_t s_LastRising = 0;
-  static uint16_t s_LastFalling = 0;  
   uint16_t l_PulseDuration;
   uint16_t l_CurrentTime = micros();
   uint8_t l_pinstatus = PIND;
@@ -1429,7 +1426,6 @@ ISR(PCINT2_vect) { // // Secondary Arduino D5 Atmega D5
     }
   }
   else{ // // transitioned to low 
-    s_LastFalling = l_CurrentTime;
     if (!Settings[S_PWM_PPM]) {//pwm
       if ((950 < l_PulseDuration) && (l_PulseDuration < 2150)) {
         pwmval2 = l_PulseDuration;

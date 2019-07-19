@@ -199,7 +199,8 @@
   //#undef HORIZON                     // Enable/disable HORIZON indicator
   //#undef DISPLAY_PR
   //#undef SHOW_TEMPERATURE
-  
+  #undef GPSTIME                     // Enable to use GPS time display functions with FC that support features
+ 
 #endif
 
 #ifdef BASEFLIGHT     //set up latest at time of release
@@ -704,12 +705,15 @@
 
 #ifdef MENU_STAT
   const uint8_t MENU_STAT_tmp = 0;
+  #undef MENU_STAT
   #define MENU_STAT MENU_STAT_tmp
+  #undef MAXPAGE
   #define MAXPAGE MENU_STAT 
 #endif
 
 #ifdef MENU_PID
   const uint8_t MENU_PID_tmp = MAXPAGE+1;
+  #undef  MENU_PID
   #define MENU_PID MENU_PID_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_PID 
@@ -717,6 +721,7 @@
 
 #ifdef MENU_RC
   const uint8_t MENU_RC_tmp = MAXPAGE+1;
+  #undef  MENU_RC
   #define MENU_RC MENU_RC_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_RC 
@@ -724,15 +729,15 @@
 
 #ifdef MENU_2RC
   const uint8_t MENU_2RC_tmp = MAXPAGE+1;
+  #undef  MENU_2RC
   #define MENU_2RC MENU_2RC_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_2RC 
 #endif
 
-#warning "AMPERAGE_DIV"
-
 #ifdef MENU_SERVO
   const uint8_t MENU_SERVO_tmp = MAXPAGE+1;
+  #undef  MENU_SERVO
   #define MENU_SERVO MENU_SERVO_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_SERVO 
@@ -740,6 +745,7 @@
 
 #ifdef MENU_FIXEDWING
   const uint8_t MENU_FIXEDWING_tmp = MAXPAGE+1;
+  #undef  MENU_FIXEDWING
   #define MENU_FIXEDWING MENU_FIXEDWING_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_FIXEDWING 
@@ -747,6 +753,7 @@
 
 #ifdef MENU_INFO
   const uint8_t MENU_INFO_tmp = MAXPAGE+1;
+  #undef  MENU_INFO
   #define MENU_INFO MENU_INFO_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_INFO 
@@ -754,6 +761,7 @@
 
 #ifdef MENU_VOLTAGE
   const uint8_t MENU_VOLTAGE_tmp = MAXPAGE+1;
+  #undef  MENU_VOLTAGE
   #define MENU_VOLTAGE MENU_VOLTAGE_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_VOLTAGE 
@@ -761,6 +769,7 @@
 
 #ifdef MENU_RSSI
   const uint8_t MENU_RSSI_tmp = MAXPAGE+1;
+  #undef  MENU_RSSI
   #define MENU_RSSI MENU_RSSI_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_RSSI 
@@ -768,6 +777,7 @@
 
 #ifdef MENU_CURRENT
   const uint8_t MENU_CURRENT_tmp = MAXPAGE+1;
+  #undef  MENU_CURRENT
   #define MENU_CURRENT MENU_CURRENT_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_CURRENT 
@@ -775,6 +785,7 @@
 
 #ifdef MENU_DISPLAY
   const uint8_t MENU_DISPLAY_tmp = MAXPAGE+1;
+  #undef  MENU_DISPLAY
   #define MENU_DISPLAY MENU_DISPLAY_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_DISPLAY 
@@ -782,6 +793,7 @@
 
 #ifdef MENU_ADVANCED
   const uint8_t MENU_ADVANCED_tmp = MAXPAGE+1;
+  #undef  MENU_ADVANCED
   #define MENU_ADVANCED MENU_ADVANCED_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_ADVANCED 
@@ -789,6 +801,7 @@
 
 #ifdef MENU_GPS_TIME
   const uint8_t MENU_GPS_TIME_tmp = MAXPAGE+1;
+  #undef  MENU_GPS_TIME
   #define MENU_GPS_TIME MENU_GPS_TIME_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_GPS_TIME 
@@ -796,6 +809,7 @@
 
 #ifdef MENU_ALARMS
   const uint8_t MENU_ALARMS_tmp = MAXPAGE+1;
+  #undef  MENU_ALARMS
   #define MENU_ALARMS MENU_ALARMS_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_ALARMS 
@@ -803,6 +817,7 @@
 
 #ifdef MENU_PROFILE
   const uint8_t MENU_PROFILE_tmp = MAXPAGE+1;
+  #undef  MENU_PROFILE
   #define MENU_PROFILE MENU_PROFILE_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_PROFILE 
@@ -810,6 +825,7 @@
 
 #ifdef MENU_DEBUG
   const uint8_t MENU_DEBUG_tmp = MAXPAGE+1;
+  #undef  MENU_DEBUG
   #define MENU_DEBUG MENU_DEBUG_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_DEBUG 
@@ -817,6 +833,7 @@
 
 #ifdef USE_MENU_VTX
   const uint8_t MENU_VTX_tmp = MAXPAGE+1;
+  #undef  USE_MENU_VTX
   #define MENU_VTX MENU_VTX_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_VTX 
@@ -1144,11 +1161,11 @@ enum {
 #ifdef iNAV
   #define IDBOXAIR 29
   #define IDBOXWP 28
-  #define IDBOXGPSLAND 199 // random unused to disable
+  #define IDBOXGPSLAND 126 // random unused to disable
 #elif defined BETAFLIGHT
   #define IDBOXAIR 28
-  #define IDBOXWP 199 // random unused to disable
-  #define IDBOXGPSLAND 199 // random unused to disable
+  #define IDBOXWP 126 // random unused to disable
+  #define IDBOXGPSLAND 126 // random unused to disable
 #else
   #define IDBOXAIR 28
   #define IDBOXWP 20
@@ -1158,7 +1175,7 @@ enum {
 #ifdef MULTIWII
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #undef  INTRO_MENU
   #define INFO_CONTROLLER 1
 #endif
@@ -1171,13 +1188,13 @@ enum {
 #ifdef LIBREPILOT
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #define INFO_CONTROLLER 3
 #endif
 #ifdef DRONIN
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #define INFO_CONTROLLER 5
 #endif
 #ifdef CLEANFLIGHT
@@ -1207,13 +1224,13 @@ enum {
 #ifdef APM
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #define INFO_CONTROLLER 14
 #endif
 #ifdef PX4
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #define INFO_CONTROLLER 15
 #endif
 #ifdef SKYTRACK
@@ -1222,19 +1239,19 @@ enum {
 #ifdef GPSOSD_UBLOX
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #define INFO_CONTROLLER 17
 #endif
 #ifdef GPSOSD_NMEA
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #define INFO_CONTROLLER 18
 #endif
 #ifdef GPSOSD_NMEA
   #ifdef INFO_CONTROLLER
    #undef INFO_CONTROLLER
-  #endif;  
+  #endif  
   #define INFO_CONTROLLER 19
 #endif
 #ifdef NOCONTROLLER

@@ -2,26 +2,29 @@
 
 #include "wireMacro.h"
 
-#if defined(IMPULSERC_HELIX)
+#ifdef IMPULSERC_HELIX
 
-# define RTC_SPILE   15 // A1
-# define RTC_SPICLK  14 // A0
-# define RTC_SPIDATA 16 // A2
+#define RTC_SPILE   15 // A1
+#define RTC_SPICLK  14 // A0
+#define RTC_SPIDATA 16 // A2
 
-# define VTX_PSW1_PIN 5
-# define VTX_PSW2_PIN 6
-# define VTX_LED_PIN  8
+#define VTX_PSW1_PIN 5
+#define VTX_PSW2_PIN 6
+#define VTX_LED_PIN  8
 
 // Note: A6 is additionally used for power sensing
 
-#elif defined(FFPV_INNOVA)
+#elif defined FFPV_INNOVA
 
-# define RTC_SPILE    9
-# define RTC_SPICLK   8
-# define RTC_SPIDATA 10
+#undef RTC_SPILE
+#undef RTC_SPICLK
+#undef RTC_SPIDATA
+#define RTC_SPILE    9
+#define RTC_SPICLK   8
+#define RTC_SPIDATA 10
 
 #else
-# error Unknown VTX integrated board
+#error Unknown VTX integrated board
 #endif
 
 void vtx_init() {
@@ -136,7 +139,6 @@ void vtx_set_frequency(uint8_t band, uint8_t channel)
   uint32_t N = 0;
   uint16_t A = 0;
   uint32_t data;
-  uint8_t i = 0;
   if (frequency <5956 && frequency> 5644)
   {
     vtx_transfer(0, 1, 400);

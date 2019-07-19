@@ -244,7 +244,7 @@
 #define BWBRIGHTNESS                // Enable GUI brightness configuration from GUI. Otherwise use default.
 //#define BLACKBRIGHTNESS 0x00      // Optional change from default 0x00=0%,0x01=10%,0x10=20%0x11=30%  default is 0x00=0%
 //#define I2CERROR 3                // Autodisplay Mutltiwii I2C errors if exceeds specified count
-//#define NOTHROTTLESPACE           // Enable to remove space between throttle symbol and the data
+//#define THROTTLESPACE 0           // Enable to remove space between throttle symbol and the data
 #define DISPLAY_PR                  // Display pitch / roll angles. Requires relevant layout ppositions to be enabled
 //#define REVERSE_AHI_PITCH         // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users
 //#define REVERSE_AHI_ROLL          // Reverse pitch / roll direction of AHI - for DJI / Eastern bloc OSD users

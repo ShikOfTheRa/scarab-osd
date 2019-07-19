@@ -56,7 +56,7 @@ uint8_t fieldIsVisible(uint8_t pos) {
     return 0;
 }
 
-char *FormatGPSCoord(uint16_t t_position, int32_t val, uint8_t t_cardinalaxis) {  // lat = 0 or lon = 2
+void FormatGPSCoord(uint16_t t_position, int32_t val, uint8_t t_cardinalaxis) {  // lat = 0 or lon = 2
 
   uint8_t t_leadicon = SYM_LAT;
   if (t_cardinalaxis>0) 
@@ -232,13 +232,17 @@ void displayMode(void)
     return;
   uint8_t apactive = 0;
 #ifdef PROTOCOL_MAVLINK
-#if defined PX4 // within MAVLINK
+#ifdef PX4 // within MAVLINK
 #define MAVMISSIONID 5
 #define MAVRTLID 6
 #elif defined FIXEDWING // within MAVLINK
+#undef MAVMISSIONID
+#undef MAVRTLID
 #define MAVMISSIONID 10
 #define MAVRTLID 11
 #else
+#undef MAVMISSIONID
+#undef MAVRTLID
 #define MAVMISSIONID 3
 #define MAVRTLID 6
 #endif
@@ -309,7 +313,8 @@ void displayMAVstatustext(void)
 {
   if (timer.MAVstatustext == 0)
     return;
-  MAVstatuslength = constrain(MAVstatuslength, 0, 28);
+  if (MAVstatuslength > 28)
+     MAVstatuslength=28;
   uint16_t pos = (14 + (30 * (getPosition(motorArmedPosition) / 30)) - (MAVstatuslength / 2));
   for (uint8_t i = 1; i <= 50; i++) {
     if (fontData[i] == 0) {
@@ -613,8 +618,6 @@ void OLDdisplayCurrentThrottle(void)
 
 #ifndef NOTHROTTLESPACE
 #define THROTTLESPACE 1
-#else
-#define THROTTLESPACE 0
 #endif
   screenBuffer[1] = ' ';
 #ifdef AUTOTHROTTLE
@@ -762,7 +765,7 @@ void displayAverageEfficiency(void)
   uint16_t t_efficiency;
   if (flyTime > 0){
     t_efficiency = (uint32_t) amperagesum /(6 * flyTime) ;
-  if (t_efficiency < 99999)
+  if (t_efficiency < 999)
     displayItem(avgefficiencyPosition, t_efficiency, SYM_AVG_EFF, 0, 0 );
   }
 }
@@ -908,7 +911,7 @@ void displayGPSdop(void)
 
 void display_speed(int16_t t_value, uint8_t t_position, uint8_t t_leadicon)
 {
-  int16_t t_speed;
+  uint16_t t_speed;
   if (!Settings[S_UNITSYSTEM])
     t_speed = t_value * 0.036;           // From MWii cm/sec to Km/h
   else
@@ -937,7 +940,7 @@ void displayVario(void)
   uint16_t position = getPosition(MwVarioPosition);
 
 #ifndef VARIOSCALE
-#define VARIOSCALE 150
+#define VARIOSCALE 150 // max 127 8 bit
 #endif
 
 #if defined VARIOENHANCED // multi char slider representation of climb rate
@@ -957,8 +960,8 @@ void displayVario(void)
   if (t_vario_icon != 0)
     screen[position - (LINE * t_vario_rows)] = SYM_VARIO + t_vario_icon; // need -ve too
 #elif defined VARIOSTANDARD // single char icon representation of climb rate
-#define VARIOSCALE VARIOSCALE // max 127 8 bit
 #define VARIOICONCOUNT 3
+#undef VARIOROWS
 #define VARIOROWS 1
   int16_t t_vario = MwVario;
   if (MwVario > VARIOSCALE) t_vario = VARIOSCALE;
@@ -1165,7 +1168,6 @@ void displayWindSpeed(void)
 {
   if (!fieldIsVisible(WIND_speedPosition))
     return;
-  uint16_t position = getPosition(WIND_speedPosition);
   int16_t d;
 #ifdef PROTOCOL_MAVLINK
 #ifdef MAV_WIND_DIR_REVERSE
@@ -1720,8 +1722,10 @@ void displayConfigScreen(void)
 #ifdef MENU_PROFILE
   if (configPage == MENU_PROFILE) {
 #ifdef CORRECTLOOPTIME
+#undef MENU10MAX
 #define MENU10MAX 2
 #else
+#undef MENU10MAX
 #define MENU10MAX 1
 #endif
     MenuBuffer[0] = FCProfile;

@@ -2,7 +2,7 @@
 
 void mav_checksum(uint8_t val) {
   uint16_t tmp;
-  tmp = val ^ mw_mav.serial_checksum & 0xFF;
+  tmp = (val ^ mw_mav.serial_checksum) & 0xFF;
   tmp ^= (tmp << 4) & 0xFF;
   mw_mav.serial_checksum = (mw_mav.serial_checksum >> 8) ^ (tmp << 8) ^ (tmp << 3) ^ (tmp >> 4);
 }
@@ -47,7 +47,7 @@ void GPS_reset_home_position() {
 
 void mav_tx_checksum_func(int val) {
   long tmp;
-  tmp = val ^ mw_mav.tx_checksum & 0xFF;
+  tmp = (val ^ mw_mav.tx_checksum) & 0xFF;
   tmp ^= (tmp << 4) & 0xFF;
   mw_mav.tx_checksum = ( mw_mav.tx_checksum >> 8) ^ (tmp << 8) ^ (tmp << 3) ^ (tmp >> 4);
 }
@@ -65,7 +65,7 @@ void mav_serialize16(uint16_t val) {
 }
 
 
-void mav_serialize32(uint16_t val) {
+void mav_serialize32(uint32_t val) {
   mav_serialize8((val   ) & 0xFF);
   mav_serialize8((val >> 8) & 0xFF);
   mav_serialize8((val >> 16) & 0xFF);

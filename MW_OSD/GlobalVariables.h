@@ -262,7 +262,7 @@ struct  __timer {
   uint32_t seconds;
   uint8_t  MSP_active;
   uint8_t  GPS_active;
-  uint8_t  GUI_active=INTRO_DELAY;
+  uint8_t  GUI_active;
   uint8_t  GPS_initdelay;
   uint16_t  loopcount;
   uint16_t  packetcount;
@@ -827,7 +827,7 @@ int32_t previousfwaltitude=0;
 int16_t AIR_speed;
 int16_t GPS_speed;
 int16_t  GPS_ground_course;
-uint16_t old_GPS_speed;
+int16_t old_GPS_speed;
 int16_t GPS_directionToHome=0;
 uint8_t GPS_numSat=0;
 uint16_t GPS_dop=0;
@@ -870,7 +870,7 @@ uint16_t HighT = HIGHTHROTTLE;
 
 // For Time
 uint16_t onTime=0;
-uint16_t flyTime=0;
+uint16_t flyTime=1;
 
 // For Heading
 const char headGraph[] PROGMEM = {
