@@ -1135,6 +1135,10 @@ enum {
   #define KKAUDIOVARIO AUDIOPIN // Enable KKAUDIOVARIO on defined audio pin (AEROMAX hardware)
 #endif
 
+#ifdef PIO9600 // This is for travis build only
+  #define BAUDRATE 9600
+#endif
+
 #ifdef PWM_THROTTLE
   #define ALWAYSARMED  // starts OSD in armed mode
 #endif
