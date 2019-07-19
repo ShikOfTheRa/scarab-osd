@@ -1896,9 +1896,16 @@ const PROGMEM char * const mav_mode_index[] =
  mav_mode_APM , 
  mav_mode_GUID,
  mav_mode_INIT, //16
- mav_mode_APM , //17
+ mav_mode_STAB, //17
+ mav_mode_HOLD, //18  
+ mav_mode_LOIT, //19
+ mav_mode_LAND, //20
+ mav_mode_RETL, //21
+ mav_mode_APM,  //22
+ mav_mode_ACRO, //23
+ mav_mode_APM , //24
 };
-#define MAV_MODE_MAX 17
+#define MAV_MODE_MAX 24
 #else
 const char mav_mode_ALTH[] PROGMEM   = "ALTH"; //Altitude Hold: auto control
 const char mav_mode_POSH[] PROGMEM   = "POSH"; //Position: auto control
