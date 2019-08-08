@@ -435,7 +435,7 @@ void displayHorizon(int rollAngle, int pitchAngle)
   pitchAngle = -pitchAngle;
 #endif //REVERSE_AHI_PITCH
 #if defined REVERSE_AHI_ROLL
-  pitchAngle = -pitchAngle;
+  rollAngle = -rollAngle;
 #endif //REVERSE_AHI_ROLL
 
 #ifndef AHICORRECT
