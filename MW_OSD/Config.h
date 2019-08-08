@@ -133,6 +133,7 @@
 //#define PPM_CONTROL               // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD PWM input pin (RSSI pin on basic MINIM hardware). Requires TX type to be set below.
 //#define PWM_OSD_SWITCH            // Enables 3 way screen switch from a RX PWM channel connected to the OSD PWM input pin (RSSI pin on basic MINIM hardware). AEROMAX OSD has a dedicated connection.
 //#define PWM_THROTTLE              // Enables throttle feature, virtual current sensor using RC throttle connected into OSD PWM input pin (RSSI pin on basic MINIM hardware). AEROMAX OSD has a dedicated connection with this enabled by default.
+//#define SBUS_CONTROL              // Enable same functionality as PPM_CONTROL but using a S.Bus signal into OSD PWM input pin (RSSI pin on basic MINIM hardware). AEROMAX OSD has a dedicated connection (D5). Disables PPM/PWM support completely and ignores any "RC source type" (S_PWM_PPM) set by the GUI. 
 
 
 /********************       FILTER settings      *********************/

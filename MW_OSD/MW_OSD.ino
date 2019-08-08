@@ -111,11 +111,18 @@ MS5837 MS5837sensor;
 #include "SKYTRACK.h"
 #endif
 
-
+#ifdef SBUS_CONTROL
+#include "sbus.h"
+SBUS sbus;
+#endif
 
 //------------------------------------------------------------------------
 void setup()
 {
+#ifdef SBUS_CONTROL
+  sbus.begin(SBUSPIN, sbusNonBlocking);
+#endif
+
 #ifdef HARDRESET
   MCUSR &= (0xFF & (0 << WDRF));
   WDTCSR |= (1 << WDCE) | (1 << WDE) | (0 << WDIE);
@@ -391,6 +398,7 @@ void loop()
     }
 #endif //MSP_SPEED_MED  
 #endif //GPSOSD
+  
   }  // End of slow Timed Service Routine (100ms loop)
 
   if ((currentMillis - previous_millis_high) >= hi_speed_cycle) // 33 Hz or 100hz in MSP high mode.
@@ -536,6 +544,10 @@ void loop()
 #endif // KISS
       MAX7456_DrawScreen();
     }
+
+#ifdef SBUS_CONTROL
+    ProcessSbus(); // handle SBUS protocol
+#endif
 
     ProcessSensors();       // using analogue sensors
 
@@ -1046,6 +1058,7 @@ void readEEPROM(void)
   }
 
   // config dependant - set up interrupts
+
 #if defined INTC3
   if (Settings[S_MWRSSI] == 1) {
     DDRC &= ~(1 << DDC3); //  PORTC |= (1 << PORTC3);
@@ -1163,6 +1176,18 @@ void gpsdistancefix(void) {
   GPS_distanceToHome = (speedcorrection * 65535) + GPS_distanceToHome;
 }
 
+#ifdef SBUS_CONTROL
+void ProcessSbus(void) {
+  for (int i = 1; i <= TX_CHANNELS; i++) {
+    MwRcData[i] = sbus.getChannel(i);
+  }
+   
+#ifdef TX_GUI_CONTROL
+  reverseChannels();
+#endif // TX_GUI_CONTROL
+    
+}
+#endif // SBUS_CONTROL
 
 void ProcessSensors(void) {
   /*
@@ -1172,6 +1197,10 @@ void ProcessSensors(void) {
   static uint8_t sensorindex;
   uint16_t sensortemp;
   for (uint8_t sensor = 0; sensor < SENSORTOTAL; sensor++) {
+#if defined SBUS_CONTROL && defined SBUS_ON_RSSIPIN
+    // don't mess with the SBUS processing (RSSIPIN uses same pin and is currently sensor 4)
+    if (sensor != 4)
+#endif // SBUS_CONTROL
     sensortemp = analogRead(sensorpinarray[sensor]);
     //--- override with FC voltage data if enabled
     if (sensor == 0) {
@@ -1305,7 +1334,7 @@ void ProcessSensors(void) {
     sensorindex = 0;
 }
 
-#if defined INTD5
+#if defined INTD5 || defined SBUS_ISR2
 ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
   #define PWMPIN1 DDC3
   static uint16_t s_LastRising = 0;
@@ -1329,7 +1358,7 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
     }
   }  
 }
-#else // INTD5
+#elif defined INTC3
 ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
  #define PWMPIN1 DDC3
   static uint8_t  s_RCchan = 1;
@@ -1390,7 +1419,7 @@ ISR(PCINT1_vect) { // Default Arduino A3 Atmega C3
     }
   }  
 }
-#endif // INTD5
+#endif // INTC3
 
 
 

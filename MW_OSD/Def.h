@@ -930,6 +930,8 @@ enum {
 #define AUDIOPIN      2   // Aeromax hardware only  
 #define INTC3             // Arduino A3 enabled for PWM/PPM interrupts) Arduino A3 == Atmega Port C bit 3 for PWM trigger on RSSI pin
 //#define INTD5           // Atmega Port D bit 5 PWM/PPM interrupts) Aeromax hardware used for RC input
+#define SBUSPIN       A3
+#define SBUS_ON_RSSIPIN
 
 // board specific amendments:
 #ifdef AEROMAX
@@ -937,6 +939,10 @@ enum {
     #define INTD5    
     #undef  AUXPIN
     #define AUXPIN    A6  // A6 for Aeromax hardware only        
+    #undef SBUSPIN
+    #define SBUSPIN D5
+    #define SBUS_ISR2
+    #undef SBUS_ON_RSSIPIN
 #elif defined AIRBOTMICRO
     #undef VOLTAGEPIN
     #undef VIDVOLTAGEPIN
@@ -1044,6 +1050,15 @@ enum {
 
 
 /********************  GPS OSD rule definitions  *********************/
+
+#if defined SBUS_CONTROL
+  #define PPM_CONTROL
+  #ifdef SBUS_ISR2
+    #undef INTD5           // Disable PWM/PPM interrupts
+  #else
+    #undef INTC3            // Disable PWM/PPM interrupts
+  #endif
+#endif
 
 #if defined PPM_CONTROL
   #undef OSD_SWITCH
