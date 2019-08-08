@@ -233,6 +233,9 @@
 #endif
 
 #ifdef APM       //set up latest at time of release
+  #ifdef QUADPLANE
+    #define FIXEDWING
+  #endif  
 #endif
 
 #ifdef KISS      //set up latest at time of release

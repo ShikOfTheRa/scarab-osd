@@ -1831,6 +1831,7 @@ const PROGMEM char * const msp_mode_index[] =
 #define  LAT  0
 #define  LON  1
 
+//Common Mavlink:
 const char mav_mode_APM[]  PROGMEM   = "APM "; //Unknown APM mode
 const char mav_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
 const char mav_mode_ACRO[] PROGMEM   = "ACRO"; //Acrobatic: rate control
@@ -1870,7 +1871,7 @@ const PROGMEM char * const mav_mode_index[] =
  mav_mode_PX4,  //11
 };
 #define MAV_MODE_MAX 11
-#elif defined FIXEDWING // within MAVLINK
+#elif defined FIXEDWING // APM within MAVLINK. Not PX4
 const char mav_mode_MANU[] PROGMEM   = "MANU"; //Manual
 const char mav_mode_TRNG[] PROGMEM   = "TRNG"; //Training
 const char mav_mode_FBWA[] PROGMEM   = "FBWA"; //Fly-by-wire A
@@ -1879,6 +1880,15 @@ const char mav_mode_CRUI[] PROGMEM   = "CRUI"; //Cruise
 const char mav_mode_INIT[] PROGMEM   = "INIT"; //Init
 const char mav_mode_HOLD[] PROGMEM   = "HOLD";
 const char mav_mode_LAND[] PROGMEM   = "LAND"; // Landing
+#ifdef QUADPLANE 
+const char mav_mode_QSTB[] PROGMEM   = "QSTB"; // Quadplane - like copter STABILIZE
+const char mav_mode_QHOV[] PROGMEM   = "QHOV"; // Quadplane - like copter ALT HOLD
+const char mav_mode_QLTR[] PROGMEM   = "QLTR"; // Quadplane - like copter LOITER
+const char mav_mode_QLND[] PROGMEM   = "QLND"; // Quadplane - like copter LAND
+const char mav_mode_QRTL[] PROGMEM   = "QRTL"; // Quadplane - like copter RTL
+const char mav_mode_QACR[] PROGMEM   = "QACR"; // Quadplane - ACRO
+#endif //QUADPLANE
+
 const PROGMEM char * const mav_mode_index[] = 
 {   
  mav_mode_MANU, //0
@@ -1898,17 +1908,24 @@ const PROGMEM char * const mav_mode_index[] =
  mav_mode_APM , 
  mav_mode_GUID,
  mav_mode_INIT, //16
- mav_mode_STAB, //17
- mav_mode_HOLD, //18  
- mav_mode_LOIT, //19
- mav_mode_LAND, //20
- mav_mode_RETL, //21
+#ifdef QUADPLANE
+ mav_mode_QSTB, //17
+ mav_mode_QHOV, //18  
+ mav_mode_QLTR, //19
+ mav_mode_QLND, //20
+ mav_mode_QRTL, //21
  mav_mode_APM,  //22
- mav_mode_ACRO, //23
- mav_mode_APM , //24
+ mav_mode_QACR, //23
+#endif
+ mav_mode_APM , 
 };
+#ifdef QUADPLANE
 #define MAV_MODE_MAX 24
-#else
+#else // FIXEWDWING
+#define MAV_MODE_MAX 17
+#endif
+
+#else // APM copter
 const char mav_mode_ALTH[] PROGMEM   = "ALTH"; //Altitude Hold: auto control
 const char mav_mode_POSH[] PROGMEM   = "POSH"; //Position: auto control
 const char mav_mode_LAND[] PROGMEM   = "LAND"; //Land:: auto control
@@ -1924,8 +1941,6 @@ const char mav_mode_NGPS[] PROGMEM   = "NGPS";
 const char mav_mode_SRTL[] PROGMEM   = "SRTL";
 const char mav_mode_FLOW[] PROGMEM   = "FLOW";
 const char mav_mode_FOLL[] PROGMEM   = "FOLL";
-
-
 const PROGMEM char * const mav_mode_index[] = 
 {   
  mav_mode_STAB, //0

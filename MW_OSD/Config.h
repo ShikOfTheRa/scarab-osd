@@ -71,6 +71,7 @@
 //Choose ONLY ONE option:
 //#define ROTORCRAFT                // Default for multirotors etc.
 //#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
+//#define QUADPLANE                 // Uncomment this ONLY if you are using ARDUPILOT QUADPLANE
 
 
 /********************       Debug      *********************/
