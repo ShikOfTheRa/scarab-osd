@@ -394,7 +394,7 @@ void loop()
       if (timer.GUI_active == 0) {
         mspWriteRequest(MSP_ATTITUDE, 0);
       }
-#endif // KISS
+#endif // PROTOCOL_MSP
     }
 #endif //MSP_SPEED_MED  
 #endif //GPSOSD
@@ -521,13 +521,13 @@ void loop()
 
     if (!fontMode) {
 #ifdef KISS
-      Serial.write(0x20);
+      Serial.write(KISS_GET_TELEMETRY);
 #elif defined SKYTRACK
       DrawSkytrack();
 #elif defined PROTOCOL_MSP
 #ifdef CANVAS_SUPPORT
       if (!canvasMode)
-#endif
+#endif // CANVAS_SUPPORT
       {
         if (MSPcmdsend != 0) {
 #ifdef MSPV2
@@ -535,7 +535,7 @@ void loop()
             mspV2WriteRequest(MSPcmdsend, 0);
           }
           else
-#endif
+#endif // MSPV2
           {
             mspWriteRequest(MSPcmdsend & 0xff, 0);
           }
