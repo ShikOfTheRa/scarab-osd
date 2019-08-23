@@ -38,13 +38,13 @@ void kiss_sync() {
 #ifdef DATA_MSP
   timer.MSP_active=DATA_MSP;             // getting something on serial port
 #endif
-  armed = kissread_u8(16);
-  MwVBat = kissread_u16(17)/10;
-  MwAngle[0]=(int16_t)kissread_u16(31)/10;
-  MwAngle[1]=(int16_t)kissread_u16(33)/10;
-  Kvar.mode = kissread_u8(65); 
+  armed = kissread_u8(KISS_INDEX_CURRENT_ARMED);
+  MwVBat = kissread_u16(KISS_INDEX_LIPOVOLT)/10;
+  MwAngle[0]=(int16_t)kissread_u16(KISS_INDEX_ANGLE0)/10;
+  MwAngle[1]=(int16_t)kissread_u16(KISS_INDEX_ANGLE1)/10;
+  Kvar.mode = kissread_u8(KISS_INDEX_MODE); 
   Kvar.mode = (Kvar.mode>2) ? 0 : Kvar.mode;
-  MwRcData[1]=1000+(int16_t)kissread_u16(0);
+  MwRcData[1]=1000+(int16_t)kissread_u16(KISS_INDEX_THROTTLE);
   for(uint8_t i=1; i<8; i++) {
     MwRcData[i+1]=1500+(int16_t)kissread_u16(i*2);
   } 
@@ -60,11 +60,11 @@ void kiss_sync() {
     // calculate amperage using ESC sum method...    
     MWAmperage=0;    
     for(uint8_t i=0; i<6; i++) {
-      filtereddata[i] = ESC_filter((uint32_t)filtereddata[i],(uint32_t)((KISSserialBuffer[87+(i*10)]<<8) | KISSserialBuffer[88+(i*10)])<<4);
+      filtereddata[i] = ESC_filter((uint32_t)filtereddata[i],(uint32_t)((KISSserialBuffer[KISS_INDEX_ESC1_AMP+(i*10)]<<8) | KISSserialBuffer[KISS_INDEX_ESC1_AMP + 1 +(i*10)])<<4);
       MWAmperage     += filtereddata[i]>>4;
     }
 //    MWAmperage/=10;   
-    amperagesum = (uint32_t)360* kissread_u16(148);
+    amperagesum = (uint32_t)360* kissread_u16(KISS_INDEX_MAH);
   }
 }
 
@@ -87,7 +87,9 @@ void serialKISSreceive(uint8_t c) {
     c_state = KISS_HEADER_SIZE;
   }
   else if (c_state == KISS_HEADER_SIZE) {
-    KISSserialBuffer[Kvar.index] = c;
+    if (Kvar.index < KISSFRAMELENGTH) {
+      KISSserialBuffer[Kvar.index] = c;
+    }
     Kvar.cksumtmp+=c;
     Kvar.index++;
     if (Kvar.index == Kvar.framelength) {

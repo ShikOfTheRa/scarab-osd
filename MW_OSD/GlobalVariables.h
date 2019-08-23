@@ -2077,8 +2077,32 @@ const PROGMEM char * const KISS_mode_index[] =
 };
 
 #define ESC_FILTER 10
+#define KISS_GET_TELEMETRY 0x20
+
+// Indexes of informations in the serial protocol(8 bits)
+#define KISS_INDEX_THROTTLE 0 // INT 16
+#define KISS_INDEX_RC1 2 // INT 16
+#define KISS_INDEX_RC2 4 // INT 16
+#define KISS_INDEX_RC3 6 // INT 16
+#define KISS_INDEX_RC4 8 // INT 16
+#define KISS_INDEX_RC5 10 // INT 16
+#define KISS_INDEX_RC6 12 // INT 16
+#define KISS_INDEX_RC7 14 // INT 16
+#define KISS_INDEX_CURRENT_ARMED 16
+#define KISS_INDEX_LIPOVOLT 17 // INT 16
+#define KISS_INDEX_ANGLE0 31 // INT 16
+#define KISS_INDEX_ANGLE1 33 // INT 16
+#define KISS_INDEX_MODE 65
+#define KISS_INDEX_ESC1_AMP 87 // INT 16
+#define KISS_INDEX_ESC2_AMP 97 // INT 16
+#define KISS_INDEX_ESC3_AMP 107 // INT 16
+#define KISS_INDEX_ESC4_AMP 117 // INT 16
+#define KISS_INDEX_ESC5_AMP 127 // INT 16
+#define KISS_INDEX_ESC6_AMP 137 // INT 16
+#define KISS_INDEX_MAH 148 // INT 16
+
 #define KISSFRAMEINIT 5
-#define KISSFRAMELENGTH 165 // max frame size
+#define KISSFRAMELENGTH KISS_INDEX_MAH + 2 // Size of serial buffer defined with last index used
 uint8_t KISSserialBuffer[KISSFRAMELENGTH];
 
 // Vars
