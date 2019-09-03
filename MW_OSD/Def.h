@@ -238,6 +238,10 @@
   #endif  
 #endif
 
+#ifdef KISSGPS   //set up latest at time of release
+  #define KISS
+#endif
+
 #ifdef KISS      //set up latest at time of release
 #endif
 

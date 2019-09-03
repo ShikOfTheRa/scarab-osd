@@ -2078,6 +2078,8 @@ const PROGMEM char * const KISS_mode_index[] =
 
 #define ESC_FILTER 10
 #define KISS_GET_TELEMETRY 0x20
+#define KISS_GET_GPS 0x54
+uint8_t KISSgetcmd;         
 
 // Indexes of informations in the serial protocol(8 bits)
 #define KISS_INDEX_THROTTLE 0 // INT 16
@@ -2100,6 +2102,13 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_INDEX_ESC5_AMP 127 // INT 16
 #define KISS_INDEX_ESC6_AMP 137 // INT 16
 #define KISS_INDEX_MAH 148 // INT 16
+
+#define KISS_INDEX_GPS_LATITUDE 0   // UINT 32
+#define KISS_INDEX_GPS_LONGITUDE 4  // UINT 32
+#define KISS_INDEX_GPS_SPEED 8      // UINT 16
+#define KISS_INDEX_GPS_COURSE 10    // UINT 16
+#define KISS_INDEX_GPS_ALTITUDE 12  // INT 16
+#define KISS_INDEX_GPS_NUMSATFIX 14 // UINT 8
 
 #define KISSFRAMEINIT 5
 #define KISSFRAMELENGTH KISS_INDEX_MAH + 2 // Size of serial buffer defined with last index used

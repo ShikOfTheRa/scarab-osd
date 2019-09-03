@@ -520,8 +520,17 @@ void loop()
     }
 
     if (!fontMode) {
-#ifdef KISS
-      Serial.write(KISS_GET_TELEMETRY);
+#ifdef KISSGPS
+      if (KISSgetcmd>3){
+        Serial.write(KISS_GET_GPS);   
+        KISSgetcmd=0;         
+      }
+      else{
+        Serial.write(KISS_GET_TELEMETRY); 
+        KISSgetcmd++;    
+      }
+#elif defined KISS
+      Serial.write(KISS_GET_TELEMETRY);   
 #elif defined SKYTRACK
       DrawSkytrack();
 #elif defined PROTOCOL_MSP

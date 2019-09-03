@@ -42,6 +42,7 @@
 //#define MULTIWII                  // Uncomment this if you are using latest 2.4 MULTIWII
 //#define MAHOWII                   // Uncomment this if you are using MAHOWII (https://github.com/mahowik/mahowii)
 //#define KISS                      // Uncomment this if you are using KISS FC
+#define KISSGPS                   // Uncomment this if you are using KISS FC with GPS support (pending test)
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define LIBREPILOT                // Uncomment this if you are using the latest LibrePilot MSP Module
