@@ -535,6 +535,11 @@ uint16_t Settings16[EEPROM16_SETTINGS];
   #define DEF_S_RCWSWITCH 1      // S_RCWSWITCH,
   #define DEF_S_RCWSWITCH_CH 8   // S_RCWSWITCH_CH,
   #define DEF_S_ALTRESOLUTION 0
+  #ifdef PX4
+    #define DEF_S16_RSSIMAX 2600   // S16_RSSIMAX PX4 non standard 
+  #else
+    #define DEF_S16_RSSIMAX 1023   // S16_RSSIMAX PX4 default 
+  #endif
 #else
   #define DEF_S_MAINVOLTAGE_VBAT 0
   #define DEF_S_TX_TYPE 0
@@ -544,6 +549,7 @@ uint16_t Settings16[EEPROM16_SETTINGS];
   #define DEF_S_RCWSWITCH 0
   #define DEF_S_RCWSWITCH_CH 8
   #define DEF_S_ALTRESOLUTION 10
+  #define DEF_S16_RSSIMAX 1023   // S16_RSSIMAX PX4 default 
 #endif
 
 #if defined (UBLOX) || defined iNAV  || defined (MAV_RTC)
@@ -641,7 +647,7 @@ PROGMEM const uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
   0,// S16_AMPZERO,
   150,// S16_AMPDIVIDERRATIO,
   0,// S16_RSSIMIN,
-  1023,// S16_RSSIMAX,
+  DEF_S16_RSSIMAX,// S16_RSSIMAX = 1024 default, 2600 PX4,
   DEF_S16_AUX_ZERO_CAL,// S16_AUX_ZERO_CAL,
   DEF_S16_AUX_CAL,// S16_AUX_CAL,
   
