@@ -792,9 +792,9 @@ if (cmdMSP==MSP_STATUS)
   if (cmdMSP==MSP_PID)
   {
     for(uint8_t i=0; i<PIDITEMS; i++) {
-      P8[i] = read8();
-      I8[i] = read8();
-      D8[i] = read8();
+      pidD[i] = read8();
+      pidD[i] = read8();
+      pidD[i] = read8();
     }
     modeMSPRequests &=~ REQ_MSP_PID;
 
@@ -1274,15 +1274,9 @@ void serialMenuCommon()
 #endif // Not KISS
 
       switch(COL) {
-#ifndef PID16
-      case 1: P8[MODROW] += menudir; break;
-      case 2: I8[MODROW] += menudir; break;
-      case 3: D8[MODROW] += menudir; break;
-#else
-      case 1: P16[MODROW] += menudir; break;
-      case 2: I16[MODROW] += menudir; break;
-      case 3: D16[MODROW] += menudir; break;
-#endif
+      case 1: pidP[MODROW] += menudir; break;
+      case 2: pidI[MODROW] += menudir; break;
+      case 3: pidD[MODROW] += menudir; break;
       }
     }
   }
@@ -1752,15 +1746,9 @@ void configSave()
 #ifndef KISS
   mspWriteRequest(MSP_SET_PID, PIDITEMS*3);
   for(uint8_t i=0; i<PIDITEMS; i++) {
-#ifndef PID16
-    mspWrite8(P8[i]);
-    mspWrite8(I8[i]);
-    mspWrite8(D8[i]);
-#else
-    mspWrite16(P16[i]);
-    mspWrite16(I16[i]);
-    mspWrite16(D16[i]);
-#endif
+    mspWrite8(pidP[i]);
+    mspWrite8(pidI[i]);
+    mspWrite8(pidD[i]);
   }
   mspWriteChecksum();
   

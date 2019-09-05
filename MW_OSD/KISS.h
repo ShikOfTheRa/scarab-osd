@@ -87,9 +87,9 @@ void kiss_sync_settings() {
 
   // PIDs
   for(uint8_t i=0; i<3; i++) {
-    P16[i] = kissread_u16(KISS_SETTINGS_IDX_PID_ROLL_P + (i * 2)) / 10;
-    I16[i] = kissread_u16(KISS_SETTINGS_IDX_PID_ROLL_I + (i * 2));
-    D16[i] = kissread_u16(KISS_SETTINGS_IDX_PID_ROLL_D + (i * 2)) / 10;
+    pidP[i] = kissread_u16(KISS_SETTINGS_IDX_PID_ROLL_P + (i * 2)) / 10;
+    pidI[i] = kissread_u16(KISS_SETTINGS_IDX_PID_ROLL_I + (i * 2));
+    pidD[i] = kissread_u16(KISS_SETTINGS_IDX_PID_ROLL_D + (i * 2)) / 10;
   }
   modeMSPRequests &=~ REQ_MSP_PID;
 }
@@ -120,9 +120,9 @@ void kiss_send_pids() {
   // Number of data send
   kissWriteInBuffer_u8(0, 18);
   for(uint8_t i=0; i<3; i++) {
-    kissWriteInBuffer_u16(KISS_SET_PID_IDX_PID_ROLL_P + (i * 6) + 1, P16[i] * 10);
-    kissWriteInBuffer_u16(KISS_SET_PID_IDX_PID_ROLL_I + (i * 6) + 1, I16[i]);
-    kissWriteInBuffer_u16(KISS_SET_PID_IDX_PID_ROLL_D + (i * 6) + 1, D16[i] * 10);
+    kissWriteInBuffer_u16(KISS_SET_PID_IDX_PID_ROLL_P + (i * 6) + 1, pidP[i] * 10);
+    kissWriteInBuffer_u16(KISS_SET_PID_IDX_PID_ROLL_I + (i * 6) + 1, pidI[i]);
+    kissWriteInBuffer_u16(KISS_SET_PID_IDX_PID_ROLL_D + (i * 6) + 1, pidD[i] * 10);
   }
   kissWriteInBuffer_u8(19, kissProtocolCRC8(KISSserialBuffer, 1, 19));
 
