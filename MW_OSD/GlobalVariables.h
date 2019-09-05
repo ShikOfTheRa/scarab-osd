@@ -2148,6 +2148,7 @@ const PROGMEM char * const KISS_mode_index[] =
 
 uint8_t KISSserialBuffer[KISSFRAMELENGTH];
 uint8_t KISScurrentRequest = 0x00;
+uint8_t KISSgetcmd=0;
 
 // Vars
 struct __Kvar {
