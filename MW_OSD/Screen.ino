@@ -1511,7 +1511,7 @@ void displayConfigScreen(void)
 #ifdef MENU_PID_VEL
     for (uint8_t X = 0; X <= 7; X++)
 #elif defined KISS
-    for (uint8_t X = 0; X <= 2; X++)
+    for (uint8_t X = 0; X < PIDITEMS; X++)
 #else
     for (uint8_t X = 0; X <= 6; X++)
 #endif
