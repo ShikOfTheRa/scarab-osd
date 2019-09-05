@@ -1225,11 +1225,32 @@ void displayCursor(void)
           ROW = 8;
       }
       oldROW = ROW;
+#elif defined KISS
+      if (ROW == 9) {
+        ROW = 5;
+      } else {
+        if (ROW > 5) {
+          ROW = 10;
+        } else {
+          if (oldROW > ROW) {
+            ROW--;
+          } else if (oldROW < ROW) {
+            ROW++;
+          }
+        }
+      }
+      oldROW = ROW;
 #else
       if (ROW == 8) ROW = 10;
       if (ROW == 9) ROW = 7;
 #endif
       cursorpos = (ROW + 2) * 30 + 10 + (COL - 1) * 6;
+#ifdef KISS
+
+      if (ROW < 10 && COL == 3) {
+       cursorpos += 1;  
+      }
+#endif
     }
 #endif
 
@@ -1489,19 +1510,27 @@ void displayConfigScreen(void)
 
 #ifdef MENU_PID_VEL
     for (uint8_t X = 0; X <= 7; X++)
+#elif defined KISS
+    for (uint8_t X = 0; X <= 2; X++)
 #else
     for (uint8_t X = 0; X <= 6; X++)
 #endif
     {
+#ifdef KISS
+      MAX7456_WriteString_P(PGMSTR(&(menu_pid[X])), ROLLT + (X * 60));
+#else
 #ifdef USE_MSP_PIDNAMES
       MAX7456_WriteString(menu_pid[X], ROLLT + (X * 30));
 #else
       MAX7456_WriteString_P(PGMSTR(&(menu_pid[X])), ROLLT + (X * 30));
 #endif
+#endif // KISS
     }
 
 #ifdef MENU_PID_VEL
     for (uint8_t Y = 0; Y <= 9; Y++)
+#elif defined KISS
+    for (uint8_t Y = 0; Y <= 2; Y++)
 #else
     for (uint8_t Y = 0; Y <= 8; Y++)
 #endif
@@ -1511,9 +1540,25 @@ void displayConfigScreen(void)
       if (Y > 6) {
         X = X - 2;
       }
+#ifndef PID16
       MAX7456_WriteString(itoa(P8[Y], screenBuffer, 10), ROLLP + (X * 30));
       MAX7456_WriteString(itoa(I8[Y], screenBuffer, 10), ROLLI + (X * 30));
       MAX7456_WriteString(itoa(D8[Y], screenBuffer, 10), ROLLD + (X * 30));
+#else
+#ifndef KISS
+      MAX7456_WriteString(itoa(P16[Y], screenBuffer, 10), ROLLP + (X * 30));
+      MAX7456_WriteString(itoa(I16[Y], screenBuffer, 10), ROLLI + (X * 30));
+      MAX7456_WriteString(itoa(D16[Y], screenBuffer, 10), ROLLD + (X * 30));
+#else
+      ItoaPadded(P16[Y], screenBuffer, 5,3);
+      MAX7456_WriteString(screenBuffer, ROLLP + (X * 60)-3);
+      ItoaPadded(I16[Y], screenBuffer, 6,3);
+      MAX7456_WriteString(screenBuffer, ROLLI + (X * 60)-3);
+      ItoaPadded(D16[Y], screenBuffer, 5,3);
+      MAX7456_WriteString(screenBuffer, ROLLD + (X * 60)-2);
+#endif // Not KISS
+
+#endif
     }
 
     MAX7456_WriteString("P", 71);
@@ -2474,6 +2519,3 @@ void displayGPSPosition(void)
   t_position = getPosition(MwGPSLonPositionTop);
   FormatGPSCoord(t_position,GPS_longitude, 2) ;
 }
-
-
-

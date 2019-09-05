@@ -41,7 +41,7 @@
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
 //#define MULTIWII                  // Uncomment this if you are using latest 2.4 MULTIWII
 //#define MAHOWII                   // Uncomment this if you are using MAHOWII (https://github.com/mahowik/mahowii)
-//#define KISS                      // Uncomment this if you are using KISS FC
+#define KISS                      // Uncomment this if you are using KISS FC
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define LIBREPILOT                // Uncomment this if you are using the latest LibrePilot MSP Module
@@ -75,7 +75,7 @@
 
 
 /********************       Debug      *********************/
-//#define MENU_DEBUG                  // Enable to display debug values in OSD menu 
+#define MENU_DEBUG                  // Enable to display debug values in OSD menu 
 
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
@@ -441,7 +441,3 @@
 
 /********************  Under developemnt      *********************/
 // This is a work in process. Not completed for implementation
-
-
-
-

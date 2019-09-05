@@ -10,6 +10,15 @@ uint16_t kissread_u16(uint8_t index) {
   return t;
 }
 
+void kissWriteInBuffer_u8(uint8_t index, uint8_t value) {
+   KISSserialBuffer[index] = (uint8_t)(value);
+}
+
+void kissWriteInBuffer_u16(uint8_t index, uint16_t value) {
+  KISSserialBuffer[index] = (uint8_t)((value) >> 8);
+   KISSserialBuffer[index + 1] = (uint8_t)(value);
+}
+
 uint32_t ESC_filter(uint32_t oldVal, uint32_t newVal){
   return (uint32_t)((uint32_t)((uint32_t)((uint32_t)oldVal*ESC_FILTER)+(uint32_t)newVal))/(ESC_FILTER+1);
 }
@@ -68,7 +77,61 @@ void kiss_sync() {
   }
 }
 
-void serialKISSreceive(uint8_t c) {
+void kiss_sync_settings() {
+  
+  // ??
+  timer.packetcount++;
+#ifdef DATA_MSP
+  timer.MSP_active=DATA_MSP;             // getting something on serial port
+#endif
+
+  // PIDs
+  for(uint8_t i=0; i<3; i++) {
+    P16[i] = kissread_u16(KISS_SETTINGS_IDX_PID_ROLL_P + (i * 2)) / 10;
+    I16[i] = kissread_u16(KISS_SETTINGS_IDX_PID_ROLL_I + (i * 2));
+    D16[i] = kissread_u16(KISS_SETTINGS_IDX_PID_ROLL_D + (i * 2)) / 10;
+  }
+  modeMSPRequests &=~ REQ_MSP_PID;
+}
+
+
+uint8_t kissProtocolCRC8(const uint8_t *data, uint8_t startIndex, uint8_t stopIndex) 
+{
+  uint8_t crc = 0;
+  for (uint8_t i = startIndex; i < stopIndex; i++) 
+  {
+    crc ^= data[i];
+    for (uint8_t j = 0; j < 8; j++) 
+    {
+      if ((crc & 0x80) != 0) 
+      {
+        crc = (uint8_t) ((crc << 1) ^ 0xD5);
+      } 
+      else 
+      {
+        crc <<= 1;
+      }
+    }
+  }
+  return crc;
+}
+
+void kiss_send_pids() {
+  // Number of data send
+  kissWriteInBuffer_u8(0, 18);
+  for(uint8_t i=0; i<3; i++) {
+    kissWriteInBuffer_u16(KISS_SET_PID_IDX_PID_ROLL_P + (i * 6) + 1, P16[i] * 10);
+    kissWriteInBuffer_u16(KISS_SET_PID_IDX_PID_ROLL_I + (i * 6) + 1, I16[i]);
+    kissWriteInBuffer_u16(KISS_SET_PID_IDX_PID_ROLL_D + (i * 6) + 1, D16[i] * 10);
+  }
+  kissWriteInBuffer_u8(19, kissProtocolCRC8(KISSserialBuffer, 1, 19));
+
+  Serial.write(KISS_SET_PIDS);
+  for (int i = 0; i < 20;i++) {
+    Serial.write(KISSserialBuffer[i]);
+  }
+}
+
   static enum _serial_state {
     KISS_IDLE,
     KISS_HEADER_INIT,
@@ -76,10 +139,28 @@ void serialKISSreceive(uint8_t c) {
     KISS_PAYLOAD,
   }
   c_state = KISS_IDLE;
+  
+void serialKISSsendRequestIfPossible(uint8_t request) {
+  static unsigned long previous_millis = 0;
+  
+  if (c_state == KISS_IDLE) {
+    Serial.write(request);
+    KISScurrentRequest = request;
+  } else {
+    unsigned long current_millis = millis();
+    if ((current_millis - previous_millis) > 2000) {
+      c_state == KISS_IDLE;
+    }
+  }
+}
+
+void serialKISSreceive(uint8_t c) {
+
 
   if (c_state == KISS_IDLE) {
     Kvar.index=0;
     Kvar.cksumtmp=0;
+    Kvar.crc8=0;
     c_state = (c == KISSFRAMEINIT) ? KISS_HEADER_INIT : KISS_IDLE;
   }
   else if (c_state == KISS_HEADER_INIT) {
@@ -91,14 +172,30 @@ void serialKISSreceive(uint8_t c) {
       KISSserialBuffer[Kvar.index] = c;
     }
     Kvar.cksumtmp+=c;
+
+    Kvar.crc8 ^= c;
+    for (uint8_t j = 0; j < 8; j++) 
+    {
+      if ((Kvar.crc8 & 0x80) != 0) 
+      {
+        Kvar.crc8 = (uint8_t) ((Kvar.crc8 << 1) ^ 0xD5);
+      } 
+      else 
+      {
+        Kvar.crc8 <<= 1;
+      }
+    }
+    
     Kvar.index++;
     if (Kvar.index == Kvar.framelength) {
       c_state = KISS_PAYLOAD;
     }
   }
   else if (c_state == KISS_PAYLOAD) {
-    if ((Kvar.cksumtmp/Kvar.framelength)==c){
-      kiss_sync();
+    if (KISScurrentRequest == KISS_GET_TELEMETRY && (Kvar.cksumtmp/Kvar.framelength)==c){
+        kiss_sync();
+    } else if (KISScurrentRequest == KISS_GET_SETTINGS && Kvar.crc8 == c) {
+        kiss_sync_settings();
     }
     c_state = KISS_IDLE; // Go straight to idle to avoid missing every other packet
   }
@@ -106,6 +203,3 @@ void serialKISSreceive(uint8_t c) {
     c_state = KISS_IDLE;
   }
 }
-
-
-

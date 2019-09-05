@@ -521,7 +521,11 @@ void loop()
 
     if (!fontMode) {
 #ifdef KISS
-      Serial.write(KISS_GET_TELEMETRY);
+      if (MSPcmdsend == MSP_PID) {
+        serialKISSrequest(KISS_GET_SETTINGS);
+      } else {
+        serialKISSrequest(KISS_GET_TELEMETRY);
+      }
 #elif defined SKYTRACK
       DrawSkytrack();
 #elif defined PROTOCOL_MSP
@@ -1522,5 +1526,3 @@ void reverseChannels(void) { //ifdef (TX_REVERSE)
       MwRcData[i] = 3000 - MwRcData[i];
   }
 }
-
-

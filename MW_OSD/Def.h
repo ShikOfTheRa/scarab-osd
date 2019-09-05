@@ -36,7 +36,7 @@
 //#define MAV_ADSB                  // Use Baro altitude from mavlink instead of GPS. Requires ADSB data to be configured in mavlink.
 
 
-//#define DEVELOPMENT               // For development set only 
+#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
 
   #define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
@@ -44,12 +44,12 @@
 
   //#define AIRBOTMICRO             // Uncomment this if using an airbot MicroOSD
   //#define EEPROMVER 16              // for eeprom layout verification
-  #define AEROMAX                 // Uncomment this if using MWOSD AEROMAX hardware
+  //#define AEROMAX                 // Uncomment this if using MWOSD AEROMAX hardware
   //#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
   //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
   //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
   //#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
-  #define APM
+  //#define APM
   //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
   //#define DISPLAYAVGEFFICIENCY                // Display average mAh used / per KM instead of mAh/min KMh. 
   //#define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
@@ -73,7 +73,7 @@
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
 //#define MULTIWII                  // Uncomment this if you are using latest 2.4 MULTIWII
 //#define MAHOWII                   // Uncomment this if you are using MAHOWII (https://github.com/mahowik/mahowii)
-//#define KISS                      // Uncomment this if you are using KISS FC
+#define KISS                      // Uncomment this if you are using KISS FC
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define LIBREPILOT                // Uncomment this if you are using the latest LibrePilot MSP Module
@@ -239,6 +239,7 @@
 #endif
 
 #ifdef KISS      //set up latest at time of release
+  #define PID16
 #endif
 
 #ifdef SKYTRACK  //set up latest at time of release
@@ -561,6 +562,7 @@
 #if defined(KISS)
   #undef INTRO_FC
   #define MENU_STAT
+  #define MENU_PID
   #define MENU_VOLTAGE
   #define MENU_RSSI
   #define MENU_CURRENT
@@ -1377,6 +1379,3 @@ enum {
 #ifndef INFO_OPTIONS
   #define INFO_OPTIONS            0            // default - unknown 
 #endif
-
-
-
