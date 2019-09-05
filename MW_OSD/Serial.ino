@@ -252,6 +252,12 @@ void cfgWriteChecksum(){
 }
 #endif // I2C_UB_SUPPORT
 
+#ifdef KISS
+void serialKISSrequest(uint8_t request) {
+  serialKISSsendRequestIfPossible(request);
+}
+#endif
+
 // --------------------------------------------------------------------------------------
 // Here are decoded received commands from MultiWii
 void serialMSPCheck()
@@ -1252,17 +1258,31 @@ void serialMenuCommon()
   if(configPage == MENU_PID) {
 #ifdef MENU_PID_VEL
     if(ROW >= 1 && ROW <= 8) {
+#elif defined KISS
+    if(ROW >=1 && ROW<=5) {
 #else
     if(ROW >= 1 && ROW <= 7) {
 #endif
-      uint8_t MODROW = ROW - 1;
+      uint8_t MODROW = 0;
+#ifndef KISS
+      MODROW = ROW - 1;
       if (ROW > 5) {
         MODROW = ROW + 1;
       }
+#else
+      MODROW = (ROW - 1) / 2;
+#endif // Not KISS
+
       switch(COL) {
+#ifndef PID16
       case 1: P8[MODROW] += menudir; break;
       case 2: I8[MODROW] += menudir; break;
       case 3: D8[MODROW] += menudir; break;
+#else
+      case 1: P16[MODROW] += menudir; break;
+      case 2: I16[MODROW] += menudir; break;
+      case 3: D16[MODROW] += menudir; break;
+#endif
       }
     }
   }
@@ -1729,11 +1749,18 @@ void configSave()
   #endif //ADVANCEDSAVE
 #endif //ENABLE_MSP_SAVE_ADVANCED
 
+#ifndef KISS
   mspWriteRequest(MSP_SET_PID, PIDITEMS*3);
   for(uint8_t i=0; i<PIDITEMS; i++) {
+#ifndef PID16
     mspWrite8(P8[i]);
     mspWrite8(I8[i]);
     mspWrite8(D8[i]);
+#else
+    mspWrite16(P16[i]);
+    mspWrite16(I16[i]);
+    mspWrite16(D16[i]);
+#endif
   }
   mspWriteChecksum();
   
@@ -1816,6 +1843,10 @@ void configSave()
   mspWriteChecksum();
 #endif
 
+#else
+  kiss_send_pids();
+#endif // Not KISS
+
 #if 0 // This is not necessary? vtxBand,vtxChannel&vtxPower are all in sync with corresponding Settings at the end of stick handling.
   #ifdef USE_MENU_VTX
     vtx_save();
@@ -1823,7 +1854,9 @@ void configSave()
 #endif
 
   writeEEPROM();
+#ifndef KISS
   mspWriteRequest(MSP_EEPROM_WRITE,0);
+#endif // Not KISS
   configExit();
 }
 
@@ -1865,5 +1898,3 @@ void setFCProfile()
 
 void MSPV2AIRSPEEDSerialRequest() {
 }
-
-

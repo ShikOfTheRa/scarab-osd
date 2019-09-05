@@ -777,8 +777,11 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE05+2)|DISPLAY_NEVER|DISPLAY_DEV,     // DOPposition
 };
 
+#ifndef PID16
 static uint8_t P8[PIDITEMS], I8[PIDITEMS], D8[PIDITEMS];
-
+#else
+static uint16_t P16[PIDITEMS], I16[PIDITEMS], D16[PIDITEMS];
+#endif
 static uint8_t rcRate8,rcExpo8;
 static uint8_t rollPitchRate;
 static uint8_t rollRate;
@@ -2085,7 +2088,9 @@ const PROGMEM char * const KISS_mode_index[] =
 #define ESC_FILTER 10
 #define KISS_GET_TELEMETRY 0x20
 #define KISS_GET_GPS 0x54
-uint8_t KISSgetcmd;         
+#define KISS_GET_SETTINGS 0x30
+#define KISS_SET_PIDS 0x44
+
 
 // Indexes of informations in the serial protocol(8 bits)
 #define KISS_INDEX_THROTTLE 0 // INT 16
@@ -2116,9 +2121,33 @@ uint8_t KISSgetcmd;
 #define KISS_INDEX_GPS_ALTITUDE 12  // INT 16
 #define KISS_INDEX_GPS_NUMSATFIX 14 // UINT 8
 
+// Indexes of settings information in serial protocol (8 bits)
+#define KISS_SETTINGS_IDX_PID_ROLL_P 0 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_PITCH_P 2 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_YAW_P 4 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_ROLL_I 6 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_PITCH_I 8 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_YAW_I 10 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_ROLL_D 12 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_PITCH_D 14 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_YAW_D 16 // INT 16 (value * 1000)
+
+// Indexes of SET_PIDS
+#define KISS_SET_PID_IDX_PID_ROLL_P 0 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_ROLL_I 2 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_ROLL_D 4 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_PITCH_P 6 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_PITCH_I 8 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_PITCH_D 10 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_YAW_P 12 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_YAW_I 14 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_YAW_D 16 // INT 16 (value * 1000)
+
 #define KISSFRAMEINIT 5
-#define KISSFRAMELENGTH KISS_INDEX_MAH + 2 // Size of serial buffer defined with last index used
+#define KISSFRAMELENGTH KISS_INDEX_MAH + 2 // Size of serial buffer defined with max index used
+
 uint8_t KISSserialBuffer[KISSFRAMELENGTH];
+uint8_t KISScurrentRequest = 0x00;
 
 // Vars
 struct __Kvar {
@@ -2128,6 +2157,7 @@ struct __Kvar {
   uint8_t readIndex;
   uint8_t framelength;
   uint16_t cksumtmp;
+  uint8_t crc8;
 }
 Kvar;
 
@@ -2153,6 +2183,3 @@ const PROGMEM char * const NAZA_mode_index[] =
  naza_mode_GPSA,
 };
 #endif // NAZA
-
-
-
