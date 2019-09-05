@@ -23,7 +23,11 @@
 // DEFINE CONFIGURATION MENU PAGES
 #define MINPAGE 0
 
+#ifdef KISS
+#define PIDITEMS 3
+#else
 #define PIDITEMS 10
+#endif // KISS
 
 // STICK POSITION
 #define MAXSTICK         1850
@@ -777,11 +781,11 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE05+2)|DISPLAY_NEVER|DISPLAY_DEV,     // DOPposition
 };
 
-#ifndef PID16
-static uint8_t P8[PIDITEMS], I8[PIDITEMS], D8[PIDITEMS];
+#ifdef KISS
+static uint16_t pidP[PIDITEMS], pidI[PIDITEMS], pidD[PIDITEMS];
 #else
-static uint16_t P16[PIDITEMS], I16[PIDITEMS], D16[PIDITEMS];
-#endif
+static uint8_t pidP[PIDITEMS], pidI[PIDITEMS], pidD[PIDITEMS];
+#endif // KISS
 static uint8_t rcRate8,rcExpo8;
 static uint8_t rollPitchRate;
 static uint8_t rollRate;

@@ -243,7 +243,6 @@
 #endif
 
 #ifdef KISS      //set up latest at time of release
-  #define PID16
 #endif
 
 #ifdef SKYTRACK  //set up latest at time of release

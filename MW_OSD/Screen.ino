@@ -1511,7 +1511,7 @@ void displayConfigScreen(void)
 #ifdef MENU_PID_VEL
     for (uint8_t X = 0; X <= 7; X++)
 #elif defined KISS
-    for (uint8_t X = 0; X <= 2; X++)
+    for (uint8_t X = 0; X < PIDITEMS; X++)
 #else
     for (uint8_t X = 0; X <= 6; X++)
 #endif
@@ -1530,7 +1530,7 @@ void displayConfigScreen(void)
 #ifdef MENU_PID_VEL
     for (uint8_t Y = 0; Y <= 9; Y++)
 #elif defined KISS
-    for (uint8_t Y = 0; Y <= 2; Y++)
+    for (uint8_t Y = 0; Y < PIDITEMS; Y++)
 #else
     for (uint8_t Y = 0; Y <= 8; Y++)
 #endif
@@ -1540,24 +1540,17 @@ void displayConfigScreen(void)
       if (Y > 6) {
         X = X - 2;
       }
-#ifndef PID16
-      MAX7456_WriteString(itoa(P8[Y], screenBuffer, 10), ROLLP + (X * 30));
-      MAX7456_WriteString(itoa(I8[Y], screenBuffer, 10), ROLLI + (X * 30));
-      MAX7456_WriteString(itoa(D8[Y], screenBuffer, 10), ROLLD + (X * 30));
-#else
-#ifndef KISS
-      MAX7456_WriteString(itoa(P16[Y], screenBuffer, 10), ROLLP + (X * 30));
-      MAX7456_WriteString(itoa(I16[Y], screenBuffer, 10), ROLLI + (X * 30));
-      MAX7456_WriteString(itoa(D16[Y], screenBuffer, 10), ROLLD + (X * 30));
-#else
-      ItoaPadded(P16[Y], screenBuffer, 5,3);
+#ifdef KISS
+      ItoaPadded(pidP[Y], screenBuffer, 5,3);
       MAX7456_WriteString(screenBuffer, ROLLP + (X * 60)-3);
-      ItoaPadded(I16[Y], screenBuffer, 6,3);
+      ItoaPadded(pidI[Y], screenBuffer, 6,3);
       MAX7456_WriteString(screenBuffer, ROLLI + (X * 60)-3);
-      ItoaPadded(D16[Y], screenBuffer, 5,3);
+      ItoaPadded(pidD[Y], screenBuffer, 5,3);
       MAX7456_WriteString(screenBuffer, ROLLD + (X * 60)-2);
-#endif // Not KISS
-
+#else
+      MAX7456_WriteString(itoa(pidP[Y], screenBuffer, 10), ROLLP + (X * 30));
+      MAX7456_WriteString(itoa(pidI[Y], screenBuffer, 10), ROLLI + (X * 30));
+      MAX7456_WriteString(itoa(pidD[Y], screenBuffer, 10), ROLLD + (X * 30));
 #endif
     }
 
