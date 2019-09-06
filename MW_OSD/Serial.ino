@@ -792,8 +792,8 @@ if (cmdMSP==MSP_STATUS)
   if (cmdMSP==MSP_PID)
   {
     for(uint8_t i=0; i<PIDITEMS; i++) {
-      pidD[i] = read8();
-      pidD[i] = read8();
+      pidP[i] = read8();
+      pidI[i] = read8();
       pidD[i] = read8();
     }
     modeMSPRequests &=~ REQ_MSP_PID;

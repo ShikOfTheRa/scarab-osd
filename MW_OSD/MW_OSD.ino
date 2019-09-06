@@ -522,7 +522,7 @@ void loop()
     if (!fontMode) {
 #ifdef KISSGPS
       if (KISSgetcmd>3){
-        serialKISSrequest(KISS_GET_SETTINGS);
+        serialKISSrequest(KISS_GET_GPS);
         KISSgetcmd=0;         
       }
       else{

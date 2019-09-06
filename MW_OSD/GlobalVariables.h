@@ -2135,6 +2135,7 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_SETTINGS_IDX_PID_ROLL_D 12 // INT 16 (value * 1000)
 #define KISS_SETTINGS_IDX_PID_PITCH_D 14 // INT 16 (value * 1000)
 #define KISS_SETTINGS_IDX_PID_YAW_D 16 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_VERSION 92 // UINT 8
 
 // Indexes of SET_PIDS
 #define KISS_SET_PID_IDX_PID_ROLL_P 0 // INT 16 (value * 1000)
@@ -2163,6 +2164,7 @@ struct __Kvar {
   uint8_t framelength;
   uint16_t cksumtmp;
   uint8_t crc8;
+  uint8_t version = 0;
 }
 Kvar;
 

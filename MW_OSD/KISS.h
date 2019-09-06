@@ -49,8 +49,8 @@ uint16_t calculateCurrentFromConsumedCapacity(uint16_t mahUsed)
   return calculatedCurrent;
 }
 
-void kiss_sync() {
-  timer.packetcount++;
+void kiss_sync_gps () {
+timer.packetcount++;
 #ifdef DATA_MSP
   timer.MSP_active = DATA_MSP;           // getting something on serial port
 #endif
@@ -73,41 +73,44 @@ void kiss_sync() {
       MwHeading -= 360;
     MwAltitude = (int32_t)GPS_altitude*100;
   }
-  else { // Standard telemtry packet
-    armed = kissread_u8(KISS_INDEX_CURRENT_ARMED);
-    MwVBat = kissread_u16(KISS_INDEX_LIPOVOLT) / 10;
-    MwAngle[0] = (int16_t)kissread_u16(KISS_INDEX_ANGLE0) / 10;
-    MwAngle[1] = (int16_t)kissread_u16(KISS_INDEX_ANGLE1) / 10;
-    Kvar.mode = kissread_u8(KISS_INDEX_MODE);
-    Kvar.mode = (Kvar.mode > 2) ? 0 : Kvar.mode;
-    MwRcData[1] = 1000 + (int16_t)kissread_u16(KISS_INDEX_THROTTLE);
-    for (uint8_t i = 1; i < 8; i++) {
-      MwRcData[i + 1] = 1500 + (int16_t)kissread_u16(i * 2);
+}
+
+void kiss_sync_telemetry() {
+  timer.packetcount++;
+#ifdef DATA_MSP
+  timer.MSP_active = DATA_MSP;           // getting something on serial port
+#endif
+  armed = kissread_u8(KISS_INDEX_CURRENT_ARMED);
+  MwVBat = kissread_u16(KISS_INDEX_LIPOVOLT) / 10;
+  MwAngle[0] = (int16_t)kissread_u16(KISS_INDEX_ANGLE0) / 10;
+  MwAngle[1] = (int16_t)kissread_u16(KISS_INDEX_ANGLE1) / 10;
+  Kvar.mode = kissread_u8(KISS_INDEX_MODE);
+  Kvar.mode = (Kvar.mode > 2) ? 0 : Kvar.mode;
+  MwRcData[1] = 1000 + (int16_t)kissread_u16(KISS_INDEX_THROTTLE);
+  for (uint8_t i = 1; i < 8; i++) {
+    MwRcData[i + 1] = 1500 + (int16_t)kissread_u16(i * 2);
+  }
+  handleRawRC();
+
+  static uint32_t filtereddata[6];
+
+  if (Settings[S_MWAMPERAGE]) {
+    // calculate amperage using capacity method...
+    // uint16_t dummy=kissread_u16(148);
+    // MWAmperage = 10*calculateCurrentFromConsumedCapacity(dummy);
+
+    // calculate amperage using ESC sum method...
+    MWAmperage = 0;
+    for (uint8_t i = 0; i < 6; i++) {
+      filtereddata[i] = ESC_filter((uint32_t)filtereddata[i], (uint32_t)((KISSserialBuffer[KISS_INDEX_ESC1_AMP + (i * 10)] << 8) | KISSserialBuffer[KISS_INDEX_ESC1_AMP + 1 + (i * 10)]) << 4);
+      MWAmperage     += filtereddata[i] >> 4;
     }
-    handleRawRC();
-
-    static uint32_t filtereddata[6];
-
-    if (Settings[S_MWAMPERAGE]) {
-      // calculate amperage using capacity method...
-      // uint16_t dummy=kissread_u16(148);
-      // MWAmperage = 10*calculateCurrentFromConsumedCapacity(dummy);
-
-      // calculate amperage using ESC sum method...
-      MWAmperage = 0;
-      for (uint8_t i = 0; i < 6; i++) {
-        filtereddata[i] = ESC_filter((uint32_t)filtereddata[i], (uint32_t)((KISSserialBuffer[KISS_INDEX_ESC1_AMP + (i * 10)] << 8) | KISSserialBuffer[KISS_INDEX_ESC1_AMP + 1 + (i * 10)]) << 4);
-        MWAmperage     += filtereddata[i] >> 4;
-      }
-      //    MWAmperage/=10;
-      amperagesum = (uint32_t)360 * kissread_u16(KISS_INDEX_MAH);
-    }
+    //    MWAmperage/=10;
+    amperagesum = (uint32_t)360 * kissread_u16(KISS_INDEX_MAH);
   }
 }
 
 void kiss_sync_settings() {
-  
-  // ??
   timer.packetcount++;
 #ifdef DATA_MSP
   timer.MSP_active=DATA_MSP;             // getting something on serial port
@@ -119,6 +122,9 @@ void kiss_sync_settings() {
     pidI[i] = kissread_u16(KISS_SETTINGS_IDX_PID_ROLL_I + (i * 2));
     pidD[i] = kissread_u16(KISS_SETTINGS_IDX_PID_ROLL_D + (i * 2)) / 10;
   }
+
+  Kvar.version = kissread_u8(KISS_SETTINGS_IDX_VERSION);
+  
   modeMSPRequests &=~ REQ_MSP_PID;
 }
 
@@ -144,6 +150,16 @@ uint8_t kissProtocolCRC8(const uint8_t *data, uint8_t startIndex, uint8_t stopIn
   return crc;
 }
 
+uint8_t kissProtocolChecksum(const uint8_t *data, uint8_t startIndex, uint8_t stopIndex) 
+{
+  uint8_t checksum = 0;
+  for (uint8_t i = startIndex; i < stopIndex; i++) 
+  {
+    checksum += data[i];
+  }
+  return checksum;
+}
+
 void kiss_send_pids() {
   // Number of data send
   kissWriteInBuffer_u8(0, 18);
@@ -152,7 +168,12 @@ void kiss_send_pids() {
     kissWriteInBuffer_u16(KISS_SET_PID_IDX_PID_ROLL_I + (i * 6) + 1, pidI[i]);
     kissWriteInBuffer_u16(KISS_SET_PID_IDX_PID_ROLL_D + (i * 6) + 1, pidD[i] * 10);
   }
-  kissWriteInBuffer_u8(19, kissProtocolCRC8(KISSserialBuffer, 1, 19));
+
+  if (Kvar.version > 0 && Kvar.version < 109) {
+    kissWriteInBuffer_u8(19, kissProtocolChecksum(KISSserialBuffer, 1, 19));
+  } else {
+    kissWriteInBuffer_u8(19, kissProtocolCRC8(KISSserialBuffer, 1, 19));
+  }
 
   Serial.write(KISS_SET_PIDS);
   for (int i = 0; i < 20;i++) {
@@ -170,13 +191,14 @@ void kiss_send_pids() {
   
 void serialKISSsendRequestIfPossible(uint8_t request) {
   static unsigned long previous_millis = 0;
+  unsigned long current_millis = millis();
   
   if (c_state == KISS_IDLE) {
     Serial.write(request);
     KISScurrentRequest = request;
+    previous_millis = current_millis;
   } else {
-    unsigned long current_millis = millis();
-    if ((current_millis - previous_millis) > 2000) {
+    if ((current_millis - previous_millis) > 20) {
       c_state == KISS_IDLE;
     }
   }
@@ -219,10 +241,18 @@ void serialKISSreceive(uint8_t c) {
     }
   }
   else if (c_state == KISS_PAYLOAD) {
-    if (KISScurrentRequest == KISS_GET_TELEMETRY && (Kvar.cksumtmp/Kvar.framelength)==c){
-        kiss_sync();
-    } else if (KISScurrentRequest == KISS_GET_SETTINGS && Kvar.crc8 == c) {
-        kiss_sync_settings();
+    if ((Kvar.cksumtmp/Kvar.framelength) == c || Kvar.crc8 == c) {
+      switch(KISScurrentRequest) {
+        case KISS_GET_TELEMETRY:
+          kiss_sync_telemetry();
+          break;
+        case KISS_GET_SETTINGS:
+          kiss_sync_settings();
+          break;
+        case KISS_GET_GPS:
+          kiss_sync_gps();
+          break;
+      }
     }
     c_state = KISS_IDLE; // Go straight to idle to avoid missing every other packet
   }
