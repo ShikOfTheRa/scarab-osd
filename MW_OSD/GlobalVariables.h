@@ -39,6 +39,11 @@
 #define ROLLP 101
 #define ROLLI 107
 #define ROLLD 113
+#ifdef KISS
+#define ROLLRC 101
+#define ROLLRATE 107
+#define ROLLCURVE 113
+#endif // KISS
 #define PITCHT 93+(30*1)
 #define PITCHP 101+(30*1)
 #define PITCHI 107+(30*1)
@@ -83,6 +88,10 @@
 #define LINE14    390
 #define LINE15    420
 #define LINE16    450
+
+#ifdef KISS
+#define KISS_LINEFIRSTSUBMENU LINE05+11
+#endif
 
 /********************       For Sensors presence      *********************/
 #define ACCELEROMETER  1//0b00000001
@@ -783,6 +792,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 
 #ifdef KISS
 static uint16_t pidP[PIDITEMS], pidI[PIDITEMS], pidD[PIDITEMS];
+static uint16_t rateRC[PIDITEMS], rateRate[PIDITEMS], rateCurve[PIDITEMS];
 #else
 static uint8_t pidP[PIDITEMS], pidI[PIDITEMS], pidD[PIDITEMS];
 #endif // KISS
@@ -999,6 +1009,11 @@ int16_t rssiMIN=100;
 
 #define MSP_DEBUGMSG             253   //out message         debug string buffer
 #define MSP_DEBUG                254   //out message         debug1,debug2,debug3,debug4
+#ifdef KISS
+#define MSP_RATES                255
+#define MSP_KISS_SETTINGS         256
+#define MSP_KISS_PID             257
+#endif // KISS
 
 // Betaflight specific
 
@@ -1223,6 +1238,10 @@ const char configMsgEXT[]  PROGMEM = "EXIT";
 const char configMsgSAVE[] PROGMEM = "SAVE+EXIT";
 const char configMsgPGS[]  PROGMEM = "<PAGE>";
 const char configMsgMWII[] PROGMEM = "USE FC";
+#ifdef KISS
+const char configMsgBack[]  PROGMEM = "BACK";
+const char configMsgSAVEAndBack[] PROGMEM = "SAVE+BACK";
+#endif
 
 // For APSTATUS
 
@@ -1409,6 +1428,15 @@ const PROGMEM char * const menu_vtx[] =
   configMsg164,
 };
 #endif //MENU_VTX
+#ifdef KISS
+//-----------------------------------------------------------KiSS Page
+const char configMsg170[] PROGMEM = "KISS SETTINGS";
+const char configMsg171[] PROGMEM = "PID";
+const char configMsg172[] PROGMEM = "RATE";
+const char configMsg1710[] PROGMEM = "RC";
+const char configMsg1711[] PROGMEM = "RATE";
+const char configMsg1712[] PROGMEM = "CURVE";
+#endif // KISS
 //-----------------------------------------------------------MENU END
 
 // BETAFLIGHT RTC setting
@@ -1464,6 +1492,11 @@ const unsigned char UnitsIcon[10]={
 
 #define REQ_MSP_RTC                  (1L<<26)
 #define REQ_MSP2_INAV_AIR_SPEED      (1L<<27)
+#ifdef KISS
+#define REQ_MSP_KISS_SETTINGS        (1L<<28)
+#define REQ_MSP_RATES                (1L<<29)
+#define REQ_MSP_KISS_PID             (1L<<30)
+#endif
 // Menu selections
 
 
@@ -1642,6 +1675,9 @@ const PROGMEM char * const menutitle_item[] =
 #ifdef MENU_STAT
   configMsg00,
 #endif
+#ifdef MENU_KISS
+  configMsg170,
+#endif
 #ifdef MENU_PID
   configMsg10,
 #endif
@@ -1697,6 +1733,19 @@ const PROGMEM char * const menu_on_off[] =
   configMsgOFF,
   configMsgON,
 };
+
+#ifdef KISS
+const PROGMEM char * const menu_kiss[] = {
+  configMsg171,
+  configMsg172
+};
+
+const PROGMEM char * const menu_kiss_rates[] = {
+  configMsg1710,
+  configMsg1711,
+  configMsg1712
+};
+#endif
 
 #ifdef PROTOCOL_MSP
 #ifdef FIXEDWING
@@ -2093,7 +2142,10 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_GET_TELEMETRY 0x20
 #define KISS_GET_GPS 0x54
 #define KISS_GET_SETTINGS 0x30
+#define KISS_GET_PIDS 0x43
 #define KISS_SET_PIDS 0x44
+#define KISS_GET_RATES 0x4D
+#define KISS_SET_RATES 0x4E
 
 
 // Indexes of informations in the serial protocol(8 bits)
@@ -2126,6 +2178,7 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_INDEX_GPS_NUMSATFIX 14 // UINT 8
 
 // Indexes of settings information in serial protocol (8 bits)
+// PIDs
 #define KISS_SETTINGS_IDX_PID_ROLL_P 0 // INT 16 (value * 1000)
 #define KISS_SETTINGS_IDX_PID_PITCH_P 2 // INT 16 (value * 1000)
 #define KISS_SETTINGS_IDX_PID_YAW_P 4 // INT 16 (value * 1000)
@@ -2135,7 +2188,28 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_SETTINGS_IDX_PID_ROLL_D 12 // INT 16 (value * 1000)
 #define KISS_SETTINGS_IDX_PID_PITCH_D 14 // INT 16 (value * 1000)
 #define KISS_SETTINGS_IDX_PID_YAW_D 16 // INT 16 (value * 1000)
+// Rates
+#define KISS_SETTINGS_IDX_RATE_ROLL_RC 28 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_PITCH_RC 30 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_YAW_RC 32 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_ROLL_RATE 34 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_PITCH_RATE 36 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_YAW_RATE 38 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_ROLL_CURVE 40 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_PITCH_CURVE 42 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_YAW_CURVE 44 // INT 16 (value * 1000)
 #define KISS_SETTINGS_IDX_VERSION 92 // UINT 8
+
+// Indexes of GET_PIDS
+#define KISS_GET_PID_IDX_PID_ROLL_P 0 // INT 16 (value * 1000)
+#define KISS_GET_PID_IDX_PID_ROLL_I 2 // INT 16 (value * 1000)
+#define KISS_GET_PID_IDX_PID_ROLL_D 4 // INT 16 (value * 1000)
+#define KISS_GET_PID_IDX_PID_PITCH_P 6 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_PITCH_I 8 // INT 16 (value * 1000)
+#define KISS_GET_PID_IDX_PID_PITCH_D 10 // INT 16 (value * 1000)
+#define KISS_GET_PID_IDX_PID_YAW_P 12 // INT 16 (value * 1000)
+#define KISS_GET_PID_IDX_PID_YAW_I 14 // INT 16 (value * 1000)
+#define KISS_GET_PID_IDX_PID_YAW_D 16 // INT 16 (value * 1000)
 
 // Indexes of SET_PIDS
 #define KISS_SET_PID_IDX_PID_ROLL_P 0 // INT 16 (value * 1000)
@@ -2148,12 +2222,39 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_SET_PID_IDX_PID_YAW_I 14 // INT 16 (value * 1000)
 #define KISS_SET_PID_IDX_PID_YAW_D 16 // INT 16 (value * 1000)
 
+// Indexes of GET_RATES
+#define KISS_GET_RATE_IDX_ROLL_RC 0 // INT 16 (value * 1000)
+#define KISS_GET_RATE_IDX_ROLL_RATE 2 // INT 16 (value * 1000)
+#define KISS_GET_RATE_IDX_ROLL_CURVE 4 // INT 16 (value * 1000)
+#define KISS_GET_RATE_IDX_PITCH_RC 6 // INT 16 (value * 1000)
+#define KISS_GET_RATE_IDX_PITCH_RATE 8 // INT 16 (value * 1000)
+#define KISS_GET_RATE_IDX_PITCH_CURVE 10 // INT 16 (value * 1000)
+#define KISS_GET_RATE_IDX_YAW_RC 12 // INT 16 (value * 1000)
+#define KISS_GET_RATE_IDX_YAW_RATE 14 // INT 16 (value * 1000)
+#define KISS_GET_RATE_IDX_YAW_CURVE 16 // INT 16 (value * 1000)
+
+// Indexes of SET_RATES
+#define KISS_SET_RATE_IDX_ROLL_RC 0 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_ROLL_RATE 2 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_ROLL_CURVE 4 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_PITCH_RC 6 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_PITCH_RATE 8 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_PITCH_CURVE 10 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_YAW_RC 12 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_YAW_RATE 14 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_YAW_CURVE 16 // INT 16 (value * 1000)
+
 #define KISSFRAMEINIT 5
 #define KISSFRAMELENGTH KISS_INDEX_MAH + 2 // Size of serial buffer defined with max index used
 
 uint8_t KISSserialBuffer[KISSFRAMELENGTH];
 uint8_t KISScurrentRequest = 0x00;
 uint8_t KISSgetcmd=0;
+
+int8_t subConfigPage=-1;
+#define SUBMENU_KISS_SIZE 2
+#define SUBMENU_KISS_PID 0
+#define SUBMENU_KISS_RATE 1
 
 // Vars
 struct __Kvar {

@@ -1130,9 +1130,15 @@ if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THR
       if(configMode&&(MwRcData[ROLLSTICK]>MAXSTICK)) // MOVE RIGHT
 #endif
       {
-	waitStick = 1;
-	COL++;
-	if(COL>3) COL=3;
+	      waitStick = 1;
+	      COL++;
+
+ #ifdef MENU_KISS
+        if (ROW == 10 && subConfigPage >= 0 && COL == 2) {
+          COL=3;
+        }
+ #endif // MENU_KISS
+	      if(COL>3) COL=3;
       }
 #ifdef TX_MODE1
       else if(configMode&&(MwRcData[YAWSTICK]<MINSTICK)) // MOVE LEFT
@@ -1140,8 +1146,13 @@ if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THR
       else if(configMode&&(MwRcData[ROLLSTICK]<MINSTICK)) // MOVE LEFT
 #endif
       {
-	waitStick = 1;
-	COL--;
+	      waitStick = 1;
+	      COL--;
+#ifdef MENU_KISS
+        if (ROW == 10 && subConfigPage >= 0  && COL == 2) {
+          COL=1;
+        }
+#endif // MENU_KISS
 	if(COL<1) COL=1;
       }
       else if(configMode&&(MwRcData[PITCHSTICK]>MAXSTICK)) // MOVE UP
@@ -1203,6 +1214,18 @@ if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THR
 
 void serialMenuCommon()
 {
+#ifdef MENU_KISS
+  if (configPage == MENU_KISS) {
+    if (ROW == 10 && subConfigPage >= 0) {
+      switch(COL) {
+      case 1: kissBack(); break;
+      case 3: kissSave(); kissBack(); break;
+      }
+      return;
+    }
+  }
+#endif // MENU_KISS
+
   if((ROW==10)&&(COL==3)) {
     if (menudir > 1){
       menudir = 1;
@@ -1216,6 +1239,46 @@ void serialMenuCommon()
 
   if(configPage < MINPAGE) configPage = MAXPAGE;
   if(configPage > MAXPAGE) configPage = MINPAGE;
+
+#ifdef MENU_KISS
+  if (configPage == MENU_KISS) {
+    switch (subConfigPage)
+    {
+    case SUBMENU_KISS_PID:
+      if(ROW >=1 && ROW<=5) {
+        uint8_t MODROW = 0;
+        MODROW = (ROW - 1) / 2;
+        switch(COL) {
+        case 1: pidP[MODROW] += menudir; break;
+        case 2: pidI[MODROW] += menudir; break;
+        case 3: pidD[MODROW] += menudir; break;
+        }
+      }
+      break;
+    case SUBMENU_KISS_RATE:
+      if(ROW >=1 && ROW<=5) {
+        uint8_t MODROW = 0;
+        MODROW = (ROW - 1) / 2;
+        switch(COL) {
+        case 1: rateRC[MODROW] += menudir; break;
+        case 2: rateRate[MODROW] += menudir; break;
+        case 3: rateCurve[MODROW] += menudir; break;
+        }
+      }
+      break;
+    case -1:
+      if (ROW < 10) {
+        if (menudir > 1) {
+          subConfigPage = ROW - 1;
+          ROW = 10;
+          COL = 1;
+          return;
+        }
+      }
+      break;
+    }
+  }
+#endif // MENU_KISS
 
 #ifdef USE_MENU_VTX
   if (configPage == MENU_VTX) {
@@ -1690,6 +1753,30 @@ void crc8_dvb_s2(uint8_t crc, unsigned char a, uint8_t crcversion)
     rcvChecksum=crc; //  return crc;
 }
 
+#ifdef MENU_KISS
+void kissBack() {
+  switch (subConfigPage) {
+  case SUBMENU_KISS_PID:
+    modeMSPRequests |= REQ_MSP_KISS_PID;
+    break;
+  case SUBMENU_KISS_RATE:
+    modeMSPRequests |= REQ_MSP_RATES;
+    break;
+  }
+  subConfigPage = -1;
+}
+
+void kissSave() {
+  switch (subConfigPage) {
+  case SUBMENU_KISS_PID:
+    kiss_send_pids();
+    break;
+  case SUBMENU_KISS_RATE:
+    kiss_send_rates();
+    break;
+  }
+}
+#endif // MENU_KISS
 
 void configExit()
 {
@@ -1831,8 +1918,6 @@ void configSave()
   mspWriteChecksum();
 #endif
 
-#else
-  kiss_send_pids();
 #endif // Not KISS
 
 #if 0 // This is not necessary? vtxBand,vtxChannel&vtxPower are all in sync with corresponding Settings at the end of stick handling.

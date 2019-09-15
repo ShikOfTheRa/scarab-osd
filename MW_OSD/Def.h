@@ -565,7 +565,7 @@
 #if defined(KISS)
   #undef INTRO_FC
   #define MENU_STAT
-  #define MENU_PID
+  #define MENU_KISS
   #define MENU_VOLTAGE
   #define MENU_RSSI
   #define MENU_CURRENT
@@ -717,6 +717,14 @@
   #define MENU_STAT MENU_STAT_tmp
   #undef MAXPAGE
   #define MAXPAGE MENU_STAT 
+#endif
+
+#ifdef MENU_KISS
+  const uint8_t MENU_KISS_tmp = MAXPAGE+1;
+  #undef  MENU_KISS
+  #define MENU_KISS MENU_KISS_tmp
+  #undef  MAXPAGE
+  #define MAXPAGE MENU_KISS 
 #endif
 
 #ifdef MENU_PID

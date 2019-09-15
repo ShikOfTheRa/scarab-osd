@@ -1200,6 +1200,7 @@ void displayWindSpeed(void)
 
 void displayCursor(void)
 {
+
   uint16_t cursorpos = 0;
   if (ROW == 10) {
     if (COL == 3) cursorpos = SAVEP + 16 - 1; // page
@@ -1208,6 +1209,51 @@ void displayCursor(void)
   }
   if (ROW < 10)
   {
+#ifdef MENU_KISS
+    if (configPage == MENU_KISS) {
+      if (subConfigPage <0) {
+        if (ROW == 9) {
+          ROW = SUBMENU_KISS_SIZE;
+          COL = 1;
+        } else {
+          if (ROW > SUBMENU_KISS_SIZE) {
+            ROW = 10;
+          }
+        }
+        oldROW = ROW;
+        cursorpos = (ROW-1) * 30 + LINE05 + 10;
+      } else {
+        switch (subConfigPage)
+        {
+        case SUBMENU_KISS_PID:
+        case SUBMENU_KISS_RATE:
+          if (ROW == 9) {
+            ROW = 5;
+          } else {
+            if (ROW > 5) {
+              ROW = 10;
+              if (COL == 2) {
+                COL = 3;
+              }
+            } else {
+              if (oldROW > ROW) {
+                ROW--;
+              } else if (oldROW < ROW) {
+              ROW++;
+            }
+          }
+        }
+        oldROW = ROW;
+        cursorpos = (ROW + 2) * 30 + 10 + (COL - 1) * 6;
+
+        if (ROW < 10 && COL == 3) {
+          cursorpos += 1;  
+        }
+        break;
+        }
+      }
+    }
+#endif // MENU_KISS
 #ifdef USE_MENU_VTX
     if (configPage == MENU_VTX) {
       if (ROW == 5) ROW = 10;
@@ -1225,32 +1271,11 @@ void displayCursor(void)
           ROW = 8;
       }
       oldROW = ROW;
-#elif defined KISS
-      if (ROW == 9) {
-        ROW = 5;
-      } else {
-        if (ROW > 5) {
-          ROW = 10;
-        } else {
-          if (oldROW > ROW) {
-            ROW--;
-          } else if (oldROW < ROW) {
-            ROW++;
-          }
-        }
-      }
-      oldROW = ROW;
 #else
       if (ROW == 8) ROW = 10;
       if (ROW == 9) ROW = 7;
 #endif
       cursorpos = (ROW + 2) * 30 + 10 + (COL - 1) * 6;
-#ifdef KISS
-
-      if (ROW < 10 && COL == 3) {
-       cursorpos += 1;  
-      }
-#endif
     }
 #endif
 
@@ -1434,6 +1459,12 @@ void displayConfigScreen(void)
 {
   int16_t MenuBuffer[10];
   uint32_t MaxMenuBuffer[9];
+#ifdef MENU_KISS
+  if(configPage == MENU_KISS) {
+    displaySubMenuConfig();
+    return;
+  }
+#endif // MENU_KISS
 
   MAX7456_WriteString_P(PGMSTR(&(menutitle_item[configPage])), 35);
 #ifdef MENU_PROFILE
@@ -1510,27 +1541,19 @@ void displayConfigScreen(void)
 
 #ifdef MENU_PID_VEL
     for (uint8_t X = 0; X <= 7; X++)
-#elif defined KISS
-    for (uint8_t X = 0; X < PIDITEMS; X++)
 #else
     for (uint8_t X = 0; X <= 6; X++)
 #endif
     {
-#ifdef KISS
-      MAX7456_WriteString_P(PGMSTR(&(menu_pid[X])), ROLLT + (X * 60));
-#else
 #ifdef USE_MSP_PIDNAMES
       MAX7456_WriteString(menu_pid[X], ROLLT + (X * 30));
 #else
       MAX7456_WriteString_P(PGMSTR(&(menu_pid[X])), ROLLT + (X * 30));
 #endif
-#endif // KISS
     }
 
 #ifdef MENU_PID_VEL
     for (uint8_t Y = 0; Y <= 9; Y++)
-#elif defined KISS
-    for (uint8_t Y = 0; Y < PIDITEMS; Y++)
 #else
     for (uint8_t Y = 0; Y <= 8; Y++)
 #endif
@@ -1540,18 +1563,9 @@ void displayConfigScreen(void)
       if (Y > 6) {
         X = X - 2;
       }
-#ifdef KISS
-      ItoaPadded(pidP[Y], screenBuffer, 5,3);
-      MAX7456_WriteString(screenBuffer, ROLLP + (X * 60)-3);
-      ItoaPadded(pidI[Y], screenBuffer, 6,3);
-      MAX7456_WriteString(screenBuffer, ROLLI + (X * 60)-3);
-      ItoaPadded(pidD[Y], screenBuffer, 5,3);
-      MAX7456_WriteString(screenBuffer, ROLLD + (X * 60)-2);
-#else
       MAX7456_WriteString(itoa(pidP[Y], screenBuffer, 10), ROLLP + (X * 30));
       MAX7456_WriteString(itoa(pidI[Y], screenBuffer, 10), ROLLI + (X * 30));
       MAX7456_WriteString(itoa(pidD[Y], screenBuffer, 10), ROLLD + (X * 30));
-#endif
     }
 
     MAX7456_WriteString("P", 71);
@@ -1827,6 +1841,85 @@ void updateVtxStatus(void)
     MAX7456_WriteString(itoa(vtxChannel + 1, screenBuffer, 10), 14 + 30);
     MAX7456_WriteString_P(PGMSTR(&(vtxPowerNames[vtxPower])), 16 + 30);
     MAX7456_WriteString(itoa((uint16_t)pgm_read_word(&vtx_frequencies[vtxBand][vtxChannel]), screenBuffer, 10), 20 + 30);
+  }
+}
+#endif
+
+#ifdef KISS
+void displaySubMenuConfig(void) {
+  if (configPage == MENU_KISS) {
+    MAX7456_WriteString_P(PGMSTR(&(menutitle_item[configPage])), 38);
+    if (subConfigPage < 0) {
+      MAX7456_WriteString_P(configMsgEXT, SAVEP);    //EXIT
+      if (!previousarmedstatus) {
+        MAX7456_WriteString_P(configMsgSAVE, SAVEP + 6); //SaveExit
+        MAX7456_WriteString_P(configMsgPGS, SAVEP + 16); //<Page>
+      }
+    } else {
+      MAX7456_WriteString_P(configMsgBack, SAVEP);    //BACK
+      MAX7456_WriteString_P(configMsgSAVEAndBack, SAVEP + 16); //Save+Back
+    }
+    switch (subConfigPage)
+    {
+    case SUBMENU_KISS_PID:
+      for (uint8_t X = 0; X < PIDITEMS; X++)
+      {
+        MAX7456_WriteString_P(PGMSTR(&(menu_pid[X])), ROLLT + (X * 60));
+	    }
+      for (uint8_t Y = 0; Y < PIDITEMS; Y++)
+      {
+        if (Y == 5) Y = 7;
+         uint8_t X = Y;
+        if (Y > 6) {
+         X = X - 2;
+        }
+        ItoaPadded(pidP[Y], screenBuffer, 5,3);
+        MAX7456_WriteString(screenBuffer, ROLLP + (X * 60)-3);
+        ItoaPadded(pidI[Y], screenBuffer, 6,3);
+        MAX7456_WriteString(screenBuffer, ROLLI + (X * 60)-3);
+        ItoaPadded(pidD[Y], screenBuffer, 5,3);
+        MAX7456_WriteString(screenBuffer, ROLLD + (X * 60)-2);
+      }
+
+      MAX7456_WriteString("P", 71);
+      MAX7456_WriteString("I", 77);
+      MAX7456_WriteString("D", 83);
+      break;
+    case SUBMENU_KISS_RATE:
+      // The rows of rates correspond to the pid
+      for (uint8_t X = 0; X < PIDITEMS; X++)
+      {
+        MAX7456_WriteString_P(PGMSTR(&(menu_pid[X])), ROLLT + (X * 60));
+      }
+      for (uint8_t Y = 0; Y < PIDITEMS; Y++)
+      {
+        if (Y == 5) Y = 7;
+        uint8_t X = Y;
+        if (Y > 6) {
+          X = X - 2;
+        }
+
+        ItoaPadded(rateRC[Y], screenBuffer, 5,3);
+        MAX7456_WriteString(screenBuffer, ROLLRC + (X * 60)-3);
+        ItoaPadded(rateRate[Y], screenBuffer, 5,3);
+        MAX7456_WriteString(screenBuffer, ROLLRATE + (X * 60)-3);
+        ItoaPadded(rateCurve[Y], screenBuffer, 5,3);
+        MAX7456_WriteString(screenBuffer, ROLLCURVE + (X * 60)-2);
+      }
+
+      MAX7456_WriteString_P(menu_kiss_rates[0], 69);
+      MAX7456_WriteString_P(menu_kiss_rates[1], 75);
+      MAX7456_WriteString_P(menu_kiss_rates[2], 82);
+      break;
+    
+    default:
+      for (uint8_t subMenu = 0; subMenu < SUBMENU_KISS_SIZE; subMenu++) {
+        MAX7456_WriteString_P(menu_kiss[subMenu], KISS_LINEFIRSTSUBMENU + (subMenu * 30));
+      }
+      break;
+    }
+
+    displayCursor();
   }
 }
 #endif
