@@ -11,8 +11,11 @@ uint16_t kissread_u16(uint8_t index) {
 }
 
 uint32_t kissread_u32(uint8_t index) {
-  uint32_t t = kissread_u16(index) << 8;
-  t |= (uint32_t)kissread_u16(index + 2);
+  uint32_t t = (uint32_t)kissread_u8(index) << 24;
+  t |= (uint32_t)kissread_u8(index + 1) << 16;
+  t |= (uint32_t)kissread_u8(index + 2) << 8;
+  t |= (uint32_t)kissread_u8(index + 3) << 0;
+  
   return t;
 }
 
@@ -49,31 +52,28 @@ uint16_t calculateCurrentFromConsumedCapacity(uint16_t mahUsed)
   return calculatedCurrent;
 }
 
+#ifdef KISSGPS
 void kiss_sync_gps () {
 timer.packetcount++;
 #ifdef DATA_MSP
   timer.MSP_active = DATA_MSP;           // getting something on serial port
 #endif
 
-#ifdef KISSGPS
-  if (Kvar.framelength == 1) { // GPS telemetry packet - need to establish correct length
-#else
-  if (0){ //Never use GPS telemetry
-#endif    
-    GPS_latitude      = kissread_u16(KISS_INDEX_GPS_SPEED);
-    GPS_longitude     = kissread_u16(KISS_INDEX_GPS_SPEED);
+    GPS_latitude      = kissread_u32(KISS_INDEX_GPS_LATITUDE);
+    GPS_longitude     = kissread_u32(KISS_INDEX_GPS_LONGITUDE);
     GPS_speed         = kissread_u16(KISS_INDEX_GPS_SPEED) / 100;
     GPS_ground_course = kissread_u16(KISS_INDEX_GPS_COURSE);
     GPS_altitude      = kissread_u16(KISS_INDEX_GPS_ALTITUDE);
     GPS_fix           = kissread_u8(KISS_INDEX_GPS_NUMSATFIX) >> 7;
     GPS_numSat        = (kissread_u8(KISS_INDEX_GPS_NUMSATFIX)) & 0x7F;
-    
+
     MwHeading = GPS_ground_course / 10;
     if (MwHeading >= 180) 
       MwHeading -= 360;
     MwAltitude = (int32_t)GPS_altitude*100;
-  }
+    
 }
+#endif
 
 void kiss_sync_telemetry() {
   timer.packetcount++;
@@ -312,9 +312,11 @@ void serialKISSreceive(uint8_t c) {
         case KISS_GET_RATES:
           kiss_sync_rates();
           break;
+#ifdef KISSGPS
         case KISS_GET_GPS:
           kiss_sync_gps();
           break;
+#endif
       }
     }
     c_state = KISS_IDLE; // Go straight to idle to avoid missing every other packet

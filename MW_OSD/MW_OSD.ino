@@ -368,9 +368,9 @@ void loop()
 #endif //USEMS5837  
     if (GPS_fix && armed) {
       if (Settings[S_UNITSYSTEM])
-        tripSum += GPS_speed * 0.0032808;    //  100/(100*1000)*3.2808=0.0016404     cm/sec ---> ft/50msec
+        tripSum += GPS_speed * GPS_CONVERSION_UNIT_TO_FT_100MSEC;
       else
-        tripSum += GPS_speed * 0.0010;       //  100/(100*1000)=0.0005               cm/sec ---> mt/50msec (trip var is float)
+        tripSum += GPS_speed * GPS_CONVERSION_UNIT_TO_MT_100MSEC;
       trip = (uint32_t) tripSum;
     }
 #if defined (GPSOSD)
@@ -527,30 +527,30 @@ void loop()
       case REQ_MSP_KISS_SETTINGS:
         MSPcmdsend = MSP_KISS_SETTINGS;
         break;
+#ifdef KISSGPS
+      case REQ_MSP_KISS_GPS:
+        MSPcmdsend = MSP_KISS_GPS;
+        break;
+#endif
 #endif
     }
 
     if (!fontMode) {
 #ifdef KISS
-#ifdef KISSGPS
-      if (KISSgetcmd>3){
-        serialKISSrequest(KISS_GET_GPS);
-        KISSgetcmd=0;         
-      }
-      else
-#endif // KISSGPS
-      { // For else of KISSGPS
       if (MSPcmdsend == MSP_KISS_PID) {
         serialKISSrequest(KISS_GET_PIDS);
       } else if (MSPcmdsend == MSP_KISS_SETTINGS){
         serialKISSrequest(KISS_GET_SETTINGS);
       } else if (MSPcmdsend == MSP_RATES) {
         serialKISSrequest(KISS_GET_RATES);
+#ifdef KISSGPS
+      } else if (MSPcmdsend == MSP_KISS_GPS) {
+        serialKISSrequest(KISS_GET_GPS);
+#endif
       } else {
         serialKISSrequest(KISS_GET_TELEMETRY);
         KISSgetcmd++; 
       }
-      } // For else of KISSGPS
 #elif defined SKYTRACK
       DrawSkytrack();
 #elif defined PROTOCOL_MSP
@@ -965,6 +965,9 @@ void setMspRequests() {
     modeMSPRequests =
 #ifdef KISS
       REQ_MSP_KISS_SETTINGS |
+#ifdef KISSGPS
+      REQ_MSP_KISS_GPS |
+#endif
 #endif // KISS
       REQ_MSP_STATUS |
       REQ_MSP_RAW_GPS |
@@ -1011,6 +1014,9 @@ void setMspRequests() {
   else {
     modeMSPRequests =
       REQ_MSP_STATUS |
+#ifdef KISSGPS
+      REQ_MSP_KISS_GPS |
+#endif
 #ifdef DEBUGMW
       REQ_MSP_DEBUG |
 #endif
@@ -1041,6 +1047,9 @@ void setMspRequests() {
     if (!armed) {
       modeMSPRequests |= 
         REQ_MSP_BOX |
+#ifdef KISSGPS
+      REQ_MSP_KISS_GPS |
+#endif
 #if defined INTRO_FC && defined PROTOCOL_MSP
         REQ_MSP_FC_VERSION |
 #endif // INTRO_FC && defined PROTOCOL_MSP      
