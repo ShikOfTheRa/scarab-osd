@@ -132,40 +132,7 @@ void kiss_sync_settings() {
 
   Kvar.version = kissread_u8(KISS_SETTINGS_IDX_VERSION);
   
-  modeMSPRequests &=~ REQ_MSP_KISS_PID;
-  modeMSPRequests &=~ REQ_MSP_RATES;
   modeMSPRequests &=~ REQ_MSP_KISS_SETTINGS;
-}
-
-void kiss_sync_rates() {
-  timer.packetcount++;
-#ifdef DATA_MSP
-  timer.MSP_active=DATA_MSP;             // getting something on serial port
-#endif
-
-  for(uint8_t i=0; i<3; i++) {
-    rateRC[i] = kissread_u16(KISS_GET_RATE_IDX_ROLL_RC + (i * 6)) / 10;
-    rateRate[i] = kissread_u16(KISS_GET_RATE_IDX_ROLL_RATE + (i * 6)) / 10;
-    rateCurve[i] = kissread_u16(KISS_GET_RATE_IDX_ROLL_CURVE + (i * 6)) / 10;
-  }
-
-  modeMSPRequests &=~ REQ_MSP_RATES;
-}
-
-void kiss_sync_pids() {
-  timer.packetcount++;
-#ifdef DATA_MSP
-  timer.MSP_active=DATA_MSP;             // getting something on serial port
-#endif
-
-  // PIDs
-  for(uint8_t i=0; i<3; i++) {
-    pidP[i] = kissread_u16(KISS_GET_PID_IDX_PID_ROLL_P + (i * 6)) / 10;
-    pidI[i] = kissread_u16(KISS_GET_PID_IDX_PID_ROLL_I + (i * 6));
-    pidD[i] = kissread_u16(KISS_GET_PID_IDX_PID_ROLL_D + (i * 6)) / 10;
-  }
-  
-  modeMSPRequests &=~ REQ_MSP_KISS_PID;
 }
 
 uint8_t kissProtocolCRC8(const uint8_t *data, uint8_t startIndex, uint8_t stopIndex) 
@@ -305,12 +272,6 @@ void serialKISSreceive(uint8_t c) {
           break;
         case KISS_GET_SETTINGS:
           kiss_sync_settings();
-          break;
-        case KISS_GET_PIDS:
-          kiss_sync_pids();
-          break;
-        case KISS_GET_RATES:
-          kiss_sync_rates();
           break;
 #ifdef KISSGPS
         case KISS_GET_GPS:
