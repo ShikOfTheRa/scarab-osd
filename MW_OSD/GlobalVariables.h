@@ -865,6 +865,20 @@ uint32_t GPS_time = 0;
 uint16_t WIND_direction = 0;
 uint16_t WIND_speed = 0;
 
+#ifndef KISS
+#define GPS_CONVERSION_UNIT_TO_KM_H 0.036           // From MWii cm/sec to Km/h
+#define GPS_CONVERSION_UNIT_TO_M_H 0.02236932       // (0.036*0.62137)  From MWii cm/sec to mph
+// For Trip in slow Timed Service Routine (100ms loop)
+#define GPS_CONVERSION_UNIT_TO_FT_100MSEC 0.0032808 // 1/100*3,28084(cm/s -> mt/s -> ft/s)/1000*100    => cm/sec ---> ft/100msec
+#define GPS_CONVERSION_UNIT_TO_MT_100MSEC 0.0010    // 1/100(cm/s -> mt/s)/1000*100                    => cm/sec ---> mt/100msec (trip var is float)
+#else
+#define GPS_CONVERSION_UNIT_TO_KM_H 1               // From KISS Km/h to Km/h
+#define GPS_CONVERSION_UNIT_TO_M_H 0.62137119       // Km/h to mph
+// For Trip in slow Timed Service Routine (100ms loop)
+#define GPS_CONVERSION_UNIT_TO_FT_100MSEC 0.0911344 // 3280,84/3600(1Km/h -> 1ft/s)/1000*100           => Km/h ---> ft/100msec
+#define GPS_CONVERSION_UNIT_TO_MT_100MSEC 0.0277778 // 1000/3600(1Km/h -> 1mt/s)/1000*100              => Km/h ---> mt/100msec
+#endif // Not KISS
+
 #ifdef HAS_ALARMS
 #define ALARM_OK 0
 #define ALARM_WARN 1
@@ -1010,9 +1024,9 @@ int16_t rssiMIN=100;
 #define MSP_DEBUGMSG             253   //out message         debug string buffer
 #define MSP_DEBUG                254   //out message         debug1,debug2,debug3,debug4
 #ifdef KISS
-#define MSP_RATES                255
-#define MSP_KISS_SETTINGS         256
-#define MSP_KISS_PID             257
+#define MSP_KISS_TELEMTRY        255
+#define MSP_KISS_SETTINGS        256
+#define MSP_KISS_GPS             257
 #endif // KISS
 
 // Betaflight specific
@@ -1493,9 +1507,9 @@ const unsigned char UnitsIcon[10]={
 #define REQ_MSP_RTC                  (1L<<26)
 #define REQ_MSP2_INAV_AIR_SPEED      (1L<<27)
 #ifdef KISS
-#define REQ_MSP_KISS_SETTINGS        (1L<<28)
-#define REQ_MSP_RATES                (1L<<29)
-#define REQ_MSP_KISS_PID             (1L<<30)
+#define REQ_MSP_KISS_TELEMTRY        (1L<<28)
+#define REQ_MSP_KISS_SETTINGS        (1L<<29)
+#define REQ_MSP_KISS_GPS             (1L<<30)
 #endif
 // Menu selections
 
@@ -2142,9 +2156,7 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_GET_TELEMETRY 0x20
 #define KISS_GET_GPS 0x54
 #define KISS_GET_SETTINGS 0x30
-#define KISS_GET_PIDS 0x43
 #define KISS_SET_PIDS 0x44
-#define KISS_GET_RATES 0x4D
 #define KISS_SET_RATES 0x4E
 
 
@@ -2200,17 +2212,6 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_SETTINGS_IDX_RATE_YAW_CURVE 44 // INT 16 (value * 1000)
 #define KISS_SETTINGS_IDX_VERSION 92 // UINT 8
 
-// Indexes of GET_PIDS
-#define KISS_GET_PID_IDX_PID_ROLL_P 0 // INT 16 (value * 1000)
-#define KISS_GET_PID_IDX_PID_ROLL_I 2 // INT 16 (value * 1000)
-#define KISS_GET_PID_IDX_PID_ROLL_D 4 // INT 16 (value * 1000)
-#define KISS_GET_PID_IDX_PID_PITCH_P 6 // INT 16 (value * 1000)
-#define KISS_SET_PID_IDX_PID_PITCH_I 8 // INT 16 (value * 1000)
-#define KISS_GET_PID_IDX_PID_PITCH_D 10 // INT 16 (value * 1000)
-#define KISS_GET_PID_IDX_PID_YAW_P 12 // INT 16 (value * 1000)
-#define KISS_GET_PID_IDX_PID_YAW_I 14 // INT 16 (value * 1000)
-#define KISS_GET_PID_IDX_PID_YAW_D 16 // INT 16 (value * 1000)
-
 // Indexes of SET_PIDS
 #define KISS_SET_PID_IDX_PID_ROLL_P 0 // INT 16 (value * 1000)
 #define KISS_SET_PID_IDX_PID_ROLL_I 2 // INT 16 (value * 1000)
@@ -2221,17 +2222,6 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_SET_PID_IDX_PID_YAW_P 12 // INT 16 (value * 1000)
 #define KISS_SET_PID_IDX_PID_YAW_I 14 // INT 16 (value * 1000)
 #define KISS_SET_PID_IDX_PID_YAW_D 16 // INT 16 (value * 1000)
-
-// Indexes of GET_RATES
-#define KISS_GET_RATE_IDX_ROLL_RC 0 // INT 16 (value * 1000)
-#define KISS_GET_RATE_IDX_ROLL_RATE 2 // INT 16 (value * 1000)
-#define KISS_GET_RATE_IDX_ROLL_CURVE 4 // INT 16 (value * 1000)
-#define KISS_GET_RATE_IDX_PITCH_RC 6 // INT 16 (value * 1000)
-#define KISS_GET_RATE_IDX_PITCH_RATE 8 // INT 16 (value * 1000)
-#define KISS_GET_RATE_IDX_PITCH_CURVE 10 // INT 16 (value * 1000)
-#define KISS_GET_RATE_IDX_YAW_RC 12 // INT 16 (value * 1000)
-#define KISS_GET_RATE_IDX_YAW_RATE 14 // INT 16 (value * 1000)
-#define KISS_GET_RATE_IDX_YAW_CURVE 16 // INT 16 (value * 1000)
 
 // Indexes of SET_RATES
 #define KISS_SET_RATE_IDX_ROLL_RC 0 // INT 16 (value * 1000)

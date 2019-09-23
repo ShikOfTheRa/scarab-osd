@@ -746,9 +746,9 @@ void displayEfficiency(void)
   uint16_t t_xx;
   uint16_t t_efficiency;
   if (!Settings[S_UNITSYSTEM])
-    t_xx = GPS_speed * 0.036;           // From MWii cm/sec to Km/h
+    t_xx = GPS_speed * GPS_CONVERSION_UNIT_TO_KM_H;
   else
-    t_xx = GPS_speed * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
+    t_xx = GPS_speed * GPS_CONVERSION_UNIT_TO_M_H;      
   if (t_xx > 0) {
     t_efficiency = amperage * voltage / (10 * t_xx); // Watts/Speed}
   }
@@ -913,9 +913,9 @@ void display_speed(int16_t t_value, uint8_t t_position, uint8_t t_leadicon)
 {
   uint16_t t_speed;
   if (!Settings[S_UNITSYSTEM])
-    t_speed = t_value * 0.036;           // From MWii cm/sec to Km/h
+    t_speed = t_value * GPS_CONVERSION_UNIT_TO_KM_H;
   else
-    t_speed = t_value * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
+    t_speed = t_value * GPS_CONVERSION_UNIT_TO_M_H;
   if (t_speed > (speedMAX + 20)) // simple GPS glitch limit filter
     speedMAX += 20;
   else if (t_speed > speedMAX)

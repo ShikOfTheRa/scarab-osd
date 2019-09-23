@@ -1757,10 +1757,8 @@ void crc8_dvb_s2(uint8_t crc, unsigned char a, uint8_t crcversion)
 void kissBack() {
   switch (subConfigPage) {
   case SUBMENU_KISS_PID:
-    modeMSPRequests |= REQ_MSP_KISS_PID;
-    break;
   case SUBMENU_KISS_RATE:
-    modeMSPRequests |= REQ_MSP_RATES;
+    modeMSPRequests |= REQ_MSP_KISS_SETTINGS;
     break;
   }
   subConfigPage = -1;
