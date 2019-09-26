@@ -581,7 +581,7 @@ void displayVoltage(void)
 
 void displayVidVoltage(void)
 {
-  if ((vidvoltage < vidvoltageWarning) && (timer.Blink2hz))
+  if ((vidvoltage < Settings[S_VIDVOLTAGEMIN]) && (timer.Blink2hz))
     return;
   displayItem(vidvoltagePosition, vidvoltage, SYM_VID_BAT, SYM_VOLT, 1 );
 }

@@ -1279,7 +1279,6 @@ void ProcessSensors(void) {
     voltage = sensorfilter[0][SENSORFILTERSIZE] >> 3;
   }
 
-  vidvoltageWarning = Settings[S_VIDVOLTAGEMIN];
   uint16_t vidvoltageRaw = sensorfilter[1][SENSORFILTERSIZE];
   if (!Settings[S_VREFERENCE]) {
     vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER1v1);
