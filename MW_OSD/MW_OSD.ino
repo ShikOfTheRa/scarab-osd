@@ -74,9 +74,9 @@ uint16_t UntouchedStack(void)
 #define PGMSTR(p) (char *)pgm_read_word(p)
 
 //------------------------------------------------------------------------
-#define MWVERS "MW-OSD - R1.9.1.3"
+#define MWVERS "MW-OSD - R1.9.1.4"
 //#define MWVERS "MW-OSD - R1.9"
-#define MWOSDVERSION 1913 // 1660=1.6.6.0 for GUI
+#define MWOSDVERSION 1914 // 1660=1.6.6.0 for GUI
 #define EEPROMVER 17      // for eeprom layout verification
 
 #include <avr/pgmspace.h>
@@ -1305,7 +1305,6 @@ void ProcessSensors(void) {
     voltage = sensorfilter[0][SENSORFILTERSIZE] >> 3;
   }
 
-  vidvoltageWarning = Settings[S_VIDVOLTAGEMIN];
   uint16_t vidvoltageRaw = sensorfilter[1][SENSORFILTERSIZE];
   if (!Settings[S_VREFERENCE]) {
     vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER1v1);

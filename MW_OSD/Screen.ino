@@ -546,11 +546,11 @@ void displayVoltage(void)
     voltageMIN = voltage;
 
   if (Settings[S_AUTOCELL]) {
-    uint8_t t_cells = (voltage / (CELL_VOLTS_MAX + 3)) + 1; // Detect 3s > 9.0v, 4s > 13.5v, 5s > 18.0v, 6s > 22.5v power up voltage
+    uint8_t t_cells = (uint16_t)(voltage / (CELL_VOLTS_MAX + 3)) + 1; // Detect 3s > 9.0v, 4s > 13.5v, 5s > 18.0v, 6s > 22.5v power up voltage
     if (t_cells > cells) {
       cells++;
     }
-    voltageWarning = cells * Settings[S_AUTOCELL_ALARM];
+    voltageWarning = (uint16_t)cells * Settings[S_AUTOCELL_ALARM];
   }
   else {
     cells = Settings[S_BATCELLS];
@@ -559,9 +559,9 @@ void displayVoltage(void)
 #ifdef BATTERYICONVOLTS
   if (Settings[S_SHOWBATLEVELEVOLUTION])
   {
-    uint8_t battev = 0;
-    uint16_t batevlow  = cells * CELL_VOLTS_MIN;
-    uint16_t batevhigh = cells * CELL_VOLTS_MAX;
+    uint16_t battev = 0;
+    uint16_t batevlow  = (uint16_t)cells * CELL_VOLTS_MIN;
+    uint16_t batevhigh = (uint16_t)cells * CELL_VOLTS_MAX;
     battev = constrain(voltage, batevlow, batevhigh - 2);
     battev = map(battev, batevlow, batevhigh - 1, 0, 7);
     t_lead_icon = (SYM_BATT_EMPTY) - battev;
@@ -581,7 +581,7 @@ void displayVoltage(void)
 
 void displayVidVoltage(void)
 {
-  if ((vidvoltage < vidvoltageWarning) && (timer.Blink2hz))
+  if ((vidvoltage < Settings[S_VIDVOLTAGEMIN]) && (timer.Blink2hz))
     return;
   displayItem(vidvoltagePosition, vidvoltage, SYM_VID_BAT, SYM_VOLT, 1 );
 }
