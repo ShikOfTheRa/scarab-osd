@@ -813,7 +813,7 @@ int16_t sensorfilter[SENSORTOTAL][SENSORFILTERSIZE+2];
 
 uint16_t  MwSensorPresent=0;
 uint32_t  MwSensorActive=0;
-uint8_t MwVBat=0;
+uint16_t MwVBat=0;
 uint8_t MwVBat2=0;
 int16_t MwVario=0;
 uint8_t armed=0;
@@ -899,8 +899,7 @@ volatile int16_t pwmRSSI = 0;
 // For Voltage
 uint16_t voltage=0;                      // its the value x10
 uint16_t vidvoltage=0;                   // its the value x10
-uint8_t voltageWarning=0;
-uint8_t vidvoltageWarning=0;
+uint16_t voltageWarning=0;
 
 // For temprature
 int16_t temperature=0;                  // temperature in degrees Centigrade
