@@ -59,19 +59,19 @@ timer.packetcount++;
   timer.MSP_active = DATA_MSP;           // getting something on serial port
 #endif
 
-    GPS_latitude      = kissread_u32(KISS_INDEX_GPS_LATITUDE);
-    GPS_longitude     = kissread_u32(KISS_INDEX_GPS_LONGITUDE);
-    GPS_speed         = kissread_u16(KISS_INDEX_GPS_SPEED) / 100;
-    GPS_ground_course = kissread_u16(KISS_INDEX_GPS_COURSE);
-    GPS_altitude      = kissread_u16(KISS_INDEX_GPS_ALTITUDE);
     GPS_fix           = kissread_u8(KISS_INDEX_GPS_NUMSATFIX) >> 7;
     GPS_numSat        = (kissread_u8(KISS_INDEX_GPS_NUMSATFIX)) & 0x7F;
-
-    MwHeading = GPS_ground_course / 10;
-    if (MwHeading >= 180) 
-      MwHeading -= 360;
-    MwAltitude = (int32_t)GPS_altitude*100;
-    
+    if (GPS_fix && GPS_numSat >= MINSATFIX) { 
+      GPS_latitude      = kissread_u32(KISS_INDEX_GPS_LATITUDE);
+      GPS_longitude     = kissread_u32(KISS_INDEX_GPS_LONGITUDE);
+      GPS_speed         = kissread_u16(KISS_INDEX_GPS_SPEED) / 100;
+      GPS_ground_course = kissread_u16(KISS_INDEX_GPS_COURSE);
+      GPS_altitude      = kissread_u16(KISS_INDEX_GPS_ALTITUDE);
+      MwHeading = GPS_ground_course / 10;
+      if (MwHeading >= 180) 
+        MwHeading -= 360;
+      MwAltitude = (int32_t)GPS_altitude*100;
+    }
 }
 #endif
 
