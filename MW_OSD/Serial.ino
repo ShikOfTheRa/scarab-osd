@@ -1266,6 +1266,56 @@ void serialMenuCommon()
         }
       }
       break;
+    case SUBMENU_KISS_NOTCH_FILTERS:
+      switch(ROW) {
+        case 1:
+          switch(COL) {
+            case 1:
+              if (menudir != 0) {
+                nfRollEnable = !nfRollEnable;
+              }
+              break;
+            case 2: 
+              nfRollCenter = constrain(nfRollCenter + menudir, KISS_MIN_NF_CENTER, KISS_MAX_NF_CENTER);
+              break;
+            case 3:
+              nfRollCutoff = constrain(nfRollCutoff + menudir, KISS_MIN_NF_CUTOFF, KISS_MAX_NF_CUTOFF);
+              break;
+          }
+          break;
+        case 2:
+          switch(COL) {
+            case 1:
+              if (menudir != 0) {
+                nfPitchEnable = !nfPitchEnable;
+              }
+              break;
+            case 2:
+              nfPitchCenter = constrain(nfPitchCenter + menudir, KISS_MIN_NF_CENTER, KISS_MAX_NF_CENTER);
+              break;
+            case 3:
+              nfPitchCutoff = constrain(nfPitchCutoff + menudir, KISS_MIN_NF_CENTER, KISS_MAX_NF_CENTER);
+              break;
+          }
+          break;
+      }
+      break;
+    case SUBMENU_KISS_LPF:
+        switch(ROW) {
+          case 1:
+            yawCFilter = constrain(yawCFilter + menudir, KISS_MIN_YAW_FILTER, KISS_MAX_YAW_FILTER);
+            break;
+          case 2:
+            rpLPF = constrain(rpLPF + menudir, KISS_MIN_LPF, KISS_MAX_LPF);
+            break;
+          case 3:
+            yawLPF = constrain(yawLPF + menudir, KISS_MIN_LPF, KISS_MAX_LPF);
+            break;
+          case 4:
+            dtermLPF = constrain(dtermLPF + menudir, KISS_MIN_LPF, KISS_MAX_LPF);
+            break;
+        }
+      break;
     case -1:
       if (ROW < 10) {
         if (menudir > 1) {
@@ -1758,6 +1808,8 @@ void kissBack() {
   switch (subConfigPage) {
   case SUBMENU_KISS_PID:
   case SUBMENU_KISS_RATE:
+  case SUBMENU_KISS_NOTCH_FILTERS:
+  case SUBMENU_KISS_LPF:
     modeMSPRequests |= REQ_MSP_KISS_SETTINGS;
     break;
   }
@@ -1771,6 +1823,10 @@ void kissSave() {
     break;
   case SUBMENU_KISS_RATE:
     kiss_send_rates();
+    break;
+  case SUBMENU_KISS_NOTCH_FILTERS:
+  case SUBMENU_KISS_LPF:
+    kiss_send_filters();
     break;
   }
 }
