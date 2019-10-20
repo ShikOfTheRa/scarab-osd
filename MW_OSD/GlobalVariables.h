@@ -793,6 +793,16 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 #ifdef KISS
 static uint16_t pidP[PIDITEMS], pidI[PIDITEMS], pidD[PIDITEMS];
 static uint16_t rateRC[PIDITEMS], rateRate[PIDITEMS], rateCurve[PIDITEMS];
+static uint8_t rpLPF = 0;
+static uint8_t yawCFilter = 0;
+static bool nfRollEnable = false;
+static uint16_t nfRollCenter = 0;
+static uint16_t nfRollCutoff = 0;
+static bool nfPitchEnable = false;
+static uint16_t nfPitchCenter = 0;
+static uint16_t nfPitchCutoff = 0;
+static uint8_t yawLPF = 0;
+static uint8_t dtermLPF = 0;
 #else
 static uint8_t pidP[PIDITEMS], pidI[PIDITEMS], pidD[PIDITEMS];
 #endif // KISS
@@ -1446,9 +1456,28 @@ const PROGMEM char * const menu_vtx[] =
 const char configMsg170[] PROGMEM = "KISS SETTINGS";
 const char configMsg171[] PROGMEM = "PID";
 const char configMsg172[] PROGMEM = "RATE";
+const char configMsg173[] PROGMEM = "NOTCH FILTER";
+const char configMsg174[] PROGMEM = "LPF / YAW FILTER";
 const char configMsg1710[] PROGMEM = "RC";
 const char configMsg1711[] PROGMEM = "RATE";
 const char configMsg1712[] PROGMEM = "CURVE";
+
+const char configMsg1730[] PROGMEM = "ENABLE";
+const char configMsg1731[] PROGMEM = "CENTER";
+const char configMsg1732[] PROGMEM = "CUTOFF";
+const char configMsg1733[] PROGMEM = "ROLL";
+const char configMsg1734[] PROGMEM = "PITCH";
+
+const char configMsg1740[] PROGMEM = "YAW FILTER";
+const char configMsg1741[] PROGMEM = "ROLL/PITCH LPF";
+const char configMsg1742[] PROGMEM = "YAW LPF";
+const char configMsg1743[] PROGMEM = "DTERM LPF";
+const char configMsg1744[] PROGMEM = "HIGH";
+const char configMsg1745[] PROGMEM = "MED. HIGH";
+const char configMsg1746[] PROGMEM = "MEDIUM";
+const char configMsg1747[] PROGMEM = "MED. LOW";
+const char configMsg1748[] PROGMEM = "LOW";
+const char configMsg1749[] PROGMEM = "VERY LOW";
 #endif // KISS
 //-----------------------------------------------------------MENU END
 
@@ -1750,13 +1779,37 @@ const PROGMEM char * const menu_on_off[] =
 #ifdef KISS
 const PROGMEM char * const menu_kiss[] = {
   configMsg171,
-  configMsg172
+  configMsg172,
+  configMsg173,
+  configMsg174
 };
 
 const PROGMEM char * const menu_kiss_rates[] = {
   configMsg1710,
   configMsg1711,
   configMsg1712
+};
+
+const PROGMEM char * const menu_kiss_notch_filters[] = {
+  configMsg1730,
+  configMsg1731,
+  configMsg1732,
+  configMsg1733,
+  configMsg1734
+};
+
+const PROGMEM char * const menu_kiss_lpf[] = {
+  configMsg1740,
+  configMsg1741,
+  configMsg1742,
+  configMsg1743,
+  configMsgOFF,
+  configMsg1744,
+  configMsg1745,
+  configMsg1746,
+  configMsg1747,
+  configMsg1748,
+  configMsg1749
 };
 #endif
 
@@ -2157,6 +2210,7 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_GET_SETTINGS 0x30
 #define KISS_SET_PIDS 0x44
 #define KISS_SET_RATES 0x4E
+#define KISS_SET_FILTERS 0x48
 
 
 // Indexes of informations in the serial protocol(8 bits)
@@ -2209,7 +2263,20 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_SETTINGS_IDX_RATE_ROLL_CURVE 40 // INT 16 (value * 1000)
 #define KISS_SETTINGS_IDX_RATE_PITCH_CURVE 42 // INT 16 (value * 1000)
 #define KISS_SETTINGS_IDX_RATE_YAW_CURVE 44 // INT 16 (value * 1000)
+// ----
+#define KISS_SETTINGS_IDX_RP_LPF 79 // UINT 8
 #define KISS_SETTINGS_IDX_VERSION 92 // UINT 8
+// Notch Filters
+#define KISS_SETTINGS_IDX_NF_ROLL_ENABLE 138 // INT 8
+#define KISS_SETTINGS_IDX_NF_ROLL_CENTER 139 // INT 16
+#define KISS_SETTINGS_IDX_NF_ROLL_CUTOFF 141 // INT 16
+#define KISS_SETTINGS_IDX_NF_PITCH_ENABLE 143 // INT 8
+#define KISS_SETTINGS_IDX_NF_PITCH_CENTER 144 // INT 16
+#define KISS_SETTINGS_IDX_NF_PITCH_CUTOFF 146 // INT 16
+// ----
+#define KISS_SETTINGS_IDX_YAW_C_FILTER 148 // INT 8
+#define KISS_SETTINGS_IDX_YAW_LPF 165 // INT 8
+#define KISS_SETTINGS_IDX_DTERM_LPF 166 // INT 8
 
 // Indexes of SET_PIDS
 #define KISS_SET_PID_IDX_PID_ROLL_P 0 // INT 16 (value * 1000)
@@ -2233,17 +2300,40 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_SET_RATE_IDX_YAW_RATE 14 // INT 16 (value * 1000)
 #define KISS_SET_RATE_IDX_YAW_CURVE 16 // INT 16 (value * 1000)
 
+// Indexes of SET_FILTERS
+#define KISS_SET_FILTER_IDX_RP_LPF 0 // INT 8
+#define KISS_SET_FILTER_IDX_YAW_C_FILTER 1 // INT 8
+#define KISS_SET_FILTER_IDX_NF_ROLL_ENABLE 2 // INT 8
+#define KISS_SET_FILTER_IDX_NF_ROLL_CENTER 3 // INT 16
+#define KISS_SET_FILTER_IDX_NF_ROLL_CUTOFF 5 // INT 16
+#define KISS_SET_FILTER_IDX_NF_PITCH_ENABLE 7 // INT 8
+#define KISS_SET_FILTER_IDX_NF_PITCH_CENTER 8 // INT 16
+#define KISS_SET_FILTER_IDX_NF_PITCH_CUTOFF 10 // INT 16
+#define KISS_SET_FILTER_IDX_YAW_LPF 12 // INT 8
+#define KISS_SET_FILTER_IDX_DTERM_LPF 13 // INT 8
+
 #define KISSFRAMEINIT 5
-#define KISSFRAMELENGTH KISS_INDEX_MAH + 2 // Size of serial buffer defined with max index used
+#define KISSFRAMELENGTH KISS_SETTINGS_IDX_DTERM_LPF + 2 // Size of serial buffer defined with max index used
 
 uint8_t KISSserialBuffer[KISSFRAMELENGTH];
 uint8_t KISScurrentRequest = 0x00;
 uint8_t KISSgetcmd=0;
 
+#define KISS_MIN_NF_CENTER 0
+#define KISS_MAX_NF_CENTER 490
+#define KISS_MIN_NF_CUTOFF 0
+#define KISS_MAX_NF_CUTOFF 490
+#define KISS_MIN_YAW_FILTER 0
+#define KISS_MAX_YAW_FILTER 97
+#define KISS_MIN_LPF 0
+#define KISS_MAX_LPF 6
+
 int8_t subConfigPage=-1;
-#define SUBMENU_KISS_SIZE 2
+#define SUBMENU_KISS_SIZE 4
 #define SUBMENU_KISS_PID 0
 #define SUBMENU_KISS_RATE 1
+#define SUBMENU_KISS_NOTCH_FILTERS 2
+#define SUBMENU_KISS_LPF 3
 
 // Vars
 struct __Kvar {

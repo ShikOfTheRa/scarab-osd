@@ -19,6 +19,10 @@ uint32_t kissread_u32(uint8_t index) {
   return t;
 }
 
+bool kissread_bool(uint8_t index) {
+  return KISSserialBuffer[index] == 1;
+}
+
 uint32_t ESC_filter(uint32_t oldVal, uint32_t newVal) {
   return (uint32_t)((uint32_t)((uint32_t)((uint32_t)oldVal * ESC_FILTER) + (uint32_t)newVal)) / (ESC_FILTER + 1);
 }
@@ -131,7 +135,23 @@ void kiss_sync_settings() {
   }
 
   Kvar.version = kissread_u8(KISS_SETTINGS_IDX_VERSION);
-  
+
+  // Notch Filters
+  nfRollEnable = kissread_bool(KISS_SETTINGS_IDX_NF_ROLL_ENABLE);
+  nfRollCenter = kissread_u16(KISS_SETTINGS_IDX_NF_ROLL_CENTER);
+  nfRollCutoff = kissread_u16(KISS_SETTINGS_IDX_NF_ROLL_CUTOFF);
+  nfPitchEnable = kissread_bool(KISS_SETTINGS_IDX_NF_PITCH_ENABLE);
+  nfPitchCenter = kissread_u16(KISS_SETTINGS_IDX_NF_PITCH_CENTER);
+  nfPitchCutoff = kissread_u16(KISS_SETTINGS_IDX_NF_PITCH_CUTOFF);
+
+  // Low Pass Filters
+  rpLPF = kissread_u8(KISS_SETTINGS_IDX_RP_LPF);
+  yawLPF = kissread_u8(KISS_SETTINGS_IDX_YAW_LPF);
+  dtermLPF = kissread_u8(KISS_SETTINGS_IDX_DTERM_LPF);
+
+  // Yaw C Filter
+  yawCFilter = kissread_u8(KISS_SETTINGS_IDX_YAW_C_FILTER);
+
   modeMSPRequests &=~ REQ_MSP_KISS_SETTINGS;
 }
 
@@ -202,6 +222,21 @@ void kiss_send_rates() {
   }
 
   serialKISSsendData(KISS_SET_RATES, 18);
+}
+
+void kiss_send_filters() {
+  kissWriteInBuffer_u8(KISS_SET_FILTER_IDX_RP_LPF, rpLPF);
+  kissWriteInBuffer_u8(KISS_SET_FILTER_IDX_YAW_C_FILTER, yawCFilter);
+  kissWriteInBuffer_u8(KISS_SET_FILTER_IDX_NF_ROLL_ENABLE, nfRollEnable);
+  kissWriteInBuffer_u16(KISS_SET_FILTER_IDX_NF_ROLL_CENTER, nfRollCenter);
+  kissWriteInBuffer_u16(KISS_SET_FILTER_IDX_NF_ROLL_CUTOFF, nfRollCutoff);
+  kissWriteInBuffer_u8(KISS_SET_FILTER_IDX_NF_PITCH_ENABLE, nfPitchEnable);
+  kissWriteInBuffer_u16(KISS_SET_FILTER_IDX_NF_PITCH_CENTER, nfPitchCenter);
+  kissWriteInBuffer_u16(KISS_SET_FILTER_IDX_NF_PITCH_CUTOFF, nfPitchCutoff);
+  kissWriteInBuffer_u8(KISS_SET_FILTER_IDX_YAW_LPF, yawLPF);
+  kissWriteInBuffer_u8(KISS_SET_FILTER_IDX_DTERM_LPF, dtermLPF);
+
+  serialKISSsendData(KISS_SET_FILTERS, 14);
 }
 
   static enum _serial_state {

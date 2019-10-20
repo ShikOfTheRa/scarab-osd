@@ -1225,31 +1225,64 @@ void displayCursor(void)
       } else {
         switch (subConfigPage)
         {
-        case SUBMENU_KISS_PID:
-        case SUBMENU_KISS_RATE:
-          if (ROW == 9) {
-            ROW = 5;
-          } else {
-            if (ROW > 5) {
-              ROW = 10;
-              if (COL == 2) {
+          case SUBMENU_KISS_PID:
+          case SUBMENU_KISS_RATE:
+            if (ROW == 9) {
+              ROW = 5;
+            } else {
+              if (ROW > 5) {
+                ROW = 10;
+                if (COL == 2) {
+                  COL = 3;
+                }
+              } else {
+                if (oldROW > ROW) {
+                  ROW--;
+                } else if (oldROW < ROW) {
+                  ROW++;
+                }
+              }
+            }
+          
+            oldROW = ROW;
+            cursorpos = (ROW + 2) * 30 + 10 + (COL - 1) * 6;
+
+            if (ROW < 10 && COL == 3) {
+              cursorpos += 1;  
+            }
+            break;
+          case SUBMENU_KISS_NOTCH_FILTERS:
+            if (ROW == 9) {
+              ROW = 2;
+            } else {
+              if (ROW > 2) {
+                ROW = 10;
                 COL = 3;
               }
-            } else {
-              if (oldROW > ROW) {
-                ROW--;
-              } else if (oldROW < ROW) {
-              ROW++;
             }
-          }
-        }
-        oldROW = ROW;
-        cursorpos = (ROW + 2) * 30 + 10 + (COL - 1) * 6;
-
-        if (ROW < 10 && COL == 3) {
-          cursorpos += 1;  
-        }
-        break;
+            cursorpos = (ROW + 2) * 30;
+            switch (COL)
+            {
+              case 1: cursorpos += 8; break;
+              case 2: cursorpos += 15; break;
+              case 3: cursorpos += 22; break;
+            }
+            break;
+          case SUBMENU_KISS_LPF:
+            if (ROW == 9) {
+              ROW = 4;
+            } else {
+              if (ROW > 4) {
+                ROW = 10;
+                if (COL == 2) {
+                  COL = 3;
+                }
+              } else {
+                COL = 3;
+              }
+            }
+            cursorpos = (ROW + 2) * 30 + 18;
+            break;
         }
       }
     }
@@ -1911,7 +1944,32 @@ void displaySubMenuConfig(void) {
       MAX7456_WriteString_P(menu_kiss_rates[1], 75);
       MAX7456_WriteString_P(menu_kiss_rates[2], 82);
       break;
-    
+    case SUBMENU_KISS_NOTCH_FILTERS:
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_notch_filters[0])), 68);
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_notch_filters[1])), 75);
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_notch_filters[2])), 82);
+      // ROLL
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_notch_filters[3])), 92);
+      MAX7456_WriteString_P(PGMSTR(&(menu_on_off[nfRollEnable])), 92 + 7);
+      MAX7456_WriteString(itoa(nfRollCenter, screenBuffer, 10), 92 + 14);
+      MAX7456_WriteString(itoa(nfRollCutoff, screenBuffer, 10), 92 + 21);
+      // PITCH
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_notch_filters[4])), 122);
+      MAX7456_WriteString_P(PGMSTR(&(menu_on_off[nfPitchEnable])), 122 + 7);
+      MAX7456_WriteString(itoa(nfPitchCenter, screenBuffer, 10), 122 + 14);
+      MAX7456_WriteString(itoa(nfPitchCutoff, screenBuffer, 10), 122 + 21);
+
+      break;
+    case SUBMENU_KISS_LPF:
+      for (uint8_t Y = 0; Y < 4; Y++) {
+        MAX7456_WriteString_P(PGMSTR(&(menu_kiss_lpf[Y])), (Y + 3) * 30 + 2);
+      }
+      
+      MAX7456_WriteString(itoa(yawCFilter, screenBuffer, 10), 90 + 19);
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_lpf[rpLPF + 4])), 120 + 19);
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_lpf[yawLPF + 4])), 150 + 19);
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_lpf[dtermLPF + 4])), 180 + 19);
+      break;
     default:
       for (uint8_t subMenu = 0; subMenu < SUBMENU_KISS_SIZE; subMenu++) {
         MAX7456_WriteString_P(menu_kiss[subMenu], KISS_LINEFIRSTSUBMENU + (subMenu * 30));
