@@ -1221,7 +1221,7 @@ void displayCursor(void)
           }
         }
         oldROW = ROW;
-        cursorpos = (ROW-1) * 30 + LINE05 + 10;
+        cursorpos = (ROW-1) * 30 + LINE05 + 7;
       } else {
         switch (subConfigPage)
         {
@@ -1282,6 +1282,21 @@ void displayCursor(void)
               }
             }
             cursorpos = (ROW + 2) * 30 + 18;
+            break;
+          case SUBMENU_KISS_VTX:
+            if (ROW == 9) {
+              ROW = 5;
+            } else {
+              if (ROW > 5) {
+                ROW = 10;
+                if (COL == 2) {
+                  COL = 3;
+                }
+              } else {
+                COL = 3;
+              }
+            }
+            cursorpos = (ROW + 2) * 30 + 12;
             break;
         }
       }
@@ -1969,6 +1984,17 @@ void displaySubMenuConfig(void) {
       MAX7456_WriteString_P(PGMSTR(&(menu_kiss_lpf[rpLPF + 4])), 120 + 19);
       MAX7456_WriteString_P(PGMSTR(&(menu_kiss_lpf[yawLPF + 4])), 150 + 19);
       MAX7456_WriteString_P(PGMSTR(&(menu_kiss_lpf[dtermLPF + 4])), 180 + 19);
+      break;
+    case SUBMENU_KISS_VTX:
+      for (uint8_t Y = 0; Y < 5; Y++) {
+        MAX7456_WriteString_P(PGMSTR(&(menu_kiss_vtx[Y])), (Y + 3) * 30 + 2);
+      }
+      
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_vtx_type[vtxType])), 90 + 13);
+      MAX7456_WriteString(itoa(vtxLowPower, screenBuffer, 10), 120 + 13);
+      MAX7456_WriteString(itoa(vtxMaxPower, screenBuffer, 10), 150 + 13);
+      MAX7456_WriteString_P(PGMSTR(&(vtxBandLetters[vtxBand])), 180 + 13);
+      MAX7456_WriteString(itoa(vtxChannel, screenBuffer, 10), 210 + 13);
       break;
     default:
       for (uint8_t subMenu = 0; subMenu < SUBMENU_KISS_SIZE; subMenu++) {

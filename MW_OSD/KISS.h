@@ -152,6 +152,14 @@ void kiss_sync_settings() {
   // Yaw C Filter
   yawCFilter = kissread_u8(KISS_SETTINGS_IDX_YAW_C_FILTER);
 
+  // VTX
+  vtxType = kissread_u8(KISS_SETTINGS_IDX_VTX_TYPE);
+  vtxNChannel = kissread_u8(KISS_SETTINGS_IDX_VTX_N_CHANNEL);
+  vtxBand = vtxNChannel / 8;
+  vtxChannel = vtxNChannel % 8 + 1;
+  vtxLowPower = kissread_u16(KISS_SETTINGS_IDX_VTX_LOW_POWER);
+  vtxMaxPower = kissread_u16(KISS_SETTINGS_IDX_VTX_MAX_POWER);
+
   modeMSPRequests &=~ REQ_MSP_KISS_SETTINGS;
 }
 
@@ -237,6 +245,16 @@ void kiss_send_filters() {
   kissWriteInBuffer_u8(KISS_SET_FILTER_IDX_DTERM_LPF, dtermLPF);
 
   serialKISSsendData(KISS_SET_FILTERS, 14);
+}
+
+void kiss_send_vtx() {
+  kissWriteInBuffer_u8(KISS_SET_VTX_IDX_TYPE, vtxType);
+  vtxNChannel = vtxBand * 8 + vtxChannel - 1;
+  kissWriteInBuffer_u8(KISS_SET_VTX_IDX_N_CHANNEL, vtxNChannel);
+  kissWriteInBuffer_u16(KISS_SET_VTX_IDX_LOW_POWER, vtxLowPower);
+  kissWriteInBuffer_u16(KISS_SET_VTX_IDX_MAX_POWER, vtxMaxPower);
+
+  serialKISSsendData(KISS_SET_VTX, 6);
 }
 
   static enum _serial_state {

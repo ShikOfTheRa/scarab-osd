@@ -1316,6 +1316,25 @@ void serialMenuCommon()
             break;
         }
       break;
+    case SUBMENU_KISS_VTX:
+      switch(ROW) {
+        case 1:
+          vtxType = constrain(vtxType + menudir, KISS_MIN_VTX_TYPE, KISS_MAX_VTX_TYPE);
+          break;
+        case 2:
+          vtxLowPower = constrain((int16_t)vtxLowPower + menudir * KISS_INC_VTX_POWER, KISS_MIN_VTX_POWER, KISS_MAX_VTX_POWER);
+          break;
+        case 3:
+          vtxMaxPower = constrain((int16_t)vtxMaxPower + menudir * KISS_INC_VTX_POWER, KISS_MIN_VTX_POWER, KISS_MAX_VTX_POWER);
+          break;
+        case 4:
+          vtxBand = constrain(vtxBand + menudir, 0, VTX_BAND_COUNT - 1);
+          break;
+        case 5:
+          vtxChannel = constrain(vtxChannel + menudir, 1, VTX_CHANNEL_COUNT);
+          break;
+      }
+      break;
     case -1:
       if (ROW < 10) {
         if (menudir > 1) {
@@ -1810,6 +1829,7 @@ void kissBack() {
   case SUBMENU_KISS_RATE:
   case SUBMENU_KISS_NOTCH_FILTERS:
   case SUBMENU_KISS_LPF:
+  case SUBMENU_KISS_VTX:
     modeMSPRequests |= REQ_MSP_KISS_SETTINGS;
     break;
   }
@@ -1827,6 +1847,9 @@ void kissSave() {
   case SUBMENU_KISS_NOTCH_FILTERS:
   case SUBMENU_KISS_LPF:
     kiss_send_filters();
+    break;
+  case SUBMENU_KISS_VTX:
+    kiss_send_vtx();
     break;
   }
 }

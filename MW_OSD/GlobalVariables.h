@@ -90,7 +90,7 @@
 #define LINE16    450
 
 #ifdef KISS
-#define KISS_LINEFIRSTSUBMENU LINE05+11
+#define KISS_LINEFIRSTSUBMENU LINE05+8
 #endif
 
 /********************       For Sensors presence      *********************/
@@ -803,6 +803,12 @@ static uint16_t nfPitchCenter = 0;
 static uint16_t nfPitchCutoff = 0;
 static uint8_t yawLPF = 0;
 static uint8_t dtermLPF = 0;
+static uint8_t vtxType = 0;
+static uint8_t vtxNChannel = 0;
+static uint16_t vtxLowPower = 0;
+static uint16_t vtxMaxPower = 0;
+static uint8_t vtxBand = 0;
+static uint8_t vtxChannel = 1;
 #else
 static uint8_t pidP[PIDITEMS], pidI[PIDITEMS], pidD[PIDITEMS];
 #endif // KISS
@@ -1458,6 +1464,8 @@ const char configMsg171[] PROGMEM = "PID";
 const char configMsg172[] PROGMEM = "RATE";
 const char configMsg173[] PROGMEM = "NOTCH FILTER";
 const char configMsg174[] PROGMEM = "LPF / YAW FILTER";
+const char configMsg175[] PROGMEM = "VTX";
+
 const char configMsg1710[] PROGMEM = "RC";
 const char configMsg1711[] PROGMEM = "RATE";
 const char configMsg1712[] PROGMEM = "CURVE";
@@ -1478,6 +1486,33 @@ const char configMsg1746[] PROGMEM = "MEDIUM";
 const char configMsg1747[] PROGMEM = "MED. LOW";
 const char configMsg1748[] PROGMEM = "LOW";
 const char configMsg1749[] PROGMEM = "VERY LOW";
+
+
+const char configMsg1750[] PROGMEM = "TYPE";
+const char configMsg1751[] PROGMEM = "LOW POWER";
+const char configMsg1752[] PROGMEM = "MAX POWER";
+const char configMsg1753[] PROGMEM = "BAND";
+const char configMsg1754[] PROGMEM = "CHANNEL";
+const char configMsg1755[] PROGMEM = "--";
+const char configMsg1756[] PROGMEM = "DUMMY VTX";
+const char configMsg1757[] PROGMEM = "IRC TRAMP HV";
+const char configMsg1758[] PROGMEM = "TBS SMART AUDIO";
+const char configMsg1759[] PROGMEM = "TBS EVO CROSSFIRE";
+
+const char vtxBandA[] PROGMEM = "A";
+const char vtxBandB[] PROGMEM = "B";
+const char vtxBandE[] PROGMEM = "E";
+const char vtxBandFS[] PROGMEM = "FS";
+const char vtxBandRB[] PROGMEM = "RB";
+const PROGMEM  char * const vtxBandLetters[] = {
+  vtxBandA,
+  vtxBandB,
+  vtxBandE,
+  vtxBandFS,
+  vtxBandRB
+};
+
+
 #endif // KISS
 //-----------------------------------------------------------MENU END
 
@@ -1781,7 +1816,8 @@ const PROGMEM char * const menu_kiss[] = {
   configMsg171,
   configMsg172,
   configMsg173,
-  configMsg174
+  configMsg174,
+  configMsg175
 };
 
 const PROGMEM char * const menu_kiss_rates[] = {
@@ -1811,6 +1847,23 @@ const PROGMEM char * const menu_kiss_lpf[] = {
   configMsg1748,
   configMsg1749
 };
+
+const PROGMEM char * const menu_kiss_vtx[] = {
+  configMsg1750,
+  configMsg1751,
+  configMsg1752,
+  configMsg1753,
+  configMsg1754
+};
+
+const PROGMEM char * const menu_kiss_vtx_type[] = {
+  configMsg1755,
+  configMsg1756,
+  configMsg1757,
+  configMsg1758,
+  configMsg1759
+};
+
 #endif
 
 #ifdef PROTOCOL_MSP
@@ -2211,7 +2264,7 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_SET_PIDS 0x44
 #define KISS_SET_RATES 0x4E
 #define KISS_SET_FILTERS 0x48
-
+#define KISS_SET_VTX 0x46
 
 // Indexes of informations in the serial protocol(8 bits)
 #define KISS_INDEX_THROTTLE 0 // INT 16
@@ -2266,6 +2319,7 @@ const PROGMEM char * const KISS_mode_index[] =
 // ----
 #define KISS_SETTINGS_IDX_RP_LPF 79 // UINT 8
 #define KISS_SETTINGS_IDX_VERSION 92 // UINT 8
+#define KISS_SETTINGS_IDX_VTX_N_CHANNEL 120 // UINT 8
 // Notch Filters
 #define KISS_SETTINGS_IDX_NF_ROLL_ENABLE 138 // INT 8
 #define KISS_SETTINGS_IDX_NF_ROLL_CENTER 139 // INT 16
@@ -2275,6 +2329,9 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_SETTINGS_IDX_NF_PITCH_CUTOFF 146 // INT 16
 // ----
 #define KISS_SETTINGS_IDX_YAW_C_FILTER 148 // INT 8
+#define KISS_SETTINGS_IDX_VTX_TYPE 149 // INT 8
+#define KISS_SETTINGS_IDX_VTX_LOW_POWER 150 // INT 16
+#define KISS_SETTINGS_IDX_VTX_MAX_POWER 152 // INT 16
 #define KISS_SETTINGS_IDX_YAW_LPF 165 // INT 8
 #define KISS_SETTINGS_IDX_DTERM_LPF 166 // INT 8
 
@@ -2312,6 +2369,12 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_SET_FILTER_IDX_YAW_LPF 12 // INT 8
 #define KISS_SET_FILTER_IDX_DTERM_LPF 13 // INT 8
 
+// Indexes of SET_VTX
+#define KISS_SET_VTX_IDX_TYPE 0 // INT 8
+#define KISS_SET_VTX_IDX_N_CHANNEL 1 // INT 8
+#define KISS_SET_VTX_IDX_LOW_POWER 2 // INT 16
+#define KISS_SET_VTX_IDX_MAX_POWER 4 // INT 16
+
 #define KISSFRAMEINIT 5
 #define KISSFRAMELENGTH KISS_SETTINGS_IDX_DTERM_LPF + 2 // Size of serial buffer defined with max index used
 
@@ -2328,13 +2391,21 @@ uint8_t KISSgetcmd=0;
 #define KISS_MIN_LPF 0
 #define KISS_MAX_LPF 6
 
+#define KISS_MIN_VTX_TYPE 0
+#define KISS_MAX_VTX_TYPE 4
+#define KISS_MIN_VTX_POWER 0
+#define KISS_MAX_VTX_POWER 2000
+#define KISS_INC_VTX_POWER 25
+#define VTX_BAND_COUNT 5
+#define VTX_CHANNEL_COUNT 8
+
 int8_t subConfigPage=-1;
-#define SUBMENU_KISS_SIZE 4
+#define SUBMENU_KISS_SIZE 5
 #define SUBMENU_KISS_PID 0
 #define SUBMENU_KISS_RATE 1
 #define SUBMENU_KISS_NOTCH_FILTERS 2
 #define SUBMENU_KISS_LPF 3
-
+#define SUBMENU_KISS_VTX 4
 // Vars
 struct __Kvar {
   uint8_t mode;
