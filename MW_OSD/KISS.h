@@ -1,7 +1,7 @@
 
 
 uint8_t kissread_u8(uint8_t index) {
-  return serialBuffer[index];
+  return KISSserialBuffer[index];
 }
 
 uint16_t kissread_u16(uint8_t index) {
@@ -20,7 +20,7 @@ uint32_t kissread_u32(uint8_t index) {
 }
 
 bool kissread_bool(uint8_t index) {
-  return serialBuffer[index] == 1;
+  return KISSserialBuffer[index] == 1;
 }
 
 uint32_t ESC_filter(uint32_t oldVal, uint32_t newVal) {
@@ -28,12 +28,12 @@ uint32_t ESC_filter(uint32_t oldVal, uint32_t newVal) {
 }
 
 void kissWriteInBuffer_u8(uint8_t index, uint8_t value) {
-   serialBuffer[index] = (uint8_t)(value);
+   KISSserialBuffer[index] = (uint8_t)(value);
 }
 
 void kissWriteInBuffer_u16(uint8_t index, uint16_t value) {
-  serialBuffer[index] = (uint8_t)((value) >> 8);
-   serialBuffer[index + 1] = (uint8_t)(value);
+  KISSserialBuffer[index] = (uint8_t)((value) >> 8);
+   KISSserialBuffer[index + 1] = (uint8_t)(value);
 }
 
 
@@ -106,7 +106,7 @@ void kiss_sync_telemetry() {
     // calculate amperage using ESC sum method...
     MWAmperage = 0;
     for (uint8_t i = 0; i < 6; i++) {
-      filtereddata[i] = ESC_filter((uint32_t)filtereddata[i], (uint32_t)((serialBuffer[KISS_INDEX_ESC1_AMP + (i * 10)] << 8) | serialBuffer[KISS_INDEX_ESC1_AMP + 1 + (i * 10)]) << 4);
+      filtereddata[i] = ESC_filter((uint32_t)filtereddata[i], (uint32_t)((KISSserialBuffer[KISS_INDEX_ESC1_AMP + (i * 10)] << 8) | KISSserialBuffer[KISS_INDEX_ESC1_AMP + 1 + (i * 10)]) << 4);
       MWAmperage     += filtereddata[i] >> 4;
     }
     //    MWAmperage/=10;
@@ -197,16 +197,16 @@ uint8_t kissProtocolChecksum(const uint8_t *data, uint8_t startIndex, uint8_t st
 void serialKISSsendData(uint8_t request, uint8_t dataSize) {
   uint8_t crc = 0;
   if (Kvar.version > 0 && Kvar.version < 109) {
-    crc = kissProtocolChecksum(serialBuffer, 0, dataSize);
+    crc = kissProtocolChecksum(KISSserialBuffer, 0, dataSize);
   } else {
-    crc = kissProtocolCRC8(serialBuffer, 0, dataSize);
+    crc = kissProtocolCRC8(KISSserialBuffer, 0, dataSize);
   }
   KISScurrentRequest = request;
   Serial.write(request);
   if (request != KISS_GET_TELEMETRY && request != KISS_GET_SETTINGS) {
     Serial.write(dataSize);
     for (int i = 0; i < dataSize;i++) {
-      Serial.write(serialBuffer[i]);
+      Serial.write(KISSserialBuffer[i]);
     }
     Serial.write(crc);
   }
@@ -296,7 +296,7 @@ void serialKISSreceive(uint8_t c) {
   }
   else if (c_state == KISS_HEADER_SIZE) {
     if (Kvar.index < KISSFRAMELENGTH) {
-      serialBuffer[Kvar.index] = c;
+      KISSserialBuffer[Kvar.index] = c;
     }
     Kvar.cksumtmp+=c;
 

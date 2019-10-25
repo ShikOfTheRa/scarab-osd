@@ -8,7 +8,7 @@
 #elif defined iNAV // 40 max in test
   #define SERIALBUFFERSIZE 65
 #elif defined KISS
-  #define SERIALBUFFERSIZE KISSFRAMELENGTH
+  #define SERIALBUFFERSIZE 65
 #else
   #define SERIALBUFFERSIZE 100
 #endif

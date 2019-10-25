@@ -2378,6 +2378,7 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISSFRAMEINIT 5
 #define KISSFRAMELENGTH KISS_SETTINGS_IDX_DTERM_LPF + 2 // Size of serial buffer defined with max index used
 
+uint8_t KISSserialBuffer[KISSFRAMELENGTH];
 uint8_t KISScurrentRequest = 0x00;
 uint8_t KISSgetcmd=0;
 
