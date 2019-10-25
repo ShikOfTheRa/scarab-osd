@@ -1,19 +1,4 @@
-// Serial Buffer must be at least 65 for font transfers
-#if defined APM
-  #define SERIALBUFFERSIZE 75
-#elif defined NAZA
-  #define SERIALBUFFERSIZE 125
-#elif defined SUBMERSIBLE
-  #define SERIALBUFFERSIZE 65
-#elif defined iNAV // 40 max in test
-  #define SERIALBUFFERSIZE 65
-#elif defined KISS
-  #define SERIALBUFFERSIZE 65
-#else
-  #define SERIALBUFFERSIZE 100
-#endif
 
-static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string
 static uint8_t receiverIndex;
 static uint16_t dataSize;
 static uint16_t cmdMSP; // 8 for MSP or 16 for MSPV2
@@ -337,12 +322,8 @@ void serialMSPCheck()
         }
       }
       else if(dataSize == 56) {
-        for(uint8_t i = 0; i < 54; i++)
-          fontData[i] = read8();
-      
-	uint8_t c = read8();
+        uint8_t c = serialBuffer[55];
         write_NVM(c);
-	//fontCharacterReceived(c);
         if (c==255)
           MAX7456Setup();
       }

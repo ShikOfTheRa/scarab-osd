@@ -401,7 +401,7 @@ void write_NVM(uint8_t char_address)
   for(uint8_t x = 0; x < NVM_ram_size; x++) // write out 54 bytes of character to shadow ram
   {
     MAX7456_Send(MAX7456ADD_CMAL, x); // set start address low
-    MAX7456_Send(MAX7456ADD_CMDI, fontData[x]);
+    MAX7456_Send(MAX7456ADD_CMDI, serialBuffer[1+x]);
   }
 
   // transfer 54 bytes from shadow ram to NVM
@@ -456,7 +456,7 @@ void updateFont()
 { 
   for(uint8_t x = 0; x < 255; x++){
     for(uint8_t i = 0; i < 54; i++){
-      fontData[i] = (uint8_t)pgm_read_byte(fontdata+(64*x)+i);
+      serialBuffer[1+i] = (uint8_t)pgm_read_byte(fontdata+(64*x)+i);
     }
     write_NVM(x);
     ledstatus=!ledstatus;

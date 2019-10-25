@@ -2441,3 +2441,20 @@ const PROGMEM char * const NAZA_mode_index[] =
  naza_mode_GPSA,
 };
 #endif // NAZA
+
+// Serial Buffer must be at least 65 for font transfers
+#if defined APM
+  #define SERIALBUFFERSIZE 75
+#elif defined NAZA
+  #define SERIALBUFFERSIZE 125
+#elif defined SUBMERSIBLE
+  #define SERIALBUFFERSIZE 65
+#elif defined iNAV // 40 max in test
+  #define SERIALBUFFERSIZE 65
+#elif defined KISS
+  #define SERIALBUFFERSIZE 65
+#else
+  #define SERIALBUFFERSIZE 100
+#endif
+
+static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string

@@ -309,6 +309,7 @@ void displayIcon(int cposition)
   }
 }
 
+#ifdef MAV_STATUS
 void displayMAVstatustext(void)
 {
   if (timer.MAVstatustext == 0)
@@ -325,6 +326,7 @@ void displayMAVstatustext(void)
     }
   }
 }
+#endif
 
 void displayHorizon(int rollAngle, int pitchAngle)
 {
