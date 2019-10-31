@@ -26,6 +26,7 @@ This work is based on the following open source work :-
  Libraries used and typically provided by compilers may have licening terms stricter than that of GNU 3
 */
 
+#include <avr/version.h>
 // travis test 1
 //------------------------------------------------------------------------
 #define MEMCHECK   // to enable memory checking.
@@ -33,13 +34,41 @@ This work is based on the following open source work :-
 __asm volatile ("nop");
 #endif
 #ifdef MEMCHECK
+/*
+The launch of the "PaintStack" method with the ".init1" section no longer works from Arduino version 1.6.10 (https://github.com/arduino/Arduino/blob/1.6.10/build/shared/revisions.txt)
+where the avr-libc library has been changed to 2.0.0. Yet in the documentation, the mechanism of sections ".initN" is still present.
+No concrete explanation but to identify this change, we use the version and program the call manually.
+ */
+#if (__AVR_LIBC_MAJOR__ >= 2)
+#define MANUALY_PAINT_STACK
+#endif
+
 extern uint8_t _end;  //end of program variables
+extern uint8_t __heap_start, *__brkval;  //start of dynamic memory
 extern uint8_t __stack; //start of stack (highest RAM address)
 
+#ifndef MANUALY_PAINT_STACK
 void PaintStack(void) __attribute__ ((naked)) __attribute__ ((section (".init1")));    //Make sure this is executed at the first time
+#endif
 
+/*
+ * "Paint" the memory to be able to control the free memory with the "UntouchedStack" method
+ * /!\
+ * In launch by section(Arduino < 1.6.10), do not call this method
+ * In MANUALY_PAINT_STACK, called only at startup of Setup()
+ */
 void PaintStack(void)
 {
+#ifdef MANUALY_PAINT_STACK
+  // For security, we paint from the current location of free memory.
+  uint8_t *p = (__brkval == 0 ? &__heap_start : __brkval);
+
+  while(p <= &__stack)
+  {
+      *p = 0xa5;
+      p++;
+  }
+#else
   //using asm since compiller could not be trusted here
   __asm volatile ("    ldi r30,lo8(_end)\n"
                   "    ldi r31,hi8(_end)\n"
@@ -53,6 +82,7 @@ void PaintStack(void)
                   "    cpc r31,r25\n"
                   "    brlo .loop\n"
                   "    breq .loop"::);
+#endif
 }
 
 uint16_t UntouchedStack(void)
@@ -119,6 +149,10 @@ SBUS sbus;
 //------------------------------------------------------------------------
 void setup()
 {
+#ifdef MANUALY_PAINT_STACK
+  // First task to be able to analyze the memory
+  PaintStack();
+#endif
 #ifdef SBUS_CONTROL
   sbus.begin(SBUSPIN, sbusNonBlocking);
 #endif
