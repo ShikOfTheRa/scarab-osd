@@ -267,7 +267,7 @@ void serialMAVCheck() {
 #endif
         }
       }
-      if (Settings[S_MAV_AUTO] >= 0) {
+      if (Settings[S_MAV_AUTO] > 0) {
         static uint8_t mavreqdone = 3;
         if (mavreqdone > 0) {
 #ifdef PX4
