@@ -319,7 +319,7 @@ void serialMAVCheck() {
 #endif //ALARM_GPS
       GPS_numSat = serialBuffer[29];
       GPS_fix = serialBuffer[28];
-      GPS_ground_course = (serialBuffer[26] | (serialBuffer[27] << 8)) / 10;
+      GPS_ground_course = (int16_t)(serialBuffer[26] | (serialBuffer[27] << 8)) / 10;
       GPS_latitude = serialbufferint(8);
       GPS_longitude = serialbufferint(12);
       GPS_dop = (int16_t)(serialBuffer[20] | serialBuffer[21] << 8);
@@ -465,7 +465,7 @@ void serialMAVCheck() {
         MwSensorActive |= (1 << 2);
       if ((serialbufferint(4) & (1 << 2)) > 0) //mag
         MwSensorActive |= (1 << 3);
-      MwVBat = (serialBuffer[14] | (serialBuffer[15] << 8)) / 100;
+      MwVBat = (uint16_t)(serialBuffer[14] | (serialBuffer[15] << 8)) / 100;
       MWAmperage = serialBuffer[16] | (serialBuffer[17] << 8);
       break;
   }
