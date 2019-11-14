@@ -281,6 +281,9 @@ void serialMAVCheck() {
       }
       break;
     case MAVLINK_MSG_ID_VFR_HUD:
+#ifdef DEBUGDPOSMAV
+  timer.d0rate++;
+#endif    
       AIR_speed = (int16_t)serialbufferfloat(0) * 100; // m/s-->cm/s
       GPS_speed = (int16_t)serialbufferfloat(4) * 100; // m/s-->cm/s
       GPS_altitude = (int16_t)serialbufferfloat(8);   // m-->m
@@ -310,10 +313,16 @@ void serialMAVCheck() {
       mw_mav.throttle = (int16_t)(((serialBuffer[18] | serialBuffer[19] << 8) * 10) + 1000);
       break;
     case MAVLINK_MSG_ID_ATTITUDE:
+#ifdef DEBUGDPOSMAV
+  timer.d1rate++;
+#endif       
       MwAngle[0] = (int16_t)(serialbufferfloat(4) * 57.2958 * 10);  // rad-->0.1deg
       MwAngle[1] = (int16_t)(serialbufferfloat(8) * 57.2958 * -10); // rad-->0.1deg
       break;
     case MAVLINK_MSG_ID_GPS_RAW_INT:
+#ifdef DEBUGDPOSMAV
+  timer.d2rate++;
+#endif 
 #ifdef ALARM_GPS
       timer.GPS_active = ALARM_GPS;
 #endif //ALARM_GPS
@@ -348,6 +357,9 @@ void serialMAVCheck() {
       break;
 #endif
     case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
+#ifdef DEBUGDPOSMAV
+  timer.d3rate++;
+#endif 
 #ifdef DUALRSSI
       FCRssi = serialBuffer[21];
 #else

@@ -774,6 +774,16 @@ void loop()
     serialrxrate = timer.serialrxrate;
     timer.serialrxrate = 0;
 #endif
+#ifdef DEBUGDPOSMAV
+  debug[0] = timer.d0rate;
+  timer.d0rate=0;
+  debug[1] = timer.d1rate;
+  timer.d1rate=0;
+  debug[2] = timer.d2rate;
+  timer.d2rate=0;
+  debug[3] = timer.d3rate;
+  timer.d3rate=0;
+#endif 
     onTime++;
 #if defined(AUTOCAM) || defined(MAXSTALLDETECT)
     if (!fontMode)
