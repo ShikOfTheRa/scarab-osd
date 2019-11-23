@@ -21,7 +21,7 @@
 //#define DEBUGDPOSMSPID 33  // display MSP ID received
 //#define DEBUGDPOSMAV       // display d0-3 as mav packet rates for VFR_HUD, Attitude, GPS raw, RC raw
 
-#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+//#define DEBUG 4                   // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
 
 // Display Debug text message in standard screen text warning message area
 // Enable and set debugtext=1 in code when required 
