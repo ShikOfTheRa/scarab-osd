@@ -1036,7 +1036,7 @@ enum {
 #ifdef AEROMAX
     #define DIVIDER1v1      0.000107      // Voltage divider for 1.1v reference.
     #define DIVIDER5v       0.000475      // Voltage divider for 5v reference.
-#elif ALTERNATEDIVIDERS
+#elif defined ALTERNATEDIVIDERS
     #define DIVIDER1v1      0.0002        // Voltage divider for 1.1v reference.
     #define DIVIDER5v       0.0005        // Voltage divider for 5v reference.
 #else
