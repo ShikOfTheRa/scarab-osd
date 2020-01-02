@@ -1873,9 +1873,9 @@ void configExit()
 
 void configSave()
 {
+#if defined ENABLE_MSP_SAVE_ADVANCED
   CurrentFCProfile=FCProfile;
 
-#if defined ENABLE_MSP_SAVE_ADVANCED
   #if defined ADVANCEDSAVE
     mspWriteRequest(MSP_SET_PID_CONTROLLER, 1);
     mspWrite8(PIDController);
@@ -2017,6 +2017,7 @@ void settingswriteSerialRequest() {
   cfgWriteChecksum();
 }
 
+#ifdef ENABLE_MSP_SAVE_ADVANCED
 void setFCProfile()
 {
   mspWriteRequest(MSP_SELECT_SETTING, 1);
@@ -2026,6 +2027,7 @@ void setFCProfile()
   setMspRequests();
   delay(100);
 }
+#endif
 
 void MSPV2AIRSPEEDSerialRequest() {
 }

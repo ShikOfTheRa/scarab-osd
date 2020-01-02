@@ -817,7 +817,6 @@ static uint8_t vtxBand = 0;
 static uint8_t vtxChannel = 1;
 #else
 static uint8_t pidP[PIDITEMS], pidI[PIDITEMS], pidD[PIDITEMS];
-#endif // KISS
 static uint8_t rcRate8,rcExpo8;
 static uint8_t rollPitchRate;
 static uint8_t rollRate;
@@ -829,10 +828,11 @@ static uint8_t thrExpo8;
 static uint16_t tpa_breakpoint16;
 static uint8_t rcYawExpo8;
 static uint8_t FCProfile;
-static uint8_t PreviousFCProfile;
 static uint8_t CurrentFCProfile;
+static uint8_t PreviousFCProfile;
 static uint8_t PIDController;
 static uint16_t LoopTime;
+#endif // KISS
 
 int32_t  MwAltitude=0;                         // This hold barometric value
 int32_t  old_MwAltitude=0;                     // This hold barometric value

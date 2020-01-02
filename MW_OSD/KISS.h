@@ -274,7 +274,7 @@ void serialKISSsendRequestIfPossible(uint8_t request) {
     previous_millis = current_millis;
   } else {
     if ((current_millis - previous_millis) > 20) {
-      c_state == KISS_IDLE;
+      c_state = KISS_IDLE;
     }
   }
 }
