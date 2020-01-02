@@ -280,6 +280,12 @@ struct  __timer {
   uint16_t  loopcount;
   uint16_t  packetcount;
   uint16_t  serialrxrate;
+#ifdef DEBUGDPOSMAV 
+  uint16_t  d0rate;
+  uint16_t  d1rate;  
+  uint16_t  d2rate;  
+  uint16_t  d3rate;
+#endif    
   uint32_t alarms;                            // Alarm length timer
   uint32_t vario;                             
   uint32_t audiolooptimer;

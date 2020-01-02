@@ -267,7 +267,7 @@ void serialMAVCheck() {
 #endif
         }
       }
-      if (Settings[S_MAV_AUTO] >= 0) {
+      if (Settings[S_MAV_AUTO] > 0) {
         static uint8_t mavreqdone = 3;
         if (mavreqdone > 0) {
 #ifdef PX4
@@ -281,6 +281,9 @@ void serialMAVCheck() {
       }
       break;
     case MAVLINK_MSG_ID_VFR_HUD:
+#ifdef DEBUGDPOSMAV
+  timer.d0rate++;
+#endif    
       AIR_speed = (int16_t)serialbufferfloat(0) * 100; // m/s-->cm/s
       GPS_speed = (int16_t)serialbufferfloat(4) * 100; // m/s-->cm/s
       GPS_altitude = (int16_t)serialbufferfloat(8);   // m-->m
@@ -310,16 +313,22 @@ void serialMAVCheck() {
       mw_mav.throttle = (int16_t)(((serialBuffer[18] | serialBuffer[19] << 8) * 10) + 1000);
       break;
     case MAVLINK_MSG_ID_ATTITUDE:
+#ifdef DEBUGDPOSMAV
+  timer.d1rate++;
+#endif       
       MwAngle[0] = (int16_t)(serialbufferfloat(4) * 57.2958 * 10);  // rad-->0.1deg
       MwAngle[1] = (int16_t)(serialbufferfloat(8) * 57.2958 * -10); // rad-->0.1deg
       break;
     case MAVLINK_MSG_ID_GPS_RAW_INT:
+#ifdef DEBUGDPOSMAV
+  timer.d2rate++;
+#endif 
 #ifdef ALARM_GPS
       timer.GPS_active = ALARM_GPS;
 #endif //ALARM_GPS
       GPS_numSat = serialBuffer[29];
       GPS_fix = serialBuffer[28];
-      GPS_ground_course = (serialBuffer[26] | (serialBuffer[27] << 8)) / 10;
+      GPS_ground_course = (int16_t)(serialBuffer[26] | (serialBuffer[27] << 8)) / 10;
       GPS_latitude = serialbufferint(8);
       GPS_longitude = serialbufferint(12);
       GPS_dop = (int16_t)(serialBuffer[20] | serialBuffer[21] << 8);
@@ -348,6 +357,9 @@ void serialMAVCheck() {
       break;
 #endif
     case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
+#ifdef DEBUGDPOSMAV
+  timer.d3rate++;
+#endif 
 #ifdef DUALRSSI
       FCRssi = serialBuffer[21];
 #else
@@ -465,7 +477,7 @@ void serialMAVCheck() {
         MwSensorActive |= (1 << 2);
       if ((serialbufferint(4) & (1 << 2)) > 0) //mag
         MwSensorActive |= (1 << 3);
-      MwVBat = (serialBuffer[14] | (serialBuffer[15] << 8)) / 100;
+      MwVBat = (uint16_t)(serialBuffer[14] | (serialBuffer[15] << 8)) / 100;
       MWAmperage = serialBuffer[16] | (serialBuffer[17] << 8);
       break;
   }
