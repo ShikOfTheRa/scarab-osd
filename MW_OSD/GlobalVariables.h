@@ -871,7 +871,7 @@ int32_t GPS_home_altitude;
 int32_t previousfwaltitude=0;
 int16_t AIR_speed;
 int16_t GPS_speed;
-int16_t  GPS_ground_course;
+int16_t GPS_ground_course; // Unit degree*10 (MSP_RAW_GPS)
 int16_t old_GPS_speed;
 int16_t GPS_directionToHome=0;
 uint8_t GPS_numSat=0;
@@ -2424,6 +2424,11 @@ struct __Kvar {
   uint8_t version = 0;
 }
 Kvar;
+
+uint8_t  GPS_fix_HOME=0;
+int32_t  GPS_home[2];
+#define  LAT  0
+#define  LON  1
 
 #endif // PROTOCOL_KISS
 

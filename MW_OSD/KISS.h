@@ -69,13 +69,45 @@ timer.packetcount++;
       GPS_latitude      = kissread_u32(KISS_INDEX_GPS_LATITUDE);
       GPS_longitude     = kissread_u32(KISS_INDEX_GPS_LONGITUDE);
       GPS_speed         = kissread_u16(KISS_INDEX_GPS_SPEED) / 100;
-      GPS_ground_course = kissread_u16(KISS_INDEX_GPS_COURSE);
+      GPS_ground_course = kissread_u16(KISS_INDEX_GPS_COURSE) / 10; // Conversion to Unit degree*10 (MSP_RAW_GPS)
       GPS_altitude      = kissread_u16(KISS_INDEX_GPS_ALTITUDE);
+
+      // calculation of the GPS direction of the drone on a 180 degree scale
       MwHeading = GPS_ground_course / 10;
       if (MwHeading >= 180) 
         MwHeading -= 360;
       MwAltitude = (int32_t)GPS_altitude*100;
+
+      // checking if the home position is to be fixed
+      if (GPS_fix_HOME == 0){
+        GPS_reset_home_position();
+        GPS_fix_HOME=1;
+      }
+      // distance and direction calculation from home position
+      uint32_t dist;
+      int32_t  dir;
+      GPS_distance_cm_bearing(&GPS_latitude,&GPS_longitude,&GPS_home[LAT],&GPS_home[LON],&dist,&dir);
+      GPS_distanceToHome = dist/100;
+      GPS_directionToHome = dir/100;
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+// Get distance between two points in cm
+// Get bearing from pos1 to pos2, returns an 1deg = 100 precision
+void GPS_distance_cm_bearing(int32_t* lat1, int32_t* lon1, int32_t* lat2, int32_t* lon2, uint32_t* dist, int32_t* bearing) {
+  float rads = (abs((float)*lat1) / 10000000.0) * 0.0174532925;
+  float dLat = *lat2 - *lat1;                                    // difference of latitude in 1/10 000 000 degrees
+  float dLon = (float)(*lon2 - *lon1) * cos(rads);
+  *dist = sqrt(sq(dLat) + sq(dLon)) * 1.113195;
+  *bearing = 9000.0f + atan2(-dLat, dLon) * 5729.57795f;      //Convert the output redians to 100xdeg
+  if (*bearing < 0) *bearing += 36000;
+}
+
+void GPS_reset_home_position() {
+  GPS_home[LAT] = GPS_latitude;
+  GPS_home[LON] = GPS_longitude;
+  GPS_home_altitude=GPS_altitude;
 }
 #endif
 
