@@ -280,6 +280,12 @@ struct  __timer {
   uint16_t  loopcount;
   uint16_t  packetcount;
   uint16_t  serialrxrate;
+#ifdef DEBUGDPOSMAV 
+  uint16_t  d0rate;
+  uint16_t  d1rate;  
+  uint16_t  d2rate;  
+  uint16_t  d3rate;
+#endif    
   uint32_t alarms;                            // Alarm length timer
   uint32_t vario;                             
   uint32_t audiolooptimer;
@@ -811,7 +817,6 @@ static uint8_t vtxBand = 0;
 static uint8_t vtxChannel = 1;
 #else
 static uint8_t pidP[PIDITEMS], pidI[PIDITEMS], pidD[PIDITEMS];
-#endif // KISS
 static uint8_t rcRate8,rcExpo8;
 static uint8_t rollPitchRate;
 static uint8_t rollRate;
@@ -823,10 +828,11 @@ static uint8_t thrExpo8;
 static uint16_t tpa_breakpoint16;
 static uint8_t rcYawExpo8;
 static uint8_t FCProfile;
-static uint8_t PreviousFCProfile;
 static uint8_t CurrentFCProfile;
+static uint8_t PreviousFCProfile;
 static uint8_t PIDController;
 static uint16_t LoopTime;
+#endif // KISS
 
 int32_t  MwAltitude=0;                         // This hold barometric value
 int32_t  old_MwAltitude=0;                     // This hold barometric value
@@ -865,7 +871,7 @@ int32_t GPS_home_altitude;
 int32_t previousfwaltitude=0;
 int16_t AIR_speed;
 int16_t GPS_speed;
-int16_t  GPS_ground_course;
+int16_t GPS_ground_course; // Unit degree*10 (MSP_RAW_GPS)
 int16_t old_GPS_speed;
 int16_t GPS_directionToHome=0;
 uint8_t GPS_numSat=0;
@@ -2418,6 +2424,11 @@ struct __Kvar {
   uint8_t version = 0;
 }
 Kvar;
+
+uint8_t  GPS_fix_HOME=0;
+int32_t  GPS_home[2];
+#define  LAT  0
+#define  LON  1
 
 #endif // PROTOCOL_KISS
 
