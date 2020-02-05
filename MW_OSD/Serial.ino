@@ -1017,7 +1017,7 @@ if (cmdMSP==MSP_STATUS)
 #ifdef MSPV2
   if (cmdMSP==MSP2_INAV_AIR_SPEED)
   {
-    float t_AIR_speed = read32() *100;
+    float t_AIR_speed = read32();
     AIR_speed = t_AIR_speed;
   }
 #endif // MSPV2  
