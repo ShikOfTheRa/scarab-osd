@@ -307,7 +307,8 @@ void serialMAVCheck() {
       }
       GPS_altitude = GPS_altitude - GPS_altitude_home;
 #ifndef MAV_ADSB
-      MwAltitude = (int32_t) GPS_altitude * 100;
+      MwAltitude = (float) (serialbufferfloat(8) * 100);
+      MwAltitude -= (GPS_altitude_home*100);
       //        MwAltitude = (int32_t) serialbufferfloat(8) * 100; //dev to displa AMSL
 #endif
       mw_mav.throttle = (int16_t)(((serialBuffer[18] | serialBuffer[19] << 8) * 10) + 1000);
