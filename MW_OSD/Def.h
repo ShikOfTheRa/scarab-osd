@@ -1322,11 +1322,12 @@ enum {
 #endif
 
 
-#ifdef ROTORCRAFT
-  #define INFO_AIRCRAFT 1
-#endif
-#ifdef FIXEDWING
+#ifdef SUBMARINE
+  #define INFO_AIRCRAFT 3
+#elif defined FIXEDWING
   #define INFO_AIRCRAFT 2
+#elif defined ROTORCRAFT
+  #define INFO_AIRCRAFT 1
 #endif
 
 
