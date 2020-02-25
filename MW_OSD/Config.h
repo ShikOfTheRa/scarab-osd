@@ -74,6 +74,7 @@
 //#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
 //#define QUADPLANE                 // Uncomment this ONLY if you are using ARDUPILOT QUADPLANE
 //#define SUBMARINE                 // Uncomment this ONLY if you are using ARDUSUB
+//#define GPSSUBMARINE              // Uncomment this ONLY if you are using GPSARDUSUB
 
 
 /********************       Debug      *********************/
@@ -158,7 +159,7 @@
 
 /********************       AIRCRAFT type=FIXEDWING settings      *********************/
 // **ONLY** valid when using fixed wing
-//#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality.
+//#define DISABLEGPSALTITUDERESET   // Disables automatic reset of GPS Altitude to zero at arm for FC that already provide this functionality. Also for ArduSub
 //#define AUTOSENSEMAG              // Undefine this to force autodetect MAG (to use MAG or GPS data for heading - otherwise use GUI). MSP data FC only.
 //#define AUTOSENSEBARO             // Undefine this to force autodetect BARO(to use BARO or GPS data for altitude - otherwise use GUI). MSP data FC only.
 
@@ -401,7 +402,7 @@
 #define DISPLAY_VTX_INFO            // Enable to show frequency in menu display. 
 
 
-/********************           Submersible settings           *********************/
+/********************    Submersible settings (not ArduSub)   *********************/
 // Specify fluid density for submersible (density = 997 freshwater, 1029 for seawater): Choose ONLY ONE option:
 #define FRESHWATER                  // Uncomment this if you are using a submersible in freshwater 
 //#define SEAWATER                  // Uncomment this if you are using a submersible in seawater

@@ -294,6 +294,7 @@ void serialMAVCheck() {
       MwHeading   = MwHeading360;
       MwVario  = (float)serialbufferfloat(12) * 100; // m/s-->cm/s
       //MwVario = filter16(MwVario, t_MwVario, 4);
+#if defined RESETGPSALTITUDEATARM
       if (!armed) {
         GPS_fix_HOME = 0;
       }
@@ -306,6 +307,7 @@ void serialMAVCheck() {
         }
       }
       GPS_altitude = GPS_altitude - GPS_altitude_home;
+#endif
 #ifndef MAV_ADSB
       MwAltitude = (float) (serialbufferfloat(8) * 100);
       MwAltitude -= (GPS_altitude_home*100);
