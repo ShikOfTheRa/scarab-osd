@@ -933,7 +933,6 @@ int16_t rssiMIN=100;
   int32_t  GPS_home[4];
 //  uint16_t GPS_ground_course = 0;                       
   int16_t  GPS_altitude_home;                            
-  int16_t  GPS_altitude_home;                             
   uint8_t  GPS_Present = 0;                             
 //  uint8_t  GPS_SerialInitialised=5;
   uint8_t  GPS_armedangleset = 0;
