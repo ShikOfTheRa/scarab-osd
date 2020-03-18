@@ -2022,7 +2022,6 @@ const PROGMEM char * const msp_mode_index[] =
 const char mav_mode_APM[]  PROGMEM   = "APM "; //Unknown APM mode
 const char mav_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
 const char mav_mode_ACRO[] PROGMEM   = "ACRO"; //Acrobatic: rate control
-const char mav_mode_AUTO[] PROGMEM   = "WAYP"; //Auto: auto control
 const char mav_mode_LOIT[] PROGMEM   = "LOIT"; //Loiter: hold a single location
 const char mav_mode_RETL[] PROGMEM   = "RETL"; //Return to Launch: auto control
 const char mav_mode_CIRC[] PROGMEM   = "CIRC"; //Circle: auto control
@@ -2033,6 +2032,7 @@ const char mav_mode_PX4[]  PROGMEM   = "PX4 "; // Unknown PX4 mode
 const char mav_mode_MANU[] PROGMEM   = "MANU"; // Manual
 const char mav_mode_ALTC[] PROGMEM   = "ALTC"; // Altitude control
 const char mav_mode_POSC[] PROGMEM   = "POSC"; // Position control
+const char mav_mode_AUTO[] PROGMEM   = "WAYP"; //Auto: auto control
 //const char mav_mode_AUTO[] PROGMEM   = "AUTO"; // Auto: auto control
 const char mav_mode_TKOF[] PROGMEM   = "TKOF"; // Takeoff
 //const char mav_mode_LOIT[] PROGMEM   = "LOIT"; // Loiter: hold a single location
@@ -2067,6 +2067,7 @@ const char mav_mode_CRUI[] PROGMEM   = "CRUI"; //Cruise
 const char mav_mode_INIT[] PROGMEM   = "INIT"; //Init
 const char mav_mode_HOLD[] PROGMEM   = "HOLD";
 const char mav_mode_LAND[] PROGMEM   = "LAND"; // Landing
+const char mav_mode_AUTO[] PROGMEM   = "WAYP"; //Auto: auto control
 #ifdef QUADPLANE 
 const char mav_mode_QSTB[] PROGMEM   = "QSTB"; // Quadplane - like copter STABILIZE
 const char mav_mode_QHOV[] PROGMEM   = "QHOV"; // Quadplane - like copter ALT HOLD
@@ -2111,7 +2112,39 @@ const PROGMEM char * const mav_mode_index[] =
 #else // FIXEWDWING
 #define MAV_MODE_MAX 17
 #endif
-
+#elif defined SUBMARINE // // APM within MAVLINK. Not PX4
+const char mav_mode_AHLD[] PROGMEM   = "AHLD"; //Manual angle with automatic depth/throttle
+const char mav_mode_AUTO[] PROGMEM   = "AUTO"; //Fully automatic waypoint control using mission commands
+const char mav_mode_SURF[] PROGMEM   = "SURF"; //Automatically return to surface, pilot maintains horizontal control
+const char mav_mode_PHLD[] PROGMEM   = "PHLD"; //Automatic position hold with manual override, with automatic throttle
+const char mav_mode_MANU[] PROGMEM   = "MANU"; //Pass-through input with no stabilization
+const char mav_mode_MOTD[] PROGMEM   = "MOTD"; //Automatically detect motors orientation
+const PROGMEM char * const mav_mode_index[] = 
+{   
+ mav_mode_STAB, //0
+ mav_mode_ACRO,
+ mav_mode_AHLD,
+ mav_mode_AUTO,
+ mav_mode_GUID,
+ mav_mode_APM, //5
+ mav_mode_APM,
+ mav_mode_CIRC,
+ mav_mode_APM,              
+ mav_mode_SURF,
+ mav_mode_APM, //10
+ mav_mode_APM,
+ mav_mode_APM, 
+ mav_mode_APM,
+ mav_mode_APM,
+ mav_mode_APM, //15
+ mav_mode_PHLD,         
+ mav_mode_APM , 
+ mav_mode_APM ,
+ mav_mode_MANU ,
+ mav_mode_MOTD , //20
+ mav_mode_APM , //21
+};
+#define MAV_MODE_MAX 21
 #else // APM copter
 const char mav_mode_ALTH[] PROGMEM   = "ALTH"; //Altitude Hold: auto control
 const char mav_mode_POSH[] PROGMEM   = "POSH"; //Position: auto control
@@ -2128,6 +2161,7 @@ const char mav_mode_NGPS[] PROGMEM   = "NGPS";
 const char mav_mode_SRTL[] PROGMEM   = "SRTL";
 const char mav_mode_FLOW[] PROGMEM   = "FLOW";
 const char mav_mode_FOLL[] PROGMEM   = "FOLL";
+const char mav_mode_AUTO[] PROGMEM   = "WAYP"; //Auto: auto control
 const PROGMEM char * const mav_mode_index[] = 
 {   
  mav_mode_STAB, //0

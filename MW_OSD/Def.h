@@ -1085,6 +1085,19 @@ enum {
 #endif
 
 
+/********************  ARDUSUB rule definitions  *********************/
+
+#if defined SUBMARINE
+#define MAV_ARMED
+#undef RESETGPSALTITUDEATARM
+#if defined ALARM_SATS
+  #undef ALARM_SATS
+#endif
+#endif  
+
+#if defined GPSSUBMARINE
+#endif  
+  
 /********************  PROTOCOL rule definitions  *********************/
 #define PROTOCOL_MSP // on by default
 
@@ -1331,11 +1344,12 @@ enum {
 #endif
 
 
-#ifdef ROTORCRAFT
-  #define INFO_AIRCRAFT 1
-#endif
-#ifdef FIXEDWING
+#if defined (SUBMARINE) || defined(GPSSUBMARINE)
+  #define INFO_AIRCRAFT 3
+#elif defined FIXEDWING
   #define INFO_AIRCRAFT 2
+#elif defined ROTORCRAFT
+  #define INFO_AIRCRAFT 1
 #endif
 
 

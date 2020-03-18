@@ -294,6 +294,7 @@ void serialMAVCheck() {
       MwHeading   = MwHeading360;
       MwVario  = (float)serialbufferfloat(12) * 100; // m/s-->cm/s
       //MwVario = filter16(MwVario, t_MwVario, 4);
+#if defined RESETGPSALTITUDEATARM
       if (!armed) {
         GPS_fix_HOME = 0;
       }
@@ -306,8 +307,10 @@ void serialMAVCheck() {
         }
       }
       GPS_altitude = GPS_altitude - GPS_altitude_home;
+#endif
 #ifndef MAV_ADSB
-      MwAltitude = (int32_t) GPS_altitude * 100;
+      MwAltitude = (float) (serialbufferfloat(8) * 100);
+      MwAltitude -= (GPS_altitude_home*100);
       //        MwAltitude = (int32_t) serialbufferfloat(8) * 100; //dev to displa AMSL
 #endif
       mw_mav.throttle = (int16_t)(((serialBuffer[18] | serialBuffer[19] << 8) * 10) + 1000);
@@ -369,7 +372,6 @@ void serialMAVCheck() {
         break;
       for (uint8_t i = 0; i < 8; i++) {
         MwRcData[i + 1] = (int16_t)(serialBuffer[4 + (i * 2)] | (serialBuffer[5 + (i * 2)] << 8));
-        MwRcData[i] = constrain(MwRcData[i], 1000, 2000);
       }
 #if defined (TX_GUI_CONTROL)
       reverseChannels();

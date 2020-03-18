@@ -861,6 +861,9 @@ void displayIntro(void)
 
 
 void displayAltitude(int32_t t_alt10, int16_t t_pos, uint8_t t_icon) { // alt sent as dm
+#if defined SUBMARINE
+  t_alt10 = abs(t_alt10);
+#endif // SUBMARINE  
   if (Settings[S_UNITSYSTEM]) {
     t_alt10 = (float) (3.32808 * t_alt10); // convert to imperial dm
   }
