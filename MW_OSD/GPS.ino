@@ -1,6 +1,4 @@
 // GPS protocol GGA and RMC  sentences are needed
-// Ublox config con be set using u-blox-config.ublox.txt
-
 
 #if defined(GPSOSD) && !defined(NAZA)
 

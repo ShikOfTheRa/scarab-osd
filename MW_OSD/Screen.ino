@@ -309,6 +309,7 @@ void displayIcon(int cposition)
   }
 }
 
+#ifdef MAV_STATUS
 void displayMAVstatustext(void)
 {
   if (timer.MAVstatustext == 0)
@@ -325,6 +326,7 @@ void displayMAVstatustext(void)
     }
   }
 }
+#endif
 
 void displayHorizon(int rollAngle, int pitchAngle)
 {
@@ -746,9 +748,9 @@ void displayEfficiency(void)
   uint16_t t_xx;
   uint16_t t_efficiency;
   if (!Settings[S_UNITSYSTEM])
-    t_xx = GPS_speed * 0.036;           // From MWii cm/sec to Km/h
+    t_xx = GPS_speed * GPS_CONVERSION_UNIT_TO_KM_H;
   else
-    t_xx = GPS_speed * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
+    t_xx = GPS_speed * GPS_CONVERSION_UNIT_TO_M_H;      
   if (t_xx > 0) {
     t_efficiency = amperage * voltage / (10 * t_xx); // Watts/Speed}
   }
@@ -916,9 +918,9 @@ void display_speed(int16_t t_value, uint8_t t_position, uint8_t t_leadicon)
 {
   uint16_t t_speed;
   if (!Settings[S_UNITSYSTEM])
-    t_speed = t_value * 0.036;           // From MWii cm/sec to Km/h
+    t_speed = t_value * GPS_CONVERSION_UNIT_TO_KM_H;
   else
-    t_speed = t_value * 0.02236932;      // (0.036*0.62137)  From MWii cm/sec to mph
+    t_speed = t_value * GPS_CONVERSION_UNIT_TO_M_H;
   if (t_speed > (speedMAX + 20)) // simple GPS glitch limit filter
     speedMAX += 20;
   else if (t_speed > speedMAX)
@@ -1203,6 +1205,7 @@ void displayWindSpeed(void)
 
 void displayCursor(void)
 {
+
   uint16_t cursorpos = 0;
   if (ROW == 10) {
     if (COL == 3) cursorpos = SAVEP + 16 - 1; // page
@@ -1211,6 +1214,99 @@ void displayCursor(void)
   }
   if (ROW < 10)
   {
+#ifdef MENU_KISS
+    if (configPage == MENU_KISS) {
+      if (subConfigPage <0) {
+        if (ROW == 9) {
+          ROW = SUBMENU_KISS_SIZE;
+          COL = 1;
+        } else {
+          if (ROW > SUBMENU_KISS_SIZE) {
+            ROW = 10;
+          }
+        }
+        oldROW = ROW;
+        cursorpos = (ROW-1) * 30 + LINE05 + 7;
+      } else {
+        switch (subConfigPage)
+        {
+          case SUBMENU_KISS_PID:
+          case SUBMENU_KISS_RATE:
+            if (ROW == 9) {
+              ROW = 5;
+            } else {
+              if (ROW > 5) {
+                ROW = 10;
+                if (COL == 2) {
+                  COL = 3;
+                }
+              } else {
+                if (oldROW > ROW) {
+                  ROW--;
+                } else if (oldROW < ROW) {
+                  ROW++;
+                }
+              }
+            }
+          
+            oldROW = ROW;
+            cursorpos = (ROW + 2) * 30 + 10 + (COL - 1) * 6;
+
+            if (ROW < 10 && COL == 3) {
+              cursorpos += 1;  
+            }
+            break;
+          case SUBMENU_KISS_NOTCH_FILTERS:
+            if (ROW == 9) {
+              ROW = 2;
+            } else {
+              if (ROW > 2) {
+                ROW = 10;
+                COL = 3;
+              }
+            }
+            cursorpos = (ROW + 2) * 30;
+            switch (COL)
+            {
+              case 1: cursorpos += 8; break;
+              case 2: cursorpos += 15; break;
+              case 3: cursorpos += 22; break;
+            }
+            break;
+          case SUBMENU_KISS_LPF:
+            if (ROW == 9) {
+              ROW = 4;
+            } else {
+              if (ROW > 4) {
+                ROW = 10;
+                if (COL == 2) {
+                  COL = 3;
+                }
+              } else {
+                COL = 3;
+              }
+            }
+            cursorpos = (ROW + 2) * 30 + 18;
+            break;
+          case SUBMENU_KISS_VTX:
+            if (ROW == 9) {
+              ROW = 5;
+            } else {
+              if (ROW > 5) {
+                ROW = 10;
+                if (COL == 2) {
+                  COL = 3;
+                }
+              } else {
+                COL = 3;
+              }
+            }
+            cursorpos = (ROW + 2) * 30 + 12;
+            break;
+        }
+      }
+    }
+#endif // MENU_KISS
 #ifdef USE_MENU_VTX
     if (configPage == MENU_VTX) {
       if (ROW == 5) ROW = 10;
@@ -1416,6 +1512,12 @@ void displayConfigScreen(void)
 {
   int16_t MenuBuffer[10];
   uint32_t MaxMenuBuffer[9];
+#ifdef MENU_KISS
+  if(configPage == MENU_KISS) {
+    displaySubMenuConfig();
+    return;
+  }
+#endif // MENU_KISS
 
   MAX7456_WriteString_P(PGMSTR(&(menutitle_item[configPage])), 35);
 #ifdef MENU_PROFILE
@@ -1514,9 +1616,9 @@ void displayConfigScreen(void)
       if (Y > 6) {
         X = X - 2;
       }
-      MAX7456_WriteString(itoa(P8[Y], screenBuffer, 10), ROLLP + (X * 30));
-      MAX7456_WriteString(itoa(I8[Y], screenBuffer, 10), ROLLI + (X * 30));
-      MAX7456_WriteString(itoa(D8[Y], screenBuffer, 10), ROLLD + (X * 30));
+      MAX7456_WriteString(itoa(pidP[Y], screenBuffer, 10), ROLLP + (X * 30));
+      MAX7456_WriteString(itoa(pidI[Y], screenBuffer, 10), ROLLI + (X * 30));
+      MAX7456_WriteString(itoa(pidD[Y], screenBuffer, 10), ROLLD + (X * 30));
     }
 
     MAX7456_WriteString("P", 71);
@@ -1792,6 +1894,121 @@ void updateVtxStatus(void)
     MAX7456_WriteString(itoa(vtxChannel + 1, screenBuffer, 10), 14 + 30);
     MAX7456_WriteString_P(PGMSTR(&(vtxPowerNames[vtxPower])), 16 + 30);
     MAX7456_WriteString(itoa((uint16_t)pgm_read_word(&vtx_frequencies[vtxBand][vtxChannel]), screenBuffer, 10), 20 + 30);
+  }
+}
+#endif
+
+#ifdef KISS
+void displaySubMenuConfig(void) {
+  if (configPage == MENU_KISS) {
+    MAX7456_WriteString_P(PGMSTR(&(menutitle_item[configPage])), 38);
+    if (subConfigPage < 0) {
+      MAX7456_WriteString_P(configMsgEXT, SAVEP);    //EXIT
+      if (!previousarmedstatus) {
+        MAX7456_WriteString_P(configMsgSAVE, SAVEP + 6); //SaveExit
+        MAX7456_WriteString_P(configMsgPGS, SAVEP + 16); //<Page>
+      }
+    } else {
+      MAX7456_WriteString_P(configMsgBack, SAVEP);    //BACK
+      MAX7456_WriteString_P(configMsgSAVEAndBack, SAVEP + 16); //Save+Back
+    }
+    switch (subConfigPage)
+    {
+    case SUBMENU_KISS_PID:
+      for (uint8_t X = 0; X < PIDITEMS; X++)
+      {
+        MAX7456_WriteString_P(PGMSTR(&(menu_pid[X])), ROLLT + (X * 60));
+	    }
+      for (uint8_t Y = 0; Y < PIDITEMS; Y++)
+      {
+        if (Y == 5) Y = 7;
+         uint8_t X = Y;
+        if (Y > 6) {
+         X = X - 2;
+        }
+        ItoaPadded(pidP[Y], screenBuffer, 5,3);
+        MAX7456_WriteString(screenBuffer, ROLLP + (X * 60)-3);
+        ItoaPadded(pidI[Y], screenBuffer, 6,3);
+        MAX7456_WriteString(screenBuffer, ROLLI + (X * 60)-3);
+        ItoaPadded(pidD[Y], screenBuffer, 5,3);
+        MAX7456_WriteString(screenBuffer, ROLLD + (X * 60)-2);
+      }
+
+      MAX7456_WriteString("P", 71);
+      MAX7456_WriteString("I", 77);
+      MAX7456_WriteString("D", 83);
+      break;
+    case SUBMENU_KISS_RATE:
+      // The rows of rates correspond to the pid
+      for (uint8_t X = 0; X < PIDITEMS; X++)
+      {
+        MAX7456_WriteString_P(PGMSTR(&(menu_pid[X])), ROLLT + (X * 60));
+      }
+      for (uint8_t Y = 0; Y < PIDITEMS; Y++)
+      {
+        if (Y == 5) Y = 7;
+        uint8_t X = Y;
+        if (Y > 6) {
+          X = X - 2;
+        }
+
+        ItoaPadded(rateRC[Y], screenBuffer, 5,3);
+        MAX7456_WriteString(screenBuffer, ROLLRC + (X * 60)-3);
+        ItoaPadded(rateRate[Y], screenBuffer, 5,3);
+        MAX7456_WriteString(screenBuffer, ROLLRATE + (X * 60)-3);
+        ItoaPadded(rateCurve[Y], screenBuffer, 5,3);
+        MAX7456_WriteString(screenBuffer, ROLLCURVE + (X * 60)-2);
+      }
+
+      MAX7456_WriteString_P(menu_kiss_rates[0], 69);
+      MAX7456_WriteString_P(menu_kiss_rates[1], 75);
+      MAX7456_WriteString_P(menu_kiss_rates[2], 82);
+      break;
+    case SUBMENU_KISS_NOTCH_FILTERS:
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_notch_filters[0])), 68);
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_notch_filters[1])), 75);
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_notch_filters[2])), 82);
+      // ROLL
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_notch_filters[3])), 92);
+      MAX7456_WriteString_P(PGMSTR(&(menu_on_off[nfRollEnable])), 92 + 7);
+      MAX7456_WriteString(itoa(nfRollCenter, screenBuffer, 10), 92 + 14);
+      MAX7456_WriteString(itoa(nfRollCutoff, screenBuffer, 10), 92 + 21);
+      // PITCH
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_notch_filters[4])), 122);
+      MAX7456_WriteString_P(PGMSTR(&(menu_on_off[nfPitchEnable])), 122 + 7);
+      MAX7456_WriteString(itoa(nfPitchCenter, screenBuffer, 10), 122 + 14);
+      MAX7456_WriteString(itoa(nfPitchCutoff, screenBuffer, 10), 122 + 21);
+
+      break;
+    case SUBMENU_KISS_LPF:
+      for (uint8_t Y = 0; Y < 4; Y++) {
+        MAX7456_WriteString_P(PGMSTR(&(menu_kiss_lpf[Y])), (Y + 3) * 30 + 2);
+      }
+      
+      MAX7456_WriteString(itoa(yawCFilter, screenBuffer, 10), 90 + 19);
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_lpf[rpLPF + 4])), 120 + 19);
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_lpf[yawLPF + 4])), 150 + 19);
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_lpf[dtermLPF + 4])), 180 + 19);
+      break;
+    case SUBMENU_KISS_VTX:
+      for (uint8_t Y = 0; Y < 5; Y++) {
+        MAX7456_WriteString_P(PGMSTR(&(menu_kiss_vtx[Y])), (Y + 3) * 30 + 2);
+      }
+      
+      MAX7456_WriteString_P(PGMSTR(&(menu_kiss_vtx_type[vtxType])), 90 + 13);
+      MAX7456_WriteString(itoa(vtxLowPower, screenBuffer, 10), 120 + 13);
+      MAX7456_WriteString(itoa(vtxMaxPower, screenBuffer, 10), 150 + 13);
+      MAX7456_WriteString_P(PGMSTR(&(vtxBandLetters[vtxBand])), 180 + 13);
+      MAX7456_WriteString(itoa(vtxChannel, screenBuffer, 10), 210 + 13);
+      break;
+    default:
+      for (uint8_t subMenu = 0; subMenu < SUBMENU_KISS_SIZE; subMenu++) {
+        MAX7456_WriteString_P(menu_kiss[subMenu], KISS_LINEFIRSTSUBMENU + (subMenu * 30));
+      }
+      break;
+    }
+
+    displayCursor();
   }
 }
 #endif
@@ -2477,6 +2694,3 @@ void displayGPSPosition(void)
   t_position = getPosition(MwGPSLonPositionTop);
   FormatGPSCoord(t_position,GPS_longitude, 2) ;
 }
-
-
-

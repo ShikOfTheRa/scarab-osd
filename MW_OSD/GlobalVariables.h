@@ -23,7 +23,11 @@
 // DEFINE CONFIGURATION MENU PAGES
 #define MINPAGE 0
 
+#ifdef KISS
+#define PIDITEMS 3
+#else
 #define PIDITEMS 10
+#endif // KISS
 
 // STICK POSITION
 #define MAXSTICK         1850
@@ -35,6 +39,11 @@
 #define ROLLP 101
 #define ROLLI 107
 #define ROLLD 113
+#ifdef KISS
+#define ROLLRC 101
+#define ROLLRATE 107
+#define ROLLCURVE 113
+#endif // KISS
 #define PITCHT 93+(30*1)
 #define PITCHP 101+(30*1)
 #define PITCHI 107+(30*1)
@@ -79,6 +88,10 @@
 #define LINE14    390
 #define LINE15    420
 #define LINE16    450
+
+#ifdef KISS
+#define KISS_LINEFIRSTSUBMENU LINE05+8
+#endif
 
 /********************       For Sensors presence      *********************/
 #define ACCELEROMETER  1//0b00000001
@@ -783,8 +796,27 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE05+2)|DISPLAY_NEVER|DISPLAY_DEV,     // DOPposition
 };
 
-static uint8_t P8[PIDITEMS], I8[PIDITEMS], D8[PIDITEMS];
-
+#ifdef KISS
+static uint16_t pidP[PIDITEMS], pidI[PIDITEMS], pidD[PIDITEMS];
+static uint16_t rateRC[PIDITEMS], rateRate[PIDITEMS], rateCurve[PIDITEMS];
+static uint8_t rpLPF = 0;
+static uint8_t yawCFilter = 0;
+static bool nfRollEnable = false;
+static uint16_t nfRollCenter = 0;
+static uint16_t nfRollCutoff = 0;
+static bool nfPitchEnable = false;
+static uint16_t nfPitchCenter = 0;
+static uint16_t nfPitchCutoff = 0;
+static uint8_t yawLPF = 0;
+static uint8_t dtermLPF = 0;
+static uint8_t vtxType = 0;
+static uint8_t vtxNChannel = 0;
+static uint16_t vtxLowPower = 0;
+static uint16_t vtxMaxPower = 0;
+static uint8_t vtxBand = 0;
+static uint8_t vtxChannel = 1;
+#else
+static uint8_t pidP[PIDITEMS], pidI[PIDITEMS], pidD[PIDITEMS];
 static uint8_t rcRate8,rcExpo8;
 static uint8_t rollPitchRate;
 static uint8_t rollRate;
@@ -796,10 +828,11 @@ static uint8_t thrExpo8;
 static uint16_t tpa_breakpoint16;
 static uint8_t rcYawExpo8;
 static uint8_t FCProfile;
-static uint8_t PreviousFCProfile;
 static uint8_t CurrentFCProfile;
+static uint8_t PreviousFCProfile;
 static uint8_t PIDController;
 static uint16_t LoopTime;
+#endif // KISS
 
 int32_t  MwAltitude=0;                         // This hold barometric value
 int32_t  old_MwAltitude=0;                     // This hold barometric value
@@ -838,7 +871,7 @@ int32_t GPS_home_altitude;
 int32_t previousfwaltitude=0;
 int16_t AIR_speed;
 int16_t GPS_speed;
-int16_t  GPS_ground_course;
+int16_t GPS_ground_course; // Unit degree*10 (MSP_RAW_GPS)
 int16_t old_GPS_speed;
 int16_t GPS_directionToHome=0;
 uint8_t GPS_numSat=0;
@@ -853,6 +886,20 @@ uint16_t FCRssi=0;
 uint32_t GPS_time = 0;
 uint16_t WIND_direction = 0;
 uint16_t WIND_speed = 0;
+
+#ifndef KISS
+#define GPS_CONVERSION_UNIT_TO_KM_H 0.036           // From MWii cm/sec to Km/h
+#define GPS_CONVERSION_UNIT_TO_M_H 0.02236932       // (0.036*0.62137)  From MWii cm/sec to mph
+// For Trip in slow Timed Service Routine (100ms loop)
+#define GPS_CONVERSION_UNIT_TO_FT_100MSEC 0.0032808 // 1/100*3,28084(cm/s -> mt/s -> ft/s)/1000*100    => cm/sec ---> ft/100msec
+#define GPS_CONVERSION_UNIT_TO_MT_100MSEC 0.0010    // 1/100(cm/s -> mt/s)/1000*100                    => cm/sec ---> mt/100msec (trip var is float)
+#else
+#define GPS_CONVERSION_UNIT_TO_KM_H 1               // From KISS Km/h to Km/h
+#define GPS_CONVERSION_UNIT_TO_M_H 0.62137119       // Km/h to mph
+// For Trip in slow Timed Service Routine (100ms loop)
+#define GPS_CONVERSION_UNIT_TO_FT_100MSEC 0.0911344 // 3280,84/3600(1Km/h -> 1ft/s)/1000*100           => Km/h ---> ft/100msec
+#define GPS_CONVERSION_UNIT_TO_MT_100MSEC 0.0277778 // 1000/3600(1Km/h -> 1mt/s)/1000*100              => Km/h ---> mt/100msec
+#endif // Not KISS
 
 #ifdef HAS_ALARMS
 #define ALARM_OK 0
@@ -997,6 +1044,11 @@ int16_t rssiMIN=100;
 
 #define MSP_DEBUGMSG             253   //out message         debug string buffer
 #define MSP_DEBUG                254   //out message         debug1,debug2,debug3,debug4
+#ifdef KISS
+#define MSP_KISS_TELEMTRY        255
+#define MSP_KISS_SETTINGS        256
+#define MSP_KISS_GPS             257
+#endif // KISS
 
 // Betaflight specific
 
@@ -1221,6 +1273,10 @@ const char configMsgEXT[]  PROGMEM = "EXIT";
 const char configMsgSAVE[] PROGMEM = "SAVE+EXIT";
 const char configMsgPGS[]  PROGMEM = "<PAGE>";
 const char configMsgMWII[] PROGMEM = "USE FC";
+#ifdef KISS
+const char configMsgBack[]  PROGMEM = "BACK";
+const char configMsgSAVEAndBack[] PROGMEM = "SAVE+BACK";
+#endif
 
 // For APSTATUS
 
@@ -1407,6 +1463,63 @@ const PROGMEM char * const menu_vtx[] =
   configMsg164,
 };
 #endif //MENU_VTX
+#ifdef KISS
+//-----------------------------------------------------------KiSS Page
+const char configMsg170[] PROGMEM = "KISS SETTINGS";
+const char configMsg171[] PROGMEM = "PID";
+const char configMsg172[] PROGMEM = "RATE";
+const char configMsg173[] PROGMEM = "NOTCH FILTER";
+const char configMsg174[] PROGMEM = "LPF / YAW FILTER";
+const char configMsg175[] PROGMEM = "VTX";
+
+const char configMsg1710[] PROGMEM = "RC";
+const char configMsg1711[] PROGMEM = "RATE";
+const char configMsg1712[] PROGMEM = "CURVE";
+
+const char configMsg1730[] PROGMEM = "ENABLE";
+const char configMsg1731[] PROGMEM = "CENTER";
+const char configMsg1732[] PROGMEM = "CUTOFF";
+const char configMsg1733[] PROGMEM = "ROLL";
+const char configMsg1734[] PROGMEM = "PITCH";
+
+const char configMsg1740[] PROGMEM = "YAW FILTER";
+const char configMsg1741[] PROGMEM = "ROLL/PITCH LPF";
+const char configMsg1742[] PROGMEM = "YAW LPF";
+const char configMsg1743[] PROGMEM = "DTERM LPF";
+const char configMsg1744[] PROGMEM = "HIGH";
+const char configMsg1745[] PROGMEM = "MED. HIGH";
+const char configMsg1746[] PROGMEM = "MEDIUM";
+const char configMsg1747[] PROGMEM = "MED. LOW";
+const char configMsg1748[] PROGMEM = "LOW";
+const char configMsg1749[] PROGMEM = "VERY LOW";
+
+
+const char configMsg1750[] PROGMEM = "TYPE";
+const char configMsg1751[] PROGMEM = "LOW POWER";
+const char configMsg1752[] PROGMEM = "MAX POWER";
+const char configMsg1753[] PROGMEM = "BAND";
+const char configMsg1754[] PROGMEM = "CHANNEL";
+const char configMsg1755[] PROGMEM = "--";
+const char configMsg1756[] PROGMEM = "DUMMY VTX";
+const char configMsg1757[] PROGMEM = "IRC TRAMP HV";
+const char configMsg1758[] PROGMEM = "TBS SMART AUDIO";
+const char configMsg1759[] PROGMEM = "TBS EVO CROSSFIRE";
+
+const char vtxBandA[] PROGMEM = "A";
+const char vtxBandB[] PROGMEM = "B";
+const char vtxBandE[] PROGMEM = "E";
+const char vtxBandFS[] PROGMEM = "FS";
+const char vtxBandRB[] PROGMEM = "RB";
+const PROGMEM  char * const vtxBandLetters[] = {
+  vtxBandA,
+  vtxBandB,
+  vtxBandE,
+  vtxBandFS,
+  vtxBandRB
+};
+
+
+#endif // KISS
 //-----------------------------------------------------------MENU END
 
 // BETAFLIGHT RTC setting
@@ -1462,6 +1575,11 @@ const unsigned char UnitsIcon[10]={
 
 #define REQ_MSP_RTC                  (1L<<26)
 #define REQ_MSP2_INAV_AIR_SPEED      (1L<<27)
+#ifdef KISS
+#define REQ_MSP_KISS_TELEMTRY        (1L<<28)
+#define REQ_MSP_KISS_SETTINGS        (1L<<29)
+#define REQ_MSP_KISS_GPS             (1L<<30)
+#endif
 // Menu selections
 
 
@@ -1640,6 +1758,9 @@ const PROGMEM char * const menutitle_item[] =
 #ifdef MENU_STAT
   configMsg00,
 #endif
+#ifdef MENU_KISS
+  configMsg170,
+#endif
 #ifdef MENU_PID
   configMsg10,
 #endif
@@ -1695,6 +1816,61 @@ const PROGMEM char * const menu_on_off[] =
   configMsgOFF,
   configMsgON,
 };
+
+#ifdef KISS
+const PROGMEM char * const menu_kiss[] = {
+  configMsg171,
+  configMsg172,
+  configMsg173,
+  configMsg174,
+  configMsg175
+};
+
+const PROGMEM char * const menu_kiss_rates[] = {
+  configMsg1710,
+  configMsg1711,
+  configMsg1712
+};
+
+const PROGMEM char * const menu_kiss_notch_filters[] = {
+  configMsg1730,
+  configMsg1731,
+  configMsg1732,
+  configMsg1733,
+  configMsg1734
+};
+
+const PROGMEM char * const menu_kiss_lpf[] = {
+  configMsg1740,
+  configMsg1741,
+  configMsg1742,
+  configMsg1743,
+  configMsgOFF,
+  configMsg1744,
+  configMsg1745,
+  configMsg1746,
+  configMsg1747,
+  configMsg1748,
+  configMsg1749
+};
+
+const PROGMEM char * const menu_kiss_vtx[] = {
+  configMsg1750,
+  configMsg1751,
+  configMsg1752,
+  configMsg1753,
+  configMsg1754
+};
+
+const PROGMEM char * const menu_kiss_vtx_type[] = {
+  configMsg1755,
+  configMsg1756,
+  configMsg1757,
+  configMsg1758,
+  configMsg1759
+};
+
+#endif
 
 #ifdef PROTOCOL_MSP
 #ifdef FIXEDWING
@@ -2125,7 +2301,11 @@ const PROGMEM char * const KISS_mode_index[] =
 #define ESC_FILTER 10
 #define KISS_GET_TELEMETRY 0x20
 #define KISS_GET_GPS 0x54
-uint8_t KISSgetcmd;         
+#define KISS_GET_SETTINGS 0x30
+#define KISS_SET_PIDS 0x44
+#define KISS_SET_RATES 0x4E
+#define KISS_SET_FILTERS 0x48
+#define KISS_SET_VTX 0x46
 
 // Indexes of informations in the serial protocol(8 bits)
 #define KISS_INDEX_THROTTLE 0 // INT 16
@@ -2156,10 +2336,117 @@ uint8_t KISSgetcmd;
 #define KISS_INDEX_GPS_ALTITUDE 12  // INT 16
 #define KISS_INDEX_GPS_NUMSATFIX 14 // UINT 8
 
-#define KISSFRAMEINIT 5
-#define KISSFRAMELENGTH KISS_INDEX_MAH + 2 // Size of serial buffer defined with last index used
-uint8_t KISSserialBuffer[KISSFRAMELENGTH];
+// Indexes of settings information in serial protocol (8 bits)
+// PIDs
+#define KISS_SETTINGS_IDX_PID_ROLL_P 0 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_PITCH_P 2 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_YAW_P 4 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_ROLL_I 6 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_PITCH_I 8 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_YAW_I 10 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_ROLL_D 12 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_PITCH_D 14 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_PID_YAW_D 16 // INT 16 (value * 1000)
+// Rates
+#define KISS_SETTINGS_IDX_RATE_ROLL_RC 28 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_PITCH_RC 30 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_YAW_RC 32 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_ROLL_RATE 34 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_PITCH_RATE 36 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_YAW_RATE 38 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_ROLL_CURVE 40 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_PITCH_CURVE 42 // INT 16 (value * 1000)
+#define KISS_SETTINGS_IDX_RATE_YAW_CURVE 44 // INT 16 (value * 1000)
+// ----
+#define KISS_SETTINGS_IDX_RP_LPF 79 // UINT 8
+#define KISS_SETTINGS_IDX_VERSION 92 // UINT 8
+#define KISS_SETTINGS_IDX_VTX_N_CHANNEL 120 // UINT 8
+// Notch Filters
+#define KISS_SETTINGS_IDX_NF_ROLL_ENABLE 138 // INT 8
+#define KISS_SETTINGS_IDX_NF_ROLL_CENTER 139 // INT 16
+#define KISS_SETTINGS_IDX_NF_ROLL_CUTOFF 141 // INT 16
+#define KISS_SETTINGS_IDX_NF_PITCH_ENABLE 143 // INT 8
+#define KISS_SETTINGS_IDX_NF_PITCH_CENTER 144 // INT 16
+#define KISS_SETTINGS_IDX_NF_PITCH_CUTOFF 146 // INT 16
+// ----
+#define KISS_SETTINGS_IDX_YAW_C_FILTER 148 // INT 8
+#define KISS_SETTINGS_IDX_VTX_TYPE 149 // INT 8
+#define KISS_SETTINGS_IDX_VTX_LOW_POWER 150 // INT 16
+#define KISS_SETTINGS_IDX_VTX_MAX_POWER 152 // INT 16
+#define KISS_SETTINGS_IDX_YAW_LPF 165 // INT 8
+#define KISS_SETTINGS_IDX_DTERM_LPF 166 // INT 8
 
+// Indexes of SET_PIDS
+#define KISS_SET_PID_IDX_PID_ROLL_P 0 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_ROLL_I 2 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_ROLL_D 4 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_PITCH_P 6 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_PITCH_I 8 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_PITCH_D 10 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_YAW_P 12 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_YAW_I 14 // INT 16 (value * 1000)
+#define KISS_SET_PID_IDX_PID_YAW_D 16 // INT 16 (value * 1000)
+
+// Indexes of SET_RATES
+#define KISS_SET_RATE_IDX_ROLL_RC 0 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_ROLL_RATE 2 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_ROLL_CURVE 4 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_PITCH_RC 6 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_PITCH_RATE 8 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_PITCH_CURVE 10 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_YAW_RC 12 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_YAW_RATE 14 // INT 16 (value * 1000)
+#define KISS_SET_RATE_IDX_YAW_CURVE 16 // INT 16 (value * 1000)
+
+// Indexes of SET_FILTERS
+#define KISS_SET_FILTER_IDX_RP_LPF 0 // INT 8
+#define KISS_SET_FILTER_IDX_YAW_C_FILTER 1 // INT 8
+#define KISS_SET_FILTER_IDX_NF_ROLL_ENABLE 2 // INT 8
+#define KISS_SET_FILTER_IDX_NF_ROLL_CENTER 3 // INT 16
+#define KISS_SET_FILTER_IDX_NF_ROLL_CUTOFF 5 // INT 16
+#define KISS_SET_FILTER_IDX_NF_PITCH_ENABLE 7 // INT 8
+#define KISS_SET_FILTER_IDX_NF_PITCH_CENTER 8 // INT 16
+#define KISS_SET_FILTER_IDX_NF_PITCH_CUTOFF 10 // INT 16
+#define KISS_SET_FILTER_IDX_YAW_LPF 12 // INT 8
+#define KISS_SET_FILTER_IDX_DTERM_LPF 13 // INT 8
+
+// Indexes of SET_VTX
+#define KISS_SET_VTX_IDX_TYPE 0 // INT 8
+#define KISS_SET_VTX_IDX_N_CHANNEL 1 // INT 8
+#define KISS_SET_VTX_IDX_LOW_POWER 2 // INT 16
+#define KISS_SET_VTX_IDX_MAX_POWER 4 // INT 16
+
+#define KISSFRAMEINIT 5
+#define KISSFRAMELENGTH KISS_SETTINGS_IDX_DTERM_LPF + 2 // Size of serial buffer defined with max index used
+
+uint8_t KISSserialBuffer[KISSFRAMELENGTH];
+uint8_t KISScurrentRequest = 0x00;
+uint8_t KISSgetcmd=0;
+
+#define KISS_MIN_NF_CENTER 0
+#define KISS_MAX_NF_CENTER 490
+#define KISS_MIN_NF_CUTOFF 0
+#define KISS_MAX_NF_CUTOFF 490
+#define KISS_MIN_YAW_FILTER 0
+#define KISS_MAX_YAW_FILTER 97
+#define KISS_MIN_LPF 0
+#define KISS_MAX_LPF 6
+
+#define KISS_MIN_VTX_TYPE 0
+#define KISS_MAX_VTX_TYPE 4
+#define KISS_MIN_VTX_POWER 0
+#define KISS_MAX_VTX_POWER 2000
+#define KISS_INC_VTX_POWER 25
+#define VTX_BAND_COUNT 5
+#define VTX_CHANNEL_COUNT 8
+
+int8_t subConfigPage=-1;
+#define SUBMENU_KISS_SIZE 5
+#define SUBMENU_KISS_PID 0
+#define SUBMENU_KISS_RATE 1
+#define SUBMENU_KISS_NOTCH_FILTERS 2
+#define SUBMENU_KISS_LPF 3
+#define SUBMENU_KISS_VTX 4
 // Vars
 struct __Kvar {
   uint8_t mode;
@@ -2168,8 +2455,15 @@ struct __Kvar {
   uint8_t readIndex;
   uint8_t framelength;
   uint16_t cksumtmp;
+  uint8_t crc8;
+  uint8_t version = 0;
 }
 Kvar;
+
+uint8_t  GPS_fix_HOME=0;
+int32_t  GPS_home[2];
+#define  LAT  0
+#define  LON  1
 
 #endif // PROTOCOL_KISS
 
@@ -2194,5 +2488,19 @@ const PROGMEM char * const NAZA_mode_index[] =
 };
 #endif // NAZA
 
+// Serial Buffer must be at least 65 for font transfers
+#if defined APM
+  #define SERIALBUFFERSIZE 75
+#elif defined NAZA
+  #define SERIALBUFFERSIZE 125
+#elif defined SUBMERSIBLE
+  #define SERIALBUFFERSIZE 65
+#elif defined iNAV // 40 max in test
+  #define SERIALBUFFERSIZE 65
+#elif defined KISS
+  #define SERIALBUFFERSIZE 65
+#else
+  #define SERIALBUFFERSIZE 100
+#endif
 
-
+static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string
