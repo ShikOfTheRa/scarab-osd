@@ -1,19 +1,4 @@
-// Serial Buffer must be at least 65 for font transfers
-#if defined APM
-  #define SERIALBUFFERSIZE 75
-#elif defined NAZA
-  #define SERIALBUFFERSIZE 125
-#elif defined SUBMERSIBLE
-  #define SERIALBUFFERSIZE 65
-#elif defined iNAV // 40 max in test
-  #define SERIALBUFFERSIZE 65
-#elif defined KISS
-  #define SERIALBUFFERSIZE 65
-#else
-  #define SERIALBUFFERSIZE 100
-#endif
 
-static uint8_t serialBuffer[SERIALBUFFERSIZE]; // this hold the imcoming string from serial O string
 static uint8_t receiverIndex;
 static uint16_t dataSize;
 static uint16_t cmdMSP; // 8 for MSP or 16 for MSPV2
@@ -252,6 +237,12 @@ void cfgWriteChecksum(){
 }
 #endif // I2C_UB_SUPPORT
 
+#ifdef KISS
+void serialKISSrequest(uint8_t request) {
+  serialKISSsendRequestIfPossible(request);
+}
+#endif
+
 // --------------------------------------------------------------------------------------
 // Here are decoded received commands from MultiWii
 void serialMSPCheck()
@@ -331,12 +322,8 @@ void serialMSPCheck()
         }
       }
       else if(dataSize == 56) {
-        for(uint8_t i = 0; i < 54; i++)
-          fontData[i] = read8();
-      
-	uint8_t c = read8();
+        uint8_t c = serialBuffer[55];
         write_NVM(c);
-	//fontCharacterReceived(c);
         if (c==255)
           MAX7456Setup();
       }
@@ -786,9 +773,9 @@ if (cmdMSP==MSP_STATUS)
   if (cmdMSP==MSP_PID)
   {
     for(uint8_t i=0; i<PIDITEMS; i++) {
-      P8[i] = read8();
-      I8[i] = read8();
-      D8[i] = read8();
+      pidP[i] = read8();
+      pidI[i] = read8();
+      pidD[i] = read8();
     }
     modeMSPRequests &=~ REQ_MSP_PID;
 
@@ -1124,9 +1111,15 @@ if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THR
       if(configMode&&(MwRcData[ROLLSTICK]>MAXSTICK)) // MOVE RIGHT
 #endif
       {
-	waitStick = 1;
-	COL++;
-	if(COL>3) COL=3;
+	      waitStick = 1;
+	      COL++;
+
+ #ifdef MENU_KISS
+        if (ROW == 10 && subConfigPage >= 0 && COL == 2) {
+          COL=3;
+        }
+ #endif // MENU_KISS
+	      if(COL>3) COL=3;
       }
 #ifdef TX_MODE1
       else if(configMode&&(MwRcData[YAWSTICK]<MINSTICK)) // MOVE LEFT
@@ -1134,8 +1127,13 @@ if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THR
       else if(configMode&&(MwRcData[ROLLSTICK]<MINSTICK)) // MOVE LEFT
 #endif
       {
-	waitStick = 1;
-	COL--;
+	      waitStick = 1;
+	      COL--;
+#ifdef MENU_KISS
+        if (ROW == 10 && subConfigPage >= 0  && COL == 2) {
+          COL=1;
+        }
+#endif // MENU_KISS
 	if(COL<1) COL=1;
       }
       else if(configMode&&(MwRcData[PITCHSTICK]>MAXSTICK)) // MOVE UP
@@ -1197,6 +1195,18 @@ if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THR
 
 void serialMenuCommon()
 {
+#ifdef MENU_KISS
+  if (configPage == MENU_KISS) {
+    if (ROW == 10 && subConfigPage >= 0) {
+      switch(COL) {
+      case 1: kissBack(); break;
+      case 3: kissSave(); kissBack(); break;
+      }
+      return;
+    }
+  }
+#endif // MENU_KISS
+
   if((ROW==10)&&(COL==3)) {
     if (menudir > 1){
       menudir = 1;
@@ -1210,6 +1220,115 @@ void serialMenuCommon()
 
   if(configPage < MINPAGE) configPage = MAXPAGE;
   if(configPage > MAXPAGE) configPage = MINPAGE;
+
+#ifdef MENU_KISS
+  if (configPage == MENU_KISS) {
+    switch (subConfigPage)
+    {
+    case SUBMENU_KISS_PID:
+      if(ROW >=1 && ROW<=5) {
+        uint8_t MODROW = 0;
+        MODROW = (ROW - 1) / 2;
+        switch(COL) {
+        case 1: pidP[MODROW] += menudir; break;
+        case 2: pidI[MODROW] += menudir; break;
+        case 3: pidD[MODROW] += menudir; break;
+        }
+      }
+      break;
+    case SUBMENU_KISS_RATE:
+      if(ROW >=1 && ROW<=5) {
+        uint8_t MODROW = 0;
+        MODROW = (ROW - 1) / 2;
+        switch(COL) {
+        case 1: rateRC[MODROW] += menudir; break;
+        case 2: rateRate[MODROW] += menudir; break;
+        case 3: rateCurve[MODROW] += menudir; break;
+        }
+      }
+      break;
+    case SUBMENU_KISS_NOTCH_FILTERS:
+      switch(ROW) {
+        case 1:
+          switch(COL) {
+            case 1:
+              if (menudir != 0) {
+                nfRollEnable = !nfRollEnable;
+              }
+              break;
+            case 2: 
+              nfRollCenter = constrain(nfRollCenter + menudir, KISS_MIN_NF_CENTER, KISS_MAX_NF_CENTER);
+              break;
+            case 3:
+              nfRollCutoff = constrain(nfRollCutoff + menudir, KISS_MIN_NF_CUTOFF, KISS_MAX_NF_CUTOFF);
+              break;
+          }
+          break;
+        case 2:
+          switch(COL) {
+            case 1:
+              if (menudir != 0) {
+                nfPitchEnable = !nfPitchEnable;
+              }
+              break;
+            case 2:
+              nfPitchCenter = constrain(nfPitchCenter + menudir, KISS_MIN_NF_CENTER, KISS_MAX_NF_CENTER);
+              break;
+            case 3:
+              nfPitchCutoff = constrain(nfPitchCutoff + menudir, KISS_MIN_NF_CENTER, KISS_MAX_NF_CENTER);
+              break;
+          }
+          break;
+      }
+      break;
+    case SUBMENU_KISS_LPF:
+        switch(ROW) {
+          case 1:
+            yawCFilter = constrain(yawCFilter + menudir, KISS_MIN_YAW_FILTER, KISS_MAX_YAW_FILTER);
+            break;
+          case 2:
+            rpLPF = constrain(rpLPF + menudir, KISS_MIN_LPF, KISS_MAX_LPF);
+            break;
+          case 3:
+            yawLPF = constrain(yawLPF + menudir, KISS_MIN_LPF, KISS_MAX_LPF);
+            break;
+          case 4:
+            dtermLPF = constrain(dtermLPF + menudir, KISS_MIN_LPF, KISS_MAX_LPF);
+            break;
+        }
+      break;
+    case SUBMENU_KISS_VTX:
+      switch(ROW) {
+        case 1:
+          vtxType = constrain(vtxType + menudir, KISS_MIN_VTX_TYPE, KISS_MAX_VTX_TYPE);
+          break;
+        case 2:
+          vtxLowPower = constrain((int16_t)vtxLowPower + menudir * KISS_INC_VTX_POWER, KISS_MIN_VTX_POWER, KISS_MAX_VTX_POWER);
+          break;
+        case 3:
+          vtxMaxPower = constrain((int16_t)vtxMaxPower + menudir * KISS_INC_VTX_POWER, KISS_MIN_VTX_POWER, KISS_MAX_VTX_POWER);
+          break;
+        case 4:
+          vtxBand = constrain(vtxBand + menudir, 0, VTX_BAND_COUNT - 1);
+          break;
+        case 5:
+          vtxChannel = constrain(vtxChannel + menudir, 1, VTX_CHANNEL_COUNT);
+          break;
+      }
+      break;
+    case -1:
+      if (ROW < 10) {
+        if (menudir > 1) {
+          subConfigPage = ROW - 1;
+          ROW = 10;
+          COL = 1;
+          return;
+        }
+      }
+      break;
+    }
+  }
+#endif // MENU_KISS
 
 #ifdef USE_MENU_VTX
   if (configPage == MENU_VTX) {
@@ -1252,17 +1371,25 @@ void serialMenuCommon()
   if(configPage == MENU_PID) {
 #ifdef MENU_PID_VEL
     if(ROW >= 1 && ROW <= 8) {
+#elif defined KISS
+    if(ROW >=1 && ROW<=5) {
 #else
     if(ROW >= 1 && ROW <= 7) {
 #endif
-      uint8_t MODROW = ROW - 1;
+      uint8_t MODROW = 0;
+#ifndef KISS
+      MODROW = ROW - 1;
       if (ROW > 5) {
         MODROW = ROW + 1;
       }
+#else
+      MODROW = (ROW - 1) / 2;
+#endif // Not KISS
+
       switch(COL) {
-      case 1: P8[MODROW] += menudir; break;
-      case 2: I8[MODROW] += menudir; break;
-      case 3: D8[MODROW] += menudir; break;
+      case 1: pidP[MODROW] += menudir; break;
+      case 2: pidI[MODROW] += menudir; break;
+      case 3: pidD[MODROW] += menudir; break;
       }
     }
   }
@@ -1676,6 +1803,38 @@ void crc8_dvb_s2(uint8_t crc, unsigned char a, uint8_t crcversion)
     rcvChecksum=crc; //  return crc;
 }
 
+#ifdef MENU_KISS
+void kissBack() {
+  switch (subConfigPage) {
+  case SUBMENU_KISS_PID:
+  case SUBMENU_KISS_RATE:
+  case SUBMENU_KISS_NOTCH_FILTERS:
+  case SUBMENU_KISS_LPF:
+  case SUBMENU_KISS_VTX:
+    modeMSPRequests |= REQ_MSP_KISS_SETTINGS;
+    break;
+  }
+  subConfigPage = -1;
+}
+
+void kissSave() {
+  switch (subConfigPage) {
+  case SUBMENU_KISS_PID:
+    kiss_send_pids();
+    break;
+  case SUBMENU_KISS_RATE:
+    kiss_send_rates();
+    break;
+  case SUBMENU_KISS_NOTCH_FILTERS:
+  case SUBMENU_KISS_LPF:
+    kiss_send_filters();
+    break;
+  case SUBMENU_KISS_VTX:
+    kiss_send_vtx();
+    break;
+  }
+}
+#endif // MENU_KISS
 
 void configExit()
 {
@@ -1714,9 +1873,9 @@ void configExit()
 
 void configSave()
 {
+#if defined ENABLE_MSP_SAVE_ADVANCED
   CurrentFCProfile=FCProfile;
 
-#if defined ENABLE_MSP_SAVE_ADVANCED
   #if defined ADVANCEDSAVE
     mspWriteRequest(MSP_SET_PID_CONTROLLER, 1);
     mspWrite8(PIDController);
@@ -1729,11 +1888,12 @@ void configSave()
   #endif //ADVANCEDSAVE
 #endif //ENABLE_MSP_SAVE_ADVANCED
 
+#ifndef KISS
   mspWriteRequest(MSP_SET_PID, PIDITEMS*3);
   for(uint8_t i=0; i<PIDITEMS; i++) {
-    mspWrite8(P8[i]);
-    mspWrite8(I8[i]);
-    mspWrite8(D8[i]);
+    mspWrite8(pidP[i]);
+    mspWrite8(pidI[i]);
+    mspWrite8(pidD[i]);
   }
   mspWriteChecksum();
   
@@ -1816,6 +1976,8 @@ void configSave()
   mspWriteChecksum();
 #endif
 
+#endif // Not KISS
+
 #if 0 // This is not necessary? vtxBand,vtxChannel&vtxPower are all in sync with corresponding Settings at the end of stick handling.
   #ifdef USE_MENU_VTX
     vtx_save();
@@ -1823,7 +1985,9 @@ void configSave()
 #endif
 
   writeEEPROM();
+#ifndef KISS
   mspWriteRequest(MSP_EEPROM_WRITE,0);
+#endif // Not KISS
   configExit();
 }
 
@@ -1853,6 +2017,7 @@ void settingswriteSerialRequest() {
   cfgWriteChecksum();
 }
 
+#ifdef ENABLE_MSP_SAVE_ADVANCED
 void setFCProfile()
 {
   mspWriteRequest(MSP_SELECT_SETTING, 1);
@@ -1862,8 +2027,7 @@ void setFCProfile()
   setMspRequests();
   delay(100);
 }
+#endif
 
 void MSPV2AIRSPEEDSerialRequest() {
 }
-
-
