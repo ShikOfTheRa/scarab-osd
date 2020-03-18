@@ -40,7 +40,7 @@
 //#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
 
-  #define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
+  //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   #undef GPSTIME
 
   //#define AIRBOTMICRO             // Uncomment this if using an airbot MicroOSD
@@ -89,6 +89,9 @@
 //#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
 //#define GPSOSD_MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
 //#define NOCONTROLLER             
+//#define SUBMARINE                 // Uncomment this ONLY if you are using ARDUSUB
+
+#define USE_MAV_GPS
 
 #endif
 

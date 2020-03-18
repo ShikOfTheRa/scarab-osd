@@ -183,6 +183,7 @@ void serialMAVCheck() {
   static uint8_t armedglitchprotect = 0;
   uint8_t severity;
   uint8_t nullifymessage = 1;
+  uint32_t t_GPS_altitude;    
 #ifdef MAV_RTC
   uint64_t i_temp;
   byte * b = (byte *) &i_temp;
@@ -286,7 +287,6 @@ void serialMAVCheck() {
 #endif    
       AIR_speed = (int16_t)serialbufferfloat(0) * 100; // m/s-->cm/s
       GPS_speed = (int16_t)serialbufferfloat(4) * 100; // m/s-->cm/s
-      GPS_altitude = (int16_t)serialbufferfloat(8);   // m-->m
       MwHeading = serialBuffer[16] | serialBuffer[17] << 8; // deg (-->deg*10 if GPS heading)
       MwHeading360 = MwHeading;
       if (MwHeading360 > 180)
@@ -294,24 +294,19 @@ void serialMAVCheck() {
       MwHeading   = MwHeading360;
       MwVario  = (float)serialbufferfloat(12) * 100; // m/s-->cm/s
       //MwVario = filter16(MwVario, t_MwVario, 4);
-#if defined RESETGPSALTITUDEATARM
-      if (!armed) {
-        GPS_fix_HOME = 0;
-      }
-      if (GPS_fix_HOME == 0) {
-        GPS_altitude_home = GPS_altitude;
-        if (GPS_numSat >= MINSATFIX) {
-          if (armed) {
-            GPS_fix_HOME |= B00000001;
-          }
-        }
-      }
-      GPS_altitude = GPS_altitude - GPS_altitude_home;
-#endif
-#ifndef MAV_ADSB
+
+#define USE_MAV_BARO
+#ifdef USE_MAV_BARO      
       MwAltitude = (float) (serialbufferfloat(8) * 100);
-      MwAltitude -= (GPS_altitude_home*100);
-      //        MwAltitude = (int32_t) serialbufferfloat(8) * 100; //dev to displa AMSL
+#if defined RESETGPSALTITUDEATARM
+      if (GPS_fix_HOME == 0) {
+        MwAltitude_home = MwAltitude;
+      }
+      MwAltitude -= MwAltitude_home;
+#endif
+#endif //USE_MAV_GPS
+#ifndef MAV_ADSB   
+
 #endif
       mw_mav.throttle = (int16_t)(((serialBuffer[18] | serialBuffer[19] << 8) * 10) + 1000);
       break;
@@ -334,7 +329,26 @@ void serialMAVCheck() {
       GPS_ground_course = (int16_t)(serialBuffer[26] | (serialBuffer[27] << 8)) / 10;
       GPS_latitude = serialbufferint(8);
       GPS_longitude = serialbufferint(12);
-      GPS_dop = (int16_t)(serialBuffer[20] | serialBuffer[21] << 8);
+      GPS_dop = (int16_t)(serialBuffer[20] | serialBuffer[21] << 8); 
+#define USE_MAV_GPS
+ #ifdef USE_MAV_GPS  
+      t_GPS_altitude =  (uint32_t) (serialBuffer[16] | (uint32_t)serialBuffer[17] << 8 | (uint32_t)serialBuffer[18] << 16 | (uint32_t)serialBuffer[19] << 24);    
+      GPS_altitude = (int32_t) t_GPS_altitude / 1000; 
+      #if defined RESETGPSALTITUDEATARM
+      if (!armed) {
+        GPS_fix_HOME = 0;
+      }
+      if (GPS_fix_HOME == 0) {
+        GPS_altitude_home = GPS_altitude;
+        if (GPS_numSat >= MINSATFIX) {
+          if (armed) {
+            GPS_fix_HOME |= B00000001;
+          }
+        }
+      }
+      GPS_altitude = GPS_altitude - GPS_altitude_home;
+      #endif
+ #endif
       if ((GPS_fix_HOME == B00000001) && (GPS_numSat >= MINSATFIX) && armed) {
         GPS_fix_HOME |= B00000011;
         GPS_reset_home_position();
