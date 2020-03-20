@@ -312,18 +312,26 @@ void displayIcon(int cposition)
 #ifdef MAV_STATUS
 void displayMAVstatustext(void)
 {
+  uint16_t pos;
   if (timer.MAVstatustext == 0)
     return;
-  if (MAVstatuslength > 28)
-     MAVstatuslength=28;
-  uint16_t pos = (14 + (30 * (getPosition(motorArmedPosition) / 30)) - (MAVstatuslength / 2));
-  for (uint8_t i = 1; i <= 50; i++) {
-    if (fontData[i] == 0) {
-      break;
-    }
-    else {
-      screen[pos + i] = char(fontData[i]);
-    }
+  pos = (30 * (getPosition(motorArmedPosition) / 30));
+  for (uint8_t i = 0; i < 60; i++) {
+    screen[pos+i] = SYM_BLANK;
+  }
+  for (uint8_t i = 1; i <= MAVstatuslength; i++) {
+    pos = 2 + (30 * (getPosition(motorArmedPosition) / 30));
+      if (MAVstatuslength<=25){ // single line
+        pos +=  (25 - (MAVstatuslength)) /2;
+      }
+      else if (i<25) { // first row of multi line       
+      }
+      else{ // second row of multi line
+        pos +=LINE;
+        pos +=  (25 - (MAVstatuslength%25)) /2;
+      }
+      pos += i % 25;  
+      screen[pos] = char(fontData[i]);
   }
 }
 #endif

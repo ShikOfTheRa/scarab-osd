@@ -423,11 +423,19 @@ void serialMAVCheck() {
       if (severity <= Settings[S_MAV_ALARMLEVEL]) {
         for (uint8_t z = MAVLINK_MSG_ID_STATUSTEXT_LEN - 1; z >= 1; z--) {
           fontData[z] = serialBuffer[z]; // steal unused fontdata array to save memory
-          if ((fontData[z] >= 97) && (fontData[z] <= 122)) // upper font only
+          if ((fontData[z] >= 97) && (fontData[z] <= 122)){ // convert to upper font
             fontData[z] -= 32;
+          }
+          else if ((fontData[z] >= 65) && (fontData[z] <= 90)){ // upper font
+          }
+          else if ((fontData[z] >= 44) && (fontData[z] <= 57)){ // numeric and key ASCII          
+          }
+          else{
+            fontData[z] = 0x20;
+          }          
           if (nullifymessage == 1) {
             if ((serialBuffer[z] == 0) || (serialBuffer[z] == 0x20)) {
-              fontData[z] = 0;
+              fontData[z] = SYM_BLANK;
             }
             else {
               nullifymessage = 0;
