@@ -299,12 +299,17 @@ void serialMAVCheck() {
 #ifdef USE_MAV_BARO      
       MwAltitude = (float) (serialbufferfloat(8) * 100);
 #if defined RESETGPSALTITUDEATARM
-      if (GPS_fix_HOME == 0) {
+      if (GPS_fix_HOME & B00000100) {
+      }
+      else{
         MwAltitude_home = MwAltitude;
+        if (armed){
+          GPS_fix_HOME |= B00000100;    
+        }    
       }
       MwAltitude -= MwAltitude_home;
 #endif
-#endif //USE_MAV_GPS
+ #endif //USE_MAV_GPS
 #ifndef MAV_ADSB   
 
 #endif
@@ -335,25 +340,27 @@ void serialMAVCheck() {
       t_GPS_altitude =  (uint32_t) (serialBuffer[16] | (uint32_t)serialBuffer[17] << 8 | (uint32_t)serialBuffer[18] << 16 | (uint32_t)serialBuffer[19] << 24);    
       GPS_altitude = (int32_t) t_GPS_altitude / 1000; 
       #if defined RESETGPSALTITUDEATARM
-      if (!armed) {
-        GPS_fix_HOME = 0;
+
+      if ((GPS_fix_HOME & B00000010) > 0) {
       }
-      if (GPS_fix_HOME == 0) {
+      else{
         GPS_altitude_home = GPS_altitude;
-        if (GPS_numSat >= MINSATFIX) {
-          if (armed) {
-            GPS_fix_HOME |= B00000001;
-          }
-        }
+        if (armed){
+          GPS_fix_HOME |= B00000010;
+        }        
       }
-      GPS_altitude = GPS_altitude - GPS_altitude_home;
+       GPS_altitude = GPS_altitude - GPS_altitude_home;
       #endif
  #endif
-      if ((GPS_fix_HOME == B00000001) && (GPS_numSat >= MINSATFIX) && armed) {
-        GPS_fix_HOME |= B00000011;
-        GPS_reset_home_position();
+      if ((GPS_fix_HOME & B00000001) > 0) {
       }
-      if ((GPS_numSat >= MINSATFIX) && (GPS_fix_HOME > 1)) {
+      else {
+        if ((GPS_numSat >= MINSATFIX) && (armed)) {
+          GPS_fix_HOME |= B00000001;
+          GPS_reset_home_position();
+        }
+      }
+      if ((GPS_numSat >= MINSATFIX) && ((GPS_fix_HOME & B00000001) > 0)) {
         uint32_t dist;
         int32_t  dir;
         GPS_distance_cm_bearing(&GPS_latitude, &GPS_longitude, &GPS_home[LAT], &GPS_home[LON], &dist, &dir);

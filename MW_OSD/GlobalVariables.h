@@ -2207,7 +2207,7 @@ struct __mw_mav {
 int32_t  GPS_home[2];
 uint8_t  GPS_fix_HOME;
 int16_t  GPS_altitude_home;  
-int16_t  MwAltitude_home;   
+int32_t  MwAltitude_home;   
 #endif //MAVLINK
 
 
