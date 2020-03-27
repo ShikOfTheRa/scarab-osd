@@ -957,7 +957,7 @@ enum {
     #undef  AUXPIN
     #define AUXPIN    A6  // A6 for Aeromax hardware only        
     #undef SBUSPIN
-    #define SBUSPIN D5
+    #define SBUSPIN 5
     #define SBUS_ISR2
     #undef SBUS_ON_RSSIPIN
 #elif defined AIRBOTMICRO
