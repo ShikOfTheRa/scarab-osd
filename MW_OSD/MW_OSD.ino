@@ -732,8 +732,10 @@ void loop()
         }
 #endif // SUBMERSIBLE
 
-        displayAltitude(((int32_t)GPS_altitude*10),MwGPSAltPosition,SYM_GPS_ALT);
-        displayAltitude(MwAltitude/10,MwAltitudePosition,SYM_ALT);
+        if (fieldIsVisible(MwGPSAltPosition))
+          displayAltitude(((int32_t)GPS_altitude*10),MwGPSAltPosition,SYM_GPS_ALT);
+        if (fieldIsVisible(MwAltitudePosition))
+          displayAltitude(MwAltitude/10,MwAltitudePosition,SYM_ALT);
         displayClimbRate();
         displayVario();
         displayNumberOfSat();

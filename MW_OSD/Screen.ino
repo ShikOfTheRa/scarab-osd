@@ -869,6 +869,7 @@ void displayIntro(void)
 
 
 void displayAltitude(int32_t t_alt10, int16_t t_pos, uint8_t t_icon) { // alt sent as dm
+  uint8_t t_dp = 0;
 #if defined SUBMARINE
   t_alt10 = abs(t_alt10);
 #endif // SUBMARINE  
@@ -884,14 +885,22 @@ void displayAltitude(int32_t t_alt10, int16_t t_pos, uint8_t t_icon) { // alt se
       return;
     }
   }
-  if (!fieldIsVisible(MwAltitudePosition))
-    return;
+  if (t_alt < Settings[S_ALTRESOLUTION]) {
+    t_dp = 1;
+    if (t_icon==SYM_ALT){
+      t_icon = SYM_AGL;
+    }
+  }
+  displayItem(t_pos, t_alt, t_icon, UnitsIcon[Settings[S_UNITSYSTEM] + 0], t_dp ); 
+
+/*  
   if (t_alt < Settings[S_ALTRESOLUTION]) {
     displayItem(t_pos, t_alt10, SYM_AGL, UnitsIcon[Settings[S_UNITSYSTEM] + 0], 1 );
   }
   else {
     displayItem(t_pos, t_alt, t_icon, UnitsIcon[Settings[S_UNITSYSTEM] + 0], 0 );
   }
+*/  
 }
 
 
