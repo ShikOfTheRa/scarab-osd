@@ -573,11 +573,12 @@
   #define MENU_VOLTAGE
   #define MENU_RSSI
   #define MENU_CURRENT
-  #define MENU_DISPLAY
-  #define MENU_ADVANCED
+  //#define MENU_DISPLAY
+  //#define MENU_ADVANCED
   #define MENU_ALARMS
   #define PROTOCOL_KISS
   #define AMPERAGE_DIV 10
+  #undef MAPMODE
 #endif
 
 #ifdef SKYTRACK
