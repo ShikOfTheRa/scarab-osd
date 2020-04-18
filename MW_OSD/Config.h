@@ -16,6 +16,7 @@
 //#define HOLYBROPDB                // Uncomment this if using a HOLYBRO PDB (Using A6 as VOLTAGEPIN) http://www.holybro.com/
 //#define IMPULSERC_HELIX           // Uncomment this if using an ImpulseRC integrated OSD/VTX (STILL UNDER DEVELOPMENT PENDING TESTING)
 //#define FFPV_INNOVA               // Uncomment this if using a FURIOUS FPV Innova integrated OSD/VTX (STILL UNDER DEVELOPMENT PENDING TESTING)
+#define WOLFPDB                   // Uncomment this if using WOLFPDB
 
 // NOTE-some boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct:
@@ -42,7 +43,7 @@
 //#define MULTIWII                  // Uncomment this if you are using latest 2.4 MULTIWII
 //#define MAHOWII                   // Uncomment this if you are using MAHOWII (https://github.com/mahowik/mahowii)
 //#define KISS                      // Uncomment this if you are using KISS FC
-//#define KISSGPS                   // Uncomment this if you are using KISS FC with GPS support (pending test)
+#define KISSGPS                   // Uncomment this if you are using KISS FC with GPS support (pending test)
 //#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
 //#define NAZA                      // Uncomment this if you are using NAZA flight controller
 //#define LIBREPILOT                // Uncomment this if you are using the latest LibrePilot MSP Module
