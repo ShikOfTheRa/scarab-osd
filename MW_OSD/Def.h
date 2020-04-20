@@ -1360,8 +1360,14 @@ enum {
 #ifdef HOLYBROPDB
   #define INFO_HARDWARE 10
 #endif
-#ifdef STEELEPDB
+#ifdef IMPULSERC_HELIX
   #define INFO_HARDWARE 11
+#endif
+#ifdef HOLYBROPDB
+  #define FFPV_INNOVA 12
+#endif
+#ifdef STEELEPDB
+  #define INFO_HARDWARE 13
 #endif
 
 #if defined (SUBMARINE) || defined(GPSSUBMARINE)
