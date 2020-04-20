@@ -572,12 +572,13 @@
   #define MENU_KISS
   #define MENU_VOLTAGE
   #define MENU_RSSI
-  #define MENU_CURRENT
-  #define MENU_DISPLAY
-  #define MENU_ADVANCED
+  //#define MENU_CURRENT
+  //#define MENU_DISPLAY
+  //#define MENU_ADVANCED
   #define MENU_ALARMS
   #define PROTOCOL_KISS
   #define AMPERAGE_DIV 10
+  #undef MAPMODE
 #endif
 
 #ifdef SKYTRACK
@@ -1026,6 +1027,20 @@ enum {
     # define LEDINIT          pinMode(LEDPIN,OUTPUT);
     # define LEDON            digitalWrite(LEDPIN,HIGH);
     # define LEDOFF           digitalWrite(LEDPIN,LOW);
+#elif defined STEELEPDB //                      
+    # define DATAOUT          11 // MOSI
+    # define DATAIN           12 // MISO
+    # define SPICLOCK         13 // sck
+    # define VSYNC             2 // INT0
+    # define MAX7456SELECT    10 // ss
+    # define MAX7456RESET      2 // RESET
+    # define MAX7456SETHARDWAREPORTS  pinMode(MAX7456RESET,OUTPUT);pinMode(MAX7456SELECT,OUTPUT);pinMode(DATAOUT, OUTPUT);pinMode(DATAIN, INPUT);pinMode(SPICLOCK,OUTPUT);pinMode(VSYNC, INPUT);
+    # define MAX7456HWRESET   digitalWrite(MAX7456RESET,LOW);delay(60);digitalWrite(MAX7456RESET,HIGH);delay(40);
+    # define MAX7456ENABLE    digitalWrite(MAX7456SELECT,LOW); 
+    # define MAX7456DISABLE   digitalWrite(MAX7456SELECT,HIGH); 
+    # define LEDINIT          pinMode(LEDPIN,OUTPUT);
+    # define LEDON            digitalWrite(LEDPIN,HIGH);
+    # define LEDOFF           digitalWrite(LEDPIN,LOW);
 #else                                  
     # define MAX7456ENABLE    PORTD&=B10111111; 
     # define MAX7456DISABLE   PORTD|=B01000000; 
@@ -1266,7 +1281,7 @@ enum {
 #ifdef iNAV
   #define INFO_CONTROLLER 12
 #endif
-#ifdef KISS
+#ifdef KISS 
   #define INFO_CONTROLLER 13
 #endif
 #ifdef APM
@@ -1342,10 +1357,12 @@ enum {
 #ifdef ANDROMEDA
   #define INFO_HARDWARE 9
 #endif
-#ifdef ANDROMEDA
-  #define HOLYBROPDB 10
+#ifdef HOLYBROPDB
+  #define INFO_HARDWARE 10
 #endif
-
+#ifdef STEELEPDB
+  #define INFO_HARDWARE 11
+#endif
 
 #if defined (SUBMARINE) || defined(GPSSUBMARINE)
   #define INFO_AIRCRAFT 3

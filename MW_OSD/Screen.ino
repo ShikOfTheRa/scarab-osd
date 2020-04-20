@@ -1915,7 +1915,7 @@ void updateVtxStatus(void)
 }
 #endif
 
-#ifdef KISS
+#ifdef MENU_KISS
 void displaySubMenuConfig(void) {
   if (configPage == MENU_KISS) {
     MAX7456_WriteString_P(PGMSTR(&(menutitle_item[configPage])), 38);
