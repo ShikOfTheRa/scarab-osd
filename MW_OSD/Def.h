@@ -1027,7 +1027,7 @@ enum {
     # define LEDINIT          pinMode(LEDPIN,OUTPUT);
     # define LEDON            digitalWrite(LEDPIN,HIGH);
     # define LEDOFF           digitalWrite(LEDPIN,LOW);
-#elif defined WOLFPDB // WOLF PDB OSD                     
+#elif defined STEELEPDB //                      
     # define DATAOUT          11 // MOSI
     # define DATAIN           12 // MISO
     # define SPICLOCK         13 // sck
@@ -1360,7 +1360,7 @@ enum {
 #ifdef HOLYBROPDB
   #define INFO_HARDWARE 10
 #endif
-#ifdef WOLFPDB
+#ifdef STEELEPDB
   #define INFO_HARDWARE 11
 #endif
 
