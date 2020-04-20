@@ -2456,7 +2456,7 @@ struct __Kvar {
   uint8_t framelength;
   uint16_t cksumtmp;
   uint8_t crc8;
-  uint8_t version = 0;
+  uint8_t version;
 }
 Kvar;
 

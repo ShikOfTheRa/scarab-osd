@@ -572,7 +572,7 @@
   #define MENU_KISS
   #define MENU_VOLTAGE
   #define MENU_RSSI
-  #define MENU_CURRENT
+  //#define MENU_CURRENT
   //#define MENU_DISPLAY
   //#define MENU_ADVANCED
   #define MENU_ALARMS
@@ -1281,7 +1281,7 @@ enum {
 #ifdef iNAV
   #define INFO_CONTROLLER 12
 #endif
-#ifdef KISS
+#ifdef KISS 
   #define INFO_CONTROLLER 13
 #endif
 #ifdef APM
@@ -1357,10 +1357,12 @@ enum {
 #ifdef ANDROMEDA
   #define INFO_HARDWARE 9
 #endif
-#ifdef ANDROMEDA
-  #define HOLYBROPDB 10
+#ifdef HOLYBROPDB
+  #define INFO_HARDWARE 10
 #endif
-
+#ifdef WOLFPDB
+  #define INFO_HARDWARE 11
+#endif
 
 #if defined (SUBMARINE) || defined(GPSSUBMARINE)
   #define INFO_AIRCRAFT 3
