@@ -586,14 +586,20 @@ void displayVoltage(void)
   if ((voltage < voltageWarning) && (timer.Blink2hz))
     return;
   displayItem(voltagePosition, voltage, t_lead_icon, SYM_VOLT, 1 );
+#ifdef SHOW_CELL_VOLTAGE
+  displayItem(vidvoltagePosition, voltage / cells, t_lead_icon, SYM_VOLT, 1 ); // individual cell voltage avg.
+#endif
+
 }
 
 
 void displayVidVoltage(void)
 {
+#ifndef SHOW_CELL_VOLTAGE
   if ((vidvoltage < Settings[S_VIDVOLTAGEMIN]) && (timer.Blink2hz))
     return;
   displayItem(vidvoltagePosition, vidvoltage, SYM_VID_BAT, SYM_VOLT, 1 );
+#endif
 }
 
 
