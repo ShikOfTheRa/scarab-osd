@@ -1033,7 +1033,7 @@ enum {
     # define SPICLOCK         13 // sck
     # define VSYNC             2 // INT0
     # define MAX7456SELECT    10 // ss
-    # define MAX7456RESET      2 // RESET
+    # define MAX7456RESET      9 // RESET
     # define MAX7456SETHARDWAREPORTS  pinMode(MAX7456RESET,OUTPUT);pinMode(MAX7456SELECT,OUTPUT);pinMode(DATAOUT, OUTPUT);pinMode(DATAIN, INPUT);pinMode(SPICLOCK,OUTPUT);pinMode(VSYNC, INPUT);
     # define MAX7456HWRESET   digitalWrite(MAX7456RESET,LOW);delay(60);digitalWrite(MAX7456RESET,HIGH);delay(40);
     # define MAX7456ENABLE    digitalWrite(MAX7456SELECT,LOW); 
