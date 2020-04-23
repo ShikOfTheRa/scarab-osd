@@ -57,6 +57,25 @@ uint16_t calculateCurrentFromConsumedCapacity(uint16_t mahUsed)
 }
 
 #ifdef KISSGPS
+
+////////////////////////////////////////////////////////////////////////////////////
+// Get distance between two points in cm
+// Get bearing from pos1 to pos2, returns an 1deg = 100 precision
+void GPS_distance_cm_bearing(int32_t* lat1, int32_t* lon1, int32_t* lat2, int32_t* lon2, uint32_t* dist, int32_t* bearing) {
+  float rads = (abs((float)*lat1) / 10000000.0) * 0.0174532925;
+  float dLat = *lat2 - *lat1;                                    // difference of latitude in 1/10 000 000 degrees
+  float dLon = (float)(*lon2 - *lon1) * cos(rads);
+  *dist = sqrt(sq(dLat) + sq(dLon)) * 1.113195;
+  *bearing = 9000.0f + atan2(-dLat, dLon) * 5729.57795f;      //Convert the output redians to 100xdeg
+  if (*bearing < 0) *bearing += 36000;
+}
+
+void GPS_reset_home_position() {
+  GPS_home[LAT] = GPS_latitude;
+  GPS_home[LON] = GPS_longitude;
+  GPS_home_altitude=GPS_altitude;
+}
+
 void kiss_sync_gps () {
 timer.packetcount++;
 #ifdef DATA_MSP
@@ -90,24 +109,6 @@ timer.packetcount++;
       GPS_distanceToHome = dist/100;
       GPS_directionToHome = dir/100;
     }
-}
-
-////////////////////////////////////////////////////////////////////////////////////
-// Get distance between two points in cm
-// Get bearing from pos1 to pos2, returns an 1deg = 100 precision
-void GPS_distance_cm_bearing(int32_t* lat1, int32_t* lon1, int32_t* lat2, int32_t* lon2, uint32_t* dist, int32_t* bearing) {
-  float rads = (abs((float)*lat1) / 10000000.0) * 0.0174532925;
-  float dLat = *lat2 - *lat1;                                    // difference of latitude in 1/10 000 000 degrees
-  float dLon = (float)(*lon2 - *lon1) * cos(rads);
-  *dist = sqrt(sq(dLat) + sq(dLon)) * 1.113195;
-  *bearing = 9000.0f + atan2(-dLat, dLon) * 5729.57795f;      //Convert the output redians to 100xdeg
-  if (*bearing < 0) *bearing += 36000;
-}
-
-void GPS_reset_home_position() {
-  GPS_home[LAT] = GPS_latitude;
-  GPS_home[LON] = GPS_longitude;
-  GPS_home_altitude=GPS_altitude;
 }
 #endif
 
