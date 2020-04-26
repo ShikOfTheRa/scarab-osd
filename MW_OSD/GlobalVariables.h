@@ -550,7 +550,6 @@ uint16_t Settings16[EEPROM16_SETTINGS];
   #define DEF_S_TX_TYPE 1        // 1
   #define DEF_S_MWRSSI 2         // 1
   #define DEF_S_MWAMPERAGE 1     // 1
-  #define DEF_S_TX_TYPE 1        // 1
   #define DEF_S_RCWSWITCH 1      // S_RCWSWITCH,
   #define DEF_S_RCWSWITCH_CH 8   // S_RCWSWITCH_CH,
   #define DEF_S_ALTRESOLUTION 0
@@ -564,7 +563,6 @@ uint16_t Settings16[EEPROM16_SETTINGS];
   #define DEF_S_TX_TYPE 0
   #define DEF_S_MWRSSI 0
   #define DEF_S_MWAMPERAGE 0
-  #define DEF_S_TX_TYPE 0
   #define DEF_S_RCWSWITCH 0
   #define DEF_S_RCWSWITCH_CH 8
   #define DEF_S_ALTRESOLUTION 10
