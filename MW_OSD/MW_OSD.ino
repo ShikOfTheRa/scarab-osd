@@ -1340,11 +1340,11 @@ void ProcessSensors(void) {
   //-------------- Voltage
   if (!Settings[S_MAINVOLTAGE_VBAT]) { // not MWII
     uint16_t voltageRaw = sensorfilter[0][SENSORFILTERSIZE];
-    if (!Settings[S_VREFERENCE]) {
-      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (DIVIDER1v1);
+    if (Settings[S_VREFERENCE]) {
+      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (DIVIDER5v);
     }
     else {
-      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (DIVIDER5v);
+      voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (DIVIDER1v1);
     }
   }
   else {
@@ -1352,11 +1352,11 @@ void ProcessSensors(void) {
   }
 
   uint16_t vidvoltageRaw = sensorfilter[1][SENSORFILTERSIZE];
-  if (!Settings[S_VREFERENCE]) {
-    vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER1v1);
+  if (Settings[S_VREFERENCE]) {
+    vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER5v);
   }
   else {
-    vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER5v);
+    vidvoltage = float(vidvoltageRaw) * Settings[S_VIDDIVIDERRATIO] * (DIVIDER1v1);
   }
 
   //-------------- Temperature
