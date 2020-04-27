@@ -664,7 +664,7 @@ void loop()
           displayAmperage();
         if (((!ampAlarming()) || timer.Blink2hz))
           displaypMeterSum();
-#ifdef DISPLAYEFFICIENCYTIME
+#if defined DISPLAYEFFICIENCYTIME && !defined DUALTIMER
         displayRemainingTime();
 #endif
         displayFlightTime();
