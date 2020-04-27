@@ -695,7 +695,7 @@ void displayTimer(uint32_t t_time, uint16_t t_pos, uint8_t t_leadsymbol)
 void displayRemainingTime(void){
   int32_t t_remaining;
   int32_t t_used = 100 * Settings[S_AMPER_HOUR_ALARM]- (amperagesum/(360));  
-  if (screenPosition[remainingTimePosition] < 512)
+  if (screenPosition[timer2Position] < 512)
     return;
   if (t_used < 0){
     t_used = 0;
@@ -712,18 +712,36 @@ void displayRemainingTime(void){
   else{ 
     t_remaining = 0;
   }
-  displayTimer(t_remaining,getPosition(remainingTimePosition), 0x2A);
+  displayTimer(t_remaining,getPosition(timer2Position), 0x2A);
 }
 
 
 void displayFlightTime(void){
-  if (screenPosition[onTimePosition] < 512)
-    return;
-
   uint32_t displaytime;
   uint8_t t_leadsymbol = 0;
-  
-  if (armed) {
+
+#ifdef DUALTIMER // Independant flight / power on timers. 
+  if (Settings[S_FLYTIME_ALARM] > 0) {
+    if (((flyTime / 60) >= Settings[S_FLYTIME_ALARM]) && (timer.Blink2hz))
+      return;
+  }
+  t_leadsymbol =2;
+  displaytime = flyTime;
+  if (displaytime>=3600){
+    t_leadsymbol+=1;
+  }
+  if (screenPosition[timer1Position] > 480)
+    displayTimer(displaytime,getPosition(timer1Position), flightUnitAdd[t_leadsymbol]); // timer 1 armed time
+
+  t_leadsymbol =0;
+  displaytime = onTime;
+  if (displaytime>=3600){
+    t_leadsymbol+=1;
+  }
+  if (screenPosition[timer2Position] > 480)
+    displayTimer(displaytime,getPosition(timer2Position), flightUnitAdd[t_leadsymbol]); // timer 2 total time
+#else
+  if (armed) { // Timer 1 = Dual purpose flight timer. Timer 2 = Estimated flight time remaining  
     if (Settings[S_FLYTIME_ALARM] > 0) {
       if (((flyTime / 60) >= Settings[S_FLYTIME_ALARM]) && (timer.Blink2hz))
         return;
@@ -738,7 +756,10 @@ void displayFlightTime(void){
   if (displaytime>=3600){
     t_leadsymbol+=1;
   }
-  displayTimer(displaytime,getPosition(onTimePosition), flightUnitAdd[t_leadsymbol]);
+  if (screenPosition[timer1Position] < 512)
+    return;
+  displayTimer(displaytime,getPosition(timer1Position), flightUnitAdd[t_leadsymbol]); // Timer 1 = flight time 
+#endif 
 }
 
 

@@ -350,9 +350,13 @@
 /********************       Battery Status Settings         ************************/
 // This works in conjunction with the GUI switch "Display Battery Status
 // Enable to use a battery icon that indicates capacity remaining dependant upon battery voltage or mAh used. Or both if required.
-#define BATTERYICONVOLTS            //Enable to use with voltage as indicator of capacity remaining
-//#define BATTERYICONAMPS           //Enable to use with mAh used percentage of AMPHR alarm limit. Warning will now be at 80% of that GUI value
+#define BATTERYICONVOLTS            // Enable to use with voltage as indicator of capacity remaining
+//#define BATTERYICONAMPS           // Enable to use with mAh used percentage of AMPHR alarm limit. Warning will now be at 80% of that GUI value
 
+
+/********************       Timer Settings         ************************/
+// Default timer 1 is a Combined On/Flight time. Timer 2 is estimated flight time remaining.
+//#define DUALTIMER                 // Enable to use separate Flight Timer and On Timers. This re-purposes the Flight Time remaining GUI configurator field  
 
 /********************       Headtracker support         ************************/
 //#define VIRTUAL_NOSE              // Enables the use of a virtual nose for headtracker users where aircraft nose is not visible
