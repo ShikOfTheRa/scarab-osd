@@ -1,7 +1,8 @@
 #ifdef NAZA
   #include "NazaDecoderLib.h"
-  #include "NazaDecoderLib.cpp"
-
+  #if not defined(PLATFORMIO)
+    #include "NazaDecoderLib.cpp"
+  #endif
 
 void GPS_reset_home_position() {
   if (GPS_fix && GPS_numSat >= MINSATFIX) {

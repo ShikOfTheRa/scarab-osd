@@ -883,8 +883,3 @@ void gpsvario() {
   }
 }
 
-
-
-#if defined NAZA
-#include "Naza.h"
-#endif
