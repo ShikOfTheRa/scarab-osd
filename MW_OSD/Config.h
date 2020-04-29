@@ -338,6 +338,12 @@
 #define NAZA_MODE_LOW  1            // NAZA mode TX low: 0=FAIL, 1= MANU, 2=ATTI, 3=GPS ATTI
 
 
+//********************       KISS Settings         ************************/
+// KISS FC specific items
+#define DISPLAY_VTX_CH            // Displays VTX channel. Re-purposes GUI gimbal configration item to display value if selected.
+#define DISPLAY_VTX_PWR           // Displays VTX channel. Re-purposes GUI gimbal configration item to display value if selected.
+
+
 /********************       Voltage Settings         ************************/
 //The following variables are available to display cell voltage values
 //#define SHOW_CELL_VOLTAGE         // Show average cell voltage for main battery instead of video / bat 2 voltage. 

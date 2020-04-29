@@ -144,14 +144,6 @@ void displayMode(void)
   }
 #endif
 
-  if ((MwSensorActive & mode.camstab)) {
-    screenBuffer[2] = 0;
-    screenBuffer[0] = SYM_GIMBAL;
-    screenBuffer[1] = SYM_GIMBAL1;
-    if (fieldIsVisible(gimbalPosition))
-      MAX7456_WriteString(screenBuffer, getPosition(gimbalPosition));
-  }
-
   uint8_t xx = 0;
   if (MwSensorActive & mode.stable || MwSensorActive & mode.horizon) {
     screenBuffer[xx] = SYM_ACC;
@@ -2738,3 +2730,37 @@ void displayGPSPosition(void)
   t_position = getPosition(MwGPSLonPositionTop);
   FormatGPSCoord(t_position,GPS_longitude, 2) ;
 }
+
+
+void displayGimbal(void){
+  if ((MwSensorActive & mode.camstab)) {
+    screenBuffer[2] = 0;
+    screenBuffer[0] = SYM_GIMBAL;
+    screenBuffer[1] = SYM_GIMBAL1;
+    if (fieldIsVisible(gimbalPosition))
+      MAX7456_WriteString(screenBuffer, getPosition(gimbalPosition));
+  }
+}
+
+#ifdef KISS 
+void displayVTXvalues(void){
+    uint8_t t_idx = 0;
+    screenBuffer[0] = 0;
+#ifdef DISPLAY_VTX_CH
+    screenBuffer[t_idx++] = 'C';
+    screenBuffer[t_idx++] = 'H';
+    screenBuffer[t_idx++] = ':';
+    itoa(vtxChannel, screenBuffer + t_idx, 10);  
+    t_idx = FindNull();
+#endif // DISPLAY_VTX_CH
+#ifdef DISPLAY_VTX_PWR
+    screenBuffer[t_idx++] = 'P';
+    screenBuffer[t_idx++] = ':';
+    itoa(vtxMaxPower, screenBuffer + t_idx, 10);
+    t_idx = FindNull();
+#endif // DISPLAY_VTX_PWR
+    screenBuffer[t_idx++] = 0;    
+    if (fieldIsVisible(gimbalPosition))
+      MAX7456_WriteString(screenBuffer, getPosition(gimbalPosition));   
+}  
+#endif
