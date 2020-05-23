@@ -1289,27 +1289,27 @@ void ProcessSensors(void) {
     sensortemp = analogRead(sensorpinarray[sensor]);
     //--- override with FC voltage data if enabled
     if (sensor == 0) {
-      if (Settings[S_MAINVOLTAGE_VBAT]) {
+      if (Settings[S_MAINVOLTAGE_VBAT] == V_MAINVOLTAGE_VBAT_FROM_FLIGHTCONTROLLER) {
         sensortemp = MwVBat;
       }
     }
 #ifdef MAV_VBAT2
     // assume vbat2 on FC if vbat1 is
     if (sensor == 1) {
-      if (Settings[S_MAINVOLTAGE_VBAT]) {
+      if (Settings[S_MAINVOLTAGE_VBAT] == V_MAINVOLTAGE_VBAT_FROM_FLIGHTCONTROLLER) {
         sensortemp = MwVBat2;
       }
     }
 #endif
     //--- override with PWM, FC RC CH or FC RSSI data if enabled
     if (sensor == 4) {
-      if (Settings[S_MWRSSI] == 3) { // RSSI from a TX channel
+      if (Settings[S_MWRSSI] == V_MWRSSI_FROM_TX_CHANNEL) {
         sensortemp = MwRcData[Settings[S_RSSI_CH]] >> 1;
       }
-      else if (Settings[S_MWRSSI] == 2) { // RSSI from Flight controller
+      else if (Settings[S_MWRSSI] == V_MWRSSI_FROM_FLIGHTCONTROLLER) {
         sensortemp = MwRssi;
       }
-      else if (Settings[S_MWRSSI] == 1) { // RSSI from direct OSD - PWM
+      else if (Settings[S_MWRSSI] == V_MWRSSI_FROM_DIRECT_OSD_PWN) {
         sensortemp = pwmRSSI >> 1;
         if (sensortemp == 0) { // timed out - use previous
           sensortemp = sensorfilter[sensor][sensorindex];
@@ -1342,7 +1342,7 @@ void ProcessSensors(void) {
   }
 
   //-------------- Voltage
-  if (!Settings[S_MAINVOLTAGE_VBAT]) { // not MWII
+  if (Settings[S_MAINVOLTAGE_VBAT] ==  V_MAINVOLTAGE_VBAT_FROM_ANALOG_PIN) {
     uint16_t voltageRaw = sensorfilter[0][SENSORFILTERSIZE];
     if (Settings[S_VREFERENCE]) {
       voltage = float(voltageRaw) * Settings[S_DIVIDERRATIO] * (DIVIDER5v);
