@@ -171,6 +171,58 @@ void request_mavlink_CMD_APM(uint8_t MAVStream, uint16_t MAVRate) {
 }
 
 
+void send_mavlink_ADSB_TRAFFIC_REPORT_MESSAGE(void) {
+  if (GPS_numSat < MINSATFIX)
+    return;
+  //head:
+  static int8_t tx_sequence = 0;
+  tx_sequence++;
+  mw_mav.tx_checksum = 0xFFFF; //init
+  Serial.write(0xFE);
+  mav_serialize8(MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_LEN);
+  mav_serialize8(tx_sequence);
+  mav_serialize8(0);
+  mav_serialize8(0);
+  mav_serialize8(MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE);
+  //body:
+  mav_serialize32(ADSBID);
+  mav_serialize32(GPS_latitude); // +10000 to test
+  mav_serialize32(GPS_longitude); // +10000 to test
+  mav_serialize32((uint32_t)GPS_altitude*1000);
+  mav_serialize16(((MwHeading+360)%360)*100);
+  mav_serialize16(GPS_speed*100);
+  mav_serialize16(0);
+  mav_serialize16(0x1BF);
+  for (int i = 0; i < 14; i++) {
+    mav_serialize8(0);
+  }
+  //tail:
+  mav_tx_checksum_func(MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_MAGIC);
+  Serial.write((uint8_t)(mw_mav.tx_checksum & 0xFF));
+  Serial.write((uint8_t)(mw_mav.tx_checksum >> 8 & 0xFF));
+}
+
+
+void send_mavlink_ADSB_STATUS_MESSAGE_MESSAGE(void) {
+  //head:
+  static int8_t tx_sequence = 0;
+  tx_sequence++;
+  mw_mav.tx_checksum = 0xFFFF; //init
+  Serial.write(0xFE);
+  mav_serialize8(MAVLINK_MSG_ID_ADSB_STATUS_MESSAGE_LEN);
+  mav_serialize8(tx_sequence);
+  mav_serialize8(1);
+  mav_serialize8(0);
+  mav_serialize8(MAVLINK_MSG_ID_ADSB_STATUS_MESSAGE);
+  //body:
+  mav_serialize8(0x01); 
+  //tail:
+  mav_tx_checksum_func(MAVLINK_MSG_ID_ADSB_STATUS_MESSAGE_MAGIC);
+  Serial.write((uint8_t)(mw_mav.tx_checksum & 0xFF));
+  Serial.write((uint8_t)(mw_mav.tx_checksum >> 8 & 0xFF));
+}
+
+
 void serialMAVCheck() {
 #ifdef DEBUGDPOSPACKET
   timer.packetcount++;
@@ -271,11 +323,13 @@ void serialMAVCheck() {
       if (Settings[S_MAV_AUTO] > 0) {
         static uint8_t mavreqdone = 3;
         if (mavreqdone > 0) {
+#ifndef ADSBSEND
 #ifdef PX4
           request_mavlink_packets_PX4();
 #else
           request_mavlink_packets_APM();
-#endif
+#endif //PX4
+#endif //ADSBSEND
 
           mavreqdone--;
         }
@@ -310,9 +364,6 @@ void serialMAVCheck() {
       MwAltitude -= MwAltitude_home;
 #endif
  #endif //USE_MAV_GPS
-#ifndef MAV_ADSB   
-
-#endif
       mw_mav.throttle = (int16_t)(((serialBuffer[18] | serialBuffer[19] << 8) * 10) + 1000);
       break;
     case MAVLINK_MSG_ID_ATTITUDE:
@@ -485,7 +536,52 @@ void serialMAVCheck() {
 #endif
 #ifdef MAV_ADSB
     case MAVLINK_MESSAGE_INFO_ADSB_VEHICLE:
-      MwAltitude = (int32_t)serialbufferint(12) / 10;
+      uint32_t t_icao;
+      int32_t t_lat;
+      int32_t t_lon;
+      int32_t t_alt;
+      int16_t  t_cog;
+      uint32_t t_dist;
+      int32_t t_dir;
+      uint8_t t_update;      
+      if (GPS_numSat < 5)
+        break;
+      readIndex=0;  
+      t_icao = read32();
+      t_lat = read32();
+      t_lon = read32();
+      t_alt = read32() / 1000;
+      t_cog = read16() / 100;
+      GPS_distance_cm_bearing(&GPS_latitude, &GPS_longitude, &t_lat, &t_lon, &t_dist, &t_dir);
+      t_dist/=100;
+      t_dir/=100;
+
+#ifdef ADSBSTATION
+      int16_t  t_hvel;
+      t_hvel = read16() / 100;      
+      ADSBSlist(t_icao, t_dist, t_alt, t_cog, t_hvel);
+#endif      
+      t_update = 1;
+      if (t_dist > adsb.dist){
+        t_update = 0;
+      }   
+      if (timer.adsbttl <= 1){
+        t_update = 1;
+      }    
+      if (t_icao == adsb.icao){
+        t_update = 1;
+      }      
+      if (t_dist > ADSB_LIMIT){
+        t_update = 0;
+      }  
+      if (t_update == 1){
+        adsb.icao = t_icao;
+        adsb.dist = t_dist;
+        adsb.alt = t_alt;
+        adsb.dir = t_dir; // ADSB target heading relative to UAV with North reference
+        adsb.cog = t_cog; // ADSB target heading
+        timer.adsbttl = ADSBTTL;
+      }
       break;
 #endif
     case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:

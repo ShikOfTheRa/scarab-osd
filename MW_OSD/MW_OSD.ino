@@ -776,6 +776,12 @@ void loop()
 #ifdef DEBUG
         displayDebug();
 #endif
+#ifdef ADSBSTATION
+  displayADSBStation();
+#endif // ADSBSTATION
+#ifdef ADSBAWARE 
+  displayADSB();
+#endif // ADSBAWARE 
 #ifdef HAS_ALARMS
         displayAlarms();
 #endif
@@ -814,6 +820,26 @@ void loop()
     if (timer.MAVstatustext > 0)
       timer.MAVstatustext--;
 #endif
+#ifdef ADSBAWARE
+    if (timer.adsbttl > 0){
+      timer.adsbttl--; 
+    }
+    else{
+      adsb.dist = 0;
+      adsb.alt = 0;
+      adsb.cog = 0; 
+    }        
+#endif // ADSBAWARE
+#ifdef ADSBSTATION
+    for (uint8_t X = 0; X < ADSBSTATIONCOUNT; X++){
+      if (adsbvehicle[X].ttl>0) 
+        adsbvehicle[X].ttl--;
+    }
+#endif // ADSBSTATION    
+#ifdef ADSBSEND
+    // send_mavlink_ADSB_STATUS_MESSAGE_MESSAGE(); // Unknown if required
+    send_mavlink_ADSB_TRAFFIC_REPORT_MESSAGE();
+#endif // ADSBSEND
 #ifdef DEBUGDPOSLOOP
     framerate = timer.loopcount;
     timer.loopcount = 0;

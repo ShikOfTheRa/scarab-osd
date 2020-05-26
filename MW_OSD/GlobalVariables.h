@@ -292,11 +292,11 @@ struct  __timer {
   uint32_t GPSOSDstate;
   uint8_t  disarmed;                             
   uint8_t  MAVstatustext;
-  uint8_t  armedstatus;                             
-
+  uint8_t  armedstatus;   
+  uint8_t  adsbttl;
 }
 timer;
-
+  
 struct __flags {
   uint8_t reset;
   uint8_t signaltype;
@@ -316,6 +316,40 @@ struct __datetime {
 }
 datetime;
 
+struct __adsb {
+  uint32_t icao;
+  int32_t lat;
+  int32_t lon;
+  int32_t alt;
+  uint16_t cog;
+  uint16_t dir;
+  uint32_t dist;                            
+}
+adsb;
+
+#ifdef ADSBSTATION
+const char ADSBTitle[]    PROGMEM = "ADS-B SENSE AND AVOID";
+const char ADSBHeading[]  PROGMEM = "ICAO DIST ALT  HDG SPD";
+const char ADSBHeading2[] PROGMEM = "---- ---- ---  --- ---";
+
+struct __adsbvehicle{
+    uint32_t  icao;        //ICAO Address
+//    int32_t   lat;         // The reported latitude in degrees * 1E7
+//    int32_t   lon;         // The reported longitude in degrees * 1E7
+    int32_t   alt;         // Altitude in Meters * 1E3 (up is +ve) - Check ALT_TYPE for reference datum
+    uint32_t  cog;     // Course over ground in degrees * 10^2
+    uint32_t  hvel;     // The horizontal velocity in (m/s * 1E2)
+//    int32_t   ver_vel;     // The vertical velocity in (m/s * 1E2)
+//    uint32_t  valid;       // Valid data fields 
+//    uint32_t  squawk;      // Mode A Squawk code (0xFFFF = no code)
+//    uint8_t   alt_type;    // Altitude Type
+//    char      callsign[9]; // The callsign
+//    uint8_t   emmitter;    // Emitter Category
+//    uint8_t   tslc;        // Time since last communication in seconds
+    uint32_t   dist;         // DIstance in Meters * 1E3 (up is +ve) - Check ALT_TYPE for reference datum
+    uint8_t   ttl;           // Time to live
+}adsbvehicle[ADSBSTATIONCOUNT];
+#endif //ADSBSTATION
 
 struct __display {
   uint32_t distance;
@@ -842,7 +876,11 @@ volatile uint16_t MwRcData[1+16];
 
 
 // for analogue / PWM sensor filtering 
+#ifndef FILTER_AVG
+#define SENSORFILTERSIZE 1
+#else
 #define SENSORFILTERSIZE 8
+#endif
 #define SENSORTOTAL 5
 #define FHBANDWIDTH 100
 
@@ -2002,8 +2040,12 @@ const PROGMEM char * const msp_mode_index[] =
 #define MAVLINK_MSG_ID_COMMAND_LONG 76
 #define MAVLINK_MSG_ID_COMMAND_LONG_MAGIC 152
 #define MAVLINK_MSG_ID_COMMAND_LONG_LEN 33
-
-// Mavlink stream requests (APM only?)
+#define MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE 246
+#define MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_MAGIC 184
+#define MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_LEN 38
+#define MAVLINK_MSG_ID_ADSB_STATUS_MESSAGE 203
+#define MAVLINK_MSG_ID_ADSB_STATUS_MESSAGE_MAGIC 85
+#define MAVLINK_MSG_ID_ADSB_STATUS_MESSAGE_LEN 1
 #define MAV_STREAMS 7
 #define MAV_DATA_STREAM_RAW_SENSORS 1
 #define MAV_DATA_STREAM_EXTENDED_STATUS 2
@@ -2487,7 +2529,7 @@ const PROGMEM char * const NAZA_mode_index[] =
 #endif // NAZA
 
 // Serial Buffer must be at least 65 for font transfers
-#if defined APM
+#if defined PROTOCOL_MAVLINK
   #define SERIALBUFFERSIZE 75
 #elif defined NAZA
   #define SERIALBUFFERSIZE 125

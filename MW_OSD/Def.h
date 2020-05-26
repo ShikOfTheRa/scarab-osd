@@ -34,15 +34,22 @@
 /********************           Under development           *********************/
 // development and test
 //#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
-//#define MAV_ADSB                  // Use Baro altitude from mavlink instead of GPS. Requires ADSB data to be configured in mavlink.
 
 
 //#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
 
   //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
-  #undef GPSTIME
-
+  //#undef GPSTIME
+  //#undef MAPMODE
+  //#undef HORIZON
+  //#undef MAV_STATUS
+  //#undef USEGLIDESCOPE 
+  //#undef INTRO_MENU                  // Enable to display TX stick MENU 
+  //#undef INTRO_CALLSIGN              // Enable to display callsign at startup
+  //#undef INTRO_SIGNALTYPE   
+  //#define MAV_ADSB
+  //#define ADSBSTATION 5
   //#define AIRBOTMICRO             // Uncomment this if using an airbot MicroOSD
   //#define EEPROMVER 16              // for eeprom layout verification
   //#define AEROMAX                 // Uncomment this if using MWOSD AEROMAX hardware
@@ -69,7 +76,7 @@
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.2.0 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define iNAV_KK                   // Uncomment this if you are using AEROMAX OSD and BARO sensor addition with iNAV with KK audio vario
-#define APM                       // Uncomment this if you are using Ardupilot on APM / PIXHAWK / other supported hardware. Supports most MAVLINK 1.0 compatible FC
+//#define APM                       // Uncomment this if you are using Ardupilot on APM / PIXHAWK / other supported hardware. Supports most MAVLINK 1.0 compatible FC
 //#define PX4                       // Uncomment this if you are using PX4 stack on PIXHAWK and other supported hardware
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
 //#define MULTIWII                  // Uncomment this if you are using latest 2.4 MULTIWII
@@ -92,7 +99,7 @@
 //#define SUBMARINE                 // Uncomment this ONLY if you are using ARDUSUB
 
 //#define USE_MAV_GPS
-#define QUADPLANE
+//#define QUADPLANE
 #endif
 
 
@@ -203,8 +210,46 @@
   //#undef HORIZON                     // Enable/disable HORIZON indicator
   //#undef DISPLAY_PR
   //#undef SHOW_TEMPERATURE
-  #undef GPSTIME                     // Enable to use GPS time display functions with FC that support features
- 
+  #undef GPSTIME                     // Enable to use GPS time display functions with FC that support features 
+#endif
+
+
+#ifdef ADSBSTATION // 
+  #undef  ALARM_MSP
+  #undef  ALARM_SATS
+  #undef  ALARM_GPS
+  #undef  OSD_SWITCH_RC
+  #undef AHIINVERTSUPPORT            // Support for inverted flight. AHI flow terrain when inverted
+  #undef DISPLAY_PR                  // Display pitch / roll angles. Requires relevant layout ppositions to be enabled
+  #undef AHILEVEL                    // Enable to display AHI level indicators on sidebars 
+  #undef APINDICATOR                 // Enable to display AUTOPILOT instead of RTH distance 
+  #undef GUISENSORS                  // Enable if wish to view raw sensor data on GUI
+  #undef AIRMODE                     // Enable this to display airmode icon. 
+  #undef MASKGPSLOCATION  
+  #undef ALARM_ARMED                 // Text alert of armed/disarmed status.
+  #undef MAV_STATUS
+  #undef USEGLIDESCOPE 
+  #undef MAPMODE
+  #undef MENU_DEBUG
+  #undef INTRO_MENU                  // Enable to display TX stick MENU 
+  #undef INTRO_CALLSIGN              // Enable to display callsign at startup
+  #undef INTRO_SIGNALTYPE            // Enable to display video type at startup
+  #undef INTRO_FC                    // Enable to display FC version at startup
+  #undef DISPLAYWATTS                // Disable to save memeory if not used. Enable this to display Watts
+  #undef DISPLAYEFFICIENCY           // Disable to save memeory if not used. Enable this to display Watts/KMh or Mph for efficiency
+  #undef DISPLAYMAHMIN               // Disable to save memeory if not used. Enable this to display average mAh/minKMh
+  #undef PILOTICON                   // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
+  #undef MASKGPSLOCATION             // Disable to save memeory if not used. Enables MASK GPS settings on GUI. Coordinates displayed with major digits XXX set to random location "XXX.DDDDDDD" 
+  #undef FILTER_AVG                  // Enable standard averaging filter  
+  #undef HORIZON                     // Enable/disable HORIZON indicator
+  #undef DISPLAY_PR
+  #undef SHOW_TEMPERATURE
+  #undef GPSTIME                     // Enable to use GPS time display functions with FC that support features 
+  //#undef PROTOCOL_MSP
+  #undef FILTER_AVG
+  #define MAV_ADSB  
+  #define ADSBSTATIONCOUNT 7          // Max number of vehicles displayed  
+  #undef ADSBAWARE  
 #endif
 
 #ifdef BASEFLIGHT     //set up latest at time of release
@@ -564,6 +609,9 @@
   #define MENU_ALARMS
   #define PROTOCOL_MAVLINK
   #define AMPERAGE_DIV 10
+  #ifdef ADSBAWARE
+    #define MAV_ADSB
+  #endif //ADSBAWARE  
 #endif
 
 #if defined(KISS)
