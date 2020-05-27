@@ -2017,7 +2017,7 @@ const PROGMEM char * const msp_mode_index[] =
 #define MAVLINK_MSG_ID_SCALED_PRESSURE_LEN 14 
 #define MAVLINK_MSG_ID_SCALED_PRESSURE2 137
 #define MAVLINK_MSG_ID_SCALED_PRESSURE2_MAGIC 14
-#define MAVLINK_MSG_ID_SCALED_PRESSURE2_LEN 195 
+#define MAVLINK_MSG_ID_SCALED_PRESSURE2_LEN 14 
 #define MAVLINK_MSG_ID_BATTERY2 181
 #define MAVLINK_MSG_ID_BATTERY2_MAGIC 174
 #define MAVLINK_MSG_ID_BATTERY2_LEN 4 
@@ -2530,7 +2530,7 @@ const PROGMEM char * const NAZA_mode_index[] =
 
 // Serial Buffer must be at least 65 for font transfers
 #if defined PROTOCOL_MAVLINK
-  #define SERIALBUFFERSIZE 75
+  #define SERIALBUFFERSIZE 65
 #elif defined NAZA
   #define SERIALBUFFERSIZE 125
 #elif defined SUBMERSIBLE

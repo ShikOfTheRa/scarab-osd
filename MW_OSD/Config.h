@@ -81,6 +81,7 @@
 
 /********************       Debug      *********************/
 //#define MENU_DEBUG                  // Enable to display debug values in OSD menu 
+#define LOW_MEMORY 10                 // Permanent warning if memory drops below this value. Potential instability if it reaches 0.
 
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
@@ -235,7 +236,7 @@
 
 /********************       MAP MODE Settings       *********************/
 //#define MAPMODENORTH              // Enable to use North as MAP reference in MODE 1 instead of take off direction (Default = disable)
-
+#define MAPEMODEORIGIN              // Enable this to use map mode origin icon
 
 /********************       Display Settings         ************************/
 #define MAXSTALLDETECT              // Enable to attempt to detect MAX chip stall from bad power. Attempts to restart.
@@ -420,7 +421,7 @@
 /********************           ADSB settings           *********************/
 // ADSB settings see https://github.com/ShikOfTheRa/scarab-osd/wiki/ADSB
 //#define ADSBAWARE                 // Enables ADSB display for FC's that support ADSB via Mavlink. Currently re-purposes Mode Sensors GUI configurable item 
-#define ADSBTTL 6                   // Timout in seconds for valid ADSB data 
+#define ADSBTTL 10                  // Timout in seconds for valid ADSB data 
 #define ADSB_LIMIT 100000           // Max distance of aircraft processed in meters
 #define ADSB_ALT 1000               // Flash ADSB data if aircraft within this altitude differential and distance in meters. Disabled when used with ADSBSEND 
 #define ADSB_DIST 2000              // Flash ADSB data if aircraft within this distance and altitude differential in meters. Disabled when used with ADSBSEND 

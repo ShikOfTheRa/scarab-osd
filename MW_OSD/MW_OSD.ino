@@ -773,12 +773,6 @@ void loop()
         if (MwSensorPresent)
           displayCells();
 #endif
-#ifdef DEBUG
-        displayDebug();
-#endif
-#ifdef ADSBSTATION
-  displayADSBStation();
-#endif // ADSBSTATION
 #ifdef ADSBAWARE 
   displayADSB();
 #endif // ADSBAWARE 
@@ -787,6 +781,15 @@ void loop()
 #endif
 #ifdef MAV_STATUS
         displayMAVstatustext();
+#endif
+#ifdef ADSBSTATION
+  displayADSBStation();
+#endif // ADSBSTATION
+#ifdef DEBUG
+        displayDebug();
+#endif
+#ifdef LOW_MEMORY
+        displayLowmemory();
 #endif
       }
     }

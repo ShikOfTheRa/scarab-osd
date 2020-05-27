@@ -494,11 +494,9 @@ void displayHorizon(int rollAngle, int pitchAngle)
       }
 #endif //FULLAHI
     }
-    if (!fieldIsVisible(MapModePosition)) {
       screen[position - 1] = SYM_AH_CENTER_LINE;
       screen[position + 1] = SYM_AH_CENTER_LINE_RIGHT;
       screen[position] =   SYM_AH_CENTER;
-    }
   }
 
   if (fieldIsVisible(SideBarPosition)) {
@@ -2233,9 +2231,27 @@ void displayCells(void) {
 void mapmode(void) {
 
 #ifdef MAPMODE
-
-  int mapstart = 0;
-  int mapend = 0;
+  if (!fieldIsVisible(MapModePosition))
+    return;
+  //if(!GPS_fix)
+  //  return;
+  int8_t xdir = 0;
+  int8_t ydir = 0;
+  int16_t targetx;
+  int16_t targety;
+  uint16_t x ;
+  uint16_t y ;
+  int16_t range = 200;
+  int16_t angle;
+  int16_t targetpos;
+  int16_t centerpos;
+  uint32_t maxdistance;
+  uint8_t mapsymbolcenter;
+  uint8_t mapsymboltarget;
+  uint8_t mapsymbolrange;
+  int16_t tmp;
+  uint8_t mapstart = 0;
+  uint8_t mapend = 0;
 
   switch (Settings[S_MAPMODE]) {
     case 1:
@@ -2258,30 +2274,13 @@ void mapmode(void) {
       return;
   }
 
-  //  if(!GPS_fix)
-  //    return;
-  if (!fieldIsVisible(MapModePosition))
-    return;
-
-  int8_t xdir = 0;
-  int8_t ydir = 0;
-  int16_t targetx;
-  int16_t targety;
-  int16_t range = 200;
-  int16_t angle;
-  int16_t targetpos;
-  int16_t centerpos;
-  uint32_t maxdistance;
-  uint8_t mapsymbolcenter;
-  uint8_t mapsymboltarget;
-  uint8_t mapsymbolrange;
-  int16_t tmp;
-
-
   for (uint8_t maptype = mapstart; maptype < mapend; maptype++) {
-
     if (maptype == 1) {
+#ifdef ADSBAWARE
+      angle = (360 + adsb.dir - MwHeading) % 360;
+#else
       angle = (180 + 360 + GPS_directionToHome - armedangle) % 360;
+#endif // ADSBAWARE
     }
     else {
       angle = (360 + GPS_directionToHome - MwHeading) % 360;
@@ -2309,13 +2308,29 @@ void mapmode(void) {
         angle = 360 - angle;
         break;
     }
-
     float rad  = angle * PI / 180;    // convert to radians
-    uint16_t x = (uint16_t)(GPS_distanceToHome * sin(rad));
-    uint16_t y = (uint16_t)(GPS_distanceToHome * cos(rad));
 
-    if (y > x) maxdistance = y;
-    else maxdistance = x;
+#ifdef ADSBAWARE
+    if (maptype == 1) {
+      maxdistance = adsb.dist;
+    }
+    else{
+      maxdistance = GPS_distanceToHome;   
+    }
+#else
+    maxdistance = GPS_distanceToHome;
+#endif // ADSBAWARE
+    if (maxdistance > 10000) // enable max distance of 128km
+      maxdistance /=4;
+    x = (uint16_t)(maxdistance * sin(rad));
+    y = (uint16_t)(maxdistance * cos(rad));
+    if (y > x){ 
+      maxdistance = y;
+    }
+    else{
+      maxdistance = x;
+    }
+  
     if (maxdistance < 100) {
       range = 100;
       mapsymbolrange = SYM_RANGE_100;
@@ -2333,17 +2348,21 @@ void mapmode(void) {
       mapsymbolrange = SYM_RANGE_MAX;
     }
 
-    targetx = xdir * map(x, 0, range, 0, 16);
-    targety = ydir * map(y, 0, range, 0, 15);
+    targetx = xdir * map(x, 0, range, 0, 11);
+    targety = ydir * map(y, 0, range, 1, 14);
 
     if (maxdistance < 20) {
       targetx = 0;
       targety = 0;
     }
 
-    centerpos = getPosition(MapCenterPosition);
+    centerpos = getPosition(horizonPosition);
     targetpos = centerpos + (targetx / 2) + (LINE * (targety / 3));
 
+#ifdef ADSBAWARE
+    mapsymbolcenter = SYM_AIRCRAFT;
+    mapsymboltarget = SYM_HOME;
+#else
     if (maptype == 1) {
       mapsymbolcenter = SYM_HOME;
       mapsymboltarget = SYM_AIRCRAFT;
@@ -2352,7 +2371,7 @@ void mapmode(void) {
       mapsymbolcenter = SYM_AIRCRAFT;
       mapsymboltarget = SYM_HOME;
     }
-
+#endif
     int8_t symx = (int8_t)abs(targetx) % 2;
     int8_t symy = (int8_t)abs(targety) % 3;
     if (ydir == 1)
@@ -2389,11 +2408,14 @@ void mapmode(void) {
     screenBuffer[1] = 0;
     MAX7456_WriteString(screenBuffer, targetpos);
 
-    screenBuffer[0] = mapsymbolcenter;
-    screenBuffer[1] = 0;
-    MAX7456_WriteString(screenBuffer, centerpos);
+#ifdef MAPEMODEORIGIN
+    if (fieldIsVisible(MapCenterPosition)){
+      screenBuffer[0] = mapsymbolcenter;
+      screenBuffer[1] = 0;
+      MAX7456_WriteString(screenBuffer, centerpos);
+    }
+#endif    
   }
-
 #endif
 }
 
@@ -2768,6 +2790,16 @@ void displayGimbal(void){
       MAX7456_WriteString(screenBuffer, getPosition(gimbalPosition));
   }
 }
+
+
+void displayLowmemory(void){
+  if (UntouchedStack()<LOW_MEMORY) {
+    MAX7456_WriteString("LOW MEM", 100);
+    itoa(UntouchedStack(), screenBuffer, 10);
+    MAX7456_WriteString(screenBuffer, 100 + 8);  
+  }
+}
+
 
 #ifdef KISS 
 void displayVTXvalues(void){
