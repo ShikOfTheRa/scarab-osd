@@ -140,6 +140,9 @@
 #define SYM_BATT_1 0X95
 #define SYM_BATT_EMPTY 0X96
 
+// ADSB
+#define SYM_ADSB 0X01
+
 // Vario
 #define SYM_VARIO 0x8C
 

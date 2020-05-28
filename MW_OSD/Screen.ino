@@ -144,7 +144,9 @@ void displayMode(void)
   }
 #endif
 
+
   uint8_t xx = 0;
+#ifndef ADSBAWARE  
   if (MwSensorActive & mode.stable || MwSensorActive & mode.horizon) {
     screenBuffer[xx] = SYM_ACC;
     xx++;
@@ -161,6 +163,7 @@ void displayMode(void)
   if (fieldIsVisible(sensorPosition)) {
     MAX7456_WriteString(screenBuffer, getPosition(sensorPosition));
   }
+#endif // ADSBAWARE 
 #ifdef PROTOCOL_MAVLINK // override MWOSD mode icons
   strcpy_P(screenBuffer, (char*)pgm_read_word(&(mav_mode_index[mw_mav.mode])));
 #elif defined PROTOCOL_LTM // override MWOSD mode icons
@@ -491,11 +494,9 @@ void displayHorizon(int rollAngle, int pitchAngle)
       }
 #endif //FULLAHI
     }
-    if (!fieldIsVisible(MapModePosition)) {
       screen[position - 1] = SYM_AH_CENTER_LINE;
       screen[position + 1] = SYM_AH_CENTER_LINE_RIGHT;
       screen[position] =   SYM_AH_CENTER;
-    }
   }
 
   if (fieldIsVisible(SideBarPosition)) {
@@ -1188,6 +1189,15 @@ void displayAngleToHome(void)
 }
 
 
+uint16_t headingDirection(int16_t t_offset)
+{
+  t_offset *= 4;
+  t_offset += 45;
+  t_offset = (t_offset / 90) % 16;
+  return SYM_ARROW_HOME + t_offset;
+}
+
+
 void displayDirectionToHome(void)
 {
   if (!fieldIsVisible(GPS_directionToHomePosition))
@@ -1196,12 +1206,27 @@ void displayDirectionToHome(void)
   //  return;
   uint16_t position = getPosition(GPS_directionToHomePosition);
   int16_t d = MwHeading + 180 + 360 - GPS_directionToHome;
-  d *= 4;
-  d += 45;
-  d = (d / 90) % 16;
-  screenBuffer[0] = SYM_ARROW_HOME + d;
+
+  screenBuffer[0] = headingDirection(d);
   screenBuffer[1] = 0;
   MAX7456_WriteString(screenBuffer, position);
+}
+
+
+void displayADSB(void)
+{  
+  if (!fieldIsVisible(sensorPosition))
+    return;
+  if ((timer.adsbttl > 0) && (timer.Blink2hz) && (adsb.dist < ADSB_DIST) && (adsb.alt < ADSB_ALT)) {
+    return;      
+  }
+  uint16_t t_pos  = getPosition(sensorPosition);  
+  formatDistance(adsb.dist,0,2,SYM_ADSB);
+  MAX7456_WriteString(screenBuffer, t_pos);
+  uint8_t t_x = FindNull();
+  formatDistance(adsb.alt-GPS_altitude,0,2,SYM_ADSB);
+  screenBuffer[0] = headingDirection(MwHeading + 180 + 360 - adsb.dir);
+  MAX7456_WriteString(screenBuffer, t_pos + t_x);
 }
 
 
@@ -2206,9 +2231,27 @@ void displayCells(void) {
 void mapmode(void) {
 
 #ifdef MAPMODE
-
-  int mapstart = 0;
-  int mapend = 0;
+  if (!fieldIsVisible(MapModePosition))
+    return;
+  //if(!GPS_fix)
+  //  return;
+  int8_t xdir = 0;
+  int8_t ydir = 0;
+  int16_t targetx;
+  int16_t targety;
+  uint16_t x ;
+  uint16_t y ;
+  int16_t range = 200;
+  int16_t angle;
+  int16_t targetpos;
+  int16_t centerpos;
+  uint32_t maxdistance;
+  uint8_t mapsymbolcenter;
+  uint8_t mapsymboltarget;
+  uint8_t mapsymbolrange;
+  int16_t tmp;
+  uint8_t mapstart = 0;
+  uint8_t mapend = 0;
 
   switch (Settings[S_MAPMODE]) {
     case 1:
@@ -2231,30 +2274,13 @@ void mapmode(void) {
       return;
   }
 
-  //  if(!GPS_fix)
-  //    return;
-  if (!fieldIsVisible(MapModePosition))
-    return;
-
-  int8_t xdir = 0;
-  int8_t ydir = 0;
-  int16_t targetx;
-  int16_t targety;
-  int16_t range = 200;
-  int16_t angle;
-  int16_t targetpos;
-  int16_t centerpos;
-  uint32_t maxdistance;
-  uint8_t mapsymbolcenter;
-  uint8_t mapsymboltarget;
-  uint8_t mapsymbolrange;
-  int16_t tmp;
-
-
   for (uint8_t maptype = mapstart; maptype < mapend; maptype++) {
-
     if (maptype == 1) {
+#ifdef ADSBAWARE
+      angle = (360 + adsb.dir - MwHeading) % 360;
+#else
       angle = (180 + 360 + GPS_directionToHome - armedangle) % 360;
+#endif // ADSBAWARE
     }
     else {
       angle = (360 + GPS_directionToHome - MwHeading) % 360;
@@ -2282,13 +2308,29 @@ void mapmode(void) {
         angle = 360 - angle;
         break;
     }
-
     float rad  = angle * PI / 180;    // convert to radians
-    uint16_t x = (uint16_t)(GPS_distanceToHome * sin(rad));
-    uint16_t y = (uint16_t)(GPS_distanceToHome * cos(rad));
 
-    if (y > x) maxdistance = y;
-    else maxdistance = x;
+#ifdef ADSBAWARE
+    if (maptype == 1) {
+      maxdistance = adsb.dist;
+    }
+    else{
+      maxdistance = GPS_distanceToHome;   
+    }
+#else
+    maxdistance = GPS_distanceToHome;
+#endif // ADSBAWARE
+    if (maxdistance > 10000) // enable max distance of 128km
+      maxdistance /=4;
+    x = (uint16_t)(maxdistance * sin(rad));
+    y = (uint16_t)(maxdistance * cos(rad));
+    if (y > x){ 
+      maxdistance = y;
+    }
+    else{
+      maxdistance = x;
+    }
+  
     if (maxdistance < 100) {
       range = 100;
       mapsymbolrange = SYM_RANGE_100;
@@ -2306,17 +2348,21 @@ void mapmode(void) {
       mapsymbolrange = SYM_RANGE_MAX;
     }
 
-    targetx = xdir * map(x, 0, range, 0, 16);
-    targety = ydir * map(y, 0, range, 0, 15);
+    targetx = xdir * map(x, 0, range, 0, 11);
+    targety = ydir * map(y, 0, range, 1, 14);
 
     if (maxdistance < 20) {
       targetx = 0;
       targety = 0;
     }
 
-    centerpos = getPosition(MapCenterPosition);
+    centerpos = getPosition(horizonPosition);
     targetpos = centerpos + (targetx / 2) + (LINE * (targety / 3));
 
+#ifdef ADSBAWARE
+    mapsymbolcenter = SYM_AIRCRAFT;
+    mapsymboltarget = SYM_HOME;
+#else
     if (maptype == 1) {
       mapsymbolcenter = SYM_HOME;
       mapsymboltarget = SYM_AIRCRAFT;
@@ -2325,7 +2371,7 @@ void mapmode(void) {
       mapsymbolcenter = SYM_AIRCRAFT;
       mapsymboltarget = SYM_HOME;
     }
-
+#endif
     int8_t symx = (int8_t)abs(targetx) % 2;
     int8_t symy = (int8_t)abs(targety) % 3;
     if (ydir == 1)
@@ -2362,11 +2408,14 @@ void mapmode(void) {
     screenBuffer[1] = 0;
     MAX7456_WriteString(screenBuffer, targetpos);
 
-    screenBuffer[0] = mapsymbolcenter;
-    screenBuffer[1] = 0;
-    MAX7456_WriteString(screenBuffer, centerpos);
+#ifdef MAPEMODEORIGIN
+    if (fieldIsVisible(MapCenterPosition)){
+      screenBuffer[0] = mapsymbolcenter;
+      screenBuffer[1] = 0;
+      MAX7456_WriteString(screenBuffer, centerpos);
+    }
+#endif    
   }
-
 #endif
 }
 
@@ -2540,15 +2589,15 @@ void formatDistance(int32_t t_d2f, uint8_t t_units, uint8_t t_type, uint8_t t_ic
   // t_d2f = integer to format into string
   // t_type 0=alt, 2=dist , 4=LD alt, 6=LD dist NOTE DO NOT SEND USING LD
   // t_units 0=none, 1 show units symbol at end
-  // t_licon 0=none, other = hex char of lead icon
+  // t_icon 0=none, other = hex char of lead icon
   int32_t tmp;
   uint8_t xx = 0;
-  if (t_icon > 1) {
+  if (t_icon > 0) {
     xx = 1;
     screenBuffer[0] = t_icon;
   }
 #ifdef LONG_RANGE_DISPLAY
-  if (t_d2f > 9999) {
+  if (t_d2f > LRTRANSITION) {
     if (Settings[S_UNITSYSTEM]) {
       tmp = (264 + (t_d2f)) / 528;
     }
@@ -2742,6 +2791,16 @@ void displayGimbal(void){
   }
 }
 
+
+void displayLowmemory(void){
+  if (UntouchedStack()<LOW_MEMORY) {
+    MAX7456_WriteString("LOW MEM", 100);
+    itoa(UntouchedStack(), screenBuffer, 10);
+    MAX7456_WriteString(screenBuffer, 100 + 8);  
+  }
+}
+
+
 #ifdef KISS 
 void displayVTXvalues(void){
     uint8_t t_idx = 0;
@@ -2764,3 +2823,85 @@ void displayVTXvalues(void){
       MAX7456_WriteString(screenBuffer, getPosition(gimbalPosition));   
 }  
 #endif
+
+
+#ifdef ADSBSTATION
+void ADSBSlist(uint32_t icao, uint32_t dist, int32_t alt, uint32_t cog, uint32_t hvel){
+  uint8_t update = 0;
+  for (uint8_t X = 0; X < ADSBSTATIONCOUNT; X++){
+    if(adsbvehicle[X].ttl==0){
+      update++;
+    }    
+    else if (adsbvehicle[X].icao == icao){
+      update++;
+    }
+    else if(adsbvehicle[X].icao == 0){
+      update++;
+    }
+
+    if ((update > 1) && (adsbvehicle[X].icao == icao)){
+      adsbvehicle[X].icao    = 0;
+      adsbvehicle[X].dist    = 0;
+      adsbvehicle[X].alt     = 0;
+      adsbvehicle[X].cog     = 0; 
+      adsbvehicle[X].ttl     = 0; 
+      adsbvehicle[X].hvel    = 0; 
+    }    
+    if (update == 1){
+      adsbvehicle[X].icao    = icao;
+      adsbvehicle[X].dist    = dist;
+      adsbvehicle[X].alt     = alt;
+      adsbvehicle[X].cog     = cog; 
+      adsbvehicle[X].hvel    = hvel; 
+      adsbvehicle[X].ttl     = ADSBTTL; 
+      update++;
+    }    
+  }
+}
+
+void displayADSBStation(void)
+{
+#define ADSBTITLE 3
+#define ADSBPOS   123
+  for (uint16_t xx = 0; xx < MAX_screen_size; ++xx) {
+    screen[xx] = ' ';
+  }
+  MAX7456_WriteString_P(ADSBTitle, ADSBTITLE);    
+  MAX7456_WriteString_P(ADSBHeading,  ADSBPOS-60);    
+  MAX7456_WriteString_P(ADSBHeading2, ADSBPOS-30);    
+  for (uint8_t X = 0; X < ADSBSTATIONCOUNT; X++) {
+    if (adsbvehicle[X].ttl > 0){
+      itoa(adsbvehicle[X].icao,screenBuffer,16);
+      uint8_t x = FindNull();
+      for (uint8_t y = 0; y < x; y++) {
+        if ((screenBuffer[y] > 96) && (screenBuffer[y] < 103))
+          screenBuffer[y]-=32;
+      }   
+      MAX7456_WriteString(screenBuffer, ADSBPOS + (X * LINE));
+      formatDistance(adsbvehicle[X].dist, 0, 2, 0);
+      MAX7456_WriteString(screenBuffer, ADSBPOS + (X * LINE) + 5);
+      formatDistance(adsbvehicle[X].alt, 0, 2, 0);
+      MAX7456_WriteString(screenBuffer, ADSBPOS + (X * LINE) + 5 + 5);
+      itoa(adsbvehicle[X].cog,screenBuffer,10);
+      MAX7456_WriteString(screenBuffer, ADSBPOS + (X * LINE) + 5 + 5 + 5); 
+      itoa(adsbvehicle[X].hvel,screenBuffer,10);
+      MAX7456_WriteString(screenBuffer, ADSBPOS + (X * LINE) + 5 + 5 + 5 + 4);  
+      screenBuffer[0] = headingDirection(adsbvehicle[X].cog);
+      screenBuffer[1]=0;
+      MAX7456_WriteString(screenBuffer, ADSBPOS + (X * LINE) + 5 + 5 + 5 + 4 + 4);        
+    } 
+  }
+  itoa(UntouchedStack(), screenBuffer, 10);
+  MAX7456_WriteString(screenBuffer, 378);
+
+  uint16_t t_pos  = 363;  
+  if (!fieldIsVisible(sensorPosition))
+    return;
+  formatDistance(adsb.dist,0,2,SYM_ADSB);
+  MAX7456_WriteString(screenBuffer, t_pos);
+  uint8_t t_x = FindNull();
+  formatDistance(adsb.alt,0,2,SYM_ADSB);
+  screenBuffer[0] = headingDirection(adsb.cog);
+  MAX7456_WriteString(screenBuffer, t_pos + t_x);  
+}
+#endif //ADSBSTATION

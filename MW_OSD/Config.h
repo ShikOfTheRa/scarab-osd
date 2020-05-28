@@ -68,6 +68,7 @@
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1
 //#define BETAFLIGHT3               // Uncomment this if you are using BETAFLIGHT versions prior to 3.1
 //#define SUBMERSIBLE               // Uncomment this if you are using a submersible with MS5837 and optional MSP based FC
+//#define ADSBSTATION               // Uncomment this if you are using PINGRX enabled MAV groundstation
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
@@ -80,6 +81,7 @@
 
 /********************       Debug      *********************/
 //#define MENU_DEBUG                  // Enable to display debug values in OSD menu 
+#define LOW_MEMORY 10                 // Permanent warning if memory drops below this value. Potential instability if it reaches 0.
 
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
 /*--------------------------       INITIALISATION options       ----------------------------------------------------*/
@@ -142,7 +144,7 @@
 
 /********************       FILTER settings      *********************/
 //Choose ONLY ONE option to enable filtered smoother readings of voltage / current / RSSI :
-#define FILTER_AVG                  // Enable standard averaging filter  
+#define FILTER_AVG 4                 // Enable standard averaging filter nd specify number of readings to average 
 //#define FILTER_HYSTERYSIS 2       // Alternative filter with hysteris to provide smoother changes. Higher number = more filtering. Max 4
 
 
@@ -234,7 +236,7 @@
 
 /********************       MAP MODE Settings       *********************/
 //#define MAPMODENORTH              // Enable to use North as MAP reference in MODE 1 instead of take off direction (Default = disable)
-
+#define MAPEMODEORIGIN              // Enable this to use map mode origin icon
 
 /********************       Display Settings         ************************/
 #define MAXSTALLDETECT              // Enable to attempt to detect MAX chip stall from bad power. Attempts to restart.
@@ -277,6 +279,7 @@
 //#define DUALRSSI 255              // Displays dual RSSI values (e.g. LQ and RRSI). Primary on line 1, Secondary on line 2. Configure primary as analog or PWM input. Secondary will be from FC. Value is max sent from FC. MWii - 1024, mavlink = 100 or 255
 //#define DISPLAYSPEEDMS            // Displays speed in m/s instead of km/h
 //#define PILOTICON                 // Disable to save memeory if unused. Display pilot ICON as an alternative to CHARACTER display. Requires enabling in GUI >= 1.8.2
+#define LRTRANSITION 999            // Point at which display transitions from standard to long range format. e.g LRT= 999, OSD displays 999m LRT = 1000, OSD displays 1.0km
 
 
 /********************       Power / efficiency display Settings         ************************/
@@ -415,6 +418,18 @@
 #define DISPLAY_VTX_INFO            // Enable to show frequency in menu display. 
 
 
+/********************           ADSB settings           *********************/
+// ADSB settings see https://github.com/ShikOfTheRa/scarab-osd/wiki/ADSB
+//#define ADSBAWARE                 // Enables ADSB display for FC's that support ADSB via Mavlink. Currently re-purposes Mode Sensors GUI configurable item 
+#define ADSBTTL 10                  // Timout in seconds for valid ADSB data 
+#define ADSB_LIMIT 100000           // Max distance of aircraft processed in meters
+#define ADSB_ALT 1000               // Flash ADSB data if aircraft within this altitude differential and distance in meters. Disabled when used with ADSBSEND 
+#define ADSB_DIST 2000              // Flash ADSB data if aircraft within this distance and altitude differential in meters. Disabled when used with ADSBSEND 
+// The following is for "Buddy Flights" to track one other aircraft.  
+//#define ADSBSEND                  // Sends mavlink ADSB. Uses for OSD display for FC's that support ADSB via Mavlink. Currently re-purposes Mode Sensors GUI configurable item 
+#define ADSBID 10                   // ADSB ID of UAV. Use different i.d for each aircraft if more than two pilots 
+
+ 
 /********************    Submersible settings (not ArduSub)   *********************/
 // Specify fluid density for submersible (density = 997 freshwater, 1029 for seawater): Choose ONLY ONE option:
 #define FRESHWATER                  // Uncomment this if you are using a submersible in freshwater 
@@ -457,3 +472,5 @@
 
 /********************  Under developemnt      *********************/
 // This is a work in process. Not completed for implementation
+
+
