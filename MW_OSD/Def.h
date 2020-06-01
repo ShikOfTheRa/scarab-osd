@@ -297,6 +297,7 @@
 #endif
 
 #ifdef KISS      //set up latest at time of release
+  #define FC_MESSAGE
 #endif
 
 #ifdef SKYTRACK  //set up latest at time of release

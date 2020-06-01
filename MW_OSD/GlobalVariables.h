@@ -769,7 +769,7 @@ enum Positions {
   WIND_speedPosition,
   MaxDistanceposition,
   DOPposition,
-
+  
   POSITIONS_SETTINGS
 };
 
@@ -861,6 +861,7 @@ static uint16_t vtxLowPower = 0;
 static uint16_t vtxMaxPower = 0;
 static uint8_t vtxBand = 0;
 static uint8_t vtxChannel = 1;
+static bool kissMessageToRequest = false;
 #else
 static uint8_t pidP[PIDITEMS], pidI[PIDITEMS], pidD[PIDITEMS];
 static uint8_t rcRate8,rcExpo8;
@@ -1098,6 +1099,7 @@ int16_t rssiMIN=100;
 #define MSP_KISS_TELEMTRY        255
 #define MSP_KISS_SETTINGS        256
 #define MSP_KISS_GPS             257
+#define MSP_KISS_MESSAGE         258
 #endif // KISS
 
 // Betaflight specific
@@ -1636,6 +1638,7 @@ const unsigned char UnitsIcon[10]={
 #define REQ_MSP_KISS_TELEMTRY        (1L<<28)
 #define REQ_MSP_KISS_SETTINGS        (1L<<29)
 #define REQ_MSP_KISS_GPS             (1L<<30)
+#define REQ_MSP_KISS_MESSAGE         (1L<<31)
 #endif
 // Menu selections
 
@@ -2372,6 +2375,7 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_GET_TELEMETRY 0x20
 #define KISS_GET_GPS 0x54
 #define KISS_GET_SETTINGS 0x30
+#define KISS_GET_MESSAGE 0x73
 #define KISS_SET_PIDS 0x44
 #define KISS_SET_RATES 0x4E
 #define KISS_SET_FILTERS 0x48
@@ -2486,6 +2490,14 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_SET_VTX_IDX_LOW_POWER 2 // INT 16
 #define KISS_SET_VTX_IDX_MAX_POWER 4 // INT 16
 
+// Indexes of GET_MESSAGE
+#define KISS_GET_MESSAGE_DURATION 0 // UINT 16
+#define KISS_GET_MESSAGE_PRIORITY 2 // UINT 8
+#define KISS_GET_MESSAGE_MESSAGE 3 // char[] | index 3 to the end of frame (last value always 0)
+
+#define KISS_MAX_MESSAGE_SIZE 15 // Size defined in KISS 1.3-RC45b
+uint8_t kissMessagePriority=1;
+
 #define KISSFRAMEINIT 5
 #define KISSFRAMELENGTH KISS_SETTINGS_IDX_DTERM_LPF + 2 // Size of serial buffer defined with max index used
 
@@ -2528,6 +2540,8 @@ struct __Kvar {
   uint8_t version;
 }
 Kvar;
+
+#define KISS_VERSION_1_3_RC44 122
 
 uint8_t  GPS_fix_HOME=0;
 int32_t  GPS_home[2];

@@ -196,6 +196,31 @@ void kiss_sync_settings() {
   modeMSPRequests &=~ REQ_MSP_KISS_SETTINGS;
 }
 
+void kiss_message() {
+  // No new message
+  if (Kvar.framelength <= 1) {
+    return;
+  }
+
+  uint8_t newPriorityMessage = kissread_u8(KISS_GET_MESSAGE_PRIORITY);
+  // Check if new message has higher priority or if old one is still displayed
+  if (newPriorityMessage >= kissMessagePriority || timer.fcMessage == 0) {
+    kissMessagePriority = newPriorityMessage;
+    timer.fcMessage = kissread_u16(KISS_GET_MESSAGE_DURATION) / 1000;
+
+    fcMessageLength = Kvar.framelength - KISS_GET_MESSAGE_MESSAGE;
+    if (fcMessageLength > KISS_MAX_MESSAGE_SIZE) {
+      fcMessageLength = KISS_MAX_MESSAGE_SIZE;
+    }
+    // message loading
+    for (uint8_t i = KISS_GET_MESSAGE_MESSAGE; i < Kvar.framelength && (i - KISS_GET_MESSAGE_MESSAGE) < KISS_MAX_MESSAGE_SIZE; i++) {
+      // Message display start at 1
+      fontData[i - KISS_GET_MESSAGE_MESSAGE + 1] = toupper(serialBuffer[i]);
+    }
+  }
+
+}
+
 uint8_t kissProtocolCRC8(const uint8_t *data, uint8_t startIndex, uint8_t stopIndex) 
 {
   uint8_t crc = 0;
@@ -358,6 +383,9 @@ void serialKISSreceive(uint8_t c) {
           break;
         case KISS_GET_SETTINGS:
           kiss_sync_settings();
+          break;
+        case KISS_GET_MESSAGE:
+          kiss_message();
           break;
 #ifdef KISSGPS
         case KISS_GET_GPS:

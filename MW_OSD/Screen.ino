@@ -2581,7 +2581,6 @@ void displayArmed(void)
   }
 }
 
-
 void displayForcedCrosshair() {
   uint16_t position = getPosition(horizonPosition);
   screen[position - 1] = SYM_AH_CENTER_LINE;

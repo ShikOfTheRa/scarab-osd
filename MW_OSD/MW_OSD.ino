@@ -415,7 +415,14 @@ void loop()
 #else
     if (!Settings[S_MWAMPERAGE])
       amperagesum += amperage;
-#endif   // KISS
+
+    // KISS Messaging implemented in KISS 1.3-RC44
+    if (Kvar.version >= KISS_VERSION_1_3_RC44) {
+      // Send request for message every 100ms
+      kissMessageToRequest = true;
+    }
+    
+#endif // KISS
 #ifndef GPSOSD
 #ifdef MSP_SPEED_MED
 #ifdef CANVAS_SUPPORT
@@ -558,6 +565,10 @@ void loop()
       case REQ_MSP_KISS_SETTINGS:
         MSPcmdsend = MSP_KISS_SETTINGS;
         break;
+      case REQ_MSP_KISS_MESSAGE:
+        MSPcmdsend = MSP_KISS_MESSAGE;
+        kissMessageToRequest = false;
+        break;
 #ifdef KISSGPS
       case REQ_MSP_KISS_GPS:
         MSPcmdsend = MSP_KISS_GPS;
@@ -574,6 +585,8 @@ void loop()
       } else if (MSPcmdsend == MSP_KISS_GPS) {
         serialKISSrequest(KISS_GET_GPS);
 #endif
+      } else if (MSPcmdsend == MSP_KISS_MESSAGE) {
+        serialKISSrequest(KISS_GET_MESSAGE);
       } else if (MSPcmdsend == MSP_KISS_TELEMTRY) {
         serialKISSrequest(KISS_GET_TELEMETRY);
       }
@@ -1082,6 +1095,10 @@ void setMspRequests() {
 #endif
       REQ_MSP_KISS_TELEMTRY |
       REQ_MSP_KISS_SETTINGS;
+
+    if (kissMessageToRequest) {
+      modeMSPRequests |= REQ_MSP_KISS_MESSAGE;
+    }
 #endif // Not KISS
   }
   else {
@@ -1119,6 +1136,10 @@ void setMspRequests() {
       REQ_MSP_KISS_GPS |
 #endif
       REQ_MSP_KISS_TELEMTRY;
+
+    if (kissMessageToRequest) {
+      modeMSPRequests |= REQ_MSP_KISS_MESSAGE;
+    }
 #endif // Not KISS
     if (!armed) {
       modeMSPRequests |= 
