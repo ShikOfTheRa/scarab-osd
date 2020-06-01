@@ -760,6 +760,10 @@ void displayAmperage(void)
 {
   if (amperage > ampMAX)
     ampMAX = amperage;
+  if (Settings[S_AMPERAGE_ALARM]>0){
+    if (((amperage / 10) > Settings[S_AMPERAGE_ALARM]) && (timer.Blink2hz))
+      return;     
+  }
   displayItem(amperagePosition, amperage, 0, SYM_AMP, 1 );
 }
 
@@ -803,6 +807,11 @@ void displayAverageEfficiency(void)
 
 void displaypMeterSum(void)
 {
+  if (Settings[S_AMPER_HOUR_ALARM]>0){
+    if (((ampAlarming()) && timer.Blink2hz))
+      return;
+  }
+
   int xx = amperagesum / 360;
 
 #ifdef BATTERYICONAMPS
@@ -839,6 +848,10 @@ void displayRSSI(void)
 {
   if (rssi < rssiMIN && rssi > 0)
     rssiMIN = rssi;
+  if (Settings[S_RSSI_ALARM]>0){
+    if (((rssi) < Settings[S_RSSI_ALARM]) && (timer.Blink2hz))
+      return;     
+  }    
 #ifdef DUALRSSI
   displayItem(rssiPosition, rssi, SYM_RSSI, '%', 0 );
   if (!fieldIsVisible(rssiPosition))

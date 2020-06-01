@@ -239,7 +239,7 @@ void setup()
   datetime.unixtime = GPS_time;
   Serial.flush();
   for (uint8_t i = 0; i < (1+16); i++) {
-    MwRcData[i]=1500;
+    MwRcData[i]=1000;
   }
 }
 
@@ -658,12 +658,9 @@ void loop()
 #endif //FORCECROSSHAIR
         displayVoltage();
         displayVidVoltage();
-        if ((rssi > Settings[S_RSSI_ALARM]) || (timer.Blink2hz))
-          displayRSSI();
-        if (((amperage / 10) < Settings[S_AMPERAGE_ALARM]) || (timer.Blink2hz))
-          displayAmperage();
-        if (((!ampAlarming()) || timer.Blink2hz))
-          displaypMeterSum();
+        displayRSSI();
+        displayAmperage();
+        displaypMeterSum();
 #if defined DISPLAYEFFICIENCYTIME && !defined DUALTIMER
         displayRemainingTime();
 #endif
