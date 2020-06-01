@@ -122,7 +122,7 @@ void kiss_sync_telemetry() {
   MwAngle[0] = (int16_t)kissread_u16(KISS_INDEX_ANGLE0) / 10;
   MwAngle[1] = (int16_t)kissread_u16(KISS_INDEX_ANGLE1) / 10;
   Kvar.mode = kissread_u8(KISS_INDEX_MODE);
-  Kvar.mode = (Kvar.mode > 2) ? 0 : Kvar.mode;
+  Kvar.mode = (Kvar.mode > KISS_mode_RTH_index) ? 0 : Kvar.mode;
   MwRcData[1] = 1000 + (int16_t)kissread_u16(KISS_INDEX_THROTTLE);
   for (uint8_t i = 1; i < 8; i++) {
     MwRcData[i + 1] = 1500 + (int16_t)kissread_u16(i * 2);

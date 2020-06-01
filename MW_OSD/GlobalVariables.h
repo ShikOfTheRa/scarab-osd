@@ -1152,10 +1152,15 @@ const char satlow_text[]    PROGMEM = "LOW SATS";
 const char disarmed_text[]  PROGMEM = "DISARMED";
 const char armed_text[]     PROGMEM = " ARMED";
 const char FAILtext[]       PROGMEM = "FAILSAFE";
+#ifndef KISS
 const char APRTHtext[]      PROGMEM = "AUTO RTL";
+#else
+const char APRTHtext[]      PROGMEM = "AUTO RTH";
+#endif // KISS
 const char APHOLDtext[]     PROGMEM = "AUTO HOLD";
 const char APWAYPOINTtext[] PROGMEM = " MISSION";
 const char lowvolts_text[]  PROGMEM = "LOW VOLTS";
+const char turtle_text[]    PROGMEM = "TURTLE";
 #if defined DEBUGTEXT
 const char debug_text[]     PROGMEM = DEBUGTEXT;
 #else
@@ -1167,6 +1172,8 @@ const char ready_text[]     PROGMEM = " READY";
 const char CRUISE_text[]    PROGMEM = " C";
 const char AUTOTRIM_text[]  PROGMEM = "AUTOTRIM";
 const char AUTOTUNE_text[]  PROGMEM = "AUTOTUNE";
+
+#define APRTHtext_index 2
 
 // For Alarm / Message text
 const PROGMEM char * const message_text[] =
@@ -1183,6 +1190,7 @@ const PROGMEM char * const message_text[] =
 #endif // EXTENDEDMODESUPPORT 
 };
 
+#define LAST_ALARM_TEXT_INDEX 8
 const PROGMEM char * const alarm_text[] =
 {   
   blank_text,     //0
@@ -1199,13 +1207,12 @@ const PROGMEM char * const alarm_text[] =
   satlow_text,    //5
   lowvolts_text,  //6
   debug_text,     //7
+  turtle_text,    //8
 };
 
 struct __alarms {
-  uint8_t active;
-  uint8_t  queue;
-  uint8_t  index;
-  uint8_t  alarm;
+  uint16_t active;
+  uint16_t  queue;
 }alarms;
 
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
@@ -2342,12 +2349,21 @@ struct __mw_ltm {
 const char KISS_mode_ACRO[] PROGMEM   = ""; //Acrobatic: rate control
 const char KISS_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
 const char KISS_mode_3D[]   PROGMEM   = "3D"; //Stabilize: hold level position
+const char KISS_mode_TURTLE[] PROGMEM = "TURTLE";
+const char KISS_mode_UNKNOWN[] PROGMEM = "";
+const char KISS_mode_RTH[] PROGMEM = "RTH";
+
+#define KISS_mode_TURTLE_index  3
+#define KISS_mode_RTH_index     5
 
 const PROGMEM char * const KISS_mode_index[] = 
 {   
  KISS_mode_ACRO,
  KISS_mode_STAB, 
- KISS_mode_3D, 
+ KISS_mode_3D,
+ KISS_mode_TURTLE,
+ KISS_mode_UNKNOWN,
+ KISS_mode_RTH
 };
 
 #define ESC_FILTER 10
