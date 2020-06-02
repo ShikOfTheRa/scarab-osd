@@ -127,6 +127,12 @@ void kiss_sync_telemetry() {
   for (uint8_t i = 1; i < 8; i++) {
     MwRcData[i + 1] = 1500 + (int16_t)kissread_u16(i * 2);
   }
+  // RC8->10 not on old versions, check if the frame contains them
+  if (Kvar.framelength >= KISS_INDEX_RC10) {
+    MwRcData[8] = 1500 + (int16_t)kissread_u16(KISS_INDEX_RC8);
+    MwRcData[9] = 1500 + (int16_t)kissread_u16(KISS_INDEX_RC9);
+    MwRcData[10] = 1500 + (int16_t)kissread_u16(KISS_INDEX_RC10);
+  }
   handleRawRC();
 
   static uint32_t filtereddata[6];

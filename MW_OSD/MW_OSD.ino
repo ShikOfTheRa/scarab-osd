@@ -318,13 +318,12 @@ void loop()
   if (flags.reset) {
     resetFunc();
   }
-#if defined (KISS)
-  if (Kvar.mode == 1)
-    screenlayout = 1;
-  else
-    screenlayout = 0;
-#elif defined (OSD_SWITCH)
+#if defined (OSD_SWITCH)
+#ifndef KISS
   if (MwSensorActive & mode.osd_switch)
+#else
+  if (Kvar.mode == 1)
+#endif
     screenlayout = 1;
   else
     screenlayout = 0;
@@ -340,7 +339,11 @@ void loop()
     }
   }
   else {
+#ifndef KISS
     if (MwSensorActive & mode.osd_switch)
+#else
+    if (Kvar.mode == 1)
+#endif
       screenlayout = 1;
   }
 #else
