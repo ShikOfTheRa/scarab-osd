@@ -188,7 +188,7 @@ void send_mavlink_ADSB_TRAFFIC_REPORT_MESSAGE(void) {
   mav_serialize32(ADSBID);
   mav_serialize32(GPS_latitude); // +10000 to test
   mav_serialize32(GPS_longitude); // +10000 to test
-  mav_serialize32((uint32_t)GPS_altitude*1000);
+  mav_serialize32((int32_t)GPS_altitude*1000);
   mav_serialize16(((MwHeading+360)%360)*100);
   mav_serialize16(GPS_speed*100);
   mav_serialize16(0);
@@ -577,7 +577,11 @@ void serialMAVCheck() {
       if (t_update == 1){
         adsb.icao = t_icao;
         adsb.dist = t_dist;
-        adsb.alt = t_alt;
+#ifdef ADSBSEND        
+        adsb.alt = t_alt; 
+#else
+        adsb.alt = t_alt - GPS_altitude_home; // Need to determine if GPS altitude type send by UAV. If not ASL, then altitude proximity will be out by launch altitude.
+#endif
         adsb.dir = t_dir; // ADSB target heading relative to UAV with North reference
         adsb.cog = t_cog; // ADSB target heading
         timer.adsbttl = ADSBTTL;
