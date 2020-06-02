@@ -1143,6 +1143,11 @@ void setMspRequests() {
     if (kissMessageToRequest) {
       modeMSPRequests |= REQ_MSP_KISS_MESSAGE;
     }
+    
+    // If the version is not yet known, we request it
+    if (Kvar.version == 0) {
+      modeMSPRequests |= REQ_MSP_KISS_SETTINGS;
+    }
 #endif // Not KISS
     if (!armed) {
       modeMSPRequests |= 
