@@ -141,7 +141,8 @@
 #define SYM_BATT_EMPTY 0X96
 
 // ADSB
-#define SYM_ADSB 0X01
+#define SYM_ADSB 0X05
+// #define SYM_ADSB 0X01 WHen GUI is updated
 
 // Vario
 #define SYM_VARIO 0x8C

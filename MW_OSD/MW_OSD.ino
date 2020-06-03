@@ -836,10 +836,10 @@ void loop()
         adsbvehicle[X].ttl--;
     }
 #endif // ADSBSTATION    
-#ifdef ADSBSEND
-    // send_mavlink_ADSB_STATUS_MESSAGE_MESSAGE(); // Unknown if required
+#ifdef BUDDYFLIGHT
+    send_mavlink_ADSB_STATUS_MESSAGE(); 
     send_mavlink_ADSB_TRAFFIC_REPORT_MESSAGE();
-#endif // ADSBSEND
+#endif // BUDDYFLIGHT
 #ifdef DEBUGDPOSLOOP
     framerate = timer.loopcount;
     timer.loopcount = 0;

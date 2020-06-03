@@ -44,7 +44,8 @@
 
   
   //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
-  #define ADSBAWARE                 // Enables ADSB display for FC's that support ADSB via Mavlink. Currently re-purposes Mode Sensors GUI configurable item 
+  //#define ADSBAWARE                 // Enables ADSB display for FC's that support ADSB via Mavlink. Currently re-purposes Mode Sensors GUI configurable item 
+  #define BUDDYFLIGHT               
   //#undef GPSTIME
   //#undef MAPMODE
   //#undef HORIZON
@@ -181,6 +182,16 @@
   #define MSPV2
 #endif
 
+#ifdef BUDDYFLIGHT
+  #define ADSBAWARE
+#endif // BUDDYFLIGHT
+
+#ifdef ADSBDEBUG
+  #define ADSBAWARE
+  #define MAV_ALL                   // To act on data from all MAV SYSID in stream. NOT recommended. Specify ID in GUI. Default=1 upon reset.
+  #define MAV_COMP_ALL  
+#endif // ADSBDEBUG
+  
 #ifdef iNAV_KK // iNAV with KK VARIO
   #define iNAV
   #define KKAUDIOVARIO AUDIOPIN     // Enable this for audio vario. AUDIOPIN = D2 on AEROMAX hardware. Alternatively use A3 (RSSI) with other hardware  

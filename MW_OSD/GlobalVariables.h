@@ -408,6 +408,12 @@ uint16_t debug[4];
 #ifdef DEBUGDPOSMSPID    
   uint8_t boxidarray[50];
 #endif
+#ifdef ADSBDEBUG
+  uint8_t adsb_debug_status = 0;
+  uint8_t adsb_debug_traffic = 0;
+  uint8_t adsb_debug_status_sent = 0;
+  uint8_t adsb_debug_traffic_sent = 0;
+#endif // ADSBDEBUG
 
 int8_t menudir;
 unsigned int allSec=0;
@@ -2045,9 +2051,6 @@ const PROGMEM char * const msp_mode_index[] =
 #define MAVLINK_MSG_ID_SYSTEM_TIME 2
 #define MAVLINK_MSG_ID_SYSTEM_TIME_MAGIC 137
 #define MAVLINK_MSG_ID_SYSTEM_TIME_LEN 12
-#define MAVLINK_MESSAGE_INFO_ADSB_VEHICLE 246 
-#define MAVLINK_MESSAGE_INFO_ADSB_VEHICLE_MAGIC 184
-#define MAVLINK_MESSAGE_INFO_ADSB_VEHICLE_LEN 38
 #define MAV_CMD_SET_MESSAGE_INTERVAL 511
 #define MAVLINK_MSG_ID_COMMAND_LONG 76
 #define MAVLINK_MSG_ID_COMMAND_LONG_MAGIC 152
@@ -2055,9 +2058,9 @@ const PROGMEM char * const msp_mode_index[] =
 #define MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE 246
 #define MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_MAGIC 184
 #define MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_LEN 38
-#define MAVLINK_MSG_ID_ADSB_STATUS_MESSAGE 203
-#define MAVLINK_MSG_ID_ADSB_STATUS_MESSAGE_MAGIC 85
-#define MAVLINK_MSG_ID_ADSB_STATUS_MESSAGE_LEN 1
+#define MAVLINK_MSG_ID_ADSB_STATUS 203
+#define MAVLINK_MSG_ID_ADSB_STATUS_MAGIC 85
+#define MAVLINK_MSG_ID_ADSB_STATUS_LEN 1
 #define MAV_STREAMS 7
 #define MAV_DATA_STREAM_RAW_SENSORS 1
 #define MAV_DATA_STREAM_EXTENDED_STATUS 2
@@ -2066,6 +2069,10 @@ const PROGMEM char * const msp_mode_index[] =
 #define MAV_DATA_STREAM_EXTRA1 10
 #define MAV_DATA_STREAM_EXTRA2 11
 #define MAV_DATA_STREAM_EXTRA3 12
+#define MAV_COMP_ID_OSD 157
+#define MAV_COMP_ID_ADSB 156
+#define MAV_SYS_ID_ADSB 1
+#define MAV_STATUS_ADSB 10
 
 #define  LAT  0
 #define  LON  1

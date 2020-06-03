@@ -1240,6 +1240,21 @@ void displayADSB(void)
   formatDistance(adsb.alt-GPS_altitude,0,2,SYM_ADSB);
   screenBuffer[0] = headingDirection(MwHeading + 180 + 360 - adsb.dir);
   MAX7456_WriteString(screenBuffer, t_pos + t_x);
+#ifdef ADSBDEBUG
+  itoa(adsb_debug_status, screenBuffer, 10);
+  t_x = FindNull();
+  screenBuffer[t_x++]=0x2F;
+  itoa(adsb_debug_traffic, screenBuffer + t_x, 10);
+  t_x = FindNull();
+  screenBuffer[t_x++]=0x2F;
+  itoa(adsb_debug_status_sent, screenBuffer + t_x, 10);
+  t_x = FindNull();
+  screenBuffer[t_x++]=0x2F;
+  itoa(adsb_debug_traffic_sent, screenBuffer + t_x, 10);
+  MAX7456_WriteString(screenBuffer, t_pos + LINE);
+#endif //ADSBDEBUG  
+
+
 }
 
 

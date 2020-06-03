@@ -181,14 +181,17 @@ void send_mavlink_ADSB_TRAFFIC_REPORT_MESSAGE(void) {
   Serial.write(0xFE);
   mav_serialize8(MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_LEN);
   mav_serialize8(tx_sequence);
-  mav_serialize8(0);
-  mav_serialize8(0);
+  mav_serialize8(MAV_SYS_ID_ADSB);
+  mav_serialize8(MAV_COMP_ID_ADSB);
   mav_serialize8(MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE);
   //body:
   mav_serialize32(ADSBID);
-  mav_serialize32(GPS_latitude); // +10000 to test
-  mav_serialize32(GPS_longitude); // +10000 to test
-  mav_serialize32((int32_t)GPS_altitude*1000);
+  mav_serialize32(GPS_latitude);
+  mav_serialize32(GPS_longitude);
+  mav_serialize32((int32_t)(GPS_altitude)*1000);
+//  mav_serialize32(GPS_latitude+10000);               // for testing with proximity vehicle
+//  mav_serialize32(GPS_longitude+10000);              // for testing with proximity vehicle
+//  mav_serialize32((int32_t)(GPS_altitude+700)*1000); // for testing with proximity vehicle
   mav_serialize16(((MwHeading+360)%360)*100);
   mav_serialize16(GPS_speed*100);
   mav_serialize16(0);
@@ -200,26 +203,32 @@ void send_mavlink_ADSB_TRAFFIC_REPORT_MESSAGE(void) {
   mav_tx_checksum_func(MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_MAGIC);
   Serial.write((uint8_t)(mw_mav.tx_checksum & 0xFF));
   Serial.write((uint8_t)(mw_mav.tx_checksum >> 8 & 0xFF));
+  #ifdef ADSBDEBUG
+    adsb_debug_traffic_sent++;
+  #endif // ADSBDEBUG  
 }
 
 
-void send_mavlink_ADSB_STATUS_MESSAGE_MESSAGE(void) {
+void send_mavlink_ADSB_STATUS_MESSAGE(void) {
   //head:
   static int8_t tx_sequence = 0;
   tx_sequence++;
   mw_mav.tx_checksum = 0xFFFF; //init
   Serial.write(0xFE);
-  mav_serialize8(MAVLINK_MSG_ID_ADSB_STATUS_MESSAGE_LEN);
+  mav_serialize8(MAVLINK_MSG_ID_ADSB_STATUS_LEN);
   mav_serialize8(tx_sequence);
-  mav_serialize8(1);
-  mav_serialize8(0);
-  mav_serialize8(MAVLINK_MSG_ID_ADSB_STATUS_MESSAGE);
+  mav_serialize8(MAV_SYS_ID_ADSB);
+  mav_serialize8(MAV_COMP_ID_ADSB);
+  mav_serialize8(MAVLINK_MSG_ID_ADSB_STATUS);
   //body:
-  mav_serialize8(0x01); 
+  mav_serialize8(MAV_STATUS_ADSB); 
   //tail:
-  mav_tx_checksum_func(MAVLINK_MSG_ID_ADSB_STATUS_MESSAGE_MAGIC);
+  mav_tx_checksum_func(MAVLINK_MSG_ID_ADSB_STATUS_MAGIC);
   Serial.write((uint8_t)(mw_mav.tx_checksum & 0xFF));
   Serial.write((uint8_t)(mw_mav.tx_checksum >> 8 & 0xFF));
+  #ifdef ADSBDEBUG
+    adsb_debug_status_sent++;
+  #endif // ADSBDEBUG
 }
 
 
@@ -323,13 +332,13 @@ void serialMAVCheck() {
       if (Settings[S_MAV_AUTO] > 0) {
         static uint8_t mavreqdone = 3;
         if (mavreqdone > 0) {
-#ifndef ADSBSEND
+#ifndef BUDDYFLIGHT
 #ifdef PX4
           request_mavlink_packets_PX4();
 #else
           request_mavlink_packets_APM();
 #endif //PX4
-#endif //ADSBSEND
+#endif //BUDDYFLIGHT
 
           mavreqdone--;
         }
@@ -535,7 +544,15 @@ void serialMAVCheck() {
       break;
 #endif
 #ifdef MAV_ADSB
-    case MAVLINK_MESSAGE_INFO_ADSB_VEHICLE:
+//  #ifdef ADSBDEBUG
+    case MAVLINK_MSG_ID_ADSB_STATUS:
+        adsb_debug_status++; 
+      break;
+//  #endif // ADSBDEBUG  
+    case MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE:
+      #ifdef ADSBDEBUG
+        adsb_debug_traffic++;
+      #endif // ADSBDEBUG   
       uint32_t t_icao;
       int32_t t_lat;
       int32_t t_lon;
@@ -577,7 +594,7 @@ void serialMAVCheck() {
       if (t_update == 1){
         adsb.icao = t_icao;
         adsb.dist = t_dist;
-#ifdef ADSBSEND        
+#ifdef BUDDYFLIGHT        
         adsb.alt = t_alt; 
 #else
         adsb.alt = t_alt - GPS_altitude_home; // Need to determine if GPS altitude type send by UAV. If not ASL, then altitude proximity will be out by launch altitude.
@@ -777,9 +794,15 @@ void serialMAVreceive(uint8_t c)
         break;
 #endif
 #ifdef MAV_ADSB
-      case  MAVLINK_MESSAGE_INFO_ADSB_VEHICLE:
-        mav_magic = MAVLINK_MESSAGE_INFO_ADSB_VEHICLE_MAGIC;
-        mav_len = MAVLINK_MESSAGE_INFO_ADSB_VEHICLE_LEN;
+      case  MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE:                       
+        mav_magic = MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_MAGIC;
+        mav_len = MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_LEN;
+        break;
+#endif
+#ifdef ADSBDEBUG
+      case  MAVLINK_MSG_ID_ADSB_STATUS:                       
+        mav_magic = MAVLINK_MSG_ID_ADSB_STATUS_MAGIC;
+        mav_len = MAVLINK_MSG_ID_ADSB_STATUS_LEN;
         break;
 #endif
 #ifdef MAV_RTC

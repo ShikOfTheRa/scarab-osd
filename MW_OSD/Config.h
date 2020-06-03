@@ -420,13 +420,14 @@
 
 /********************           ADSB settings           *********************/
 // ADSB settings see https://github.com/ShikOfTheRa/scarab-osd/wiki/ADSB
+//#define ADSBDEBUG                 // Debug only
 //#define ADSBAWARE                 // Enables ADSB display for FC's that support ADSB via Mavlink. Currently re-purposes Mode Sensors GUI configurable item 
 #define ADSBTTL 10                  // Timout in seconds for valid ADSB data 
 #define ADSB_LIMIT 100000           // Max distance of aircraft processed in meters
 #define ADSB_ALT 1000               // Flash ADSB data if aircraft within this altitude differential and distance in meters. Disabled when used with ADSBSEND 
 #define ADSB_DIST 2000              // Flash ADSB data if aircraft within this distance and altitude differential in meters. Disabled when used with ADSBSEND 
 // The following is for "Buddy Flights" to track one other aircraft.  
-//#define ADSBSEND                  // Sends mavlink ADSB. Uses for OSD display for FC's that support ADSB via Mavlink. Currently re-purposes Mode Sensors GUI configurable item 
+//#define BUDDYFLIGHT               // Sends mavlink ADSB to share position status via simulated ADSB sent via OSD tx pin. 
 #define ADSBID 10                   // ADSB ID of UAV. Use different i.d for each aircraft if more than two pilots 
 
  
