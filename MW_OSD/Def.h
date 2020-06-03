@@ -187,9 +187,8 @@
 #endif // BUDDYFLIGHT
 
 #ifdef ADSBDEBUG
-  #define ADSBAWARE
-  #define MAV_ALL                   // To act on data from all MAV SYSID in stream. NOT recommended. Specify ID in GUI. Default=1 upon reset.
-  #define MAV_COMP_ALL  
+  //#define MAV_ALL                   // To act on data from all MAV SYSID in stream. NOT recommended. Specify ID in GUI. Default=1 upon reset.
+  //#define MAV_COMP_ALL  
 #endif // ADSBDEBUG
   
 #ifdef iNAV_KK // iNAV with KK VARIO
