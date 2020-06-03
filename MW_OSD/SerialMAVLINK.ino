@@ -544,11 +544,11 @@ void serialMAVCheck() {
       break;
 #endif
 #ifdef MAV_ADSB
-//  #ifdef ADSBDEBUG
+  #ifdef ADSBDEBUG
     case MAVLINK_MSG_ID_ADSB_STATUS:
         adsb_debug_status++; 
       break;
-//  #endif // ADSBDEBUG  
+  #endif // ADSBDEBUG  
     case MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE:
       #ifdef ADSBDEBUG
         adsb_debug_traffic++;
