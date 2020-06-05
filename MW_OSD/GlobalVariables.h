@@ -2487,7 +2487,6 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISSFRAMEINIT 5
 #define KISSFRAMELENGTH KISS_SETTINGS_IDX_DTERM_LPF + 2 // Size of serial buffer defined with max index used
 
-uint8_t KISSserialBuffer[KISSFRAMELENGTH];
 uint8_t KISScurrentRequest = 0x00;
 uint8_t KISSgetcmd=0;
 
@@ -2566,7 +2565,11 @@ const PROGMEM char * const NAZA_mode_index[] =
 #elif defined iNAV // 40 max in test
   #define SERIALBUFFERSIZE 65
 #elif defined KISS
+#if KISSFRAMELENGTH > 65 // By security, we test that the frame is always greater than 65
+  #define SERIALBUFFERSIZE KISSFRAMELENGTH
+#else
   #define SERIALBUFFERSIZE 65
+#endif
 #else
   #define SERIALBUFFERSIZE 100
 #endif
