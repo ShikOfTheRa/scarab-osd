@@ -423,7 +423,7 @@
 //#define ADSBDEBUG                 // Debug only
 //#define ADSBAWARE                 // Enables ADSB display for FC's that support ADSB via Mavlink. Currently re-purposes Mode Sensors GUI configurable item 
 #define ADSBTTL 10                  // Timout in seconds for valid ADSB data 
-#define ADSB_LIMIT 100000           // Max distance of aircraft processed in meters
+#define ADSB_LIMIT 100000           // Max distance of aircraft included in scope. 
 #define ADSB_ALT 1000               // Flash ADSB data if aircraft within this altitude differential and distance in meters. Disabled when used with ADSBSEND 
 #define ADSB_DIST 2000              // Flash ADSB data if aircraft within this distance and altitude differential in meters. Disabled when used with ADSBSEND 
 // The following is for "Buddy Flights" to track one other aircraft.  
