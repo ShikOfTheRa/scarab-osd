@@ -779,8 +779,8 @@ void loop()
 #ifdef HAS_ALARMS
         displayAlarms();
 #endif
-#ifdef MAV_STATUS
-        displayMAVstatustext();
+#ifdef FC_MESSAGE
+        displayFCMessage();
 #endif
 #ifdef ADSBSTATION
   displayADSBStation();
@@ -819,9 +819,9 @@ void loop()
       timer.armedstatus--;
     timer.seconds += 1000;
     timer.tenthSec = 0;
-#ifdef MAV_STATUS
-    if (timer.MAVstatustext > 0)
-      timer.MAVstatustext--;
+#ifdef FC_MESSAGE
+    if (timer.fcMessage > 0)
+      timer.fcMessage--;
 #endif
 #ifdef ADSBAWARE
     if (timer.adsbttl > 0){

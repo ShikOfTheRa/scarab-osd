@@ -307,26 +307,30 @@ void displayIcon(int cposition)
   }
 }
 
-#ifdef MAV_STATUS
-void displayMAVstatustext(void)
+#ifdef FC_MESSAGE
+void displayFCMessage(void)
 {
   uint16_t pos;
-  if (timer.MAVstatustext == 0)
+  if (timer.fcMessage == 0)
     return;
   pos = (30 * (getPosition(motorArmedPosition) / 30));
-  for (uint8_t i = 0; i < 60; i++) {
+  uint8_t maxLength = 60;
+  // If the message length is <= 25, we only use the first line
+  if (fcMessageLength<=25)
+    maxLength = 30;
+  for (uint8_t i = 0; i < maxLength; i++) {
     screen[pos+i] = SYM_BLANK;
   }
-  for (uint8_t i = 1; i <= MAVstatuslength; i++) {
+  for (uint8_t i = 1; i <= fcMessageLength; i++) {
     pos = 2 + (30 * (getPosition(motorArmedPosition) / 30));
-      if (MAVstatuslength<=25){ // single line
-        pos +=  (25 - (MAVstatuslength)) /2;
+      if (fcMessageLength<=25){ // single line
+        pos +=  (25 - (fcMessageLength)) /2;
       }
       else if (i<25) { // first row of multi line       
       }
       else{ // second row of multi line
         pos +=LINE;
-        pos +=  (25 - (MAVstatuslength%25)) /2;
+        pos +=  (25 - (fcMessageLength%25)) /2;
       }
       pos += i % 25;  
       screen[pos] = char(fontData[i]);

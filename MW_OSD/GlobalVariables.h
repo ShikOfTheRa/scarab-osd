@@ -272,7 +272,7 @@ struct  __timer {
 //  uint8_t accCalibrationTimer;
   uint8_t  magCalibrationTimer;
   uint32_t fwAltitudeTimer;
-  uint32_t seconds;
+  uint32_t seconds;                           // Incremented every second (in milliseconds)
   uint8_t  MSP_active;
   uint8_t  GPS_active;
   uint8_t  GUI_active;
@@ -291,7 +291,7 @@ struct  __timer {
   uint32_t audiolooptimer;
   uint32_t GPSOSDstate;
   uint8_t  disarmed;                             
-  uint8_t  MAVstatustext;
+  uint8_t  fcMessage;                        // Duration of the FC message (in seconds)
   uint8_t  armedstatus;   
   uint8_t  adsbttl;
 }
@@ -426,7 +426,9 @@ volatile uint16_t pwmval2=0;
 uint8_t debugtext=0;
 uint8_t MSP_home_set=0;
 uint8_t variopitch=0;
-uint8_t MAVstatuslength;
+#ifdef FC_MESSAGE
+uint8_t fcMessageLength;
+#endif // FC_MESSAGE
 
 #if defined CORRECT_MSP_BF1
   uint8_t bfconfig[25];

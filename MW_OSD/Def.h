@@ -1189,6 +1189,7 @@ enum {
 #ifndef TX_CHANNELS
   #define TX_CHANNELS 16 
 #endif
+#define FC_MESSAGE
 #endif
 
 #ifdef PROTOCOL_LTM
