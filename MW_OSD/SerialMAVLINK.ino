@@ -506,11 +506,11 @@ void serialMAVCheck() {
             }
             else {
               nullifymessage = 0;
-              MAVstatuslength = z;
+              fcMessageLength = z;
             }
           }
         }
-        timer.MAVstatustext = MAV_STATUS_TIMER;
+        timer.fcMessage = MAV_STATUS_TIMER;
       }
       break;
 #endif

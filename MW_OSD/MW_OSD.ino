@@ -318,13 +318,12 @@ void loop()
   if (flags.reset) {
     resetFunc();
   }
-#if defined (KISS)
-  if (Kvar.mode == 1)
-    screenlayout = 1;
-  else
-    screenlayout = 0;
-#elif defined (OSD_SWITCH)
+#if defined (OSD_SWITCH)
+#ifndef KISS
   if (MwSensorActive & mode.osd_switch)
+#else
+  if (Kvar.mode == 1)
+#endif
     screenlayout = 1;
   else
     screenlayout = 0;
@@ -340,7 +339,11 @@ void loop()
     }
   }
   else {
+#ifndef KISS
     if (MwSensorActive & mode.osd_switch)
+#else
+    if (Kvar.mode == 1)
+#endif
       screenlayout = 1;
   }
 #else
@@ -415,7 +418,14 @@ void loop()
 #else
     if (!Settings[S_MWAMPERAGE])
       amperagesum += amperage;
-#endif   // KISS
+
+    // KISS Messaging implemented in KISS 1.3-RC44
+    if (Kvar.version >= KISS_VERSION_1_3_RC44) {
+      // Send request for message every 100ms
+      kissMessageToRequest = true;
+    }
+    
+#endif // KISS
 #ifndef GPSOSD
 #ifdef MSP_SPEED_MED
 #ifdef CANVAS_SUPPORT
@@ -558,6 +568,10 @@ void loop()
       case REQ_MSP_KISS_SETTINGS:
         MSPcmdsend = MSP_KISS_SETTINGS;
         break;
+      case REQ_MSP_KISS_MESSAGE:
+        MSPcmdsend = MSP_KISS_MESSAGE;
+        kissMessageToRequest = false;
+        break;
 #ifdef KISSGPS
       case REQ_MSP_KISS_GPS:
         MSPcmdsend = MSP_KISS_GPS;
@@ -574,6 +588,8 @@ void loop()
       } else if (MSPcmdsend == MSP_KISS_GPS) {
         serialKISSrequest(KISS_GET_GPS);
 #endif
+      } else if (MSPcmdsend == MSP_KISS_MESSAGE) {
+        serialKISSrequest(KISS_GET_MESSAGE);
       } else if (MSPcmdsend == MSP_KISS_TELEMTRY) {
         serialKISSrequest(KISS_GET_TELEMETRY);
       }
@@ -776,8 +792,8 @@ void loop()
 #ifdef HAS_ALARMS
         displayAlarms();
 #endif
-#ifdef MAV_STATUS
-        displayMAVstatustext();
+#ifdef FC_MESSAGE
+        displayFCMessage();
 #endif
 #ifdef ADSBSTATION
   displayADSBStation();
@@ -816,9 +832,9 @@ void loop()
       timer.armedstatus--;
     timer.seconds += 1000;
     timer.tenthSec = 0;
-#ifdef MAV_STATUS
-    if (timer.MAVstatustext > 0)
-      timer.MAVstatustext--;
+#ifdef FC_MESSAGE
+    if (timer.fcMessage > 0)
+      timer.fcMessage--;
 #endif
 #ifdef ADSBAWARE
     if (timer.adsbttl > 0){
@@ -1079,6 +1095,10 @@ void setMspRequests() {
 #endif
       REQ_MSP_KISS_TELEMTRY |
       REQ_MSP_KISS_SETTINGS;
+
+    if (kissMessageToRequest) {
+      modeMSPRequests |= REQ_MSP_KISS_MESSAGE;
+    }
 #endif // Not KISS
   }
   else {
@@ -1116,6 +1136,15 @@ void setMspRequests() {
       REQ_MSP_KISS_GPS |
 #endif
       REQ_MSP_KISS_TELEMTRY;
+
+    if (kissMessageToRequest) {
+      modeMSPRequests |= REQ_MSP_KISS_MESSAGE;
+    }
+    
+    // If the version is not yet known, we request it
+    if (Kvar.version == 0) {
+      modeMSPRequests |= REQ_MSP_KISS_SETTINGS;
+    }
 #endif // Not KISS
     if (!armed) {
       modeMSPRequests |= 
