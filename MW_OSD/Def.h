@@ -41,7 +41,7 @@
   #undef LOW_MEMORY 
   #define LOW_MEMORY 200
 
-
+  #define PHASERS
   
   //#define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   //#define ADSBAWARE                 // Enables ADSB display for FC's that support ADSB via Mavlink. Currently re-purposes Mode Sensors GUI configurable item 

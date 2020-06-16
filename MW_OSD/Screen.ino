@@ -2935,3 +2935,37 @@ void displayADSBStation(void)
   MAX7456_WriteString(screenBuffer, t_pos + t_x);  
 }
 #endif //ADSBSTATION
+
+void firePhasers(uint8_t count){
+    phasers=count;
+}
+
+void displayPhasers(void){
+  static uint32_t trigger_millis;
+  static uint8_t counter;
+  if ((phasers > 0) && (counter == 0)) {
+    phasers--;
+    counter=6;
+  }
+  if (counter==0) {  
+    return;
+  }
+  if ((millis() - trigger_millis) > 40) {
+    trigger_millis=millis();
+    if (counter>0)
+      counter--;
+  }
+    uint16_t position = getPosition(horizonPosition);
+    for (int8_t y = 0-counter; y <= counter; y++) {
+      if (abs(y)== counter){
+        for (int8_t x = 0-counter*2; x <= counter*2; x++) { 
+          screen[position + (LINE * y) + x] =  0x2E;
+        }
+      }
+      else{
+          screen[position + (LINE * y) + counter*2] =  0x2E;
+          screen[position + (LINE * y) - counter*2] =  0x2E;            
+      }
+    }
+}
+

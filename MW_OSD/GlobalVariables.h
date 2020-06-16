@@ -433,7 +433,7 @@ uint8_t debugtext=0;
 uint8_t MSP_home_set=0;
 uint8_t variopitch=0;
 uint8_t MAVstatuslength;
-
+uint8_t phasers=0;
 #if defined CORRECT_MSP_BF1
   uint8_t bfconfig[25];
 #endif
@@ -897,7 +897,7 @@ volatile uint16_t MwRcData[1+16];
 #ifndef FILTER_AVG
 #define SENSORFILTERSIZE 1
 #else
-#define SENSORFILTERSIZE 8
+#define SENSORFILTERSIZE FILTER_AVG
 #endif
 #define SENSORTOTAL 5
 #define FHBANDWIDTH 100

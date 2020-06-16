@@ -779,6 +779,9 @@ void loop()
 #ifdef MAV_STATUS
         displayMAVstatustext();
 #endif
+#ifdef PHASERS  
+        displayPhasers();
+#endif // PHASERS  
 #ifdef ADSBSTATION
   displayADSBStation();
 #endif // ADSBSTATION
