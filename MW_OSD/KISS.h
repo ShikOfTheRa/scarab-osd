@@ -1,7 +1,7 @@
 
 
 uint8_t kissread_u8(uint8_t index) {
-  return KISSserialBuffer[index];
+  return serialBuffer[index];
 }
 
 uint16_t kissread_u16(uint8_t index) {
@@ -20,7 +20,7 @@ uint32_t kissread_u32(uint8_t index) {
 }
 
 bool kissread_bool(uint8_t index) {
-  return KISSserialBuffer[index] == 1;
+  return serialBuffer[index] == 1;
 }
 
 uint32_t ESC_filter(uint32_t oldVal, uint32_t newVal) {
@@ -28,12 +28,12 @@ uint32_t ESC_filter(uint32_t oldVal, uint32_t newVal) {
 }
 
 void kissWriteInBuffer_u8(uint8_t index, uint8_t value) {
-   KISSserialBuffer[index] = (uint8_t)(value);
+   serialBuffer[index] = (uint8_t)(value);
 }
 
 void kissWriteInBuffer_u16(uint8_t index, uint16_t value) {
-  KISSserialBuffer[index] = (uint8_t)((value) >> 8);
-   KISSserialBuffer[index + 1] = (uint8_t)(value);
+  serialBuffer[index] = (uint8_t)((value) >> 8);
+   serialBuffer[index + 1] = (uint8_t)(value);
 }
 
 
@@ -122,10 +122,16 @@ void kiss_sync_telemetry() {
   MwAngle[0] = (int16_t)kissread_u16(KISS_INDEX_ANGLE0) / 10;
   MwAngle[1] = (int16_t)kissread_u16(KISS_INDEX_ANGLE1) / 10;
   Kvar.mode = kissread_u8(KISS_INDEX_MODE);
-  Kvar.mode = (Kvar.mode > 2) ? 0 : Kvar.mode;
+  Kvar.mode = (Kvar.mode > KISS_mode_RTH_index) ? 0 : Kvar.mode;
   MwRcData[1] = 1000 + (int16_t)kissread_u16(KISS_INDEX_THROTTLE);
   for (uint8_t i = 1; i < 8; i++) {
     MwRcData[i + 1] = 1500 + (int16_t)kissread_u16(i * 2);
+  }
+  // RC8->10 not on old versions, check if the frame contains them
+  if (Kvar.framelength >= KISS_INDEX_RC10) {
+    MwRcData[8] = 1500 + (int16_t)kissread_u16(KISS_INDEX_RC8);
+    MwRcData[9] = 1500 + (int16_t)kissread_u16(KISS_INDEX_RC9);
+    MwRcData[10] = 1500 + (int16_t)kissread_u16(KISS_INDEX_RC10);
   }
   handleRawRC();
 
@@ -139,7 +145,7 @@ void kiss_sync_telemetry() {
     // calculate amperage using ESC sum method...
     MWAmperage = 0;
     for (uint8_t i = 0; i < 6; i++) {
-      filtereddata[i] = ESC_filter((uint32_t)filtereddata[i], (uint32_t)((KISSserialBuffer[KISS_INDEX_ESC1_AMP + (i * 10)] << 8) | KISSserialBuffer[KISS_INDEX_ESC1_AMP + 1 + (i * 10)]) << 4);
+      filtereddata[i] = ESC_filter((uint32_t)filtereddata[i], (uint32_t)((serialBuffer[KISS_INDEX_ESC1_AMP + (i * 10)] << 8) | serialBuffer[KISS_INDEX_ESC1_AMP + 1 + (i * 10)]) << 4);
       MWAmperage     += filtereddata[i] >> 4;
     }
     //    MWAmperage/=10;
@@ -196,6 +202,31 @@ void kiss_sync_settings() {
   modeMSPRequests &=~ REQ_MSP_KISS_SETTINGS;
 }
 
+void kiss_message() {
+  // No new message
+  if (Kvar.framelength <= 1) {
+    return;
+  }
+
+  uint8_t newPriorityMessage = kissread_u8(KISS_GET_MESSAGE_PRIORITY);
+  // Check if new message has higher priority or if old one is still displayed
+  if (newPriorityMessage >= kissMessagePriority || timer.fcMessage == 0) {
+    kissMessagePriority = newPriorityMessage;
+    timer.fcMessage = kissread_u16(KISS_GET_MESSAGE_DURATION) / 1000;
+
+    fcMessageLength = Kvar.framelength - KISS_GET_MESSAGE_MESSAGE;
+    if (fcMessageLength > KISS_MAX_MESSAGE_SIZE) {
+      fcMessageLength = KISS_MAX_MESSAGE_SIZE;
+    }
+    // message loading
+    for (uint8_t i = KISS_GET_MESSAGE_MESSAGE; i < Kvar.framelength && (i - KISS_GET_MESSAGE_MESSAGE) < KISS_MAX_MESSAGE_SIZE; i++) {
+      // Message display start at 1
+      fontData[i - KISS_GET_MESSAGE_MESSAGE + 1] = toupper(serialBuffer[i]);
+    }
+  }
+
+}
+
 uint8_t kissProtocolCRC8(const uint8_t *data, uint8_t startIndex, uint8_t stopIndex) 
 {
   uint8_t crc = 0;
@@ -230,16 +261,16 @@ uint8_t kissProtocolChecksum(const uint8_t *data, uint8_t startIndex, uint8_t st
 void serialKISSsendData(uint8_t request, uint8_t dataSize) {
   uint8_t crc = 0;
   if (Kvar.version > 0 && Kvar.version < 109) {
-    crc = kissProtocolChecksum(KISSserialBuffer, 0, dataSize);
+    crc = kissProtocolChecksum(serialBuffer, 0, dataSize);
   } else {
-    crc = kissProtocolCRC8(KISSserialBuffer, 0, dataSize);
+    crc = kissProtocolCRC8(serialBuffer, 0, dataSize);
   }
   KISScurrentRequest = request;
   Serial.write(request);
   if (request != KISS_GET_TELEMETRY && request != KISS_GET_SETTINGS) {
     Serial.write(dataSize);
     for (int i = 0; i < dataSize;i++) {
-      Serial.write(KISSserialBuffer[i]);
+      Serial.write(serialBuffer[i]);
     }
     Serial.write(crc);
   }
@@ -329,7 +360,7 @@ void serialKISSreceive(uint8_t c) {
   }
   else if (c_state == KISS_HEADER_SIZE) {
     if (Kvar.index < KISSFRAMELENGTH) {
-      KISSserialBuffer[Kvar.index] = c;
+      serialBuffer[Kvar.index] = c;
     }
     Kvar.cksumtmp+=c;
 
@@ -358,6 +389,9 @@ void serialKISSreceive(uint8_t c) {
           break;
         case KISS_GET_SETTINGS:
           kiss_sync_settings();
+          break;
+        case KISS_GET_MESSAGE:
+          kiss_message();
           break;
 #ifdef KISSGPS
         case KISS_GET_GPS:

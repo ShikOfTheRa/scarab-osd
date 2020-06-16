@@ -307,6 +307,7 @@
 #endif
 
 #ifdef KISS      //set up latest at time of release
+  #define FC_MESSAGE
 #endif
 
 #ifdef SKYTRACK  //set up latest at time of release
@@ -1199,6 +1200,7 @@ enum {
 #ifndef TX_CHANNELS
   #define TX_CHANNELS 16 
 #endif
+#define FC_MESSAGE
 #endif
 
 #ifdef PROTOCOL_LTM

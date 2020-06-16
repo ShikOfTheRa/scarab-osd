@@ -272,7 +272,7 @@ struct  __timer {
 //  uint8_t accCalibrationTimer;
   uint8_t  magCalibrationTimer;
   uint32_t fwAltitudeTimer;
-  uint32_t seconds;
+  uint32_t seconds;                           // Incremented every second (in milliseconds)
   uint8_t  MSP_active;
   uint8_t  GPS_active;
   uint8_t  GUI_active;
@@ -291,7 +291,7 @@ struct  __timer {
   uint32_t audiolooptimer;
   uint32_t GPSOSDstate;
   uint8_t  disarmed;                             
-  uint8_t  MAVstatustext;
+  uint8_t  fcMessage;                        // Duration of the FC message (in seconds)
   uint8_t  armedstatus;   
   uint8_t  adsbttl;
 }
@@ -432,8 +432,11 @@ volatile uint16_t pwmval2=0;
 uint8_t debugtext=0;
 uint8_t MSP_home_set=0;
 uint8_t variopitch=0;
-uint8_t MAVstatuslength;
 uint8_t phasers=0;
+#ifdef FC_MESSAGE
+uint8_t fcMessageLength;
+#endif // FC_MESSAGE
+
 #if defined CORRECT_MSP_BF1
   uint8_t bfconfig[25];
 #endif
@@ -773,7 +776,7 @@ enum Positions {
   WIND_speedPosition,
   MaxDistanceposition,
   DOPposition,
-
+  
   POSITIONS_SETTINGS
 };
 
@@ -865,6 +868,7 @@ static uint16_t vtxLowPower = 0;
 static uint16_t vtxMaxPower = 0;
 static uint8_t vtxBand = 0;
 static uint8_t vtxChannel = 1;
+static bool kissMessageToRequest = false;
 #else
 static uint8_t pidP[PIDITEMS], pidI[PIDITEMS], pidD[PIDITEMS];
 static uint8_t rcRate8,rcExpo8;
@@ -1102,6 +1106,7 @@ int16_t rssiMIN=100;
 #define MSP_KISS_TELEMTRY        255
 #define MSP_KISS_SETTINGS        256
 #define MSP_KISS_GPS             257
+#define MSP_KISS_MESSAGE         258
 #endif // KISS
 
 // Betaflight specific
@@ -1158,10 +1163,15 @@ const char satlow_text[]    PROGMEM = "LOW SATS";
 const char disarmed_text[]  PROGMEM = "DISARMED";
 const char armed_text[]     PROGMEM = " ARMED";
 const char FAILtext[]       PROGMEM = "FAILSAFE";
+#ifndef KISS
 const char APRTHtext[]      PROGMEM = "AUTO RTL";
+#else
+const char APRTHtext[]      PROGMEM = "AUTO RTH";
+#endif // KISS
 const char APHOLDtext[]     PROGMEM = "AUTO HOLD";
 const char APWAYPOINTtext[] PROGMEM = " MISSION";
 const char lowvolts_text[]  PROGMEM = "LOW VOLTS";
+const char turtle_text[]    PROGMEM = "TURTLE";
 #if defined DEBUGTEXT
 const char debug_text[]     PROGMEM = DEBUGTEXT;
 #else
@@ -1173,6 +1183,8 @@ const char ready_text[]     PROGMEM = " READY";
 const char CRUISE_text[]    PROGMEM = " C";
 const char AUTOTRIM_text[]  PROGMEM = "AUTOTRIM";
 const char AUTOTUNE_text[]  PROGMEM = "AUTOTUNE";
+
+#define APRTHtext_index 2
 
 // For Alarm / Message text
 const PROGMEM char * const message_text[] =
@@ -1189,6 +1201,7 @@ const PROGMEM char * const message_text[] =
 #endif // EXTENDEDMODESUPPORT 
 };
 
+#define LAST_ALARM_TEXT_INDEX 8
 const PROGMEM char * const alarm_text[] =
 {   
   blank_text,     //0
@@ -1205,13 +1218,12 @@ const PROGMEM char * const alarm_text[] =
   satlow_text,    //5
   lowvolts_text,  //6
   debug_text,     //7
+  turtle_text,    //8
 };
 
 struct __alarms {
-  uint8_t active;
-  uint8_t  queue;
-  uint8_t  index;
-  uint8_t  alarm;
+  uint16_t active;
+  uint16_t  queue;
 }alarms;
 
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
@@ -1633,6 +1645,7 @@ const unsigned char UnitsIcon[10]={
 #define REQ_MSP_KISS_TELEMTRY        (1L<<28)
 #define REQ_MSP_KISS_SETTINGS        (1L<<29)
 #define REQ_MSP_KISS_GPS             (1L<<30)
+#define REQ_MSP_KISS_MESSAGE         (1L<<31)
 #endif
 // Menu selections
 
@@ -2349,18 +2362,28 @@ struct __mw_ltm {
 const char KISS_mode_ACRO[] PROGMEM   = ""; //Acrobatic: rate control
 const char KISS_mode_STAB[] PROGMEM   = "STAB"; //Stabilize: hold level position
 const char KISS_mode_3D[]   PROGMEM   = "3D"; //Stabilize: hold level position
+const char KISS_mode_TURTLE[] PROGMEM = "TURTLE";
+const char KISS_mode_UNKNOWN[] PROGMEM = "";
+const char KISS_mode_RTH[] PROGMEM = "RTH";
+
+#define KISS_mode_TURTLE_index  3
+#define KISS_mode_RTH_index     5
 
 const PROGMEM char * const KISS_mode_index[] = 
 {   
  KISS_mode_ACRO,
  KISS_mode_STAB, 
- KISS_mode_3D, 
+ KISS_mode_3D,
+ KISS_mode_TURTLE,
+ KISS_mode_UNKNOWN,
+ KISS_mode_RTH
 };
 
 #define ESC_FILTER 10
 #define KISS_GET_TELEMETRY 0x20
 #define KISS_GET_GPS 0x54
 #define KISS_GET_SETTINGS 0x30
+#define KISS_GET_MESSAGE 0x73
 #define KISS_SET_PIDS 0x44
 #define KISS_SET_RATES 0x4E
 #define KISS_SET_FILTERS 0x48
@@ -2387,6 +2410,9 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_INDEX_ESC5_AMP 127 // INT 16
 #define KISS_INDEX_ESC6_AMP 137 // INT 16
 #define KISS_INDEX_MAH 148 // INT 16
+#define KISS_INDEX_RC8 154 // INT 16
+#define KISS_INDEX_RC9 156 // INT 16
+#define KISS_INDEX_RC10 158 // INT 16
 
 #define KISS_INDEX_GPS_LATITUDE 0   // UINT 32
 #define KISS_INDEX_GPS_LONGITUDE 4  // UINT 32
@@ -2475,10 +2501,17 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_SET_VTX_IDX_LOW_POWER 2 // INT 16
 #define KISS_SET_VTX_IDX_MAX_POWER 4 // INT 16
 
+// Indexes of GET_MESSAGE
+#define KISS_GET_MESSAGE_DURATION 0 // UINT 16
+#define KISS_GET_MESSAGE_PRIORITY 2 // UINT 8
+#define KISS_GET_MESSAGE_MESSAGE 3 // char[] | index 3 to the end of frame (last value always 0)
+
+#define KISS_MAX_MESSAGE_SIZE 15 // Size defined in KISS 1.3-RC45b
+uint8_t kissMessagePriority=1;
+
 #define KISSFRAMEINIT 5
 #define KISSFRAMELENGTH KISS_SETTINGS_IDX_DTERM_LPF + 2 // Size of serial buffer defined with max index used
 
-uint8_t KISSserialBuffer[KISSFRAMELENGTH];
 uint8_t KISScurrentRequest = 0x00;
 uint8_t KISSgetcmd=0;
 
@@ -2519,6 +2552,8 @@ struct __Kvar {
 }
 Kvar;
 
+#define KISS_VERSION_1_3_RC44 122
+
 uint8_t  GPS_fix_HOME=0;
 int32_t  GPS_home[2];
 #define  LAT  0
@@ -2557,7 +2592,11 @@ const PROGMEM char * const NAZA_mode_index[] =
 #elif defined iNAV // 40 max in test
   #define SERIALBUFFERSIZE 65
 #elif defined KISS
+#if KISSFRAMELENGTH > 65 // By security, we test that the frame is always greater than 65
+  #define SERIALBUFFERSIZE KISSFRAMELENGTH
+#else
   #define SERIALBUFFERSIZE 65
+#endif
 #else
   #define SERIALBUFFERSIZE 100
 #endif

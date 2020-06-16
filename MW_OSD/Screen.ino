@@ -170,6 +170,9 @@ void displayMode(void)
   strcpy_P(screenBuffer, (char*)pgm_read_word(&(ltm_mode_index[mw_ltm.mode])));
 #elif defined PROTOCOL_KISS// override MWOSD mode icons
   strcpy_P(screenBuffer, (char*)pgm_read_word(&(KISS_mode_index[Kvar.mode])));
+  if (Kvar.mode == KISS_mode_RTH_index) { // RTL
+    MAX7456_WriteString_P(PGMSTR(&(message_text[APRTHtext_index])), getPosition(APstatusPosition));
+  }
 #elif defined (NAZAMODECONTROL) && defined (NAZA)// override MWOSD mode icons
   strcpy_P(screenBuffer, (char*)pgm_read_word(&(NAZA_mode_index[Naza.mode])));
 #elif defined (PROTOCOL_MSP) // MWOSD mode icons
@@ -242,7 +245,7 @@ void displayMode(void)
 #define MAVRTLID 6
 #endif
   if (mw_mav.mode == MAVRTLID) { // RTL
-    apactive = 2;
+    apactive = APRTHtext_index;
     MAX7456_WriteString_P(PGMSTR(&(message_text[apactive])), getPosition(APstatusPosition));
   }
   else if ((mw_mav.mode == MAVMISSIONID) & (GPS_waypoint_step > 0)) // Mission
@@ -304,26 +307,30 @@ void displayIcon(int cposition)
   }
 }
 
-#ifdef MAV_STATUS
-void displayMAVstatustext(void)
+#ifdef FC_MESSAGE
+void displayFCMessage(void)
 {
   uint16_t pos;
-  if (timer.MAVstatustext == 0)
+  if (timer.fcMessage == 0)
     return;
   pos = (30 * (getPosition(motorArmedPosition) / 30));
-  for (uint8_t i = 0; i < 60; i++) {
+  uint8_t maxLength = 60;
+  // If the message length is <= 25, we only use the first line
+  if (fcMessageLength<=25)
+    maxLength = 30;
+  for (uint8_t i = 0; i < maxLength; i++) {
     screen[pos+i] = SYM_BLANK;
   }
-  for (uint8_t i = 1; i <= MAVstatuslength; i++) {
+  for (uint8_t i = 1; i <= fcMessageLength; i++) {
     pos = 2 + (30 * (getPosition(motorArmedPosition) / 30));
-      if (MAVstatuslength<=25){ // single line
-        pos +=  (25 - (MAVstatuslength)) /2;
+      if (fcMessageLength<=25){ // single line
+        pos +=  (25 - (fcMessageLength)) /2;
       }
       else if (i<25) { // first row of multi line       
       }
       else{ // second row of multi line
         pos +=LINE;
-        pos +=  (25 - (MAVstatuslength%25)) /2;
+        pos +=  (25 - (fcMessageLength%25)) /2;
       }
       pos += i % 25;  
       screen[pos] = char(fontData[i]);
@@ -2526,6 +2533,7 @@ void displayArmed(void)
       armedtimer--;
     }
     else {
+      // Activates blank text
       alarms.active |= B00000001;
     }
   }
@@ -2570,14 +2578,23 @@ void displayArmed(void)
     }
 #endif //ALARM_MSP
   }
+  
+#ifdef KISS
+  if (Kvar.mode == KISS_mode_TURTLE_index) {
+    alarms.active |= (1 << 8);
+  }
+#endif // KISS
 
 #ifndef ALARM_ARMED
+  // deactivation of blank, disarmed and armed
   alarms.active &= B11111000;
 #endif //ALARM_ARMED
 
+
+
   if (alarms.queue == 0)
     alarms.queue = alarms.active;
-  uint8_t queueindex = alarms.queue & -alarms.queue;
+  uint16_t queueindex = alarms.queue & -alarms.queue;
   if (millis() > 500 + timer.alarms) {
     if (alarms.queue > 0)
       alarms.queue &= ~queueindex;
@@ -2585,7 +2602,7 @@ void displayArmed(void)
   }
 
   uint8_t queueindexbit = 0;
-  for (uint8_t i = 0; i <= 7; i++) {
+  for (uint8_t i = 0; i <= LAST_ALARM_TEXT_INDEX; i++) {
     if  (queueindex & (1 << i))
       queueindexbit = i;
   }
@@ -2593,7 +2610,6 @@ void displayArmed(void)
     MAX7456_WriteString_P(PGMSTR(&(alarm_text[queueindexbit])), getPosition(motorArmedPosition));
   }
 }
-
 
 void displayForcedCrosshair() {
   uint16_t position = getPosition(horizonPosition);
