@@ -898,15 +898,14 @@ volatile uint16_t MwRcData[1+16];
 
 
 // for analogue / PWM sensor filtering 
-#ifndef FILTER_AVG
-#define SENSORFILTERSIZE 1
-#else
-#define SENSORFILTERSIZE FILTER_AVG
-#endif
 #define SENSORTOTAL 5
-#define FHBANDWIDTH 100
+#ifdef FILTER_AVG
+  #define SENSORFILTERSIZE 8
+#else
+  #define SENSORFILTERSIZE 0
+#endif
+  int16_t sensorfilter[SENSORTOTAL][SENSORFILTERSIZE+1]; 
 
-int16_t sensorfilter[SENSORTOTAL][SENSORFILTERSIZE+2]; 
 
 uint16_t  MwSensorPresent=0;
 uint32_t  MwSensorActive=0;

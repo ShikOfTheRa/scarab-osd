@@ -1377,20 +1377,7 @@ void ProcessSensors(void) {
       }
     }
     //--- Apply filtering
-#if defined FILTER_HYSTERYSIS  // Hysteris incremental averaged change    
-    static uint16_t shfilter[SENSORTOTAL];
-    int16_t diff = (sensortemp << FILTER_HYSTERYSIS) - shfilter[sensor];
-    if (abs(diff) > (FHBANDWIDTH << FILTER_HYSTERYSIS)) {
-      shfilter[sensor] = sensortemp << FILTER_HYSTERYSIS;
-    }
-    else if (diff > 0) {
-      shfilter[sensor]++;
-    }
-    else if (diff < 0) {
-      shfilter[sensor]--;
-    }
-    sensorfilter[sensor][SENSORFILTERSIZE] = (shfilter[sensor] >> FILTER_HYSTERYSIS << 3);
-#elif defined FILTER_AVG   // Use averaged change    
+#if defined FILTER_AVG   // Use averaged change    
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];
     sensorfilter[sensor][sensorindex] = (sensorfilter[sensor][sensorindex] + sensortemp) >> 1;
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] + sensorfilter[sensor][sensorindex];

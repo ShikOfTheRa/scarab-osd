@@ -292,7 +292,11 @@ void serialMSPCheck()
       cfgWrite8(OSD_SENSORS);
       for (uint8_t sensor=0;sensor<SENSORTOTAL;sensor++) {
 //        uint16_t sensortemp = analogRead(sensorpinarray[sensor]);
+        #ifdef FILTER_AVG
         uint16_t sensortemp = (uint16_t)sensorfilter[sensor][SENSORFILTERSIZE]/SENSORFILTERSIZE;
+        #else
+         uint16_t sensortemp = (uint16_t)sensorfilter[sensor][SENSORFILTERSIZE];
+        #endif
         cfgWrite16(sensortemp);
       }
        cfgWriteChecksum();
