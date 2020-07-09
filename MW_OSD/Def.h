@@ -925,7 +925,6 @@
 
 #ifdef USE_MENU_VTX
   const uint8_t MENU_VTX_tmp = MAXPAGE+1;
-  #undef  USE_MENU_VTX
   #define MENU_VTX MENU_VTX_tmp
   #undef  MAXPAGE
   #define MAXPAGE MENU_VTX 
