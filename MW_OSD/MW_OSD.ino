@@ -1377,7 +1377,8 @@ void ProcessSensors(void) {
       }
     }
     //--- Apply filtering
-#if defined FILTER_AVG   // Use averaged change    
+#if defined FILTER_AVG   // Use averaged change  
+    sensortemp = sensortemp << (FILTER_SHIFT);
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];
     sensorfilter[sensor][sensorindex] = (sensorfilter[sensor][sensorindex] + sensortemp) >> 1;
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] + sensorfilter[sensor][sensorindex];

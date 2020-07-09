@@ -144,7 +144,7 @@
 
 /********************       FILTER settings      *********************/
 //Choose ONLY ONE option to enable filtered smoother readings of voltage / current / RSSI :
-//#define FILTER_AVG                  // Enable standard averaging filter. Averagae of 8 readings. Uses lots of memory
+//#define FILTER_AVG 4               // Enable standard averaging filter. Average of X readings. Only use 2,4 or 8. Uses memory
 
 
 /********************       GPS settings      *********************/

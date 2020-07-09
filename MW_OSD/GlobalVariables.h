@@ -899,8 +899,19 @@ volatile uint16_t MwRcData[1+16];
 
 // for analogue / PWM sensor filtering 
 #define SENSORTOTAL 5
-#ifdef FILTER_AVG
-  #define SENSORFILTERSIZE 8
+#if defined FILTER_AVG
+  #if FILTER_AVG == 8
+    #define FILTER_SHIFT 0
+  #elif FILTER_AVG==4
+    #define FILTER_SHIFT 1
+  #elif FILTER_AVG==2
+    #define FILTER_SHIFT 2
+  #else
+    #undefine FILTER_AVG
+    #define SENSORFILTERSIZE 0
+  #endif
+  
+  #define SENSORFILTERSIZE FILTER_AVG
 #else
   #define SENSORFILTERSIZE 0
 #endif
