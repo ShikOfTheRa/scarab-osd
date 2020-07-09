@@ -379,11 +379,10 @@ For sub-command 3 (draw string):
            (Charset compat problem is ignored)
 */
 
-    lastCanvas = millis();
-
     if (configMode)
       configExit(); // exits MWOSD menu so never be in menu when CMS mode active
-
+    lastCanvas = millis();
+    canvasMode = true;
     switch(read8()) {
     case 0: // Enter / hold canvas mode
       canvasMode = true;
@@ -394,7 +393,8 @@ For sub-command 3 (draw string):
       break;
 
     case 2: // Clear canvas
-      MAX7456_ClearScreen();
+      MAX7456_DrawScreen(); // Draws and clears..
+//      MAX7456_ClearScreen();
       break;
 
     case 3: // Draw string at (row,col) with attribute (if supported)
@@ -415,6 +415,9 @@ For sub-command 3 (draw string):
         ++canvasx;
       }
       break;
+
+//    case 4:  // documentation indicates a screen draw, but it seems independant of drawn strings and unusable      
+
     }
     return;
   }

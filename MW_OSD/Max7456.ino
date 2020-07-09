@@ -292,7 +292,7 @@ void MAX7456_WaitVSYNC(void)
     if (millis() > vsync_timer){
       vsync_wait=0;
     } else{
-      serialMSPreceive(0); // Might as well do something whilst waiting :)
+//      serialMSPreceive(0); // Might as well do something whilst waiting :)
     }
   }
 }
@@ -350,9 +350,6 @@ void MAX7456_DrawScreen()
    
     MAX7456_Send(MAX7456ADD_DMDI, screen[xx]);
 
-#ifdef CANVAS_SUPPORT
-    if (!canvasMode) // Don't erase in canvas mode
-#endif
     {
       screen[xx] = ' ';
     #ifdef INVERTED_CHAR_SUPPORT

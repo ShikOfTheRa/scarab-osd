@@ -59,6 +59,10 @@
 //#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
 //#define GPSOSD_MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
 //#define NOCONTROLLER              // Uncomment this if you have nothing connected to the serial port - no controller or GPS module
+//#define SUBMERSIBLE               // Uncomment this if you are using a submersible with MS5837 and optional MSP based FC
+//#define ADSBSTATION               // Uncomment this if you are using PINGRX enabled MAV groundstation
+//#define CANVASOSD                 // Uncomment this if you are using OSD permanently in CANVASOSD mode
+
 // old releases supported...
 //#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3
 //#define MULTIWII_V21              // Uncomment this if you are using MW versions 2.0/2.1  (for BOXNAMES compatibility)
@@ -67,8 +71,7 @@
 //#define CLEANFLIGHT172            // Uncomment this if you are using CLEANFLIGHT versions up to and including 1.7.2
 //#define CLEANFLIGHT180            // Uncomment this if you are using CLEANFLIGHT versions 1.8.0 & 1.8.1
 //#define BETAFLIGHT3               // Uncomment this if you are using BETAFLIGHT versions prior to 3.1
-//#define SUBMERSIBLE               // Uncomment this if you are using a submersible with MS5837 and optional MSP based FC
-//#define ADSBSTATION               // Uncomment this if you are using PINGRX enabled MAV groundstation
+
 
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
@@ -240,7 +243,7 @@
 /********************       Display Settings         ************************/
 #define MAXSTALLDETECT              // Enable to attempt to detect MAX chip stall from bad power. Attempts to restart.
 #define AUTOCAM                     // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
-#define USE_VSYNC                   // Disable if no screen display. Removes sparklies as updates screen during blanking time period. 
+//#define USE_VSYNC                 // Removes sparklies as updates screen during blanking time period. Only of benefit for MAX7456 IC 
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
 //#define ALT_CENTER                // Enable alternative center crosshair
 //#define FORCECROSSHAIR            // Forces a crosshair even if no AHI / horizon used

@@ -276,6 +276,12 @@ void loop()
   displayFont();
   MAX7456_DrawScreen();
 }
+#elif defined CANVASOSD
+void loop()
+{
+  // MAX7456Setup() // it would be beneficial to run this every few seconds to identify and reset max7456 lockups from low voltages
+  serialMSPreceive(1);
+}
 #else
 
 // ampAlarming returns true if the total consumed mAh is greater than
@@ -613,7 +619,10 @@ void loop()
         }
       }
 #endif // KISS
-      MAX7456_DrawScreen();
+#ifdef CANVAS_SUPPORT
+      if (!canvasMode)
+#endif // CANVAS_SUPPORT
+        MAX7456_DrawScreen();
     }
 
 #ifdef SBUS_CONTROL
