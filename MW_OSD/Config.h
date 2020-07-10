@@ -61,7 +61,7 @@
 //#define NOCONTROLLER              // Uncomment this if you have nothing connected to the serial port - no controller or GPS module
 //#define SUBMERSIBLE               // Uncomment this if you are using a submersible with MS5837 and optional MSP based FC
 //#define ADSBSTATION               // Uncomment this if you are using PINGRX enabled MAV groundstation
-//#define CANVASOSD                 // Uncomment this if you are using OSD permanently in CANVASOSD mode
+//#define CANVASOSD                 // Uncomment for permanent canvas mode operation. https://github.com/ShikOfTheRa/scarab-osd/wiki/CANVASOSD 
 //#define LTM2ADSB                  // Uncomment for an LTM2ADSB converter
 
 // old releases supported...
