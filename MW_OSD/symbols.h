@@ -142,7 +142,10 @@
 
 // ADSB
 #define SYM_ADSB 0X05
-// #define SYM_ADSB 0X01 WHen GUI is updated
+// #define SYM_ADSB 0X7E When GUI is updated
+
+#define SYM_MARK  0xC2
+#define SYM_SPACE 0xC3
 
 // Vario
 #define SYM_VARIO 0x8C

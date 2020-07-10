@@ -69,7 +69,7 @@ void PaintStack(void)
       p++;
   }
 #else
-  //using asm since compiller could not be trusted here
+  //using asm since compiler could not be trusted here
   __asm volatile ("    ldi r30,lo8(_end)\n"
                   "    ldi r31,hi8(_end)\n"
                   "    ldi r24,lo8(0xa5)\n" /* Paint color = 0xa5 */
@@ -795,6 +795,9 @@ void loop()
         if (MwSensorPresent)
           displayCells();
 #endif
+#ifdef VT
+        encodeVT();
+#endif 
 #ifdef ADSBAWARE 
   displayADSB();
 #endif // ADSBAWARE 
