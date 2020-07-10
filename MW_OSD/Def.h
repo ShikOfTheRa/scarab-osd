@@ -182,6 +182,12 @@
   #define MSPV2
 #endif
 
+#ifdef LTM2ADSB
+  #define BUDDYFLIGHT
+  #define PROTOCOL_LTM 
+  #define PROTOCOL_MAVLINK_SHARED_ADSB  
+#endif // LTM2ADSB
+
 #ifdef BUDDYFLIGHT
   #define ADSBAWARE
 #endif // BUDDYFLIGHT

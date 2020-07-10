@@ -1,3 +1,95 @@
+#if defined (PROTOCOL_MAVLINK) || defined (PROTOCOL_MAVLINK_SHARED_ADSB)
+
+void mav_tx_checksum_func(int val) {
+  long tmp;
+  tmp = (val ^ mw_mav.tx_checksum) & 0xFF;
+  tmp ^= (tmp << 4) & 0xFF;
+  mw_mav.tx_checksum = ( mw_mav.tx_checksum >> 8) ^ (tmp << 8) ^ (tmp << 3) ^ (tmp >> 4);
+}
+
+
+void mav_serialize8(uint8_t val) {
+  mav_tx_checksum_func(val);
+  Serial.write(val);
+}
+
+
+void mav_serialize16(uint16_t val) {
+  mav_serialize8((val   ) & 0xFF);
+  mav_serialize8((val >> 8) & 0xFF);
+}
+
+
+void mav_serialize32(uint32_t val) {
+  mav_serialize8((val   ) & 0xFF);
+  mav_serialize8((val >> 8) & 0xFF);
+  mav_serialize8((val >> 16) & 0xFF);
+  mav_serialize8((val >> 24) & 0xFF);
+}
+
+void send_mavlink_ADSB_TRAFFIC_REPORT_MESSAGE(void) {
+  if (GPS_numSat < MINSATFIX)
+    return;
+  //head:
+  static int8_t tx_sequence = 0;
+  tx_sequence++;
+  mw_mav.tx_checksum = 0xFFFF; //init
+  Serial.write(0xFE);
+  mav_serialize8(MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_LEN);
+  mav_serialize8(tx_sequence);
+  mav_serialize8(MAV_SYS_ID_ADSB);
+  mav_serialize8(MAV_COMP_ID_ADSB);
+  mav_serialize8(MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE);
+  //body:
+  mav_serialize32(ADSBID);
+  mav_serialize32(GPS_latitude);
+  mav_serialize32(GPS_longitude);
+  mav_serialize32((int32_t)(GPS_altitude)*1000);
+//  mav_serialize32(GPS_latitude+10000);               // for testing with proximity vehicle
+//  mav_serialize32(GPS_longitude+10000);              // for testing with proximity vehicle
+//  mav_serialize32((int32_t)(GPS_altitude+700)*1000); // for testing with proximity vehicle
+  mav_serialize16(((MwHeading+360)%360)*100);
+  mav_serialize16(GPS_speed*100);
+  mav_serialize16(0);
+  mav_serialize16(0x1BF);
+  for (int i = 0; i < 14; i++) {
+    mav_serialize8(0);
+  }
+  //tail:
+  mav_tx_checksum_func(MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_MAGIC);
+  Serial.write((uint8_t)(mw_mav.tx_checksum & 0xFF));
+  Serial.write((uint8_t)(mw_mav.tx_checksum >> 8 & 0xFF));
+  #ifdef ADSBDEBUG
+    adsb_debug_traffic_sent++;
+  #endif // ADSBDEBUG  
+}
+
+
+void send_mavlink_ADSB_STATUS_MESSAGE(void) {
+  //head:
+  static int8_t tx_sequence = 0;
+  tx_sequence++;
+  mw_mav.tx_checksum = 0xFFFF; //init
+  Serial.write(0xFE);
+  mav_serialize8(MAVLINK_MSG_ID_ADSB_STATUS_LEN);
+  mav_serialize8(tx_sequence);
+  mav_serialize8(MAV_SYS_ID_ADSB);
+  mav_serialize8(MAV_COMP_ID_ADSB);
+  mav_serialize8(MAVLINK_MSG_ID_ADSB_STATUS);
+  //body:
+  mav_serialize8(MAV_STATUS_ADSB); 
+  //tail:
+  mav_tx_checksum_func(MAVLINK_MSG_ID_ADSB_STATUS_MAGIC);
+  Serial.write((uint8_t)(mw_mav.tx_checksum & 0xFF));
+  Serial.write((uint8_t)(mw_mav.tx_checksum >> 8 & 0xFF));
+  #ifdef ADSBDEBUG
+    adsb_debug_status_sent++;
+  #endif // ADSBDEBUG
+}
+#endif
+
+
+
 #ifdef PROTOCOL_MAVLINK
 
 void mav_checksum(uint8_t val) {
@@ -42,34 +134,6 @@ void GPS_reset_home_position() {
   GPS_home[LAT] = GPS_latitude;
   GPS_home[LON] = GPS_longitude;
   //GPS_altitude_home = GPS_altitude;
-}
-
-
-void mav_tx_checksum_func(int val) {
-  long tmp;
-  tmp = (val ^ mw_mav.tx_checksum) & 0xFF;
-  tmp ^= (tmp << 4) & 0xFF;
-  mw_mav.tx_checksum = ( mw_mav.tx_checksum >> 8) ^ (tmp << 8) ^ (tmp << 3) ^ (tmp >> 4);
-}
-
-
-void mav_serialize8(uint8_t val) {
-  mav_tx_checksum_func(val);
-  Serial.write(val);
-}
-
-
-void mav_serialize16(uint16_t val) {
-  mav_serialize8((val   ) & 0xFF);
-  mav_serialize8((val >> 8) & 0xFF);
-}
-
-
-void mav_serialize32(uint32_t val) {
-  mav_serialize8((val   ) & 0xFF);
-  mav_serialize8((val >> 8) & 0xFF);
-  mav_serialize8((val >> 16) & 0xFF);
-  mav_serialize8((val >> 24) & 0xFF);
 }
 
 
@@ -168,67 +232,6 @@ void request_mavlink_CMD_APM(uint8_t MAVStream, uint16_t MAVRate) {
   mav_tx_checksum_func(MAVLINK_MSG_ID_REQUEST_DATA_STREAM_MAGIC);
   Serial.write((uint8_t)(mw_mav.tx_checksum & 0xFF));
   Serial.write((uint8_t)(mw_mav.tx_checksum >> 8 & 0xFF));
-}
-
-
-void send_mavlink_ADSB_TRAFFIC_REPORT_MESSAGE(void) {
-  if (GPS_numSat < MINSATFIX)
-    return;
-  //head:
-  static int8_t tx_sequence = 0;
-  tx_sequence++;
-  mw_mav.tx_checksum = 0xFFFF; //init
-  Serial.write(0xFE);
-  mav_serialize8(MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_LEN);
-  mav_serialize8(tx_sequence);
-  mav_serialize8(MAV_SYS_ID_ADSB);
-  mav_serialize8(MAV_COMP_ID_ADSB);
-  mav_serialize8(MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE);
-  //body:
-  mav_serialize32(ADSBID);
-  mav_serialize32(GPS_latitude);
-  mav_serialize32(GPS_longitude);
-  mav_serialize32((int32_t)(GPS_altitude)*1000);
-//  mav_serialize32(GPS_latitude+10000);               // for testing with proximity vehicle
-//  mav_serialize32(GPS_longitude+10000);              // for testing with proximity vehicle
-//  mav_serialize32((int32_t)(GPS_altitude+700)*1000); // for testing with proximity vehicle
-  mav_serialize16(((MwHeading+360)%360)*100);
-  mav_serialize16(GPS_speed*100);
-  mav_serialize16(0);
-  mav_serialize16(0x1BF);
-  for (int i = 0; i < 14; i++) {
-    mav_serialize8(0);
-  }
-  //tail:
-  mav_tx_checksum_func(MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_MAGIC);
-  Serial.write((uint8_t)(mw_mav.tx_checksum & 0xFF));
-  Serial.write((uint8_t)(mw_mav.tx_checksum >> 8 & 0xFF));
-  #ifdef ADSBDEBUG
-    adsb_debug_traffic_sent++;
-  #endif // ADSBDEBUG  
-}
-
-
-void send_mavlink_ADSB_STATUS_MESSAGE(void) {
-  //head:
-  static int8_t tx_sequence = 0;
-  tx_sequence++;
-  mw_mav.tx_checksum = 0xFFFF; //init
-  Serial.write(0xFE);
-  mav_serialize8(MAVLINK_MSG_ID_ADSB_STATUS_LEN);
-  mav_serialize8(tx_sequence);
-  mav_serialize8(MAV_SYS_ID_ADSB);
-  mav_serialize8(MAV_COMP_ID_ADSB);
-  mav_serialize8(MAVLINK_MSG_ID_ADSB_STATUS);
-  //body:
-  mav_serialize8(MAV_STATUS_ADSB); 
-  //tail:
-  mav_tx_checksum_func(MAVLINK_MSG_ID_ADSB_STATUS_MAGIC);
-  Serial.write((uint8_t)(mw_mav.tx_checksum & 0xFF));
-  Serial.write((uint8_t)(mw_mav.tx_checksum >> 8 & 0xFF));
-  #ifdef ADSBDEBUG
-    adsb_debug_status_sent++;
-  #endif // ADSBDEBUG
 }
 
 

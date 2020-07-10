@@ -2012,6 +2012,30 @@ const PROGMEM char * const msp_mode_index[] =
 };
 #endif // PROTOCOL_MSP
 
+
+#if defined (PROTOCOL_MAVLINK) || defined (PROTOCOL_MAVLINK_SHARED_ADSB)
+#define MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE 246
+#define MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_MAGIC 184
+#define MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_LEN 38
+#define MAVLINK_MSG_ID_ADSB_STATUS 203
+#define MAVLINK_MSG_ID_ADSB_STATUS_MAGIC 85
+#define MAVLINK_MSG_ID_ADSB_STATUS_LEN 1
+#define MAV_COMP_ID_ADSB 156
+#define MAV_SYS_ID_ADSB 1
+#define MAV_STATUS_ADSB 10
+struct __mw_mav {
+  uint8_t  message_cmd;
+  uint8_t  message_length;
+  uint8_t  mode;
+  uint8_t  sequence;
+  uint16_t serial_checksum;
+  uint16_t tx_checksum;
+  uint16_t throttle;
+}mw_mav;
+
+#endif //ADSB_MAVLINK
+
+
 #ifdef PROTOCOL_MAVLINK
 
 #define MAVLINK_MSG_ID_HEARTBEAT 0
@@ -2078,12 +2102,6 @@ const PROGMEM char * const msp_mode_index[] =
 #define MAVLINK_MSG_ID_COMMAND_LONG 76
 #define MAVLINK_MSG_ID_COMMAND_LONG_MAGIC 152
 #define MAVLINK_MSG_ID_COMMAND_LONG_LEN 33
-#define MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE 246
-#define MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_MAGIC 184
-#define MAVLINK_MSG_ID_ADSB_TRAFFIC_REPORT_MESSAGE_LEN 38
-#define MAVLINK_MSG_ID_ADSB_STATUS 203
-#define MAVLINK_MSG_ID_ADSB_STATUS_MAGIC 85
-#define MAVLINK_MSG_ID_ADSB_STATUS_LEN 1
 #define MAV_STREAMS 7
 #define MAV_DATA_STREAM_RAW_SENSORS 1
 #define MAV_DATA_STREAM_EXTENDED_STATUS 2
@@ -2093,9 +2111,6 @@ const PROGMEM char * const msp_mode_index[] =
 #define MAV_DATA_STREAM_EXTRA2 11
 #define MAV_DATA_STREAM_EXTRA3 12
 #define MAV_COMP_ID_OSD 157
-#define MAV_COMP_ID_ADSB 156
-#define MAV_SYS_ID_ADSB 1
-#define MAV_STATUS_ADSB 10
 
 #define  LAT  0
 #define  LON  1
@@ -2276,16 +2291,6 @@ const PROGMEM char * const mav_mode_index[] =
 #endif //FIXEDWING or COPTER
 
 // Vars
-struct __mw_mav {
-  uint8_t  message_cmd;
-  uint8_t  message_length;
-  uint8_t  mode;
-  uint8_t  sequence;
-  uint16_t serial_checksum;
-  uint16_t tx_checksum;
-  uint16_t throttle;
-}mw_mav;
-
 int32_t  GPS_home[2];
 uint8_t  GPS_fix_HOME;
 int16_t  GPS_altitude_home;  

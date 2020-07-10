@@ -62,6 +62,7 @@
 //#define SUBMERSIBLE               // Uncomment this if you are using a submersible with MS5837 and optional MSP based FC
 //#define ADSBSTATION               // Uncomment this if you are using PINGRX enabled MAV groundstation
 //#define CANVASOSD                 // Uncomment this if you are using OSD permanently in CANVASOSD mode
+//#define LTM2ADSB                  // Uncomment for an LTM2ADSB converter
 
 // old releases supported...
 //#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3
