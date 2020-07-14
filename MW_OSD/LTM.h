@@ -26,14 +26,6 @@ void GPS_distance_cm_bearing(int32_t* lat1, int32_t* lon1, int32_t* lat2, int32_
   if (*bearing < 0) *bearing += 36000;
 }
 
-void GPS_reset_home_position() {
-  if (GPS_fix && GPS_numSat >= MINSATFIX) {
-    GPS_home[LAT] = GPS_latitude;
-    GPS_home[LON] = GPS_longitude;
-    if (!MSP_home_set)
-      mw_ltm.GPS_altitude_home = GPS_altitude;
-  }
-}
 
 uint16_t calculateCurrentFromConsumedCapacity(uint16_t mahUsed)
 {
@@ -75,16 +67,29 @@ void ltm_check() {
     GPS_longitude = (int32_t)ltmread_u32();
     GPS_speed = ltmread_u8() * 100;            // LTM gives m/s, we expect cm/s
     GPS_altitude = ((int32_t)ltmread_u32());   // LTM altitude in cm.
-    if (GPS_fix_HOME == 0){
-      GPS_reset_home_position();
-    }
+
     GPS_altitude=GPS_altitude - mw_ltm.GPS_altitude_home;
     MwAltitude = (int32_t) GPS_altitude;       // baro alt in cm
     GPS_altitude = GPS_altitude / 100;         // gps  alt in m
     uint8_t ltm_satsfix = ltmread_u8();
     GPS_numSat = (ltm_satsfix >> 2) & 0xFF;
     GPS_fix    = ((ltm_satsfix & 0b00000011) <= 1) ? 0 : 1;
-    // ipdate home distance and bearing
+    //update home
+    if (GPS_fix_HOME == 0){
+      if (GPS_fix && (GPS_numSat >= MINSATFIX)) {
+        if (GPS_fix_HOME_validation>0){
+          GPS_fix_HOME_validation--;
+          GPS_numSat=1;
+        }
+        else{
+          GPS_home[LAT] = GPS_latitude;
+          GPS_home[LON] = GPS_longitude;
+          mw_ltm.GPS_altitude_home = GPS_altitude;
+          GPS_fix_HOME=1;
+        }
+      }    
+    }
+    // update home distance and bearing
     if ((GPS_fix>0) && (GPS_numSat >= MINSATFIX)) {
       uint32_t dist;
       int32_t  dir;
@@ -92,6 +97,7 @@ void ltm_check() {
       GPS_distanceToHome = dist/100;
       GPS_directionToHome = dir/100;
     } 
+    
   }
 
   if (mw_ltm.LTMcmd == LIGHTTELEMETRY_AFRAME)
@@ -137,23 +143,6 @@ void ltm_check() {
     mw_ltm.mode = (mw_ltm.mode>15) ? 15 : mw_ltm.mode;
   }
 
-  if (mw_ltm.LTMcmd == LIGHTTELEMETRY_OFRAME)
-  {
-
-    if (GPS_fix && (GPS_numSat >= MINSATFIX)) {
-      if (GPS_fix_HOME_validation>0){
-        GPS_fix_HOME_validation--;
-        GPS_numSat=1;
-      }
-      else{
-        if (GPS_fix_HOME == 0){
-          GPS_home[LAT] = (int32_t)ltmread_u32();
-          GPS_home[LON] = (int32_t)ltmread_u32();
-          GPS_fix_HOME=1;
-        }
-      }
-    }
-  }
 }
 
 void serialLTMreceive(uint8_t c) {
