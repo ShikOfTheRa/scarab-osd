@@ -67,10 +67,6 @@ void ltm_check() {
     GPS_longitude = (int32_t)ltmread_u32();
     GPS_speed = ltmread_u8() * 100;            // LTM gives m/s, we expect cm/s
     GPS_altitude = ((int32_t)ltmread_u32());   // LTM altitude in cm.
-
-    GPS_altitude=GPS_altitude - mw_ltm.GPS_altitude_home;
-    MwAltitude = (int32_t) GPS_altitude;       // baro alt in cm
-    GPS_altitude = GPS_altitude / 100;         // gps  alt in m
     uint8_t ltm_satsfix = ltmread_u8();
     GPS_numSat = (ltm_satsfix >> 2) & 0xFF;
     GPS_fix    = ((ltm_satsfix & 0b00000011) <= 1) ? 0 : 1;
@@ -89,6 +85,11 @@ void ltm_check() {
         }
       }    
     }
+
+    GPS_altitude=GPS_altitude - mw_ltm.GPS_altitude_home;
+    MwAltitude = (int32_t) GPS_altitude;       // baro alt in cm
+    GPS_altitude = GPS_altitude / 100;         // gps  alt in m
+        
     // update home distance and bearing
     if ((GPS_fix>0) && (GPS_numSat >= MINSATFIX)) {
       uint32_t dist;
