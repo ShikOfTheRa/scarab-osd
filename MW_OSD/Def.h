@@ -188,6 +188,12 @@
   #define PROTOCOL_MAVLINK_SHARED_ADSB  
 #endif // LTM2ADSB
 
+#ifdef UBLOX2ADSB
+  #define BUDDYFLIGHT
+  #define GPSOSD_UBLOX 
+  #define PROTOCOL_MAVLINK_SHARED_ADSB  
+#endif // LTM2ADSB
+
 #ifdef BUDDYFLIGHT
   #define ADSBAWARE
 #endif // BUDDYFLIGHT

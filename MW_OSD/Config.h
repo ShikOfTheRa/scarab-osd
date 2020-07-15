@@ -62,7 +62,8 @@
 //#define SUBMERSIBLE               // Uncomment this if you are using a submersible with MS5837 and optional MSP based FC
 //#define ADSBSTATION               // Uncomment this if you are using PINGRX enabled MAV groundstation
 //#define CANVASOSD                 // Uncomment for permanent canvas mode operation. https://github.com/ShikOfTheRa/scarab-osd/wiki/CANVASOSD 
-//#define LTM2ADSB                  // Uncomment for an LTM2ADSB converter
+//#define LTM2ADSB                  // Uncomment for a LTM protocol to ADSB converter
+//#define UBLOX2ADSB                // Uncomment for a UBLOX protocol to ADSB converter
 
 // old releases supported...
 //#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3
