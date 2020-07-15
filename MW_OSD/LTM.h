@@ -52,7 +52,6 @@ uint16_t calculateCurrentFromConsumedCapacity(uint16_t mahUsed)
 void ltm_check() {
   timer.packetcount++;
   mw_ltm.LTMreadIndex=0;
-  static uint8_t GPS_fix_HOME_validation=GPSHOMEFIX;
   static uint8_t armedglitchprotect=0;
   uint32_t dummy;
 #ifdef DATA_MSP
@@ -73,16 +72,10 @@ void ltm_check() {
     //update home
     if (GPS_fix_HOME == 0){
       if (GPS_fix && (GPS_numSat >= MINSATFIX)) {
-        if (GPS_fix_HOME_validation>0){
-          GPS_fix_HOME_validation--;
-          GPS_numSat=1;
-        }
-        else{
-          GPS_home[LAT] = GPS_latitude;
-          GPS_home[LON] = GPS_longitude;
-          mw_ltm.GPS_altitude_home = GPS_altitude;
-          GPS_fix_HOME=1;
-        }
+        GPS_home[LAT] = GPS_latitude;
+        GPS_home[LON] = GPS_longitude;
+        mw_ltm.GPS_altitude_home = GPS_altitude;
+        GPS_fix_HOME=1;
       }    
     }
 
