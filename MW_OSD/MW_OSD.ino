@@ -1394,6 +1394,8 @@ void ProcessSensors(void) {
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] - sensorfilter[sensor][sensorindex];
     sensorfilter[sensor][sensorindex] = (sensorfilter[sensor][sensorindex] + sensortemp) >> 1;
     sensorfilter[sensor][SENSORFILTERSIZE] = sensorfilter[sensor][SENSORFILTERSIZE] + sensorfilter[sensor][sensorindex];
+#elif defined FILTER_STD   // Use averaged change  
+    sensorfilter[sensor][SENSORFILTERSIZE] = (sensorfilter[sensor][SENSORFILTERSIZE] - (sensorfilter[sensor][SENSORFILTERSIZE]>>(3+FILTER_STD)) + (sensortemp >> FILTER_STD));
 #else                      // No filtering
     sensorfilter[sensor][SENSORFILTERSIZE] = sensortemp << 3;
 #endif

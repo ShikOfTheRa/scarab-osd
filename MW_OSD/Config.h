@@ -149,7 +149,8 @@
 
 /********************       FILTER settings      *********************/
 //Choose ONLY ONE option to enable filtered smoother readings of voltage / current / RSSI :
-//#define FILTER_AVG 4               // Enable standard averaging filter. Average of X readings. Only use 2,4 or 8. Uses memory
+#define FILTER_STD 1                 // Enable simple averaging filter. Average of X readings. Only use 0-4. Higher = more filtering. Uses more ststic memory. 
+//#define FILTER_AVG 4               // Enable alternative more accurate averaging filter. Average of X readings. Only use 2,4 or 8. Uses more dynamic and static memory.
 
 
 /********************       GPS settings      *********************/
@@ -472,7 +473,7 @@
 // This is to enable rarely used advanced parameter saving. Off by default to minimise risk
 // Enabling may create ability to write invalid data to FC
 //#define ADVANCEDSAVE              // Enables saving of advanced paramters where supported (Looptime/profile)
-//#define FIXEDLOOP                 // Enables 1ms loop max for consistency
+#define FIXEDLOOP                   // Enables 1ms loop max for consistency.
 
 
 /********************  Under developemnt      *********************/
