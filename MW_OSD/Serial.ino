@@ -872,6 +872,7 @@ if (cmdMSP==MSP_STATUS)
         const char *name;
     } boxnames[] = {
         { &mode.armed,      8,  PSTR("ARM") },
+        { &mode.stable,     8,  PSTR("ACC") },
         { &mode.stable,     8,  PSTR("ANGLE") },
         { &mode.horizon,    8,  PSTR("HORIZON") },
         { &mode.mag,        8,  PSTR("MAG") },
