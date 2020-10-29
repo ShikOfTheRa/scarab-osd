@@ -117,7 +117,7 @@
 
 //#define CANVAS_SUPPORT            // Enable CANVAS mode support for post betaflight 3.1.0 CMS
 //#define INVERTED_CHAR_SUPPORT     // Enable inverted char support
-
+#define AAT                         // Enable video telemetry for Antenna tracker
 
 /********************       DATE & TIME settings      *********************/
 //Select ONLY if you are sure your OSD is connected to a telemetry feed such as MAVLINK/LTM:
@@ -285,6 +285,7 @@
 //#define DISPLAYSPEEDMS            // Displays speed in m/s instead of km/h
 //#define PILOTICON                 // Disable to save memeory if unused. Display pilot ICON as an alternative to CHARACTER display. Requires enabling in GUI >= 1.8.2
 #define LRTRANSITION 999            // Point at which display transitions from standard to long range format. e.g LRT= 999, OSD displays 999m LRT = 1000, OSD displays 1.0km
+//#define AATTEST                   // Display a second visible full telemtry data line for test...
 
 
 /********************       Power / efficiency display Settings         ************************/
@@ -478,5 +479,5 @@
 
 /********************  Under developemnt      *********************/
 // This is a work in process. Not completed for implementation
-//#define VT
+
 

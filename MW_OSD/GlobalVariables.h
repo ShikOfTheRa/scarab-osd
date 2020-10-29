@@ -577,7 +577,7 @@ enum Setting_ {
   S_GLIDESCOPE,
   S_LOSTMODEL,
   S_MAV_AUTO,
-
+  S_AAT,
   // EEPROM_SETTINGS must be last!
   EEPROM_SETTINGS
 };
@@ -713,6 +713,7 @@ DEF_S_ALTRESOLUTION,     // S_ALTRESOLUTION
 0,      // S_GLIDESCOPE - not used
 0,      // S_LOSTMODEL - not used
 1,      // S_MAV_AUTO
+0,      // S_AAT
 };
 
 PROGMEM const uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
