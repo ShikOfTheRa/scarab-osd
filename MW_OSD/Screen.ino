@@ -1235,14 +1235,14 @@ void displayDirectionToHome(void)
 
 void displayADSB(void)
 {  
-  if (!fieldIsVisible(sensorPosition))
+  if (!fieldIsVisible(ADSBposition))
     return;
 #ifndef BUDDYFLIGHT
   if ((timer.adsbttl > 0) && (timer.Blink2hz) && (adsb.dist < ADSB_DIST) && (adsb.alt < ADSB_ALT)) {
     return;      
   }
 #endif // BUDDYFLIGHT  
-  uint16_t t_pos  = getPosition(sensorPosition);  
+  uint16_t t_pos  = getPosition(ADSBposition);  
   formatDistance(adsb.dist,0,2,SYM_ADSB);
   MAX7456_WriteString(screenBuffer, t_pos);
   uint8_t t_x = FindNull();

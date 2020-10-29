@@ -141,8 +141,8 @@
 #define SYM_BATT_EMPTY 0X96
 
 // ADSB
-#define SYM_ADSB 0X05
-// #define SYM_ADSB 0X7E When GUI is updated
+#define SYM_ADSB 0X7F
+
 
 #define SYM_MARK  0xC2
 #define SYM_SPACE 0xC3
