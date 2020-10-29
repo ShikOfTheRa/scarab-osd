@@ -2847,10 +2847,16 @@ void displayLowmemory(void){
 }
 
 
-#ifdef KISS 
+
 void displayVTXvalues(void){
     uint8_t t_idx = 0;
     screenBuffer[0] = 0;
+#ifdef DISPLAY_VTX_BAND
+    screenBuffer[t_idx++] = 'B';
+    screenBuffer[t_idx++] = ':';
+    itoa(vtxBand, screenBuffer + t_idx, 10);  
+    t_idx = FindNull();
+#endif // DISPLAY_VTX_BAND
 #ifdef DISPLAY_VTX_CH
     screenBuffer[t_idx++] = 'C';
     screenBuffer[t_idx++] = 'H';
@@ -2861,14 +2867,19 @@ void displayVTXvalues(void){
 #ifdef DISPLAY_VTX_PWR
     screenBuffer[t_idx++] = 'P';
     screenBuffer[t_idx++] = ':';
-    itoa(vtxMaxPower, screenBuffer + t_idx, 10);
+    itoa(vtxPower, screenBuffer + t_idx, 10);
     t_idx = FindNull();
 #endif // DISPLAY_VTX_PWR
+#ifdef DISPLAY_VTX_PWR_MAX // KISS
+    screenBuffer[t_idx++] = 'P';
+    screenBuffer[t_idx++] = ':';
+    itoa(vtxMaxPower, screenBuffer + t_idx, 10);
+    t_idx = FindNull();
+#endif // DISPLAY_VTX_PWR_MAX
     screenBuffer[t_idx++] = 0;    
-    if (fieldIsVisible(gimbalPosition))
-      MAX7456_WriteString(screenBuffer, getPosition(gimbalPosition));   
+    if (fieldIsVisible(VTXposition))
+      MAX7456_WriteString(screenBuffer, getPosition(VTXposition));   
 }  
-#endif
 
 
 #ifdef ADSBSTATION

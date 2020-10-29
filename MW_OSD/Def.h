@@ -36,7 +36,7 @@
 //#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
 
 
-#define DEVELOPMENT               // For development set only 
+//#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
   #undef LOW_MEMORY 
   #define LOW_MEMORY 200
@@ -133,6 +133,8 @@
   #define VTX_RC
   #define VTX_LED
   #define USE_MENU_VTX
+  #define DISPLAY_VTX_CH            // Enables displays VTX channel.
+  #define DISPLAY_VTX_PWR           // Enables displays VTX power.
 #endif
 
 #ifdef FFPV_INNOVA
@@ -141,6 +143,8 @@
   //#define VTX_RC    // Can be turned on, hard to use without VTX_LED
   //#define VTX_LED   // Needs VTXLED_* definitions in RTC6705.ino
   #define USE_MENU_VTX
+  #define DISPLAY_VTX_CH            // Enables displays VTX channel.
+  #define DISPLAY_VTX_PWR           // Enables displays VTX power.
 #endif
 
 
@@ -326,7 +330,6 @@
 #endif
 
 #ifdef KISS      //set up latest at time of release
-  #define FC_MESSAGE
 #endif
 
 #ifdef SKYTRACK  //set up latest at time of release
@@ -662,6 +665,9 @@
   #define PROTOCOL_KISS
   #define AMPERAGE_DIV 10
   #undef MAPMODE
+  #define FC_MESSAGE  
+  #define DISPLAY_VTX_CH            // Enables displays VTX channel.
+  #define DISPLAY_VTX_PWR_MAX       // Enables displays VTX Power max.
 #endif
 
 #ifdef SKYTRACK

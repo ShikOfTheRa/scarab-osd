@@ -775,11 +775,10 @@ void loop()
         displayWindSpeed(); // also windspeed if available
         displayItem(MAX_speedPosition, speedMAX, SYM_MAX, speedUnitAdd[Settings[S_UNITSYSTEM]], 0 );
         displayGPSPosition();
-#ifdef KISS
+#if defined (DISPLAY_VTX_CH) || defined (DISPLAY_VTX_PWR) || defined (DISPLAY_VTX_PWR_MAX) || defined (DISPLAY_VTX_BAND)   
         displayVTXvalues();
-#else
+#endif        
         displayGimbal();
-#endif
 #ifdef GPSTIME
         if (fieldIsVisible(GPS_timePosition))
           displayDateTime();

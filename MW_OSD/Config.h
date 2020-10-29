@@ -349,8 +349,6 @@
 
 //********************       KISS Settings         ************************/
 // KISS FC specific items
-#define DISPLAY_VTX_CH            // Displays VTX channel. Re-purposes GUI gimbal configration item to display value if selected.
-#define DISPLAY_VTX_PWR           // Displays VTX channel. Re-purposes GUI gimbal configration item to display value if selected.
 
 
 /********************       Voltage Settings         ************************/

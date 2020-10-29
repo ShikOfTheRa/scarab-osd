@@ -778,7 +778,8 @@ enum Positions {
   MaxDistanceposition,
   DOPposition,
   ADSBposition,
-    
+  VTXposition,
+     
   POSITIONS_SETTINGS
 };
 
@@ -849,7 +850,8 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE03+22)|DISPLAY_NEVER|DISPLAY_DEV,    // WIND_speedposition,
 (LINE06+8)|DISPLAY_NEVER|DISPLAY_DEV,     // MaxDistanceposition
 (LINE05+2)|DISPLAY_NEVER|DISPLAY_DEV,     // DOPposition
-(LINE03+10)|DISPLAY_NEVER|DISPLAY_DEV,     // ADSBposition
+(LINE03+10)|DISPLAY_NEVER|DISPLAY_DEV,    // ADSBposition
+(LINE04+10)|DISPLAY_NEVER|DISPLAY_DEV,    // VTXPosition
 };
 
 #ifdef KISS
