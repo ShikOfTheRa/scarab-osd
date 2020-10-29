@@ -352,8 +352,6 @@
 
 
 /********************       Voltage Settings         ************************/
-//The following variables are available to display cell voltage values
-//#define SHOW_CELL_VOLTAGE         // Show average cell voltage for main battery instead of video / bat 2 voltage. 
 //The following variables are available for adjustment of battery icon only
 #define CELL_VOLTS_MIN 32           // Specify the cell voltage at which it is considered empty. Used for battery guage icon only
 #define CELL_VOLTS_MAX 42           // Specify the max normal LIPO cell voltage. Used for auto cell count determination and battery guage icon

@@ -779,6 +779,7 @@ enum Positions {
   DOPposition,
   ADSBposition,
   VTXposition,
+  Cellposition,
      
   POSITIONS_SETTINGS
 };
@@ -852,6 +853,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE05+2)|DISPLAY_NEVER|DISPLAY_DEV,     // DOPposition
 (LINE03+10)|DISPLAY_NEVER|DISPLAY_DEV,    // ADSBposition
 (LINE04+10)|DISPLAY_NEVER|DISPLAY_DEV,    // VTXPosition
+(LINE08+2)|DISPLAY_NEVER|DISPLAY_DEV,     // Cellposition
 };
 
 #ifdef KISS

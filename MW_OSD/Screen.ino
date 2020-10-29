@@ -586,10 +586,7 @@ void displayVoltage(void)
   if ((voltage < voltageWarning) && (timer.Blink2hz))
     return;
   displayItem(voltagePosition, voltage, t_lead_icon, SYM_VOLT, 1 );
-#ifdef SHOW_CELL_VOLTAGE
-  displayItem(vidvoltagePosition, voltage / cells, t_lead_icon, SYM_VOLT, 1 ); // individual cell voltage avg.
-#endif
-
+  displayItem(Cellposition, voltage / cells, t_lead_icon, SYM_VOLT, 1 ); // individual cell voltage avg.
 }
 
 
@@ -785,7 +782,7 @@ void displayWatt(void)
 void displayEfficiency(void)
 {
   uint16_t t_xx;
-  uint16_t t_efficiency;
+  uint16_t t_efficiency = 999;
   if (!Settings[S_UNITSYSTEM])
     t_xx = GPS_speed * GPS_CONVERSION_UNIT_TO_KM_H;
   else
@@ -793,11 +790,9 @@ void displayEfficiency(void)
   if (t_xx > 0) {
     t_efficiency = amperage * voltage / (10 * t_xx); // Watts/Speed}
   }
-  else {
-    t_efficiency = 999;
-  }
-  if (t_efficiency < 999)
-    displayItem(efficiencyPosition, t_efficiency, SYM_EFF, 0, 0 );
+  if (t_efficiency > 999)
+    t_efficiency = 999;      
+  displayItem(efficiencyPosition, t_efficiency, SYM_EFF, 0, 0 );
 }
 
 
