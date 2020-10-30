@@ -93,7 +93,7 @@
 // Ignore this section unless you know you need to use it !!
 // This section contains initialisation options that only require to be run once.
 // Once the initialisation has completed, all sections should be commented and the sketch re-uploaded.
-// Font upload will take 90 seconds after upload is completed. If connected to a camera, you will see teh font table displayed.
+// Font upload will take 90 seconds after upload is completed. If connected to a camera, you will see the font table displayed.
 
 //#define EEPROM_CLEAR              // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.
 //#define LOADFONT_DEFAULT          // Uncomment to force an upload of default font instead of using GUI
