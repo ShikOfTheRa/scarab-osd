@@ -1271,7 +1271,7 @@ void readEEPROM(void)
     screenPosition[en] = EEPROM.read(pos);
     uint16_t xx = (uint16_t)EEPROM.read(pos + 1) << 8;
     screenPosition[en] = screenPosition[en] + xx;
-    if (flags.signaltype == 1) {
+    if ((flags.signaltype == 1) && (Settings[S_VIDEOSIGNALTYPE]==2)) {
       uint16_t x = screenPosition[en] & 0x1FF;
       if (x > LINE06) screenPosition[en] = screenPosition[en] + LINE;
       if (x > LINE09) screenPosition[en] = screenPosition[en] + LINE;
