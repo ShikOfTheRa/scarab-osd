@@ -194,7 +194,7 @@
 #define SYM_FLY_M 0X9C
 #define SYM_ON_H 0X70
 #define SYM_FLY_H 0X71
-#define SYM_FLY_REM 0X2A
+#define SYM_FLY_REM 0XF7
 
 
 // Menu cursor
