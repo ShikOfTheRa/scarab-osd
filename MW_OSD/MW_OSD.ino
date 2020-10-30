@@ -767,6 +767,7 @@ void loop()
         displayDistanceMax();
         displayAngleToHome();
         displayGPSdop();
+        displayCustom();
         // displayfwglidescope(); //note hook for this is in display horizon function
         if (!armed) 
           GPS_speed = 0;

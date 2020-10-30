@@ -580,6 +580,7 @@ enum Setting_ {
   S_AAT,
   S_TIMER1,
   S_TIMER2,
+  S_CUSTOM,
   // EEPROM_SETTINGS must be last!
   EEPROM_SETTINGS
 };
@@ -718,6 +719,7 @@ DEF_S_ALTRESOLUTION,     // S_ALTRESOLUTION
 0,      // S_AAT
 0,      // S_TIMER1
 3,      // S_TIMER2
+0,      // S_CUSTOM
 };
 
 PROGMEM const uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
@@ -784,6 +786,7 @@ enum Positions {
   ADSBposition,
   VTXposition,
   Cellposition,
+  Customposition,
      
   POSITIONS_SETTINGS
 };
@@ -858,6 +861,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE03+10)|DISPLAY_NEVER|DISPLAY_DEV,    // ADSBposition
 (LINE04+10)|DISPLAY_NEVER|DISPLAY_DEV,    // VTXPosition
 (LINE04+2)|DISPLAY_NEVER|DISPLAY_DEV,     // Cellposition
+(LINE03+15)|DISPLAY_NEVER|DISPLAY_DEV,    // Customposition
 };
 
 #ifdef KISS
