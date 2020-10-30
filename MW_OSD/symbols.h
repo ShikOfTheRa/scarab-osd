@@ -107,16 +107,12 @@
 #define SYM_MAG11 0XB6
 
 // AH Center screen Graphics
-//#define SYM_AH_CENTER 0X01
-#ifdef ALT_CENTER
-  #define SYM_AH_CENTER_LINE 0XB0
-  #define SYM_AH_CENTER 0XB1
-  #define SYM_AH_CENTER_LINE_RIGHT 0XB2
-#else
-  #define SYM_AH_CENTER_LINE 0X26
-  #define SYM_AH_CENTER 0X7E
-  #define SYM_AH_CENTER_LINE_RIGHT 0XBC
-#endif
+#define SYM_AH_CENTER_LINE 0XB0
+#define SYM_AH_CENTER 0XB1
+#define SYM_AH_CENTER_LINE_RIGHT 0XB2
+//#define SYM_AH_CENTER_LINE 0X26
+//#define SYM_AH_CENTER 0X7E
+//#define SYM_AH_CENTER_LINE_RIGHT 0XBC
 #define SYM_AH_RIGHT 0X02
 #define SYM_AH_LEFT 0X03
 #define SYM_AH_DECORATION_UP 0XC9
@@ -143,7 +139,7 @@
 // ADSB
 #define SYM_ADSB 0X7F
 
-
+// AAT
 #define SYM_MARK  0xC2
 #define SYM_SPACE 0xC3
 
@@ -198,6 +194,8 @@
 #define SYM_FLY_M 0X9C
 #define SYM_ON_H 0X70
 #define SYM_FLY_H 0X71
+#define SYM_FLY_REM 0X2A
+
 
 // Menu cursor
 #define SYM_CURSOR SYM_AH_LEFT
@@ -355,4 +353,3 @@
 #else
 #define SYM_THR           0
 #endif
-

@@ -578,6 +578,8 @@ enum Setting_ {
   S_LOSTMODEL,
   S_MAV_AUTO,
   S_AAT,
+  S_TIMER1,
+  S_TIMER2,
   // EEPROM_SETTINGS must be last!
   EEPROM_SETTINGS
 };
@@ -714,6 +716,8 @@ DEF_S_ALTRESOLUTION,     // S_ALTRESOLUTION
 0,      // S_LOSTMODEL - not used
 1,      // S_MAV_AUTO
 0,      // S_AAT
+0,      // S_TIMER1
+3,      // S_TIMER2
 };
 
 PROGMEM const uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
@@ -821,7 +825,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE01+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // MwGPSLatPositionTop         On top of screen
 (LINE01+15)|DISPLAY_ALWAYS|DISPLAY_DEV,   // MwGPSLonPositionTop         On top of screen
 (LINE12+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // rssiPosition
-(LINE09+8)|DISPLAY_NEVER|DISPLAY_DEV,     // temperaturePosition
+(LINE09+23)|DISPLAY_NEVER|DISPLAY_DEV,     // temperaturePosition
 (LINE13+2)|DISPLAY_ALWAYS|DISPLAY_DEV,    // voltagePosition
 (LINE11+2)|DISPLAY_NEVER|DISPLAY_DEV,     // vidvoltagePosition
 (LINE13+9)|DISPLAY_ALWAYS|DISPLAY_DEV,    // amperagePosition
@@ -853,7 +857,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE05+2)|DISPLAY_NEVER|DISPLAY_DEV,     // DOPposition
 (LINE03+10)|DISPLAY_NEVER|DISPLAY_DEV,    // ADSBposition
 (LINE04+10)|DISPLAY_NEVER|DISPLAY_DEV,    // VTXPosition
-(LINE08+2)|DISPLAY_NEVER|DISPLAY_DEV,     // Cellposition
+(LINE04+2)|DISPLAY_NEVER|DISPLAY_DEV,     // Cellposition
 };
 
 #ifdef KISS
@@ -1613,8 +1617,8 @@ const uint8_t monthDays[]=
 const unsigned char compass[] = {'N','S','E','W'};
 
 // POSITION OF EACH CHARACTER OR LOGO IN THE MAX7456
-const unsigned char flightUnitAdd[4] ={
-  SYM_ON_M,SYM_ON_H, SYM_FLY_M,SYM_FLY_H} ; 
+const unsigned char flightUnitAdd[5] ={
+  SYM_ON_M,SYM_ON_H, SYM_FLY_M,SYM_FLY_H, SYM_FLY_REM} ; 
 
 const unsigned char speedUnitAdd[2] ={
   SYM_KMH,SYM_MPH} ; // [0][0] and [0][1] = Km/h   [1][0] and [1][1] = Mph

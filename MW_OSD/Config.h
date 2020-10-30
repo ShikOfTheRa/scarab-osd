@@ -292,7 +292,6 @@
 #define DISPLAYWATTS                // Disable to save memory if not used. Enable this to display Watts
 #define DISPLAYEFFICIENCY           // Disable to save memory if not used. Enable this to display Watts/KMh or Mph for efficiency
 #define DISPLAYAVGEFFICIENCY        // Disable to save memory if not used. Enable this to display average mAh used / per KM or Mile travelled. 
-#define DISPLAYEFFICIENCYTIME       // Enable this to display effieciency time remaining above elapsed time. 
 //#define EFFICIENCYTIMEINST        // Enable this for time remaining display to be based upon instantaneous current draw instead of average battery consumption during flight so far. 
 
 
@@ -364,10 +363,6 @@
 #define BATTERYICONVOLTS            // Enable to use with voltage as indicator of capacity remaining
 //#define BATTERYICONAMPS           // Enable to use with mAh used percentage of AMPHR alarm limit. Warning will now be at 80% of that GUI value
 
-
-/********************       Timer Settings         ************************/
-// Default timer 1 is a Combined On/Flight time. Timer 2 is estimated flight time remaining.
-//#define DUALTIMER                 // Enable to use separate Flight Timer and On Timers. This re-purposes the Flight Time remaining GUI configurator field  
 
 /********************       Headtracker support         ************************/
 //#define VIRTUAL_NOSE              // Enables the use of a virtual nose for headtracker users where aircraft nose is not visible
@@ -475,5 +470,3 @@
 
 /********************  Under developemnt      *********************/
 // This is a work in process. Not completed for implementation
-
-

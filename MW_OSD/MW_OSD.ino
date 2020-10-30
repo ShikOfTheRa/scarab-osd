@@ -1,5 +1,7 @@
 
 
+// USE ARDUINO 1.8 minimum for memory optimisations
+
 /*
 Scarab NG OSD ...
 
@@ -686,10 +688,8 @@ void loop()
         displayRSSI();
         displayAmperage();
         displaypMeterSum();
-#if defined DISPLAYEFFICIENCYTIME && !defined DUALTIMER
-        displayRemainingTime();
-#endif
-        displayFlightTime();
+        displayFlightTime(0);
+        displayFlightTime(1);
 #if defined (DISPLAYWATTS)
         displayWatt();
 #endif //DISPLAYWATTS
