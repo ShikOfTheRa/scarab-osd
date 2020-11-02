@@ -711,16 +711,16 @@ void displayWatt(void)
 void displayEfficiency(void)
 {
   uint16_t t_xx;
-  uint16_t t_efficiency = 999;
+  uint32_t t_efficiency = 999;
   if (!Settings[S_UNITSYSTEM])
     t_xx = GPS_speed * GPS_CONVERSION_UNIT_TO_KM_H;
   else
     t_xx = GPS_speed * GPS_CONVERSION_UNIT_TO_M_H;      
   if (t_xx > 0) {
     t_efficiency = amperage * voltage / (10 * t_xx); // Watts/Speed}
-  }
-  if (t_efficiency > 999)
-    t_efficiency = 999;      
+    if (t_efficiency > 999)
+      t_efficiency = 999;  
+  }    
   displayItem(efficiencyPosition, t_efficiency, SYM_EFF, 0, 0 );
 }
 
@@ -3015,12 +3015,9 @@ void displayFlightTime(uint8_t t_timerno){
     }
   }
 
-  if (t_time>=3600){
-    t_leadsymbol+=1;
-  }
   switch (t_timertype) {
     case 1:
-      t_time = onTime;
+      t_time = onTime;   
       break;
     case 2:
       t_time = flyTime;
@@ -3029,26 +3026,31 @@ void displayFlightTime(uint8_t t_timerno){
         if (((flyTime / 60) >= Settings[S_FLYTIME_ALARM]) && (timer.Blink2hz))
           return;
       }
-      break;      
-    case 3:
-      t_leadsymbol=4;
-      if (t_used < 0){
-        t_used = 0;
-      }
-    #ifdef EFFICIENCYTIMEINST  
-      if (amperage>1){
-        t_time = (uint32_t) 60 * 60 *(t_used)/(amperage * 100);
-      }
-    #else
-      if (amperagesum>100){
-        t_time = (uint32_t) flyTime *(t_used)/(amperagesum/360);
-      }
-    #endif
-      else{ 
-        t_time = 0;
-      }
-      break;
+      break;     
   }
+  if (t_time>=3600){
+    t_leadsymbol+=1;
+  }
+
+  if (t_timertype==3){
+    t_leadsymbol=4;
+    if (t_used < 0){
+      t_used = 0;
+    }
+  #ifdef EFFICIENCYTIMEINST  
+    if (amperage>1){
+      t_time = (uint32_t) 60 * 60 *(t_used)/(amperage * 100);
+    }
+  #else
+    if (amperagesum>100){
+      t_time = (uint32_t) flyTime *(t_used)/(amperagesum/360);
+    }
+  #endif
+    else{ 
+      t_time = 0;
+    }      
+  }  
+  
   if (screenPosition[t_timerPosition] < 512)
     return;
   displayTimer(t_time,getPosition(t_timerPosition), flightUnitAdd[t_leadsymbol]);
