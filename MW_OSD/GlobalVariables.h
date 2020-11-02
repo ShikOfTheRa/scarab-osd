@@ -820,8 +820,8 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE07+23)|DISPLAY_ALWAYS|DISPLAY_DEV,   // MwAltitudePosition
 (LINE07+22)|DISPLAY_ALWAYS|DISPLAY_DEV,   // MwVarioPosition
 (LINE12+22)|DISPLAY_ALWAYS|DISPLAY_DEV,   // CurrentThrottlePosition
-(LINE14+22)|DISPLAY_NEVER|DISPLAY_DEV,    // remainingTimePosition
-(LINE13+22)|DISPLAY_ALWAYS|DISPLAY_DEV,   // onTimePosition
+(LINE11+22)|DISPLAY_NEVER|DISPLAY_DEV,    // Timer2Position
+(LINE13+22)|DISPLAY_ALWAYS|DISPLAY_DEV,   // Timer1Position
 (LINE11+11)|DISPLAY_ALWAYS|DISPLAY_DEV,   // motorArmedPosition
 (LINE10+22)|DISPLAY_NEVER|DISPLAY_DEV,    // pitchAnglePosition
 (LINE11+22)|DISPLAY_NEVER|DISPLAY_DEV,    // rollAnglePosition
@@ -835,11 +835,11 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE13+16)|DISPLAY_ALWAYS|DISPLAY_DEV,   // pMeterSumPosition
 (LINE07+14)|DEF_horizonPosition|DISPLAY_DEV,   // horizonPosition
 (LINE07+7)|DISPLAY_ALWAYS|DISPLAY_DEV,    // SideBarPosition
-(LINE07+7)|DISPLAY_NEVER|DISPLAY_DEV,    // SideBarScrollPosition        Move to 8 bit
-(LINE01+3)|DISPLAY_NEVER,                 //                             Unused
-(LINE01+7)|DISPLAY_NEVER,                 //                             Unused
+(LINE07+7)|DISPLAY_NEVER|DISPLAY_DEV,     // SideBarScrollPosition        Move to 8 bit
+(LINE01+3)|DISPLAY_NEVER,                 // Special function do not use
+(LINE01+7)|DISPLAY_NEVER,                 // Special function do not use
 (LINE04+2)|DISPLAY_NEVER|DISPLAY_DEV,     // Gimbal Position
-(LINE09+11)|DISPLAY_NEVER|DISPLAY_DEV,   // GPS_time Position
+(LINE09+11)|DISPLAY_NEVER|DISPLAY_DEV,    // GPS_time Position
 (LINE09+22)|DISPLAY_NEVER|DISPLAY_DEV,    // SportPosition
 (LINE03+2)|DEF_modePosition|DISPLAY_DEV,  // modePosition
 (LINE02+22)|DISPLAY_NEVER,                // MapModePosition
