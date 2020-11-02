@@ -15,6 +15,9 @@
 #define SBAS_TEST_MODE          PSTR("$PMTK319,0*25\r\n")  //Enable test use of sbas satelite in test mode (usually PRN124 is in test mode)
 #endif
 
+// GPS data buffer length
+#define GPS_BUFFER_LEN 200
+
 // moving average filter variables
 #define GPS_FILTER_VECTOR_LENGTH 5
 
@@ -469,7 +472,7 @@ static union {
   ubx_nav_solution solution;
   ubx_nav_velned velned;
   ubx_nav_timeutc timeutc;
-  uint8_t bytes[0];
+  uint8_t bytes[GPS_BUFFER_LEN];
 } _buffer;
 
 void _update_checksum(uint8_t *data, uint8_t len, uint8_t &ck_a, uint8_t &ck_b) {
@@ -522,7 +525,7 @@ bool GPS_UBLOX_newFrame(uint8_t data) {
       _step++;
       _ck_b += (_ck_a += data);  // checksum byte
       _payload_length += (uint16_t)(data << 8);
-      if ((_payload_length > 512)||(_payload_length == 0)) {
+      if ((_payload_length > GPS_BUFFER_LEN)||(_payload_length == 0)) { //*************************************************************
         _payload_length = 0;
         _step = 0;
       }
@@ -530,7 +533,7 @@ bool GPS_UBLOX_newFrame(uint8_t data) {
       break;
     case 6:
       _ck_b += (_ck_a += data);  // checksum byte
-      if (_payload_counter < sizeof(_buffer)) {
+      if (_payload_counter < GPS_BUFFER_LEN) {
         _buffer.bytes[_payload_counter] = data;
       }
       if (++_payload_counter == _payload_length)
@@ -663,7 +666,7 @@ bool  _offset_calculated;
 // Receive buffer
 union {
   diyd_mtk_msg  msg;
-  uint8_t       bytes[];
+  uint8_t       bytes[GPS_BUFFER_LEN];
 } _buffer;
 
 inline long _swapl(const void *bytes)
@@ -725,7 +728,7 @@ restart:
     case 3:
       _buffer.bytes[_payload_counter++] = data;
       _ck_b += (_ck_a += data);
-      if (_payload_counter == sizeof(_buffer))
+      if (_payload_counter == GPS_BUFFER_LEN)
         _step++;
       break;
 
@@ -882,4 +885,3 @@ void gpsvario() {
     previousfwaltitude = GPS_altitude;
   }
 }
-
