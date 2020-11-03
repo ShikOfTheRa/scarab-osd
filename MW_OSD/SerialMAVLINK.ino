@@ -44,7 +44,7 @@ void send_mavlink_ADSB_TRAFFIC_REPORT_MESSAGE(void) {
   mav_serialize32(ADSBID);
   mav_serialize32(GPS_latitude);
   mav_serialize32(GPS_longitude);
-  mav_serialize32((int32_t)(GPS_altitude)*1000);
+  mav_serialize32((int32_t)(GPS_altitude_ASL)*1000);
 //  mav_serialize32(GPS_latitude+10000);               // for testing with proximity vehicle
 //  mav_serialize32(GPS_longitude+10000);              // for testing with proximity vehicle
 //  mav_serialize32((int32_t)(GPS_altitude+700)*1000); // for testing with proximity vehicle
@@ -402,6 +402,7 @@ void serialMAVCheck() {
  #ifdef USE_MAV_GPS  
       t_GPS_altitude =  (uint32_t) (serialBuffer[16] | (uint32_t)serialBuffer[17] << 8 | (uint32_t)serialBuffer[18] << 16 | (uint32_t)serialBuffer[19] << 24);    
       GPS_altitude = (int32_t) t_GPS_altitude / 1000; 
+      GPS_altitude_ASL = GPS_altitude;
       #if defined RESETGPSALTITUDEATARM
 
       if ((GPS_fix_HOME & B00000010) > 0) {
@@ -600,7 +601,7 @@ void serialMAVCheck() {
 #ifdef BUDDYFLIGHT        
         adsb.alt = t_alt; 
 #else
-        adsb.alt = t_alt - GPS_altitude_home; // Need to determine if GPS altitude type send by UAV. If not ASL, then altitude proximity will be out by launch altitude.
+        adsb.alt = t_alt ; 
 #endif
         adsb.dir = t_dir; // ADSB target heading relative to UAV with North reference
         adsb.cog = t_cog; // ADSB target heading
@@ -859,32 +860,3 @@ void serialMAVreceive(uint8_t c)
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

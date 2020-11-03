@@ -486,6 +486,7 @@ if (cmdMSP==MSP_STATUS)
     GPS_latitude = read32();
     GPS_longitude = read32();
     GPS_altitude = read16();
+    GPS_altitude_ASL = GPS_altitude;
     #if defined RESETGPSALTITUDEATARM
       if (!armed){
         GPS_home_altitude=GPS_altitude;

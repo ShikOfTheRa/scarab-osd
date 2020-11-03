@@ -146,7 +146,7 @@ void displayMode(void)
 
 
   uint8_t xx = 0;
-#ifndef ADSBAWARE  
+
   if (MwSensorActive & mode.stable || MwSensorActive & mode.horizon) {
     screenBuffer[xx] = SYM_ACC;
     xx++;
@@ -163,7 +163,7 @@ void displayMode(void)
   if (fieldIsVisible(sensorPosition)) {
     MAX7456_WriteString(screenBuffer, getPosition(sensorPosition));
   }
-#endif // ADSBAWARE 
+
 #ifdef PROTOCOL_MAVLINK // override MWOSD mode icons
   strcpy_P(screenBuffer, (char*)pgm_read_word(&(mav_mode_index[mw_mav.mode])));
 #elif defined PROTOCOL_LTM // override MWOSD mode icons
@@ -1166,11 +1166,15 @@ void displayADSB(void)
     return;      
   }
 #endif // BUDDYFLIGHT  
+
+
+  if (adsb.dist == 0)
+    adsb.alt = 0;
   uint16_t t_pos  = getPosition(ADSBposition);  
   formatDistance(adsb.dist,0,2,SYM_ADSB);
   MAX7456_WriteString(screenBuffer, t_pos);
   uint8_t t_x = FindNull();
-  formatDistance(adsb.alt-GPS_altitude,0,2,SYM_ADSB);
+  formatDistance(adsb.alt-GPS_altitude_ASL,0,2,SYM_ADSB);
   screenBuffer[0] = headingDirection(MwHeading + 180 + 360 - adsb.dir);
   MAX7456_WriteString(screenBuffer, t_pos + t_x);
 #ifdef ADSBDEBUG

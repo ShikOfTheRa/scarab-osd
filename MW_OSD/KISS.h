@@ -90,6 +90,7 @@ timer.packetcount++;
       GPS_speed         = kissread_u16(KISS_INDEX_GPS_SPEED) / 100;
       GPS_ground_course = kissread_u16(KISS_INDEX_GPS_COURSE) / 10; // Conversion to Unit degree*10 (MSP_RAW_GPS)
       GPS_altitude      = kissread_u16(KISS_INDEX_GPS_ALTITUDE);
+      GPS_altitude_ASL  = GPS_altitude;
 
       // calculation of the GPS direction of the drone on a 180 degree scale
       MwHeading = GPS_ground_course / 10;
