@@ -956,9 +956,13 @@ void loop()
   }
   //  setMspRequests();
   serialMSPreceive(1);
-#ifdef FIXEDLOOP
-  delay(1);
-#endif
+#if defined (FIXEDLOOP) && !defined (USE_VSYNC) // fixed loop speed for consistency with update at max frequency of NTSC to reduce sparklies
+  uint32_t loop_timer = 33 + millis();
+  while (millis() < loop_timer){
+    serialMSPreceive(0); // Might as well do something whilst waiting :)
+  }
+  loop_timer = 33 + loop_timer;
+#endif //FIXEDLOOP
 
 }  // End of main loop
 #endif //main loop
