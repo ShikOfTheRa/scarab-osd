@@ -3061,6 +3061,24 @@ void displayFlightTime(uint8_t t_timerno){
 }
 
 
+void displayPID(void) 
+{
+  uint16_t t_pos = getPosition(PIDposition);
+  if (!fieldIsVisible(PIDposition))
+    return;
+  uint8_t t_piditem;
+  MAX7456_WriteString("R", t_pos);
+  MAX7456_WriteString("P", LINE+t_pos);
+  MAX7456_WriteString("Y", LINE+LINE+t_pos);
+  for (uint8_t t_row = 0; t_row < 3; t_row++) {
+    MAX7456_WriteString(itoa(pidP[t_row], screenBuffer, 10), t_pos + 2);
+    MAX7456_WriteString(itoa(pidI[t_row], screenBuffer, 10), t_pos + 6);
+    MAX7456_WriteString(itoa(pidD[t_row], screenBuffer, 10), t_pos + 10);
+    t_pos+=LINE;
+  }   
+}
+
+
 void displayCustom(void) /// Put your custome code here. Example code below
 {
   uint16_t position = getPosition(Customposition);

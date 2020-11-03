@@ -786,6 +786,7 @@ enum Positions {
   ADSBposition,
   VTXposition,
   Cellposition,
+  PIDposition,
   Customposition,
      
   POSITIONS_SETTINGS
@@ -861,6 +862,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE03+10)|DISPLAY_NEVER|DISPLAY_DEV,    // ADSBposition
 (LINE04+10)|DISPLAY_NEVER|DISPLAY_DEV,    // VTXPosition
 (LINE04+2)|DISPLAY_NEVER|DISPLAY_DEV,     // Cellposition
+(LINE05+10)|DISPLAY_NEVER|DISPLAY_DEV,    // PIDposition
 (LINE03+15)|DISPLAY_NEVER|DISPLAY_DEV,    // Customposition
 };
 

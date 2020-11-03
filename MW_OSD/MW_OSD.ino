@@ -795,9 +795,12 @@ void loop()
         if (MwSensorPresent)
           displayCells();
 #endif
+#ifdef INFLIGHTTUNING
+  displayPID();
+#endif //INFLIGHTTUNING
 #ifdef AAT
         displayAAT();
-#endif 
+#endif //AAT
 #ifdef ADSBAWARE 
   displayADSB();
 #endif // ADSBAWARE 
@@ -1150,6 +1153,11 @@ void setMspRequests() {
       REQ_MSP2_INAV_AIR_SPEED |
 #endif
       REQ_MSP_RC;
+#ifdef INFLIGHTTUNING
+  if (fieldIsVisible(PIDposition))
+      modeMSPRequests |=REQ_MSP_PID;
+#endif
+      
 #else // else not KISS
 #ifdef KISSGPS
       REQ_MSP_KISS_GPS |
