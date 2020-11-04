@@ -773,7 +773,9 @@ void loop()
           GPS_speed = 0;
         display_speed(GPS_speed, GPS_speedPosition, SYM_SPEED_GPS);
         display_speed(AIR_speed, AIR_speedPosition, SYM_SPEED_AIR);
+#if defined WIND_SUPPORTED
         displayWindSpeed(); // also windspeed if available
+#endif//WIND_SUPPORTED
         displayItem(MAX_speedPosition, speedMAX, SYM_MAX, speedUnitAdd[Settings[S_UNITSYSTEM]], 0 );
         displayGPSPosition();
 #if defined (DISPLAY_VTX_CH) || defined (DISPLAY_VTX_PWR) || defined (DISPLAY_VTX_PWR_MAX) || defined (DISPLAY_VTX_BAND)   

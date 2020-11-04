@@ -183,7 +183,9 @@
 
 #ifdef iNAV    //set up latest at time of release
 //  #define iNAV
+  #define ADSBAWARE                   // Enables ADSB display for FC's that support ADSB via Mavlink.
   #define MSPV2
+  #define WIND_SUPPORTED
 #endif
 
 #ifdef LTM2ADSB
@@ -323,6 +325,8 @@
   #ifdef QUADPLANE
     #define FIXEDWING
   #endif  
+  #define WIND_SUPPORTED
+  #define ADSBAWARE                   // Enables ADSB display for FC's that support ADSB via Mavlink.
 #endif
 
 #ifdef KISSGPS   //set up latest at time of release

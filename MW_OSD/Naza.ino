@@ -116,7 +116,7 @@ void NAZA_NewData(uint8_t c){
         GPS_coord[LAT]=(int32_t)(10000000*NazaDecoder.getLat());
         GPS_coord[LON]=(int32_t)(10000000*NazaDecoder.getLon());
         GPS_altitude=NazaDecoder.getGpsAlt();
-        GPS_altidude_ASL=NazaDecoder.getGpsAlt();
+        GPS_altitude_ASL=NazaDecoder.getGpsAlt();
         GPS_fix_temp=NazaDecoder.getFixType();
         GPS_numSat=NazaDecoder.getNumSat();
         GPS_speed=100*NazaDecoder.getSpeed();

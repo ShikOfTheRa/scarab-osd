@@ -418,7 +418,6 @@
 /********************           ADSB settings           *********************/
 // ADSB settings see https://github.com/ShikOfTheRa/scarab-osd/wiki/ADSB
 //#define ADSBDEBUG                 // Debug only
-#define ADSBAWARE                   // Enables ADSB display for FC's that support ADSB via Mavlink.
 #define ADSBTTL 10                  // Timout in seconds for valid ADSB data 
 #define ADSB_LIMIT 500000           // Max distance of aircraft included in scope. 
 #define ADSB_ALT 1000               // Flash ADSB data if aircraft within this altitude differential and distance in meters. Disabled when used with ADSBSEND 
