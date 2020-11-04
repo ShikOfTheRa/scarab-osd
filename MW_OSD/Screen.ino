@@ -1169,7 +1169,7 @@ void displayADSB(void)
 
 
   if (adsb.dist == 0)
-    adsb.alt = 0;
+    adsb.alt = GPS_altitude_ASL;
   uint16_t t_pos  = getPosition(ADSBposition);  
   formatDistance(adsb.dist,0,2,SYM_ADSB);
   MAX7456_WriteString(screenBuffer, t_pos);
