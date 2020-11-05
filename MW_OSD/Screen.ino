@@ -3089,6 +3089,7 @@ void displayCustom(void) /// Put your custome code here. Example code below
   if (Settings[S_CUSTOM] > 11)
     return;
   */  
-    
-  MAX7456_WriteString("COCK", position);
+
+  // MAX7456_WriteString(itoa(69, screenBuffer, 10), position);  // Display number
+  MAX7456_WriteString("COCK", position); // Display text
 }

@@ -798,13 +798,13 @@ void loop()
           displayCells();
 #endif
 #ifdef INFLIGHTTUNING
-  displayPID();
+        displayPID();
 #endif //INFLIGHTTUNING
 #ifdef AAT
         displayAAT();
 #endif //AAT
 #ifdef ADSBAWARE 
-  displayADSB();
+        displayADSB();
 #endif // ADSBAWARE 
 #ifdef HAS_ALARMS
         displayAlarms();
@@ -1192,6 +1192,10 @@ void setMspRequests() {
         REQ_MSP_RTC |
 #endif // MSP_RTC_SUPPORT
         0;
+#ifdef INFLIGHTTUNING
+  if (fieldIsVisible(PIDposition))
+      modeMSPRequests |=REQ_MSP_PID;
+#endif        
     }
 #if defined MULTIWII_V24
     if (MwSensorActive & mode.gpsmission)

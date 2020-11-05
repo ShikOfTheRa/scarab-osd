@@ -68,9 +68,9 @@
   //#define DISPLAYAVGEFFICIENCY                // Display average mAh used / per KM instead of mAh/min KMh. 
   //#define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
   //#define FIXEDWING               // Uncomment this if you are using fixed wing with MultiWii or Baseflight
-  #define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
+  //#define EEPROM_CLEAR            // Uncomment to force a wipe and reload of default settings at each OSD start. Same as EEPROM_CLEAR sketch.  
   //#define INTRO_DELAY 1           // To speed up startup
-  #define DISPLAY_DEV 0xC000        // Use screen layout dev position - display all items...
+  //#define DISPLAY_DEV 0xC000        // Use screen layout dev position - display all items...
   //#define KKAUDIOVARIO A3         // Enable this for audio vario on Arduino pin XX. A3=RSSI. Use AUDIOPIN on AEROMAX 
   //#define MAVSENSOR173
   //#define MSPV2  
@@ -351,6 +351,7 @@
 //CORRECTLOOPTIME show looptime option in Adavanced tuning menu
 
 #if defined BETAFLIGHT3
+  #define INFLIGHTTUNING
   #define AMPERAGE_DIV 10
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
@@ -370,6 +371,7 @@
 #endif
 
 #if defined BETAFLIGHT31
+  #define INFLIGHTTUNING
   #define AMPERAGE_DIV 10
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
@@ -394,6 +396,7 @@
 #endif
 
 #if defined CLEANFLIGHT190
+  #define INFLIGHTTUNING
   #define AMPERAGE_DIV 10
   #define CORRECT_MSP_CF2
   #define CORRECT_MENU_RCT2
@@ -418,6 +421,7 @@
 #endif
 
 #if defined iNAV // same as CLEANFLIGHT190 + CMS
+  #define INFLIGHTTUNING
   #define EXTENDEDMODESUPPORT
   #define AMPERAGE_DIV 10
   #define CORRECT_MSP_CF2
@@ -448,6 +452,7 @@
 #endif
 
 #if defined CLEANFLIGHT180
+  #define INFLIGHTTUNING
   #define AMPERAGE_DIV 10
   #define CORRECT_MSP_CF1
   #define CORRECT_MENU_RCT1
