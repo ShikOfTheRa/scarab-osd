@@ -74,6 +74,7 @@
 #define SYM_LAT 0xCA
 #define SYM_LON 0XCB
 //#define SYM_ALT 0XCC
+#define SYM_GPS_MMSS 0x27
 
 // GPS Mode and Autopilot
 #define SYM_3DFIX 0XDF 
@@ -140,8 +141,8 @@
 #define SYM_ADSB 0X7F
 
 // AAT
-#define SYM_MARK  0xC2
-#define SYM_SPACE 0xC3
+#define SYM_SPACE  0xC2
+#define SYM_MARK   0xC3
 
 // Vario
 #define SYM_VARIO 0x8C

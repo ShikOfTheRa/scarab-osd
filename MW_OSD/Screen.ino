@@ -1,5 +1,4 @@
 
-
 char *ItoaPadded(int val, char *str, uint8_t bytes, uint8_t decimalpos)  {
   // Val to convert
   // Return String
@@ -55,6 +54,53 @@ uint8_t fieldIsVisible(uint8_t pos) {
   else
     return 0;
 }
+
+void GPS2DDMMSS( double DD_DDDDD , int *DD, int *MM, double *SS ){    
+ *DD=(int)DD_DDDDD;
+ *MM=(int)((DD_DDDDD - *DD)*60);
+ *SS=((DD_DDDDD - *DD)*60-*MM)*60;
+}
+
+
+void FormatGPSCoordDDMMSS(uint16_t t_position, int32_t val, uint8_t t_cardinalaxis) {  // lat = 0 or lon = 2
+   uint8_t t_idx=0;
+  uint8_t t_leadicon = SYM_LAT;
+  if (t_cardinalaxis>0) 
+    t_leadicon++;  
+  uint8_t t_cardinal = 0;
+  if (val < 0) {
+      t_cardinal ++;
+    val = -val;
+  }
+  t_cardinal+=t_cardinalaxis;
+
+  float f_val=(float)val/100000;
+  int DD; int MM; double SS;
+  GPS2DDMMSS( f_val , &DD, &MM, &SS );
+ 
+  if (Settings[S_GPS_MASK]) {
+    DD=63;
+  }
+
+  screenBuffer[0] = t_leadicon;
+  itoa(DD, screenBuffer + 1, 10);
+  t_idx = FindNull();
+  screenBuffer[t_idx]=SYM_DEGREES;
+  t_idx++;
+  itoa(MM, screenBuffer + t_idx, 10);
+  t_idx = FindNull();
+  screenBuffer[t_idx]=SYM_GPS_MMSS;
+  t_idx++;
+  itoa(SS, screenBuffer + t_idx, 10);
+  t_idx = FindNull();
+  screenBuffer[t_idx]=SYM_GPS_MMSS;
+  t_idx++;
+  screenBuffer [t_idx] = compass[t_cardinal];
+  t_idx++;
+  screenBuffer [t_idx] = 0;
+  MAX7456_WriteString(screenBuffer, t_position);
+}
+
 
 void FormatGPSCoord(uint16_t t_position, int32_t val, uint8_t t_cardinalaxis) {  // lat = 0 or lon = 2
 
@@ -2748,10 +2794,18 @@ void displayGPSPosition(void)
     return;
   }
   uint16_t t_position;
+
+#if defined GSPDDMMSS  
+  t_position = getPosition(MwGPSLatPositionTop);
+  FormatGPSCoordDDMMSS(t_position,GPS_latitude, 0) ;
+  t_position = getPosition(MwGPSLonPositionTop);
+  FormatGPSCoordDDMMSS(t_position,GPS_longitude, 2) ;
+#else
   t_position = getPosition(MwGPSLatPositionTop);
   FormatGPSCoord(t_position,GPS_latitude, 0) ;
   t_position = getPosition(MwGPSLonPositionTop);
   FormatGPSCoord(t_position,GPS_longitude, 2) ;
+#endif  
 }
 
 
@@ -3090,6 +3144,6 @@ void displayCustom(void) /// Put your custome code here. Example code below
     return;
   */  
 
-  // MAX7456_WriteString(itoa(69, screenBuffer, 10), position);  // Display number
   MAX7456_WriteString("COCK", position); // Display text
+  // MAX7456_WriteString(itoa(MwRcData[2], screenBuffer, 10), position);  // Display number
 }

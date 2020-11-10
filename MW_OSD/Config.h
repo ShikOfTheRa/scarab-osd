@@ -286,7 +286,7 @@
 //#define PILOTICON                 // Disable to save memeory if unused. Display pilot ICON as an alternative to CHARACTER display. Requires enabling in GUI >= 1.8.2
 #define LRTRANSITION 999            // Point at which display transitions from standard to long range format. e.g LRT= 999, OSD displays 999m LRT = 1000, OSD displays 1.0km
 //#define AATTEST                   // Display a second visible full telemtry data line for test...
-
+//#define GSPDDMMSS                 // Display GPS co-ordinates in DDMMSS. Pending test verification
 
 /********************       Power / efficiency display Settings         ************************/
 #define DISPLAYWATTS                // Disable to save memory if not used. Enable this to display Watts
