@@ -211,6 +211,13 @@
   #endif  
 #endif // CANVASOSD
 
+#ifdef ESCOSD
+  #define PROTOCOL_ESC
+  #ifdef USE_VSYNC
+    #undef USE_VSYNC
+  #endif  
+#endif // CANVASOSD
+
 #ifdef ADSBDEBUG
   //#define MAV_ALL                   // To act on data from all MAV SYSID in stream. NOT recommended. Specify ID in GUI. Default=1 upon reset.
   //#define MAV_COMP_ALL  

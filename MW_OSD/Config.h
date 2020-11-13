@@ -246,6 +246,7 @@
 /********************       Display Settings         ************************/
 #define MAXSTALLDETECT              // Enable to attempt to detect MAX chip stall from bad power. Attempts to restart.
 #define AUTOCAM                     // Disable if no screen display. Enables autodetect Camera type PAL/NTSC. Overrides GUI/OSD settings.
+#define AUTOSIZEVDEO                // Enables AUTO resizing of display to fit PAL/NTSC - when using "AUTO" mode. 2 blank lines inserted for PAL
 //#define USE_VSYNC                 // Removes sparklies as updates screen during blanking time period. Only of benefit for MAX7456 IC 
 #define DECIMAL '.'                 // Decimal point character, change to what suits you best (.) (,)
 //#define ALT_CENTER                // Enable alternative center crosshair
@@ -469,3 +470,4 @@
 
 /********************  Under developemnt      *********************/
 // This is a work in process. Not completed for implementation
+#define ESCOSD

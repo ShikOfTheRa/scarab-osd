@@ -294,6 +294,7 @@ struct  __timer {
   uint8_t  fcMessage;                        // Duration of the FC message (in seconds)
   uint8_t  armedstatus;   
   uint8_t  adsbttl;
+  uint32_t fixedlooptimer;
 }
 timer;
   
@@ -433,9 +434,15 @@ uint8_t debugtext=0;
 uint8_t MSP_home_set=0;
 uint8_t variopitch=0;
 uint8_t phasers=0;
+uint16_t rpm;
 #ifdef FC_MESSAGE
 uint8_t fcMessageLength;
 #endif // FC_MESSAGE
+
+#if defined PROTOCOL_ESC
+static int16_t ESC_telemetrie[5]; // Temperature, Voltage, Current, used mAh, eRpM
+static uint8_t receivedBytes = 0;
+#endif //PROTOCOL_ESC
 
 #if defined CORRECT_MSP_BF1
   uint8_t bfconfig[25];

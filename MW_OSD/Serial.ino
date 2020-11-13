@@ -1673,7 +1673,9 @@ void serialMSPreceive(uint8_t loops)
     #if defined (PROTOCOL_KISS)
        serialKISSreceive(c);
     #endif // PROTOCOL_KISS   
-
+    #if defined (PROTOCOL_ESC)
+       serialESCreceive(c);
+    #endif // PROTOCOL_ESC 
     if (c_state == IDLE)
     {
       c_state = (c=='$') ? HEADER_START : IDLE;

@@ -284,16 +284,54 @@ void loop()
   // MAX7456Setup() // it would be beneficial to run this every few seconds to identify and reset max7456 lockups from low voltages
   serialMSPreceive(1);
 }
-#else
+#elif defined ESCOSD
+void loop()
+{
 
-// ampAlarming returns true if the total consumed mAh is greater than
-// the configured alarm value (which is stored as 100s of amps)
-bool ampAlarming() {
-  int used = pMeterSum > 0 ? pMeterSum : (amperagesum / 360);
-  return used > (Settings[S_AMPER_HOUR_ALARM] * 100);
+   static bool gui_connected = false;
+   static uint32_t loopTime = 0;
+   static uint8_t tlemetrieCounter = 0;
+  // MAX7456Setup() // it would be beneficial to run this every few seconds to identify and reset max7456 lockups from low voltages
+
+   if (timer.packetcount>0){
+     gui_connected = true;
+   }
+
+   if(micros()-loopTime > 2000){ // 2000Hz looptime
+      loopTime = micros();
+      serialMSPreceive(1);
+      if(++tlemetrieCounter == 20){ // get telemetrie with 25Hz
+        tlemetrieCounter = 0;
+        receivedBytes = 0; // reset bytes counter
+      }
+      
+      //print the telemetry
+      if(tlemetrieCounter == 10){
+        temperature = ESC_telemetrie[0];
+        voltage     = ESC_telemetrie[1];
+        amperage    = ESC_telemetrie[2]; 
+        amperagesum = ESC_telemetrie[3] * 360;   
+        rpm         = ESC_telemetrie[4];
+      }      
+  }
+
+  displayTemperature();
+  displayVoltage();
+  displayVidVoltage();
+  displayAmperage();
+  displaypMeterSum();
+  displayWatt();
+  displayRPM();  
+
+#if defined (FIXEDLOOP) && !defined (USE_VSYNC) // fixed loop speed for consistency with screen update at 15hz to reduce sparklies
+  if (millis() > timer.fixedlooptimer){
+    MAX7456_DrawScreen();
+    timer.fixedlooptimer+=67; // 15hz
+  }
+#endif //FIXEDLOOP
+  
 }
-
-
+#else
 //------------------------------------------------------------------------
 void loop()
 {
@@ -624,7 +662,14 @@ void loop()
 #ifdef CANVAS_SUPPORT
       if (!canvasMode)
 #endif // CANVAS_SUPPORT
-        MAX7456_DrawScreen();
+
+#if defined (FIXEDLOOP) && !defined (USE_VSYNC) // fixed loop speed for consistency with screen update at 15hz to reduce sparklies
+  if (millis() > timer.fixedlooptimer){
+    MAX7456_DrawScreen();
+    timer.fixedlooptimer+=67;
+  }
+#endif //FIXEDLOOP
+    
     }
 
 #ifdef SBUS_CONTROL
@@ -961,12 +1006,8 @@ void loop()
   }
   //  setMspRequests();
   serialMSPreceive(1);
-#if defined (FIXEDLOOP) && !defined (USE_VSYNC) // fixed loop speed for consistency with update at max frequency of NTSC to reduce sparklies
-  uint32_t loop_timer = 33 + millis();
-  while (millis() < loop_timer){
-    serialMSPreceive(0); // Might as well do something whilst waiting :)
-  }
-  loop_timer = 33 + loop_timer;
+#if defined (FIXEDLOOP) && !defined (USE_VSYNC) // slower loop speed for consistent analogue readings. 500-1000hz.
+  delay(1);  
 #endif //FIXEDLOOP
 
 }  // End of main loop
@@ -1290,11 +1331,13 @@ void readEEPROM(void)
     screenPosition[en] = EEPROM.read(pos);
     uint16_t xx = (uint16_t)EEPROM.read(pos + 1) << 8;
     screenPosition[en] = screenPosition[en] + xx;
+#if defined AUTOSIZEVIDEO    
     if ((flags.signaltype == 1) && (Settings[S_VIDEOSIGNALTYPE]==2)) {
       uint16_t x = screenPosition[en] & 0x1FF;
       if (x > LINE06) screenPosition[en] = screenPosition[en] + LINE;
       if (x > LINE09) screenPosition[en] = screenPosition[en] + LINE;
     }
+#endif // AUTOSIZEVIDEO    
   }
 }
 
@@ -1683,4 +1726,11 @@ void reverseChannels(void) { //ifdef (TX_REVERSE)
     if (Settings[S_TX_CH_REVERSE] & (1 << i))
       MwRcData[i] = 3000 - MwRcData[i];
   }
+}
+
+// ampAlarming returns true if the total consumed mAh is greater than
+// the configured alarm value (which is stored as 100s of amps)
+bool ampAlarming() {
+  int used = pMeterSum > 0 ? pMeterSum : (amperagesum / 360);
+  return used > (Settings[S_AMPER_HOUR_ALARM] * 100);
 }

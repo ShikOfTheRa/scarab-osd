@@ -646,6 +646,11 @@ void displayVidVoltage(void)
 }
 
 
+void displayRPM(void)
+{
+  displayItem(Customposition, rpm, 0, 0x4B, 1 );
+}
+
 void displayCurrentThrottle(void){
 
 #ifdef AUTOTHROTTLE
