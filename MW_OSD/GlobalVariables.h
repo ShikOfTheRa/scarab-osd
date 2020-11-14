@@ -439,10 +439,9 @@ uint16_t rpm;
 uint8_t fcMessageLength;
 #endif // FC_MESSAGE
 
-#if defined PROTOCOL_ESC
+// PROTOCOL_ESC
 static int16_t ESC_telemetrie[5]; // Temperature, Voltage, Current, used mAh, eRpM
 static uint8_t receivedBytes = 0;
-#endif //PROTOCOL_ESC
 
 #if defined CORRECT_MSP_BF1
   uint8_t bfconfig[25];
