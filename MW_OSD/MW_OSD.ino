@@ -663,11 +663,14 @@ void loop()
       if (!canvasMode)
 #endif // CANVAS_SUPPORT
 
-#if defined (FIXEDLOOP) && !defined (USE_VSYNC) // fixed loop speed for consistency with screen update at 15hz to reduce sparklies
+//  serialMSPreceive(1);
+  #if defined (FIXEDLOOP) && !defined (USE_VSYNC) // fixed loop speed for consistency with screen update at 15hz to reduce sparklies
   if (millis() > timer.fixedlooptimer){
     MAX7456_DrawScreen();
     timer.fixedlooptimer+=67;
   }
+#else
+    MAX7456_DrawScreen(); 
 #endif //FIXEDLOOP
     
     }
@@ -944,10 +947,8 @@ void loop()
   timer.d3rate=0;
 #endif 
     onTime++;
-#if defined(AUTOCAM) || defined(MAXSTALLDETECT)
     if (!fontMode)
       MAX7456CheckStatus();
-#endif
 #ifdef ALARM_GPS
     if (timer.GPS_active == 0) {
       GPS_numSat = 0;
@@ -1005,11 +1006,11 @@ void loop()
     if (timer.rssiTimer > 0) timer.rssiTimer--;
   }
   //  setMspRequests();
-  serialMSPreceive(1);
 #if defined (FIXEDLOOP) && !defined (USE_VSYNC) // slower loop speed for consistent analogue readings. 500-1000hz.
+  serialMSPreceive(1);
   delay(1);  
 #endif //FIXEDLOOP
-
+  serialMSPreceive(1);
 }  // End of main loop
 #endif //main loop
 
@@ -1331,13 +1332,11 @@ void readEEPROM(void)
     screenPosition[en] = EEPROM.read(pos);
     uint16_t xx = (uint16_t)EEPROM.read(pos + 1) << 8;
     screenPosition[en] = screenPosition[en] + xx;
-#if defined AUTOSIZEVIDEO    
-    if ((flags.signaltype == 1) && (Settings[S_VIDEOSIGNALTYPE]==2)) {
+    if ((flags.signaltype == 1) && (Settings[S_VIDEOSIGNALTYPE]!=1)){
       uint16_t x = screenPosition[en] & 0x1FF;
       if (x > LINE06) screenPosition[en] = screenPosition[en] + LINE;
       if (x > LINE09) screenPosition[en] = screenPosition[en] + LINE;
     }
-#endif // AUTOSIZEVIDEO    
   }
 }
 

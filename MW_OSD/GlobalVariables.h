@@ -435,6 +435,7 @@ uint8_t MSP_home_set=0;
 uint8_t variopitch=0;
 uint8_t phasers=0;
 uint16_t rpm;
+uint8_t use_vsync=1;
 #ifdef FC_MESSAGE
 uint8_t fcMessageLength;
 #endif // FC_MESSAGE
