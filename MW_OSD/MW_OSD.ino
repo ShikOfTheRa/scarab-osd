@@ -323,12 +323,7 @@ void loop()
   displayWatt();
   displayRPM();  
 
-#if defined (FIXEDLOOP) && !defined (USE_VSYNC) // fixed loop speed for consistency with screen update at 15hz to reduce sparklies
-  if (millis() > timer.fixedlooptimer){
-    MAX7456_DrawScreen();
-    timer.fixedlooptimer+=67; // 15hz
-  }
-#endif //FIXEDLOOP
+  MAX7456_DrawScreen();
   
 }
 #else
@@ -659,20 +654,11 @@ void loop()
         }
       }
 #endif // KISS
+
 #ifdef CANVAS_SUPPORT
       if (!canvasMode)
 #endif // CANVAS_SUPPORT
-
-//  serialMSPreceive(1);
-  #if defined (FIXEDLOOP) && !defined (USE_VSYNC) // fixed loop speed for consistency with screen update at 15hz to reduce sparklies
-  if (millis() > timer.fixedlooptimer){
-    MAX7456_DrawScreen();
-    timer.fixedlooptimer+=67;
-  }
-#else
-    MAX7456_DrawScreen(); 
-#endif //FIXEDLOOP
-    
+        MAX7456_DrawScreen();           
     }
 
 #ifdef SBUS_CONTROL
@@ -1006,11 +992,11 @@ void loop()
     if (timer.rssiTimer > 0) timer.rssiTimer--;
   }
   //  setMspRequests();
-#if defined (FIXEDLOOP) && !defined (USE_VSYNC) // slower loop speed for consistent analogue readings. 500-1000hz.
+#if defined (FIXEDLOOP) // slower loop speed for consistent analogue readings. 500-1000hz.
   serialMSPreceive(1);
   delay(1);  
 #endif //FIXEDLOOP
-  serialMSPreceive(1);
+  serialMSPreceive(1);  
 }  // End of main loop
 #endif //main loop
 

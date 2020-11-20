@@ -435,7 +435,8 @@ uint8_t MSP_home_set=0;
 uint8_t variopitch=0;
 uint8_t phasers=0;
 uint16_t rpm;
-uint8_t use_vsync=1;
+volatile bool vsync_active = false;
+volatile bool vsync_wait = false;
 #ifdef FC_MESSAGE
 uint8_t fcMessageLength;
 #endif // FC_MESSAGE
@@ -1331,7 +1332,6 @@ const PROGMEM char * const screen_test[] =
 };
 #endif
 
-#ifdef AUTOCAM 
 const char signaltext0[]  PROGMEM = "NTSC";
 const char signaltext1[]  PROGMEM = "PAL";
 const char signaltext2[]  PROGMEM = "NOT DETECTED";
@@ -1341,30 +1341,6 @@ const PROGMEM char * const signal_type[] =
   signaltext1,
   signaltext2,
 };
-#elif AUTOCAMFULL // For testing
-const char signaltext0[]  PROGMEM = "NTSC";
-const char signaltext1[]  PROGMEM = "PAL";
-const char signaltext2[]  PROGMEM = "NOT DETECTED-NTSC";
-const char signaltext3[]  PROGMEM = "NOT DETECTED-PAL";
-const PROGMEM char * const signal_type[] =
-{   
-  signaltext0,
-  signaltext1,
-  signaltext2,
-  signaltext3,
-};
-#else
-const char signaltext0[]  PROGMEM = "NTSC";
-const char signaltext1[]  PROGMEM = "PAL";
-const char signaltext2[]  PROGMEM = "";
-const PROGMEM char * const signal_type[] =
-{   
-  signaltext0,
-  signaltext1,
-  signaltext2,
-  signaltext2,
-};
-#endif
 
 // For Config menu common
 const char configMsgON[]   PROGMEM = "ON";

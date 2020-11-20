@@ -76,6 +76,8 @@
 #define MAX7456ADD_OSDBL        0x6c
 #define MAX7456ADD_STAT         0xA0
 
+#define MAX7456ADD_VM0_READ     0x80  
+
 // Selectable by video mode
 //uint8_t ENABLE_display;
 //uint8_t ENABLE_display_vert;
@@ -137,9 +139,8 @@ void MAX7456SoftReset(void)
 
 void MAX7456Setup(void)
 {
-  uint8_t MAX7456_reset=0x0C;
+  uint8_t MAX7456_reset;
   uint8_t MAX_screen_rows;
-
   MAX7456DISABLE
 
   MAX7456HWRESET
@@ -153,7 +154,6 @@ void MAX7456Setup(void)
   SPSR = (1<<SPI2X);
   MAX_screen_rows=SPSR; // Apparnetly have to read twice to clear errors. Unconfirmed 
   MAX_screen_rows=SPDR;  
-  delay(10);
 
 #ifdef MAX_SOFTRESET
   MAX7456SoftReset();
@@ -167,23 +167,27 @@ void MAX7456Setup(void)
   flags.signaltype = 0;            // default - NTSC    
   spi_transfer(MAX7456ADD_STAT);
   srdata = spi_transfer(0xFF); 
-  srdata &= B00000011;
   detectedCamType = srdata;
+  detectedCamType &= B00000111;
+  if ((srdata & B00000100) > 0)           // No signal
+    detectedCamType = 0;
   MAX_screen_size = 390;
   MAX_screen_rows=13;
-  if (srdata == B00000001){      // PAL
+  MAX7456_reset = 0x08;
+  if (detectedCamType == B00000001){      // PAL
     flags.signaltype = 1; 
     flags.signalauto = 1; 
-    MAX7456_reset = 0x4C;
+    MAX7456_reset = 0x48;
     MAX_screen_size = 480;
-    MAX_screen_rows = 16;  }
-  else if (srdata == B00000010){ // NTSC
+    MAX_screen_rows = 16;  
+    }
+  else if (detectedCamType == B00000010){ // NTSC
     flags.signalauto = 0; 
   }
 
-
   // Set up the Max chip. Enable display + set standard.
   MAX7456_Send(MAX7456ADD_VM0, MAX7456_reset);
+  delay(1);
    
 #ifdef FASTPIXEL // force fast pixel timing helps with ghosting for some cams
   MAX7456_Send(MAX7456ADD_OSDM, 0x00);
@@ -203,11 +207,8 @@ void MAX7456Setup(void)
     EIMSK |= (1 << INT0);
   }
 #endif
-// readEEPROM_screenlayout();
   readEEPROM();
-#ifdef USE_VSYNC  
-  MAX7456_TestVSYNC();
-#endif 
+  vsync_active = false;
 }
 
 // Copy string from ram into screen buffer
@@ -263,108 +264,41 @@ void MAX7456_ClearScreen(void)
 }
 #endif
 
-
-volatile unsigned char vsync_wait = 0;
 ISR(INT0_vect) {
-    vsync_wait = 0;
-}
-
-#ifdef USE_VSYNC
-void MAX7456_TestVSYNC(void)
-{
-  uint32_t vsync_timer = 40 + millis();
-  vsync_wait = 1;
-  use_vsync=1;
-  while (vsync_wait) {
-    if (millis() > vsync_timer){
-      vsync_wait=0;
-      use_vsync=0;
-    }
-  }
+  vsync_wait   = false;
+  vsync_active = true; 
 }
 
 void MAX7456_WaitVSYNC(void)
 {
-  if (use_vsync!=1)
-    return;
-  serialMSPreceive(1); // clear buffer before wait to improve speed
-  vsync_wait = 1;
-  while (vsync_wait) {
- //   serialMSPreceive(0); // Improved serial, but may introduce sparklie on first lines :(
+  if (!vsync_active) 
+    return;  
+  uint8_t srdata;
+  vsync_wait = true; 
+  while (vsync_wait){ 
   }
+  vsync_active = false; 
 }
 
-
 void MAX7456_DrawScreen() {
-  char *b = screen;
-  char *end_b = b+sizeof(screen);
+#ifdef USE_VSYNC
+  MAX7456_WaitVSYNC();
+#endif   
+  char *screen_address = screen;
+  char *end_address = screen_address + sizeof(screen);
   screen[sizeof(screen)-1] = END_string;
   MAX7456ENABLE; 
   MAX7456_Send(MAX7456ADD_DMAH, 0);
   MAX7456_Send(MAX7456ADD_DMAL, 0);
-  MAX7456_Send(MAX7456ADD_DMM,  1); // автоинкремент адреса
+  MAX7456_Send(MAX7456ADD_DMM,  1);
   MAX7456DISABLE; 
-  MAX7456_WaitVSYNC();    
-  for(; b < end_b;) {
+  for(; screen_address < end_address;) {
     MAX7456ENABLE;
-    spi_transfer(*b);
+    spi_transfer(*screen_address);
     MAX7456DISABLE;        
-    *b++=0;
+    *screen_address++=0;
   }
 }
-#else
-
-void MAX7456_DrawScreen()
-{
-  uint16_t xx;
-
-  MAX7456ENABLE;
-
-  MAX7456_Send(MAX7456ADD_DMAH, 0);
-  MAX7456_Send(MAX7456ADD_DMAL, 0);
-  MAX7456_Send(MAX7456ADD_DMM, 1);
-
-#ifdef SCREENTEST
-   for(xx = 0; xx < MAX_screen_size; ++xx) {
-     screen[xx] = 48 + (xx %10) ;
-      if ((xx%30)==8)
-        screen[xx] = 48 + ((xx/30) % 10) ; 
-      if ((xx%30)==7)
-        screen[xx] = ' ' ; 
-      if ((xx%30)==9)
-        screen[xx] = ' ' ;    
-      if ((xx>120)&&(xx<300))
-        screen[xx] = ' ' ;    
-   }    
-   for (uint8_t X = 0; X <= 3; X++) {
-     MAX7456_WriteString_P(PGMSTR(&(screen_test[X])), (LINE*5)+10+(X*LINE));
-   }      
-#endif // SCREENTEST
-
-  for(xx = 0; xx < MAX_screen_size; ++xx) {
-#ifdef INVERTED_CHAR_SUPPORT
-    bool invActive = false;
-    if (!invActive && bitISSET(screenAttr, xx)) {
-      MAX7456_Send(MAX7456ADD_DMM, 1|(1<<3));
-      invActive = true;
-    } else if (invActive && bitISCLR(screenAttr, xx)) {
-      MAX7456_Send(MAX7456ADD_DMM, 1);
-      invActive = false;
-    }
-#endif   
-      MAX7456_Send(MAX7456ADD_DMDI, screen[xx]);
-      screen[xx] = ' ';
-    #ifdef INVERTED_CHAR_SUPPORT
-      bitCLR(screenAttr, xx);
-    #endif      
-  }
-
-  MAX7456_Send(MAX7456ADD_DMDI, END_string);
-  MAX7456_Send(MAX7456ADD_DMM, 0);
-
-  MAX7456DISABLE
-}
-#endif
 
 void MAX7456_Send(uint8_t add, uint8_t data)
 {
@@ -420,20 +354,24 @@ void write_NVM(uint8_t char_address)
 void MAX7456CheckStatus(void){
   uint8_t srdata;
   MAX7456ENABLE
-
   spi_transfer(MAX7456ADD_STAT);
-  srdata = spi_transfer(0xFF);
-  srdata &= B00000011;
+  srdata = spi_transfer(0xFF); 
+  srdata &= B00000111;
+  if ((srdata & B00000100) > 0)           // No signal
+    srdata = 0;
+  MAX7456DISABLE
   if (detectedCamType != srdata) {
     MAX7456Setup();
     return;
   }
 
-  spi_transfer(0x80);
+  MAX7456ENABLE 
+  spi_transfer(MAX7456ADD_VM0_READ);
   srdata = spi_transfer(0xFF); 
-  
-  if ((B00001000 & srdata) == 0)
+  MAX7456DISABLE
+  if ((B00001000 & srdata) == 0){
     MAX7456Setup(); 
+  }
 }
 
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD || defined DISPLAYFONTS
