@@ -462,7 +462,7 @@
 // This is to enable rarely used advanced parameter saving. Off by default to minimise risk
 // Enabling may create ability to write invalid data to FC
 //#define ADVANCEDSAVE              // Enables saving of advanced paramters where supported (Looptime/profile)
-#define FIXEDLOOP                   // Enables 1ms loop max for consistency.
+//#define FIXEDLOOP                   // Enables 1ms loop max for consistency.
 
 
 /********************  Under developemnt      *********************/

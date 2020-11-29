@@ -252,11 +252,13 @@ void loop()
   switch (fontStatus) {
     case 0:
       MAX7456_WriteString_P(messageF0, 32);
-      MAX7456_DrawScreen();
+      displayReady =true;
+//      MAX7456_DrawScreen(); // use VSYNC
       delay(3000);
       displayFont();
       MAX7456_WriteString_P(messageF1, 32);
-      MAX7456_DrawScreen();
+      displayReady =true;
+//      MAX7456_DrawScreen(); // use VSYNC
       fontStatus++;
       delay(3000);
       break;
@@ -265,8 +267,10 @@ void loop()
       MAX7456Setup();
       MAX7456_WriteString_P(messageF2, 32);
       displayFont();
-      MAX7456_DrawScreen();
+      displayReady =true;
+//      MAX7456_DrawScreen(); // use VSYNC
       fontStatus++;
+      delay(3000)
       break;
   }
   LEDOFF
@@ -275,8 +279,11 @@ void loop()
 void loop()
 {
   MAX7456Setup();
-  displayFont();
-  MAX7456_DrawScreen();
+  if displayReady = false{
+    displayFont();
+  }
+  displayReady =true;
+//      MAX7456_DrawScreen();
 }
 #elif defined CANVASOSD
 void loop()
@@ -287,43 +294,42 @@ void loop()
 #elif defined ESCOSD
 void loop()
 {
-
-   static bool gui_connected = false;
-   static uint32_t loopTime = 0;
-   static uint8_t tlemetrieCounter = 0;
+  static bool gui_connected = false;
+  static uint32_t loopTime = 0;
+  static uint8_t tlemetrieCounter = 0;
   // MAX7456Setup() // it would be beneficial to run this every few seconds to identify and reset max7456 lockups from low voltages
 
-   if (timer.packetcount>0){
-     gui_connected = true;
-   }
-
-   if(micros()-loopTime > 2000){ // 2000Hz looptime
-      loopTime = micros();
-      serialMSPreceive(1);
-      if(++tlemetrieCounter == 20){ // get telemetrie with 25Hz
-        tlemetrieCounter = 0;
-        receivedBytes = 0; // reset bytes counter
-      }
-      
-      //print the telemetry
-      if(tlemetrieCounter == 10){
-        temperature = ESC_telemetrie[0];
-        voltage     = ESC_telemetrie[1];
-        amperage    = ESC_telemetrie[2]; 
-        amperagesum = ESC_telemetrie[3] * 360;   
-        rpm         = ESC_telemetrie[4];
-      }      
+  if (timer.packetcount>0){
+    gui_connected = true;
   }
 
-  displayTemperature();
-  displayVoltage();
-  displayVidVoltage();
-  displayAmperage();
-  displaypMeterSum();
-  displayWatt();
-  displayRPM();  
+  if(micros()-loopTime > 2000){ // 2000Hz looptime
+    loopTime = micros();
+    serialMSPreceive(1);
+    if(++tlemetrieCounter == 20){ // get telemetrie with 25Hz
+      tlemetrieCounter = 0;
+      receivedBytes = 0; // reset bytes counter
+    }
+      
+    if(tlemetrieCounter == 10){
+      temperature = ESC_telemetrie[0];
+      voltage     = ESC_telemetrie[1];
+      amperage    = ESC_telemetrie[2]; 
+      amperagesum = ESC_telemetrie[3] * 360;   
+      rpm         = ESC_telemetrie[4];
+    }      
+  }
 
-  MAX7456_DrawScreen();
+  if (displayReady != true){
+    displayTemperature();
+    displayVoltage();
+    displayVidVoltage();
+    displayAmperage();
+    displaypMeterSum();
+    displayWatt();
+    displayRPM();  
+    displayReady =true;
+  }
   
 }
 #else
@@ -658,17 +664,20 @@ void loop()
 #ifdef CANVAS_SUPPORT
       if (!canvasMode)
 #endif // CANVAS_SUPPORT
-        MAX7456_DrawScreen();           
-    }
+      {          
+        if (millis() > (vsync_timer + 100))
+          MAX7456_DrawScreen();   
+      }        
+   }
 
 #ifdef SBUS_CONTROL
-    ProcessSbus(); // handle SBUS protocol
+   ProcessSbus(); // handle SBUS protocol
 #endif
 
-    ProcessSensors();       // using analogue sensors
+   ProcessSensors();       // using analogue sensors
 
     if ( allSec < INTRO_DELAY ) {
-      displayIntro();
+      buildIntro();
       timer.lastCallSign = onTime - CALLSIGNINTERVAL;
     }
     else
@@ -710,6 +719,153 @@ void loop()
       else
       {
         setMspRequests();
+        buildDisplay();
+      }
+    }
+  }  // End of fast Timed Service Routine (50ms loop)
+
+  if (timer.halfSec >= 5) {
+    timer.halfSec = 0;
+    timer.Blink2hz = ! timer.Blink2hz;
+
+#if 0
+    // XXX What is this for? On-Arm power setting?
+    // XXX May be "Power up at minimum power, then goto stored power on-arming."for stick based blind operation or something similar
+    // XXX Leave commented out until intension is known.
+#ifdef VTX_RTC6705
+    vtx_set_power(armed ? vtxPower : 0);
+#endif // VTX_RTC6705
+#endif
+  }
+
+  if (millis() > timer.seconds + 1000)  // this execute 1 time a second
+  {
+#if defined (GPSTIME) && !defined (UBLOX)
+    datetime.unixtime++;
+    updateDateTime(datetime.unixtime);
+#endif //GPSTIME    
+    if (timer.armedstatus > 0)
+      timer.armedstatus--;
+    timer.seconds += 1000;
+    timer.tenthSec = 0;
+#ifdef FC_MESSAGE
+    if (timer.fcMessage > 0)
+      timer.fcMessage--;
+#endif
+#ifdef ADSBAWARE
+    if (timer.adsbttl > 0){
+      timer.adsbttl--; 
+    }
+    else{
+      adsb.dist = 0;
+      adsb.alt = 0;
+      adsb.cog = 0; 
+    }        
+#endif // ADSBAWARE
+#ifdef ADSBSTATION
+    for (uint8_t X = 0; X < ADSBSTATIONCOUNT; X++){
+      if (adsbvehicle[X].ttl>0) 
+        adsbvehicle[X].ttl--;
+    }
+#endif // ADSBSTATION    
+#ifdef BUDDYFLIGHT
+    send_mavlink_ADSB_STATUS_MESSAGE(); 
+    send_mavlink_ADSB_TRAFFIC_REPORT_MESSAGE();
+#endif // BUDDYFLIGHT
+#ifdef DEBUGDPOSLOOP
+    framerate = timer.loopcount;
+    timer.loopcount = 0;
+#endif
+#ifdef DEBUGDPOSPACKET
+    packetrate = timer.packetcount;
+    timer.packetcount = 0;
+#endif
+#ifdef DEBUGDPOSRX
+    serialrxrate = timer.serialrxrate;
+    timer.serialrxrate = 0;
+#endif
+#ifdef DEBUGDPOSMAV
+  debug[0] = timer.d0rate;
+  timer.d0rate=0;
+  debug[1] = timer.d1rate;
+  timer.d1rate=0;
+  debug[2] = timer.d2rate;
+  timer.d2rate=0;
+  debug[3] = timer.d3rate;
+  timer.d3rate=0;
+#endif 
+    onTime++;
+    if (!fontMode)
+      MAX7456CheckStatus();
+#ifdef ALARM_GPS
+    if (timer.GPS_active == 0) {
+      GPS_numSat = 0;
+    }
+    else {
+      timer.GPS_active--;
+    }
+#endif // ALARM_GPS 
+    if (timer.disarmed > 0) {
+      timer.disarmed--;
+    }
+    if (timer.MSP_active > 0) {
+      timer.MSP_active--;
+    }
+    if (timer.GUI_active > 0) {
+      timer.GUI_active--;
+#if defined GPSOSD
+      timer.GPS_initdelay = 2;
+#endif
+    }
+#if defined(GPSOSD) && !defined(NAZA)
+    if (timer.GPS_initdelay == 1) {
+      GPS_SerialInit();
+    }
+    if (timer.GPS_initdelay > 0) {
+      timer.GPS_initdelay--;
+    }
+#endif
+
+    if (!armed) {
+#ifndef MAPMODENORTH
+      armedangle = MwHeading;
+#endif
+    }
+    else {
+      flyTime++;
+      flyingTime++;
+      configMode = 0;
+      setMspRequests();
+    }
+    allSec++;
+    /*
+        if((timer.accCalibrationTimer==1)&&(configMode)) {
+          mspWriteRequest(MSP_ACC_CALIBRATION,0);
+          timer.accCalibrationTimer=0;
+        }
+    */
+#ifdef PROTOCOL_MSP
+    if ((timer.magCalibrationTimer == 1) && (configMode)) {
+      mspWriteRequest(MSP_MAG_CALIBRATION, 0);
+      timer.magCalibrationTimer = 0;
+    }
+    if (timer.magCalibrationTimer > 0) timer.magCalibrationTimer--;
+#endif
+    if (timer.rssiTimer > 0) timer.rssiTimer--;
+  }
+  //  setMspRequests();
+#if defined (FIXEDLOOP) // slower loop speed for consistent analogue readings. 500-1000hz.
+  serialMSPreceive(1);
+  delay(1);  
+#endif //FIXEDLOOP
+  serialMSPreceive(1);  
+}  // End of main loop
+#endif //main loop
+
+
+void buildDisplay(void){
+  if (displayReady)
+    return;
 #if defined USE_AIRSPEED_SENSOR
         useairspeed();
 #endif //USE_AIRSPEED_SENSOR
@@ -858,149 +1014,8 @@ void loop()
 #ifdef LOW_MEMORY
         displayLowmemory();
 #endif
-      }
-    }
-  }  // End of fast Timed Service Routine (50ms loop)
-
-  if (timer.halfSec >= 5) {
-    timer.halfSec = 0;
-    timer.Blink2hz = ! timer.Blink2hz;
-
-#if 0
-    // XXX What is this for? On-Arm power setting?
-    // XXX May be "Power up at minimum power, then goto stored power on-arming."for stick based blind operation or something similar
-    // XXX Leave commented out until intension is known.
-#ifdef VTX_RTC6705
-    vtx_set_power(armed ? vtxPower : 0);
-#endif // VTX_RTC6705
-#endif
-  }
-
-  if (millis() > timer.seconds + 1000)  // this execute 1 time a second
-  {
-#if defined (GPSTIME) && !defined (UBLOX)
-    datetime.unixtime++;
-    updateDateTime(datetime.unixtime);
-#endif //GPSTIME    
-    if (timer.armedstatus > 0)
-      timer.armedstatus--;
-    timer.seconds += 1000;
-    timer.tenthSec = 0;
-#ifdef FC_MESSAGE
-    if (timer.fcMessage > 0)
-      timer.fcMessage--;
-#endif
-#ifdef ADSBAWARE
-    if (timer.adsbttl > 0){
-      timer.adsbttl--; 
-    }
-    else{
-      adsb.dist = 0;
-      adsb.alt = 0;
-      adsb.cog = 0; 
-    }        
-#endif // ADSBAWARE
-#ifdef ADSBSTATION
-    for (uint8_t X = 0; X < ADSBSTATIONCOUNT; X++){
-      if (adsbvehicle[X].ttl>0) 
-        adsbvehicle[X].ttl--;
-    }
-#endif // ADSBSTATION    
-#ifdef BUDDYFLIGHT
-    send_mavlink_ADSB_STATUS_MESSAGE(); 
-    send_mavlink_ADSB_TRAFFIC_REPORT_MESSAGE();
-#endif // BUDDYFLIGHT
-#ifdef DEBUGDPOSLOOP
-    framerate = timer.loopcount;
-    timer.loopcount = 0;
-#endif
-#ifdef DEBUGDPOSPACKET
-    packetrate = timer.packetcount;
-    timer.packetcount = 0;
-#endif
-#ifdef DEBUGDPOSRX
-    serialrxrate = timer.serialrxrate;
-    timer.serialrxrate = 0;
-#endif
-#ifdef DEBUGDPOSMAV
-  debug[0] = timer.d0rate;
-  timer.d0rate=0;
-  debug[1] = timer.d1rate;
-  timer.d1rate=0;
-  debug[2] = timer.d2rate;
-  timer.d2rate=0;
-  debug[3] = timer.d3rate;
-  timer.d3rate=0;
-#endif 
-    onTime++;
-    if (!fontMode)
-      MAX7456CheckStatus();
-#ifdef ALARM_GPS
-    if (timer.GPS_active == 0) {
-      GPS_numSat = 0;
-    }
-    else {
-      timer.GPS_active--;
-    }
-#endif // ALARM_GPS 
-    if (timer.disarmed > 0) {
-      timer.disarmed--;
-    }
-    if (timer.MSP_active > 0) {
-      timer.MSP_active--;
-    }
-    if (timer.GUI_active > 0) {
-      timer.GUI_active--;
-#if defined GPSOSD
-      timer.GPS_initdelay = 2;
-#endif
-    }
-#if defined(GPSOSD) && !defined(NAZA)
-    if (timer.GPS_initdelay == 1) {
-      GPS_SerialInit();
-    }
-    if (timer.GPS_initdelay > 0) {
-      timer.GPS_initdelay--;
-    }
-#endif
-
-    if (!armed) {
-#ifndef MAPMODENORTH
-      armedangle = MwHeading;
-#endif
-    }
-    else {
-      flyTime++;
-      flyingTime++;
-      configMode = 0;
-      setMspRequests();
-    }
-    allSec++;
-    /*
-        if((timer.accCalibrationTimer==1)&&(configMode)) {
-          mspWriteRequest(MSP_ACC_CALIBRATION,0);
-          timer.accCalibrationTimer=0;
-        }
-    */
-#ifdef PROTOCOL_MSP
-    if ((timer.magCalibrationTimer == 1) && (configMode)) {
-      mspWriteRequest(MSP_MAG_CALIBRATION, 0);
-      timer.magCalibrationTimer = 0;
-    }
-    if (timer.magCalibrationTimer > 0) timer.magCalibrationTimer--;
-#endif
-    if (timer.rssiTimer > 0) timer.rssiTimer--;
-  }
-  //  setMspRequests();
-#if defined (FIXEDLOOP) // slower loop speed for consistent analogue readings. 500-1000hz.
-  serialMSPreceive(1);
-  delay(1);  
-#endif //FIXEDLOOP
-  serialMSPreceive(1);  
-}  // End of main loop
-#endif //main loop
-
-
+  displayReady = true;    
+}
 //------------------------------------------------------------------------
 //FONT management
 

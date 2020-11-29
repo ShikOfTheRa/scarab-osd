@@ -393,8 +393,11 @@ For sub-command 3 (draw string):
       break;
 
     case 2: // Clear canvas
+      displayReady = true;
+      cli();
       MAX7456_DrawScreen(); // Draws and clears..
-//      MAX7456_ClearScreen();
+      displayReady = false;
+      sei();
       break;
 
     case 3: // Draw string at (row,col) with attribute (if supported)

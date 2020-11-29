@@ -91,10 +91,13 @@ uint8_t detectedCamType = 0;
 //////////////////////////////////////////////////////////////
 uint8_t spi_transfer(uint8_t data)
 {
-  SPDR = data;                    // Start the transmission
-  while (!(SPSR & (1<<SPIF)))     // Wait the end of the transmission
-    ;
-  return SPDR;                    // return the received byte
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+  {
+    SPDR = data;                    // Start the transmission
+    while (!(SPSR & (1<<SPIF)))     // Wait the end of the transmission
+      ;
+    return SPDR;                    // return the received byte
+  }
 }
 
 // ============================================================   WRITE TO SCREEN
@@ -208,7 +211,6 @@ void MAX7456Setup(void)
   }
 #endif
   readEEPROM();
-  vsync_active = false;
 }
 
 // Copy string from ram into screen buffer
@@ -265,25 +267,21 @@ void MAX7456_ClearScreen(void)
 #endif
 
 ISR(INT0_vect) {
-  vsync_wait   = false;
-  vsync_active = true; 
+#ifdef USE_VSYNC
+  MAX7456_DrawScreen();
+#endif
 }
 
 void MAX7456_WaitVSYNC(void)
 {
-  if (!vsync_active) 
-    return;  
-  uint8_t srdata;
   vsync_wait = true; 
   while (vsync_wait){ 
   }
-  vsync_active = false; 
 }
 
 void MAX7456_DrawScreen() {
-#ifdef USE_VSYNC
-  MAX7456_WaitVSYNC();
-#endif   
+  if (displayReady!=true)
+    return;
   char *screen_address = screen;
   char *end_address = screen_address + sizeof(screen);
   screen[sizeof(screen)-1] = END_string;
@@ -298,6 +296,8 @@ void MAX7456_DrawScreen() {
     MAX7456DISABLE;        
     *screen_address++=0;
   }
+  vsync_timer = millis();
+  displayReady = false;
 }
 
 void MAX7456_Send(uint8_t add, uint8_t data)
@@ -352,7 +352,11 @@ void write_NVM(uint8_t char_address)
 }
 
 void MAX7456CheckStatus(void){
+
+
   uint8_t srdata;
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+  {
   MAX7456ENABLE
   spi_transfer(MAX7456ADD_STAT);
   srdata = spi_transfer(0xFF); 
@@ -360,18 +364,24 @@ void MAX7456CheckStatus(void){
   if ((srdata & B00000100) > 0)           // No signal
     srdata = 0;
   MAX7456DISABLE
+  }//ATOMIC_BLOCK(ATOMIC_RESTORESTATE)  
+
   if (detectedCamType != srdata) {
     MAX7456Setup();
     return;
   }
 
+  ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+  {
   MAX7456ENABLE 
   spi_transfer(MAX7456ADD_VM0_READ);
   srdata = spi_transfer(0xFF); 
   MAX7456DISABLE
+  sei();
   if ((B00001000 & srdata) == 0){
     MAX7456Setup(); 
   }
+  }//ATOMIC_BLOCK(ATOMIC_RESTORESTATE)  
 }
 
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD || defined DISPLAYFONTS

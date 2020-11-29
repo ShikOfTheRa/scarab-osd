@@ -851,8 +851,10 @@ void displayRSSI(void)
 }
 
 
-void displayIntro(void)
+void buildIntro(void)
 {
+  if (displayReady)
+    return;
   for (uint8_t X = 0; X <= 8; X++) {
     MAX7456_WriteString_P(PGMSTR(&(intro_item[X])), 64 + (X * 30));
   }
@@ -880,6 +882,7 @@ void displayIntro(void)
     MAX7456_WriteString((const char*)alarmMsg, 64 + (30 * 9) + 4);
   }
 #endif
+  displayReady = false;
 }
 
 

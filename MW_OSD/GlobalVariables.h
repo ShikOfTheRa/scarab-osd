@@ -435,8 +435,9 @@ uint8_t MSP_home_set=0;
 uint8_t variopitch=0;
 uint8_t phasers=0;
 uint16_t rpm;
-volatile bool vsync_active = false;
+volatile uint32_t vsync_timer = 0;
 volatile bool vsync_wait = false;
+volatile bool displayReady = false;
 #ifdef FC_MESSAGE
 uint8_t fcMessageLength;
 #endif // FC_MESSAGE
