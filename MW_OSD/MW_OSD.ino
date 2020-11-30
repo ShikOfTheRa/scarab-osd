@@ -270,7 +270,7 @@ void loop()
       displayReady =true;
 //      MAX7456_DrawScreen(); // use VSYNC
       fontStatus++;
-      delay(3000)
+      delay(3000);
       break;
   }
   LEDOFF

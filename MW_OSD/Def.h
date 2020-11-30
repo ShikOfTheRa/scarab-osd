@@ -984,6 +984,13 @@ enum {
   #define USE_FC_VOLTS_CONFIG
 #endif
 
+
+/********************  MEMORY reductions  *********************/
+#ifdef IMPULSERC_HELIX
+  #undef MSP_RTC_SUPPORT
+#endif
+                    
+
 /********************  FIXEDWING definitions  *********************/
 #ifdef FIXEDWING                     
   //#define LONG_RANGE_DISPLAY
