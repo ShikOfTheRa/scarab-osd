@@ -256,34 +256,31 @@ void serialMSPCheck()
   #endif
 
   if (cmdMSP == MSP_OSD) {
+    # ifdef USE_VSYNC    
+      EIMSK = EIMSK & ~(1 << INT0);
+    #endif
     uint8_t cmd = read8();
-      timer.GUI_active=254;
- 
+      timer.GUI_active=254; 
     if (cmd == OSD_READ_CMD_EE) {
       eeaddress = read8();
       eeaddress = eeaddress+read8();
-      eedata = read8();
-      settingsMode=1;
-      settingsSerialRequest();
+      eedata = read8();     
+      settingsSerialRequest();   
     }
 
-    if (cmd == OSD_WRITE_CMD_EE) {
+    if (cmd == OSD_WRITE_CMD_EE) {  
       for(uint8_t i=0; i<10; i++) {
         eeaddress = read8();
         eeaddress = eeaddress+(read8()<<8);
         eedata = read8();
-        settingsMode=1;
- //       MSP_OSD_timer=3000+millis();
         EEPROM.write(eeaddress,eedata);
-//        if (eeaddress==0){
-          EEPROM.write(0,EEPROMVER);
-//        }
-        if ((eeaddress==(EEPROM_SETTINGS-1)+(EEPROM16_SETTINGS*2))||(eeaddress==(EEPROM_SETTINGS-1)+(EEPROM16_SETTINGS*2)+(3*2*POSITIONS_SETTINGS))){
+        if (eeaddress==(EEPROM_SETTINGS-1)+(EEPROM16_SETTINGS*2)+(3*2*POSITIONS_SETTINGS)){
           readEEPROM();
         }
       }
-      eeaddress++;
-    settingswriteSerialRequest();
+      eeaddress++;         
+      EEPROM.write(0,EEPROMVER);
+      settingswriteSerialRequest();
     }
 #ifdef GUISENSORS
     if (cmd == OSD_SENSORS2||cmd == OSD_SENSORS) {
@@ -347,6 +344,9 @@ void serialMSPCheck()
 #ifdef PROTOCOL_MSP
 
   #ifdef CANVAS_SUPPORT
+  uint8_t canvasy;
+  uint8_t canvasx;
+  uint8_t canvasa;
   if (cmdMSP == MSP_DISPLAYPORT) {
     // Don't go into canvas mode when armed or in other special mode
     if (armed || fontMode)
@@ -396,14 +396,13 @@ For sub-command 3 (draw string):
       displayReady = true;
       cli();
       MAX7456_DrawScreen(); // Draws and clears..
-      displayReady = false;
       sei();
       break;
 
     case 3: // Draw string at (row,col) with attribute (if supported)
-      uint8_t canvasy = read8();
-      uint8_t canvasx = read8();
-      uint8_t canvasa = read8();
+      canvasy = read8();
+      canvasx = read8();
+      canvasa = read8();
       for (int i = 5; i <= dataSize ; i++) {
         char canvasc[2];
         canvasc[0] = read8();
@@ -419,8 +418,10 @@ For sub-command 3 (draw string):
       }
       break;
 
-//    case 4:  // documentation indicates a screen draw, but it seems independant of drawn strings and unusable      
-
+    case 4:  // documentation indicates a screen draw, but it seems independant of drawn strings and unusable      
+      //displayReady = true;
+      //MAX7456_DrawScreen(); // Draws and clears..
+      break;
     }
     return;
   }

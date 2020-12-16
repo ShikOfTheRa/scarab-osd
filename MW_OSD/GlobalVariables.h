@@ -435,8 +435,10 @@ uint8_t MSP_home_set=0;
 uint8_t variopitch=0;
 uint8_t phasers=0;
 uint16_t rpm;
+#define VSYNC_TIMEOUT 125 // if not VSYNC received within this period, display anyway
 volatile uint32_t vsync_timer = 0;
 volatile bool vsync_wait = false;
+volatile uint8_t vsync_ctr = 0;
 volatile bool displayReady = false;
 #ifdef FC_MESSAGE
 uint8_t fcMessageLength;
@@ -445,6 +447,8 @@ uint8_t fcMessageLength;
 // PROTOCOL_ESC
 static int16_t ESC_telemetrie[5]; // Temperature, Voltage, Current, used mAh, eRpM
 static uint8_t receivedBytes = 0;
+static uint32_t ESC_loopTime=0;
+static bool ESCdata = false;
 
 #if defined CORRECT_MSP_BF1
   uint8_t bfconfig[25];
@@ -473,7 +477,7 @@ uint8_t retransmitQueue;
 
 uint16_t eeaddress = 0;
 uint8_t eedata = 0;
-uint8_t settingsMode=0;
+//uint8_t settingsMode=0;
 //uint32_t MSP_OSD_timer=0;
 uint16_t framerate = 0;
 uint16_t packetrate = 0;

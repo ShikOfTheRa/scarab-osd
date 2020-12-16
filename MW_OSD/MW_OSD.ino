@@ -252,17 +252,19 @@ void loop()
   switch (fontStatus) {
     case 0:
       MAX7456_WriteString_P(messageF0, 32);
-      displayReady =true;
+      displayReady = true;
 //      MAX7456_DrawScreen(); // use VSYNC
       delay(3000);
+      displayReady = false;
       displayFont();
       MAX7456_WriteString_P(messageF1, 32);
-      displayReady =true;
+      displayReady = true;
 //      MAX7456_DrawScreen(); // use VSYNC
       fontStatus++;
       delay(3000);
       break;
     case 1:
+      displayReady = false;
       updateFont();
       MAX7456Setup();
       MAX7456_WriteString_P(messageF2, 32);
@@ -295,42 +297,34 @@ void loop()
 void loop()
 {
   static bool gui_connected = false;
-  static uint32_t loopTime = 0;
-  static uint8_t tlemetrieCounter = 0;
   // MAX7456Setup() // it would be beneficial to run this every few seconds to identify and reset max7456 lockups from low voltages
 
   if (timer.packetcount>0){
     gui_connected = true;
   }
 
-  if(micros()-loopTime > 2000){ // 2000Hz looptime
-    loopTime = micros();
-    serialMSPreceive(1);
-    if(++tlemetrieCounter == 20){ // get telemetrie with 25Hz
-      tlemetrieCounter = 0;
-      receivedBytes = 0; // reset bytes counter
-    }
-      
-    if(tlemetrieCounter == 10){
-      temperature = ESC_telemetrie[0];
-      voltage     = ESC_telemetrie[1];
-      amperage    = ESC_telemetrie[2]; 
-      amperagesum = ESC_telemetrie[3] * 360;   
-      rpm         = ESC_telemetrie[4];
-    }      
+  serialMSPreceive(1);
+ 
+  if(micros()-ESC_loopTime > 200){ //no serial, reset counter
+    receivedBytes = 0;
   }
-
+      
   if (displayReady != true){
     displayTemperature();
     displayVoltage();
-    displayVidVoltage();
     displayAmperage();
     displaypMeterSum();
     displayWatt();
-    displayRPM();  
-    displayReady =true;
+    displayRPM(); 
+//    displaydebug(); 
+    displayReady =true;    
+
+//  Data received test
+    displayHeading();  
   }
-  
+
+   if (millis() > (vsync_timer + VSYNC_TIMEOUT))
+      MAX7456_DrawScreen();       
 }
 #else
 //------------------------------------------------------------------------
@@ -665,7 +659,7 @@ void loop()
       if (!canvasMode)
 #endif // CANVAS_SUPPORT
       {          
-        if (millis() > (vsync_timer + 100))
+        if (millis() > (vsync_timer + VSYNC_TIMEOUT))
           MAX7456_DrawScreen();   
       }        
    }

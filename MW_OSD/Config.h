@@ -16,7 +16,8 @@
 //#define HOLYBROPDB                // Uncomment this if using a HOLYBRO PDB (Using A6 as VOLTAGEPIN) http://www.holybro.com/
 //#define IMPULSERC_HELIX           // Uncomment this if using an ImpulseRC integrated OSD/VTX (STILL UNDER DEVELOPMENT PENDING TESTING)
 //#define FFPV_INNOVA               // Uncomment this if using a FURIOUS FPV Innova integrated OSD/VTX (STILL UNDER DEVELOPMENT PENDING TESTING)
-//#define STEELEPDB                   // Uncomment this if using STEELEPDB
+//#define STEELEPDB                 // Uncomment this if using STEELEPDB
+//#define ESCOSD                    // Uncomment this if using ESC OSD - displays ESC TELEMETRY VALUES recieved on serial RX. Suitable for single ESC only.
 
 // NOTE-some boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct:
@@ -100,7 +101,6 @@
 //#define LOADFONT_LARGE            // Uncomment to force an upload of large font instead of using GUI
 //#define LOADFONT_BOLD             // Uncomment to force an upload of bold font instead of using GUI
 //#define DISPLAYFONTS              // Uncomment to display installed fonts for testing
-//#define SCREENTEST                // Uncomment to fill display to assist in character alignment
 
 
 /*--------------------------       OPTIONAL configurable parameters      ----------------------------------------------------*/
@@ -431,6 +431,12 @@
 //#define SEAWATER                  // Uncomment this if you are using a submersible in seawater
 //#define FLUID_DENSITY 997         // Uncomment this if you are using a submersible and wish to specify a particular fluid density
 
+
+/********************    ESC OSD settings   *********************/
+// Specify ESC OSD specific settings:
+#define MOTORPOLES 7                 // Value set = Motor pole count / 2  i.e. set 7 for a 14 pole motor 
+
+
 /********************           Display items lead icon           *********************/
 // comment out to not display lead icon for displayed items
 #define ICON_ANGLE_RTH              // Direction to home
@@ -467,4 +473,3 @@
 
 /********************  Under developemnt      *********************/
 // This is a work in process. Not completed for implementation
-//#define ESCOSD

@@ -83,7 +83,7 @@
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.2.0 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define iNAV_KK                   // Uncomment this if you are using AEROMAX OSD and BARO sensor addition with iNAV with KK audio vario
-#define APM                       // Uncomment this if you are using Ardupilot on APM / PIXHAWK / other supported hardware. Supports most MAVLINK 1.0 compatible FC
+//#define APM                       // Uncomment this if you are using Ardupilot on APM / PIXHAWK / other supported hardware. Supports most MAVLINK 1.0 compatible FC
 //#define PX4                       // Uncomment this if you are using PX4 stack on PIXHAWK and other supported hardware
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
 //#define MULTIWII                  // Uncomment this if you are using latest 2.4 MULTIWII
@@ -213,10 +213,14 @@
 #endif // CANVASOSD
 
 #ifdef ESCOSD
-  #define PROTOCOL_ESC
-  #ifdef USE_VSYNC
-    #undef USE_VSYNC
-  #endif  
+  #define PROTOCOL_ESC 
+  #undef  ICON_TMP
+  #undef  ICON_MAIN_BATT
+  #undef  INTRO_MENU        
+  #undef  INTRO_CALLSIGN  
+  #undef  INTRO_SIGNALTYPE
+  #undef  INTRO_DELAY
+  #define INTRO_DELAY 1
 #endif // CANVASOSD
 
 #ifdef ADSBDEBUG
@@ -1154,8 +1158,8 @@ enum {
     # define LEDON            digitalWrite(LEDPIN,HIGH);
     # define LEDOFF           digitalWrite(LEDPIN,LOW);
 #else                                  
-    # define MAX7456ENABLE    PORTD&=B10111111; 
-    # define MAX7456DISABLE   PORTD|=B01000000; 
+    # define MAX7456ENABLE    PORTD &= ~_BV(PD6); 
+    # define MAX7456DISABLE   PORTD |= _BV(PD6); 
     # define MAX7456SETHARDWAREPORTS  DDRB|=B00101100;DDRB&=B11101111;DDRD|=B01000000;DDRD&=B11111011;
     # define MAX7456HWRESET   PORTB&=B11111011;delay(100);PORTB|=B00000100;
     # define LEDINIT          DDRD = DDRD|B10000000;

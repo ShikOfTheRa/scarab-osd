@@ -153,10 +153,11 @@ void MAX7456Setup(void)
   //sample on leading edge of clk,system clock/4 rate (4 meg)
   //SPI2X will double the rate (8 meg)
 
+  SPCR = 0;
   SPCR = (1<<SPE)|(1<<MSTR);
-  SPSR = (1<<SPI2X);
-  MAX_screen_rows=SPSR; // Apparnetly have to read twice to clear errors. Unconfirmed 
-  MAX_screen_rows=SPDR;  
+  SPSR |= 1;
+  byte tmp = SPSR; // Apparnetly have to read twice to clear errors. Unconfirmed 
+  tmp = SPDR;  
 
 #ifdef MAX_SOFTRESET
   MAX7456SoftReset();
@@ -268,32 +269,42 @@ void MAX7456_ClearScreen(void)
 
 ISR(INT0_vect) {
 #ifdef USE_VSYNC
+  vsync_ctr++;
+  if (vsync_ctr < 6) // 10hz
+    return;
+  vsync_ctr = 0;
   MAX7456_DrawScreen();
 #endif
 }
 
+/*
 void MAX7456_WaitVSYNC(void)
 {
   vsync_wait = true; 
   while (vsync_wait){ 
   }
 }
+*/
 
+//**********************
+  //# define MAX7456ENABLE    PORTD&=B10111111; 
+  //# define MAX7456DISABLE   PORTD|=B01000000; 
+    
 void MAX7456_DrawScreen() {
   if (displayReady!=true)
     return;
   char *screen_address = screen;
   char *end_address = screen_address + sizeof(screen);
   screen[sizeof(screen)-1] = END_string;
-  MAX7456ENABLE; 
+   PORTD &= ~_BV(PD6);
   MAX7456_Send(MAX7456ADD_DMAH, 0);
   MAX7456_Send(MAX7456ADD_DMAL, 0);
   MAX7456_Send(MAX7456ADD_DMM,  1);
-  MAX7456DISABLE; 
+    PORTD |= _BV(PD6);  
   for(; screen_address < end_address;) {
-    MAX7456ENABLE;
+    PORTD &= ~_BV(PD6);
     spi_transfer(*screen_address);
-    MAX7456DISABLE;        
+    PORTD |= _BV(PD6);        
     *screen_address++=0;
   }
   vsync_timer = millis();
@@ -377,7 +388,7 @@ void MAX7456CheckStatus(void){
   spi_transfer(MAX7456ADD_VM0_READ);
   srdata = spi_transfer(0xFF); 
   MAX7456DISABLE
-  sei();
+//  sei();
   if ((B00001000 & srdata) == 0){
     MAX7456Setup(); 
   }
@@ -387,6 +398,9 @@ void MAX7456CheckStatus(void){
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD || defined DISPLAYFONTS
 void displayFont()
 {
+  for(uint8_t x = 0; x < 480; x++) {
+    screen[x] = SYM_BLANK;
+  }
   for(uint8_t x = 0; x < 255; x++) {
     screen[90+x] = x;
   }

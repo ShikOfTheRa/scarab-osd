@@ -15,22 +15,26 @@ uint8_t get_crc8(uint8_t *Buf, uint8_t BufLen){
 
 void serialESCreceive(uint8_t c){
   static uint8_t SerialBuf[10];
-  
-  if(receivedBytes < 9){ // collect bytes
-      SerialBuf[receivedBytes] = c;
-      receivedBytes++;
-    if(receivedBytes == 10){ // transmission complete
-      
-      uint8_t crc8 = get_crc8(SerialBuf, 9); // get the 8 bit CRC
-      
-      if(crc8 != SerialBuf[9]) return; // transmission failure 
-      
-      // compute the received values
-      ESC_telemetrie[0] = SerialBuf[0]; // temperature
-      ESC_telemetrie[1] = (SerialBuf[1]<<8)|SerialBuf[2]; // voltage
-      ESC_telemetrie[2] = (SerialBuf[3]<<8)|SerialBuf[4]; // Current
-      ESC_telemetrie[3] = (SerialBuf[5]<<8)|SerialBuf[6]; // used mA/h
-      ESC_telemetrie[4] = (SerialBuf[7]<<8)|SerialBuf[8]; // eRpM *100
-    }
+  MwHeading++;
+  ESC_loopTime = micros();
+  if(receivedBytes > 10) receivedBytes = 0;
+  if(receivedBytes < 10){ // collect bytes
+    SerialBuf[receivedBytes] = c;
+    receivedBytes++;
+  }  
+  if(receivedBytes == 10){ // transmission complete      
+    uint8_t crc8 = get_crc8(SerialBuf, 9); // get the 8 bit CRC
+  if(crc8 != SerialBuf[9]) return; // transmission failure       
+    ESC_telemetrie[0] = SerialBuf[0]; // temperature
+    ESC_telemetrie[1] = ((SerialBuf[1]<<8)|SerialBuf[2])/10; // voltage
+    ESC_telemetrie[2] = ((SerialBuf[3]<<8)|SerialBuf[4])/10; // Current
+    ESC_telemetrie[3] = (SerialBuf[5]<<8)|SerialBuf[6]; // used mA/h
+    ESC_telemetrie[4] = ((SerialBuf[7]<<8)|SerialBuf[8]) / MOTORPOLES; // eRpM *100  for 14 pole
+    temperature = ESC_telemetrie[0];
+    voltage     = ESC_telemetrie[1];
+    amperage    = ESC_telemetrie[2]; 
+    amperagesum = ESC_telemetrie[3]*360;   
+    rpm         = ESC_telemetrie[4];
+    receivedBytes = 0;
   }
 }
