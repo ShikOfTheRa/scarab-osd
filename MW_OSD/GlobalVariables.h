@@ -435,7 +435,7 @@ uint8_t MSP_home_set=0;
 uint8_t variopitch=0;
 uint8_t phasers=0;
 uint16_t rpm;
-#define VSYNC_TIMEOUT 125 // if not VSYNC received within this period, display anyway
+#define VSYNC_TIMEOUT 80 // if not VSYNC received within this ms period, display anyway
 volatile uint32_t vsync_timer = 0;
 volatile bool vsync_wait = false;
 volatile uint8_t vsync_ctr = 0;

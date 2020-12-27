@@ -17,6 +17,7 @@ void serialESCreceive(uint8_t c){
   static uint8_t SerialBuf[10];
   MwHeading++;
   ESC_loopTime = micros();
+  if (Settings[S_CUSTOM] == 0) Settings[S_CUSTOM] = 1;
   if(receivedBytes > 10) receivedBytes = 0;
   if(receivedBytes < 10){ // collect bytes
     SerialBuf[receivedBytes] = c;
@@ -29,7 +30,7 @@ void serialESCreceive(uint8_t c){
     ESC_telemetrie[1] = ((SerialBuf[1]<<8)|SerialBuf[2])/10; // voltage
     ESC_telemetrie[2] = ((SerialBuf[3]<<8)|SerialBuf[4])/10; // Current
     ESC_telemetrie[3] = (SerialBuf[5]<<8)|SerialBuf[6]; // used mA/h
-    ESC_telemetrie[4] = ((SerialBuf[7]<<8)|SerialBuf[8]) / MOTORPOLES; // eRpM *100  for 14 pole
+    ESC_telemetrie[4] = ((SerialBuf[7]<<8)|SerialBuf[8]) / Settings[S_CUSTOM]; // eRpM *100  for 14 pole
     temperature = ESC_telemetrie[0];
     voltage     = ESC_telemetrie[1];
     amperage    = ESC_telemetrie[2]; 

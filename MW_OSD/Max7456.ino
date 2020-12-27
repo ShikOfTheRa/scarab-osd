@@ -75,13 +75,7 @@
 #define MAX7456ADD_RB15         0x1f
 #define MAX7456ADD_OSDBL        0x6c
 #define MAX7456ADD_STAT         0xA0
-
 #define MAX7456ADD_VM0_READ     0x80  
-
-// Selectable by video mode
-//uint8_t ENABLE_display;
-//uint8_t ENABLE_display_vert;
-//uint8_t DISABLE_display;
 
 // Goods for tidiness
 #define VIDEO_MODE (flags.signaltype ? VIDEO_MODE_PAL : VIDEO_MODE_NTSC)
@@ -91,13 +85,10 @@ uint8_t detectedCamType = 0;
 //////////////////////////////////////////////////////////////
 uint8_t spi_transfer(uint8_t data)
 {
-  ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-  {
     SPDR = data;                    // Start the transmission
     while (!(SPSR & (1<<SPIF)))     // Wait the end of the transmission
       ;
     return SPDR;                    // return the received byte
-  }
 }
 
 // ============================================================   WRITE TO SCREEN
@@ -270,41 +261,30 @@ void MAX7456_ClearScreen(void)
 ISR(INT0_vect) {
 #ifdef USE_VSYNC
   vsync_ctr++;
-  if (vsync_ctr < 6) // 10hz
+  if (vsync_ctr < 4) // to maximise serial performance reduce rate
     return;
   vsync_ctr = 0;
   MAX7456_DrawScreen();
 #endif
 }
 
-/*
-void MAX7456_WaitVSYNC(void)
-{
-  vsync_wait = true; 
-  while (vsync_wait){ 
-  }
-}
-*/
-
-//**********************
-  //# define MAX7456ENABLE    PORTD&=B10111111; 
-  //# define MAX7456DISABLE   PORTD|=B01000000; 
     
 void MAX7456_DrawScreen() {
   if (displayReady!=true)
     return;
+  displayReady = false;
   char *screen_address = screen;
   char *end_address = screen_address + sizeof(screen);
   screen[sizeof(screen)-1] = END_string;
-   PORTD &= ~_BV(PD6);
+  MAX7456ENABLE
   MAX7456_Send(MAX7456ADD_DMAH, 0);
   MAX7456_Send(MAX7456ADD_DMAL, 0);
   MAX7456_Send(MAX7456ADD_DMM,  1);
-    PORTD |= _BV(PD6);  
+  MAX7456DISABLE  
   for(; screen_address < end_address;) {
-    PORTD &= ~_BV(PD6);
+    MAX7456ENABLE
     spi_transfer(*screen_address);
-    PORTD |= _BV(PD6);        
+    MAX7456DISABLE        
     *screen_address++=0;
   }
   vsync_timer = millis();
@@ -362,11 +342,12 @@ void write_NVM(uint8_t char_address)
 #endif
 }
 
+
 void MAX7456CheckStatus(void){
-
-
+  bool t_displayReady = displayReady;
+  displayReady = false;
   uint8_t srdata;
-  ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+  //ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
   {
   MAX7456ENABLE
   spi_transfer(MAX7456ADD_STAT);
@@ -382,18 +363,21 @@ void MAX7456CheckStatus(void){
     return;
   }
 
-  ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+  //ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
   {
   MAX7456ENABLE 
   spi_transfer(MAX7456ADD_VM0_READ);
   srdata = spi_transfer(0xFF); 
   MAX7456DISABLE
-//  sei();
+
+  }//ATOMIC_BLOCK(ATOMIC_RESTORESTATE) 
+  
   if ((B00001000 & srdata) == 0){
     MAX7456Setup(); 
-  }
-  }//ATOMIC_BLOCK(ATOMIC_RESTORESTATE)  
+  }   
+  displayReady = t_displayReady;
 }
+
 
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD || defined DISPLAYFONTS
 void displayFont()

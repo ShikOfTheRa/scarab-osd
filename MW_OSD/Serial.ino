@@ -256,8 +256,8 @@ void serialMSPCheck()
   #endif
 
   if (cmdMSP == MSP_OSD) {
-    # ifdef USE_VSYNC    
-      EIMSK = EIMSK & ~(1 << INT0);
+    # ifdef USE_VSYNC // disable VSYNC for faster OSD updates   
+ //     EIMSK = EIMSK & ~(1 << INT0);
     #endif
     uint8_t cmd = read8();
       timer.GUI_active=254; 

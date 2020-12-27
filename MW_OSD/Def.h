@@ -36,7 +36,7 @@
 //#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
 
 
-//#define DEVELOPMENT               // For development set only 
+#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
   #undef LOW_MEMORY 
   #define LOW_MEMORY 200
@@ -64,7 +64,7 @@
   //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
   //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
   //#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
-  //#define APM
+  #define APM
   //#define PX4                     // Uncomment this if you are using PIXHAWK with PX4 stack
   //#define DISPLAYAVGEFFICIENCY                // Display average mAh used / per KM instead of mAh/min KMh. 
   //#define iNAV                    // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
@@ -79,34 +79,7 @@
   //#define MAV_ALT_THROTTLE          // Use alternative MAV throttle value. Not raw RC channel.
   //#define TX_CHANNELS 16 
   //#define PPM_CONTROL               // Enables full OSD menu, screen switching, RSSI, Throttle feature, virtual current sensor, etc using a PPM signal into OSD PWM input pin (RSSI pin on basic MINIM hardware). Requires TX type to be set below.
-  
-//#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.2.0 at time of this MWOSD release)
-//#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
-//#define iNAV_KK                   // Uncomment this if you are using AEROMAX OSD and BARO sensor addition with iNAV with KK audio vario
-//#define APM                       // Uncomment this if you are using Ardupilot on APM / PIXHAWK / other supported hardware. Supports most MAVLINK 1.0 compatible FC
-//#define PX4                       // Uncomment this if you are using PX4 stack on PIXHAWK and other supported hardware
-//#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
-//#define MULTIWII                  // Uncomment this if you are using latest 2.4 MULTIWII
-//#define MAHOWII                   // Uncomment this if you are using MAHOWII (https://github.com/mahowik/mahowii)
-//#define KISS                      // Uncomment this if you are using KISS FC
-//#define DRONIN                    // Uncomment this if you are using the latest DRONIN MSP Module
-//#define NAZA                      // Uncomment this if you are using NAZA flight controller
-//#define LIBREPILOT                // Uncomment this if you are using the latest LibrePilot MSP Module
-//#define TAULABS                   // Uncomment this if you are using the latest Tau Labs MSP Module
-//#define FIXEDWING_BF              // Uncomment this if you are using fixed wing Baseflight 
-//#define FIXEDWING_BF_SERVO        // Uncomment this if you are using fixed wing Baseflight with additional SERVO adjustment menu.
-//#define HARAKIRI                  // Uncomment this if you are using HARAKIRI (for BOXNAMES compatibility)
-//#define RACEFLIGHT                // Uncomment this if you are using RACEFLIGHT - untested. Test and feedback required
-//#define SKYTRACK                  // Under development
-//#define GPSOSD_UBLOX              // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
-//#define GPSOSD_UBLOX_KK           // Uncomment this if you are using AEROMAX OSD and BARO sensor addition with UBLOX GPS module and KK audio vario
-//#define GPSOSD_NMEA               // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
-//#define GPSOSD_MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
-//#define NOCONTROLLER             
-//#define SUBMARINE                 // Uncomment this ONLY if you are using ARDUSUB
 
-//#define USE_MAV_GPS
-//#define QUADPLANE
 #endif
 
 

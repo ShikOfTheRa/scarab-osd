@@ -434,7 +434,7 @@
 
 /********************    ESC OSD settings   *********************/
 // Specify ESC OSD specific settings:
-#define MOTORPOLES 7                 // Value set = Motor pole count / 2  i.e. set 7 for a 14 pole motor 
+
 
 
 /********************           Display items lead icon           *********************/

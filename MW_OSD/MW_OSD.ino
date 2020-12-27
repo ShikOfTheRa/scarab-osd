@@ -789,8 +789,9 @@ void loop()
   timer.d3rate=0;
 #endif 
     onTime++;
-    if (!fontMode)
+    if (!fontMode){
       MAX7456CheckStatus();
+    }
 #ifdef ALARM_GPS
     if (timer.GPS_active == 0) {
       GPS_numSat = 0;
@@ -1284,6 +1285,9 @@ void readEEPROM(void)
   cli();
 #if defined INTC3
   if (Settings[S_MWRSSI] == 1) {
+    #ifdef USE_VSYNC // disable VSYNC to remove RSSI glitches    
+      EIMSK = EIMSK & ~(1 << INT0);
+    #endif
     if ((PCMSK1 & (1 << PCINT11)) == 0) {
       PCICR |=  (1 << PCIE1);
       PCMSK1 |= (1 << PCINT11);
@@ -1291,6 +1295,9 @@ void readEEPROM(void)
   }
 #endif
 #if defined INTD5
+  #ifdef USE_VSYNC // disable VSYNC to remove RSSI glitches    
+    EIMSK = EIMSK & ~(1 << INT0);
+  #endif
   if ((PCMSK2 & (1 << PCINT21)) == 0) {
     PCICR |=  (1 << PCIE2);
     PCMSK2 |= (1 << PCINT21);
