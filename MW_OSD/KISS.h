@@ -135,7 +135,10 @@ void kiss_sync_telemetry() {
     MwRcData[10+1] = 1500 + (int16_t)kissread_u16(KISS_INDEX_RC10);
   }
   handleRawRC();
-
+  // CRSF not on old versions, check if the frame contains them.
+  if (Kvar.framelength >= KISS_INDEX_CRSF_LQ) {
+    MwRssi = (int16_t)(((102) * kissread_u8(KISS_INDEX_CRSF_LQ)) / 10);
+  }
   static uint32_t filtereddata[6];
 
   if (Settings[S_MWAMPERAGE]) {

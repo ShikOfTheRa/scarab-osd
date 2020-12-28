@@ -2433,6 +2433,7 @@ const PROGMEM char * const KISS_mode_index[] =
 #define KISS_INDEX_RC8 154 // INT 16
 #define KISS_INDEX_RC9 156 // INT 16
 #define KISS_INDEX_RC10 158 // INT 16
+#define KISS_INDEX_CRSF_LQ 162 // INT 8
 
 #define KISS_INDEX_GPS_LATITUDE 0   // UINT 32
 #define KISS_INDEX_GPS_LONGITUDE 4  // UINT 32
@@ -2530,7 +2531,7 @@ const PROGMEM char * const KISS_mode_index[] =
 uint8_t kissMessagePriority=1;
 
 #define KISSFRAMEINIT 5
-#define KISSFRAMELENGTH KISS_SETTINGS_IDX_DTERM_LPF + 2 // Size of serial buffer defined with max index used
+#define KISSFRAMELENGTH 169 + 2 // Size of serial buffer defined with max index used. 169 = CRSF downSNR
 
 uint8_t KISScurrentRequest = 0x00;
 uint8_t KISSgetcmd=0;
