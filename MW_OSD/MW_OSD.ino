@@ -249,28 +249,31 @@ void setup()
 #if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
 void loop()
 {
+  MAX7456CheckStatus();
+  EIMSK = EIMSK & ~(1 << INT0);
   switch (fontStatus) {
     case 0:
       MAX7456_WriteString_P(messageF0, 32);
       displayReady = true;
-//      MAX7456_DrawScreen(); // use VSYNC
+      MAX7456_DrawScreen();    
       delay(3000);
       displayReady = false;
       displayFont();
       MAX7456_WriteString_P(messageF1, 32);
       displayReady = true;
-//      MAX7456_DrawScreen(); // use VSYNC
+      MAX7456_DrawScreen();  
       fontStatus++;
       delay(3000);
       break;
     case 1:
       displayReady = false;
+      MAX7456Setup();
       updateFont();
       MAX7456Setup();
       MAX7456_WriteString_P(messageF2, 32);
       displayFont();
       displayReady =true;
-//      MAX7456_DrawScreen(); // use VSYNC
+      MAX7456_DrawScreen();  
       fontStatus++;
       delay(3000);
       break;
@@ -280,12 +283,14 @@ void loop()
 #elif defined DISPLAYFONTS
 void loop()
 {
-  MAX7456Setup();
-  if displayReady = false{
+  MAX7456CheckStatus();
+
+  if (displayReady == false){
     displayFont();
+    displayReady = true;
+    MAX7456_DrawScreen();  
   }
-  displayReady =true;
-//      MAX7456_DrawScreen();
+  delay(1000);  
 }
 #elif defined CANVASOSD
 void loop()
@@ -296,11 +301,12 @@ void loop()
 #elif defined ESCOSD
 void loop()
 {
-  static bool gui_connected = false;
-  // MAX7456Setup() // it would be beneficial to run this every few seconds to identify and reset max7456 lockups from low voltages
-
-  if (timer.packetcount>0){
-    gui_connected = true;
+ 
+  // It would be beneficial to run this every few seconds to identify and reset max7456 lockups from low voltages
+  static uint32_t lastcheck;
+  if (millis() / 1000 == lastcheck){
+    MAX7456CheckStatus();
+    lastcheck = millis() / 1000;
   }
 
   serialMSPreceive(1);
@@ -316,7 +322,6 @@ void loop()
     displaypMeterSum();
     displayWatt();
     displayRPM(); 
-//    displaydebug(); 
     displayReady =true;    
 
 //  Data received test
@@ -325,6 +330,25 @@ void loop()
 
    if (millis() > (vsync_timer + VSYNC_TIMEOUT))
       MAX7456_DrawScreen();       
+}
+#elif defined TOSD
+void loop()
+{
+  // It would be beneficial to run this every few seconds to identify and reset max7456 lockups from low voltages
+  static uint32_t lastcheck;
+  if (millis() / 1000 == lastcheck){
+    MAX7456CheckStatus();
+    lastcheck = millis() / 1000;
+  }
+  serialMSPreceive(1);
+  if (displayReady != true){
+    displayFont();
+    displayDebug();
+    displayReady = true;
+    true;    
+  } 
+  if (millis() > (vsync_timer + VSYNC_TIMEOUT))
+    MAX7456_DrawScreen();   
 }
 #else
 //------------------------------------------------------------------------
@@ -1014,71 +1038,10 @@ void buildDisplay(void){
 //------------------------------------------------------------------------
 //FONT management
 
-uint8_t safeMode() {
-  return 1;	// XXX
-}
-
-
-// Font upload queue implementation.
-// Implement a window for curr + the previous 6 requests.
-// First-chance to retransmit at curr-3 (retransmitQueue & 0x10)
-// First-chance retransmit marked as used at retransmitQueue |= 0x01
-// 2 to N-chance retransmit marked at curr-6 (retransmitQueue & 0x02)
 void initFontMode() {
-  if (armed || configMode || fontMode || !safeMode())
+  if (armed || configMode || fontMode )
     return;
-  // queue first char for transmition.
-  retransmitQueue = 0x80;
   fontMode = 1;
-  //  setMspRequests();
-}
-
-
-void fontCharacterReceived(uint8_t cindex) {
-  if (!fontMode)
-    return;
-
-  uint8_t bit = (0x80 >> (nextCharToRequest - cindex));
-
-  // Just received a char..
-  if (retransmitQueue & bit) {
-    // this char war requested and now received for the first time
-    retransmitQueue &= ~bit;  // mark as already received
-    write_NVM(cindex);       // Write to MVRam
-  }
-}
-
-int16_t getNextCharToRequest() {
-  if (nextCharToRequest != lastCharToRequest) { // Not at last char
-    if (retransmitQueue & 0x02) {               // Missed char at curr-6. Need retransmit!
-      return nextCharToRequest - 6;
-    }
-
-    if ((retransmitQueue & 0x11) == 0x10) {     // Missed char at curr-3. First chance retransmit
-      retransmitQueue |= 0x01;                  // Mark first chance as used
-      return nextCharToRequest - 3;
-    }
-
-    retransmitQueue = (retransmitQueue >> 1) | 0x80; // Add next to queue
-    return nextCharToRequest++;                      // Notice post-increment!
-  }
-
-  uint8_t temp1 = retransmitQueue & ~0x01;
-  uint8_t temp2 = nextCharToRequest - 6;
-
-  if (temp1 == 0) {
-    fontMode = 0;                            // Exit font mode
-    //  setMspRequests();
-    return -1;
-  }
-
-  // Already at last char... check for missed characters.
-  while (!(temp1 & 0x03)) {
-    temp1 >>= 1;
-    temp2++;
-  }
-
-  return temp2;
 }
 
 

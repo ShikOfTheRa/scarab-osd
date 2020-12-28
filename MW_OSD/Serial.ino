@@ -257,7 +257,7 @@ void serialMSPCheck()
 
   if (cmdMSP == MSP_OSD) {
     # ifdef USE_VSYNC // disable VSYNC for faster OSD updates   
- //     EIMSK = EIMSK & ~(1 << INT0);
+      EIMSK = EIMSK & ~(1 << INT0);
     #endif
     uint8_t cmd = read8();
       timer.GUI_active=254; 
@@ -325,8 +325,13 @@ void serialMSPCheck()
       else if(dataSize == 56) {
         uint8_t c = serialBuffer[55];
         write_NVM(c);
-        if (c==255)
+        if (c==255){
           MAX7456Setup();
+          fontMode=0;
+        }
+        else{
+          fontSerialRequest();
+        }
       }
     }
     if(cmd == OSD_DEFAULT) {
@@ -2009,7 +2014,7 @@ void configSave()
 void fontSerialRequest() {
   cfgWriteRequest(MSP_OSD,3);
   cfgWrite8(OSD_GET_FONT);
-  cfgWrite16(getNextCharToRequest());
+  cfgWrite16(nextCharToRequest);
   cfgWriteChecksum();
 } 
 

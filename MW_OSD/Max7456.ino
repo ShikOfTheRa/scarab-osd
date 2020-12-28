@@ -147,7 +147,7 @@ void MAX7456Setup(void)
   SPCR = 0;
   SPCR = (1<<SPE)|(1<<MSTR);
   SPSR |= 1;
-  byte tmp = SPSR; // Apparnetly have to read twice to clear errors. Unconfirmed 
+  byte tmp = SPSR; // Apparently have to read twice to clear errors. Unconfirmed 
   tmp = SPDR;  
 
 #ifdef MAX_SOFTRESET
@@ -204,8 +204,6 @@ void MAX7456Setup(void)
 #endif
   readEEPROM();
 }
-
-// Copy string from ram into screen buffer
 
 #ifdef INVERTED_CHAR_SUPPORT
 
@@ -379,18 +377,7 @@ void MAX7456CheckStatus(void){
 }
 
 
-#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD || defined DISPLAYFONTS
-void displayFont()
-{
-  for(uint8_t x = 0; x < 480; x++) {
-    screen[x] = SYM_BLANK;
-  }
-  for(uint8_t x = 0; x < 255; x++) {
-    screen[90+x] = x;
-  }
-}
-
-#ifndef DISPLAYFONTS
+#if defined LOADFONT_DEFAULT || defined LOADFONT_LARGE || defined LOADFONT_BOLD
 void updateFont()
 { 
   for(uint8_t x = 0; x < 255; x++){
@@ -408,5 +395,4 @@ void updateFont()
     delay(20); // Shouldn't be needed due to status reg wait.
   }
 }
-#endif
 #endif

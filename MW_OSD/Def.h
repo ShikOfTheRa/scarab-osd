@@ -36,7 +36,7 @@
 //#define PILOTICON                 // Enable code to display pilot ICON as an alternative to CHARACTER display. Requires GUI > 1.8.0
 
 
-#define DEVELOPMENT               // For development set only 
+//#define DEVELOPMENT               // For development set only 
 #ifdef DEVELOPMENT                  // Development pre-set test paramters only 
   #undef LOW_MEMORY 
   #define LOW_MEMORY 200

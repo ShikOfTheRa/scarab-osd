@@ -17,7 +17,6 @@
 //#define IMPULSERC_HELIX           // Uncomment this if using an ImpulseRC integrated OSD/VTX (STILL UNDER DEVELOPMENT PENDING TESTING)
 //#define FFPV_INNOVA               // Uncomment this if using a FURIOUS FPV Innova integrated OSD/VTX (STILL UNDER DEVELOPMENT PENDING TESTING)
 //#define STEELEPDB                 // Uncomment this if using STEELEPDB
-//#define ESCOSD                    // Uncomment this if using ESC OSD - displays ESC TELEMETRY VALUES recieved on serial RX. Suitable for single ESC only.
 
 // NOTE-some boards have swapped bat1/bat2 pins and alternative voltage measuring resistors
 // If having difficulties, first select default MINIMOSD as above, then use the following to correct:
@@ -65,6 +64,7 @@
 //#define CANVASOSD                 // Uncomment for permanent canvas mode operation. https://github.com/ShikOfTheRa/scarab-osd/wiki/CANVASOSD 
 //#define LTM2ADSB                  // Uncomment for a LTM protocol to ADSB converter
 //#define UBLOX2ADSB                // Uncomment for a UBLOX protocol to ADSB converter
+//#define ESCOSD                    // Uncomment this if using ESC OSD - displays ESC TELEMETRY VALUES recieved on serial RX. Suitable for single ESC only.
 
 // old releases supported...
 //#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3
@@ -473,3 +473,4 @@
 
 /********************  Under developemnt      *********************/
 // This is a work in process. Not completed for implementation
+//#define TOSD

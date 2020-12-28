@@ -3139,3 +3139,11 @@ void displayPID(void)
     t_pos+=LINE;
   }   
 }
+
+
+void displayFont()
+{
+  for(uint8_t x = 0; x < 255; x++) {
+    screen[90+x] = x;
+  }
+}
