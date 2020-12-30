@@ -354,6 +354,10 @@ void loop()
 //------------------------------------------------------------------------
 void loop()
 {
+  serialMSPreceive(1);
+  while(fontMode){
+    serialMSPreceive(1);
+  }
 
 #if defined TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI for GPSOSD and MAVLINK
   switch (Settings[S_TX_TYPE]) {
@@ -445,9 +449,9 @@ void loop()
   {
     previous_millis_sync = previous_millis_sync + sync_speed_cycle;
 #ifdef CANVAS_SUPPORT
-    if (!fontMode && !canvasMode)
+    if (!canvasMode)
 #else
-    if (!fontMode)
+    if (1)
 #endif
     {
 #ifdef PROTOCOL_MSP
@@ -494,9 +498,9 @@ void loop()
 #ifndef GPSOSD
 #ifdef MSP_SPEED_MED
 #ifdef CANVAS_SUPPORT
-    if (!fontMode && !canvasMode)
+    if (!canvasMode)
 #else
-    if (!fontMode)
+    if (1)
 #endif
     {
 #ifdef PROTOCOL_MSP
@@ -645,7 +649,7 @@ void loop()
 #endif
     }
 
-    if (!fontMode) {
+    if (1) {
 #ifdef KISS
       if (MSPcmdsend == MSP_KISS_SETTINGS){
         serialKISSrequest(KISS_GET_SETTINGS);
@@ -683,8 +687,9 @@ void loop()
       if (!canvasMode)
 #endif // CANVAS_SUPPORT
       {          
-        if (millis() > (vsync_timer + VSYNC_TIMEOUT))
+        if (millis() > (vsync_timer + VSYNC_TIMEOUT)){
           MAX7456_DrawScreen();   
+        }
       }        
    }
 
@@ -813,7 +818,7 @@ void loop()
   timer.d3rate=0;
 #endif 
     onTime++;
-    if (!fontMode){
+    if (1){
       MAX7456CheckStatus();
     }
 #ifdef ALARM_GPS
@@ -874,10 +879,8 @@ void loop()
   }
   //  setMspRequests();
 #if defined (FIXEDLOOP) // slower loop speed for consistent analogue readings. 500-1000hz.
-  serialMSPreceive(1);
   delay(1);  
 #endif //FIXEDLOOP
-  serialMSPreceive(1);  
 }  // End of main loop
 #endif //main loop
 

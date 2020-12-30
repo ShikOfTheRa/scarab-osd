@@ -315,11 +315,11 @@ void serialMSPCheck()
 #endif
 
     if(cmd == OSD_GET_FONT) {
+      initFontMode();
       if(dataSize == 5) {
         if(read16() == 7456) {
           nextCharToRequest = read8();
           lastCharToRequest = read8();
-          initFontMode();
         }
       }
       else if(dataSize == 56) {
@@ -1670,21 +1670,25 @@ void serialMSPreceive(uint8_t loops)
       #endif //NAZA  
     #endif //GPSOSD   
 
-    #if defined (PROTOCOL_SKYTRACK)
-       serialSLreceive(c);
-    #endif //PROTOCOL_SKYTRACK   
-    #if defined (PROTOCOL_MAVLINK)
-       serialMAVreceive(c);
-    #endif //PROTOCOL_MAVLINK   
-    #if defined (PROTOCOL_LTM)
-       serialLTMreceive(c);
-    #endif // PROTOCOL_LTM   
-    #if defined (PROTOCOL_KISS)
-       serialKISSreceive(c);
-    #endif // PROTOCOL_KISS   
-    #if defined (PROTOCOL_ESC)
-       serialESCreceive(c);
-    #endif // PROTOCOL_ESC 
+    if (!fontMode){
+      #if defined (PROTOCOL_SKYTRACK)
+        serialSLreceive(c);
+      #endif //PROTOCOL_SKYTRACK   
+      #if defined (PROTOCOL_MAVLINK)
+        serialMAVreceive(c);
+      #endif //PROTOCOL_MAVLINK   
+      #if defined (PROTOCOL_LTM)
+        serialLTMreceive(c);
+      #endif // PROTOCOL_LTM   
+      #if defined (PROTOCOL_KISS)
+        if (timer.GUI_active==0)
+          serialKISSreceive(c);
+      #endif // PROTOCOL_KISS   
+      #if defined (PROTOCOL_ESC)
+        serialESCreceive(c);
+      #endif // PROTOCOL_ESC 
+    }
+    
     if (c_state == IDLE)
     {
       c_state = (c=='$') ? HEADER_START : IDLE;
