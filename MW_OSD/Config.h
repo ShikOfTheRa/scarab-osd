@@ -112,7 +112,7 @@
 // Further configuration may be require elsewhere in config.h + option enabled on GUI
 #define HORIZON                     // Enable/disable HORIZON indicator
 #define MAPMODE                     // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
-//#define SBDIRECTION               // Enable/disable sidebar indicators (icons indicationg changes in speed or altitude)
+//#define SBDIRECTION               // Enable/disable sidebar indicators (icons indicating changes in speed or altitude)
 //#define SPORT                     // Enable/disable FRSKY S.PORT cell code
 
 //#define CANVAS_SUPPORT            // Enable CANVAS mode support for post betaflight 3.1.0 CMS
@@ -476,7 +476,7 @@
 #define FIXEDLOOP                   // Enables 1ms loop max for consistency.
 
 
-/********************  Under developemnt      *********************/
+/********************  Under development      *********************/
 // This is a work in process. Not completed for implementation
 //#define VT
 
