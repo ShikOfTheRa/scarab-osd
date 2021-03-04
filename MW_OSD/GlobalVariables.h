@@ -1010,12 +1010,9 @@ float amperagesum = 0;
 int16_t MWAmperage=0;
 
 // Rssi
-int16_t rssi =0;   // uint8_t ?
-int16_t oldrssi;   // uint8_t ?
+int16_t rssi = 0;
+int16_t oldrssi = 0;
 volatile int16_t pwmRSSI = 0;
-//int rssiADC=0;
-//int rssi_Int=0;
-
 
 // For Voltage
 uint16_t voltage=0;                      // its the value x10
