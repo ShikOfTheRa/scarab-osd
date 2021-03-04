@@ -1022,7 +1022,7 @@ uint16_t voltage=0;                      // its the value x10
 uint16_t vidvoltage=0;                   // its the value x10
 uint16_t voltageWarning=0;
 
-// For temprature
+// For temperature
 int16_t temperature=0;                  // temperature in degrees Centigrade
 
 
