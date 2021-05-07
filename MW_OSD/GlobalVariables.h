@@ -2134,7 +2134,7 @@ const char mav_mode_PX4[]  PROGMEM   = "PX4 "; // Unknown PX4 mode
 const char mav_mode_MANU[] PROGMEM   = "MANU"; // Manual
 const char mav_mode_ALTC[] PROGMEM   = "ALTC"; // Altitude control
 const char mav_mode_POSC[] PROGMEM   = "POSC"; // Position control
-const char mav_mode_AUTO[] PROGMEM   = "WAYP"; //Auto: auto control
+const char mav_mode_AUTO[] PROGMEM   = "AUTO"; //Auto: auto control
 //const char mav_mode_AUTO[] PROGMEM   = "AUTO"; // Auto: auto control
 const char mav_mode_TKOF[] PROGMEM   = "TKOF"; // Takeoff
 //const char mav_mode_LOIT[] PROGMEM   = "LOIT"; // Loiter: hold a single location
@@ -2169,7 +2169,8 @@ const char mav_mode_CRUI[] PROGMEM   = "CRUI"; //Cruise
 const char mav_mode_INIT[] PROGMEM   = "INIT"; //Init
 const char mav_mode_HOLD[] PROGMEM   = "HOLD";
 const char mav_mode_LAND[] PROGMEM   = "LAND"; // Landing
-const char mav_mode_AUTO[] PROGMEM   = "WAYP"; //Auto: auto control
+const char mav_mode_AUTO[] PROGMEM   = "AUTO"; //Auto: auto control
+const char mav_mode_TKOF[] PROGMEM   = "TKOF"; //Take Off
 #ifdef QUADPLANE 
 const char mav_mode_QSTB[] PROGMEM   = "QSTB"; // Quadplane - like copter STABILIZE
 const char mav_mode_QHOV[] PROGMEM   = "QHOV"; // Quadplane - like copter ALT HOLD
@@ -2194,7 +2195,7 @@ const PROGMEM char * const mav_mode_index[] =
  mav_mode_AUTO,
  mav_mode_RETL,
  mav_mode_LOIT,
- mav_mode_APM , 
+ mav_mode_TKOF, 
  mav_mode_APM , 
  mav_mode_GUID,
  mav_mode_INIT, //16
@@ -2263,7 +2264,7 @@ const char mav_mode_NGPS[] PROGMEM   = "NGPS";
 const char mav_mode_SRTL[] PROGMEM   = "SRTL";
 const char mav_mode_FLOW[] PROGMEM   = "FLOW";
 const char mav_mode_FOLL[] PROGMEM   = "FOLL";
-const char mav_mode_AUTO[] PROGMEM   = "WAYP"; //Auto: auto control
+const char mav_mode_AUTO[] PROGMEM   = "AUTO"; //Auto: auto control
 const PROGMEM char * const mav_mode_index[] = 
 {   
  mav_mode_STAB, //0
