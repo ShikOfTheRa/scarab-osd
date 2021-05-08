@@ -776,7 +776,7 @@ enum Positions {
   SideBarScrollPosition,
   SideBarHeightSPARE,           // special function
   SideBarWidthSPARE,            // special function
-  gimbalPosition,
+  batstatusPosition,
   GPS_timePosition,
   SportPosition,
   ModePosition,
@@ -852,7 +852,7 @@ PROGMEM const uint16_t SCREENLAYOUT_DEFAULT[POSITIONS_SETTINGS] = {
 (LINE07+7)|DISPLAY_NEVER|DISPLAY_DEV,     // SideBarScrollPosition        Move to 8 bit
 (LINE01+3)|DISPLAY_NEVER,                 // Special function do not use
 (LINE01+7)|DISPLAY_NEVER,                 // Special function do not use
-(LINE04+2)|DISPLAY_NEVER|DISPLAY_DEV,     // Gimbal Position
+(LINE04+2)|DISPLAY_NEVER|DISPLAY_DEV,     // Batstatus% Position (mavlink)
 (LINE09+11)|DISPLAY_NEVER|DISPLAY_DEV,    // GPS_time Position
 (LINE09+22)|DISPLAY_NEVER|DISPLAY_DEV,    // SportPosition
 (LINE03+2)|DEF_modePosition|DISPLAY_DEV,  // modePosition
@@ -1038,6 +1038,7 @@ static int16_t MwHeading=0;
 float amperage = 0;                // its the real value x10
 float amperagesum = 0;
 int16_t MWAmperage=0;
+uint8_t batstatus=0;
 
 // Rssi
 int16_t rssi =0;   // uint8_t ?

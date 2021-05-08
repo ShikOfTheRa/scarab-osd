@@ -2817,13 +2817,18 @@ void displayGPSPosition(void)
 }
 
 
+void displayBatStatus(void){
+  if (fieldIsVisible(batstatusPosition))
+    displayItem(batstatusPosition, batstatus, SYM_MAIN_BATT, '%', 0 );
+}
+
 void displayGimbal(void){
   if ((MwSensorActive & mode.camstab)) {
     screenBuffer[2] = 0;
     screenBuffer[0] = SYM_GIMBAL;
     screenBuffer[1] = SYM_GIMBAL1;
-    if (fieldIsVisible(gimbalPosition))
-      MAX7456_WriteString(screenBuffer, getPosition(gimbalPosition));
+    if (fieldIsVisible(batstatusPosition))
+      MAX7456_WriteString(screenBuffer, getPosition(batstatusPosition));
   }
 }
 

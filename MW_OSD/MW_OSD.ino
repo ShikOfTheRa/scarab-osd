@@ -921,8 +921,6 @@ void buildDisplay(void){
         displayCurrentThrottle();
 #ifdef FREETEXTLLIGHTS
         if (MwSensorActive & mode.llights) displayCallsign(getPosition(callSignPosition));
-#elif  FREETEXTGIMBAL
-        if (MwSensorActive & mode.camstab) displayCallsign(getPosition(callSignPosition));
 #else
         if (fieldIsVisible(callSignPosition)) {
 #ifdef PILOTICON
@@ -993,7 +991,11 @@ void buildDisplay(void){
 #if defined (DISPLAY_VTX_CH) || defined (DISPLAY_VTX_PWR) || defined (DISPLAY_VTX_PWR_MAX) || defined (DISPLAY_VTX_BAND)   
         displayVTXvalues();
 #endif        
+#ifdef GIMBALICON
         displayGimbal();
+#else
+        displayBatStatus();
+#endif //GIMBALICON        
 #ifdef GPSTIME
         if (fieldIsVisible(GPS_timePosition))
           displayDateTime();

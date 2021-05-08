@@ -631,6 +631,7 @@ void serialMAVCheck() {
         MwSensorActive |= (1 << 3);
       MwVBat = (uint16_t)(serialBuffer[14] | (serialBuffer[15] << 8)) / 100;
       MWAmperage = serialBuffer[16] | (serialBuffer[17] << 8);
+      batstatus = serialBuffer[30];
       break;
   }
   if (armed) {
