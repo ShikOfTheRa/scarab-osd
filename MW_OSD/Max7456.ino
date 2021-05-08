@@ -283,7 +283,7 @@ void MAX7456_DrawScreen() {
     MAX7456ENABLE
     spi_transfer(*screen_address);
     MAX7456DISABLE        
-    *screen_address++=0;
+    *screen_address++=0x20;
   }
   vsync_timer = millis();
   displayReady = false;
