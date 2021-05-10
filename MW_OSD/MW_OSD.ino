@@ -717,7 +717,7 @@ void loop()
         ROW = 10;
         COL = 1;
         configMode = 1;
-        setMspRequests();
+        setMspRequests();      
       }
 #else
       if (previousarmedstatus && !armed) {
@@ -727,7 +727,8 @@ void loop()
 #endif //HIDESUMMARY      
       if (configMode)
       {
-        displayConfigScreen();
+        setMspRequests();   
+        buildConfig();
       }
 #ifdef CANVAS_SUPPORT
       else if (canvasMode)
@@ -742,7 +743,7 @@ void loop()
       else
       {
         setMspRequests();
-        buildDisplay();
+        buildDisplay();        
       }
     }
   }  // End of fast Timed Service Routine (50ms loop)

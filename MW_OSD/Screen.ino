@@ -1588,8 +1588,10 @@ void displayCursor(void)
 }
 
 
-void displayConfigScreen(void)
+void buildConfig(void)
 {
+  if (displayReady)
+    return;
   int16_t MenuBuffer[10];
   uint32_t MaxMenuBuffer[9];
 #ifdef MENU_KISS
@@ -1959,7 +1961,8 @@ void displayConfigScreen(void)
 #endif
 
   if (configPage > MAXPAGE)configPage = MINPAGE;
-  displayCursor();
+  displayCursor();  
+  displayReady = true;
 }
 
 
