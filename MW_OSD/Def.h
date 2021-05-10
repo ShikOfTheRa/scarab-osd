@@ -965,6 +965,7 @@ enum {
 /********************  MEMORY reductions  *********************/
 #ifdef IMPULSERC_HELIX
   #undef MSP_RTC_SUPPORT
+  #undef MAPMODE
 #endif
                     
 
