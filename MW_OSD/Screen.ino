@@ -2822,9 +2822,15 @@ void displayGPSPosition(void)
 
 
 void displayBatStatus(void){
+#ifndef PROTOCOL_MAVLINK
+  uint32_t t_batstatus = (100*Settings[S_AMPER_HOUR_ALARM]-(amperagesum /360))/Settings[S_AMPER_HOUR_ALARM]; 
+  batstatus = constrain(t_batstatus,0,100); 
+#endif
   if (fieldIsVisible(batstatusPosition))
-    displayItem(batstatusPosition, batstatus, SYM_MAIN_BATT, '%', 0 );
+    displayItem(batstatusPosition, t_batstatus, SYM_MAIN_BATT, '%', 0 );
 }
+
+
 
 void displayGimbal(void){
   if ((MwSensorActive & mode.camstab)) {
@@ -2835,6 +2841,7 @@ void displayGimbal(void){
       MAX7456_WriteString(screenBuffer, getPosition(batstatusPosition));
   }
 }
+
 
 
 void displayLowmemory(void){
