@@ -2827,7 +2827,7 @@ void displayBatStatus(void){
   batstatus = constrain(t_batstatus,0,100); 
 #endif
   if (fieldIsVisible(batstatusPosition))
-    displayItem(batstatusPosition, t_batstatus, SYM_MAIN_BATT, '%', 0 );
+    displayItem(batstatusPosition, batstatus, SYM_MAIN_BATT, '%', 0 );
 }
 
 
