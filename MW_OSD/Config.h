@@ -112,7 +112,7 @@
 // Further configuration may be require elsewhere in config.h + option enabled on GUI
 #define HORIZON                     // Enable/disable HORIZON indicator
 #define MAPMODE                     // Enable/disable MAP MODE - map indication of relative positions of home and aircraft
-//#define SBDIRECTION               // Enable/disable sidebar indicators (icons indicationg changes in speed or altitude)
+//#define SBDIRECTION               // Enable/disable sidebar indicators (icons indicating changes in speed or altitude)
 //#define SPORT                     // Enable/disable FRSKY S.PORT cell code
 
 //#define CANVAS_SUPPORT            // Enable CANVAS mode support for post betaflight 3.1.0 CMS
@@ -279,7 +279,7 @@
 //#define OSD_SWITCH                // Forces original 2 way multiwii screen switch using OSD Switch via Flight Controller. MUST Ensure enabled on flight controller - e.g. #define OSD_SWITCH on multiwii
 //#define NOSUMMARYTHROTTLERESET    // Enable to supress summary display clearing from throttle
 #define OSDSUMMARY 30               // Seconds summary is displayed for after landing. Max 254
-//#define DUALRSSI 255              // Displays dual RSSI values (e.g. LQ and RRSI). Primary on line 1, Secondary on line 2. Configure primary as analog or PWM input. Secondary will be from FC. Value is max sent from FC. MWii - 1024, mavlink = 100 or 255
+//#define DUALRSSI 255              // Displays dual RSSI values (e.g. LQ and RSSI). Primary on line 1, Secondary on line 2. Configure primary as analog or PWM input. Secondary will be from FC. Value is max sent from FC. MWii - 1024, mavlink = 100 or 255
 //#define DISPLAYSPEEDMS            // Displays speed in m/s instead of km/h
 //#define PILOTICON                 // Disable to save memeory if unused. Display pilot ICON as an alternative to CHARACTER display. Requires enabling in GUI >= 1.8.2
 #define LRTRANSITION 999            // Point at which display transitions from standard to long range format. e.g LRT= 999, OSD displays 999m LRT = 1000, OSD displays 1.0km
@@ -472,6 +472,6 @@
 //#define FIXEDLOOP                   // Enables 1ms loop max for consistency.
 
 
-/********************  Under developemnt      *********************/
+/********************  Under development      *********************/
 // This is a work in process. Not completed for implementation
 //#define TOSD
