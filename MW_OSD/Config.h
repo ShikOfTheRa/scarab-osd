@@ -37,7 +37,7 @@
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.2.0 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define iNAV_KK                   // Uncomment this if you are using AEROMAX OSD and BARO sensor addition with iNAV with KK audio vario
-//#define APM                       // Uncomment this if you are using Ardupilot on APM / PIXHAWK / other supported hardware. Supports most MAVLINK 1.0 compatible FC
+#define APM                       // Uncomment this if you are using Ardupilot on APM / PIXHAWK / other supported hardware. Supports most MAVLINK 1.0 compatible FC
 //#define PX4                       // Uncomment this if you are using PX4 stack on PIXHAWK and other supported hardware
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
 //#define MULTIWII                  // Uncomment this if you are using latest 2.4 MULTIWII
@@ -80,7 +80,7 @@
 //Choose ONLY ONE option:
 //#define ROTORCRAFT                // Default for multirotors etc.
 //#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
-//#define QUADPLANE                 // Uncomment this ONLY if you are using ARDUPILOT QUADPLANE
+#define QUADPLANE                 // Uncomment this ONLY if you are using ARDUPILOT QUADPLANE
 //#define SUBMARINE                 // Uncomment this ONLY if you are using ARDUSUB
 //#define GPSSUBMARINE              // Uncomment this ONLY if you are using GPSARDUSUB
 

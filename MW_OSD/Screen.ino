@@ -908,6 +908,7 @@ void displayAltitude(int32_t t_alt10, int16_t t_pos, uint8_t t_icon) { // alt se
     if (t_icon==SYM_ALT){
       t_icon = SYM_AGL;
     }
+    t_alt=t_alt10;
   }
   displayItem(t_pos, t_alt, t_icon, UnitsIcon[Settings[S_UNITSYSTEM] + 0], t_dp ); 
 
