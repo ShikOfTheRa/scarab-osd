@@ -200,6 +200,10 @@
 //#define MAV_RESET_HOME            // Resets home position when not armed. When enabled, note that RX glitch etc. could potentially reset home position.
 //#define MAV_WIND_DIR_REVERSE      // SHow direction in which wind is coming from. Same as otehr OSD. Default is to show direction of wind flow.
 //#define MAV_VBAT2                 // Use VBAT2 from mavlink instead of direct connect
+#define MAV_GPS_USE_GPS_RAW         // Default GPS - use MAVLINK_MSG_ID_GPS_RAW_INT for GPS altitude with OSD calculated altitude relative to home 
+#define MAV_BARO_USE_VFR_HUD        // Default BARO - use MAVLINK_MSG_ID_VFR_HUD for BARO altitude with OSD calculated altitude relative to home 
+//#define MAV_BARO_USE_GLOB_POS     // Alternative BARO - use MAV_BARO_USE_GLOB_POS for GPS altitude with FC calculated altitude relative to home. Undefine MAV_BARO_USE_VFR_HUD to use
+
 
 /******************** Mavlink distance sensor settings *********************/
 // Choose ONLY ONE SENSOR option AND enable MAVSENSORACTIVE
@@ -283,7 +287,7 @@
 //#define DISPLAYSPEEDMS            // Displays speed in m/s instead of km/h
 //#define PILOTICON                 // Disable to save memeory if unused. Display pilot ICON as an alternative to CHARACTER display. Requires enabling in GUI >= 1.8.2
 #define LRTRANSITION 999            // Point at which display transitions from standard to long range format. e.g LRT= 999, OSD displays 999m LRT = 1000, OSD displays 1.0km
-//#define AATTEST                   // Display a second visible full telemtry data line for test...
+//#define AATTEST                   // Display a second visible full telemetry data line for test...
 //#define GSPDDMMSS                 // Display GPS co-ordinates in DDMMSS. Pending test verification
 //#define GIMBALICON                // MSP only - displays GIMBAL instead of Battery % (APM only)
 

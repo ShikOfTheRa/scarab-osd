@@ -360,9 +360,7 @@ void serialMAVCheck() {
       MwHeading   = MwHeading360;
       MwVario  = (float)serialbufferfloat(12) * 100; // m/s-->cm/s
       //MwVario = filter16(MwVario, t_MwVario, 4);
-
-#define USE_MAV_BARO
-#ifdef USE_MAV_BARO      
+#ifdef MAV_BARO_USE_VFR_HUD      
       MwAltitude = (float) (serialbufferfloat(8) * 100);
 #if defined RESETGPSALTITUDEATARM
       if (GPS_fix_HOME & B00000100) {
@@ -375,7 +373,7 @@ void serialMAVCheck() {
       }
       MwAltitude -= MwAltitude_home;
 #endif
- #endif //USE_MAV_GPS
+#endif //MAV_BARO_USE_VFR_HUD
       mw_mav.throttle = (int16_t)(((serialBuffer[18] | serialBuffer[19] << 8) * 10) + 1000);
       break;
     case MAVLINK_MSG_ID_ATTITUDE:
@@ -398,8 +396,7 @@ void serialMAVCheck() {
       GPS_latitude = serialbufferint(8);
       GPS_longitude = serialbufferint(12);
       GPS_dop = (int16_t)(serialBuffer[20] | serialBuffer[21] << 8); 
-#define USE_MAV_GPS
- #ifdef USE_MAV_GPS  
+ #ifdef MAV_GPS_USE_GPS_RAW  
       t_GPS_altitude =  (uint32_t) (serialBuffer[16] | (uint32_t)serialBuffer[17] << 8 | (uint32_t)serialBuffer[18] << 16 | (uint32_t)serialBuffer[19] << 24);    
       GPS_altitude = (int32_t) t_GPS_altitude / 1000; 
       GPS_altitude_ASL = GPS_altitude;
@@ -415,7 +412,7 @@ void serialMAVCheck() {
       }
        GPS_altitude = GPS_altitude - GPS_altitude_home;
       #endif
- #endif
+ #endif // MAV_GPS_USE_GPS_RAW
       if ((GPS_fix_HOME & B00000001) > 0) {
       }
       else {
@@ -432,6 +429,12 @@ void serialMAVCheck() {
         GPS_directionToHome = dir / 100;
       }
       break;
+#ifdef MAV_BARO_USE_GLOB_POS 
+    case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
+      MwAltitude = (uint32_t) (serialBuffer[16] | (uint32_t)serialBuffer[17] << 8 | (uint32_t)serialBuffer[18] << 16 | (uint32_t)serialBuffer[19] << 24)/10;    
+ 
+      break;    
+#endif //  MAV_BARO_USE_GLOB_POS         
 #ifdef MAV_RTC
     case MAVLINK_MSG_ID_SYSTEM_TIME:
       for (uint8_t i = 0; i < 8; i++) {
