@@ -281,7 +281,8 @@ void MAX7456_DrawScreen() {
   MAX7456DISABLE  
   for(; screen_address < end_address;) {
     MAX7456ENABLE
-    spi_transfer(*screen_address);
+    SPDR = *screen_address;
+    while (!(SPSR & (1<<SPIF))) ;
     MAX7456DISABLE        
     *screen_address++=0x20;
   }
