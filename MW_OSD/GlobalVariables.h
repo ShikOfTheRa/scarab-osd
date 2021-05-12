@@ -328,6 +328,24 @@ struct __adsb {
 }
 adsb;
 
+#ifdef SENTINELAAT
+#define SENTINELTIMEOUT 4500 
+struct __sentinel {
+  bool     gpsdata = false;
+  bool     gpsdetected = false;
+  uint8_t  baud = 99;
+  uint16_t timeout = SENTINELTIMEOUT;
+  uint32_t timer_led=0;
+  uint32_t timer_maxreset = 0;
+  uint32_t timer_gpsdata = 0;
+  uint32_t timer_baudchange = 0;
+}
+sentinel;
+
+uint32_t SentinelBaud[] {115200,57600,9600,38400,19200,4800};
+#endif // SENTINELAAT
+
+
 #ifdef ADSBSTATION
 const char ADSBTitle[]    PROGMEM = "ADS-B SENSE AND AVOID";
 const char ADSBHeading[]  PROGMEM = "ICAO DIST ALT  HDG SPD";
