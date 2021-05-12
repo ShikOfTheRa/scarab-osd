@@ -65,6 +65,8 @@
 //#define LTM2ADSB                  // Uncomment for a LTM protocol to ADSB converter
 //#define UBLOX2ADSB                // Uncomment for a UBLOX protocol to ADSB converter
 //#define ESCOSD                    // Uncomment this if using ESC OSD - displays ESC TELEMETRY VALUES recieved on serial RX. Suitable for single ESC only.
+//#define SENTINELAAT_UBLOX         // Uncomment this to create a SENTINEL AAT module for use with other OSD using UBLOX GPS
+//#define SENTINELAAT_NMEA          // Uncomment this to create a SENTINEL AAT module for use with other OSD using NMEA GPS
 
 // old releases supported...
 //#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3

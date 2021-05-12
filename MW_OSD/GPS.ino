@@ -341,6 +341,9 @@ bool GPS_NMEA_newFrame(char c) {
       if (checksum == parity) {
         timer.packetcount++;
         frameOK = 1;
+#ifdef SENTINELAAT
+        sentinel.gpsdata = true;
+#endif // SENTINELAAT          
         if (frame == FRAME_GGA) {
           GPS_updateGGA();
         }
@@ -556,6 +559,10 @@ bool GPS_UBLOX_newFrame(uint8_t data) {
 
 bool UBLOX_parse_gps(void) {
   timer.packetcount++;
+#ifdef SENTINELAAT
+  sentinel.gpsdata = true;
+#endif // SENTINELAAT  
+
   switch (_msg_id) {
     case MSG_POSLLH:
       //i2c_dataset.time                = _buffer.posllh.time;
