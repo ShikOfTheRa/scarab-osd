@@ -892,3 +892,67 @@ void gpsvario() {
     previousfwaltitude = GPS_altitude;
   }
 }
+
+#ifdef SENTINELAAT
+void sentinelinit() // SENTINEL GPSOSD
+{
+  Settings[S_AAT] = 1;
+  static bool fontupdated = false;
+
+// FONT................
+if (fontupdated == false) {
+  for(uint8_t x = 0; x < 3; x++){
+    for(uint8_t i = 0; i < 54; i++){
+      serialBuffer[1+i] = (uint8_t)pgm_read_byte(fontdata+(64*x)+i);
+    }
+    write_NVM(SentinelFont[x]);
+    delay(20); // Shouldn't be needed due to status reg wait.
+    fontupdated = true;
+  }
+}
+  
+// FIX INDICATOR................
+  if (sentinel.gpsdetected == true){
+    sentinel.timer_led=millis();
+  }  
+  else if ( millis() > (sentinel.timer_led + 1000)){
+    sentinel.timer_led=millis();
+    LEDON
+  }
+  else if (millis() > (sentinel.timer_led+ 500)){
+    LEDON
+    screen[3]=0x2A;    
+  }
+  else{
+    LEDON
+  }
+  
+  // Autodetect baud rate.............
+    if (millis() > sentinel.timer_gpsdata){
+      sentinel.gpsdetected = false;
+    }
+    if (sentinel.gpsdata == true){
+      sentinel.gpsdetected =true;
+      sentinel.timer_gpsdata=millis()+SENTINELTIMEOUT;    
+    }
+    sentinel.gpsdata = false; 
+
+    if (sentinel.gpsdetected == false){
+      if (sentinel.timeout > (SENTINELTIMEOUT)){
+        sentinel.timeout = 0;
+      }   
+      if (millis() > sentinel.timer_baudchange){
+        sentinel.baud++; 
+        if (sentinel.baud>5){
+          sentinel.baud = 0;
+          sentinel.timeout +=1500;
+        }          
+        serialMSPreceive(1);
+        Serial.begin(SentinelBaud[sentinel.baud]);
+        delay(10);
+        serialMSPreceive(1);     
+        sentinel.timer_baudchange = millis() + sentinel.timeout;
+      }
+    }
+}
+#endif // SENTINELLAAT

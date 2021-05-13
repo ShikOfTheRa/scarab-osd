@@ -343,6 +343,7 @@ struct __sentinel {
 sentinel;
 
 uint32_t SentinelBaud[] {115200,57600,9600,38400,19200,4800};
+uint8_t  SentinelFont[] {0XC2,0XC3,0x2A};
 #endif // SENTINELAAT
 
 

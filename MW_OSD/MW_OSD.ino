@@ -128,6 +128,8 @@ uint16_t UntouchedStack(void)
 #include "fontD.h"
 #elif defined LOADFONT_BOLD
 #include "fontB.h"
+#elif defined SENTINELAAT
+#include "fontS.h"
 #endif
 #ifdef I2C_UB_SUPPORT
 #include "WireUB.h"
@@ -188,8 +190,11 @@ void setup()
 #if defined EEPROM_CLEAR
   EEPROM_clear();
 #endif
+
+#ifndef SENTINELAAT
   checkEEPROM();
   readEEPROM();
+#endif  
 
 #ifndef STARTUPDELAY
 #define STARTUPDELAY 1000
@@ -350,72 +355,8 @@ void loop()
   if (millis() > (vsync_timer + VSYNC_TIMEOUT))
     MAX7456_DrawScreen();   
 }
-#elif defined SENTINELAAT
-void loop() // SENTINEL GPSOSD
-{
-  Settings[S_AAT] = 1;
-  serialMSPreceive(1);
+#elif defined XSENTINELAAT
 
-  // Max lockup detect.............
-  if (millis() > sentinel.timer_maxreset){
-    MAX7456CheckStatus();
-    sentinel.timer_maxreset = millis();
-  }
-
-// LED................
-  if (sentinel.gpsdetected == true){
-    sentinel.timer_led=millis();
-  }  
-  if ( millis() > (sentinel.timer_led + 1000)){
-    sentinel.timer_led=millis();
-  }
-  else if (millis() > (sentinel.timer_led+ 500)){
-    LEDOFF
-  }
-  else{
-    LEDON
-  }
-  
-  // Autodetect baud rate.............
-    if (millis() > sentinel.timer_gpsdata){
-      sentinel.gpsdetected = false;
-    }
-    if (sentinel.gpsdata == true){
-      sentinel.gpsdetected =true;
-      sentinel.timer_gpsdata=millis()+SENTINELTIMEOUT;    
-    }
-    sentinel.gpsdata = false; 
-
-    if (sentinel.gpsdetected == false){
-      if (sentinel.timeout > (SENTINELTIMEOUT)){
-        sentinel.timeout = 0;
-      }   
-      if (millis() > sentinel.timer_baudchange){
-        sentinel.baud++; 
-        if (sentinel.baud>5){
-          sentinel.baud = 0;
-          sentinel.timeout +=1500;
-        }          
-        serialMSPreceive(1);
-        Serial.begin(SentinelBaud[sentinel.baud]);
-        delay(10);
-        serialMSPreceive(1);     
-        sentinel.timer_baudchange = millis() + sentinel.timeout;
-      }
-    }
-
-  // Draw .............
-  if (displayReady != true){
-    displayAAT();
-    //displayDebug();
-    //displayGPSPosition();
-    //displayArmed();
-    //displayNumberOfSat();
-    displayReady = true;  
-  } 
-  if (millis() > (vsync_timer + VSYNC_TIMEOUT))
-    MAX7456_DrawScreen();   
-}
 #else
 //------------------------------------------------------------------------
 void loop()
@@ -424,7 +365,9 @@ void loop()
   while(fontMode){
     serialMSPreceive(1);
   }
-
+#ifdef SENTINELAAT
+  sentinelinit();
+#endif // SENTINELAAT
 #if defined TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI for GPSOSD and MAVLINK
   switch (Settings[S_TX_TYPE]) {
     case 1: //RPTY
@@ -491,10 +434,12 @@ void loop()
   oldscreenlayout = screenlayout;
 
   // Blink Basic Sanity Test Led at 0.5hz
-  if (timer.Blink2hz)
+  if (timer.Blink2hz){
     LEDON
-    else
-      LEDOFF
+  }
+  else {
+    LEDOFF
+  }
 
       //---------------  Start Timed Service Routines  ---------------------------------------
       unsigned long currentMillis = millis();
@@ -728,6 +673,7 @@ void loop()
       } else if (MSPcmdsend == MSP_KISS_TELEMTRY) {
         serialKISSrequest(KISS_GET_TELEMETRY);
       }
+#elif defined SENTINELAAT
 #elif defined SKYTRACK
       DrawSkytrack();
 #elif defined PROTOCOL_MSP
@@ -763,8 +709,9 @@ void loop()
    ProcessSbus(); // handle SBUS protocol
 #endif
 
+#ifndef SENTINELAAT
    ProcessSensors();       // using analogue sensors
-
+#endif
     if ( allSec < INTRO_DELAY ) {
       buildIntro();
       timer.lastCallSign = onTime - CALLSIGNINTERVAL;
@@ -955,6 +902,11 @@ void loop()
 void buildDisplay(void){
   if (displayReady)
     return;
+
+#ifdef SENTINELAAT //DISPLAYCHOICE
+    displayAAT();
+//    displayGPSPosition();
+#else //DISPLAYCHOICE
 #if defined USE_AIRSPEED_SENSOR
         useairspeed();
 #endif //USE_AIRSPEED_SENSOR
@@ -1105,6 +1057,9 @@ void buildDisplay(void){
 #ifdef LOW_MEMORY
         displayLowmemory();
 #endif
+#endif //DISPALY CHOICE
+
+
   displayReady = true;    
 }
 //------------------------------------------------------------------------
