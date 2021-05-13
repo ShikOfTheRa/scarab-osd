@@ -341,6 +341,9 @@ bool GPS_NMEA_newFrame(char c) {
       if (checksum == parity) {
         timer.packetcount++;
         frameOK = 1;
+#ifdef SENTINELAAT
+        sentinel.gpsdata = true;
+#endif // SENTINELAAT          
         if (frame == FRAME_GGA) {
           GPS_updateGGA();
         }
@@ -556,6 +559,10 @@ bool GPS_UBLOX_newFrame(uint8_t data) {
 
 bool UBLOX_parse_gps(void) {
   timer.packetcount++;
+#ifdef SENTINELAAT
+  sentinel.gpsdata = true;
+#endif // SENTINELAAT  
+
   switch (_msg_id) {
     case MSG_POSLLH:
       //i2c_dataset.time                = _buffer.posllh.time;
@@ -885,3 +892,72 @@ void gpsvario() {
     previousfwaltitude = GPS_altitude;
   }
 }
+
+#ifdef SENTINELAAT
+void sentinelinit() // SENTINEL GPSOSD
+{
+  Settings[S_AAT] = 1;
+  static bool fontupdated = false;
+
+// FONT................
+if (fontupdated == false) {
+  for(uint8_t x = 0; x < 3; x++){
+    for(uint8_t i = 0; i < 54; i++){
+      serialBuffer[1+i] = (uint8_t)pgm_read_byte(fontdata+(64*x)+i);
+    }
+    write_NVM(SentinelFont[x]);
+    delay(20); // Shouldn't be needed due to status reg wait.
+    fontupdated = true;
+  }
+}
+
+// STATUS INDICATOR................
+  switch (GPSOSD_state) {
+    case 0: // No sats
+      if (timer.Blink10hz){
+        screen[3]=0x2A; 
+      }
+       break;        
+    case 1: // Waiting for steady state fix - (enough sats for a consecutive period without glitch). Default: 6 sats for 10 seconds)
+      if (timer.Blink2hz){
+        screen[3]=0x2A; 
+      }
+      break;    
+    default: //Ready / in flight / disconnected warning
+      if (sentinel.gpsdetected == false){
+        if (timer.Blink2hz){
+          screen[3]=0x2A; 
+        }
+      }     
+      break;
+  }
+ 
+  // Autodetect baud rate.............
+    if (millis() > sentinel.timer_gpsdata){
+      sentinel.gpsdetected = false;
+    }
+    if (sentinel.gpsdata == true){
+      sentinel.gpsdetected =true;
+      sentinel.timer_gpsdata=millis()+SENTINELTIMEOUT;    
+    }
+    sentinel.gpsdata = false; 
+
+    if (sentinel.gpsdetected == false){
+      if (sentinel.timeout > (SENTINELTIMEOUT)){
+        sentinel.timeout = 0;
+      }   
+      if (millis() > sentinel.timer_baudchange){
+        sentinel.baud++; 
+        if (sentinel.baud>5){
+          sentinel.baud = 0;
+          sentinel.timeout +=1500;
+        }          
+        serialMSPreceive(1);
+        Serial.begin(SentinelBaud[sentinel.baud]);
+        delay(10);
+        serialMSPreceive(1);     
+        sentinel.timer_baudchange = millis() + sentinel.timeout;
+      }
+    }
+}
+#endif // SENTINELLAAT

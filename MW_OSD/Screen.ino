@@ -1611,7 +1611,8 @@ void buildConfig(void)
     MAX7456_WriteString_P(configMsgSAVE, SAVEP + 6); //SaveExit
     MAX7456_WriteString_P(configMsgPGS, SAVEP + 16); //<Page>
   }
-
+  
+#ifdef MENU_STAT
   if (configPage == MENU_STAT)
   {
 
@@ -1671,6 +1672,7 @@ void buildConfig(void)
 #endif
 
   }
+#endif // MENU_STAT  
 #ifdef MENU_PID
   if (configPage == MENU_PID)
   {

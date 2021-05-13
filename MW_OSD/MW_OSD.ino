@@ -128,6 +128,8 @@ uint16_t UntouchedStack(void)
 #include "fontD.h"
 #elif defined LOADFONT_BOLD
 #include "fontB.h"
+#elif defined SENTINELAAT
+#include "fontS.h"
 #endif
 #ifdef I2C_UB_SUPPORT
 #include "WireUB.h"
@@ -188,8 +190,11 @@ void setup()
 #if defined EEPROM_CLEAR
   EEPROM_clear();
 #endif
+
+#ifndef SENTINELAAT
   checkEEPROM();
   readEEPROM();
+#endif  
 
 #ifndef STARTUPDELAY
 #define STARTUPDELAY 1000
@@ -336,7 +341,7 @@ void loop()
 {
   // It would be beneficial to run this every few seconds to identify and reset max7456 lockups from low voltages
   static uint32_t lastcheck;
-  if (millis() / 1000 == lastcheck){
+  if (millis() / 1000 > lastcheck){
     MAX7456CheckStatus();
     lastcheck = millis() / 1000;
   }
@@ -350,6 +355,8 @@ void loop()
   if (millis() > (vsync_timer + VSYNC_TIMEOUT))
     MAX7456_DrawScreen();   
 }
+#elif defined XSENTINELAAT
+
 #else
 //------------------------------------------------------------------------
 void loop()
@@ -358,7 +365,9 @@ void loop()
   while(fontMode){
     serialMSPreceive(1);
   }
-
+#ifdef SENTINELAAT
+  sentinelinit();
+#endif // SENTINELAAT
 #if defined TX_GUI_CONTROL   //PITCH,YAW,THROTTLE,ROLL order controlled by GUI for GPSOSD and MAVLINK
   switch (Settings[S_TX_TYPE]) {
     case 1: //RPTY
@@ -425,10 +434,12 @@ void loop()
   oldscreenlayout = screenlayout;
 
   // Blink Basic Sanity Test Led at 0.5hz
-  if (timer.Blink2hz)
+  if (timer.Blink2hz){
     LEDON
-    else
-      LEDOFF
+  }
+  else {
+    LEDOFF
+  }
 
       //---------------  Start Timed Service Routines  ---------------------------------------
       unsigned long currentMillis = millis();
@@ -662,6 +673,7 @@ void loop()
       } else if (MSPcmdsend == MSP_KISS_TELEMTRY) {
         serialKISSrequest(KISS_GET_TELEMETRY);
       }
+#elif defined SENTINELAAT
 #elif defined SKYTRACK
       DrawSkytrack();
 #elif defined PROTOCOL_MSP
@@ -697,8 +709,9 @@ void loop()
    ProcessSbus(); // handle SBUS protocol
 #endif
 
+#ifndef SENTINELAAT
    ProcessSensors();       // using analogue sensors
-
+#endif
     if ( allSec < INTRO_DELAY ) {
       buildIntro();
       timer.lastCallSign = onTime - CALLSIGNINTERVAL;
@@ -889,6 +902,11 @@ void loop()
 void buildDisplay(void){
   if (displayReady)
     return;
+
+#ifdef SENTINELAAT //DISPLAYCHOICE
+    displayAAT();
+//    displayGPSPosition();
+#else //DISPLAYCHOICE
 #if defined USE_AIRSPEED_SENSOR
         useairspeed();
 #endif //USE_AIRSPEED_SENSOR
@@ -1039,6 +1057,9 @@ void buildDisplay(void){
 #ifdef LOW_MEMORY
         displayLowmemory();
 #endif
+#endif //DISPALY CHOICE
+
+
   displayReady = true;    
 }
 //------------------------------------------------------------------------

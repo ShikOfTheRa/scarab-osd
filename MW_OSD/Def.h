@@ -686,6 +686,33 @@
   #define MENU_STAT
 #endif
 
+#if defined SENTINELAAT_UBLOX
+  #define GPSOSD_UBLOX
+  #define SENTINELAAT
+  #define INTRO_DELAY 0
+  #undef INTRO_FC
+  #undef  INTRO_MENU
+  #undef  ALARM_MSP
+  #undef  ALARM_SATS
+  #undef  ALARM_GPS
+  #undef  OSD_SWITCH_RC
+  #undef  ALARM_ARMED
+  #define MENU_STAT
+#endif
+#if defined SENTINELAAT_NMEA
+  #define GPSOSD_NMEA
+  #define SENTINELAAT
+  #define INTRO_DELAY 0 
+  #undef INTRO_FC
+  #undef  INTRO_MENU
+  #undef  ALARM_MSP
+  #undef  ALARM_SATS
+  #undef  ALARM_GPS
+  #undef  OSD_SWITCH_RC
+  #undef  ALARM_ARMED
+  #define MENU_STAT 
+#endif
+
 #if defined GPSOSD_UBLOX_KK
   #define UBLOX
   #define KKAUDIOVARIO AUDIOPIN     // Enable this for audio vario. AUDIOPIN = D2 on AEROMAX hardware. Alternatively use A3 (RSSI) with other hardware  
@@ -778,7 +805,28 @@
   #define MENU_ALARMS
 #endif
 
-
+#ifdef SENTINELAAT
+#undef MENU_STAT
+#undef HORIZON
+#undef MAPMODE
+#undef GPSTIME 
+#undef FILTER_STD
+#undef USEGLIDESCOPE
+#undef INTRO_MENU
+#undef INTRO_CALLSIGN
+#undef INTRO_SIGNALTYPE
+#undef DISPLAY_PR
+#undef APINDICATOR
+#undef GUISENSORS
+#undef LONG_RANGE_DISPLAY
+#undef AIRMODE
+#undef MASKGPSLOCATION
+#undef TX_GUI_CONTROL  
+#undef MANUALY_PAINT_STACK
+#define HIDESUMMARY
+#define INTRO_DELAY 0
+#define GPSOSDARMDISTANCE  10
+#endif
 /*
   #define MENU_STAT          0       //STATISTICS
   #define MENU_PID           1       //PID CONFIG
