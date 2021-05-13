@@ -825,8 +825,7 @@
 #undef MANUALY_PAINT_STACK
 #define HIDESUMMARY
 #define INTRO_DELAY 0
-
-
+#define GPSOSDARMDISTANCE  10
 #endif
 /*
   #define MENU_STAT          0       //STATISTICS

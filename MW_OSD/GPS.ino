@@ -910,23 +910,28 @@ if (fontupdated == false) {
     fontupdated = true;
   }
 }
-  
-// FIX INDICATOR................
-  if (sentinel.gpsdetected == true){
-    sentinel.timer_led=millis();
-  }  
-  else if ( millis() > (sentinel.timer_led + 1000)){
-    sentinel.timer_led=millis();
-    LEDON
+
+// STATUS INDICATOR................
+  switch (GPSOSD_state) {
+    case 0: // No sats
+      if (timer.Blink10hz){
+        screen[3]=0x2A; 
+      }
+       break;        
+    case 1: // Waiting for steady state fix - (enough sats for a consecutive period without glitch). Default: 6 sats for 10 seconds)
+      if (timer.Blink2hz){
+        screen[3]=0x2A; 
+      }
+      break;    
+    default: //Ready / in flight / disconnected warning
+      if (sentinel.gpsdetected == false){
+        if (timer.Blink2hz){
+          screen[3]=0x2A; 
+        }
+      }     
+      break;
   }
-  else if (millis() > (sentinel.timer_led+ 500)){
-    LEDON
-    screen[3]=0x2A;    
-  }
-  else{
-    LEDON
-  }
-  
+ 
   // Autodetect baud rate.............
     if (millis() > sentinel.timer_gpsdata){
       sentinel.gpsdetected = false;
