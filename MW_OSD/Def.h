@@ -686,17 +686,6 @@
   #define MENU_STAT
 #endif
 
-#if defined SENTINELAAT_UBLOX
-  #define GPSOSD_UBLOX
-  #define SENTINELAAT
-  #define INTRO_DELAY 0
-#endif
-#if defined SENTINELAAT_NMEA
-  #define GPSOSD_NMEA
-  #define SENTINELAAT
-  #define INTRO_DELAY 0  
-#endif
-
 #if defined GPSOSD_UBLOX_KK
   #define UBLOX
   #define KKAUDIOVARIO AUDIOPIN     // Enable this for audio vario. AUDIOPIN = D2 on AEROMAX hardware. Alternatively use A3 (RSSI) with other hardware  

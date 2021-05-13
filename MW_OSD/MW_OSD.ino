@@ -336,7 +336,7 @@ void loop()
 {
   // It would be beneficial to run this every few seconds to identify and reset max7456 lockups from low voltages
   static uint32_t lastcheck;
-  if (millis() / 1000 > lastcheck){
+  if (millis() / 1000 == lastcheck){
     MAX7456CheckStatus();
     lastcheck = millis() / 1000;
   }
@@ -346,72 +346,6 @@ void loop()
     displayDebug();
     displayReady = true;
     true;    
-  } 
-  if (millis() > (vsync_timer + VSYNC_TIMEOUT))
-    MAX7456_DrawScreen();   
-}
-#elif defined SENTINELAAT
-void loop() // SENTINEL GPSOSD
-{
-  Settings[S_AAT] = 1;
-  serialMSPreceive(1);
-
-  // Max lockup detect.............
-  if (millis() > sentinel.timer_maxreset){
-    MAX7456CheckStatus();
-    sentinel.timer_maxreset = millis();
-  }
-
-// LED................
-  if (sentinel.gpsdetected == true){
-    sentinel.timer_led=millis();
-  }  
-  if ( millis() > (sentinel.timer_led + 1000)){
-    sentinel.timer_led=millis();
-  }
-  else if (millis() > (sentinel.timer_led+ 500)){
-    LEDOFF
-  }
-  else{
-    LEDON
-  }
-  
-  // Autodetect baud rate.............
-    if (millis() > sentinel.timer_gpsdata){
-      sentinel.gpsdetected = false;
-    }
-    if (sentinel.gpsdata == true){
-      sentinel.gpsdetected =true;
-      sentinel.timer_gpsdata=millis()+SENTINELTIMEOUT;    
-    }
-    sentinel.gpsdata = false; 
-
-    if (sentinel.gpsdetected == false){
-      if (sentinel.timeout > (SENTINELTIMEOUT)){
-        sentinel.timeout = 0;
-      }   
-      if (millis() > sentinel.timer_baudchange){
-        sentinel.baud++; 
-        if (sentinel.baud>5){
-          sentinel.baud = 0;
-          sentinel.timeout +=1500;
-        }          
-        serialMSPreceive(1);
-        Serial.begin(SentinelBaud[sentinel.baud]);
-        delay(10);
-        serialMSPreceive(1);     
-        sentinel.timer_baudchange = millis() + sentinel.timeout;
-      }
-    }
-
-  // Draw .............
-  if (displayReady != true){
-    displayAAT();
-    //displayDebug();
-    //displayGPSPosition();
-    //displayArmed();
-    //displayNumberOfSat();
-    displayReady = true;  
   } 
   if (millis() > (vsync_timer + VSYNC_TIMEOUT))
     MAX7456_DrawScreen();   
