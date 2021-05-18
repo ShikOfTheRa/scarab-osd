@@ -758,7 +758,7 @@ PROGMEM const uint16_t EEPROM16_DEFAULT[EEPROM16_SETTINGS] = {
   0,// S16_AMPZERO,
   150,// S16_AMPDIVIDERRATIO,
   0,// S16_RSSIMIN,
-  DEF_S16_RSSIMAX,// S16_RSSIMAX = 1024 default, 2600 PX4,
+  0, // 0 enables autorange - or use DEF_S16_RSSIMAX,// S16_RSSIMAX = 1024 default, 2600 PX4,
   DEF_S16_AUX_ZERO_CAL,// S16_AUX_ZERO_CAL,
   DEF_S16_AUX_CAL,// S16_AUX_CAL,
   
@@ -1000,6 +1000,9 @@ uint16_t GPS_waypoint_dist=0;
 uint16_t pMeterSum=0;
 uint16_t MwRssi=0;
 uint16_t FCRssi=0;
+uint16_t rssi_RangeMin = 1024;
+uint16_t rssi_RangeMax = 0;     
+
 uint32_t GPS_time = 0;
 uint16_t WIND_direction = 0;
 uint16_t WIND_speed = 0;
