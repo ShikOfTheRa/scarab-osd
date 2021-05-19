@@ -1317,12 +1317,6 @@ void readEEPROM(void)
     Settings16[en] = Settings16[en] + (xx << 8);
   }
 
-  if (Settings16[S16_RSSIMAX]==0) {
-      rssi_RangeMin = 1024;    
-      rssi_RangeMax = 0; 
-      MwRssi = 50;   
-    }
-
   // Read screen layouts
   uint16_t EEPROMscreenoffset = EEPROM_SETTINGS + (EEPROM16_SETTINGS * 2) + (screenlayout * POSITIONS_SETTINGS * 2);
   for (uint8_t en = 0; en < POSITIONS_SETTINGS; en++) {
@@ -1527,22 +1521,17 @@ void ProcessSensors(void) {
       timer.rssiTimer = 0;
     }
   }
+  rssi_RangeMin = Settings16[S16_RSSIMIN];  
   if (Settings16[S16_RSSIMAX]==0) {
-    if (rssi < rssi_RangeMin) {
-      rssi_RangeMin=rssi;    
-    }
     if (rssi > rssi_RangeMax) {
       rssi_RangeMax=rssi;    
     }
   }
   else {
-    rssi_RangeMin = Settings16[S16_RSSIMIN];
     rssi_RangeMax = Settings16[S16_RSSIMAX];     
   }
-  
   rssi = map(rssi, rssi_RangeMin, rssi_RangeMax, 0, 100);
- // rssi = constrain(rssi, 0, 100);
-
+  rssi = constrain( rssi,0,100);
   //-------------- For filter support
   sensorindex++;
   if (sensorindex >= SENSORFILTERSIZE)

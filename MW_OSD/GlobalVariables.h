@@ -1000,7 +1000,7 @@ uint16_t GPS_waypoint_dist=0;
 uint16_t pMeterSum=0;
 uint16_t MwRssi=0;
 uint16_t FCRssi=0;
-uint16_t rssi_RangeMin = 1024;
+uint16_t rssi_RangeMin = 0;
 uint16_t rssi_RangeMax = 0;     
 
 uint32_t GPS_time = 0;
