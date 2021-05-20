@@ -203,7 +203,7 @@ void kiss_sync_settings() {
   vtxLowPower = kissread_u16(KISS_SETTINGS_IDX_VTX_LOW_POWER);
   vtxMaxPower = kissread_u16(KISS_SETTINGS_IDX_VTX_MAX_POWER);
 
-  modeMSPRequests &=~ REQ_MSP_KISS_SETTINGS;
+  kissSettingsToRequest = false;
 }
 
 void kiss_message() {

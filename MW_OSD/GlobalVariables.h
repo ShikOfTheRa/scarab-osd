@@ -918,6 +918,7 @@ static uint16_t vtxMaxPower = 0;
 static uint8_t vtxBand = 0;
 static uint8_t vtxChannel = 1;
 static bool kissMessageToRequest = false;
+static bool kissSettingsToRequest = false;
 #else
 static uint8_t pidP[PIDITEMS], pidI[PIDITEMS], pidD[PIDITEMS];
 static uint8_t rcRate8,rcExpo8;

@@ -1145,8 +1145,11 @@ void setMspRequests() {
 #ifdef KISSGPS
       REQ_MSP_KISS_GPS |
 #endif
-      REQ_MSP_KISS_TELEMTRY |
-      REQ_MSP_KISS_SETTINGS;
+      REQ_MSP_KISS_TELEMTRY;
+    // The configuration is loaded at initialisation(If the version is not yet known) or if asked (navigation on KISS menu)
+    if (Kvar.version == 0 || kissSettingsToRequest) {
+      modeMSPRequests |= REQ_MSP_KISS_SETTINGS;
+    }
 
     if (kissMessageToRequest) {
       modeMSPRequests |= REQ_MSP_KISS_MESSAGE;
@@ -1199,7 +1202,7 @@ void setMspRequests() {
     }
     
     // If the version is not yet known, we request it
-    if (Kvar.version == 0) {
+    if (Kvar.version == 0 || kissSettingsToRequest) {
       modeMSPRequests |= REQ_MSP_KISS_SETTINGS;
     }
 #endif // Not KISS
