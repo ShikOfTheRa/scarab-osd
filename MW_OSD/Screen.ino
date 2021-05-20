@@ -1598,6 +1598,7 @@ void buildConfig(void)
 #ifdef MENU_KISS
   if(configPage == MENU_KISS) {
     displaySubMenuConfig();
+    displayReady = true;
     return;
   }
 #endif // MENU_KISS
