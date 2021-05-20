@@ -1109,6 +1109,10 @@ if((MwRcData[PITCHSTICK]>MAXSTICK)&&(MwRcData[YAWSTICK]>MAXSTICK)&&(MwRcData[THR
           waitStick =  2;	// Sticks must return to center before continue!
           configMode = 1;
           configPage = previousconfigPage;
+#ifdef KISS
+          // Before displaying the configuration, refresh the settings which will then be updated when navigating in the KISS sub-menu
+          kissSettingsToRequest = true;
+#endif
           setMspRequests();
       }
     }
@@ -1835,7 +1839,7 @@ void kissBack() {
   case SUBMENU_KISS_NOTCH_FILTERS:
   case SUBMENU_KISS_LPF:
   case SUBMENU_KISS_VTX:
-    modeMSPRequests |= REQ_MSP_KISS_SETTINGS;
+    kissSettingsToRequest = true;
     break;
   }
   subConfigPage = -1;
