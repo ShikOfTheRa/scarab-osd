@@ -66,7 +66,7 @@ void ltm_check() {
     GPS_longitude = (int32_t)ltmread_u32();
     GPS_speed = ltmread_u8() * 100;            // LTM gives m/s, we expect cm/s
     GPS_altitude = ((int32_t)ltmread_u32());   // LTM altitude in cm.
-    GPS_altitude_ASL = GPS_altitude;
+    GPS_altitude_ASL = GPS_altitude/100;
     uint8_t ltm_satsfix = ltmread_u8();
     GPS_numSat = (ltm_satsfix >> 2) & 0xFF;
     GPS_fix    = ((ltm_satsfix & 0b00000011) <= 1) ? 0 : 1;
