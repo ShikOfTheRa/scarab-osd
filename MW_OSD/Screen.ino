@@ -1223,13 +1223,22 @@ void displayADSB(void)
 #endif // BUDDYFLIGHT  
 
 
-  if (adsb.dist == 0)
+  if (adsb.dist == 0){
+   #ifdef ADSBALTAGL 
+    adsb.alt = GPS_altitude;
+   #else
     adsb.alt = GPS_altitude_ASL;
+   #endif
+  }
   uint16_t t_pos  = getPosition(ADSBposition);  
   formatDistance(adsb.dist,0,2,SYM_ADSB);
   MAX7456_WriteString(screenBuffer, t_pos);
   uint8_t t_x = FindNull();
+ #ifdef ADSBALTAGL 
+  formatDistance(adsb.alt-GPS_altitude,0,2,SYM_ADSB);
+ #else
   formatDistance(adsb.alt-GPS_altitude_ASL,0,2,SYM_ADSB);
+ #endif  
   screenBuffer[0] = headingDirection(MwHeading + 180 + 360 - adsb.dir);
   MAX7456_WriteString(screenBuffer, t_pos + t_x);
 #ifdef ADSBDEBUG

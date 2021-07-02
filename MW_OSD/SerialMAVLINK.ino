@@ -44,7 +44,11 @@ void send_mavlink_ADSB_TRAFFIC_REPORT_MESSAGE(void) {
   mav_serialize32(ADSBID);
   mav_serialize32(GPS_latitude);
   mav_serialize32(GPS_longitude);
+#ifdef ADSBALTAGL  
+  mav_serialize32((int32_t)(GPS_altitude)*1000);
+#else
   mav_serialize32((int32_t)(GPS_altitude_ASL)*1000);
+#endif
 //  mav_serialize32(GPS_latitude+10000);               // for testing with proximity vehicle
 //  mav_serialize32(GPS_longitude+10000);              // for testing with proximity vehicle
 //  mav_serialize32((int32_t)(GPS_altitude+700)*1000); // for testing with proximity vehicle
