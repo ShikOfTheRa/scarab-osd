@@ -2673,7 +2673,7 @@ void formatDistance(int32_t t_d2f, uint8_t t_units, uint8_t t_type, uint8_t t_ic
 }
 
 
-void displayItem(uint16_t t_position, int16_t t_value, uint8_t t_leadicon, uint8_t t_trailicon, uint8_t t_pdec )
+void displayItem(uint16_t t_position, int32_t t_value, uint8_t t_leadicon, uint8_t t_trailicon, uint8_t t_pdec )
 {
   /*
    *  t_position  = screen position
