@@ -425,8 +425,8 @@
 //#define ADSBDEBUG                 // Debug only
 #define ADSBTTL 10                  // Timout in seconds for valid ADSB data 
 #define ADSB_LIMIT 500000           // Max distance of aircraft included in scope. 
-#define ADSB_ALT 1000               // Flash ADSB data if aircraft within this altitude differential and distance in meters. Disabled when used with ADSBSEND 
-#define ADSB_DIST 2000              // Flash ADSB data if aircraft within this distance and altitude differential in meters. Disabled when used with ADSBSEND 
+#define ADSB_ALT 0                  // 1000 Flash ADSB data if aircraft within this altitude differential and distance in meters. 0 to disable flashing. Disabled when used with ADSBSEND 
+#define ADSB_DIST 0                 // 2000 Flash ADSB data if aircraft within this distance and altitude differential in meters. 0 to disable flashing. Disabled when used with ADSBSEND 
 #define ADSBALTAGL                  // When enabled, uses / sends AGL (relative to launch) instead of ASL (above sea level). ASL is not possible with all systems. AGL: buddyflight / ASL: aviation  
 // The following is for "Buddy Flights" to track one other aircraft.  
 //#define BUDDYFLIGHT               // Sends mavlink ADSB to share position status via simulated ADSB sent via OSD tx pin. 
