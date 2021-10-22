@@ -497,8 +497,8 @@ void serialMAVCheck() {
 #ifdef MAV_STATUS
     case  MAVLINK_MSG_ID_STATUSTEXT:
       severity = serialBuffer[0];
-      nullifymessage = 1;
       if (severity <= Settings[S_MAV_ALARMLEVEL]) {
+        fcMessageLength = MAVLINK_MSG_ID_STATUSTEXT_LEN - 1;
         for (uint8_t z = MAVLINK_MSG_ID_STATUSTEXT_LEN - 1; z >= 1; z--) {
           fontData[z] = serialBuffer[z]; // steal unused fontdata array to save memory
           if ((fontData[z] >= 97) && (fontData[z] <= 122)){ // convert to upper font
@@ -511,15 +511,11 @@ void serialMAVCheck() {
           else{
             fontData[z] = 0x20;
           }          
-          if (nullifymessage == 1) {
-            if ((serialBuffer[z] == 0) || (serialBuffer[z] == 0x20)) {
-              fontData[z] = SYM_BLANK;
-            }
-            else {
-              nullifymessage = 0;
+          if (serialBuffer[z] == 0)  
+            {
               fcMessageLength = z;
+              fontData[z] = 0;
             }
-          }
         }
         timer.fcMessage = MAV_STATUS_TIMER;
       }

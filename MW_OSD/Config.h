@@ -4,7 +4,7 @@
 
 /********************       OSD HARDWARE settings      *********************/
 //Choose ONLY ONE option:
-#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
+//#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
 //#define MICROMINIMOSD             // Uncomment this if using the MICRO MINIMOSD hardware
 //#define AEROMAX                   // Uncomment this if using MWOSD AEROMAX hardware
 //#define RTFQV1                    // Uncomment this if using standard RTFQ/Witespy V1.1 OSD, select this to correct for both swapped bat1/bat 2 and to also use alternative resistors / pinouts.
@@ -37,7 +37,7 @@
 //#define CLEANFLIGHT               // Uncomment this if you are using latest CLEANFLIGHT version from repository (2.2.0 at time of this MWOSD release)
 //#define iNAV                      // Uncomment this if you are using latest iNAV version from repository (1.01 at time of this MWOSD release)
 //#define iNAV_KK                   // Uncomment this if you are using AEROMAX OSD and BARO sensor addition with iNAV with KK audio vario
-#define APM                       // Uncomment this if you are using Ardupilot on APM / PIXHAWK / other supported hardware. Supports most MAVLINK 1.0 compatible FC
+//#define APM                       // Uncomment this if you are using Ardupilot on APM / PIXHAWK / other supported hardware. Supports most MAVLINK 1.0 compatible FC
 //#define PX4                       // Uncomment this if you are using PX4 stack on PIXHAWK and other supported hardware
 //#define BASEFLIGHT                // Uncomment this if you are using latest BASEFLIGHT version from repository (Stable 2015.08.27 at time of this MWOSD release)
 //#define MULTIWII                  // Uncomment this if you are using latest 2.4 MULTIWII
@@ -65,6 +65,8 @@
 //#define LTM2ADSB                  // Uncomment for a LTM protocol to ADSB converter
 //#define UBLOX2ADSB                // Uncomment for a UBLOX protocol to ADSB converter
 //#define ESCOSD                    // Uncomment this if using ESC OSD - displays ESC TELEMETRY VALUES recieved on serial RX. Suitable for single ESC only.
+//#define SENTINELAAT_UBLOX         // Uncomment this to create a video AAT telemetry module for use with other OSD that use UBLOX GPS module. https://github.com/ShikOfTheRa/scarab-osd/wiki/Video-telemetry-module
+//#define SENTINELAAT_NMEA          // Uncomment this to create a video AAT telemetry module for use with other OSD that use NMEA GPS module. https://github.com/ShikOfTheRa/scarab-osd/wiki/Video-telemetry-module
 
 // old releases supported...
 //#define MULTIWII_V23              // Uncomment this if you are using MW versions 2.2/2.3
@@ -79,7 +81,7 @@
 /********************       AIRCRAFT/INSTALLATION TYPE settings      *********************/
 //Choose ONLY ONE option:
 //#define ROTORCRAFT                // Default for multirotors etc.
-#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
+//#define FIXEDWING                 // Uncomment this if you are using fixed wing with MultiWii or Baseflight
 //#define QUADPLANE                 // Uncomment this ONLY if you are using ARDUPILOT QUADPLANE
 //#define SUBMARINE                 // Uncomment this ONLY if you are using ARDUSUB
 //#define GPSSUBMARINE              // Uncomment this ONLY if you are using GPSARDUSUB
@@ -117,7 +119,7 @@
 
 //#define CANVAS_SUPPORT            // Enable CANVAS mode support for post betaflight 3.1.0 CMS
 //#define INVERTED_CHAR_SUPPORT     // Enable inverted char support // deprecated
-//#define AAT                         // Enable video telemetry for Antenna tracker
+#define AAT                         // Enable video telemetry for Antenna tracker
 
 /********************       DATE & TIME settings      *********************/
 //Select ONLY if you are sure your OSD is connected to a telemetry feed such as MAVLINK/LTM:
@@ -183,7 +185,7 @@
 /******************** Serial speed settings *********************/
 // Overides defaults if required (57.6k for MAVLINK based or 115k for all others).
 //#define BAUDRATE 115200
-#define BAUDRATE 57600
+//#define BAUDRATE 57600
 //#define BAUDRATE 38400
 //#define BAUDRATE 19200
 //#define BAUDRATE 9600
@@ -299,8 +301,8 @@
 
 
 /********************       Visual Vario / climbrate Settings         ************************/
-#define VARIOSTANDARD             // Enable this for single icon representation of vario. Less memory.
-//#define VARIOENHANCED               // Enable this for multi line more accurate visual slider representation of vario. Configurable from GUI
+//#define VARIOSTANDARD             // Enable this for single icon representation of vario. Less memory.
+#define VARIOENHANCED               // Enable this for multi line more accurate visual slider representation of vario. Configurable from GUI
 //#define VARIOSCALE 150            // Scale used for Vario - 200 =2.00 m/s. Multirotor default = 150, Plane = 400
 //#define SHOWNEGATIVECLIMBRATE     // Show negative sign for neagtive climb rate values
 
@@ -423,8 +425,8 @@
 //#define ADSBDEBUG                 // Debug only
 #define ADSBTTL 10                  // Timout in seconds for valid ADSB data 
 #define ADSB_LIMIT 500000           // Max distance of aircraft included in scope. 
-#define ADSB_ALT 0               // 1000 Flash ADSB data if aircraft within this altitude differential and distance in meters. Disabled when used with ADSBSEND 
-#define ADSB_DIST 0              // 2000 Flash ADSB data if aircraft within this distance and altitude differential in meters. Disabled when used with ADSBSEND 
+#define ADSB_ALT 0                  // 1000 Flash ADSB data if aircraft within this altitude differential and distance in meters. 0 to disable flashing. Disabled when used with ADSBSEND 
+#define ADSB_DIST 0                 // 2000 Flash ADSB data if aircraft within this distance and altitude differential in meters. 0 to disable flashing. Disabled when used with ADSBSEND 
 #define ADSBALTAGL                  // When enabled, uses / sends AGL (relative to launch) instead of ASL (above sea level). ASL is not possible with all systems. AGL: buddyflight / ASL: aviation  
 // The following is for "Buddy Flights" to track one other aircraft.  
 //#define BUDDYFLIGHT               // Sends mavlink ADSB to share position status via simulated ADSB sent via OSD tx pin. 
@@ -464,8 +466,8 @@
 #define ICON_ALT                    // Altitude prime
 #define ICON_AGL                    // Altitude rangefinder
 #define ICON_GPS_ALT                // GPS altitude
-//#define ICON_MAIN_BATT              // Main battery icon
-//#define ICON_VID_BAT                // Video battery icon
+#define ICON_MAIN_BATT              // Main battery icon
+#define ICON_VID_BAT                // Video battery icon
 #define ICON_RSSI                   // RSSI
 #define ICON_SAT                    // Sattelite enable for large icon, disable for small icon
 #define ICON_THR                    // Throttle
