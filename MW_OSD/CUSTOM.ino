@@ -6,8 +6,9 @@ void displayCustom(void) /// Put your custome code here. Example code below
   if (!fieldIsVisible(Customposition))
     return; 
   MAX7456_WriteString("CUSTOM", position); // Display text example
-  // MAX7456_WriteString(itoa(MwRcData[2], screenBuffer, 10), position);  // Display number example
+  // MAX7456_WriteString(itoa(MwRcData[2], screenBuffer, 10), position);  // Alternative display number example
 }
+
 
 /*
 ///////////////////////////////////////////////////////////
@@ -15,7 +16,7 @@ void displayCustom(void) /// Put your custome code here. Example code below
 // Other example options:
 
 
-// Display information when screen element is turned on 
+// Display information when screen element is turned on - same info for all layouts 
 void displayCustom(void) /// Put your custome code here. Example code below
 {
   uint16_t position = getPosition(Customposition);
@@ -36,8 +37,8 @@ void displayCustom(void) /// Put your custome code here. Example code below
 
    switch (screenlayout) {
      case 0:
-       MAX7456_WriteString("CUST 0", position); // Display text custom screen 0
-       // MAX7456_WriteString(itoa(MwRcData[0], screenBuffer, 10),position);  // Alternative display number
+       MAX7456_WriteString("CUSTOM0", position); // Display text custom screen 0
+       // MAX7456_WriteString(itoa(MwRcData[0], screenBuffer, 10),position);  // Alternative display number example
        break;
      case 1:
        MAX7456_WriteString("CUSTOM1", position); // Display text custom screen 1
