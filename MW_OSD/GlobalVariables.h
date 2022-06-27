@@ -2195,14 +2195,14 @@ const char mav_mode_HOLD[] PROGMEM   = "HOLD";
 const char mav_mode_LAND[] PROGMEM   = "LAND"; // Landing
 const char mav_mode_AUTO[] PROGMEM   = "AUTO"; //Auto: auto control
 const char mav_mode_TKOF[] PROGMEM   = "TKOF"; //Take Off
-#ifdef QUADPLANE 
 const char mav_mode_QSTB[] PROGMEM   = "QSTB"; // Quadplane - like copter STABILIZE
 const char mav_mode_QHOV[] PROGMEM   = "QHOV"; // Quadplane - like copter ALT HOLD
 const char mav_mode_QLTR[] PROGMEM   = "QLTR"; // Quadplane - like copter LOITER
 const char mav_mode_QLND[] PROGMEM   = "QLND"; // Quadplane - like copter LAND
 const char mav_mode_QRTL[] PROGMEM   = "QRTL"; // Quadplane - like copter RTL
 const char mav_mode_QACR[] PROGMEM   = "QACR"; // Quadplane - ACRO
-#endif //QUADPLANE
+const char mav_mode_THRM[] PROGMEM   = "THRM"; // Thermal
+const char mav_mode_CRSH[] PROGMEM   = "CRSH"; // Course hold
 
 const PROGMEM char * const mav_mode_index[] = 
 {   
@@ -2223,7 +2223,6 @@ const PROGMEM char * const mav_mode_index[] =
  mav_mode_APM , 
  mav_mode_GUID,
  mav_mode_INIT, //16
-#ifdef QUADPLANE
  mav_mode_QSTB, //17
  mav_mode_QHOV, //18  
  mav_mode_QLTR, //19
@@ -2231,14 +2230,12 @@ const PROGMEM char * const mav_mode_index[] =
  mav_mode_QRTL, //21
  mav_mode_APM,  //22
  mav_mode_QACR, //23
-#endif
- mav_mode_APM , 
+ mav_mode_THRM, //24
+ mav_mode_APM , //25
+ mav_mode_CRSH ,//26  
+ mav_mode_APM , //27
 };
-#ifdef QUADPLANE
-#define MAV_MODE_MAX 24
-#else // FIXEWDWING
-#define MAV_MODE_MAX 17
-#endif
+#define MAV_MODE_MAX 27
 #elif defined SUBMARINE // // APM within MAVLINK. Not PX4
 const char mav_mode_AHLD[] PROGMEM   = "AHLD"; //Manual angle with automatic depth/throttle
 const char mav_mode_AUTO[] PROGMEM   = "AUTO"; //Fully automatic waypoint control using mission commands
@@ -2288,7 +2285,10 @@ const char mav_mode_NGPS[] PROGMEM   = "NGPS";
 const char mav_mode_SRTL[] PROGMEM   = "SRTL";
 const char mav_mode_FLOW[] PROGMEM   = "FLOW";
 const char mav_mode_FOLL[] PROGMEM   = "FOLL";
-const char mav_mode_AUTO[] PROGMEM   = "AUTO"; //Auto: auto control
+const char mav_mode_AUTO[] PROGMEM   = "AUTO";
+const char mav_mode_ZGZG[] PROGMEM   = "ZGZG";
+const char mav_mode_SYID[] PROGMEM   = "SYID";
+const char mav_mode_AROT[] PROGMEM   = "AROT";
 const PROGMEM char * const mav_mode_index[] = 
 {   
  mav_mode_STAB, //0
@@ -2314,10 +2314,14 @@ const PROGMEM char * const mav_mode_index[] =
  mav_mode_NGPS ,
  mav_mode_SRTL ,
  mav_mode_FLOW ,
- mav_mode_FOLL ,
- mav_mode_APM , //24
+ mav_mode_FOLL , //23
+ mav_mode_ZGZG , //24
+ mav_mode_SYID , //25
+ mav_mode_AROT , //26
+ mav_mode_RETL , //27 
+ mav_mode_APM ,  //28
 };
-#define MAV_MODE_MAX 24
+#define MAV_MODE_MAX 28
 #endif //FIXEDWING or COPTER
 
 // Vars
