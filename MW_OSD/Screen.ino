@@ -646,7 +646,7 @@ void displayVidVoltage(void)
 }
 
 
-void displayRPM(void)
+void displayRPM(void) // ESCOSD only
 {
   displayItem(Customposition, rpm, 0, 0x4B, 1 );
 }
