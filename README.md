@@ -2,7 +2,7 @@
 
 <a href='https://github.com/ShikOfTheRa/scarab-osd/wiki' target='_blank'>Click here for our WIKI for the latest documentation</a><br>
 
-Current development repository status : [![Build Status](https://travis-ci.com/ShikOfTheRa/scarab-osd.svg?branch=master)](https://travis-ci.com/ShikOfTheRa/scarab-osd) 		
+Current development repository status : [![Build Status](https://travis-ci.com/ShikOfTheRa/scarab-osd.svg?branch=master)](https://app.travis-ci.com/ShikOfTheRa/scarab-osd) 		
 
 ##
 ## MWOSD NextGeneration OSD for UAV
