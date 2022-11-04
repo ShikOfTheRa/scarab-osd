@@ -106,7 +106,7 @@ uint16_t UntouchedStack(void)
 #define PGMSTR(p) (char *)pgm_read_word(p)
 
 //------------------------------------------------------------------------
-#define MWVERS "MW-OSD - R2.0.0.0"
+#define MWVERS "MW-OSD - R2.0.0.1"
 //#define MWVERS "MW-OSD - R2.0"
 #define MWOSDVERSION 2000 // 1660=1.6.6.0 for GUI
 #define EEPROMVER 18      // for eeprom layout verification
