@@ -22,8 +22,7 @@ script:
 
 deploy:
   provider: releases
-  api_key:  
-    secure: apGXp65aUCmhXb/ExQ5pIOnFyNJcL4yfGt6mhlbnxQQuDbEOZ0mDZJtdf8BDsPdObZaplcFwM+MijymMsXoDL8hzbZm9S0LYJUyIvhCUUZ6KLj+CkydFarSR/F1trPtOcG5Ph5YFZbBDIkUjp2WUMlTdkDy7hykVnJxpHt3xdwZifJDszf+WALyRaGjknNrlc6jc3zbpjvT7cSzbgzwv4/fYlOjlGgtPAHnq1cPEdcBRpw0l6D6zMYL7kbgZgLkgAPTEeb6Azv9MF1v5iP5yaGM/OugdPMyBY3uRY1mYuOo5Q2gyiG2G6a4QOw5y7HTlBt8nn64j2WcaEaf+VI9aCillmhID0mte9xqmQoLn/BCFPJrj+LVQN1AzAhZb7hDtmdyRt63YF6vkBGJ6jJQzrmzS8Z2Gc/vyD+BkohHKbadopk11TXm1BXHMEwzxzwDXkZvCKUcoNCYTumMfW4w1UgqSNs28GTHr6TQceabd/Crtb2wG6p947WbCRxpY+7FCybJFNUrmr1qR/WJPz4Na1FHUhf/Okj+ygGQWy48LoE89eOEXO+PKKaIQvEysey/WF7vM+thv7JVGGTRe5jzikno0l7NzErH09o2DVDCtMf+tedcyoXqme6Jx+CSNPGJA4itmLIpu9hnt9e3RlnmwRmXT8lvnmCZsJBID5eYwrms=
+  api_key: $GITHUB_TOKEN 
   file_glob: true
   file: ./dist/*.hex
   skip_cleanup: true
