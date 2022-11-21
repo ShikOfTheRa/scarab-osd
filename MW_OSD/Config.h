@@ -287,6 +287,7 @@
 #define OSDSUMMARY 30               // Seconds summary is displayed for after landing. Max 254
 //#define DUALRSSI 255              // Displays dual RSSI values (e.g. LQ and RSSI). Primary on line 1, Secondary on line 2. Configure primary as analog or PWM input. Secondary will be from FC. Value is max sent from FC. MWii - 1024, mavlink = 100 or 255
 //#define DISPLAYSPEEDMS            // Displays speed in m/s instead of km/h
+//#define DISPLAYSPEEDKNOTS         // Displays speed in knots instead of km/h
 //#define PILOTICON                 // Disable to save memeory if unused. Display pilot ICON as an alternative to CHARACTER display. Requires enabling in GUI >= 1.8.2
 #define LRTRANSITION 999            // Point at which display transitions from standard to long range format. e.g LRT= 999, OSD displays 999m LRT = 1000, OSD displays 1.0km
 //#define AATTEST                   // Display a second visible full telemetry data line for test...

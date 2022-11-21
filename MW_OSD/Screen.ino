@@ -953,10 +953,16 @@ void displayGPSdop(void)
 void display_speed(int16_t t_value, uint8_t t_position, uint8_t t_leadicon)
 {
   uint16_t t_speed;
+
+#ifdef DISPLAYSPEEDKNOTS  
+    t_speed = t_value * GPS_CONVERSION_UNIT_TO_KNOTS;
+#else
   if (!Settings[S_UNITSYSTEM])
     t_speed = t_value * GPS_CONVERSION_UNIT_TO_KM_H;
   else
     t_speed = t_value * GPS_CONVERSION_UNIT_TO_M_H;
+#endif
+    
   if (t_speed > (speedMAX + 20)) // simple GPS glitch limit filter
     speedMAX += 20;
   else if (t_speed > speedMAX)
@@ -968,6 +974,8 @@ void display_speed(int16_t t_value, uint8_t t_position, uint8_t t_leadicon)
 #ifdef DISPLAYSPEEDMS
   t_speed = t_value * 0.01;           // From MWii cm/sec to m/sec
   displayItem(t_position, t_speed, t_leadicon, SYM_MS, 0 );
+#elif defined DISPLAYSPEEDKNOTS  
+  displayItem(t_position, t_speed, t_leadicon, 0x4B, 0 );
 #else
   displayItem(t_position, t_speed, t_leadicon, speedUnitAdd[Settings[S_UNITSYSTEM]], 0 );
 #endif

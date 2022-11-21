@@ -1011,6 +1011,7 @@ uint16_t WIND_speed = 0;
 #ifndef KISS
 #define GPS_CONVERSION_UNIT_TO_KM_H 0.036           // From MWii cm/sec to Km/h
 #define GPS_CONVERSION_UNIT_TO_M_H 0.02236932       // (0.036*0.62137)  From MWii cm/sec to mph
+#define GPS_CONVERSION_UNIT_TO_KNOTS 0.01943842     // From MWii cm/sec to knots
 // For Trip in slow Timed Service Routine (100ms loop)
 #define GPS_CONVERSION_UNIT_TO_FT_100MSEC 0.0032808 // 1/100*3,28084(cm/s -> mt/s -> ft/s)/1000*100    => cm/sec ---> ft/100msec
 #define GPS_CONVERSION_UNIT_TO_MT_100MSEC 0.0010    // 1/100(cm/s -> mt/s)/1000*100                    => cm/sec ---> mt/100msec (trip var is float)
