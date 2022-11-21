@@ -355,8 +355,8 @@ void serialMAVCheck() {
 #ifdef DEBUGDPOSMAV
   timer.d0rate++;
 #endif    
-      AIR_speed = (int16_t)serialbufferfloat(0) * 100; // m/s-->cm/s
-      GPS_speed = (int16_t)serialbufferfloat(4) * 100; // m/s-->cm/s
+      AIR_speed = (float)serialbufferfloat(0) * 100; // m/s-->cm/s
+      GPS_speed = (float)serialbufferfloat(4) * 100; // m/s-->cm/s
       MwHeading = serialBuffer[16] | serialBuffer[17] << 8; // deg (-->deg*10 if GPS heading)
       MwHeading360 = MwHeading;
       if (MwHeading360 > 180)
