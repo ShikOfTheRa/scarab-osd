@@ -1061,8 +1061,8 @@ static int16_t MwHeading=0;
 // For Amperage
 float amperage = 0;                // its the real value x10
 float amperagesum = 0;
-int16_t MWAmperage=0;
-uint8_t batstatus=0;
+uint16_t MWAmperage = 0;
+uint8_t batstatus = 0;
 
 // Rssi
 int16_t rssi = 0;

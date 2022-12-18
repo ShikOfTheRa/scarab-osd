@@ -793,23 +793,24 @@ void displaypMeterSum(void)
     if (((ampAlarming()) && timer.Blink2hz))
       return;
   }
-
-  int xx = amperagesum / 360;
-
+  uint32_t xx = amperagesum / 360;
+  uint8_t t_lead_icon = 0;
 #ifdef BATTERYICONAMPS
   uint16_t battev = 0;
   if (Settings[S_SHOWBATLEVELEVOLUTION]) {
     battev = amperagesum / (360 * Settings[S_AMPER_HOUR_ALARM]);
     battev = constrain(battev, 0, 100);
     battev = map(100 - battev, 0, 101, 0, 7);
-    uint8_t t_lead_icon = SYM_BATT_EMPTY - battev;
-    displayItem(pMeterSumPosition, xx, t_lead_icon, SYM_MAH, 0 );
+    t_lead_icon = SYM_BATT_EMPTY - battev;
   }
-  else
-    displayItem(pMeterSumPosition, xx, 0, SYM_MAH, 0 );
-#else
-  displayItem(pMeterSumPosition, xx, 0, SYM_MAH, 0 );
 #endif //BATTERYICONAMPS
+  if (xx > 9999){
+    xx /= 100;
+    displayItem(pMeterSumPosition, xx, t_lead_icon, SYM_MAH, 1);
+  }
+  else{
+    displayItem(pMeterSumPosition, xx, t_lead_icon, SYM_MAH, 0); 
+  }  
 }
 
 
