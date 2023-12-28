@@ -806,7 +806,7 @@ void displaypMeterSum(void)
 #endif //BATTERYICONAMPS
   if (xx > 9999){
     xx /= 100;
-    displayItem(pMeterSumPosition, xx, t_lead_icon, SYM_MAH, 1);
+    displayItem(pMeterSumPosition, xx, t_lead_icon, SYM_AH, 1);
   }
   else{
     displayItem(pMeterSumPosition, xx, t_lead_icon, SYM_MAH, 0); 
