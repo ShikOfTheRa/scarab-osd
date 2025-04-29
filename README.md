@@ -35,7 +35,7 @@ MWOSD also provides support a number of other configurations:
 <li>NAZA - test only</li>
 </ul>
 
-<a href='https://www.virtualpilot.co.uk/index.php?route=product/product&path=62&product_id=53' target='_blank'>Click here for GUI Configurator with easy install firmware</a><br>
+<a href='https://github.com/ShikOfTheRa/scarab-osd-gui/tree/master/MW_OSD_GUI/R2.0%20GUI%20-%20licence%20free' target='_blank'>Click here for GUI Configurator with easy install firmware</a><br>
 
 <br>
 <hr />
