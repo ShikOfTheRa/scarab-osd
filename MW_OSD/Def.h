@@ -45,7 +45,7 @@
   #define DEBUG 4                 // Enable/disable option to display OSD debug values. Define which OSD switch position to show debug on screen display 0 (default), 1 or 2. 4 for always on
   
   //#define USE_VSYNC 
-  //#define ADSBAWARE                 // Enables ADSB display for FC's that support ADSB via Mavlink. Currently re-purposes Mode Sensors GUI configurable item 
+  #define ADSBAWARE                 // Enables ADSB display for FC's that support ADSB via Mavlink. Currently re-purposes Mode Sensors GUI configurable item 
   //#define BUDDYFLIGHT               
   //#undef GPSTIME
   //#undef MAPMODE
@@ -56,11 +56,11 @@
   //#undef INTRO_CALLSIGN              // Enable to display callsign at startup
   //#undef INTRO_SIGNALTYPE   
   //#define MAV_ADSB
-  //#define ADSBSTATION 5
+  #define ADSBSTATION 5
   //#define AIRBOTMICRO             // Uncomment this if using an airbot MicroOSD
   //#define EEPROMVER 16              // for eeprom layout verification
   //#define AEROMAX                 // Uncomment this if using MWOSD AEROMAX hardware
-  //#define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
+  #define MINIMOSD                  // Uncomment this if using standard MINIMOSD hardware (default)
   //#define GPSOSD_NMEA             // Uncomment this if you are using a NMEA compatible GPS module for a GPS based OSD
   //#define GPSOSD_UBLOX            // Uncomment this if you are using a UBLOX GPS module for a GPS based OSD
   //#define BETAFLIGHT                // Uncomment this if you are using latest BETAFLIGHT version 3.1 onwards
