@@ -55,7 +55,7 @@
   //#undef INTRO_MENU                  // Enable to display TX stick MENU 
   //#undef INTRO_CALLSIGN              // Enable to display callsign at startup
   //#undef INTRO_SIGNALTYPE   
-  //#define MAV_ADSB
+  #define MAV_ADSB
   #define ADSBSTATION 5
   //#define AIRBOTMICRO             // Uncomment this if using an airbot MicroOSD
   //#define EEPROMVER 16              // for eeprom layout verification

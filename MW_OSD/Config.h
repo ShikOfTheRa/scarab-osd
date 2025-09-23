@@ -60,7 +60,7 @@
 //#define GPSOSD_MTK                // Uncomment this if you are using a MTK module for a GPS based OSD
 //#define NOCONTROLLER              // Uncomment this if you have nothing connected to the serial port - no controller or GPS module
 //#define SUBMERSIBLE               // Uncomment this if you are using a submersible with MS5837 and optional MSP based FC
-#define ADSBSTATION               // Uncomment this if you are using PINGRX enabled MAV groundstation
+//#define ADSBSTATION               // Uncomment this if you are using PINGRX enabled MAV groundstation
 //#define CANVASOSD                 // Uncomment for permanent canvas mode operation. https://github.com/ShikOfTheRa/scarab-osd/wiki/CANVASOSD 
 //#define LTM2ADSB                  // Uncomment for a LTM protocol to ADSB converter
 //#define UBLOX2ADSB                // Uncomment for a UBLOX protocol to ADSB converter
@@ -196,8 +196,8 @@
 #define MAV_STATUS 6                // Enable to display mavlink system messages up to and including category X. 5 = default 
 #define MAV_STATUS_TIMER 4          // How long to display MAV status messages. 4 = default 
 #define MAV_ALT_THROTTLE            // Enable to use MAVLINK throttle value when armed. Disable to use raw RC channel.
-//#define MAV_ALL                   // To act on data from all MAV SYSID in stream. NOT recommended. Specify ID in GUI. Default=1 upon reset.
-//#define MAV_COMP_ALL              // To act on data from all MAV COMPONENTS in stream. Overrides MAV_COM_ID. Use if do not know MAV_COM_ID. Recommended for iNAV telemetry.
+#define MAV_ALL                   // To act on data from all MAV SYSID in stream. NOT recommended. Specify ID in GUI. Default=1 upon reset.
+#define MAV_COMP_ALL              // To act on data from all MAV COMPONENTS in stream. Overrides MAV_COM_ID. Use if do not know MAV_COM_ID. Recommended for iNAV telemetry.
 //#define MAV_ARMED                 // Forces OSD to be always armed (for when MAV does not send armed status in heartbeat).
 //#define MAV_RESET_HOME            // Resets home position when not armed. When enabled, note that RX glitch etc. could potentially reset home position.
 //#define MAV_WIND_DIR_REVERSE      // SHow direction in which wind is coming from. Same as otehr OSD. Default is to show direction of wind flow.
@@ -423,9 +423,9 @@
 
 /********************           ADSB settings           *********************/
 // ADSB settings see https://github.com/ShikOfTheRa/scarab-osd/wiki/ADSB
-//#define ADSBDEBUG                 // Debug only
+#define ADSBDEBUG                 // Debug only
 #define ADSBTTL 10                  // Timout in seconds for valid ADSB data 
-#define ADSB_LIMIT 500000           // Max distance of aircraft included in scope. 
+#define ADSB_LIMIT 900000           // Max distance of aircraft included in scope. 
 #define ADSB_ALT 0                  // 1000 Flash ADSB data if aircraft within this altitude differential and distance in meters. 0 to disable flashing. Disabled when used with ADSBSEND 
 #define ADSB_DIST 0                 // 2000 Flash ADSB data if aircraft within this distance and altitude differential in meters. 0 to disable flashing. Disabled when used with ADSBSEND 
 #define ADSBALTAGL                  // When enabled, uses / sends AGL (relative to launch) instead of ASL (above sea level). ASL is not possible with all systems. AGL: buddyflight / ASL: aviation  
